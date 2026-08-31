@@ -93,9 +93,9 @@ export function result(s,choice){
 export function step(state,action){
  if(!available(state).includes(action))return state;
  const s=JSON.parse(JSON.stringify(state));
- if(action==='status'){s.phase='status';log(s,'SERVER ........... STORY_TELLER\nRELAY NODE ....... Y.0529\nPROCESS .......... ACTIVE','accent');log(s,'BODY SIGNATURE ... NOT DETECTED\nMEMORY STREAM .... STABLE\nCONSCIOUSNESS .... ONLINE\nUPLOAD STATUS .... IN PROGRESS','accent');log(s,'[提示：脑干诱发电位丢失。]','system-note','type');log(s,'restoring memory fragments...\nsyncing residual self...\ncontinuing without shell...\nARASHI_UPLOAD ... 99.7%','accent');}
+ if(action==='status'){s.phase='status';log(s,'SERVER ........... STORY_TELLER\nRELAY NODE ....... Y.0529\nPROCESS .......... ACTIVE','accent');log(s,'BODY SIGNATURE ... NOT DETECTED\nMEMORY STREAM .... STABLE\nCONSCIOUSNESS .... ONLINE\nUPLOAD STATUS .... IN PROGRESS','accent');log(s,'[提示：脑干诱发电位丢失。]','system-note','type');log(s,'restoring memory fragments...\nsyncing residual self...\ncontinuing without shell...','accent','burst');log(s,'ARASHI_UPLOAD ... 99.7%','accent');}
  else if(action==='connect'){s.phase='greeting';log(s,'scanning residual signal...\nPACKET DETECTED\nMEMORY ... FRAGMENTED','accent');roundLog(s);}
- else if(action==='reply'){s.phase='round';log(s,'黎星 > ？','voice');log(s,'Y > 终端登记的是黎星。\nY > 先用着。这里改名要本人到场。','voice');log(s,'Y > 先扫 A。每轮最多两路，多扫一次会留下痕迹。\nY > 换了信道，上一条就放下。不能切回。','voice');}
+ else if(action==='reply'){s.phase='round';log(s,'> ？','voice');log(s,'Y > 终端登记的是黎星。\nY > 先用着。这里改名要本人到场。','voice');log(s,'Y > 先扫 A。每轮最多两路，多扫一次会留下痕迹。\nY > 换了信道，上一条就放下。不能切回。','voice');}
  else if(action.startsWith('scan:')){const id=action.slice(5),p=channels(s.seed,s.round).find(p=>p.id===id);s.scans++;s.scanned.push(id);s.current=id;if(s.scanned.length>1)s.trace++;log(s,`> SCANNING CH.${id}\nRSSI ${p.rssi} dBm / SNR +${p.snr} dB\nHOPS ${p.hops} / CRC ${p.crc}`,'accent');log(s,`${describe(p)}\nDATA / ${p.type==='spoof'?'所有缺失部分都已自动补齐。':p.type==='noise'?'…… / 未识别载波 / ……':p.text}`);if(p.key)log(s,`FRAGMENT ID : ${p.key}`,'muted');if(s.round===1)log(s,'Y > CRC 正常。只说明完整，不代表可信。\nY > LOCK 直接写入；VERIFY 修复或隔离，但会增加追踪。\nY > 不留就 DISCARD。别什么都收。\nY > 这次可以锁。','voice');risk(s,'round');}
  else if(action==='cut')end(s,7);
  else if(action==='force'){s.risks++;s.errors++;s.trace=2;s.sync=0;s.phase=s.resume;delete s.resume;log(s,'FORCED ROUTE\nERR +1 / TRACE → 2 / SYNC → 0','danger');if(s.errors>=3)end(s,3);}
@@ -128,7 +128,7 @@ export function step(state,action){
    }
   }
   if(s.round===1){
-   log(s,'Y > 追踪到 6 就断开。硬撑会增加错误；错误到 3，连接就没了。\nY > 12 个碎片，最多 15 轮。不用等它完整。','voice');
+   log(s,'Y > 看上方状态栏。追踪到 6 就断开。硬撑会增加错误；错误到 3，连接就没了。\nY > 12 个碎片，最多 15 轮。不用等它完整。','voice');
    if(s.recovered.length){
     log(s,'> fragment_001.decode','accent');
     log(s,'ARASHI > ……黎星？','voice','type');

@@ -21,3 +21,12 @@
 }
 
 .system-note{border-left:2px solid #466173;padding-left:12px;color:var(--text)}
+
+/* Text-mode inverse labels, with separate colours for the four measurement types. */
+#lines>.signal-metrics{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;padding:3px 0}
+.signal-field{display:inline-flex;align-items:baseline;gap:8px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.signal-key{padding:0 5px;line-height:1.45;background:var(--metric);color:#080c10;font-weight:700}
+.field-rssi{--metric:#96bed2}.field-snr{--metric:#a2bfaa}.field-hops{--metric:#cfb680}.field-crc{--metric:#b4a5cf}
+.signal-value{color:var(--text);min-width:3ch}.signal-value.warn{color:#e0bf77}.signal-value.pass{color:#a2bfaa}
+.signal-value.bad{background:#db817c;color:#080c10;padding:0 4px;font-weight:700}
+@media(max-width:600px){#lines>.signal-metrics{gap:6px 14px}.signal-field{gap:6px}}

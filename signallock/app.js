@@ -1,4 +1,4 @@
-import {VERSION,ENDINGS,fresh,step,channels,available,restoreSave} from './engine.js?v=opening-4';
+import {VERSION,ENDINGS,fresh,step,channels,available,restoreSave} from './engine.js?v=scan-5';
 const $=id=>document.getElementById(id), SAVE='y29.arashi.session.v1', ARCHIVE='y29.arashi.archive.v1';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let storageOK=true;
@@ -38,7 +38,20 @@ function render(){
  storageStatus();
 }
 function scrollOutput(){if(follow)$('log').scrollTop=$('log').scrollHeight;}
-function addLine(entry,continuation=false){const div=document.createElement('div');div.className=entry.kind+(continuation?' continuation':'');div.textContent=entry.text;$('lines').append(div);scrollOutput();return div;}
+function metricMarkup(text){
+ const badge=(name,value,tone)=>`<span class="signal-field field-${name.toLowerCase()}"><span class="signal-key">${name}</span><span class="signal-value ${tone||''}">${esc(value)}</span></span>`;
+ let m=text.match(/^RSSI (-?\d+) dBm \/ SNR \+([\d.]+) dB$/);
+ if(m)return badge('RSSI',m[1]+' dBm','')+badge('SNR','+'+m[2]+' dB',Number(m[2])<3?'bad':Number(m[2])<6?'warn':'');
+ m=text.match(/^HOPS (\d+) \/ CRC (OK|FAIL)$/);
+ if(m)return badge('HOPS',m[1],Number(m[1])>10?'bad':Number(m[1])>3?'warn':'')+badge('CRC',m[2],m[2]==='FAIL'?'bad':'pass');
+ return null;
+}
+function addLine(entry,continuation=false){
+ const div=document.createElement('div');div.className=entry.kind+(continuation?' continuation':'');
+ const markup=metricMarkup(entry.text);
+ if(markup){div.className+=' signal-metrics';div.innerHTML=markup;}else div.textContent=entry.text;
+ $('lines').append(div);scrollOutput();return div;
+}
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function outputStatic(entries){for(const entry of entries)entry.text.split('\n').forEach((text,i)=>addLine({kind:entry.kind,text},i>0));}
 // Content pacing stays enabled even with reduced motion; CSS still suppresses cursor blinking.
@@ -49,6 +62,17 @@ async function output(entries,myEpoch){
  let batch=0;
  for(const entry of entries){
   const lines=entry.text.split('\n');
+  if(entry.reveal==='burst'){
+   for(let i=0;i<lines.length;i+=2){
+    if(myEpoch!==epoch)return;
+    let head;
+    for(let j=i;j<Math.min(i+2,lines.length);j++)head=addLine({kind:entry.kind,text:lines[j]},j>0);
+    head.className+=' printing';
+    await pause(i===0?150:240);
+    head.className=head.className.replace(' printing','');
+   }
+   continue;
+  }
   for(let index=0;index<lines.length;){
    if(myEpoch!==epoch)return;
    const text=lines[index],deliberate=entry.reveal==='type',command=commandLine(text);
