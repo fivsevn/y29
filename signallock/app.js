@@ -39,37 +39,47 @@ function render(){
 function scrollOutput(){if(follow)$('log').scrollTop=$('log').scrollHeight;}
 function addLine(entry,continuation=false){const div=document.createElement('div');div.className=entry.kind+(continuation?' continuation':'');div.textContent=entry.text;$('lines').append(div);scrollOutput();return div;}
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-function motionReduced(){return window.matchMedia('(prefers-reduced-motion: reduce)').matches;}
 function outputStatic(entries){for(const entry of entries)entry.text.split('\n').forEach((text,i)=>addLine({kind:entry.kind,text},i>0));}
-// DOS-style writes: commands arrive in byte-like bursts, status rows flush at once.
-// Only marked narrative beats use a deliberate one-character cadence.
+// Content pacing stays enabled even with reduced motion; CSS still suppresses cursor blinking.
+// Explicit character output is part of the requested terminal reading experience.
+const commandLine=text=>/^(>|[a-z].*\.\.\.$)/.test(text);
+const dataLine=(entry,text)=>entry.kind!=='voice'&&entry.reveal!=='type'&&!commandLine(text)&&/^[A-Z][A-Z0-9_ ]*(?:[.: /]|$)/.test(text);
 async function output(entries,myEpoch){
+ let batch=0;
  for(const entry of entries){
-  let index=0;
-  for(const text of entry.text.split('\n')){
+  const lines=entry.text.split('\n');
+  for(let index=0;index<lines.length;){
    if(myEpoch!==epoch)return;
-   const deliberate=entry.reveal==='type';
-   const command=/^(>|[a-z].*\.\.\.$)/.test(text);
-   const streamed=!motionReduced()&&(deliberate||command||entry.kind==='voice');
+   const text=lines[index],deliberate=entry.reveal==='type',command=commandLine(text);
+   if(dataLine(entry,text)){
+    // Flush related fields together, then wait for the next read to complete.
+    const limit=[2,3][batch%2];let count=0,head;
+    while(index<lines.length&&count<limit&&dataLine(entry,lines[index])){
+     head=addLine({kind:entry.kind,text:lines[index]},index>0);index++;count++;
+    }
+    head.className+=' printing';
+    await pause([460,680,380][batch++%3]);
+    head.className=head.className.replace(' printing','');
+    continue;
+   }
+   const streamed=deliberate||command||entry.kind==='voice';
    const div=addLine({kind:entry.kind,text:streamed?'':text},index++>0);
    div.className+=' printing';
    if(streamed){
-    const chars=Array.from(text);
-    let position=0,tick=0;
+    const chars=Array.from(text);let position=0,tick=0;
     while(position<chars.length){
      if(myEpoch!==epoch)return;
-     const size=deliberate?1:command?[2,4,3,6][tick%4]:[2,2,3][tick%3];
+     const size=deliberate||command?1:[2,2,3][tick%3];
      position=Math.min(chars.length,position+size);
      div.textContent=chars.slice(0,position).join('');scrollOutput();
-     if(!motionReduced())await pause(deliberate?60:command?28:36);
+     await pause(deliberate?65:command?22:34);
      tick++;
     }
    }
-   // Line sequencing is content pacing, not motion: retain it in reduced-motion mode.
-   await pause(entry.kind==='voice'?300:360);
+   await pause(deliberate?420:command?260:entry.kind==='voice'?180:320);
    div.className=div.className.replace(' printing','');
   }
-  await pause(180);
+  await pause(entry.kind==='voice'?240:380);
  }
 }
 async function present(entries){

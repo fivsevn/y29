@@ -49,14 +49,14 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
  try{
   await import('../signallock/app.js?animated');
   const lines=h.elements.get('lines');
-  assert.deepEqual(lines.children.map(x=>x.textContent),['> ']);
+  assert.deepEqual(lines.children.map(x=>x.textContent),['>']);
   assert.match(lines.children[0].className,/printing/);
-  await tick();assert.equal(lines.children[0].textContent,'> SYST');
+  await tick();assert.equal(lines.children[0].textContent,'> ');
   await h.click('status');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,0);
   await drain();assert.equal(lines.children.length,3);
   assert.ok(lines.children.every(x=>!x.className.includes('printing')));
   await h.click('status');
-  assert.equal(lines.children.at(-1).textContent,'SERVER ........... STORY_TELLER');
+  assert.equal(lines.children.at(-1).textContent,'RELAY NODE ....... Y.0529');
   for(let i=0;i<30&&lines.children.at(-1).textContent!=='载';i++)await tick();
   assert.equal(lines.children.at(-1).textContent,'载');
   assert.match(lines.children.at(-1).className,/printing/);
@@ -75,26 +75,26 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
  }finally{globalThis.setTimeout=originalTimeout;}
 });
 
-for(const restored of [false,true])test(`reduced motion still reveals one row at a time (${restored?'restored status':'new session'})`,async t=>{
- const saved=restored?{'y29.arashi.session.v1':JSON.stringify({version:1,seed:123,actions:['status']})}:{};
- const h=harness(saved),timers=[];
+for(const reduced of [false,true])test(`mixed terminal pacing survives motion preference (${reduced}) and saved startup`,async t=>{
+ const h=harness({'y29.arashi.session.v1':JSON.stringify({version:1,seed:123,actions:['status']})}),timers=[];
+ window.matchMedia=()=>({matches:reduced});
  t.mock.method(globalThis,'setTimeout',(callback,delay)=>{timers.push({callback,delay});return timers.length;});
- const tick=async()=>{const timer=timers.shift();assert.ok(timer);assert.ok(timer.delay>=300);timer.callback();for(let i=0;i<8;i++)await Promise.resolve();};
- const drain=async()=>{for(let i=0;timers.length&&i<1000;i++){timers.shift().callback();for(let j=0;j<8;j++)await Promise.resolve();}assert.equal(timers.length,0);};
- await import(`../signallock/app.js?reduced-${restored}`);
+ const tick=async()=>{const timer=timers.shift();assert.ok(timer);timer.callback();for(let i=0;i<8;i++)await Promise.resolve();return timer.delay;};
+ await import(`../signallock/app.js?mixed-${reduced}`);
  const lines=h.elements.get('lines');
- assert.deepEqual(lines.children.map(x=>x.textContent),['> SYSTEM BOOT']);
+ assert.deepEqual(lines.children.map(x=>x.textContent),['>']);
  assert.equal(h.elements.get('log').attributes['data-output'],'busy');
- await tick();assert.equal(lines.children.length,2);
- await tick();assert.equal(lines.children.length,3);
- await drain();assert.equal(h.elements.get('log').attributes['data-output'],'idle');
- if(!restored){
-  await h.click('status');
-  assert.equal(lines.children.length,4);
-  assert.equal(lines.children.at(-1).textContent,'SERVER ........... STORY_TELLER');
-  await tick();assert.equal(lines.children.length,5);
-  await drain();
- }
+ await tick();assert.equal(lines.children[0].textContent,'> ');
+ for(let i=0;lines.children.length<5&&i<300;i++)await tick();
+ assert.deepEqual(lines.children.slice(-2).map(x=>x.textContent),['SERVER ........... STORY_TELLER','RELAY NODE ....... Y.0529']);
+ assert.ok(timers[0].delay>=400);
+ await tick();assert.equal(lines.children.length,8); // Next three status fields flush together.
+ for(let i=0;lines.children.at(-1).textContent!=='载'&&i<20;i++)await tick();
+ assert.equal(lines.children.at(-1).textContent,'载');
+ await tick();assert.equal(lines.children.at(-1).textContent,'载体');
+ for(let i=0;timers.length&&i<1000;i++)await tick();
+ assert.equal(timers.length,0);
+ assert.equal(h.elements.get('log').attributes['data-output'],'idle');
  assert.equal(lines.children.at(-1).textContent,'ARASHI_UPLOAD ... 99.7%');
  assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,['status']);
 });
