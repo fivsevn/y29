@@ -11,7 +11,7 @@ function harness(initial={},fail=false){
  globalThis.window={matchMedia(){return {matches:true};}};
  globalThis.localStorage={getItem(k){if(fail)throw Error('Blocked');return memory.get(k)||null;},setItem(k,v){if(fail)throw Error('Quota');memory.set(k,v);}};
  const click=async(action)=>{handlers.click({target:{closest:()=>({dataset:{action},disabled:false})}});await Promise.resolve();};
- return {elements,memory,click};
+ return {elements,memory,click,command:command=>handlers.click({target:{closest:()=>({dataset:{command},disabled:false})}})};
 }
 test('controller starts, handles tutorial, stores transcript and ignores repeat lock',async()=>{
  const h=harness();await import('../signallock/app.js?controller1');assert.match(h.elements.get('controls').innerHTML,/查看系统状态/);
@@ -34,4 +34,33 @@ test('all local page assets exist and load without external services',async()=>{
    const target=match[1];assert.ok(!/^https?:/.test(target));const p=resolve(dirname(new URL('../'+file,import.meta.url).pathname),target,target.endsWith('/')?'index.html':'');await readFile(p);
   }
  }
+});
+
+test('terminal prints lines and selected characters, blocks overlapping actions and cancels output on restart',async()=>{
+ const h=harness(),timers=[],originalTimeout=globalThis.setTimeout;
+ window.matchMedia=()=>({matches:false});
+ globalThis.setTimeout=callback=>{timers.push(callback);return timers.length;};
+ const tick=async()=>{timers.shift()?.();for(let i=0;i<8;i++)await Promise.resolve();};
+ const drain=async()=>{for(let i=0;timers.length&&i<1000;i++)await tick();assert.equal(timers.length,0);};
+ try{
+  await import('../signallock/app.js?animated');
+  const lines=h.elements.get('lines');
+  assert.deepEqual(lines.children.map(x=>x.textContent),['> SYSTEM BOOT']);
+  await h.click('status');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,0);
+  await drain();assert.equal(lines.children.length,3);
+  await h.click('status');
+  assert.equal(lines.children.at(-1).textContent,'SERVER ........ STORY_TELLER');
+  for(let i=0;i<30&&lines.children.at(-1).textContent!=='载';i++)await tick();
+  assert.equal(lines.children.at(-1).textContent,'载');
+  await h.click('connect');assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,['status']);
+  h.elements.get('restart').onclick();
+  // Confirm via the real delegated click handler using a command button.
+  h.command('confirm-restart');
+  await drain();assert.equal(lines.children.length,3);
+  assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,[]);
+  await h.click('status');await drain();
+  assert.equal(lines.children.at(-1).textContent,'载体未检出 / 意识在线');
+  await h.click('connect');await drain();
+  assert.match(lines.children.at(-1).textContent,/不能切回/);
+ }finally{globalThis.setTimeout=originalTimeout;}
 });

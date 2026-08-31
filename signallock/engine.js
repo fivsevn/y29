@@ -55,11 +55,16 @@ export function channels(seed,round){
  if(round>1)for(let i=items.length-1;i>0;i--){let j=Math.floor(rand()*(i+1));[items[i],items[j]]=[items[j],items[i]];}
  return items.map((p,i)=>({...p,id:'ABC'[i]}));
 }
-export function fresh(seed=Date.now()){return {version:VERSION,seed:seed>>>0,phase:'boot',round:1,scanned:[],current:null,trace:0,errors:0,sync:0,best:0,recovered:[],locks:0,verifies:0,rejects:0,unknown:0,local:0,relay:0,risks:0,scans:0,ending:null,history:[],logs:[{kind:'muted',text:'> SYSTEM BOOT\n> ARCHIVE NODE : ARASHI\n> RUNTIME : 49 DAYS'},{kind:'normal',text:'这个系统已经运行了 49 天。\n启动之初，阿岚仍存在于现实世界。'}]};}
-const log=(s,text,kind='normal')=>s.logs.push({text,kind});
-function end(s,id){s.phase='ended';s.ending=id;const e=ENDINGS[id-1];log(s,'SESSION CLOSED / 本次连接结束','muted');log(s,`ENDING ${String(id).padStart(2,'0')} // ${e.code}\n${e.name}\n${e.status}`,'accent');log(s,e.text,'voice');}
-function roundLog(s){log(s,`—— ROUND ${String(s.round).padStart(2,'0')} / 第 ${s.round} 轮 ——`,'muted');if(s.round===1)log(s,'Y > 黎星，看得到吗？\nY > 别碰别的。先扫 A。','voice');else if(s.round===2)log(s,'Y > 只处理最后扫描的信道。\nY > 第一遍免费，多扫一次会留下痕迹。\nY > 信息不是越多越好。','voice');else if(s.round===10)log(s,s.history.some(x=>x.round===5&&x.action==='discard')?'REFERENCE MISSING // 第 05 轮的记录已被你丢弃。':'REFERENCE FOUND // 第 05 轮的记录仍可读取。','muted');else log(s,'PACKET DETECTED // 接收到三路候选信号。','muted');}
-function risk(s,back){if(s.trace>=6){s.trace=6;s.resume=back;s.phase='risk';log(s,'ROUTE EXPOSED // 反向定位已抵达终端。\n切断会结束本局并保留档案；强行继续会增加一次错误。','danger');return true;}return false;}
+export function fresh(seed=Date.now()){return {version:VERSION,seed:seed>>>0,phase:'boot',round:1,scanned:[],current:null,trace:0,errors:0,sync:0,best:0,recovered:[],locks:0,verifies:0,rejects:0,unknown:0,local:0,relay:0,risks:0,scans:0,ending:null,history:[],logs:[{kind:'muted',text:'> SYSTEM BOOT\n> ARCHIVE NODE : ARASHI\n> RUNTIME : 49 DAYS'}]};}
+const log=(s,text,kind='normal',reveal)=>s.logs.push({text,kind,...(reveal?{reveal}:{})});
+function end(s,id){s.phase='ended';s.ending=id;const e=ENDINGS[id-1];log(s,'SESSION CLOSED / 本次连接结束','muted');log(s,`ENDING ${String(id).padStart(2,'0')} // ${e.code}\n${e.name}\n${e.status}`,'accent');log(s,e.text,'voice','type');}
+function roundLog(s){
+ log(s,`—— WINDOW ${String(s.round).padStart(2,'0')} / 接收窗口 ——`,'muted');
+ if(s.round===1)log(s,'Y > 黎星，先扫描 A。这里只接通了一路。\nY > 后续每轮最多扫两路。首扫不增加追踪，第二次追踪 +1。\nY > 只处理最后扫描的一路，不能切回。','voice');
+ else if(s.round===10)log(s,s.history.some(x=>x.round===5&&x.action==='discard')?'REFERENCE MISSING // 05 号记录已丢弃':'REFERENCE FOUND // 05 号记录可读取','muted');
+ else log(s,'PACKET DETECTED // 候选信道：3','muted');
+}
+function risk(s,back){if(s.trace>=6){s.trace=6;s.resume=back;s.phase='risk';log(s,'ROUTE EXPOSED // 反向定位已确认','danger');return true;}return false;}
 export function available(s){
  if(s.phase==='boot')return ['status'];if(s.phase==='status')return ['connect'];
  if(s.phase==='risk')return ['cut','force'];
@@ -87,9 +92,9 @@ export function result(s,choice){
 export function step(state,action){
  if(!available(state).includes(action))return state;
  const s=JSON.parse(JSON.stringify(state));
- if(action==='status'){s.phase='status';log(s,'SERVER ........ STORY_TELLER\nRELAY NODE .... Y.0529\nBODY SIGNATURE .. NOT DETECTED\nCONSCIOUSNESS ... ONLINE\nARASHI_UPLOAD ... 99.7%','accent');log(s,'[系统提示：未检测到载体。意识仍在线。]');}
+ if(action==='status'){s.phase='status';log(s,'SERVER ........ STORY_TELLER\nRELAY NODE .... Y.0529\nBODY SIGNATURE .. NOT DETECTED\nCONSCIOUSNESS ... ONLINE\nARASHI_UPLOAD ... 99.7%','accent');log(s,'载体未检出 / 意识在线','accent','type');}
  else if(action==='connect'){s.phase='round';roundLog(s);}
- else if(action.startsWith('scan:')){const id=action.slice(5),p=channels(s.seed,s.round).find(p=>p.id===id);s.scans++;s.scanned.push(id);s.current=id;if(s.scanned.length>1)s.trace++;log(s,`> SCANNING CH.${id}\nRSSI ${p.rssi} dBm / SNR +${p.snr} dB\nHOPS ${p.hops} / CRC ${p.crc}`,'accent');log(s,`[解析：${describe(p)}]\n片段：${p.type==='spoof'?'所有缺失部分都已自动补齐。':p.type==='noise'?'…… / 未识别载波 / ……':p.text}`);if(p.key)log(s,`FRAGMENT ID : ${p.key}`,'muted');if(s.round===1)log(s,'Y > 校验正常，路径也一致。这次可以锁。','voice');risk(s,'round');}
+ else if(action.startsWith('scan:')){const id=action.slice(5),p=channels(s.seed,s.round).find(p=>p.id===id);s.scans++;s.scanned.push(id);s.current=id;if(s.scanned.length>1)s.trace++;log(s,`> SCANNING CH.${id}\nRSSI ${p.rssi} dBm / SNR +${p.snr} dB\nHOPS ${p.hops} / CRC ${p.crc}`,'accent');log(s,`解析 / ${describe(p)}\n片段 / ${p.type==='spoof'?'所有缺失部分都已自动补齐。':p.type==='noise'?'…… / 未识别载波 / ……':p.text}`);if(p.key)log(s,`FRAGMENT ID : ${p.key}`,'muted');if(s.round===1)log(s,'Y > 锁定会直接写入。可靠数据使碎片、连续同步 +1，追踪 -1；损坏或空包会增加错误。\nY > 验证先使追踪 +1；有效数据恢复后追踪 -1。也能修复损坏、拦截伪造、隔离未知来源。\nY > 丢弃跳过本轮，追踪 -1，同步归零。\nY > RSSI 越接近 0、SNR 越高，信号越强、越清晰。CRC 只检查完整性；HOPS 是路径跳数，0 表示本地。\nY > 这一路校验和路径一致，可以锁定。','voice');risk(s,'round');}
  else if(action==='cut')end(s,7);
  else if(action==='force'){s.risks++;s.errors++;s.trace=2;s.sync=0;s.phase=s.resume;delete s.resume;log(s,'FORCED ROUTE // 错误 +1，追踪降至 2。','danger');if(s.errors>=3)end(s,3);}
  else if(['protect','clean','bypass'].includes(action)){
@@ -99,8 +104,8 @@ export function step(state,action){
   s.phase='round';s.round++;s.current=null;s.scanned=[];if(!risk(s,'round'))roundLog(s);
  }
  else if(action==='next'){
-  if(s.recovered.length>=12||s.round>=15){s.phase='final';log(s,'SESSION LIMIT REACHED // 本次窗口即将关闭。\n你可以封存现有结构。终端不会替你补全缺失的部分。','accent');}
-  else if([4,8,12].includes(s.round)){s.phase='event';log(s,'RELAY REQUEST // 中继请求\n链路之外还有其他回应。你要保护中继、清理损坏缓存，还是放行未知节点？','accent');}
+  if(s.recovered.length>=12||s.round>=15){s.phase='final';log(s,'SESSION LIMIT REACHED // 接收窗口关闭\nARCHIVE READY // 待封存','accent');}
+  else if([4,8,12].includes(s.round)){s.phase='event';log(s,'RELAY REQUEST // 外部节点待处理','accent');}
   else{s.round++;s.phase='round';s.current=null;s.scanned=[];roundLog(s);}
  }
  else if(['seal','release','handshake'].includes(action))end(s,result(s,action));
@@ -115,15 +120,16 @@ export function step(state,action){
    else{
     s.recovered.push({key:p.key,type:p.type,title:p.title,text:p.text,round:s.round});
     if(['spoof','damaged'].includes(p.type)&&action==='lock'){s.errors++;s.sync=0;log(s,'UNVERIFIED MEMORY // 碎片 +1，但损坏被一并写入。错误 +1。','danger');}
-    else{s.sync++;s.best=Math.max(s.best,s.sync);s.trace=Math.max(0,s.trace-1);log(s,'MEMORY RECOVERED // 碎片 +1，连胜 +1，追踪 -1。','good');}
+    else{s.sync++;s.best=Math.max(s.best,s.sync);s.trace=Math.max(0,s.trace-1);log(s,'MEMORY RECOVERED // 碎片 +1，连续同步 +1，追踪 -1。','good');}
     if(p.type==='local')s.local++;if(p.type==='relay')s.relay++;if(p.type==='unknown'&&action==='lock'){s.unknown++;s.trace++;log(s,'UNKNOWN ACCESS // 未知来源未隔离，追踪 +1。','danger');}
-    log(s,s.round===1?'ARASHI > ……黎星？\nY > ……\nY > 通讯到此为止。':p.note,'voice');
+    if(s.round===1)log(s,'ARASHI > ……黎星？','voice','type');else log(s,p.note,'voice');
    }
   }
+  if(s.round===1)log(s,'Y > 追踪达到 6，切断封存，或让错误 +1 换取继续。强行继续后追踪回到 2；错误达到 3，连接终止。\nY > 收到 12 个碎片，或完成 15 轮，接收窗口关闭。未集齐也能封存。\nY > 后续中继请求的代价会标在选项上。\nY > 通讯到此为止。','voice');
   if(s.errors>=3)end(s,3);else risk(s,'review');
  }
  return s;
 }
-export function describe(p){return ({remote:'路径一致。校验正常；这只说明数据完整。',local:'跳数为 0。信号就在本地，不经过远端。',relay:'包含其他节点的路由。恢复也会保护中继。',unknown:'校验完整，但来源无法确认。直接锁定会放行来源；验证会隔离恢复。',damaged:'校验失败，但片段仍可读。验证可以修复；直接锁定会写入错误。',spoof:'信号很强，但经过 19 次跳转。完整校验与异常路径不一致。',noise:'信噪比过低，校验失败。很可能只有噪声。'})[p.type];}
+export function describe(p){return ({remote:'路径一致 / 校验通过',local:'本地来源 / HOPS 0',relay:'中继路由 / 关联节点在线',unknown:'校验通过 / 来源未确认',damaged:'校验失败 / 区段可修复',spoof:'强信号 / 路径异常',noise:'低信噪比 / 校验失败'})[p.type];}
 // Replay a saved transcript instead of trusting arbitrary persisted counters.
 export function restoreSave(value){if(!value||value.version!==VERSION||!Number.isInteger(value.seed)||!Array.isArray(value.actions)||value.actions.length>300)return null;let s=fresh(value.seed);for(const action of value.actions){if(typeof action!=='string'||!available(s).includes(action))return null;s=step(s,action);}return s;}
