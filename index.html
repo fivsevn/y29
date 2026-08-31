@@ -8,20 +8,106 @@
   <title>域/Y.29 — domain/Y.29</title>
   <link rel="stylesheet" href="./arashi/style.css">
   <style>
-    .index .node-line{align-items:flex-start;gap:20px}
-    .index .node-title{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:1ch;row-gap:8px;margin:0;letter-spacing:0;line-height:1.5;font-size:20px}
-    .index .node-title-cn{grid-column:2;font-size:16px}
-    .index .node-line small{white-space:nowrap;padding-top:6px}
-    .index .node-copy{margin-top:22px}
-    .index .node-copy p{margin:0 0 14px}
+    .index{
+      --muted:#8c9da6;
+      --line:#40525c;
+      max-width:840px;
+      min-height:calc(100svh - 64px);
+      margin:32px auto;
+      padding:0 28px;
+      border:3px double var(--line);
+      font-family:"Courier New",Menlo,Consolas,"PingFang SC",monospace;
+    }
+    .index header{
+      height:42px;
+      margin:0 -28px;
+      padding:0 20px;
+      border-bottom:3px double var(--bg);
+      background:var(--text);
+      color:var(--bg);
+      font-size:13px;
+      letter-spacing:.04em;
+    }
+    .index header a{color:inherit}
+    .index header a:focus-visible{outline-color:var(--bg)}
+    .index-main{padding:42px 0 28px}
+    .index h1{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-size:40px;
+      line-height:1.3;
+      letter-spacing:0;
+    }
+    .index h1::after{
+      content:"";
+      display:block;
+      width:.48em;
+      height:.86em;
+      background:var(--text);
+      animation:blink 1.4s step-end infinite;
+    }
+    .index .intro{margin:24px 0 36px;font-size:13px;line-height:2}
+    .index .node-link{padding:0;border:1px solid var(--line)}
+    .index .node-line{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:20px;
+      padding:15px 18px;
+      border-bottom:1px solid var(--line);
+      background:#17232b;
+    }
+    .index .node-title{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr);
+      column-gap:1ch;
+      row-gap:5px;
+      margin:0;
+      letter-spacing:0;
+      line-height:1.5;
+      font-size:20px;
+    }
+    .index .node-title-cn{grid-column:2;font-size:15px}
+    .index .node-line small{white-space:nowrap;padding-top:6px;font-size:11px}
+    .index .node-copy{padding:20px 18px}
+    .index .node-copy p{margin:0 0 14px;font-size:12px;line-height:1.9}
     .index .node-copy p:last-child{margin-bottom:0}
-    .index footer{justify-content:flex-end;text-align:right}
+    .index .node-link:focus-visible .node-line,
+    .index .node-link:active .node-line{background:var(--text);color:var(--bg)}
+    .index .node-link:focus-visible .node-line small,
+    .index .node-link:active .node-line small{color:var(--bg)}
+    .index .hint{margin-top:16px;line-height:1.8}
+    .index .hint::before{content:"> ";color:var(--text)}
+    .index footer{
+      margin-top:30px;
+      min-height:54px;
+      justify-content:flex-end;
+      text-align:right;
+      border-top:3px double var(--line);
+      font-size:10px;
+    }
+    @media(hover:hover){
+      .index .node-link:hover .node-line{background:var(--text);color:var(--bg)}
+      .index .node-link:hover .node-line small{color:var(--bg)}
+    }
+    @media(max-width:880px){
+      .index{margin:20px 20px;min-height:calc(100svh - 40px)}
+    }
     @media(max-width:600px){
-      .index .node-line{flex-wrap:wrap;gap:12px}
-      .index .node-title{font-size:clamp(14px,3.6vw,20px)}
-      .index .node-title-cn{font-size:14px}
+      .index{margin:12px;min-height:calc(100svh - 24px);padding:0 16px}
+      .index header{height:38px;margin:0 -16px;padding:0 14px;font-size:12px}
+      .index-main{padding:30px 0 22px}
+      .index h1{font-size:32px}
+      .index .intro{font-size:12px;margin-bottom:28px}
+      .index .node-line{flex-wrap:wrap;gap:10px;padding:13px 12px}
+      .index .node-title{font-size:clamp(13px,3.5vw,20px)}
+      .index .node-title-cn{font-size:13px}
       .index .node-line small{padding-top:0;margin-left:auto}
-      .index footer{align-items:flex-end;justify-content:center}
+      .index .node-copy{padding:16px 12px}
+      .index .node-copy p{font-size:12px;overflow-wrap:anywhere}
+      .index footer{margin-top:20px;align-items:flex-end;justify-content:center}
+      .index footer>span{font-size:9px}
     }
   </style>
 </head>
