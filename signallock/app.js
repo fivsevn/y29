@@ -16,22 +16,22 @@ function button(action,primary=false){const l=labels[action];return `<button dat
 function render(){
  $('shards').innerHTML=`${s.recovered.length}<span>/12</span>`;$('sync').textContent=s.sync;$('trace').innerHTML=`${s.trace}<span>/6</span>`;$('errors').innerHTML=`${s.errors}<span>/3</span>`;
  $('trace').classList.toggle('critical',s.trace>=5);$('errors').classList.toggle('critical',s.errors>0);
- $('roundLabel').textContent=['boot','status'].includes(s.phase)?'/ 待接入':`/ ${String(s.round).padStart(2,'0')} · ${s.phase==='ended'?'连接结束':'接收窗口'}`;
+ $('roundLabel').textContent=['boot','status'].includes(s.phase)?'/ STANDBY':`/ ${String(s.round).padStart(2,'0')} · ${s.phase==='ended'?'CLOSED':'RECEIVING'}`;
  $('archive').hidden=discovered.length===0;
  let html='',opts=available(s);
- if(s.phase==='boot')html=`<div class="welcome"><p>OPERATOR / 黎星<br>待接收：ARASHI 残留信号</p></div><div class="actions">${button('status',true)}</div>`;
+ if(s.phase==='boot')html=`<div class="welcome"><p>OPERATOR / 黎星</p></div><div class="actions">${button('status',true)}</div>`;
  if(s.phase==='status')html=`<div class="control-heading"><span>ARASHI_UPLOAD / 99.7%</span></div><div class="actions">${button('connect',true)}</div>`;
  if(s.phase==='round'){
-  html=`<div class="control-heading"><span>INCOMING SIGNAL / 候选信道</span><span>${s.current?'当前：CH.'+s.current:'尚未扫描'} · ${s.scanned.length}/2</span></div><div class="channels">`;
-  for(const id of ['A','B','C']){const exists=channels(s.seed,s.round).some(p=>p.id===id),seen=s.scanned.includes(id);html+=`<button class="channel ${s.current===id?'selected':''}" data-action="scan:${id}" ${!opts.includes('scan:'+id)?'disabled':''}><span>CH.${id} <span class="wave">${exists?'▂▅▃▆▂':'─────'}</span></span><small>${!exists?'未接通':s.current===id?'当前信号':seen?'已释放':'SCAN / 扫描'}</small></button>`;}
+  html=`<div class="control-heading"><span>INCOMING SIGNAL</span><span>${s.current?'CH.'+s.current:'WAITING'} · ${s.scanned.length}/2</span></div><div class="channels">`;
+  for(const id of ['A','B','C']){const exists=channels(s.seed,s.round).some(p=>p.id===id),seen=s.scanned.includes(id);html+=`<button class="channel ${s.current===id?'selected':''}" data-action="scan:${id}" ${!opts.includes('scan:'+id)?'disabled':''}><span>CH.${id} <span class="wave">${exists?'▂▅▃▆▂':'─────'}</span></span><small>${!exists?'OFFLINE':s.current===id?'SELECTED':seen?'RELEASED':'SCAN / 扫描'}</small></button>`;}
   html+='</div>';
   if(s.current)html+=`<div class="actions">${button('lock',true)}${button('verify')}${button('discard')}</div>`;
 
  }
- if(s.phase==='review')html=`<div class="control-heading"><span>TRANSACTION RECORDED / 事务已记录</span><span>窗口已关闭</span></div><div class="actions">${button('next',true)}</div>`;
+ if(s.phase==='review')html=`<div class="control-heading"><span>TRANSACTION RECORDED</span><span>WINDOW CLOSED</span></div><div class="actions">${button('next',true)}</div>`;
  if(s.phase==='risk')html=`<div class="control-heading danger"><span>TRACE CRITICAL / 追踪已达阈值</span><span>6 / 6</span></div><div class="actions">${button('cut',true)}${button('force')}</div>`;
- if(s.phase==='event')html=`<div class="control-heading"><span>RELAY REQUEST / 中继请求</span><span>来源未定</span></div><div class="actions">${opts.map((a,i)=>button(a,i===0)).join('')}</div>`;
- if(s.phase==='final')html=`<div class="control-heading"><span>ARCHIVE READY / 等待封存</span><span>${s.recovered.length} 个碎片</span></div><div class="actions">${opts.map((a,i)=>button(a,i===0)).join('')}</div>`;
+ if(s.phase==='event')html=`<div class="control-heading"><span>RELAY REQUEST</span><span>SOURCE UNKNOWN</span></div><div class="actions">${opts.map((a,i)=>button(a,i===0)).join('')}</div>`;
+ if(s.phase==='final')html=`<div class="control-heading"><span>ARCHIVE READY</span><span>${s.recovered.length} 个碎片</span></div><div class="actions">${opts.map((a,i)=>button(a,i===0)).join('')}</div>`;
  if(s.phase==='ended'){const e=ENDINGS[s.ending-1];html=`<div class="result-id">ENDING ${String(e.id).padStart(2,'0')} // ${e.code}</div><div class="result-name">${e.name}</div><div class="actions"><button class="primary" data-command="restart">重新连接<small>RECONNECT</small></button><button data-command="archive">已发现 ${discovered.length} / 13<small>ARCHIVE INDEX</small></button></div><p class="hint">碎片 ${s.recovered.length}/12 · 同步峰值 ${s.best} · 扫描 ${s.scans} 次</p>`;}
  $('controls').innerHTML=html;for(const b of $('controls').querySelectorAll('button'))if(busy)b.disabled=true;
  storageStatus();
@@ -87,4 +87,4 @@ $('archive').onclick=archive;$('restart').onclick=restart;$('closeDialog').oncli
 $('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent='声音 '+(soundOn?'开':'关');$('sound').setAttribute('aria-pressed',String(soundOn));beep();};
 $('log').onscroll=()=>{follow=$('log').scrollHeight-$('log').scrollTop-$('log').clientHeight<36;$('latest').hidden=follow;};
 $('latest').onclick=()=>{follow=true;$('log').scrollTop=$('log').scrollHeight;$('latest').hidden=true;};
-persist();if(restored){outputStatic(s.logs);addLine({text:'SESSION RESTORED // 会话已恢复',kind:'muted'});render();}else present(s.logs);
+persist();if(restored){outputStatic(s.logs);addLine({text:'SESSION RESTORED',kind:'muted'});render();}else present(s.logs);

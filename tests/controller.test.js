@@ -49,7 +49,7 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
   await h.click('status');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,0);
   await drain();assert.equal(lines.children.length,3);
   await h.click('status');
-  assert.equal(lines.children.at(-1).textContent,'SERVER ........ STORY_TELLER');
+  assert.equal(lines.children.at(-1).textContent,'SERVER ........... STORY_TELLER');
   for(let i=0;i<30&&lines.children.at(-1).textContent!=='载';i++)await tick();
   assert.equal(lines.children.at(-1).textContent,'载');
   await h.click('connect');assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,['status']);
@@ -59,7 +59,8 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
   await drain();assert.equal(lines.children.length,3);
   assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,[]);
   await h.click('status');await drain();
-  assert.equal(lines.children.at(-1).textContent,'载体未检出 / 意识在线');
+  assert.ok(lines.children.some(x=>x.textContent==='载体未检出 / 意识在线'));
+  assert.equal(lines.children.at(-1).textContent,'ARASHI_UPLOAD ... 99.7%');
   await h.click('connect');await drain();
   assert.match(lines.children.at(-1).textContent,/不能切回/);
  }finally{globalThis.setTimeout=originalTimeout;}
