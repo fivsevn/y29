@@ -29,9 +29,9 @@ test('unavailable storage and corrupt data do not prevent playing or render inje
 test('all routes have local assets; signal route loads its own controller',async()=>{
  for(const file of ['index.html','signallock/index.html','mobileutopia/index.html']){
   const html=await readFile(new URL('../'+file,import.meta.url),'utf8');assert.match(html,/<html lang="zh-CN"/);
-  for(const [,target] of html.matchAll(/(?:src|href)="([^"]+)"/g)){
-   assert.ok(!/^https?:/.test(target));await readFile(resolve(dirname(new URL('../'+file,import.meta.url).pathname),target,target.endsWith('/')?'index.html':''));
+  for(const [,href] of html.matchAll(/(?:src|href)="([^"]+)"/g)){
+   const target=href.split('?')[0];assert.ok(!/^https?:/.test(target));await readFile(resolve(dirname(new URL('../'+file,import.meta.url).pathname),target,target.endsWith('/')?'index.html':''));
   }
  }
- const signal=await readFile(new URL('../signallock/index.html',import.meta.url),'utf8');assert.match(signal,/src="\.\/app.js"/);
+ const signal=await readFile(new URL('../signallock/index.html',import.meta.url),'utf8');assert.match(signal,/src="\.\/app\.js(?:\?[^"]*)?"/);
 });

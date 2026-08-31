@@ -6,32 +6,36 @@ import {resolve,dirname} from 'node:path';
 
 function harness(initial={},fail=false){
  const elements=new Map(),handlers={},memory=new Map(Object.entries(initial));
- function element(){return {innerHTML:'',textContent:'',hidden:false,children:[],disabled:false,dataset:{},classList:{toggle(){}},setAttribute(){},append(x){this.children.push(x);},replaceChildren(){this.children=[];},querySelectorAll(){return [];},showModal(){this.open=true;},close(){this.open=false;},scrollTop:0,scrollHeight:100,clientHeight:100};}
+ function element(){return {innerHTML:'',textContent:'',hidden:false,children:[],disabled:false,dataset:{},classList:{toggle(){}},attributes:{},setAttribute(k,v){this.attributes[k]=v;},append(x){this.children.push(x);},replaceChildren(){this.children=[];},querySelectorAll(){return [];},showModal(){this.open=true;},close(){this.open=false;},scrollTop:0,scrollHeight:100,clientHeight:100};}
  globalThis.document={getElementById(id){if(!elements.has(id))elements.set(id,element());return elements.get(id);},createElement:element,addEventListener(type,f){handlers[type]=f;}};
  globalThis.window={matchMedia(){return {matches:true};}};
  globalThis.localStorage={getItem(k){if(fail)throw Error('Blocked');return memory.get(k)||null;},setItem(k,v){if(fail)throw Error('Quota');memory.set(k,v);}};
  const click=async(action)=>{handlers.click({target:{closest:()=>({dataset:{action},disabled:false})}});await Promise.resolve();};
- return {elements,memory,click,command:command=>handlers.click({target:{closest:()=>({dataset:{command},disabled:false})}})};
+ const settle=async()=>{for(let i=0;i<3000&&elements.get('log')?.attributes['data-output']==='busy';i++)await Promise.resolve();assert.equal(elements.get('log')?.attributes['data-output'],'idle');};
+ return {elements,memory,click,settle,command:command=>handlers.click({target:{closest:()=>({dataset:{command},disabled:false})}})};
 }
-test('controller starts, handles tutorial, stores transcript and ignores repeat lock',async()=>{
- const h=harness();await import('../signallock/app.js?controller1');assert.match(h.elements.get('controls').innerHTML,/查看系统状态/);
- for(const a of ['status','connect','scan:A','lock'])await h.click(a);
+test('controller starts, handles tutorial, stores transcript and ignores repeat lock',async t=>{
+ t.mock.method(globalThis,'setTimeout',callback=>{queueMicrotask(callback);return 0;});
+ const h=harness();await import('../signallock/app.js?controller1');await h.settle();assert.match(h.elements.get('controls').innerHTML,/查看系统状态/);
+ for(const a of ['status','connect','scan:A','lock']){await h.click(a);await h.settle();}
  assert.match(h.elements.get('shards').innerHTML,/1<span>/);assert.match(h.elements.get('controls').innerHTML,/下一段信号/);
  await h.click('lock');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,4);
 });
-test('blocked browser storage never prevents playing',async()=>{
- const h=harness({},true);await import('../signallock/app.js?controller2');for(const a of ['status','connect','scan:A','verify'])await h.click(a);
+test('blocked browser storage never prevents playing',async t=>{
+ t.mock.method(globalThis,'setTimeout',callback=>{queueMicrotask(callback);return 0;});
+ const h=harness({},true);await import('../signallock/app.js?controller2');await h.settle();for(const a of ['status','connect','scan:A','verify']){await h.click(a);await h.settle();}
  assert.match(h.elements.get('saveStatus').textContent,/存储不可用/);assert.match(h.elements.get('shards').innerHTML,/1<span>/);
 });
-test('corrupt save resets safely; archive strings cannot inject markup',async()=>{
- const h=harness({'y29.arashi.session.v1':'{broken','y29.arashi.archive.v1':'[1,"<script>",99,1]'});await import('../signallock/app.js?controller3');
+test('corrupt save resets safely; archive strings cannot inject markup',async t=>{
+ t.mock.method(globalThis,'setTimeout',callback=>{queueMicrotask(callback);return 0;});
+ const h=harness({'y29.arashi.session.v1':'{broken','y29.arashi.archive.v1':'[1,"<script>",99,1]'});await import('../signallock/app.js?controller3');await h.settle();
  h.elements.get('archive').onclick();assert.equal(h.elements.get('dialog').open,true);assert.match(h.elements.get('dialogBody').innerHTML,/1 \/ 13/);assert.doesNotMatch(h.elements.get('dialogBody').innerHTML,/<script>/);
 });
 test('all local page assets exist and load without external services',async()=>{
  for(const file of ['index.html','signallock/index.html']){
   const html=await readFile(new URL('../'+file,import.meta.url),'utf8');assert.match(html,/<html lang="zh-CN"/);assert.match(html,/name="viewport"/);
   for(const match of html.matchAll(/(?:src|href)="([^"]+)"/g)){
-   const target=match[1];assert.ok(!/^https?:/.test(target));const p=resolve(dirname(new URL('../'+file,import.meta.url).pathname),target,target.endsWith('/')?'index.html':'');await readFile(p);
+   const target=match[1].split('?')[0];assert.ok(!/^https?:/.test(target));const p=resolve(dirname(new URL('../'+file,import.meta.url).pathname),target,target.endsWith('/')?'index.html':'');await readFile(p);
   }
  }
 });
@@ -69,4 +73,28 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
   await h.click('connect');await drain();
   assert.match(lines.children.at(-1).textContent,/不能切回/);
  }finally{globalThis.setTimeout=originalTimeout;}
+});
+
+for(const restored of [false,true])test(`reduced motion still reveals one row at a time (${restored?'restored status':'new session'})`,async t=>{
+ const saved=restored?{'y29.arashi.session.v1':JSON.stringify({version:1,seed:123,actions:['status']})}:{};
+ const h=harness(saved),timers=[];
+ t.mock.method(globalThis,'setTimeout',(callback,delay)=>{timers.push({callback,delay});return timers.length;});
+ const tick=async()=>{const timer=timers.shift();assert.ok(timer);assert.ok(timer.delay>=300);timer.callback();for(let i=0;i<8;i++)await Promise.resolve();};
+ const drain=async()=>{for(let i=0;timers.length&&i<1000;i++){timers.shift().callback();for(let j=0;j<8;j++)await Promise.resolve();}assert.equal(timers.length,0);};
+ await import(`../signallock/app.js?reduced-${restored}`);
+ const lines=h.elements.get('lines');
+ assert.deepEqual(lines.children.map(x=>x.textContent),['> SYSTEM BOOT']);
+ assert.equal(h.elements.get('log').attributes['data-output'],'busy');
+ await tick();assert.equal(lines.children.length,2);
+ await tick();assert.equal(lines.children.length,3);
+ await drain();assert.equal(h.elements.get('log').attributes['data-output'],'idle');
+ if(!restored){
+  await h.click('status');
+  assert.equal(lines.children.length,4);
+  assert.equal(lines.children.at(-1).textContent,'SERVER ........... STORY_TELLER');
+  await tick();assert.equal(lines.children.length,5);
+  await drain();
+ }
+ assert.equal(lines.children.at(-1).textContent,'ARASHI_UPLOAD ... 99.7%');
+ assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,['status']);
 });

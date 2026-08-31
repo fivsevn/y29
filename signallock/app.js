@@ -50,7 +50,7 @@ async function output(entries,myEpoch){
    if(myEpoch!==epoch)return;
    const deliberate=entry.reveal==='type';
    const command=/^(>|[a-z].*\.\.\.$)/.test(text);
-   const streamed=deliberate||command||entry.kind==='voice';
+   const streamed=!motionReduced()&&(deliberate||command||entry.kind==='voice');
    const div=addLine({kind:entry.kind,text:streamed?'':text},index++>0);
    div.className+=' printing';
    if(streamed){
@@ -65,16 +65,16 @@ async function output(entries,myEpoch){
      tick++;
     }
    }
-   // A brief carriage-return pause; no fades, easing or per-letter movement.
-   if(!motionReduced())await pause(deliberate?260:entry.kind==='voice'?110:40);
+   // Line sequencing is content pacing, not motion: retain it in reduced-motion mode.
+   await pause(entry.kind==='voice'?300:360);
    div.className=div.className.replace(' printing','');
   }
-  if(!motionReduced())await pause(entry.kind==='voice'?160:210);
+  await pause(180);
  }
 }
 async function present(entries){
  const myEpoch=epoch;busy=true;$('log').setAttribute('data-output','busy');render();
- if(motionReduced())outputStatic(entries);else await output(entries,myEpoch);
+ await output(entries,myEpoch);
  if(myEpoch!==epoch)return;
  busy=false;$('log').setAttribute('data-output','idle');render();$('announcement').textContent=entries.at(-1)?.text||'';
 }
@@ -99,4 +99,11 @@ $('archive').onclick=archive;$('restart').onclick=restart;$('closeDialog').oncli
 $('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent='声音 '+(soundOn?'开':'关');$('sound').setAttribute('aria-pressed',String(soundOn));beep();};
 $('log').onscroll=()=>{follow=$('log').scrollHeight-$('log').scrollTop-$('log').clientHeight<36;$('latest').hidden=follow;};
 $('latest').onclick=()=>{follow=true;$('log').scrollTop=$('log').scrollHeight;$('latest').hidden=true;};
-persist();if(restored){outputStatic(s.logs);present([{text:'> SESSION RESTORED',kind:'muted'}]);}else present(s.logs);
+persist();
+if(restored&&!['boot','status'].includes(s.phase)){
+ // Older turns remain readable; replay the latest transaction on reconnect.
+ const previous=restoreSave({version:VERSION,seed:s.seed,actions:actions.slice(0,-1)});
+ const boundary=previous?.logs.length||0;
+ outputStatic(s.logs.slice(0,boundary));
+ present([{text:'> SESSION RESTORED',kind:'muted'},...s.logs.slice(boundary)]);
+}else present(s.logs);
