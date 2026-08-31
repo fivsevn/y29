@@ -26,12 +26,12 @@ test('unavailable storage and corrupt data do not prevent playing or render inje
  const h=harness({},true);await import('../mobileutopia/app.js?blocked');h.elements.get('place').value='bridge';h.click('begin');assert.match(h.elements.get('saveStatus').textContent,/存储不可用/);h.click('choose:invite');assert.match(h.elements.get('game').innerHTML,/两件事/);
  const bad=harness({'y29.mobileutopia.session.v1':'{broken','y29.mobileutopia.archive.v1':'["<script>alert(1)</script>",null]'});await import('../mobileutopia/app.js?bad');bad.click('archive');assert.doesNotMatch(bad.elements.get('dialogBody').innerHTML,/<script>/);
 });
-test('both new routes and legacy route have local assets; new signal route shares original save controller',async()=>{
- for(const file of ['index.html','arashi/index.html','signallock/index.html','mobileutopia/index.html']){
+test('all routes have local assets; signal route loads its own controller',async()=>{
+ for(const file of ['index.html','signallock/index.html','mobileutopia/index.html']){
   const html=await readFile(new URL('../'+file,import.meta.url),'utf8');assert.match(html,/<html lang="zh-CN"/);
   for(const [,target] of html.matchAll(/(?:src|href)="([^"]+)"/g)){
    assert.ok(!/^https?:/.test(target));await readFile(resolve(dirname(new URL('../'+file,import.meta.url).pathname),target,target.endsWith('/')?'index.html':''));
   }
  }
- const signal=await readFile(new URL('../signallock/index.html',import.meta.url),'utf8');assert.match(signal,/src="\.\.\/arashi\/app.js"/);
+ const signal=await readFile(new URL('../signallock/index.html',import.meta.url),'utf8');assert.match(signal,/src="\.\/app.js"/);
 });

@@ -1,4 +1,4 @@
-# 阿岚残响频率 / ARASHI
+# 阿岚：残响频率 / ARASHI: SIGNAL LOCK
 
 本目录用于存放阿岚网页小游戏的代码与资源。
 
@@ -7,7 +7,7 @@
 ## 规划地址
 
 - 企划入口：`https://y29.fivsevn.com/`
-- 阿岚游戏：`https://y29.fivsevn.com/arashi/`
+- 阿岚游戏：`https://y29.fivsevn.com/signallock/`
 
 以上为规划地址；是否已上线取决于 GitHub Pages 与域名配置。
 
@@ -28,12 +28,12 @@
 
 ## 开发与检查
 
-使用 Node.js 运行 `npm test` 执行模型和界面控制器单元测试。运行 `npm start` 后访问 `http://127.0.0.1:4173/arashi/`。无需安装第三方依赖。直接双击 HTML 不支持模块加载，请通过本地服务器或 GitHub Pages 打开。
+使用 Node.js 运行 `npm test` 执行模型和界面控制器单元测试。运行 `npm start` 后访问 `http://127.0.0.1:4173/signallock/`。无需安装第三方依赖。直接双击 HTML 不支持模块加载，请通过本地服务器或 GitHub Pages 打开。
 
 结局测试使用真实可执行的操作序列验证全部 13 个结局，另有 500 局混合选择测试。没有通过直接修改统计数值来伪造可达性。
 
 ## GitHub Pages
 
-在仓库 Settings → Pages 选择 Deploy from a branch，分支 main、目录 / (root)。未绑定域名时入口为 `https://fivsevn.github.io/y29/`，游戏为 `https://fivsevn.github.io/y29/arashi/`。
+在仓库 Settings → Pages 选择 Deploy from a branch，分支 main、目录 / (root)。未绑定域名时入口为 `https://fivsevn.github.io/y29/`，游戏为 `https://fivsevn.github.io/y29/signallock/`。
 
 自定义域名待确认 DNS 后，在 Pages 的 Custom domain 中配置 `y29.fivsevn.com`，并将 DNS 的 `y29` CNAME 指向 `fivsevn.github.io`。不要修改主域名记录。等待证书就绪后再启用 Enforce HTTPS。本版不预先添加 CNAME 文件，以免在域名未就绪时强制跳转到不可用地址。

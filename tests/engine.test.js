@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ENDINGS,fresh,step,channels,available,restoreSave} from '../arashi/engine.js';
+import {ENDINGS,fresh,step,channels,available,restoreSave} from '../signallock/engine.js';
 
 function play(target,seed=42){
  let s=fresh(seed),actions=[];

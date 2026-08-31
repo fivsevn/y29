@@ -14,21 +14,21 @@ function harness(initial={},fail=false){
  return {elements,memory,click};
 }
 test('controller starts, handles tutorial, stores transcript and ignores repeat lock',async()=>{
- const h=harness();await import('../arashi/app.js?controller1');assert.match(h.elements.get('controls').innerHTML,/查看系统状态/);
+ const h=harness();await import('../signallock/app.js?controller1');assert.match(h.elements.get('controls').innerHTML,/查看系统状态/);
  for(const a of ['status','connect','scan:A','lock'])await h.click(a);
  assert.match(h.elements.get('shards').innerHTML,/1<span>/);assert.match(h.elements.get('controls').innerHTML,/下一段信号/);
  await h.click('lock');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,4);
 });
 test('blocked browser storage never prevents playing',async()=>{
- const h=harness({},true);await import('../arashi/app.js?controller2');for(const a of ['status','connect','scan:A','verify'])await h.click(a);
+ const h=harness({},true);await import('../signallock/app.js?controller2');for(const a of ['status','connect','scan:A','verify'])await h.click(a);
  assert.match(h.elements.get('saveStatus').textContent,/存储不可用/);assert.match(h.elements.get('shards').innerHTML,/1<span>/);
 });
 test('corrupt save resets safely; archive strings cannot inject markup',async()=>{
- const h=harness({'y29.arashi.session.v1':'{broken','y29.arashi.archive.v1':'[1,"<script>",99,1]'});await import('../arashi/app.js?controller3');
+ const h=harness({'y29.arashi.session.v1':'{broken','y29.arashi.archive.v1':'[1,"<script>",99,1]'});await import('../signallock/app.js?controller3');
  h.elements.get('archive').onclick();assert.equal(h.elements.get('dialog').open,true);assert.match(h.elements.get('dialogBody').innerHTML,/1 \/ 13/);assert.doesNotMatch(h.elements.get('dialogBody').innerHTML,/<script>/);
 });
 test('all local page assets exist and load without external services',async()=>{
- for(const file of ['index.html','arashi/index.html']){
+ for(const file of ['index.html','signallock/index.html']){
   const html=await readFile(new URL('../'+file,import.meta.url),'utf8');assert.match(html,/<html lang="zh-CN"/);assert.match(html,/name="viewport"/);
   for(const match of html.matchAll(/(?:src|href)="([^"]+)"/g)){
    const target=match[1];assert.ok(!/^https?:/.test(target));const p=resolve(dirname(new URL('../'+file,import.meta.url).pathname),target,target.endsWith('/')?'index.html':'');await readFile(p);
