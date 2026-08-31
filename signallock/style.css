@@ -19,3 +19,5 @@
 @media(prefers-reduced-motion:reduce){
  #lines .printing::after,#log[data-output="idle"] #lines>div:last-child::after{animation:none}
 }
+
+.system-note{border-left:2px solid #466173;padding-left:12px;color:var(--text)}

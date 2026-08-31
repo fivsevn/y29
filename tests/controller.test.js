@@ -17,13 +17,13 @@ function harness(initial={},fail=false){
 test('controller starts, handles tutorial, stores transcript and ignores repeat lock',async t=>{
  t.mock.method(globalThis,'setTimeout',callback=>{queueMicrotask(callback);return 0;});
  const h=harness();await import('../signallock/app.js?controller1');await h.settle();assert.match(h.elements.get('controls').innerHTML,/查看系统状态/);
- for(const a of ['status','connect','scan:A','lock']){await h.click(a);await h.settle();}
+ for(const a of ['status','connect','reply','scan:A','lock']){await h.click(a);await h.settle();}
  assert.match(h.elements.get('shards').innerHTML,/1<span>/);assert.match(h.elements.get('controls').innerHTML,/下一段信号/);
- await h.click('lock');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,4);
+ await h.click('lock');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,5);
 });
 test('blocked browser storage never prevents playing',async t=>{
  t.mock.method(globalThis,'setTimeout',callback=>{queueMicrotask(callback);return 0;});
- const h=harness({},true);await import('../signallock/app.js?controller2');await h.settle();for(const a of ['status','connect','scan:A','verify']){await h.click(a);await h.settle();}
+ const h=harness({},true);await import('../signallock/app.js?controller2');await h.settle();for(const a of ['status','connect','reply','scan:A','verify']){await h.click(a);await h.settle();}
  assert.match(h.elements.get('saveStatus').textContent,/存储不可用/);assert.match(h.elements.get('shards').innerHTML,/1<span>/);
 });
 test('corrupt save resets safely; archive strings cannot inject markup',async t=>{
@@ -57,8 +57,8 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
   assert.ok(lines.children.every(x=>!x.className.includes('printing')));
   await h.click('status');
   assert.equal(lines.children.at(-1).textContent,'RELAY NODE ....... Y.0529');
-  for(let i=0;i<30&&lines.children.at(-1).textContent!=='载';i++)await tick();
-  assert.equal(lines.children.at(-1).textContent,'载');
+  for(let i=0;i<30&&lines.children.at(-1).textContent!=='[';i++)await tick();
+  assert.equal(lines.children.at(-1).textContent,'[');
   assert.match(lines.children.at(-1).className,/printing/);
   await h.click('connect');assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,['status']);
   h.elements.get('restart').onclick();
@@ -68,9 +68,12 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
   assert.ok(lines.children.every(x=>!x.className.includes('printing')));
   assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,[]);
   await h.click('status');await drain();
-  assert.ok(lines.children.some(x=>x.textContent==='载体未检出 / 意识在线'));
+  assert.ok(lines.children.some(x=>x.textContent==='[提示：脑干诱发电位丢失。]'));
   assert.equal(lines.children.at(-1).textContent,'ARASHI_UPLOAD ... 99.7%');
   await h.click('connect');await drain();
+  assert.match(h.elements.get('controls').innerHTML,/REPLY/);
+  assert.doesNotMatch(h.elements.get('controls').innerHTML,/data-action="scan:/);
+  await h.click('reply');await drain();
   assert.match(lines.children.at(-1).textContent,/不能切回/);
  }finally{globalThis.setTimeout=originalTimeout;}
 });
@@ -88,10 +91,10 @@ for(const reduced of [false,true])test(`mixed terminal pacing survives motion pr
  for(let i=0;lines.children.length<5&&i<300;i++)await tick();
  assert.deepEqual(lines.children.slice(-2).map(x=>x.textContent),['SERVER ........... STORY_TELLER','RELAY NODE ....... Y.0529']);
  assert.ok(timers[0].delay>=400);
- await tick();assert.equal(lines.children.length,8); // Next three status fields flush together.
- for(let i=0;lines.children.at(-1).textContent!=='载'&&i<20;i++)await tick();
- assert.equal(lines.children.at(-1).textContent,'载');
- await tick();assert.equal(lines.children.at(-1).textContent,'载体');
+ await tick();assert.equal(lines.children.length,6); // The process row completes this record group.
+ for(let i=0;lines.children.at(-1).textContent!=='['&&i<40;i++)await tick();
+ assert.equal(lines.children.at(-1).textContent,'[');
+ await tick();assert.equal(lines.children.at(-1).textContent,'[提');
  for(let i=0;timers.length&&i<1000;i++)await tick();
  assert.equal(timers.length,0);
  assert.equal(h.elements.get('log').attributes['data-output'],'idle');

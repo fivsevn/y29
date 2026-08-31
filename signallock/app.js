@@ -1,4 +1,4 @@
-import {VERSION,ENDINGS,fresh,step,channels,available,restoreSave} from './engine.js';
+import {VERSION,ENDINGS,fresh,step,channels,available,restoreSave} from './engine.js?v=opening-4';
 const $=id=>document.getElementById(id), SAVE='y29.arashi.session.v1', ARCHIVE='y29.arashi.archive.v1';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let storageOK=true;
@@ -11,7 +11,7 @@ const savedArchive=read(ARCHIVE);let discovered=Array.isArray(savedArchive)?[...
 let audio=null,soundOn=false;
 function beep(){if(!soundOn)return;try{audio??=new (window.AudioContext||window.webkitAudioContext)();audio.resume().catch(()=>{});const o=audio.createOscillator(),g=audio.createGain();o.type='sine';o.frequency.value=s.phase==='ended'?420:760;g.gain.setValueAtTime(.025,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.075);o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+.08);}catch{soundOn=false;$('sound').textContent='声音不可用';$('sound').setAttribute('aria-pressed','false');}}
 function persist(){write(SAVE,{version:VERSION,seed:s.seed,actions});if(s.ending&&!discovered.includes(s.ending)){discovered.push(s.ending);write(ARCHIVE,discovered);}}
-const labels={status:['查看系统状态','SYSTEM STATUS'],connect:['接入信号','CONNECT'],lock:['锁定','LOCK'],verify:['验证并恢复','VERIFY'],discard:['丢弃','DISCARD'],next:['下一段信号','CONTINUE'],cut:['切断并封存','CUT LINK'],force:['强行继续','TRACE → 2 / ERR +1'],protect:['保护中继','TRACE −1'],clean:['清理缓存','ERR −1 / 审查 +1'],bypass:['放行未知节点','TRACE +1'],seal:['封存结构','SEAL ARCHIVE'],release:['保持无载体运行','NO SHELL'],handshake:['回应 Y.0529','HANDSHAKE']};
+const labels={reply:['？','REPLY'],status:['查看系统状态','SYSTEM STATUS'],connect:['接入信号','CONNECT'],lock:['锁定','LOCK'],verify:['验证并恢复','VERIFY'],discard:['丢弃','DISCARD'],next:['下一段信号','CONTINUE'],cut:['切断并封存','CUT LINK'],force:['强行继续','TRACE → 2 / ERR +1'],protect:['保护中继','TRACE −1'],clean:['清理缓存','ERR −1 / 审查 +1'],bypass:['放行未知节点','TRACE +1'],seal:['封存结构','SEAL ARCHIVE'],release:['保持无载体运行','NO SHELL'],handshake:['回应 Y.0529','HANDSHAKE']};
 function button(action,primary=false){const l=labels[action];return `<button data-action="${action}" class="${primary?'primary ':''}${action==='force'?'danger':''}">${l[0]}<small>${l[1]}</small></button>`;}
 function render(){
  $('shards').innerHTML=`${s.recovered.length}<span>/12</span>`;$('sync').textContent=s.sync;$('trace').innerHTML=`${s.trace}<span>/6</span>`;$('errors').innerHTML=`${s.errors}<span>/3</span>`;
@@ -21,6 +21,7 @@ function render(){
  let html='',opts=available(s);
  if(s.phase==='boot')html=`<div class="welcome"><p>OPERATOR / 黎星</p></div><div class="actions">${button('status',true)}</div>`;
  if(s.phase==='status')html=`<div class="control-heading"><span>ARASHI_UPLOAD / 99.7%</span></div><div class="actions">${button('connect',true)}</div>`;
+ if(s.phase==='greeting')html=`<div class="actions">${button('reply',true)}</div>`;
  if(s.phase==='round'){
   html=`<div class="control-heading"><span>INCOMING SIGNAL</span><span>${s.current?'CH.'+s.current:'WAITING'} · ${s.scanned.length}/2</span></div><div class="channels">`;
   for(const id of ['A','B','C']){const exists=channels(s.seed,s.round).some(p=>p.id===id),seen=s.scanned.includes(id);html+=`<button class="channel ${s.current===id?'selected':''}" data-action="scan:${id}" ${!opts.includes('scan:'+id)?'disabled':''}><span>CH.${id} <span class="wave">${exists?'▂▅▃▆▂':'─────'}</span></span><small>${!exists?'OFFLINE':s.current===id?'SELECTED':seen?'RELEASED':'SCAN / 扫描'}</small></button>`;}
@@ -72,7 +73,10 @@ async function output(entries,myEpoch){
      const size=deliberate||command?1:[2,2,3][tick%3];
      position=Math.min(chars.length,position+size);
      div.textContent=chars.slice(0,position).join('');scrollOutput();
-     await pause(deliberate?65:command?22:34);
+     // Discrete clock ticks: English advances unevenly, with short read stalls.
+     const ascii=/^[\x00-\x7F]*$/.test(text);
+     const delay=ascii?[45,75,40,120,55,85][tick%6]:deliberate?65:34;
+     await pause(delay);
      tick++;
     }
    }

@@ -6,7 +6,7 @@ function play(target,seed=42){
  let s=fresh(seed),actions=[];
  for(let count=0;count<150&&s.phase!=='ended';count++){
   const opts=available(s);let a;
-  if(s.phase==='boot')a='status';else if(s.phase==='status')a='connect';else if(s.phase==='review')a='next';
+  if(s.phase==='boot')a='status';else if(s.phase==='status')a='connect';else if(s.phase==='greeting')a='reply';else if(s.phase==='review')a='next';
   else if(s.phase==='event')a=target===11||target===12?'protect':target===5?'bypass':'clean';
   else if(s.phase==='risk')a=target===12?'force':'cut';
   else if(s.phase==='final')a=target===10?'handshake':target===8?'release':'seal';
@@ -40,7 +40,7 @@ test('all thirteen endings have a playable transcript, not fabricated counters',
  assert.equal(seen.size,ENDINGS.length);
 });
 test('tutorial, scan limit and last-scanned-only operations',()=>{
- let s=step(step(fresh(2),'status'),'connect');assert.deepEqual(available(s),['scan:A']);assert.equal(step(s,'scan:B'),s);
+ let s=step(step(step(fresh(2),'status'),'connect'),'reply');assert.deepEqual(available(s),['scan:A']);assert.equal(step(s,'scan:B'),s);
  s=step(s,'scan:A');assert.equal(step(s,'scan:A'),s);s=step(step(s,'lock'),'next');
  s=step(step(s,'scan:A'),'scan:B');assert.equal(s.current,'B');assert.equal(step(s,'scan:C'),s);assert.equal(step(s,'scan:A'),s);
  const p=channels(2,2)[1];s=step(s,'lock');assert.equal(s.history.at(-1).type,p.type);assert.equal(step(s,'lock'),s);
@@ -61,3 +61,17 @@ test('500 deterministic mixed-action sessions terminate and stay within bounds',
 });
 
 export {play};
+
+test('opening reply gates scanning without changing game counters and old saves remain compatible',()=>{
+ let s=step(step(fresh(88),'status'),'connect');
+ assert.equal(s.phase,'greeting');assert.deepEqual(available(s),['reply']);
+ assert.equal(step(s,'scan:A'),s);
+ const pending=restoreSave({version:1,seed:88,actions:['status','connect']});
+ assert.deepEqual(pending,s);
+ s=step(s,'reply');assert.equal(s.phase,'round');
+ assert.deepEqual([s.round,s.scans,s.trace,s.errors,s.recovered.length],[1,0,0,0,0]);
+ assert.equal(step(s,'reply'),s);
+ const legacy=restoreSave({version:1,seed:88,actions:['status','connect','scan:A','lock']});
+ const current=restoreSave({version:1,seed:88,actions:['status','connect','reply','scan:A','lock']});
+ assert.deepEqual(legacy,current);
+});
