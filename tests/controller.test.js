@@ -45,18 +45,23 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
  try{
   await import('../signallock/app.js?animated');
   const lines=h.elements.get('lines');
-  assert.deepEqual(lines.children.map(x=>x.textContent),['> SYSTEM BOOT']);
+  assert.deepEqual(lines.children.map(x=>x.textContent),['> ']);
+  assert.match(lines.children[0].className,/printing/);
+  await tick();assert.equal(lines.children[0].textContent,'> SYST');
   await h.click('status');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,0);
   await drain();assert.equal(lines.children.length,3);
+  assert.ok(lines.children.every(x=>!x.className.includes('printing')));
   await h.click('status');
   assert.equal(lines.children.at(-1).textContent,'SERVER ........... STORY_TELLER');
   for(let i=0;i<30&&lines.children.at(-1).textContent!=='载';i++)await tick();
   assert.equal(lines.children.at(-1).textContent,'载');
+  assert.match(lines.children.at(-1).className,/printing/);
   await h.click('connect');assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,['status']);
   h.elements.get('restart').onclick();
   // Confirm via the real delegated click handler using a command button.
   h.command('confirm-restart');
   await drain();assert.equal(lines.children.length,3);
+  assert.ok(lines.children.every(x=>!x.className.includes('printing')));
   assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,[]);
   await h.click('status');await drain();
   assert.ok(lines.children.some(x=>x.textContent==='载体未检出 / 意识在线'));

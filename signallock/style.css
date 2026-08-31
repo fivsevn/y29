@@ -4,3 +4,18 @@
 /* Terminal records retain grouping while individual lines print in sequence. */
 #lines>div.continuation{margin-top:-10px}.meters>.error-meter{color:var(--red)}
 @media(max-width:600px){#lines>div.continuation{margin-top:-8px}}
+
+/* The write head is part of the current text line, including after wrapping. */
+#log{scroll-behavior:auto;font-variant-ligatures:none}
+#lines>div{min-height:1.8em}
+#lines .printing::after,
+#log[data-output="idle"] #lines>div:last-child::after{
+ content:"\00a0";display:inline-block;width:.65em;height:1.05em;
+ margin-left:1px;vertical-align:-.14em;background:var(--text);
+ animation:dos-cursor 1s steps(1,end) infinite;
+}
+#lines .printing::after{animation:none}
+@keyframes dos-cursor{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){
+ #lines .printing::after,#log[data-output="idle"] #lines>div:last-child::after{animation:none}
+}

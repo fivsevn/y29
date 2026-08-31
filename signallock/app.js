@@ -41,30 +41,42 @@ function addLine(entry,continuation=false){const div=document.createElement('div
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function motionReduced(){return window.matchMedia('(prefers-reduced-motion: reduce)').matches;}
 function outputStatic(entries){for(const entry of entries)entry.text.split('\n').forEach((text,i)=>addLine({kind:entry.kind,text},i>0));}
+// DOS-style writes: commands arrive in byte-like bursts, status rows flush at once.
+// Only marked narrative beats use a deliberate one-character cadence.
 async function output(entries,myEpoch){
  for(const entry of entries){
   let index=0;
   for(const text of entry.text.split('\n')){
    if(myEpoch!==epoch)return;
-   const typed=entry.reveal==='type';
-   const div=addLine({kind:entry.kind,text:typed?'':text},index++>0);
-   if(typed){
-    for(const char of Array.from(text)){
+   const deliberate=entry.reveal==='type';
+   const command=/^(>|[a-z].*\.\.\.$)/.test(text);
+   const streamed=deliberate||command||entry.kind==='voice';
+   const div=addLine({kind:entry.kind,text:streamed?'':text},index++>0);
+   div.className+=' printing';
+   if(streamed){
+    const chars=Array.from(text);
+    let position=0,tick=0;
+    while(position<chars.length){
      if(myEpoch!==epoch)return;
-     div.textContent+=char;scrollOutput();
-     if(!motionReduced())await pause(/[。？！…]/.test(char)?110:32);
+     const size=deliberate?1:command?[2,4,3,6][tick%4]:[2,2,3][tick%3];
+     position=Math.min(chars.length,position+size);
+     div.textContent=chars.slice(0,position).join('');scrollOutput();
+     if(!motionReduced())await pause(deliberate?60:command?28:36);
+     tick++;
     }
    }
-   if(!motionReduced())await pause(entry.kind==='voice'?230:135);
+   // A brief carriage-return pause; no fades, easing or per-letter movement.
+   if(!motionReduced())await pause(deliberate?260:entry.kind==='voice'?110:40);
+   div.className=div.className.replace(' printing','');
   }
-  if(!motionReduced())await pause(100);
+  if(!motionReduced())await pause(entry.kind==='voice'?160:210);
  }
 }
 async function present(entries){
- const myEpoch=epoch;busy=true;render();
+ const myEpoch=epoch;busy=true;$('log').setAttribute('data-output','busy');render();
  if(motionReduced())outputStatic(entries);else await output(entries,myEpoch);
  if(myEpoch!==epoch)return;
- busy=false;render();$('announcement').textContent=entries.at(-1)?.text||'';
+ busy=false;$('log').setAttribute('data-output','idle');render();$('announcement').textContent=entries.at(-1)?.text||'';
 }
 async function perform(action){
  if(busy||!available(s).includes(action))return;
@@ -87,4 +99,4 @@ $('archive').onclick=archive;$('restart').onclick=restart;$('closeDialog').oncli
 $('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent='声音 '+(soundOn?'开':'关');$('sound').setAttribute('aria-pressed',String(soundOn));beep();};
 $('log').onscroll=()=>{follow=$('log').scrollHeight-$('log').scrollTop-$('log').clientHeight<36;$('latest').hidden=follow;};
 $('latest').onclick=()=>{follow=true;$('log').scrollTop=$('log').scrollHeight;$('latest').hidden=true;};
-persist();if(restored){outputStatic(s.logs);addLine({text:'SESSION RESTORED',kind:'muted'});render();}else present(s.logs);
+persist();if(restored){outputStatic(s.logs);present([{text:'> SESSION RESTORED',kind:'muted'}]);}else present(s.logs);
