@@ -100,4 +100,10 @@ for(const reduced of [false,true])test(`mixed terminal pacing survives motion pr
  assert.equal(h.elements.get('log').attributes['data-output'],'idle');
  assert.equal(lines.children.at(-1).textContent,'ARASHI_UPLOAD ... 99.7%');
  assert.deepEqual(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions,['status']);
+ await h.click('connect');
+ assert.match(h.elements.get('controls').innerHTML,/CONNECTING/);
+ assert.doesNotMatch(h.elements.get('controls').innerHTML,/REPLY/);
+ for(let i=0;timers.length&&i<1000;i++)await tick();
+ assert.match(h.elements.get('controls').innerHTML,/REPLY/);
+ assert.doesNotMatch(h.elements.get('controls').innerHTML,/CONNECTING/);
 });

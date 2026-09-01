@@ -1,4 +1,4 @@
-import {VERSION,ENDINGS,fresh,step,channels,available,restoreSave} from './engine.js?v=scan-5';
+import {VERSION,ENDINGS,fresh,step,channels,available,restoreSave} from './engine.js?v=reply-reveal-6';
 const $=id=>document.getElementById(id), SAVE='y29.arashi.session.v1', ARCHIVE='y29.arashi.archive.v1';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let storageOK=true;
@@ -21,7 +21,7 @@ function render(){
  let html='',opts=available(s);
  if(s.phase==='boot')html=`<div class="welcome"><p>OPERATOR / 黎星</p></div><div class="actions">${button('status',true)}</div>`;
  if(s.phase==='status')html=`<div class="control-heading"><span>ARASHI_UPLOAD / 99.7%</span></div><div class="actions">${button('connect',true)}</div>`;
- if(s.phase==='greeting')html=`<div class="actions">${button('reply',true)}</div>`;
+ if(s.phase==='greeting')html=busy?`<div class="actions"><button class="primary" disabled>接入信号<small>CONNECTING</small></button></div>`:`<div class="actions">${button('reply',true)}</div>`;
  if(s.phase==='round'){
   html=`<div class="control-heading"><span>INCOMING SIGNAL</span><span>${s.current?'CH.'+s.current:'WAITING'} · ${s.scanned.length}/2</span></div><div class="channels">`;
   for(const id of ['A','B','C']){const exists=channels(s.seed,s.round).some(p=>p.id===id),seen=s.scanned.includes(id);html+=`<button class="channel ${s.current===id?'selected':''}" data-action="scan:${id}" ${!opts.includes('scan:'+id)?'disabled':''}><span>CH.${id} <span class="wave">${exists?'▂▅▃▆▂':'─────'}</span></span><small>${!exists?'OFFLINE':s.current===id?'SELECTED':seen?'RELEASED':'SCAN / 扫描'}</small></button>`;}
