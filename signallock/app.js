@@ -20,7 +20,7 @@ function render(){
  $('roundLabel').textContent=['boot','status'].includes(s.phase)?'/ STANDBY':`/ ${String(s.round).padStart(2,'0')} · ${s.phase==='ended'?'CLOSED':'RECEIVING'}`;
  $('archive').hidden=discovered.length===0;
  let html='',opts=available(s);
- if(s.phase==='boot')html=`<div class="welcome"><p>OPERATOR / 黎星</p></div><div class="actions">${button('status',true)}</div>`;
+ if(s.phase==='boot')html=`<div class="welcome"><p>OPERATOR / 黎星</p></div>${busy?'':`<div class="actions">${button('status',true)}</div>`}`;
  if(s.phase==='status')html=`<div class="control-heading"><span>ARASHI_UPLOAD / 99.7%</span></div><div class="actions">${button('connect',true)}</div>`;
  if(s.phase==='greeting')html=busy?`<div class="actions"><button class="primary" disabled>接入信号<small>CONNECTING</small></button></div>`:`<div class="actions">${button('reply',true)}</div>`;
  if(s.phase==='round'){

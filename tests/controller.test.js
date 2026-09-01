@@ -51,10 +51,12 @@ test('terminal prints lines and selected characters, blocks overlapping actions 
   const lines=h.elements.get('lines');
   assert.deepEqual(lines.children.map(x=>x.textContent),['>']);
   assert.match(lines.children[0].className,/printing/);
+  assert.doesNotMatch(h.elements.get('controls').innerHTML,/查看系统状态/);
   await tick();assert.equal(lines.children[0].textContent,'> ');
   await h.click('status');assert.equal(JSON.parse(h.memory.get('y29.arashi.session.v1')).actions.length,0);
   await drain();assert.equal(lines.children.length,3);
   assert.ok(lines.children.every(x=>!x.className.includes('printing')));
+  assert.match(h.elements.get('controls').innerHTML,/查看系统状态/);
   await h.click('status');
   assert.equal(lines.children.at(-1).textContent,'RELAY NODE ....... Y.0529');
   for(let i=0;i<30&&lines.children.at(-1).textContent!=='[';i++)await tick();
