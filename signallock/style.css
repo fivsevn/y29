@@ -30,11 +30,13 @@
 .signal-value{color:var(--text);min-width:3ch}.signal-value.warn{color:#e0bf77}.signal-value.pass{color:#a2bfaa}
 .signal-value.bad{background:#db817c;color:#080c10;padding:0 4px;font-weight:700}
 @media(max-width:600px){#lines>.signal-metrics{gap:6px 14px}.signal-field{gap:6px}}
+@font-face{font-family:"Y29 Plex Mono";src:url("../assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Y29 Fusion Pixel";src:url("../assets/fonts/FusionPixel12px-Mono-SC.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap}
 /* Restrained DOS pass: text-mode contrast, denser geometry, no novelty CRT effects. */
 :root{
  --bg:#06090c;--text:#bed0da;--muted:#728b99;--line:#3f5360;
  --cyan:#9fc4d6;--green:#8eb9c2;--amber:#91afbf;--red:#c98680;
- font-family:"Courier New","SimSun","宋体",Consolas,monospace;
+ font-family:"Y29 Plex Mono","Y29 Fusion Pixel","Courier New","SimSun","宋体",Consolas,monospace;
 }
 body{
  background:radial-gradient(ellipse at 48% 42%,#0b1116 0,#06090c 68%);
