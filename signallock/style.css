@@ -30,3 +30,102 @@
 .signal-value{color:var(--text);min-width:3ch}.signal-value.warn{color:#e0bf77}.signal-value.pass{color:#a2bfaa}
 .signal-value.bad{background:#db817c;color:#080c10;padding:0 4px;font-weight:700}
 @media(max-width:600px){#lines>.signal-metrics{gap:6px 14px}.signal-field{gap:6px}}
+/* Restrained DOS pass: text-mode contrast, denser geometry, no novelty CRT effects. */
+:root{
+ --bg:#06090c;--text:#bed0da;--muted:#728b99;--line:#3f5360;
+ --cyan:#9fc4d6;--green:#8eb9c2;--amber:#91afbf;--red:#c98680;
+ font-family:"Courier New","SimSun","宋体",Consolas,monospace;
+}
+body{
+ background:radial-gradient(ellipse at 48% 42%,#0b1116 0,#06090c 68%);
+ text-shadow:0 0 2px #9fc4d62b;
+}
+body:after{
+ background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,#0007 4px),linear-gradient(90deg,#6b92a612,#0000 24%,#8bb6cb0d 72%,#0002);
+ opacity:.5;
+}
+button{
+ background:#080d11;border-color:#607480;
+ box-shadow:inset 1px 1px #263640,inset -1px -1px #020405;
+}
+button:hover{background:var(--text);border-color:var(--text);color:#070b0e;text-shadow:none}
+button:focus-visible,a:focus-visible,#log:focus-visible{outline:1px dashed var(--amber);outline-offset:3px}
+button.primary{border-color:#829eac;background:#111b21;color:#e0ebf0}
+button.danger{border-color:#7f5c52;color:#d49a89}
+a:hover{background:var(--text);color:#070b0e;text-shadow:none}
+p{line-height:1.65}
+h1,h2{letter-spacing:.06em}
+.terminal{max-width:920px;padding:0 28px}
+header{height:58px;border-bottom:3px double var(--line);letter-spacing:.06em}
+.live i{width:7px;height:7px;border:1px solid var(--green);background:transparent}
+.identity{padding:19px 0 15px}
+.meters{border:1px solid var(--line);padding:0}
+.meters>div,.meters>div:first-child{padding:8px 12px}
+.meters b{font-size:17px;margin-top:4px}
+.log-label{
+ min-height:36px;margin-top:10px;padding:0 8px;
+ background:var(--muted);color:var(--bg);text-shadow:none;
+}
+#log{
+ padding:10px 10px 14px 8px;line-height:1.65;
+ border-left:1px solid #24333c;border-right:1px solid #24333c;
+ scrollbar-color:#506875 transparent;
+}
+.accent{color:var(--cyan)}
+#controls{border-top:3px double var(--line);padding:13px 0 11px}
+.channel.selected{border-color:var(--text);background:var(--text);color:var(--bg);text-shadow:none}
+footer{min-height:51px}
+dialog{background:#080d11;border:3px double #657b88;padding:20px}
+.signal-key{color:#070b0e}
+footer button{
+ padding-left:10px;padding-right:10px;
+ background:transparent;border:0;box-shadow:none;
+}
+footer button:hover{background:transparent;color:#dceaf0;text-shadow:0 0 3px #9fc4d64d}
+footer nav{align-items:center}
+footer button{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.keycap{display:inline-block;padding:1px 4px;background:var(--muted);color:var(--bg);line-height:1.25;text-shadow:none}
+.cmd-label{letter-spacing:.04em;color:var(--muted)}
+footer button:hover .keycap{background:var(--text)}
+footer button:hover .cmd-label{color:var(--text)}
+@media(min-width:1200px){.terminal{border-left-color:#223039;border-right-color:#223039;padding:0 32px}}
+@media(max-width:600px){
+ .terminal{padding:0 14px}
+ header{height:43px}
+ .identity{padding:13px 0}
+ .meters>div,.meters>div:first-child{padding:7px 6px}
+ .log-label{margin-top:7px;min-height:31px}
+ #log{padding:8px 7px 8px}
+ #controls{padding:10px 0 8px}
+ footer nav{gap:8px}
+ footer button{padding-left:9px;padding-right:9px}
+}
+
+/* Data tones stay cool; only destructive/error feedback is allowed to turn red. */
+.field-rssi{--metric:#91b8cb}.field-snr{--metric:#88aebd}.field-hops{--metric:#789cae}.field-crc{--metric:#9aabc3}
+.signal-value.warn{color:#91afbf}.signal-value.pass{color:#91bbc5}
+
+/* Dialogs use the same function-key language as the terminal command bar. */
+dialog{padding:0}
+.dialog-header{margin:0;padding:16px 18px;border-bottom:3px double var(--line);gap:18px}
+.dialog-header h2{font-size:14px;letter-spacing:.08em}
+.dialog-header #closeDialog{
+ display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0;
+ background:transparent;border:0;box-shadow:none;white-space:nowrap;
+}
+.dialog-header #closeDialog:hover{background:transparent;color:var(--text);text-shadow:none}
+.dialog-header #closeDialog:hover .keycap{background:var(--text)}
+.dialog-header #closeDialog:hover .cmd-label{color:var(--text)}
+#dialogBody{padding:18px 20px 20px;max-height:calc(85svh - 62px);overflow:auto}
+.dialog-actions{gap:8px;margin-top:18px}
+.dialog-actions button{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 12px;min-height:54px}
+.dialog-actions button small{margin:0;color:var(--muted);font-size:10px}
+.dialog-command{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.dialog-actions button:hover small,.dialog-actions button:hover .cmd-label{color:#070b0e}
+.dialog-actions button:hover .keycap{background:#070b0e;color:var(--text)}
+@media(max-width:600px){
+ .dialog-header{padding:12px 13px}
+ #dialogBody{padding:14px 14px 16px}
+ .dialog-actions{display:grid;grid-template-columns:1fr}
+ .dialog-actions button{justify-content:space-between}
+}

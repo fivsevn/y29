@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080c10"><meta name="description" content="扫描信道，读取残片，决定哪些数据值得留下。Y.29 / ARASHI 互动终端。"><title>ARASHI: SIGNAL LOCK / 阿岚：残响频率</title><link rel="stylesheet" href="./style.css?v=reply-reveal-6"></head>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#06090c"><meta name="description" content="扫描信道，读取残片，决定哪些数据值得留下。Y.29 / ARASHI 互动终端。"><title>ARASHI: SIGNAL LOCK / 阿岚：残响频率</title><link rel="stylesheet" href="./style.css?v=dos-blue-4"></head>
 <body><main class="terminal" aria-label="阿岚信号恢复终端">
  <header><a href="../" aria-label="返回Y.29企划入口">Y.29 <span>/ ARASHI</span></a><div class="live"><i></i> LINK 3 <span>· 在线</span></div></header>
  <section class="identity"><div><h1>ARCHIVE TERMINAL</h1><p>阿岚：残响频率 <span>// SIGNAL LOCK</span></p></div><div class="runtime">RUNTIME<br><strong>1176 HOURS</strong></div></section>
@@ -8,9 +8,9 @@
  <section id="log" tabindex="0" aria-label="终端历史日志"><div id="lines"></div></section>
  <div id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
  <section id="controls" aria-label="当前操作"></section>
- <footer><span id="saveStatus">DEVICE MEMORY / 本机存档</span><nav><button id="sound" aria-pressed="false">声音 关</button><button id="help">操作说明</button><button id="archive" hidden>档案库</button><button id="restart">重新连接</button></nav></footer>
+ <footer><span id="saveStatus">DEVICE MEMORY / 本机存档</span><nav aria-label="终端功能键"><button id="sound" aria-label="声音：关" aria-pressed="false"><span class="keycap">F2</span><span class="cmd-label">SND:OFF</span></button><button id="help" aria-label="操作说明"><span class="keycap">F1</span><span class="cmd-label">HELP</span></button><button id="archive" aria-label="档案库" hidden><span class="keycap">F9</span><span class="cmd-label">ARCHIVE</span></button><button id="restart" aria-label="重新连接"><span class="keycap">F10</span><span class="cmd-label">RECONNECT</span></button></nav></footer>
  </main>
- <dialog id="dialog"><div class="dialog-header"><h2 id="dialogTitle">ARCHIVE</h2><button id="closeDialog" aria-label="关闭窗口">关闭 ×</button></div><div id="dialogBody"></div></dialog>
+ <dialog id="dialog"><div class="dialog-header"><h2 id="dialogTitle">ARCHIVE</h2><button id="closeDialog" aria-label="关闭窗口"><span class="keycap">ESC</span><span class="cmd-label">CLOSE</span></button></div><div id="dialogBody"></div></dialog>
  <noscript>此终端需要启用 JavaScript 才能扫描信号。无需账号，也无需安装插件。</noscript>
- <script type="module" src="./app.js?v=reply-reveal-6"></script>
+ <script type="module" src="./app.js?v=dos-ui-2"></script>
 </body></html>
