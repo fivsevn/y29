@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#080c10">
   <meta name="description" content="五月七日扫频过程中，偶然捕获异常回波。未知意识残留于节点 A。STORY_TELLER 终端已接管通讯。请勿中断上传。">
   <title>域/Y.29 — domain/Y.29</title>
-  <link rel="stylesheet" href="./signallock/style.css">
+  <link rel="stylesheet" href="./signallock/style.css?v=dos-blue-5">
   <style>
     .index{
       --muted:#8c9da6;
@@ -77,6 +77,8 @@
     .index .node-link:active .node-line{background:var(--text);color:var(--bg)}
     .index .node-link:focus-visible .node-line small,
     .index .node-link:active .node-line small{color:var(--bg)}
+    .index .node-link:focus-visible,
+    .index .node-link:active{background:transparent;color:var(--text)}
     .index .hint{margin-top:16px;line-height:1.8}
     .index .hint::before{content:"> ";color:var(--text)}
     .index footer{
@@ -88,6 +90,7 @@
       font-size:10px;
     }
     @media(hover:hover){
+      .index .node-link:hover{background:transparent;color:var(--text)}
       .index .node-link:hover .node-line{background:var(--text);color:var(--bg)}
       .index .node-link:hover .node-line small{color:var(--bg)}
     }

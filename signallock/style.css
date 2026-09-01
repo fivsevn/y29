@@ -116,6 +116,9 @@ dialog{padding:0}
 .dialog-header #closeDialog:hover{background:transparent;color:var(--text);text-shadow:none}
 .dialog-header #closeDialog:hover .keycap{background:var(--text)}
 .dialog-header #closeDialog:hover .cmd-label{color:var(--text)}
+.dialog-header #closeDialog:focus-visible{outline:0}
+.dialog-header #closeDialog:focus-visible .keycap{background:var(--text)}
+.dialog-header #closeDialog:focus-visible .cmd-label{color:var(--text)}
 #dialogBody{padding:18px 20px 20px;max-height:calc(85svh - 62px);overflow:auto}
 .dialog-actions{gap:8px;margin-top:18px}
 .dialog-actions button{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 12px;min-height:54px}
