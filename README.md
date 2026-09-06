@@ -5,6 +5,7 @@
 - `/`：企划入口。
 - `/signallock/`：ARASHI: SIGNAL LOCK / 阿岚：残响频率。游戏页面、脚本和样式统一放在 `signallock/`，沿用原存档。
 - `/mobileutopia/`：MOBILE UTOPIA: OPEN TABLE / 移动乌托邦：留个位置，六时段的饭局策略叙事游戏。
+- `/training/`：SINCE WE’RE HERE / 来都来了，支持 1–4 人的七日城市公共训练场小游戏。
 - 移动乌托邦企划与玩法文档保存在本地 `docs/mobileutopia-design.md`，含创作依据，不随网站发布。
 
 不依赖服务端、第三方字体或模型 API。发布目标为 GitHub Pages。部署与本地运行说明见 [signallock/README.md](signallock/README.md)。

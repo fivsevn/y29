@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#151a17">
+  <meta name="description" content="1–4 人的七日城市公共训练场。练一点，歇一点，顺便把队友捞起来。">
+  <title>来都来了 / SINCE WE’RE HERE</title>
+  <link rel="preload" href="../assets/fonts/IBMPlexMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/FusionPixel12px-Mono-SC.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./style.css?v=training-1">
+</head>
+<body>
+  <main class="machine">
+    <header class="titlebar">
+      <a href="../" aria-label="返回 Y.29 首页">domain/Y.29</a>
+      <span>03 / PUBLIC TRAINING YARD</span>
+    </header>
+    <div id="game" class="game"></div>
+    <footer>
+      <span id="saveStatus">本机存档 · 无需登录</span>
+      <nav aria-label="游戏工具">
+        <button type="button" data-act="help">玩法</button>
+        <button type="button" data-act="restart">重开</button>
+      </nav>
+    </footer>
+  </main>
+  <dialog id="dialog" aria-labelledby="dialogTitle">
+    <div class="dialog-title"><h2 id="dialogTitle"></h2><button type="button" data-act="close">关闭 ×</button></div>
+    <div id="dialogBody"></div>
+  </dialog>
+  <canvas id="reportCanvas" width="1080" height="1440" hidden></canvas>
+  <div id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <noscript>这是一款浏览器小游戏，需要启用 JavaScript。无需登录。</noscript>
+  <script type="module" src="./game.js?v=training-1"></script>
+</body>
+</html>
