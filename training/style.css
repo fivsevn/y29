@@ -489,3 +489,17 @@ a { color: inherit; text-decoration: none; }
   .dialogue-actions { opacity: 1; transform: none; transition: none; }
   .sport-watch.is-updating .watch-metric strong { animation: none; }
 }
+
+.food-choices .choice { min-height: 54px; }
+.food-choices .choice b,
+.food-choices .choice span { display: block; }
+.food-choices .choice span { margin-top: 3px; font-size: 8px; opacity: .78; }
+.notification { padding: 6px; border: 1px dashed var(--ink); background: #fff8dc; }
+.promo { padding-top: 7px; border-top: 1px dashed #858072; color: #8d3653; }
+.money { font-size: 20px; color: #8d3653; }
+.result-bars { display: grid; gap: 7px; margin: 8px 0; }
+.result-row { display: grid; grid-template-columns: 56px 1fr 34px; align-items: center; gap: 6px; font-size: 9px; }
+.result-row > i { display: block; height: 8px; border: 1px solid var(--ink); background: #fff; }
+.result-row > i > b { display: block; height: 100%; background: var(--cyan); }
+.result-row > strong { font-size: 8px; font-weight: 400; text-align: right; }
+.monologue p { margin: 11px 0; padding-left: 10px; border-left: 2px solid var(--cyan); }
