@@ -82,6 +82,9 @@
     .index .node-link:active .node-line small{color:var(--bg)}
     .index .node-link:focus-visible,
     .index .node-link:active{background:transparent;color:var(--text)}
+    .index .node-link.is-offline{opacity:.62}
+    .index .node-link.is-offline .node-line{background:#111920}
+    .index .node-link.is-offline .node-copy{color:var(--muted)}
     .index .hint{margin-top:16px;line-height:1.8}
     .index .hint::before{content:"> ";color:var(--text)}
     .index footer{
@@ -96,6 +99,8 @@
       .index .node-link:hover{background:transparent;color:var(--text)}
       .index .node-link:hover .node-line{background:var(--text);color:var(--bg)}
       .index .node-link:hover .node-line small{color:var(--bg)}
+      .index .node-link.is-offline:hover .node-line{background:#111920;color:var(--text)}
+      .index .node-link.is-offline:hover .node-line small{color:var(--muted)}
     }
     @media(max-width:880px){
       .index{margin:20px 20px;min-height:calc(100svh - 40px)}
@@ -122,7 +127,7 @@
     <header><a href="./">domain/Y.29</a></header>
     <section class="index-main">
       <h1>域/Y.29</h1>
-      <p class="intro">五月七日扫频过程中，<br>偶然捕获异常回波。<br>未知意识残留于节点 A。<br>STORY_TELLER 终端已接管通讯。<br>请勿中断上传。</p>
+      <p class="intro">五月七日，异常回波接入。<br>三个故事节点，正在运行。</p>
       <a class="node-link" href="./signallock/" aria-label="进入 ARASHI: SIGNAL LOCK 阿岚：残响频率">
         <div class="node-line">
           <h2 class="node-title"><span>01 /</span><span>ARASHI: SIGNAL LOCK</span><span class="node-title-cn">阿岚：残响频率</span></h2>
@@ -134,31 +139,30 @@
           <p>13+ 分支。<br>[提示：不要中断上传。]</p>
         </div>
       </a>
-      <a class="node-link" href="./mobileutopia/" aria-label="进入移动乌托邦：留个位置">
+      <div class="node-link is-offline" aria-disabled="true">
         <div class="node-line">
           <h2 class="node-title"><span>02 /</span><span>MOBILE UTOPIA: OPEN TABLE</span><span class="node-title-cn">移动乌托邦：留个位置</span></h2>
-          <small>● ONLINE ↗</small>
+          <small>○ OFFLINE</small>
         </div>
         <div class="node-copy">
           <p>群里有人问，今晚在哪里吃饭。</p>
           <p>桥洞下面，还是上次那个路口。<br>有人带菜，有人带来一个朋友。<br>还有一个人，迟迟没有回复。</p>
           <p>饭还热着。<br>要不要再留一个位置？</p>
         </div>
-      </a>
-      <a class="node-link" href="./training/" aria-label="进入来都来了城市公共训练场">
+      </div>
+      <a class="node-link" href="./training/" aria-label="进入飙肌野郎">
         <div class="node-line">
-          <h2 class="node-title"><span>03 /</span><span>SINCE WE’RE HERE</span><span class="node-title-cn">来都来了</span></h2>
+          <h2 class="node-title"><span>03 /</span><span>飙肌野郎</span><span class="node-title-cn">七日训练 ADV</span></h2>
           <small>● ONLINE ↗</small>
         </div>
         <div class="node-copy">
-          <p>城市公共训练场，本周空位 1–4 个。</p>
-          <p>练什么不重要。<br>重要的是人已经来了。</p>
-          <p>7 天一循环。<br>练一点，歇一点，顺便把队友捞起来。</p>
+          <p>去 57training 练一周。<br>叫上朋友，也可以自己来。</p>
+          <p>练完去 57store。<br>看看七天后，衣服还合不合身。</p>
         </div>
       </a>
       <p class="hint">其余频段，等待扫描。</p>
     </section>
-    <footer><span>无需登录 · 进度仅保存在当前浏览器</span></footer>
+    <footer><span>无需登录 · 浏览器小游戏</span></footer>
   </main>
 </body>
 </html>

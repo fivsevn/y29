@@ -1,132 +1,133 @@
-export const VERSION=1;
+export const VERSION=2;
+
 export const WORKOUTS={
-  split:{name:'保加利亚分腿蹲',en:'BULGARIAN SPLIT SQUAT',explain:'后脚垫高，前腿单独蹲；练腿，也练“不晃”。',tags:['单腿','力量','平衡'],main:'power',load:3,gain:2},
-  rdl:{name:'罗马尼亚硬拉',en:'ROMANIAN DEADLIFT',explain:'膝盖微屈，把髋往后送；主要练大腿后侧和臀。',tags:['髋铰链','后链','力量'],main:'power',load:3,gain:2},
-  farmer:{name:'农夫行走',en:'FARMER CARRY',explain:'两手提重物稳稳走；像拎菜，但不让身体歪。',tags:['负重','握力','核心'],main:'grit',load:2,gain:2},
-  pullup:{name:'引体向上',en:'PULL-UP',explain:'把自己拉向横杆；够不到也可做悬垂或慢慢下放。',tags:['拉力','背部','可降级'],main:'power',load:3,gain:2},
-  animal:{name:'Animal Flow / 动物流',en:'ANIMAL FLOW',explain:'手脚撑地连续移动；像动物，但要控制和呼吸。',tags:['地面','协调','活动度'],main:'move',load:2,gain:2},
-  body:{name:'徒手训练',en:'BODYWEIGHT',explain:'用自己的体重做蹲、撑、爬；随时能开始，也能变难。',tags:['零器械','全身','入门'],main:'grit',load:2,gain:1},
-  bell:{name:'壶铃',en:'KETTLEBELL',explain:'有把手的铁球；摆荡靠髋发力，不是拿手臂硬抡。',tags:['爆发','髋部','节奏'],main:'power',load:3,gain:2},
-  ropes:{name:'战绳',en:'BATTLE ROPES',explain:'双手让粗绳持续起浪；很快，也很诚实。',tags:['心肺','上肢','高声量'],main:'grit',load:4,gain:2}
+  split:{name:'保加利亚分腿蹲',en:'BULGARIAN SPLIT SQUAT',explain:'后脚垫高，前腿单独蹲；练腿，也练得更稳。',main:'strength',load:3},
+  animal:{name:'Animal Flow / 动物流',en:'ANIMAL FLOW',explain:'手脚撑地连续移动；像动物，也要控制呼吸。',main:'mobility',load:2},
+  prisoner:{name:'囚徒健身组合',en:'PRISONER CONDITIONING',explain:'用深蹲、俯卧撑和悬垂，把自身体重当器械。',main:'cardio',load:3},
+  rdl:{name:'罗马尼亚硬拉',en:'ROMANIAN DEADLIFT',explain:'膝盖微屈、髋往后送；主要练臀和大腿后侧。',main:'strength',load:3},
+  carry:{name:'农夫行走',en:'FARMER CARRY',explain:'两手提重物稳稳走；像拎菜，但身体不要歪。',main:'strength',load:2},
+  run:{name:'坡度节奏跑',en:'INCLINE TEMPO RUN',explain:'在缓坡上控制步频；能说短句，但不会太轻松。',main:'cardio',load:3},
+  crawl:{name:'熊爬与侧向穿越',en:'BEAR CRAWL',explain:'手脚着地低位移动；让肩、髋和核心一起工作。',main:'mobility',load:2}
 };
-export const SCHEDULE=[['body','bell','animal'],['split','farmer','ropes'],['rdl','pullup','animal'],['bell','body','farmer'],['split','rdl','ropes'],['pullup','animal','bell'],['body','farmer','pullup']];
-const TRAITS=[
-  {id:'goat',name:'单边谈判专家',work:['split','animal'],line:'越需要找平衡，反而越专心。'},
-  {id:'bags',name:'一趟拎完主义',work:['farmer','bell'],line:'看到能提的东西，就拒绝走第二趟。'},
-  {id:'bar',name:'横杆熟人',work:['pullup'],line:'路过横杆时，会下意识抬头。'},
-  {id:'floor',name:'地面派',work:['animal','body'],line:'只要手一碰地，动作忽然合理起来。'},
-  {id:'noise',name:'动静换功率',work:['ropes'],line:'器械越响，输出越像回事。'},
-  {id:'hinge',name:'髋部有主意',work:['rdl','bell'],line:'别人还在想，髋已经先往后坐了。'}
+
+export const SCHEDULE=[
+  ['split','animal','prisoner'],['rdl','crawl','run'],['carry','animal','prisoner'],
+  ['split','run','crawl'],['rdl','animal','prisoner'],['carry','run','crawl'],['split','animal','carry']
 ];
+
+const WARMUPS=[
+  [{id:'ankle',label:'先活动脚踝，再慢慢蹲下去',line:'你们扶着墙转脚踝。有人转得像在搅汤。',delta:{mobility:1,recovery:1}},{id:'race',label:'边聊天边走两圈',line:'第二圈时，呼吸终于和脚步站到同一边。',delta:{cardio:1,sync:1}}],
+  [{id:'hinge',label:'拿木棍练髋部折叠',line:'木棍没有重量，但很擅长指出问题。',delta:{strength:1,recovery:1}},{id:'shake',label:'先把昨晚的困意甩掉',line:'大家甩了甩胳膊，像三件等待晾干的衣服。',delta:{sync:1,recovery:1}}],
+  [{id:'floor',label:'从地面动作开始',line:'掌心贴地以后，身体慢慢醒了。',delta:{mobility:1,recovery:1}},{id:'music',label:'跟着店里的鼓点热身',line:'谁也没承认自己踩错过拍。',delta:{cardio:1,sync:1}}],
+  [{id:'band',label:'用弹力带叫醒肩膀',line:'弹力带发出轻响，像在替你们打考勤。',delta:{strength:1,recovery:1}},{id:'walk',label:'去窗边来回快走',line:'玻璃里的几个人，看起来已经很像固定班底。',delta:{cardio:1,sync:1}}],
+  [{id:'slow',label:'每个动作都慢一点',line:'慢下来之后，小晃动反而无处可藏。',delta:{mobility:1,recovery:1}},{id:'call',label:'轮流报下一个动作',line:'有人把“开合跳”报成了“开会跳”。',delta:{sync:2}}],
+  [{id:'breath',label:'先找呼吸，不抢速度',line:'第一口完整的呼吸，让肩膀终于放了下来。',delta:{cardio:1,recovery:1}},{id:'mirror',label:'两个人互相看动作',line:'纠正动作时，大家使用了罕见的温和语气。',delta:{sync:2}}],
+  [{id:'usual',label:'照这一周熟悉的顺序来',line:'没人再问下一步是什么。身体已经记住了。',delta:{recovery:1,sync:1}},{id:'free',label:'每个人选自己最需要的',line:'路线不同，但最后都在同一块垫子旁集合。',delta:{mobility:1,recovery:1}}]
+];
+
 const EVENTS=[
-  {who:'巡场大爷',text:'“今天谁先练？”他问得像在点菜。',choices:[{id:'warm',label:'先热身，锅不开急火',energy:1,cohesion:1,note:'大家认真活动了脚踝，场面一度非常专业。'},{id:'coin',label:'猜拳，输的人先来',energy:0,cohesion:2,note:'猜拳打了两轮，因为第一轮有人慢半拍。'}]},
-  {who:'天气',text:'风把训练计划吹到隔壁单杠下面。',choices:[{id:'fetch',label:'捡回来，照练',energy:0,cohesion:1,note:'纸救回来了，顺序已经不重要了。'},{id:'memory',label:'凭记忆练个大概',energy:1,cohesion:0,note:'每个人记得的计划都不太一样。'}]},
-  {who:'路过的小孩',text:'“你们这是比赛吗？”',choices:[{id:'no',label:'不是，在努力不受伤',energy:1,cohesion:1,note:'解释很朴素，小孩点头表示可以。'},{id:'yes',label:'是，比谁收器械快',energy:0,cohesion:2,note:'本日最整齐项目提前诞生。'}]},
-  {who:'自动售货机',text:'唯一一瓶常温水卡在出货口。',choices:[{id:'shake',label:'不摇机器，拍两下',energy:0,cohesion:1,note:'第三下才掉。大家一致声称只拍了两下。'},{id:'leave',label:'算了，自己带的够喝',energy:1,cohesion:0,note:'那瓶水继续悬着，像某种公共艺术。'}]},
-  {who:'隔壁队伍',text:'有人把弹力带忘在长椅上。',choices:[{id:'call',label:'喊住他',energy:0,cohesion:2,note:'弹力带回到主人手里，获得一个远程点赞。'},{id:'desk',label:'挂到失物钩上',energy:1,cohesion:1,note:'失物钩第一次看起来很有制度。'}]},
-  {who:'蓝牙音箱',text:'突然播放一段过分激昂的前奏。',choices:[{id:'beat',label:'承认节奏确实有用',energy:0,cohesion:2,note:'大家默默按上了同一个拍子。'},{id:'quiet',label:'关小一点，听呼吸',energy:1,cohesion:0,note:'场地安静下来，只剩器械偶尔表示意见。'}]},
-  {who:'场地广播',text:'“请量力而行。”广播重复了两遍。',choices:[{id:'wise',label:'听劝，动作留两次余力',energy:2,cohesion:1,note:'没人练趴下。广播可能有一点失望。'},{id:'notme',label:'它说的一定是别人',energy:0,cohesion:1,note:'三分钟后，所有人都开始重新理解“量力”。'}]},
-  {who:'一只橘猫',text:'它占住了唯一一块完全平整的地面。',choices:[{id:'move',label:'换块地，人适应猫',energy:1,cohesion:1,note:'队伍整体平移两米，猫对此没有评价。'},{id:'wait',label:'等它自己下班',energy:0,cohesion:2,note:'等待成为今天最完整的一组静态训练。'}]},
-  {who:'陌生人',text:'有人问：“这个动作练哪儿？”',choices:[{id:'plain',label:'用人话说一遍',energy:1,cohesion:1,note:'解释没有出现任何三个字母的缩写。'},{id:'demo',label:'做一个轻重量示范',energy:0,cohesion:2,note:'示范结束，围观者和队友一起鼓掌。'}]}
+  {who:'巡场教练',text:'“第一次来？器械会用吗？”',choices:[{id:'ask',label:'承认有几个动作想确认',line:'教练把重量调轻一格：“会问，比会装熟强。”',delta:{recovery:2,sync:1}},{id:'show',label:'先做一遍空手版本',line:'你们认真演示了没有重量的重量训练。',delta:{mobility:1,sync:1}}]},
+  {who:'储物柜',text:'最下层传来一声闷响。',choices:[{id:'look',label:'蹲下看看',line:'一只滚筒掉出来。没有怪物，只有泡沫轴。',delta:{recovery:2}},{id:'friend',label:'让旁边的人先开',line:'对方白了你一眼，还是一起蹲了下来。',delta:{sync:2}}]},
+  {who:'陌生会员',text:'“这个动作到底练哪里？”',choices:[{id:'plain',label:'不用缩写，讲人话',line:'解释完以后，对方点头，你自己也更明白了。',delta:{mobility:1,sync:1}},{id:'demo',label:'做一个轻重量示范',line:'示范结束，队友很小声地鼓了掌。',delta:{strength:1,sync:1}}]},
+  {who:'音响',text:'突然播了一首过分激昂的歌。',choices:[{id:'beat',label:'承认节奏确实有用',line:'大家默默踩上同一个拍子。',delta:{cardio:1,sync:2}},{id:'quiet',label:'把声音调小，听呼吸',line:'场地安静下来，只剩器械偶尔发表意见。',delta:{recovery:2}}]},
+  {who:'饮水机',text:'纸杯只剩最后一个。',choices:[{id:'share',label:'拿自己的水壶分着倒',line:'杯子没少，洁癖边界也守住了。',delta:{sync:2}},{id:'buy',label:'下楼买几瓶新的',line:'回来时，多带了一瓶给前台。',delta:{recovery:1,sync:1}}]},
+  {who:'窗外',text:'雨把整座城的速度调慢了。',choices:[{id:'stay',label:'今天就留在这里慢慢练',line:'雨声替你们数着组间休息。',delta:{recovery:2}},{id:'watch',label:'靠窗做完这一组',line:'玻璃上的倒影，动作比第一天整齐。',delta:{sync:2}}]},
+  {who:'57training 前台',text:'“一周了。今天还照旧？”',choices:[{id:'same',label:'照旧，但谁都别逞强',line:'这句话已经像你们的队训。',delta:{recovery:2,sync:1}},{id:'photo',label:'先拍一张很糊的合照',line:'照片里没人站好，但每个人都在。',delta:{sync:3}}]}
 ];
-const NAMES=['阿洛','小枣','老范','十一','柚子','南星','河豚','小段','阿吉','白桃','李电龙'];
-const PALETTES=[['#e2a05e','#5f8f86','#d9cfac'],['#d98776','#80996b','#eadab3'],['#c6df71','#596f91','#e2bc8c'],['#85c4b8','#8d6d91','#e3cba5'],['#e0b164','#586f63','#d9a987']];
+
+export const APPEARANCE={
+  hair:['短碎发','蓬松卷发','齐肩直发','高马尾','寸头','双丸子'],hairColor:['夜黑','栗棕','雾银','莓红','湖蓝'],eyes:['深棕','灰蓝','琥珀','墨绿'],
+  top:['宽松 T 恤','短款卫衣','运动背心','薄夹克','网球衫'],bottom:['工装长裤','运动短裤','百褶裙','宽松长裙','束脚裤'],shoes:['旧跑鞋','高帮帆布鞋','训练鞋','厚底运动鞋'],accessory:['没有配件','圆框眼镜','发带','耳饰','棒球帽','彩色腕带'],body:['轻巧','修长','结实','圆润']
+};
+const NAMES=['小岚','诺亚','桃井','鹿文','阿满','乔安','小海','木木','迟夏','冬青'];
+const RELATIONS=['常约饭的朋友','同事兼训练搭子','认识很久的网友','住在附近的人','关系有点微妙的人'];
+const PRESETS=[
+  {name:'小岚',relation:'常约饭的朋友',focus:'mobility',look:{hair:2,hairColor:3,eyes:0,top:2,bottom:3,shoes:1,accessory:3,body:0}},
+  {name:'诺亚',relation:'同事兼训练搭子',focus:'strength',look:{hair:4,hairColor:2,eyes:1,top:0,bottom:0,shoes:2,accessory:1,body:2}},
+  {name:'桃井',relation:'认识很久的网友',focus:'cardio',look:{hair:5,hairColor:4,eyes:2,top:1,bottom:2,shoes:3,accessory:5,body:1}},
+  {name:'鹿文',relation:'关系有点微妙的人',focus:'balanced',look:{hair:1,hairColor:0,eyes:3,top:3,bottom:4,shoes:0,accessory:4,body:3}}
+];
+
 export function hash(value){let h=2166136261;for(const c of String(value)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 export function randomSeed(){return (Date.now()^Math.floor(Math.random()*0xffffffff))>>>0}
-export function eventFor(seed,day){return EVENTS[hash(`${seed}:event:${day}`)%EVENTS.length]}
-export function createPlayer(seed,index,name='',focus='balanced'){
-  const base={balanced:[3,3,3],power:[5,2,2],move:[2,5,2],grit:[2,2,5],random:[2+hash(`${seed}:${index}:p`)%4,2+hash(`${seed}:${index}:m`)%4,2+hash(`${seed}:${index}:g`)%4]}[focus]||[3,3,3];
-  const rare=hash(`${seed}:rare:${index}`)%997===0;
-  return {id:`p${index}`,name:(name||((rare?'李电龙':NAMES[hash(`${seed}:name:${index}`)%10]))).slice(0,8),power:base[0],move:base[1],grit:base[2],energy:10,trait:TRAITS[hash(`${seed}:trait:${index}`)%TRAITS.length].id,traitKnown:false,palette:hash(`${seed}:palette:${index}`)%PALETTES.length,shape:hash(`${seed}:shape:${index}`)%4,score:0};
-}
-export function fresh(seed,specs){
-  const players=specs.slice(0,4).map((s,i)=>createPlayer(seed,i,s.name,s.focus));
-  return {version:VERSION,seed,day:1,phase:'event',players,selected:players.map(p=>p.id),eventChoice:null,cohesion:0,total:0,used:[],logs:[],recap:null};
-}
-export function restore(raw){
-  const phases=['event','training','recap','ended'];
-  const validPlayer=p=>p&&typeof p.id==='string'&&typeof p.name==='string'&&p.name.length<=8&&['power','move','grit','energy','score'].every(k=>Number.isFinite(p[k]))&&p.power>=0&&p.power<=9&&p.move>=0&&p.move<=9&&p.grit>=0&&p.grit<=9&&p.energy>=0&&p.energy<=10&&TRAITS.some(t=>t.id===p.trait)&&Number.isInteger(p.palette)&&Number.isInteger(p.shape);
-  if(!raw||raw.version!==VERSION||!Number.isInteger(raw.seed)||!Number.isInteger(raw.day)||raw.day<1||raw.day>7||!phases.includes(raw.phase)||!Array.isArray(raw.players)||raw.players.length<1||raw.players.length>4||!raw.players.every(validPlayer)||!Array.isArray(raw.selected)||!Array.isArray(raw.used)||!Array.isArray(raw.logs)||!Number.isFinite(raw.cohesion)||!Number.isFinite(raw.total))return null;
-  return raw;
-}
-export function chooseEvent(state,choiceId){
-  if(state.phase!=='event')return state;const e=eventFor(state.seed,state.day),c=e.choices.find(x=>x.id===choiceId);if(!c)return state;
-  return {...state,phase:'training',eventChoice:choiceId,cohesion:Math.min(20,state.cohesion+c.cohesion),players:state.players.map(p=>({...p,energy:Math.min(10,p.energy+c.energy)})),logs:[...state.logs,{day:state.day,text:c.note}]};
-}
-const traitFor=p=>TRAITS.find(t=>t.id===p.trait);
-export function doTraining(state,workoutId,selectedIds){
-  if(state.phase!=='training'||!SCHEDULE[state.day-1].includes(workoutId))return state;
-  const ids=selectedIds.filter(id=>state.players.some(p=>p.id===id));if(!ids.length)return state;
-  const w=WORKOUTS[workoutId];let gained=0;const reveals=[];const details=[];
-  const players=state.players.map(p=>{
-    if(!ids.includes(p.id))return {...p,energy:Math.min(10,p.energy+3)};
-    const trait=traitFor(p),match=trait.work.includes(workoutId),tired=p.energy<w.load;
-    const aptitude=p[w.main];const points=Math.max(1,w.gain+Math.floor(aptitude/3)+(match?2:0)-(tired?2:0));gained+=points;
-    const stats={power:p.power,move:p.move,grit:p.grit};stats[w.main]=Math.min(9,stats[w.main]+(tired?0:1));
-    if(match&&!p.traitKnown)reveals.push(`${p.name}：${trait.name} — ${trait.line}`);
-    details.push(`${p.name} ${tired?'靠意志完成，动作及时降级':'留有余力地完成'} +${points}`);
-    return {...p,...stats,energy:Math.max(0,p.energy-w.load),traitKnown:p.traitKnown||match,score:p.score+points};
-  });
-  const pair=ids.length>1?state.players.filter(p=>ids.includes(p.id)).slice(0,2):[];
-  const interaction=pair.length===2?interactionFor(state.seed,state.day,pair[0].name,pair[1].name):'';
-  const cohesion=Math.min(20,state.cohesion+(ids.length>1?2:0));
-  return {...state,phase:'recap',players,selected:ids,total:state.total+gained,cohesion,used:[...state.used,workoutId],recap:{workoutId,gained,details,reveals,interaction}};
-}
-export function nextDay(state){
-  if(state.phase!=='recap')return state;if(state.day===7)return {...state,phase:'ended'};
-  return {...state,day:state.day+1,phase:'event',eventChoice:null,selected:state.players.map(p=>p.id),recap:null};
-}
-export function teamTitle(state){
-  const avg=state.total/state.players.length;
-  if(state.cohesion>=12&&avg>=22)return '器械归位委员会';
-  if(state.used.filter(x=>x==='animal'||x==='body').length>=4)return '地面交通管理局';
-  if(state.players.some(p=>p.energy===0))return '明天一定拉伸队';
-  if(state.cohesion>=10)return '互相数数不漏拍队';
-  if(avg>=18)return '动作基本像回事队';
-  return '来都来了常驻代表';
-}
-export function summary(state){
-  const power=state.players.reduce((n,p)=>n+p.power,0),move=state.players.reduce((n,p)=>n+p.move,0),grit=state.players.reduce((n,p)=>n+p.grit,0);
-  return {title:teamTitle(state),power,move,grit,traits:state.players.filter(p=>p.traitKnown).length,days:7};
-}
-function interactionFor(seed,day,a,b){const lines=[`${a}替${b}数次数，数到八的时候突然回到六。`,`${a}说“最后一组”，${b}问这是第几个最后一组。`,`${b}把重量往下调了一格。${a}没有逞强。`,`${a}和${b}同时去拿同一个壶铃，又同时松手。`,`${b}动作做完，${a}负责用很小的声音鼓掌。`];return lines[hash(`${seed}:pair:${day}`)%lines.length]}
-function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function spritePixels(player){
-  const [shirt,pants,skin]=PALETTES[player.palette%PALETTES.length],hair=player.shape%2?'#372f2a':'#242a27';
-  const grid=['..HHH...','.HSSSH..','.HSSSH..','..TTT...','.TTTTT..','T.TTT.T.','..PPP...','.PP.PP..','.P...P..'];
-  return {grid,colors:{H:hair,S:skin,T:shirt,P:pants}};
-}
-function paintAvatar(canvas,player,scale=5){
-  if(!canvas)return;const ctx=canvas.getContext('2d'),{grid,colors}=spritePixels(player);ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,canvas.width,canvas.height);const size=Math.floor(Math.min(canvas.width/8,canvas.height/9));const ox=Math.floor((canvas.width-size*8)/2),oy=Math.floor((canvas.height-size*9)/2);grid.forEach((row,y)=>[...row].forEach((v,x)=>{if(colors[v]){ctx.fillStyle=colors[v];ctx.fillRect(ox+x*size,oy+y*size,size,size)}}));
-  if(player.power>=5){ctx.fillStyle=colors.T;ctx.fillRect(ox,oy+4*size,size,2*size);ctx.fillRect(ox+7*size,oy+4*size,size,2*size)}
-}
+export function defaultLook(seed=1,index=0){const look={};for(const [key,values] of Object.entries(APPEARANCE))look[key]=hash(`${seed}:${index}:${key}`)%values.length;return look}
+function baseStats(focus,points){if(points&&points.length===3&&points.every(Number.isFinite))return {strength:points[0],cardio:points[1],mobility:points[2]};return {strength:focus==='strength'?4:focus==='balanced'?2:1,cardio:focus==='cardio'?4:focus==='balanced'?2:1,mobility:focus==='mobility'?4:focus==='balanced'?2:1}}
+export function createCharacter(seed,index,spec={}){const focus=spec.focus||['balanced','strength','cardio','mobility'][hash(`${seed}:focus:${index}`)%4],base=baseStats(focus,spec.points);return {id:`p${index}`,name:String(spec.name||NAMES[hash(`${seed}:name:${index}`)%NAMES.length]).slice(0,10),relation:spec.relation||RELATIONS[hash(`${seed}:relation:${index}`)%RELATIONS.length],height:Number(spec.height)||165,weight:Number(spec.weight)||60,look:{...defaultLook(seed,index),...(spec.look||{})},hidden:{...base,fatigue:0,recovery:3,sync:0,proficiency:{},meals:{},sessions:[]},appearanceMark:null}}
+export function presetContacts(seed){return PRESETS.map((p,i)=>createCharacter(seed,i+1,p))}
+export function randomFriend(seed,index=1){return createCharacter(seed,index,{name:NAMES[hash(`${seed}:random:${index}`)%NAMES.length],relation:RELATIONS[hash(`${seed}:rel:${index}`)%RELATIONS.length]})}
+export function createGame(seed,specs){const party=specs.slice(0,3).map((spec,i)=>createCharacter(seed,i,spec));if(!party.length)throw new Error('A player is required');return {version:VERSION,seed,day:1,step:'warmup',party,history:[],last:null}}
+export function eventFor(seed,day){return EVENTS[(hash(`${seed}:event:${day}`)+day-1)%EVENTS.length]}
+function applyDelta(party,delta){return party.map(p=>{const h={...p.hidden};for(const [key,value] of Object.entries(delta||{}))h[key]=(h[key]||0)+value;h.fatigue=Math.max(0,h.fatigue-(delta?.recovery||0));return {...p,hidden:h}})}
+export function chooseWarmup(state,id){if(state.step!=='warmup')return state;const choice=WARMUPS[state.day-1]?.find(x=>x.id===id);if(!choice)return state;return {...state,step:'warmupResult',party:applyDelta(state.party,choice.delta),last:{kind:'warmup',line:choice.line,id}}}
+export function continueToEvent(state){return state.step==='warmupResult'?{...state,step:'event'}:state}
+export function chooseEvent(state,id){if(state.step!=='event')return state;const choice=eventFor(state.seed,state.day).choices.find(x=>x.id===id);if(!choice)return state;return {...state,step:'eventResult',party:applyDelta(state.party,choice.delta),last:{kind:'event',line:choice.line,id}}}
+export function continueToWorkout(state){return state.step==='eventResult'?{...state,step:'workout'}:state}
+export function doWorkout(state,id){if(state.step!=='workout'||!SCHEDULE[state.day-1]?.includes(id))return state;const workout=WORKOUTS[id];const party=state.party.map((p,index)=>{const h={...p.hidden,proficiency:{...p.hidden.proficiency},sessions:[...p.hidden.sessions,id]},aptitude=h[workout.main];h[workout.main]+=1;h.fatigue+=Math.max(1,workout.load-Math.floor((aptitude+h.recovery)/4));h.recovery=Math.max(0,h.recovery-1);h.sync+=state.party.length>1?1:0;h.proficiency[id]=(h.proficiency[id]||0)+1+(index===0?1:0);return {...p,hidden:h}});const tired=party[0].hidden.fatigue>=5,line=tired?'最后两次，你把动作换成了更稳妥的版本。教练点了点头。':'最后一次落地很稳。旁边的人替你记住了这个感觉。';return {...state,step:'watch',party,last:{kind:'workout',id,line}}}
+export function chooseMeal(state,id){if(state.step!=='meal'||!['rice','noodles','soup'].includes(id))return state;const lines={rice:'热饭上桌以后，刚才还在逞强的人突然都安静了。',noodles:'第一口面太烫。大家吹了半天，像在做另一种呼吸训练。',soup:'汤端上来时，57store 的玻璃已经蒙了一层雾。'};const party=state.party.map(p=>{const h={...p.hidden,meals:{...p.hidden.meals}};h.meals[id]=(h.meals[id]||0)+1;h.fatigue=Math.max(0,h.fatigue-2);h.recovery+=id==='soup'?2:1;return {...p,hidden:h}});return {...state,step:'mealResult',party,last:{kind:'meal',id,line:lines[id]}}}
+export function continueAfterMeal(state){if(state.step!=='mealResult')return state;return {...state,step:'summary',history:[...state.history,{day:state.day,workout:state.party[0].hidden.sessions.at(-1),meal:state.last.id}]}}
+export function advanceDay(state){if(state.step!=='summary')return state;if(state.day===7){const party=state.party.map(p=>({...p,appearanceMark:appearanceRoute(p)}));return {...state,step:'weekEnding',party}}return {...state,day:state.day+1,step:'warmup',last:null}}
+export function appearanceRoute(character){const h=character.hidden,counts={};for(const id of h.sessions)counts[WORKOUTS[id].main]=(counts[WORKOUTS[id].main]||0)+1;const meals=Object.values(h.meals).reduce((a,b)=>a+b,0),entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);if(meals>=6&&new Set(Object.keys(h.meals)).size>=3)return'store';if((counts.strength||0)>=Math.max(counts.cardio||0,counts.mobility||0))return'power';if((counts.mobility||0)>=(counts.cardio||0))return'flow';return'runner'}
+export function endingText(route,name){return ({power:`${name}换衣服时，发现袖口比一周前紧了。再抬手，T 恤干脆变成了很有主张的背心。`,flow:`${name}站着系鞋带，身体顺手折成了一个过分流畅的角度。宽松下装似乎终于理解了这份工作。`,runner:`${name}下楼买水，走到街口才发现自己一直在控制呼吸。发带和轻装已经自动进入值班状态。`,store:`57store 店员把袋子递给${name}：“还是老样子？”这一周别的不说，熟客造型已经完全成立。`})[route]}
 
 const hasDOM=typeof document!=='undefined';
 if(hasDOM){
-  const $=id=>document.getElementById(id),SAVE='y29.training.week.v1';let storageOK=true,state=restore(readSave()),setupSeed=randomSeed(),setupCount=2,setupDraft=Array.from({length:4},(_,i)=>({name:'',focus:i?'random':'balanced'})),uiWorkout=null;
-  function readSave(){try{return JSON.parse(localStorage.getItem(SAVE))}catch{storageOK=false;return null}}
-  function save(){try{localStorage.setItem(SAVE,JSON.stringify(state))}catch{storageOK=false}$('saveStatus').textContent=storageOK?'本机存档 / 自动保存 · 无需登录':'浏览器存储不可用 / 本次仍可玩'}
-  function button(act,label,attrs=''){return `<button type="button" data-act="${esc(act)}" ${attrs}>${label}</button>`}
-  function avatar(p,cls=''){return `<canvas class="avatar ${cls}" width="72" height="81" data-avatar="${esc(p.id)}" aria-label="${esc(p.name)}的像素角色"></canvas>`}
-  function paintAll(){document.querySelectorAll('[data-avatar]').forEach(c=>{const p=(state?.players||currentSetupPlayers()).find(x=>x.id===c.dataset.avatar);if(p)paintAvatar(c,p)})}
-  function currentSetupPlayers(){return setupDraft.slice(0,setupCount).map((s,i)=>createPlayer(setupSeed,i,s.name,s.focus))}
-  function head(kicker,title,stamp='WEEK / 01'){return `<div class="screen-head"><div><p class="kicker">${kicker}</p><h1>${title}</h1></div><div class="stamp">SINCE WE'RE HERE<br>${stamp}</div></div>`}
-  function renderSetup(){const ps=currentSetupPlayers();$('game').innerHTML=`<section class="intro"><div class="intro-copy">${head('03 / 城市公共训练场','来都来了')}<p class="big">练什么不重要。<br>人已经来了。</p><p>拉上 1–4 个人，过一个不太严肃、但动作基本靠谱的训练周。</p><div class="intro-meta">7 天 / 每天约 1 分钟<br>没有体重打分 · 没有连续打卡惩罚 · 会自动存档</div></div><section class="panel"><div class="panel-title"><span>建立小队 / CHECK IN</span><span>1–4 人</span></div><div class="panel-body"><div class="setup-tools"><label>人数 <select id="playerCount">${[1,2,3,4].map(n=>`<option ${n===setupCount?'selected':''}>${n}</option>`).join('')}</select></label>${button('randomize','全部随机')}</div><div class="player-rows">${ps.map((p,i)=>`<div class="player-row">${avatar(p)}<input data-name="${i}" value="${esc(setupDraft[i].name)}" maxlength="8" aria-label="玩家 ${i+1} 名字" placeholder="${esc(p.name)}"><select data-focus="${i}" aria-label="${esc(p.name)}的基础倾向"><option value="balanced" ${setupDraft[i].focus==='balanced'?'selected':''}>均衡 / 3·3·3</option><option value="power" ${setupDraft[i].focus==='power'?'selected':''}>力量 / 5·2·2</option><option value="move" ${setupDraft[i].focus==='move'?'selected':''}>灵活 / 2·5·2</option><option value="grit" ${setupDraft[i].focus==='grit'?'selected':''}>耐力 / 2·2·5</option><option value="random" ${setupDraft[i].focus==='random'?'selected':''}>随机属性</option></select></div>`).join('')}</div>${button('start','进入训练场 →','class="setup-start primary"')}<p class="setup-note">像素人按属性和本周 seed 生成；隐藏特质要在训练里碰到才会显示。</p></div></section></section>`;save();paintAll()}
-  function roster(){return `<section class="panel roster"><div class="panel-title"><span>今天上场 / 点击切换</span><span>${state.selected.length} / ${state.players.length}</span></div><div class="roster-list">${state.players.map(p=>button(`toggle:${p.id}`,`${avatar(p)}<span class="athlete-name">${esc(p.name)}</span><span class="athlete-stats">力${p.power} 灵${p.move} 耐${p.grit}</span><span class="athlete-energy"><i style="width:${p.energy*10}%"></i></span>${p.traitKnown?`<span class="trait">◆ ${esc(traitFor(p).name)}</span>`:''}`,`class="athlete" aria-pressed="${state.selected.includes(p.id)}"`)).join('')}</div></section>`}
-  function hud(){return `<div class="hud"><div><div class="dayline"><h1>DAY ${state.day}</h1><span>/ 7 · ${['先到场','腿各练各的','今天往回拉','中场不加戏','开始懂得留力','熟人局','周末合练'][state.day-1]}</span></div><div class="week-dots">${[1,2,3,4,5,6,7].map(n=>`<span class="${n<state.day?'past':n===state.day?'now':''}"></span>`).join('')}</div></div><div class="team-bars"><span>默契<b>${state.cohesion}</b></span><span>训练量<b>${state.total}</b></span></div></div>`}
-  function eventPanel(){const e=eventFor(state.seed,state.day);return `<section class="event"><p class="kicker">今日随机事件 / 先处理一下</p><h2>${esc(e.who)}：${esc(e.text)}</h2><div class="event-actions">${e.choices.map(c=>button(`event:${c.id}`,`${esc(c.label)} <small>默契 +${c.cohesion}${c.energy?` · 精力 +${c.energy}`:''}</small>`)).join('')}</div></section>`}
-  function workoutPanel(){const offers=SCHEDULE[state.day-1];if(!uiWorkout||!offers.includes(uiWorkout))uiWorkout=offers[0];const w=WORKOUTS[uiWorkout];return `<section class="training-card"><h2>今天选一项 / 没上场的人恢复 3 精力</h2><p>每项都可按自己的能力降级。低于消耗仍能练，但成长和得分会减少。</p><div class="workouts">${offers.map(id=>{const x=WORKOUTS[id];return button(`workout:${id}`,`<span class="workout-line"><b>${esc(x.name)}</b><em>精力 −${x.load}</em></span><small>${esc(x.explain)} [${x.tags.join(' / ')}]</small>`,`class="workout" aria-pressed="${id===uiWorkout}"`)}).join('')}</div>${button('train',`练 ${esc(w.name)} · ${state.selected.length} 人上场 →`,`class="go primary" ${state.selected.length?'':'disabled'}`)}</section>`}
-  function renderPlay(){const training=state.phase==='training';$('game').innerHTML=`${hud()}<div class="play-layout">${roster()}<div class="yard">${training?`<div class="event"><p class="kicker">事件已处理</p><p>${esc(state.logs[state.logs.length-1]?.text||'大家站到了器械旁边。')}</p></div>`:eventPanel()}${training?workoutPanel():`<section class="training-card"><h2>今天先别急着拿器械。</h2><p>处理完眼前这件小事，再决定谁上场、练什么。</p><div class="workouts">${SCHEDULE[state.day-1].map(id=>`<div class="workout"><span class="workout-line"><b>${esc(WORKOUTS[id].name)}</b><em>待解锁</em></span><small>${esc(WORKOUTS[id].explain)} [${WORKOUTS[id].tags.join(' / ')}]</small></div>`).join('')}</div></section>`}</div></div>`;save();paintAll()}
-  function renderRecap(){const r=state.recap,w=WORKOUTS[r.workoutId];$('game').innerHTML=`<section class="recap"><div class="recap-art"><div class="party">${state.players.map(p=>avatar(p)).join('')}</div></div><div class="recap-copy"><p class="kicker">DAY ${state.day} / 收操记录</p><h2>${esc(w.name)}，练完。</h2><p>${esc(r.interaction||'一个人练也算一队。今天自己给自己数次数。')}</p><div class="delta-list">${r.details.map(x=>`<span>${esc(x)}</span>`).join('')}${r.reveals.map(x=>`<span><strong>◆ 隐藏特质发现</strong> ${esc(x)}</span>`).join('')}</div><p>本次训练量 <strong>+${r.gained}</strong> · 没上场的人恢复了精力。</p><div class="recap-actions">${button('continue',state.day===7?'生成本周报告 →':'明天再来 →','class="primary"')}</div></div></section>`;save();paintAll()}
-  function renderReport(){const s=summary(state);$('game').innerHTML=`<section class="report"><article class="report-card"><div><p class="kicker">CITY PUBLIC TRAINING YARD / WEEK 01</p><h1>来都来了</h1><p class="team-title">「${esc(s.title)}」</p></div><div class="report-party">${state.players.map(p=>avatar(p)).join('')}</div><div></div><div class="report-stats"><span>训练量<b>${state.total}</b></span><span>默契<b>${state.cohesion}</b></span><span>特质<b>${s.traits}/${state.players.length}</b></span></div></article><div class="report-copy"><h2>七天都算数。</h2><p>${state.players.map(p=>esc(p.name)).join(' / ')}</p><p>力量 ${s.power} · 灵活 ${s.move} · 耐力 ${s.grit}</p><p>做得最多的是：<strong>${esc(mostUsed())}</strong></p><p>不是每次都练得漂亮。<br>但器械都归位了，人也都还在。</p><div class="report-actions">${button('png','保存周报 PNG','class="primary"')}${button('newweek','再来一周')}</div><p class="fine">图片只在本机生成，不会上传。存档仍保留在当前浏览器。</p></div></section>`;save();paintAll()}
-  function mostUsed(){const count={};state.used.forEach(x=>count[x]=(count[x]||0)+1);const id=Object.keys(count).sort((a,b)=>count[b]-count[a])[0];return WORKOUTS[id]?.name||'认真休息'}
-  function render(){if(!state)renderSetup();else if(state.phase==='event'||state.phase==='training')renderPlay();else if(state.phase==='recap')renderRecap();else renderReport()}
-  function openHelp(){openDialog('玩法 / 七天训练场',`<div class="help"><p>每天先处理一个很短的随机事件，再从 3 项训练里选 1 项。点击队员可以决定谁上场；没上场的人会恢复 3 点精力。</p><p>属性只有三项：<strong>力量</strong>影响负重和拉力，<strong>灵活</strong>影响控制与活动度，<strong>耐力</strong>影响持续输出。项目旁的精力是本次消耗；精力不够也能做，但系统会自动视为降级训练。</p><p>专业动作首次看到就有人话解释和标签。现实训练中仍应先学动作、选择合适重量；疼痛不是游戏里的“加分提示”。</p><p>隐藏特质不是优劣评级，只是某些项目里会冒出来的小习惯。多人同时上场会增加默契，并偶尔发生队友互动。</p><p>第 7 天结束会生成团队称号和可保存的 PNG 周报。所有数据只存在当前浏览器。</p></div>`)}
-  function openDialog(title,html){$('dialogTitle').textContent=title;$('dialogBody').innerHTML=html;if(!$('dialog').open)$('dialog').showModal()}
-  function drawReport(){const c=$('reportCanvas'),x=c.getContext('2d'),s=summary(state);x.imageSmoothingEnabled=false;x.fillStyle='#151a17';x.fillRect(0,0,c.width,c.height);x.strokeStyle='#c6df71';x.lineWidth=8;x.strokeRect(44,44,992,1352);x.strokeRect(58,58,964,1324);x.fillStyle='#c6df71';x.font='34px "Y29 Plex Mono", monospace';x.fillText('CITY PUBLIC TRAINING YARD / WEEK 01',90,125);x.font='86px "Y29 Fusion Pixel", sans-serif';x.fillText('来都来了',90,240);x.fillStyle='#e4a45f';x.font='42px "Y29 Fusion Pixel", sans-serif';x.fillText(`「${s.title}」`,90,315);const gap=Math.min(190,760/state.players.length),start=(1080-gap*state.players.length)/2+gap/2;state.players.forEach((p,i)=>{const mini=document.createElement('canvas');mini.width=144;mini.height=162;paintAvatar(mini,p);x.drawImage(mini,start+i*gap-72,390,144,162);x.fillStyle='#e8e1c7';x.font='28px "Y29 Fusion Pixel", sans-serif';x.textAlign='center';x.fillText(p.name,start+i*gap,590)});x.textAlign='left';x.strokeStyle='#697263';x.lineWidth=3;x.beginPath();x.moveTo(90,660);x.lineTo(990,660);x.stroke();[['训练量',state.total],['默契',state.cohesion],['发现特质',`${s.traits}/${state.players.length}`]].forEach(([label,val],i)=>{const px=100+i*310;x.fillStyle='#a9ad9e';x.font='28px "Y29 Fusion Pixel", sans-serif';x.fillText(label,px,735);x.fillStyle='#e8e1c7';x.font='66px "Y29 Plex Mono", monospace';x.fillText(String(val),px,815)});x.fillStyle='#e8e1c7';x.font='32px "Y29 Fusion Pixel", sans-serif';x.fillText(`力量 ${s.power}   灵活 ${s.move}   耐力 ${s.grit}`,90,930);x.fillText(`本周常练：${mostUsed()}`,90,995);x.fillStyle='#a9ad9e';x.font='29px "Y29 Fusion Pixel", sans-serif';x.fillText('不是每次都练得漂亮。',90,1120);x.fillText('但器械都归位了，人也都还在。',90,1170);x.fillStyle='#c6df71';x.font='30px "Y29 Plex Mono", monospace';x.fillText('SINCE WE\'RE HERE  /  y29.fivsevn.com/training/',90,1320);return c}
-  async function downloadReport(){await document.fonts?.ready;const url=drawReport().toDataURL('image/png');openDialog('周报 PNG / 1080 × 1440','<div class="report-preview"><img id="reportPreview" alt="本周训练报告预览"><a id="reportDownload" class="download-link" download="来都来了-本周训练报告.png">下载 PNG</a><p>手机也可以长按预览图保存，或直接截取上一个页面的周报卡片。</p></div>');$('reportPreview').src=url;$('reportDownload').href=url}
-  document.addEventListener('input',e=>{if(e.target.matches('[data-name]'))setupDraft[Number(e.target.dataset.name)].name=e.target.value;if(e.target.matches('[data-focus]')){setupDraft[Number(e.target.dataset.focus)].focus=e.target.value;renderSetup()}});
-  document.addEventListener('change',e=>{if(e.target.id==='playerCount'){setupCount=Number(e.target.value);renderSetup()}});
-  document.addEventListener('click',e=>{const b=e.target.closest('button[data-act]');if(!b||b.disabled)return;const a=b.dataset.act;if(a==='help'){openHelp();return}if(a==='close'){$('dialog').close();return}if(a==='restart'){openDialog('重开这一周？',`<p>当前周进度会被替换。</p><div class="recap-actions">${button('confirmRestart','确认重开')}${button('close','继续训练')}</div>`);return}if(a==='confirmRestart'){$('dialog').close();state=null;localStorage.removeItem(SAVE);setupSeed=randomSeed();render();return}if(a==='randomize'){setupSeed=randomSeed();setupDraft=setupDraft.map(()=>({name:'',focus:'random'}));renderSetup();return}if(a==='start'){const specs=setupDraft.slice(0,setupCount);state=fresh(setupSeed,specs);uiWorkout=null;render();return}if(a.startsWith('event:')){state=chooseEvent(state,a.slice(6));render();return}if(a.startsWith('toggle:')&&state.phase==='training'){const id=a.slice(7),on=state.selected.includes(id);state={...state,selected:on?state.selected.filter(x=>x!==id):[...state.selected,id]};render();return}if(a.startsWith('workout:')){uiWorkout=a.slice(8);render();return}if(a==='train'){state=doTraining(state,uiWorkout,state.selected);render();return}if(a==='continue'){state=nextDay(state);uiWorkout=null;render();return}if(a==='png'){downloadReport();return}if(a==='newweek'){state=fresh(randomSeed(),state.players.map(p=>({name:p.name,focus:'balanced'})));uiWorkout=null;render();return}});
+  const $=id=>document.getElementById(id);let seed=randomSeed(),screen='intro',gameState=null,animating=false,frame=0,raf=0;
+  const card={name:'',height:'168',weight:'60',points:[2,2,2],look:defaultLook(seed,0)};
+  let contacts=presetContacts(seed),selected=[],custom=null;
+  const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const button=(act,label,attrs='')=>`<button type="button" class="choice" data-act="${esc(act)}" ${attrs}>${label}</button>`;
+  const stage=(label,place,body)=>`<section class="screen"><div class="stage-shell"><canvas class="stage" id="stage" width="240" height="160" aria-label="${esc(place)}的复古像素场景"></canvas><span class="stage-label">${esc(label)}</span><span class="stage-place">${esc(place)}</span><i class="scanlines"></i></div>${body}</section>`;
+  const box=(speaker,content)=>`<div class="box"><div class="speaker">${esc(speaker)}</div>${content}</div>`;
+  function announce(text){$('announcement').textContent=text}
+  function currentParty(){return gameState?.party||[createCharacter(seed,0,{name:card.name||'你',height:card.height,weight:card.weight,points:card.points,look:card.look}),...selected.map(id=>contacts.find(x=>x.id===id)).filter(Boolean),...(custom?[custom]:[])].slice(0,3)}
+  function sceneName(){if(screen==='card'||screen==='points')return'card';if(screen==='look')return'locker';if(screen==='phone')return'phone';if(!gameState)return'bedroom';if(gameState.step==='meal'||gameState.step==='mealResult')return'store';if(gameState.step==='watch')return'watch';if(gameState.step==='summary'||gameState.step==='weekEnding')return'room';return'gym'}
+  function render(){$('dayChip').textContent=gameState?`DAY ${gameState.day}`:'DAY 0';if(!gameState){if(screen==='intro')renderIntro();else if(screen==='card')renderCard();else if(screen==='points')renderPoints();else if(screen==='look')renderLook();else renderPhone()}else renderDay();cancelAnimationFrame(raf);frame=0;drawLoop();paintMinis()}
+  function renderIntro(){$('game').innerHTML=stage('WEEK 01 / 07:12','你的房间',box('旁白','<h1>飙肌野郎</h1><p class="lead">手机震了一下。<br>57training 的七日体验卡，今天生效。</p>'+button('card','拿出健身卡')))}
+  function renderCard(){$('game').innerHTML=stage('DAY 0 / CHECK IN','桌面',box('健身卡','<p>卡片边缘有点粗糙，正面只留了三行空白。</p><div class="form-grid"><label class="field">名字<input id="cardName" maxlength="10" autocomplete="off" value="'+esc(card.name)+'" placeholder="怎么称呼你"></label><label class="field">身高 / cm<input id="cardHeight" type="number" min="120" max="220" inputmode="numeric" value="'+esc(card.height)+'"></label><label class="field">体重 / kg<input id="cardWeight" type="number" min="30" max="220" inputmode="decimal" value="'+esc(card.weight)+'"></label></div><p class="privacy">资料只用于本次游戏，不上传、不保存，刷新/关闭后清除。</p>'+button('points','在卡背面盖下初始点数')))}
+  function renderPoints(){const labels=[['发力感','想更稳地抬起东西'],['续航感','想让呼吸别那么快乱'],['活动感','想让身体更听话']],sum=card.points.reduce((a,b)=>a+b,0);$('game').innerHTML=stage('DAY 0 / CARD BACK','桌面',box(card.name||'你','<p>卡背面写着：<br>“六枚印章，盖在你想开始的地方。”</p><div class="points">'+labels.map((x,i)=>`<div class="point-row"><span>${x[0]}<small>${x[1]}</small></span><span class="point-controls"><button data-act="point-" data-index="${i}" aria-label="减少${x[0]}">−</button><output>${'◆'.repeat(card.points[i])}</output><button data-act="point+" data-index="${i}" aria-label="增加${x[0]}">＋</button></span></div>`).join('')+'</div><p class="point-note">还剩 '+(6-sum)+' 枚</p>'+button('look','去衣柜前看看',sum===6?'':'disabled')))}
+  function lookRows(){return Object.entries(APPEARANCE).map(([key,values])=>`<div class="look-row"><button data-act="look-" data-key="${key}" aria-label="上一个选项">‹</button><span class="look-value">${esc(values[card.look[key]])}</span><button data-act="look+" data-key="${key}" aria-label="下一个选项">›</button></div>`).join('')}
+  function renderLook(){$('game').innerHTML=stage('DAY 0 / GET DRESSED','衣柜',box(card.name||'你','<p>先穿得像自己。以后会变成什么样，等练完再说。</p><div class="look-grid">'+lookRows()+'</div>'+button('phone','衣服没问题，拿起手机')))}
+  function renderPhone(){const chosen=selected.length+(custom?1:0);$('game').innerHTML=stage('DAY 0 / 07:24','像素手机',box('你','<p class="lead">叫个人一起？</p><p class="phone-note">点联系人发消息。最多叫两个人；不选也可以自己去。</p><div class="contact-list">'+contacts.map(p=>`<button class="contact" data-act="contact" data-id="${p.id}" aria-pressed="${selected.includes(p.id)}"><canvas class="mini-sprite" width="16" height="16" data-mini="${p.id}"></canvas><span><b>${esc(p.name)}</b><small>${esc(p.relation)}</small></span><span class="tick">${selected.includes(p.id)?'✓':'·'}</span></button>`).join('')+'</div>'+(custom?customFriendForm():button('addFriend','＋ 新建联系人 / 随机生成'))+`<p class="party-line">${chosen?`消息已发给 <strong>${[...selected.map(id=>contacts.find(x=>x.id===id)?.name),custom?.name].filter(Boolean).join('、')}</strong>`:'光标停在输入框里。自己去也完全说得通。'}</p>`+button('startDay',chosen?'等回复，出发去 57training':'收起手机，自己出发')))}
+  function customFriendForm(){const labels=['发力','续航','活动'];return `<div class="custom-friend"><div class="form-grid"><label class="field">联系人名字<input id="friendName" maxlength="10" value="${esc(custom.name)}"></label><label class="field">你们的关系<input id="friendRelation" maxlength="16" value="${esc(custom.relation)}"></label></div><p class="phone-note">朋友的六枚初始印章，也可以自己分。</p><div class="custom-points">${labels.map((label,i)=>`<div class="point-row"><span>${label}</span><span class="point-controls"><button data-act="friendPoint-" data-index="${i}" aria-label="减少${label}">−</button><output>${custom._points[i]}</output><button data-act="friendPoint+" data-index="${i}" aria-label="增加${label}">＋</button></span></div>`).join('')}</div><div class="custom-focus"><button data-act="friendRandom">整个人随机</button><button data-act="friendRemove">移除联系人</button></div></div>`}
+  function renderDay(){const s=gameState.step,day=gameState.day,party=gameState.party,names=party.map(p=>p.name).join('、');let html='';
+    if(s==='warmup'){const choices=WARMUPS[day-1];html=box(day===1?'57training 前台':'训练搭子',`<p class="lead">${day===1?'“卡给我。先别急着练。”':'“今天先怎么热身？”'}</p><div class="choices">${choices.map(c=>button(`warm:${c.id}`,esc(c.label))).join('')}</div><p class="party-line">今天到场：<strong>${esc(names)}</strong></p>`)}
+    else if(s==='warmupResult')html=box('旁白',`<p class="lead">${esc(gameState.last.line)}</p>${button('toEvent','活动开了。往里走。')}`);
+    else if(s==='event'){const e=eventFor(gameState.seed,day);html=box(e.who,`<p class="lead">${esc(e.text)}</p><div class="choices">${e.choices.map(c=>button(`event:${c.id}`,esc(c.label))).join('')}</div>`)}
+    else if(s==='eventResult')html=box('旁白',`<p class="lead">${esc(gameState.last.line)}</p>${button('toWorkout','该正式练了')}`);
+    else if(s==='workout')html=box('巡场教练',`<p>“今天三选一。名字不熟没关系，我说人话。”</p><div class="choices workout-list">${SCHEDULE[day-1].map(id=>{const w=WORKOUTS[id];return button(`work:${id}`,`<b>${esc(w.name)}</b><span>${esc(w.explain)}</span>`)}).join('')}</div>`);
+    else if(s==='watch')html=box(party[0].name,`<p class="watch-copy">你抬起手腕。小小的像素环转完一圈。</p><p>“${esc(gameState.last.line)}”</p>${button('toStore','去 57store 吃点东西')}`);
+    else if(s==='meal')html=box('57store 店员','<p class="lead">“练完了？今天吃什么？”</p><div class="choices">'+button('meal:rice','照烧鸡肉饭和一份青菜')+button('meal:noodles','热汤面，再加一个蛋')+button('meal:soup','杂蔬汤、饭团和酸奶')+'</div>');
+    else if(s==='mealResult')html=box('旁白',`<p class="lead">${esc(gameState.last.line)}</p>${button('afterMeal','把最后一口吃完')}`);
+    else if(s==='summary')html=box(party[0].name,`<div class="day-end"><p>洗完澡以后，今天的动作还留在身体里。</p><p>不是数字。只是下楼时，脚步比早上稳了一点。</p></div>${button('nextDay',day===7?'这一周，结束了':'睡一觉，进入 DAY '+(day+1))}`);
+    else {const p=party[0],route=p.appearanceMark;html=box('镜子',`<p class="lead">${esc(endingText(route,p.name))}</p><p>没有弹窗，也没有谁宣布升级。只是镜子里的你，确实留下了一点这一周的样子。</p><div class="credits">WEEK 01 COMPLETE · 本次资料只留在当前运行内存中</div>${button('again','穿着这身，再来一周')}`)}
+    const labels={warmup:'WARM UP',warmupResult:'2-FRAME MOTION',event:'EVENT',eventResult:'DIALOGUE',workout:'57TRAINING',watch:'WRIST WATCH',meal:'RECOVERY',mealResult:'57STORE',summary:'DAY END',weekEnding:'WEEK END'},scene=sceneName(),place=scene==='store'?'57store':scene==='gym'?'57training':scene==='watch'?'手腕':'你的房间';$('game').innerHTML=stage(`DAY ${day} / ${labels[s]}`,place,html)
+  }
+  function saveInputs(){const n=$('cardName'),h=$('cardHeight'),w=$('cardWeight');if(n)card.name=n.value;if(h)card.height=h.value;if(w)card.weight=w.value;const fn=$('friendName'),fr=$('friendRelation');if(custom&&fn){custom.name=fn.value||custom.name;custom.relation=fr.value||custom.relation}}
+  function startAnimation(next,ms=1050){animating=true;$('game').querySelectorAll('button').forEach(b=>b.disabled=true);setTimeout(()=>{animating=false;next();render()},ms)}
+  document.addEventListener('input',saveInputs);
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled||animating)return;saveInputs();const a=b.dataset.act;
+    if(a==='restart'){if(confirm('从 DAY 0 重新开始？本次进度会立即清除。'))location.reload();return}if(a==='card'||a==='points'||a==='look'||a==='phone'){screen=a;render();return}
+    if(a==='point-'||a==='point+'){const i=Number(b.dataset.index),sum=card.points.reduce((x,y)=>x+y,0);if(a==='point-'&&card.points[i]>1)card.points[i]--;if(a==='point+'&&card.points[i]<4&&sum<6)card.points[i]++;render();return}
+    if(a==='look-'||a==='look+'){const key=b.dataset.key,n=APPEARANCE[key].length;card.look[key]=(card.look[key]+(a==='look+'?1:-1)+n)%n;render();return}
+    if(a==='contact'){const id=b.dataset.id;if(selected.includes(id))selected=selected.filter(x=>x!==id);else if(selected.length+(custom?1:0)<2)selected.push(id);else announce('最多邀请两个人');render();return}
+    if(a==='addFriend'){if(selected.length>=2){announce('队伍已经有三个人了');return}custom=randomFriend(seed,3);custom._points=[2,2,2];render();return}if(a==='friendRandom'){const nextSeed=randomSeed();custom=randomFriend(nextSeed,3);custom._points=[1,1,1];for(let n=0;n<3;n++){let i=hash(`${nextSeed}:point:${n}`)%3;while(custom._points[i]>=4)i=(i+1)%3;custom._points[i]++}render();return}if(a==='friendRemove'){custom=null;render();return}
+    if(a==='friendPoint-'||a==='friendPoint+'){const i=Number(b.dataset.index),sum=custom._points.reduce((x,y)=>x+y,0);if(a==='friendPoint-'&&custom._points[i]>1)custom._points[i]--;if(a==='friendPoint+'&&custom._points[i]<4&&sum<6)custom._points[i]++;render();return}
+    if(a==='startDay'){const self={name:card.name.trim()||'阿野',height:card.height,weight:card.weight,points:card.points,look:card.look,relation:'你自己'},specs=[self,...selected.map(id=>{const p=contacts.find(x=>x.id===id);return {name:p.name,relation:p.relation,look:p.look,focus:dominantFocus(p)}}),...(custom?[{name:custom.name,relation:custom.relation,look:custom.look,points:custom._points}]:[])];gameState=createGame(seed,specs);screen='day';startAnimation(()=>{},850);return}
+    if(a.startsWith('warm:')){startAnimation(()=>{gameState=chooseWarmup(gameState,a.slice(5))});return}if(a==='toEvent'){gameState=continueToEvent(gameState);render();return}if(a.startsWith('event:')){startAnimation(()=>{gameState=chooseEvent(gameState,a.slice(6))});return}if(a==='toWorkout'){gameState=continueToWorkout(gameState);render();return}if(a.startsWith('work:')){startAnimation(()=>{gameState=doWorkout(gameState,a.slice(5))},1400);return}if(a==='toStore'){gameState={...gameState,step:'meal'};render();return}if(a.startsWith('meal:')){gameState=chooseMeal(gameState,a.slice(5));render();return}if(a==='afterMeal'){gameState=continueAfterMeal(gameState);render();return}if(a==='nextDay'){gameState=advanceDay(gameState);render();return}
+    if(a==='again'){const specs=gameState.party.map(p=>({name:p.name,relation:p.relation,look:p.look,focus:'balanced'}));seed=randomSeed();gameState=createGame(seed,specs);render()}
+  });
+  function dominantFocus(p){return ['strength','cardio','mobility'].sort((a,b)=>p.hidden[b]-p.hidden[a])[0]}
+  function paintMinis(){document.querySelectorAll('[data-mini]').forEach(c=>{const p=contacts.find(x=>x.id===c.dataset.mini);if(p)drawMini(c.getContext('2d'),p,3,14,0,'idle',1)})}
+  function drawLoop(){const canvas=$('stage');if(!canvas)return;drawScene(canvas.getContext('2d'),sceneName(),frame,currentParty());frame=(frame+1)%4;raf=requestAnimationFrame(()=>setTimeout(drawLoop,animating?170:520))}
+  function rect(x,c,px,py,w,h){x.fillStyle=c;x.fillRect(px,py,w,h)}
+  function drawMini(x,p,px,ground,f,action='idle',scale=2){const L=p.look||defaultLook(1,0),skin=['#f0c39b','#b97858','#8c533d','#f2d1b1'][(L.eyes+L.body)%4],hair=['#2b2531','#6c4438','#c7c6bd','#a33c58','#326b82'][L.hairColor%5],tops=['#e26d78','#697ab3','#f0c85c','#5d927b','#eee3bf'],bottoms=['#3d4265','#486967','#8f5e80','#d8a967','#333846'],shoe=['#eee3bf','#25283a','#b74b5a','#6d5d84'][L.shoes%4],bob=f%2&&action!=='watch'?scale:0,wide=p.appearanceMark==='power'?scale:0;rect(x,hair,px+3*scale,ground-13*scale+bob,4*scale,3*scale);if(L.hair===2||L.hair===3||L.hair===5)rect(x,hair,px+2*scale,ground-11*scale+bob,6*scale,5*scale);rect(x,skin,px+3*scale,ground-11*scale+bob,4*scale,4*scale);rect(x,tops[L.top%5],px+2*scale-wide,ground-7*scale+bob,6*scale+wide*2,5*scale);if(p.appearanceMark==='power')rect(x,skin,px,ground-6*scale+bob,2*scale,4*scale);else{rect(x,skin,px+scale,ground-6*scale+bob,scale,4*scale);rect(x,skin,px+8*scale,ground-6*scale+bob,scale,4*scale)}rect(x,bottoms[L.bottom%5],px+2*scale,ground-2*scale+bob,3*scale,3*scale);rect(x,bottoms[L.bottom%5],px+6*scale,ground-2*scale+bob,2*scale,3*scale);const step=f%2&&action!=='watch'?scale:0;rect(x,shoe,px+2*scale-step,ground+scale,3*scale,scale);rect(x,shoe,px+6*scale+step,ground+scale,3*scale,scale);if(L.accessory===1)rect(x,'#28304b',px+3*scale,ground-10*scale+bob,4*scale,scale);if(L.accessory===4||p.appearanceMark==='runner')rect(x,'#edc75e',px+2*scale,ground-12*scale+bob,6*scale,scale);if(action==='watch')rect(x,'#73c2bf',px+9*scale,ground-5*scale,2*scale,2*scale)}
+  function drawScene(x,scene,f,party){x.imageSmoothingEnabled=false;x.clearRect(0,0,240,160);const sky=scene==='room'||scene==='bedroom'||scene==='locker'?'#65658a':'#8bc4b8';rect(x,sky,0,0,240,160);
+    if(scene==='gym'){rect(x,'#d8e9c4',0,52,240,108);rect(x,'#59647a',0,118,240,42);for(let i=0;i<6;i++)rect(x,'#4b5368',i*44,118,2,42);rect(x,'#34384f',18,28,4,90);rect(x,'#34384f',20,28,52,4);rect(x,'#e56b88',180,66,34,4);rect(x,'#34384f',187,70,4,48);rect(x,'#34384f',207,70,4,48);party.forEach((p,i)=>drawMini(x,p,48+i*52,112,f,animating?'move':'idle',2))}
+    else if(scene==='store'){rect(x,'#f2d59a',0,44,240,116);rect(x,'#87566d',0,116,240,44);rect(x,'#5c435c',15,24,65,76);for(let y=36;y<94;y+=18)rect(x,'#f4e3b2',20,y,55,5);rect(x,'#3b4156',112,74,108,8);rect(x,'#f3ca67',123,62,22,12);rect(x,'#75a765',155,60,18,14);party.forEach((p,i)=>drawMini(x,p,50+i*48,113,f,'idle',2))}
+    else if(scene==='watch'){rect(x,'#27283d',0,0,240,160);rect(x,'#bd926e',46,70,148,34);rect(x,'#222538',92,45,58,72);rect(x,'#65c3bd',98,51,46,60);rect(x,'#1e2634',103,56,36,50);const dots=f%4+4;for(let i=0;i<dots;i++)rect(x,'#f3ca67',108+i*4,77,2,8);rect(x,'#f4edc7',111,93,25,3)}
+    else if(scene==='phone'){rect(x,'#2b2b42',0,0,240,160);rect(x,'#151625',68,8,104,144);rect(x,'#d8e9c4',74,17,92,126);rect(x,'#5a6378',79,25,82,12);for(let i=0;i<4;i++){rect(x,'#fff',80,43+i*22,80,17);rect(x,['#e56b88','#65c3bd','#f3ca67','#75a765'][i],84,47+i*22,9,9)}rect(x,'#65c3bd',104,132,31,4)}
+    else if(scene==='card'){rect(x,'#8c5e5b',0,0,240,160);rect(x,'#5b3f49',0,118,240,42);rect(x,'#f8f0c8',45,25,150,96);rect(x,'#e56b88',45,25,150,14);for(let i=0;i<4;i++)rect(x,'#636579',62,53+i*14,105,2);rect(x,'#65c3bd',159,94,20,14)}
+    else {rect(x,'#444563',0,0,240,160);rect(x,'#25263a',0,110,240,50);rect(x,'#9f6a78',18,53,75,57);rect(x,'#f8f0c8',24,61,63,24);rect(x,'#34364f',145,26,68,84);for(let i=0;i<3;i++)rect(x,'#c7b76d',153+i*18,39,12,12);party.forEach((p,i)=>drawMini(x,p,65+i*48,108,f,'idle',2))}
+  }
   render();
 }

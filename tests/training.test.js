@@ -1,61 +1,69 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WORKOUTS,SCHEDULE,createPlayer,eventFor,fresh,restore,chooseEvent,doTraining,nextDay,summary} from '../training/game.js';
+import {WORKOUTS,SCHEDULE,APPEARANCE,createCharacter,createGame,eventFor,chooseWarmup,continueToEvent,chooseEvent,continueToWorkout,doWorkout,chooseMeal,continueAfterMeal,advanceDay,appearanceRoute,endingText,presetContacts} from '../training/game.js';
 
-test('training catalog covers all requested disciplines',()=>{
-  assert.deepEqual(new Set(Object.keys(WORKOUTS)),new Set(['split','rdl','farmer','pullup','animal','body','bell','ropes']));
-  assert.equal(new Set(SCHEDULE.flat()).size,8);
-  for(const item of Object.values(WORKOUTS)){
-    assert.ok(item.explain.length>12);
-    assert.ok(item.tags.length>=3);
-  }
+test('catalog contains professional names and plain-language explanations',()=>{
+  assert.equal(SCHEDULE.length,7);
+  assert.ok(WORKOUTS.split.name.includes('保加利亚'));
+  assert.ok(WORKOUTS.animal.name.includes('动物流'));
+  assert.ok(WORKOUTS.prisoner.name.includes('囚徒健身'));
+  for(const workout of Object.values(WORKOUTS))assert.ok(workout.explain.length>=20);
 });
 
-test('player generation is deterministic and respects focus',()=>{
-  assert.deepEqual(createPlayer(57,0,'阿测','power'),createPlayer(57,0,'阿测','power'));
-  const player=createPlayer(57,0,'阿测','power');
-  assert.equal(player.name,'阿测');
-  assert.deepEqual([player.power,player.move,player.grit],[5,2,2]);
+test('character creation supports varied bodies and clothing',()=>{
+  const p=createCharacter(57,0,{name:'阿测',height:172,weight:64,points:[3,2,1]});
+  assert.equal(p.name,'阿测');
+  assert.equal(p.height,172);
+  assert.deepEqual([p.hidden.strength,p.hidden.cardio,p.hidden.mobility],[3,2,1]);
+  for(const key of ['hair','hairColor','eyes','top','bottom','shoes','accessory','body'])assert.ok(Number.isInteger(p.look[key]));
+  assert.ok(APPEARANCE.bottom.includes('百褶裙'));
 });
 
-test('invalid and old saves are rejected',()=>{
-  assert.equal(restore(null),null);
-  assert.equal(restore({version:0,players:[{}],day:1}),null);
-  assert.equal(restore({version:1,players:[],day:1}),null);
-  assert.equal(restore({version:1,seed:1,day:1,phase:'event',players:[{name:'坏存档'}],selected:[],used:[],logs:[],cohesion:0,total:0}),null);
+test('day one follows the full ADV loop',()=>{
+  let state=createGame(290507,[{name:'甲',points:[2,2,2]},{name:'乙',focus:'mobility'},{name:'丙',focus:'strength'}]);
+  state=chooseWarmup(state,'ankle');assert.equal(state.step,'warmupResult');
+  state=continueToEvent(state);assert.equal(state.step,'event');
+  const event=eventFor(state.seed,state.day);
+  state=chooseEvent(state,event.choices[0].id);assert.equal(state.step,'eventResult');
+  state=continueToWorkout(state);assert.equal(state.step,'workout');
+  state=doWorkout(state,SCHEDULE[0][0]);assert.equal(state.step,'watch');
+  state={...state,step:'meal'};
+  state=chooseMeal(state,'rice');assert.equal(state.step,'mealResult');
+  state=continueAfterMeal(state);assert.equal(state.step,'summary');
+  state=advanceDay(state);assert.equal(state.day,2);assert.equal(state.step,'warmup');
 });
 
-test('a full seven-day week reaches a report with bounded stats',()=>{
-  let state=fresh(290507,[{name:'甲',focus:'balanced'},{name:'乙',focus:'move'},{name:'丙',focus:'grit'},{name:'丁',focus:'power'}]);
+test('one, two and three-person parties are supported and capped at three',()=>{
+  assert.equal(createGame(1,[{name:'一'}]).party.length,1);
+  assert.equal(createGame(1,[{name:'一'},{name:'二'}]).party.length,2);
+  assert.equal(createGame(1,[{name:'一'},{name:'二'},{name:'三'},{name:'四'}]).party.length,3);
+  assert.equal(presetContacts(7).length,4);
+});
+
+test('seven days reach a narrative appearance change',()=>{
+  let state=createGame(57,[{name:'小野',focus:'strength'}]);
+  const warmups=['ankle','hinge','floor','band','slow','breath','usual'];
   for(let day=1;day<=7;day++){
-    const event=eventFor(state.seed,state.day);
-    state=chooseEvent(state,event.choices[0].id);
-    assert.equal(state.phase,'training');
-    const rested=state.players[day%state.players.length].id;
-    const selected=state.players.filter(p=>p.id!==rested).map(p=>p.id);
-    state=doTraining(state,SCHEDULE[day-1][day%3],selected);
-    assert.equal(state.phase,'recap');
-    assert.ok(state.recap.gained>0);
-    state=nextDay(state);
+    state=chooseWarmup(state,warmups[day-1]);
+    state=continueToEvent(state);
+    state=chooseEvent(state,eventFor(state.seed,day).choices[0].id);
+    state=continueToWorkout(state);
+    state=doWorkout(state,SCHEDULE[day-1][0]);
+    state={...state,step:'meal'};
+    state=chooseMeal(state,['rice','noodles','soup'][day%3]);
+    state=continueAfterMeal(state);
+    state=advanceDay(state);
   }
-  assert.equal(state.phase,'ended');
-  assert.equal(state.used.length,7);
-  assert.ok(state.total>0);
-  assert.ok(state.cohesion<=20);
-  assert.equal(summary(state).days,7);
-  assert.ok(summary(state).title.length>2);
-  for(const player of state.players){
-    assert.ok(player.energy>=0&&player.energy<=10);
-    assert.ok(player.power<=9&&player.move<=9&&player.grit<=9);
-  }
+  assert.equal(state.step,'weekEnding');
+  assert.ok(['power','flow','runner','store'].includes(state.party[0].appearanceMark));
+  assert.ok(endingText(state.party[0].appearanceMark,'小野').includes('小野'));
 });
 
-test('one-player mode remains playable and resting restores energy',()=>{
-  let state=fresh(1,[{name:'单人',focus:'random'}]);
-  state=chooseEvent(state,eventFor(1,1).choices[0].id);
-  const before=state.players[0].energy;
-  assert.equal(doTraining(state,'not-a-workout',state.selected),state);
-  state=doTraining(state,SCHEDULE[0][0],state.selected);
-  assert.ok(state.players[0].energy<before);
-  assert.equal(state.recap.interaction,'');
+test('appearance routes include strength, flow, running and 57store regular',()=>{
+  const p=createCharacter(1,0,{name:'路线'});
+  const withSessions=(sessions,meals={})=>({...p,hidden:{...p.hidden,sessions,meals}});
+  assert.equal(appearanceRoute(withSessions(['split','rdl'])),'power');
+  assert.equal(appearanceRoute(withSessions(['animal','crawl'])),'flow');
+  assert.equal(appearanceRoute(withSessions(['run','run'])),'runner');
+  assert.equal(appearanceRoute(withSessions(['run'],{rice:2,noodles:2,soup:2})),'store');
 });
