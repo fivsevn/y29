@@ -131,7 +131,7 @@ a { color: inherit; text-decoration: none; }
 .stage {
   display: block;
   width: 100%;
-  height: clamp(118px, 22dvh, 172px);
+  height: clamp(132px, 25dvh, 190px);
   object-fit: cover;
   object-position: 50% 54%;
   background: var(--screen);
@@ -163,10 +163,11 @@ a { color: inherit; text-decoration: none; }
 .sport-watch {
   position: absolute;
   z-index: 3;
-  left: 11px;
-  bottom: 10px;
-  width: 126px;
-  padding: 5px 6px 6px;
+  right: 13px;
+  bottom: 19px;
+  width: 108px;
+  padding: 5px 5px 6px;
+  overflow: visible;
   color: #d8e9c4;
   background: #111823e8;
   border: 3px solid #202339;
@@ -177,30 +178,60 @@ a { color: inherit; text-decoration: none; }
 .sport-watch::after {
   content: "";
   position: absolute;
-  right: -6px;
-  top: 18px;
-  width: 4px;
-  height: 15px;
+  right: -5px;
+  top: 17px;
+  width: 3px;
+  height: 13px;
   background: #596164;
   border: 1px solid #202339;
 }
+.watch-strap {
+  position: absolute;
+  z-index: -1;
+  left: 26px;
+  width: 50px;
+  height: 16px;
+  background:
+    repeating-linear-gradient(90deg, #35394a 0 5px, #424859 5px 9px),
+    #35394a;
+  border: 2px solid #202339;
+  box-shadow: inset 0 0 0 2px #596164;
+}
+.watch-strap-top { top: -15px; }
+.watch-strap-bottom { bottom: -15px; }
 .watch-top {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 5px;
+  gap: 3px;
   padding-bottom: 3px;
   border-bottom: 1px solid #65706f;
   color: var(--paper);
   font-size: 8px;
   line-height: 1;
 }
-.watch-time { color: var(--cyan); font-size: 10px; letter-spacing: .06em; }
-.watch-icons { color: #9db3a0; font-size: 7px; letter-spacing: -1px; white-space: nowrap; }
+.watch-date { color: var(--paper); font-size: 7px; }
+.watch-time { color: var(--cyan); font-size: 9px; letter-spacing: .02em; }
+.watch-icons { justify-self: end; color: #9db3a0; font-size: 6px; letter-spacing: -1px; white-space: nowrap; }
+.watch-help {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 1px solid #95aa96;
+  background: #202939;
+  color: var(--paper);
+  font: 8px/1 "Y29 Plex Mono", monospace;
+  cursor: help;
+}
+.watch-help:hover,
+.watch-help:focus-visible,
+.watch-help[aria-expanded="true"] { color: var(--night); background: var(--cyan); }
 .watch-metrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2px 7px;
+  gap: 1px 5px;
   padding-top: 4px;
 }
 .watch-metric {
@@ -212,7 +243,22 @@ a { color: inherit; text-decoration: none; }
   font-size: 7px;
   line-height: 1.25;
 }
-.watch-metric strong { color: #f3ca67; font-size: 10px; font-weight: 400; }
+.watch-metric strong { color: #f3ca67; font-size: 9px; font-weight: 400; }
+.watch-legend {
+  position: absolute;
+  right: calc(100% + 7px);
+  bottom: 0;
+  width: 108px;
+  padding: 5px;
+  background: #111823f2;
+  border: 2px solid #596164;
+  box-shadow: 2px 2px 0 #11121c99;
+  color: #c7d7ba;
+  font-size: 7px;
+  line-height: 1.45;
+}
+.watch-legend span { display: block; white-space: nowrap; }
+.watch-legend b { color: var(--yellow); font-weight: 400; }
 .sport-watch.is-updating .watch-metric strong { animation: watch-jump .72s steps(2, end) 2; }
 .sport-watch.is-updating .watch-metric:nth-child(2) strong { animation-delay: .08s; }
 .sport-watch.is-updating .watch-metric:nth-child(3) strong { animation-delay: .16s; }
@@ -221,7 +267,9 @@ a { color: inherit; text-decoration: none; }
 .box {
   min-height: 0;
   align-self: stretch;
-  overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: var(--paper);
   color: var(--ink);
   border: 4px double var(--ink);
@@ -339,7 +387,7 @@ a { color: inherit; text-decoration: none; }
 .point-controls output { min-width: 48px; text-align: center; }
 .point-note { color: #8d3653; font-size: 9px; }
 
-.fixed-panel { display: flex; flex-direction: column; }
+.fixed-panel { display: flex; flex-direction: column; overflow: hidden; }
 .fixed-panel > .speaker,
 .fixed-panel > p,
 .panel-foot,
@@ -392,13 +440,15 @@ a { color: inherit; text-decoration: none; }
   .game { padding: 5px; }
   .screen { gap: 5px; }
   .stage-shell { padding: 4px; }
-  .stage { height: clamp(112px, 21dvh, 154px); }
+  .stage { height: clamp(124px, 24dvh, 174px); }
   .scanlines { inset: 4px; }
   .stage-label,
   .stage-place { top: 9px; }
   .stage-label { left: 10px; }
   .stage-place { right: 10px; }
-  .sport-watch { left: 9px; bottom: 8px; width: 120px; }
+  .sport-watch { right: 10px; bottom: 18px; width: 104px; }
+  .watch-strap { left: 25px; width: 48px; }
+  .watch-legend { width: 104px; }
   .box { padding: 7px; }
   .box h1 { font-size: 21px; }
   .look-grid { grid-template-columns: 1fr; }
@@ -409,7 +459,7 @@ a { color: inherit; text-decoration: none; }
   .handheld { grid-template-rows: 32px minmax(0, 1fr) 32px; }
   .topbar,
   .bottombar { height: 32px; }
-  .stage { height: clamp(104px, 19dvh, 132px); }
+  .stage { height: clamp(114px, 22dvh, 150px); }
   .box .lead { font-size: 12px; }
   .choice { min-height: 31px; padding: 5px 7px; }
   .number-wheel {

@@ -86,7 +86,13 @@ test('dialogue reveal, compact watch HUD and fixed viewport are built into the r
   assert.match(gameSource,/prefers-reduced-motion: reduce/);
   for(const label of ['PWR','END','MOB','FAT'])assert.match(gameSource,new RegExp(`'${label}'`));
   assert.match(styleSource,/\.stage \{[\s\S]*?width: 100%;[\s\S]*?height: clamp\(/);
+  assert.match(styleSource,/\.sport-watch \{[\s\S]*?right: 13px;[\s\S]*?width: 108px;/);
+  assert.match(styleSource,/\.watch-strap \{/);
+  assert.match(styleSource,/\.watch-legend \{/);
+  assert.match(gameSource,/function gameDate\(/);
+  assert.match(gameSource,/data-act="watchHelp"/);
   assert.match(styleSource,/\.number-wheel \{[\s\S]*?height: 66px;/);
+  assert.match(styleSource,/\.box \{[\s\S]*?overflow-y: auto;/);
   assert.match(styleSource,/\.scroll-area \{[\s\S]*?overflow-y: auto;/);
   assert.doesNotMatch(indexSource,/ui-patch\.(?:css|js)/);
   assert.doesNotMatch(gameSource,/TRAINING LOG|ui-watch-row/);
