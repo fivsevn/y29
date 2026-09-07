@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {WORKOUTS,SCHEDULE,APPEARANCE,createCharacter,createGame,eventFor,chooseWarmup,continueToEvent,chooseEvent,continueToWorkout,doWorkout,chooseMeal,continueAfterMeal,advanceDay,appearanceRoute,endingText,presetContacts} from '../training/game.js';
+
+const gameSource=readFileSync(new URL('../training/game.js',import.meta.url),'utf8');
+const styleSource=readFileSync(new URL('../training/style.css',import.meta.url),'utf8');
+const indexSource=readFileSync(new URL('../training/index.html',import.meta.url),'utf8');
 
 test('catalog contains professional names and plain-language explanations',()=>{
   assert.equal(SCHEDULE.length,7);
@@ -66,4 +71,23 @@ test('appearance routes include strength, flow, running and 57store regular',()=
   assert.equal(appearanceRoute(withSessions(['animal','crawl'])),'flow');
   assert.equal(appearanceRoute(withSessions(['run','run'])),'runner');
   assert.equal(appearanceRoute(withSessions(['run'],{rice:2,noodles:2,soup:2})),'store');
+});
+
+test('choice scenes start unselected and require a separate confirmation',()=>{
+  assert.match(gameSource,/class="choice select-option"[^>]+aria-pressed="false"/);
+  assert.match(gameSource,/class="choice confirm-choice"[^>]+disabled/);
+  assert.match(gameSource,/if\(a==='selectChoice'\)/);
+  assert.match(gameSource,/if\(a==='confirmChoice'\)/);
+  for(const source of ['act:`warm:${c.id}`','act:`event:${c.id}`','act:`work:${id}`',"act:'meal:rice'"])assert.ok(gameSource.includes(source));
+});
+
+test('dialogue reveal, compact watch HUD and fixed viewport are built into the route',()=>{
+  assert.match(gameSource,/data-dialogue/);
+  assert.match(gameSource,/prefers-reduced-motion: reduce/);
+  for(const label of ['PWR','END','MOB','FAT'])assert.match(gameSource,new RegExp(`'${label}'`));
+  assert.match(styleSource,/\.stage \{[\s\S]*?width: 100%;[\s\S]*?height: clamp\(/);
+  assert.match(styleSource,/\.number-wheel \{[\s\S]*?height: 66px;/);
+  assert.match(styleSource,/\.scroll-area \{[\s\S]*?overflow-y: auto;/);
+  assert.doesNotMatch(indexSource,/ui-patch\.(?:css|js)/);
+  assert.doesNotMatch(gameSource,/TRAINING LOG|ui-watch-row/);
 });
