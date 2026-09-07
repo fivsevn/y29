@@ -165,8 +165,8 @@ a { color: inherit; text-decoration: none; }
   z-index: 3;
   right: 13px;
   bottom: 19px;
-  width: 94px;
-  padding: 5px 5px 6px;
+  width: 82px;
+  padding: 5px 4px 6px;
   overflow: visible;
   color: #d8e9c4;
   background: #111823e8;
@@ -188,8 +188,8 @@ a { color: inherit; text-decoration: none; }
 .watch-strap {
   position: absolute;
   z-index: -1;
-  left: 23px;
-  width: 42px;
+  left: 20px;
+  width: 36px;
   height: 16px;
   background:
     repeating-linear-gradient(90deg, #35394a 0 5px, #424859 5px 9px),
@@ -212,13 +212,23 @@ a { color: inherit; text-decoration: none; }
 }
 .watch-date { justify-self: center; color: var(--paper); font-size: 7px; font-weight: 400; }
 .watch-time { justify-self: start; color: var(--cyan); font-size: 7px; font-weight: 400; letter-spacing: 0; }
-.watch-status { justify-self: end; display: flex; align-items: center; gap: 2px; }
-.watch-icons { color: #9db3a0; font-size: 5px; letter-spacing: -1px; white-space: nowrap; }
+.watch-status { justify-self: end; display: flex; align-items: center; gap: 1px; }
+.watch-signal {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1px;
+  width: 8px;
+  height: 8px;
+}
+.watch-signal i { display: block; width: 2px; background: #9db3a0; }
+.watch-signal i:nth-child(1) { height: 3px; }
+.watch-signal i:nth-child(2) { height: 5px; }
+.watch-signal i:nth-child(3) { height: 7px; }
 .watch-help {
   display: grid;
   place-items: center;
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   padding: 0;
   border: 1px solid #95aa96;
   background: #202939;
@@ -232,14 +242,14 @@ a { color: inherit; text-decoration: none; }
 .watch-metrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px 5px;
+  gap: 1px 3px;
   padding-top: 4px;
 }
 .watch-metric {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 4px;
+  gap: 2px;
   color: #95aa96;
   font-size: 7px;
   line-height: 1.25;
@@ -447,8 +457,8 @@ a { color: inherit; text-decoration: none; }
   .stage-place { top: 9px; }
   .stage-label { left: 10px; }
   .stage-place { right: 10px; }
-  .sport-watch { right: 10px; bottom: 18px; width: 92px; }
-  .watch-strap { left: 23px; width: 40px; }
+  .sport-watch { right: 10px; bottom: 18px; width: 80px; }
+  .watch-strap { left: 19px; width: 35px; }
   .watch-legend { width: 104px; }
   .box { padding: 7px; }
   .box h1 { font-size: 21px; }
