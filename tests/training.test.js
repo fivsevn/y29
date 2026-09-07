@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {WORKOUTS,SCHEDULE,APPEARANCE,MENUS,createCharacter,createGame,eventFor,gymEventFor,afterEventFor,chooseWarmup,continueToEvent,chooseEvent,continueToWorkout,doWorkout,continueAfterWorkout,chooseGymEvent,chooseBonus,continueAfterBonus,chooseMeal,continueAfterMeal,chooseAfterEvent,continueAfterEvent,advanceDay,appearanceRoute,endingText,presetContacts,compositeMetrics} from '../training/game.js';
+import {WORKOUTS,SCHEDULE,APPEARANCE,MENUS,CHARACTER_DATA,START_QUESTIONS,createCharacter,createGame,eventFor,gymEventFor,afterEventFor,storesFor,chooseWarmup,continueToEvent,chooseEvent,continueToWorkout,doWorkout,continueAfterWorkout,chooseGymEvent,chooseBonus,continueAfterBonus,chooseStore,continueToMenu,chooseMeal,continueAfterMeal,chooseAfterEvent,continueAfterEvent,advanceDay,appearanceRoute,endingText,presetContacts,compositeMetrics,companionMoment,friendEndingMessages,epilogueLines} from '../training/game.js';
 
 const gameSource=readFileSync(new URL('../training/game.js',import.meta.url),'utf8');
 const styleSource=readFileSync(new URL('../training/style.css',import.meta.url),'utf8');
@@ -34,7 +34,9 @@ test('day one follows the full ADV loop',()=>{
   state=doWorkout(state,SCHEDULE[0][0]);assert.equal(state.step,'workoutResult');
   state=continueAfterWorkout(state);assert.equal(state.step,'gymEvent');
   state=chooseGymEvent(state,gymEventFor(state.seed,1).choices[0].id);assert.equal(state.step,'gymEventResult');
-  state=continueToWorkout(state);state=doWorkout(state,SCHEDULE[0][1]);state=continueAfterWorkout(state);assert.equal(state.step,'meal');
+  state=continueToWorkout(state);state=doWorkout(state,SCHEDULE[0][1]);state=continueAfterWorkout(state);assert.equal(state.step,'mealPlace');
+  state=chooseStore(state,'57store');assert.equal(state.step,'mealPlaceResult');
+  state=continueToMenu(state);assert.equal(state.step,'meal');
   state=chooseMeal(state,'57store|sandwich');assert.equal(state.step,'mealResult');
   state=continueAfterMeal(state);assert.equal(state.step,'afterEvent');
   state=chooseAfterEvent(state,afterEventFor(state.seed,1).choices[0].id);assert.equal(state.step,'afterEventResult');
@@ -46,7 +48,8 @@ test('one, two and three-person parties are supported and capped at three',()=>{
   assert.equal(createGame(1,[{name:'一'}]).party.length,1);
   assert.equal(createGame(1,[{name:'一'},{name:'二'}]).party.length,2);
   assert.equal(createGame(1,[{name:'一'},{name:'二'},{name:'三'},{name:'四'}]).party.length,3);
-  assert.equal(presetContacts(7).length,4);
+  assert.equal(presetContacts(7).length,7);
+  assert.notDeepEqual(presetContacts(7).map(x=>x.id),presetContacts(8).map(x=>x.id));
 });
 
 test('seven days reach a narrative appearance change',()=>{
@@ -61,14 +64,15 @@ test('seven days reach a narrative appearance change',()=>{
     state=chooseGymEvent(state,gymEventFor(state.seed,day).choices[0].id);state=continueToWorkout(state);
     state=doWorkout(state,SCHEDULE[day-1][1]);state=continueAfterWorkout(state);
     if(state.step==='bonusOffer'){state=chooseBonus(state,'stop');state=continueAfterBonus(state)}
-    const store=Object.keys(MENUS)[day-1],meal=MENUS[store][0];
+    const available=storesFor(state.seed,day),store=available[0],meal=MENUS[store][0];
+    state=chooseStore(state,store);state=continueToMenu(state);
     state=chooseMeal(state,`${store}|${meal.id}`);
     state=continueAfterMeal(state);
     state=chooseAfterEvent(state,afterEventFor(state.seed,day).choices[0].id);
     state=continueAfterEvent(state);
     state=advanceDay(state);
   }
-  assert.equal(state.step,'reportGym');
+  assert.equal(state.step,'epilogue');
   assert.ok(['power','flow','runner','store'].includes(state.party[0].appearanceMark));
   assert.ok(endingText(state.party[0].appearanceMark,'小野').includes('小野'));
 });
@@ -99,6 +103,17 @@ test('watch metrics are composites rather than raw hidden stats',()=>{
   assert.ok(Object.values(metrics).every(value=>value>=1&&value<=5));
 });
 
+test('front desk questions and fixed characters are data-driven',()=>{
+  assert.equal(START_QUESTIONS.length,4);
+  assert.ok(START_QUESTIONS.every(q=>q.choices.length>=3&&q.choices.every(c=>c.line&&c.points.length===3)));
+  assert.deepEqual(new Set(CHARACTER_DATA.map(x=>x.name)),new Set(['熙熙','飞飞','Y.','孟总','邓子','安柒','老周']));
+  assert.ok(CHARACTER_DATA.every(x=>x.rates&&x.events.train.length&&x.events.meal.length&&x.events.ending.length));
+  const state=createGame(57,[{name:'我'},CHARACTER_DATA[0],CHARACTER_DATA[1]],{tags:['returning']});
+  assert.ok(companionMoment(state,'train'));
+  assert.equal(friendEndingMessages(state).length,2);
+  assert.equal(epilogueLines(state).length,3);
+});
+
 test('choice scenes start unselected and require a separate confirmation',()=>{
   assert.match(gameSource,/class="choice select-option"[^>]+aria-pressed="false"/);
   assert.match(gameSource,/class="choice confirm-choice"[^>]+disabled/);
@@ -110,7 +125,7 @@ test('choice scenes start unselected and require a separate confirmation',()=>{
 test('dialogue reveal, compact watch HUD and fixed viewport are built into the route',()=>{
   assert.match(gameSource,/data-dialogue/);
   assert.match(gameSource,/prefers-reduced-motion: reduce/);
-  for(const label of ['状态','节奏','负荷','默契'])assert.match(gameSource,new RegExp(`'${label}'`));
+  for(const label of ['STS','PACE','LOAD','LINK'])assert.match(gameSource,new RegExp(`'${label}'`));
   assert.match(styleSource,/\.stage \{[\s\S]*?width: 100%;[\s\S]*?height: clamp\(/);
   assert.match(styleSource,/\.sport-watch \{[\s\S]*?right: 13px;[\s\S]*?width: 82px;/);
   assert.match(styleSource,/\.watch-top \{[\s\S]*?grid-template-columns: 1fr auto 1fr;/);
@@ -129,5 +144,8 @@ test('dialogue reveal, compact watch HUD and fixed viewport are built into the r
   assert.doesNotMatch(gameSource,/STR \/ END|PEAK FAT|EGO/);
   assert.match(gameSource,/体验报告已送达/);
   assert.match(gameSource,/支付软件 · 周度观察/);
+  assert.match(gameSource,/朋友消息/);
+  assert.match(gameSource,/mealPlaceResult/);
+  assert.match(styleSource,/\.food-pixel/);
   assert.match(gameSource,/THOUGHT_POOLS/);
 });
