@@ -142,9 +142,9 @@ test('dialogue reveal, compact watch HUD and fixed viewport are built into the r
   assert.doesNotMatch(indexSource,/ui-patch\.(?:css|js)/);
   assert.doesNotMatch(gameSource,/TRAINING LOG|ui-watch-row/);
   assert.doesNotMatch(gameSource,/STR \/ END|PEAK FAT|EGO/);
-  assert.match(gameSource,/体验报告已送达/);
-  assert.match(gameSource,/支付软件 · 周度观察/);
-  assert.match(gameSource,/朋友消息/);
+  assert.match(gameSource,/潜力报告已出炉/);
+  assert.match(gameSource,/支付服务 · 周度观察/);
+  assert.match(gameSource,/groupName/);
   assert.match(gameSource,/mealPlaceResult/);
   assert.match(styleSource,/\.food-pixel/);
   assert.match(gameSource,/THOUGHT_POOLS/);

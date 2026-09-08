@@ -4,6 +4,52 @@
   font-display: swap;
 }
 
+/* Group chat, notification lock screen and the unlit mirror. */
+.phone-music { flex:none; padding:4px 12px; font-size:9px; color:#54644c; border-bottom:1px dotted #77896a; }
+.chat-nav .choice { min-width:38px; font-size:18px; }
+.chat-nav .choice::before { content:none; }
+.chat-line { display:flex; align-items:flex-start; gap:8px; margin:12px 0; }
+.chat-line > div { max-width:85%; min-width:0; }
+.chat-line small { display:block; color:#627153; font-size:9px; }
+.chat-line .chat-bubble { margin:3px 0 0; padding:8px 10px; box-shadow:2px 2px 0 #a4b292; }
+.chat-line.from-self { flex-direction:row-reverse; }
+.chat-line.from-self small { text-align:right; }
+.chat-avatar { flex:none; width:32px; height:32px; image-rendering:pixelated; background:#b2c89b; border:1px solid var(--ink); }
+.chat-replies { border-top:2px solid #8a9c79; margin-top:16px; padding-top:8px; }
+.chat-replies .choice { font-size:10px; }
+.is-locked { background:#6c795f; }
+.is-locked .chat-screen > .box { background:#6c795f; padding:0 10px 10px; }
+.is-locked .speaker { display:none; }
+.lock-wallpaper { position:relative; margin:0 -10px 12px; }
+.lock-wallpaper canvas { display:block; width:100%; max-height:300px; object-fit:cover; image-rendering:pixelated; }
+.lock-caption { position:absolute; inset:10px 0 auto; color:#f4f1cf; text-shadow:2px 2px #253324; text-align:center; }
+.lock-caption h1 { margin:0; font-size:36px; }
+.lock-caption p { margin:0; font-size:9px; }
+.lock-notices .message-entry { background:#edf1d9e8; border:2px solid #33402d; margin-bottom:7px; }
+.ad-report, .payment-card { background:#f6f0d2; border:2px solid var(--ink); padding:14px; margin:12px 0; box-shadow:3px 3px #94a37e; }
+.ad-report { border:4px double #982d50; }
+.ad-report h2 { color:#ae3159; font-size:26px; line-height:1.2; }
+.ad-stamp { background:#e7bf59; padding:7px; transform:rotate(-2deg); }
+.ad-report h3 { background:#222339; color:#f5dc71; padding:8px; }
+.ad-report small, .payment-card small { font-size:9px; }
+.payment-card > strong { display:block; text-align:center; font-size:24px; margin:12px 0; }
+.payment-card footer { border-top:1px dashed #879773; padding-top:8px; font-size:9px; }
+.screen { position:relative; }
+.payment-toast { position:absolute; z-index:4; top:10px; left:12px; right:12px; background:#e5edd7; color:#243323; border:2px solid #263227; padding:8px 12px; font-size:10px; pointer-events:none; animation:payment-arrival .25s steps(3); }
+@keyframes payment-arrival { from { transform:translateY(-12px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.handheld.mirror-mode { grid-template-rows:minmax(0,1fr); background:#020303; }
+.mirror-mode > .topbar, .mirror-mode > .bottombar { display:none; }
+.mirror-mode .game { padding:12px; background:#020303; }
+.mirror-screen { height:100%; min-height:0; color:#bfc4bd; background:#020303; border:3px double #353c39; overflow:auto; }
+.mirror-glass { min-height:100%; display:flex; flex-direction:column; padding:22px 18px; }
+.mirror-label { color:#515a56; font-size:8px; letter-spacing:.14em; }
+.mirror-thoughts { flex:1; display:flex; flex-direction:column; justify-content:center; gap:30px; padding:48px 0; }
+.mirror-thoughts p { max-width:25em; font-size:13px; line-height:2; margin:0; }
+.mirror-screen .choice { background:#080b0a; color:#7d8982; border:1px solid #343e38; box-shadow:none; }
+.mirror-screen .dialogue-actions .choice { background:#080b0a; color:#7d8982; }
+.mirror-screen .credits { color:#57645c; font-size:9px; margin:12px 0; }
+@media (prefers-reduced-motion:reduce) { .payment-toast { animation:none; } }
+
 /* Phone scenes replace the entire game viewport; other scenes stay untouched. */
 .handheld.phone-mode { grid-template-rows: minmax(0,1fr); }
 .phone-mode > .topbar, .phone-mode > .bottombar { display:none; }
