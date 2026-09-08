@@ -33,13 +33,13 @@ test('day one follows the full ADV loop',()=>{
   state=continueToWorkout(state);assert.equal(state.step,'workout');
   state=doWorkout(state,SCHEDULE[0][0]);assert.equal(state.step,'workoutResult');
   state=continueAfterWorkout(state);assert.equal(state.step,'gymEvent');
-  state=chooseGymEvent(state,gymEventFor(state.seed,1).choices[0].id);assert.equal(state.step,'gymEventResult');
+  state=chooseGymEvent(state,gymEventFor(state.seed,1,state).choices[0].id);assert.equal(state.step,'gymEventResult');
   state=continueToWorkout(state);state=doWorkout(state,SCHEDULE[0][1]);state=continueAfterWorkout(state);assert.equal(state.step,'mealPlace');
   state=chooseStore(state,'57store');assert.equal(state.step,'mealPlaceResult');
   state=continueToMenu(state);assert.equal(state.step,'meal');
   state=chooseMeal(state,'57store|sandwich');assert.equal(state.step,'mealResult');
   state=continueAfterMeal(state);assert.equal(state.step,'afterEvent');
-  state=chooseAfterEvent(state,afterEventFor(state.seed,1).choices[0].id);assert.equal(state.step,'afterEventResult');
+  state=chooseAfterEvent(state,afterEventFor(state.seed,1,state).choices[0].id);assert.equal(state.step,'afterEventResult');
   state=continueAfterEvent(state);assert.equal(state.step,'summary');
   state=advanceDay(state);assert.equal(state.day,2);assert.equal(state.step,'warmup');
 });
@@ -48,7 +48,7 @@ test('one, two and three-person parties are supported and capped at three',()=>{
   assert.equal(createGame(1,[{name:'一'}]).party.length,1);
   assert.equal(createGame(1,[{name:'一'},{name:'二'}]).party.length,2);
   assert.equal(createGame(1,[{name:'一'},{name:'二'},{name:'三'},{name:'四'}]).party.length,3);
-  assert.equal(presetContacts(7).length,7);
+  assert.equal(presetContacts(7).length,5);
   assert.notDeepEqual(presetContacts(7).map(x=>x.id),presetContacts(8).map(x=>x.id));
 });
 
@@ -61,14 +61,14 @@ test('seven days reach a narrative appearance change',()=>{
     state=chooseEvent(state,eventFor(state.seed,day).choices[0].id);
     state=continueToWorkout(state);
     state=doWorkout(state,SCHEDULE[day-1][0]);state=continueAfterWorkout(state);
-    state=chooseGymEvent(state,gymEventFor(state.seed,day).choices[0].id);state=continueToWorkout(state);
+    state=chooseGymEvent(state,gymEventFor(state.seed,day,state).choices[0].id);state=continueToWorkout(state);
     state=doWorkout(state,SCHEDULE[day-1][1]);state=continueAfterWorkout(state);
     if(state.step==='bonusOffer'){state=chooseBonus(state,'stop');state=continueAfterBonus(state)}
     const available=storesFor(state.seed,day),store=available[0],meal=MENUS[store][0];
     state=chooseStore(state,store);state=continueToMenu(state);
     state=chooseMeal(state,`${store}|${meal.id}`);
     state=continueAfterMeal(state);
-    state=chooseAfterEvent(state,afterEventFor(state.seed,day).choices[0].id);
+    state=chooseAfterEvent(state,afterEventFor(state.seed,day,state).choices[0].id);
     state=continueAfterEvent(state);
     state=advanceDay(state);
   }
@@ -106,7 +106,7 @@ test('watch metrics are composites rather than raw hidden stats',()=>{
 test('front desk questions and fixed characters are data-driven',()=>{
   assert.equal(START_QUESTIONS.length,4);
   assert.ok(START_QUESTIONS.every(q=>q.choices.length>=3&&q.choices.every(c=>c.line&&c.points.length===3)));
-  assert.deepEqual(new Set(CHARACTER_DATA.map(x=>x.name)),new Set(['熙熙','飞飞','Y.','孟总','邓子','安柒','老周']));
+  assert.deepEqual(new Set(CHARACTER_DATA.map(x=>x.name)),new Set(['熙熙','飞飞','Y.','孟总','邓子']));
   assert.ok(CHARACTER_DATA.every(x=>x.rates&&x.events.train.length&&x.events.meal.length&&x.events.ending.length));
   const state=createGame(57,[{name:'我'},CHARACTER_DATA[0],CHARACTER_DATA[1]],{tags:['returning']});
   assert.ok(companionMoment(state,'train'));
