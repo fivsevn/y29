@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "status": "WAITING",
+  "source": "STORYTELLER",
+  "message": "终端已就绪。\n等待下一次传输。\n\n此处只显示当前状态。",
+  "sequence": 0,
+  "startedAt": "2026-09-10T00:00:00Z",
+  "expiresAt": null,
+  "mock": true
+}
