@@ -87,7 +87,7 @@ test('appearance routes include strength, flow, running and 57store regular',()=
 });
 
 test('every day has progressive pools and all requested food locations',()=>{
-  assert.deepEqual(Object.keys(MENUS),['向羽轩','日立屋','飞飞小厨','熙兰拉面','57store','几丁质功能饮料自动贩卖机','拾叁面包房']);
+assert.deepEqual(Object.keys(MENUS),['dx捕鲸堡','向羽轩','日立屋','飞飞小厨','熙兰拉面','57store','几丁质功能饮料自动贩卖机','拾叁面包房']);
   assert.ok(Object.values(MENUS).every(menu=>menu.length>=3));
   for(let day=1;day<=7;day++){
     assert.ok(eventFor(57,day).choices.length>=2);

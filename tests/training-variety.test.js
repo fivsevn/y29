@@ -5,7 +5,7 @@ test('round six doubles core authored catalogs without duplicate prompts',()=>{
  const rows=Object.values(g.FRIEND_EVENTS).flat();assert.equal(rows.length,214);assert.equal(new Set(rows.map(r=>r[0])).size,214);
  assert.equal(g.GYM_EXTRAS.length+g.NIGHT_EXTRAS.length,98);
  assert.equal(g.FRIEND_GROUPS.reduce((n,p)=>n+p.train.length+p.meal.length,0),24);
- assert.equal(Object.values(g.MENUS).flat().length,100);
+ assert.equal(Object.values(g.MENUS).flat().length,109);
  for(const phase of ['train','meal'])for(const seed of [1,11,57,114,514]){
  let s=g.createGame(seed,[{name:'我'},...g.CHARACTER_DATA.filter(p=>['xixi','feifei','deng'].includes(p.id))]),seen=new Set();
  for(let day=1;day<=7;day++){s={...s,day,step:phase==='train'?'gymEvent':'afterEvent'};const e=phase==='train'?g.gymEventFor(seed,day,s):g.afterEventFor(seed,day,s);assert.ok(!seen.has(e.text));seen.add(e.text);s=phase==='train'?g.chooseGymEvent(s,e.choices.at(-1).id):g.chooseAfterEvent(s,e.choices.at(-1).id)}

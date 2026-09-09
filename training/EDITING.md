@@ -1,5 +1,7 @@
 # 飙肌野郎：内容维护
 
+dx捕鲸堡：`game.js / MENUS、DAY_STORES、STORE_LINES、STORE_ARRIVALS、DX_SIDES` 定义九种主餐、四种快餐小食和反馈；`preferredStores` 为飞飞、邓子的隐藏喜好。邀请任一人时，店铺每天可选；普通日池在第 1、3、7 天出现。选定后两位朋友约饭到场概率增加 18 个百分点，仍非必到，邓子仍不训练。场景使用 `store-fastfood`，食物图标为 `food-burger`。
+
 ## 第六轮：内容与手机细节
 
 新增内容集中在 `variety.js`，由 `game.js` 在原数据上追加，不替换原流程。
