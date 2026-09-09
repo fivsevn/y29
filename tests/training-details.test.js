@@ -52,9 +52,9 @@ test('all designated groups have reachable exclusive scenes and require all memb
   assert.equal(g.groupEventFor(incomplete,'meal'),null);
  }
 });
-test('every workout round presents four distinct available projects',()=>{
+test('every workout round presents five distinct available projects',()=>{
  for(let d=1;d<=7;d++)for(let round=0;round<3;round++){
-  const choices=g.workoutsFor(57,d,round);assert.equal(choices.length,4);
-  assert.equal(new Set(choices).size,4);assert.ok(choices.every(id=>g.SCHEDULE[d-1].includes(id)));
+  const choices=g.workoutsFor(57,d,round);assert.equal(choices.length,5);
+  assert.equal(new Set(choices).size,5);assert.ok(choices.every(id=>g.SCHEDULE[d-1].includes(id)));
  }
 });

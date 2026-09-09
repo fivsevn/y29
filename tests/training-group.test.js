@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {CHARACTER_DATA,createGame,gymEventFor,afterEventFor,chooseGymEvent,chooseAfterEvent} from '../training/game.js';
 import {FRIEND_EVENTS,FRIEND_PHASES} from '../training/game.js';
-import {MIRROR_POOLS,GROUP_REPLIES} from '../training/narrative.js';
+import {MIRROR_POOLS,GROUP_REPLIES} from '../training/game.js';
 test('fixed companion events never repeat within seven days across 500 seeds',()=>{
  for(let seed=1;seed<=500;seed++)for(const p of CHARACTER_DATA){
   let s=createGame(seed,[{name:'老己'},p]);const seen=new Set();
@@ -21,10 +21,10 @@ test('each fixed character has seven or more events per permitted phase',()=>{
   for(const row of FRIEND_EVENTS[p.id])assert.ok(row.slice(0,5).every(Boolean));
  }
 });
-test('mirror has 96 distinct original short lines and chat has eight replies',()=>{
+test('mirror has 192 distinct original short lines and chat has sixteen replies',()=>{
  const lines=Object.values(MIRROR_POOLS).flat();
- assert.equal(lines.length,96);assert.equal(new Set(lines).size,96);
- assert.ok(lines.every(l=>l.length<48));assert.equal(GROUP_REPLIES.length,8);
+ assert.equal(lines.length,192);assert.equal(new Set(lines).size,192);
+ assert.ok(lines.every(l=>l.length<48));assert.equal(GROUP_REPLIES.length,16);
 });
 test('phone battery follows initial conditions without exposing them',()=>{
  const good=createGame(1,[{name:'我'}],{needs:{sleep:2}});

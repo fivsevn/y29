@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as g from '../training/game.js';
-import {GYM_EXTRAS,NIGHT_EXTRAS,FRIEND_EVENTS} from '../training/content.js';
+import {GYM_EXTRAS,NIGHT_EXTRAS,FRIEND_EVENTS} from '../training/game.js';
 
 function week(seed,friends){
   let s=g.createGame(seed,[{name:'老己'},...friends]),seen=[];
@@ -51,7 +51,7 @@ test('Deng never trains, occasionally dines; absent companions gain no workouts'
 });
 test('expanded data remains progressive with complete choice feedback',()=>{
   assert.equal(Object.keys(g.WORKOUTS).length,21);
-  assert.equal(GYM_EXTRAS.length,28);assert.equal(NIGHT_EXTRAS.length,21);
+  assert.equal(GYM_EXTRAS.length,56);assert.equal(NIGHT_EXTRAS.length,42);
   assert.equal(Object.keys(g.FRIEND_EVENTS).length,8);
   for(const e of [...GYM_EXTRAS,...NIGHT_EXTRAS]){
     assert.ok(e.minDay>=1&&e.minDay<=7);

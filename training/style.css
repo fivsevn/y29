@@ -94,7 +94,12 @@
 .chat-bubble.outgoing { margin-left:28px; margin-right:0; background:#a7d8b0; }
 .chat-bubble p { margin:5px 0; }
 .chat-system { text-align:center; color:#59604f; font-size:10px; padding:6px 0; }
-.chat-screen .pixel-phone-list { display:grid; gap:0; }
+.chat-screen .pixel-phone-list { display:grid; gap:9px; }
+.is-locked .phone-status { background:#6c795f; border:0; color:#edf0d7; }
+.is-locked .phone-bottom,.is-locked .phone-home { background:#6c795f; border:0; color:#edf0d7; }
+.is-locked .lock-caption>span { display:none; }
+.workout-list .choice { position:relative; padding-left:23px; }
+.workout-list .choice::before { position:absolute; left:7px; top:8px; }
 .chat-screen .inbox-item { box-shadow:none; }
 .phone-bottom { display:flex; justify-content:space-between; gap:8px; padding:9px; font-size:9px; border-top:2px solid var(--ink); }
 .phone-bottom button { border:0; background:transparent; color:var(--ink); }

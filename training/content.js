@@ -107,7 +107,7 @@ export const FRIEND_EVENTS={
  ['吃完饭，邓子已经站在门边。','一起走到路口','路上没说几句，倒也不尴尬。','挥手说下次见','TA说“吃饭叫我”。信息量够了。',{trust:1}]
  ]
 };
-export function makeFriendEvent(id,index,name){const row=FRIEND_EVENTS[id][index];return {...event('friend-'+id+'-'+index,[...row,name]),friendId:id};}
+export function makeFriendEvent(id,index,name){const row=FRIEND_EVENTS[id][index],e=event('friend-'+id+'-'+index,[...row,name]),phase=FRIEND_PHASES[id][index];return {...e,friendId:id,choices:[...e.choices,{id:e.id+'-pause',label:phase==='train'?'先休息一下，再聊这个':'慢慢吃，听TA接着说',line:phase==='train'?'你把呼吸放稳再接话。这个小问题不需要抢答。':'你没急着发表看法，给这顿饭多留了一点时间。',delta:{recovery:1,trust:1}}]};}
 
 const extraFriendRows={
  xixi:[

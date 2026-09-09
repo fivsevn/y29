@@ -1,7 +1,7 @@
 import {mkdir,readFile,writeFile,copyFile,cp,rm} from 'node:fs/promises';
 await rm('dist',{recursive:true,force:true});
 for(const dir of ['signallock','mobileutopia','training'])await mkdir('dist/'+dir,{recursive:true});
-for(const p of ['index.html','.nojekyll','signallock/index.html','signallock/style.css','signallock/app.js','signallock/engine.js','mobileutopia/index.html','mobileutopia/style.css','mobileutopia/engine.js','mobileutopia/app.js','training/index.html','training/style.css','training/game.js','training/content.js','training/narrative.js','training/expansion.js'])await copyFile(p,'dist/'+p);
+for(const p of ['index.html','.nojekyll','signallock/index.html','signallock/style.css','signallock/app.js','signallock/engine.js','mobileutopia/index.html','mobileutopia/style.css','mobileutopia/engine.js','mobileutopia/app.js','training/index.html','training/style.css','training/game.js','training/content.js','training/narrative.js','training/expansion.js','training/variety.js'])await copyFile(p,'dist/'+p);
 await cp('assets','dist/assets',{recursive:true});
 const [html,css,engine,app]=await Promise.all(['signallock/index.html','signallock/style.css','signallock/engine.js','signallock/app.js'].map(p=>readFile(p,'utf8')));
 const combined=engine.replace(/^export /gm,'')+'\n'+app.replace(/^import .*?;\n/,'');
