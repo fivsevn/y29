@@ -17,9 +17,9 @@ function week(seed,friends){
     if(s.step==='bonusOffer'){s=g.chooseBonus(s,'stop');s=g.continueAfterBonus(s)}
     assert.equal(s.step,'mealPlace');const store=g.storesFor(seed,d)[0];
     s=g.chooseStore(s,store);assert.equal(s.step,'mealPlaceResult');assert.ok(s.last.line);
-    s=g.continueToMenu(s);s=g.chooseMeal(s,store+'|'+g.MENUS[store][0].id);
+    s=g.continueToMenu(s);s=g.chooseMeal(s,store+'|'+g.menuFor(seed,d,store)[0].id);
     assert.equal(s.step,'mealResult');assert.ok(s.last.line);
-    s=g.continueAfterMeal(s);e=g.afterEventFor(seed,d,s);seen.push(e.text);
+    s=g.continueAfterMeal(s);if(s.step==='sideOffer'){s=g.chooseSide(s,'no');s=g.continueAfterMeal(s)}e=g.afterEventFor(seed,d,s);seen.push(e.text);
     s=g.chooseAfterEvent(s,e.choices[0].id);assert.equal(s.step,'afterEventResult');
     s=g.continueAfterEvent(s);s=g.advanceDay(s);
   }
@@ -52,7 +52,7 @@ test('Deng never trains, occasionally dines; absent companions gain no workouts'
 test('expanded data remains progressive with complete choice feedback',()=>{
   assert.equal(Object.keys(g.WORKOUTS).length,21);
   assert.equal(GYM_EXTRAS.length,28);assert.equal(NIGHT_EXTRAS.length,21);
-  assert.equal(Object.keys(FRIEND_EVENTS).length,5);
+  assert.equal(Object.keys(g.FRIEND_EVENTS).length,8);
   for(const e of [...GYM_EXTRAS,...NIGHT_EXTRAS]){
     assert.ok(e.minDay>=1&&e.minDay<=7);
     assert.ok(e.choices.every(c=>c.label&&c.line&&c.delta));

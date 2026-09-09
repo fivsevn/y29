@@ -4,6 +4,29 @@
   font-display: swap;
 }
 
+.intro-promo { border:3px double #a12d50; padding:10px; margin:14px 0; transform:rotate(-1deg); background:#f6d769; color:#78263f; }
+.intro-promo strong { display:block; font-size:24px; letter-spacing:-1px; }
+.intro-promo span,.intro-promo small { display:block; }
+.intro-promo small { font-size:8px; }
+.time-echo { color:#926079; border-left:2px solid #aa7585; padding-left:8px; }
+.workout-list { gap:5px; }
+.workout-list .choice { padding:7px 8px; margin:0; font-size:11px; }
+.workout-list .choice b { line-height:1.3; }
+.workout-list .choice span { font-size:9px; line-height:1.3; margin-top:3px; }
+.workout-list .choice[aria-pressed="false"] span { display:none; }
+.food-choices .choice { padding:7px; }
+.food-choices .choice:disabled { opacity:.5; cursor:not-allowed; text-decoration:line-through; }
+.food-bottle::before { left:6px; top:3px; width:11px; height:17px; border:2px solid #35536b; background:#9fb78a; }
+.food-bottle::after { left:10px; top:9px; width:3px; height:5px; background:#473d35; box-shadow:-2px -1px #473d35,2px 2px #473d35,-2px 4px #473d35; }
+.is-locked .chat-screen>.box { display:flex; flex-direction:column; }
+.is-locked .lock-wallpaper { flex:1 0 215px; min-height:215px; }
+.is-locked .lock-wallpaper canvas { width:100%; height:100%; max-height:none; object-fit:fill; }
+.is-locked .lock-caption h1.phone-now { font-size:64px; line-height:1.05; letter-spacing:-5px; font-weight:400; margin:12px 0 0; }
+.is-locked .lock-caption p { margin-top:6px; }
+.lock-notices { flex:none; margin-top:auto; }
+.is-locked .chat-system { color:#edf0d7; flex:none; margin:5px 0; }
+@media(max-height:650px){.is-locked .lock-wallpaper { flex-basis:165px; min-height:165px; }.is-locked .lock-caption h1.phone-now{font-size:52px}.workout-list .choice{padding:5px 7px;font-size:10px}}
+
 /* Group chat, notification lock screen and the unlit mirror. */
 .phone-music { flex:none; padding:4px 12px; font-size:9px; color:#54644c; border-bottom:1px dotted #77896a; }
 .chat-nav .choice { min-width:38px; font-size:18px; }

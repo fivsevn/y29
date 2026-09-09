@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {CHARACTER_DATA,createGame,gymEventFor,afterEventFor,chooseGymEvent,chooseAfterEvent} from '../training/game.js';
-import {FRIEND_EVENTS,FRIEND_PHASES} from '../training/content.js';
+import {FRIEND_EVENTS,FRIEND_PHASES} from '../training/game.js';
 import {MIRROR_POOLS,GROUP_REPLIES} from '../training/narrative.js';
 test('fixed companion events never repeat within seven days across 500 seeds',()=>{
  for(let seed=1;seed<=500;seed++)for(const p of CHARACTER_DATA){

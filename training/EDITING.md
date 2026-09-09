@@ -1,8 +1,20 @@
 # 飙肌野郎：内容维护
 
-沿用原七日流程、隐藏参数和 Canvas 场景。第四轮加入建群前独自出发分支、通知锁屏、群聊与熄屏独白。
+沿用原七日流程、隐藏参数和 Canvas 场景。第五轮加入三位朋友、四人同行、每日菜单、加菜及时间回环。
 
-- `game.js / CHARACTER_DATA`：五位固定朋友的简短介绍、外观、初始倾向、出勤及消息。不要给邓子增加训练出勤：`attendance` 也显式禁止她参训。
+## 第五轮新增数据入口
+
+- `expansion.js / NEW_CHARACTERS、NEW_FRIEND_ROWS`：老戴、Kevin、神秘哥；每位各 7 个训练事件、7 个饭局事件。公开介绍保持含蓄，设定只通过行为体现。
+- `expansion.js / FRIEND_GROUPS`：孟总与 Y.、熙熙与飞飞、老戴与 Kevin 与神秘哥，三组共 12 个组合事件；全员实际到场才可触发，同周不重复。
+- `expansion.js / EXTRA_MENUS、SIDE_DISHES`：29 道新增菜单（含 5 种虚构昆虫饮料）、4 种可选小菜；每道菜的 id 必须唯一。
+- `game.js / menuFor、sideFor、chooseSide`：每天轮换四项菜单，偶尔售罄；加菜独立计费，不覆盖主餐记录。
+- `game.js / workoutsFor、APPEARANCE、drawMini`：每段四项训练选项、亚文化搭配及对应像素外观。
+- `game.js / renderIntro、resetWeek`：体验卡开场、153 cm / 43 kg 默认值、完整清空状态并回到七天前。
+- `game.js / renderReport`：57pay 周度小结置顶、支付记录倒序；`style.css / .is-locked`：大时钟及底部锁屏通知。
+
+## 原有内容入口
+
+- `game.js / CHARACTER_DATA`：原五位固定朋友的简短介绍、外观、初始倾向、出勤及消息，另从 expansion.js 合入三位。不要给邓子增加训练出勤：`attendance` 也显式禁止 TA 参训。
 - `content.js / FRIEND_EVENTS、extraFriendRows、FRIEND_PHASES`：65 个固定角色事件。前四位各 7 个馆内、7 个饭局，邓子 9 个饭局。每行依次是旁白、选项一、反馈一、选项二、反馈二、效果；阶段索引控制场合。
 - `game.js / attendance、contextualEvent、recordInteraction`：实际出勤、组合事件、互动记录。训练画面、训练增长和结局使用同一出勤结果。
 - `content.js / EXTRA_WORKOUTS、EXTRA_SCHEDULE`：新增训练项目与首次出现日期；原项目保留在 `game.js / WORKOUTS、SCHEDULE`。
@@ -18,4 +30,4 @@
 
 验证：运行全套 tests、build 和 diff 检查。新数据文件已加入 build.js。改动发布时更新 index.html 的样式/脚本版本；若修改 content.js，也更新 game.js 的导入版本。
 
-测试包含五个固定种子的完整七日周目，以及 500 个种子下五位朋友的七日事件去重。固定角色专属事件一周内不重复；普通日常池仍随机。现有游玩状态仍只在内存中。
+测试包含五个固定种子的完整七日周目，以及 500 个种子下八位朋友的七日事件去重，另检查组合事件、菜单轮换、售罄防护、加菜账单及完整重开。固定角色专属事件一周内不重复；普通日常池仍随机。现有游玩状态仍只在内存中。
