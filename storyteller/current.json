@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "status": "ONLINE",
+  "source": "SYSTEM",
+  "message": "等待当前消息。",
+  "sequence": 0,
+  "startedAt": "2026-09-10T00:00:00Z",
+  "expiresAt": null,
+  "mock": false
+}

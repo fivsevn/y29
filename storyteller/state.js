@@ -7,7 +7,7 @@ export function normalizeState(s) {
       !(s.expiresAt === null || (typeof s.expiresAt === 'string' && Number.isFinite(Date.parse(s.expiresAt))))) {
     throw new Error('Invalid current-state');
   }
-  return {...s, source:s.source.replace(/[\r\n\t]/g,' ').slice(0,32), message:s.message.slice(0,4096)};
+  return {...s, source:s.source.replace(/[\r\n\t]/g,' ').slice(0,40), message:s.message.slice(0,4096)};
 }
 export function currentView(s, now = Date.now()) {
   if (s.expiresAt !== null && now >= Date.parse(s.expiresAt)) return {...s,status:'OFFLINE',source:'SYSTEM',message:'信号已过期。\n等待当前状态。'};
