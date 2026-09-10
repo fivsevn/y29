@@ -1,10 +1,11 @@
 {
   "version": 1,
   "status": "ONLINE",
-  "source": "SYSTEM",
-  "message": "等待当前消息。",
-  "sequence": 0,
-  "startedAt": "2026-09-10T00:00:00Z",
+  "source": "@fivsevn",
+  "message": "CQCQCQ",
+  "sequence": 1,
+  "startedAt": "2026-09-09T20:44:07Z",
   "expiresAt": null,
-  "mock": false
+  "mock": false,
+  "lastCommentId": 18375476
 }
