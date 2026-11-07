@@ -7,3 +7,8 @@ social/private/
 social/drafts/
 .social-private/
 test-results/
+
+lucifer0/.publish.lock/
+lucifer0/.private/
+lucifer0/private/
+lucifer0/drafts/

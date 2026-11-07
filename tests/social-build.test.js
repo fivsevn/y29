@@ -19,14 +19,14 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   const directory = await mkdtemp(join(tmpdir(), 'y29-build-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const project = new URL('../', import.meta.url);
-  for (const path of ['build.js', 'package.json', 'index.html', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'social']) {
+  for (const path of ['build.js', 'package.json', 'index.html', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0', 'social']) {
     await cp(new URL(path, project), join(directory, path), { recursive: true });
   }
-  await mkdir(join(directory, 'social/.private'), { recursive: true });
-  await writeFile(join(directory, 'social/.private/test.json'), '{"syntheticPrivateMarker":true}');
-  await writeFile(join(directory, 'social/assets/not-referenced.txt'), 'syntheticPrivateMarker');
+  await mkdir(join(directory, 'lucifer0/.private'), { recursive: true });
+  await writeFile(join(directory, 'lucifer0/.private/test.json'), '{"syntheticPrivateMarker":true}');
+  await writeFile(join(directory, 'lucifer0/assets/not-referenced.txt'), 'syntheticPrivateMarker');
   execFileSync(process.execPath, ['build.js'], { cwd: directory });
-  const published = await files(join(directory, 'dist/social'));
+  const published = await files(join(directory, 'dist/lucifer0'));
   assert.ok(published.includes('data/feed.json'));
   assert.ok(published.includes('assets/media/orange-study.svg'));
   assert.ok(published.every(path => ['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg'].includes(path) || /^assets\/(avatars|media)\/[a-z0-9-]+\.svg$/.test(path)));
@@ -34,5 +34,8 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {
     assert.equal(await readFile(join(directory, 'dist', path), 'utf8'), await readFile(new URL(path, project), 'utf8'));
   }
-  assert.match(await readFile(join(directory, 'dist/index.html'), 'utf8'), /href="\.\/social\/"/);
+  assert.deepEqual(await files(join(directory, 'dist/social')), ['index.html', 'redirect.js']);
+  assert.equal(await readFile(join(directory, 'dist/social/redirect.js'), 'utf8'), await readFile(new URL('social/redirect.js', project), 'utf8'));
+  assert.match(await readFile(join(directory, 'dist/social/index.html'), 'utf8'), /https:\/\/y29\.fivsevn\.com\/lucifer0\//);
+  assert.match(await readFile(join(directory, 'dist/index.html'), 'utf8'), /href="\.\/lucifer0\/"/);
 });

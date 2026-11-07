@@ -110,7 +110,7 @@ async function validateAssets(root, feed) {
   for (const path of new Set(['assets/icon.svg', ...feed.users.map(user => user.avatar), ...feed.posts.flatMap(post => post.media.map(image => image.src))])) {
     const file = join(root, path);
     const [actual, stat] = await Promise.all([realpath(file), lstat(file)]);
-    if (!actual.startsWith(assetsRoot + sep) || !stat.isFile() || stat.isSymbolicLink()) fail(`Asset must be a regular file inside social/assets: ${path}`);
+    if (!actual.startsWith(assetsRoot + sep) || !stat.isFile() || stat.isSymbolicLink()) fail(`Asset must be a regular file inside lucifer0/assets: ${path}`);
   }
 }
 

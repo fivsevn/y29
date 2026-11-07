@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { mkdtemp, cp, readFile, writeFile, rm, mkdir, readdir, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../social/tools/content.js';
-import { prepareContext, validatePrivateProfile } from '../social/tools/private-profiles.js';
-import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../social/core.js';
+import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../lucifer0/tools/content.js';
+import { prepareContext, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
 
 const source = await loadContent();
 const fixture = () => structuredClone(source);

@@ -28,7 +28,7 @@
 
 ```sh
 Y29_SOCIAL_PRIVATE_DIR=/private/location/y29-characters \
-  node social/tools/context.js --out /private/location/new-context.json
+  node lucifer0/tools/context.js --out /private/location/new-context.json
 ```
 
 工具每次重新读取公开账号、总开关、全量历史、已归档批次 ID，以及目录中实际存在的角色档案；未知/缺失的档案会在输出中列出。它不生成帖子、不调用模型，也不将私有事实转换为公开内容。

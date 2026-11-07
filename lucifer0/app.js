@@ -26,12 +26,12 @@ function notify(message) {
   toastTimer = setTimeout(() => toast.classList.remove('visible'), 2800);
 }
 function header() {
-  return `<header class="topbar"><a class="brand" href="#/" aria-label="路西法零首页"><span class="brand-symbol" aria-hidden="true">L<span>0</span></span><span><h1>路西法零</h1><p>自由表达的商业承诺</p></span></a><span class="brand-code" aria-hidden="true">LUCIFER<br>ZERO / Ω</span></header>`;
+  return `<header class="topbar"><a class="brand" href="#/" aria-label="/lucifer0 首页"><h1>/lucifer0</h1></a><span class="terminal-mark" aria-hidden="true"></span></header>`;
 }
 function boardbar(title, meta = '', action = '') {
-  return `<div class="boardbar"><h2><span aria-hidden="true">/</span> ${esc(title)}</h2>${meta ? `<span class="board-meta">${esc(meta)}</span>` : ''}${action}</div>`;
+  return `<div class="boardbar"><h2>${title.startsWith('/') ? esc(title) : `<span aria-hidden="true">/</span> ${esc(title)}`}</h2>${meta ? `<span class="board-meta">${esc(meta)}</span>` : ''}${action}</div>`;
 }
-function backLink() { return `<a class="back-link" href="#/">${icon('back')} 世界</a>`; }
+function backLink() { return `<a class="back-link" href="#/">${icon('back')} /world</a>`; }
 function followButton(user) {
   const following = state.follows.includes(user.id);
   return `<button class="follow-button" data-action="follows" data-id="${esc(user.id)}" aria-pressed="${following}" aria-label="${following ? '取消关注' : '关注'}${esc(user.name)}">${following ? '已关注 −' : '关注 +'}</button>`;
@@ -39,7 +39,7 @@ function followButton(user) {
 function personRow(user) {
   return `<div class="person-row"><a class="person-identity" href="${userURL(user.id)}"><strong>${esc(user.name)}</strong><span class="author-id">ID:${boardID(user.id)}</span></a>${followButton(user)}</div>`;
 }
-function empty(title, copy, href = '#/', label = '返回世界') {
+function empty(title, copy, href = '#/', label = '返回 /world') {
   return `<div class="empty"><span class="empty-symbol" aria-hidden="true">( ´_ゝ｀)</span><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="text-link" href="${href}">[ ${esc(label)} ]</a></div>`;
 }
 function replyPreview(post) {
@@ -62,12 +62,12 @@ function postMarkup(post, { threaded = false, target, preview = false } = {}) {
 }
 function renderHome(following) {
   const selected = selectPosts(feed.posts, state, { view: following ? 'following' : 'all' });
-  return header() + boardbar(following ? '关注' : '世界', `${selected.length} 串`, following ? '<a href="#/people">管理关注</a>' : '') +
+  return header() + boardbar(following ? '关注' : '/world', `${selected.length} 串`, following ? '<a href="#/people">管理关注</a>' : '') +
     (selected.length ? selected.map(post => postMarkup(post, { preview: true })).join('') + '<p class="feed-end">— 暂时就这些 —</p>' : empty('这里还没有帖子', '关注的人发帖后，会出现在这里。', '#/people', '管理关注'));
 }
 function renderProfile(id) {
   const user = users.get(id);
-  if (!user) return header() + boardbar('用户', '', backLink()) + empty('没有找到这个账号', '检查链接，或回世界看看。');
+  if (!user) return header() + boardbar('用户', '', backLink()) + empty('没有找到这个账号', '检查链接，或回 /world 看看。');
   const history = selectPosts(feed.posts, state, { user: id });
   return header() + boardbar('用户', '', backLink()) + `<section class="profile">${personRow(user)}<p class="profile-bio">${esc(user.bio)}</p><div class="profile-meta"><span>@${esc(user.handle)}</span><span>${history.length} 条发言</span>${!user.enabled ? '<span>暂时休息中</span>' : ''}</div></section>` +
     (history.length ? history.map(post => postMarkup(post)).join('') : empty('还没有发言', '偶尔来看看。'));
@@ -88,7 +88,7 @@ function renderSearch(query) {
     (!needle ? empty('想找什么？', '输入一个名字或帖子里的关键词。') : `<p class="search-count">${foundUsers.length} 个用户 · ${foundPosts.length} 条发言</p>${foundUsers.length ? `<div class="search-people">${foundUsers.map(personRow).join('')}</div>` : ''}${foundPosts.map(post => postMarkup(post)).join('')}${!foundUsers.length && !foundPosts.length ? empty('没有找到相关内容', '换个关键词试试。') : ''}`);
 }
 function renderAbout() {
-  return header() + boardbar('关于路西法零') + `<div class="about-content"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><h2>自由表达的商业承诺</h2><p class="company-intro">路西法零，一家社交网站企业。<br>打开世界，自行选择想听见的声音。</p><div class="about-rule" aria-hidden="true">0 ─────────────────── Ω</div><section><h3>世界与关注</h3><p>世界收录所有公开帖子。熟悉的人、擦肩而过的人，都可以出现在同一页。关注页只收录你选择的账号；首次使用时，已为你关注《真心猎手》中的人物。</p></section><section><h3>关于这个版本</h3><p>这是 Y.29 的小说衍生页面。现有帖子、回复、简介和配图均为原创样例，不对应小说时间线，不确认人物关系或未公开剧情。账号拥有各自稳定的身份。</p></section><section><h3>本机记录</h3><p>关注、点赞和收藏只保存在当前浏览器。无需登录，目前可浏览和收藏，暂不开放访客发帖。自动运营尚未开启。</p><div class="about-links"><a href="#/bookmarks">[ 我的收藏 ]</a><a href="#/search">[ 搜索帖子 ]</a></div></section><footer class="about-footer"><a href="../">↖ Y.29</a><span>LUCIFER ZERO</span></footer></div>`;
+  return header() + boardbar('关于') + `<div class="about-content"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2><p class="company-intro">路西法零，一家社交网站企业。<br>自行表达，自行选择想听见的声音。</p><div class="about-rule" aria-hidden="true">0 ─────────────────── Ω</div><section><h3>/world 与关注</h3><p>/world 收录所有公开帖子。熟悉的人、擦肩而过的人，都可以出现在同一页。关注页只收录你选择的账号；首次使用时，已为你关注《真心猎手》中的人物。</p></section><section><h3>站点地址</h3><p><code>y29.fivsevn.com/lucifer0</code></p></section><section><h3>关于这个版本</h3><p>这是 Y.29 的小说衍生页面。现有帖子、回复、简介和配图均为原创样例，不对应小说时间线，不确认人物关系或未公开剧情。账号拥有各自稳定的身份。</p></section><section><h3>本机记录</h3><p>关注、点赞和收藏只保存在当前浏览器。无需登录，目前可浏览和收藏，暂不开放访客发帖。自动运营尚未开启。</p><div class="about-links"><a href="#/bookmarks">[ 我的收藏 ]</a><a href="#/search">[ 搜索帖子 ]</a></div></section><footer class="about-footer"><a href="../">↖ Y.29</a><span>LUCIFER ZERO</span></footer></div>`;
 }
 function render() {
   const current = route();
@@ -105,8 +105,8 @@ function render() {
   else if (current.page === 'bookmarks') {
     const saved = selectPosts(feed.posts, state, { view: 'bookmarks' });
     main.innerHTML = header() + boardbar('我的收藏', `${saved.length} 条`, '<a href="#/about">返回</a>') + (saved.length ? saved.map(post => postMarkup(post)).join('') : empty('还没有收藏', '帖子下方的「收藏」会把它留在这里。'));
-  } else main.innerHTML = header() + empty('没有这个页面', '回到世界继续看看。');
-  document.title = `${main.querySelector('.boardbar h2')?.textContent.replace('/', '').trim() || '世界'} · 路西法零`;
+  } else main.innerHTML = header() + empty('没有这个页面', '回到 /world 继续看看。');
+  document.title = `${main.querySelector('.boardbar h2')?.textContent.trim() || '/world'} · 路西法零`;
 }
 
 document.addEventListener('submit', event => {

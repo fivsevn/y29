@@ -49,7 +49,7 @@ export async function prepareContext({ privateDirectory, outputPath }) {
     version: 1, preparedAt: new Date().toISOString(), policy, users: registry.users,
     processedBatchIds: batches.map(batch => batch.id), posts: feed.posts, privateProfiles,
     missingPrivateProfiles: registry.users.filter(user => !privateProfiles[user.id]).map(user => user.id),
-    warning: 'Private working context. Never commit or publish. Canon status does not grant public visibility. Read social/docs/ai-updates.md before use.'
+    warning: 'Private working context. Never commit or publish. Canon status does not grant public visibility. Read lucifer0/docs/ai-updates.md before use.'
   };
   // Exclusive creation avoids following an existing symlink or replacing someone else's file.
   await writeFile(destination, JSON.stringify(snapshot, null, 2) + '\n', { flag: 'wx', mode: 0o600 });

@@ -36,7 +36,7 @@
 2. 审核完成后执行：
 
    ```sh
-   node social/tools/publish.js ingest /outside/repository/batch.json --reviewed
+   node lucifer0/tools/publish.js ingest /outside/repository/batch.json --reviewed
    npm test
    npm run build
    ```

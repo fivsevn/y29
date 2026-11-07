@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
 const { chromium } = await import(process.env.Y29_PLAYWRIGHT_MODULE || 'playwright');
-const base = process.env.Y29_SOCIAL_URL || 'http://127.0.0.1:4173/social/';
+const base = process.env.Y29_SOCIAL_URL || 'http://127.0.0.1:4173/lucifer0/';
 const output = process.env.Y29_SCREENSHOTS || join(tmpdir(), 'y29-social-browser');
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true });
@@ -21,12 +21,14 @@ try {
     await page.goto(base + hash);
     await page.locator('.boardbar h2').filter({ hasText: title }).waitFor();
   };
-  await visit('', '世界');
-  check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['世界', '关注', '0关于路西法零']), 'exactly three bottom destinations');
+  await visit('', '/world');
+  check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '关注', '0关于']), 'exactly three bottom destinations');
   check(await page.locator('.tabs,.welcome-note,.edition-pill').count() === 0, 'redundant tabs and welcome card are removed');
-  check(await page.locator('.topbar').innerText().then(text => text.includes('自由表达的商业承诺')), 'exact corporate slogan');
+  check((await page.locator('.topbar').innerText()).trim() === '/lucifer0', 'compact header contains only the app path');
+  check(await page.locator('.topbar').evaluate(element => element.getBoundingClientRect().height <= 56), 'compact header is at most 56px');
+  check(await page.locator('#post-sample-alarm').evaluate(element => element.getBoundingClientRect().height <= 145), 'single-line post stays compact at 390px');
   check(await page.locator('.reply-preview').count() > 0, 'forum feed includes quoted reply previews');
-  check(await page.title() === '世界 · 路西法零', 'home title is not duplicated');
+  check((await page.title()).includes('路西法零'), 'home title identifies the app');
   await page.locator('.skip-link').focus();
   await page.keyboard.press('Enter');
   check(await page.locator('main').evaluate(element => document.activeElement === element), 'skip link focuses content');
@@ -88,6 +90,13 @@ try {
   await visit('#/user/does-not-exist', '用户');
   await page.getByRole('heading', { name: '没有找到这个账号' }).waitFor(); checks++;
 
+  const legacy = new URL('../social/?entry=legacy#/post/sample-drawing-answer', base);
+  await page.goto(legacy.href);
+  await page.locator('#post-sample-drawing-answer').waitFor();
+  const redirected = new URL(page.url());
+  check(redirected.pathname === new URL(base).pathname, 'old entry redirects to canonical path');
+  check(redirected.search === '?entry=legacy' && redirected.hash === '#/post/sample-drawing-answer', 'legacy redirect preserves query and thread permalink');
+
   await page.evaluate(() => localStorage.clear());
   await page.goto(base); await page.locator('article').first().waitFor();
   for (const width of [320, 390, 768, 1440]) {
@@ -108,7 +117,8 @@ try {
   await page.screenshot({ path: join(output, 'phone-thread.png'), fullPage: true });
   await visit('#/user/chenanjing', '用户');
   await page.screenshot({ path: join(output, 'phone-profile.png'), fullPage: false });
-  await visit('#/about', '关于路西法零');
+  await visit('#/about', '关于');
+  check(await page.locator('.about-content').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
   await page.screenshot({ path: join(output, 'phone-about.png'), fullPage: true });
 
   const deniedContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
