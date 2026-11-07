@@ -41,6 +41,11 @@ try {
     check(await end.getAttribute('aria-hidden') === 'true', `${channel} ending is decorative`);
     check(await end.evaluate(element => element.tagName === 'P' && !element.hasAttribute('tabindex') && !element.closest('a,button') && !element.querySelector('a,button,input,[tabindex]')), `${channel} ending is not interactive`);
   };
+  const checkPlatformDates = async view => {
+    const times = await page.locator('.post-metadata time').evaluateAll(elements => elements.map(element => ({ label: element.textContent, title: element.title, datetime: element.getAttribute('datetime') })));
+    check(times.length > 0 && times.every(time => /^Ω\.\d{2,}\/\d{2}\/\d{2} \d{2}:\d{2}$/.test(time.label) && time.title === time.label), `${view} dates and tooltips use the platform calendar`);
+    check(times.every(time => /^\d{4}-\d{2}-\d{2}T/.test(time.datetime) && !time.label.includes(time.datetime.slice(0, 4))), `${view} keeps ISO timestamps separate from displayed years`);
+  };
   const fixedFrames = () => page.evaluate(() => {
     const header = document.querySelector('.topbar').getBoundingClientRect();
     const nav = document.querySelector('.bottom-bar').getBoundingClientRect();
@@ -73,6 +78,7 @@ try {
   check(await page.locator('main').evaluate(element => document.activeElement === element), 'skip link focuses content');
   check(!page.url().endsWith('#content'), 'skip link preserves the app route');
   check(await page.locator('article.post').count() === roots.length, 'main timeline contains roots only');
+  await checkPlatformDates('world');
   await page.locator('.post-image img').evaluate(image => image.decode());
   check(await page.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0)), 'all visible media load');
 
@@ -149,12 +155,14 @@ try {
 
   await visit('#/post/sample-drawing', '讨论串');
   check(await page.locator('article').count() === threadCount('sample-drawing'), 'thread includes nested replies');
+  await checkPlatformDates('thread');
   check(await page.locator('#post-sample-drawing-answer .reply-context').getAttribute('href') === '#/post/sample-drawing-reply', 'nested reply links its immediate parent');
   await visit('#/post/sample-drawing-answer', '讨论串');
   check(await page.locator('#post-sample-drawing-answer').evaluate(element => element.classList.contains('is-target')), 'reply permalink selects the reply');
   check(await page.evaluate(() => window.scrollY === 0), 'reply anchors do not move the outer document');
   await visit('#/user/chenanjing', '/user');
   check(await page.locator('article').count() === feed.posts.filter(post => post.author === 'chenanjing').length, 'profile keeps posts and replies');
+  await checkPlatformDates('profile');
   await visit('#/people', '/following');
   check(await page.locator('article').count() === followingCount, 'legacy people route returns to following');
   check(await page.locator('.directory,.directory-person,a[href="#/people"]').count() === 0, 'legacy people route does not render the directory');

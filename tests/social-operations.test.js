@@ -161,6 +161,29 @@ test('AI ingestion enforces the recorded author draw, total and pool budgets, an
   await assert.rejects(ingestBatch(input, publishOptions), /different content/);
 });
 
+test('historical AI import still requires its current context and selected authors', async t => {
+  const { directory, root, options } = await fixture(t);
+  const input = join(directory, 'batch.json');
+  const baseline = { version: 1, id: 'existing-day', mode: 'daily', posts: [{ id: 'existing-entry', author: 'visitor-8', createdAt: new Date(options.now).toISOString().replace(/\.\d{3}Z$/, 'Z'), text: 'Existing synthetic entry', replyTo: null, likes: 0, canon: 'derivative', media: [] }] };
+  await writeFile(input, JSON.stringify(baseline));
+  await ingestBatch(input, { root, reviewed: true });
+  await prepareRound(options);
+  const context = await read(options.outputPath), batch = batchFrom(context);
+  batch.posts.forEach(post => { post.createdAt = new Date(options.now - 365 * DAY).toISOString().replace(/\.\d{3}Z$/, 'Z'); });
+  const publishOptions = { root, reviewed: true, ai: true, contextPath: options.outputPath, privateDirectory: options.privateDirectory };
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, publishOptions), /append/);
+  await assert.rejects(ingestBatch(input, { ...publishOptions, contextPath: undefined, backfill: true }), /--context/);
+  const outside = registry().find(user => !context.selection.users.some(candidate => candidate.id === user.id));
+  const invalid = structuredClone(batch); invalid.posts[0].author = outside.id;
+  await writeFile(input, JSON.stringify(invalid));
+  await assert.rejects(ingestBatch(input, { ...publishOptions, backfill: true }), /not selected/);
+  await writeFile(input, JSON.stringify(batch));
+  assert.equal((await ingestBatch(input, { ...publishOptions, backfill: true })).status, 'archived');
+  assert.equal((await ingestBatch(input, { ...publishOptions, backfill: true })).status, 'already-archived');
+  assert.equal((await loadContent(root)).feed.posts.length, baseline.posts.length + batch.posts.length);
+});
+
 test('changing plan, stale profiles, withdrawn canon and overdue reviews cannot publish', async t => {
   const { root, options } = await fixture(t); await prepareRound(options);
   const saved = await read(options.outputPath), batch = batchFrom(saved), validateOptions = { ...options, contextPath: options.outputPath };

@@ -14,11 +14,12 @@ try {
       const flag = flags[index];
       if (flag === '--reviewed' && !options.reviewed) options.reviewed = true;
       else if (flag === '--ai' && !options.ai) options.ai = true;
+      else if (flag === '--backfill' && !options.backfill) options.backfill = true;
       else if (flag === '--context' && !options.contextPath && flags[index + 1] && !flags[index + 1].startsWith('--')) options.contextPath = flags[++index];
       else throw new Error('Unknown, duplicate or incomplete publishing option');
     }
     console.log(JSON.stringify(await ingestBatch(input, options)));
   } else {
-    throw new Error('Usage: node lucifer0/tools/publish.js validate | build | ingest /path/to/batch.json --reviewed [--ai --context /outside/context.json]');
+    throw new Error('Usage: node lucifer0/tools/publish.js validate | build | ingest /path/to/batch.json --reviewed [--ai --context /outside/context.json] [--backfill]');
   }
 } catch (error) { console.error(error.message); process.exitCode = 1; }

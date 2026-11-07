@@ -146,9 +146,13 @@ test('local storage corruption or denial falls back safely and toggles are rever
   assert.throws(() => toggle(empty, 'unknown', 'post'));
 });
 
-test('user-supplied text is escaped and dates display in Shanghai time', () => {
+test('user-supplied text is escaped and platform dates follow Shanghai year boundaries', () => {
   assert.equal(escapeHTML('<img onerror="x">&'), '&lt;img onerror=&quot;x&quot;&gt;&amp;');
-  assert.match(dateLabel('2026-11-07T13:16:00Z'), /21:16/);
+  assert.equal(dateLabel('2026-11-07T13:16:00Z', true), 'Ω.10/11/07 21:16');
+  assert.equal(dateLabel('2025-03-18T16:42:00+08:00', true), 'Ω.09/03/18 16:42');
+  assert.equal(dateLabel('2025-12-31T16:00:00Z', true), 'Ω.10/01/01 00:00');
+  assert.equal(dateLabel('2025-12-31T15:59:00Z', true), 'Ω.09/12/31 23:59');
+  assert.equal(dateLabel('2026-11-07T13:16:00Z'), '11/07 21:16');
 });
 
 test('builds are deterministic and preserve source archives', async t => {
@@ -197,6 +201,40 @@ test('bad media and backdated batches fail before writing any archive', async t 
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /append/);
   assert.equal((await loadContent(root)).batches.length, 3);
+});
+
+test('explicit historical import preserves chronology, existing posts and idempotent retries', async t => {
+  const { root, directory } = await repositoryCopy(t);
+  const input = join(directory, 'batch.json'), batch = newBatch();
+  const earlier = newBatch(); earlier.id = 'test-earlier-batch'; earlier.posts[0].id = 'test-earlier-post';
+  earlier.posts[0].createdAt = '2025-03-18T16:42:00+08:00'; earlier.posts[0].text = '更早的一条历史记录。';
+  await writeFile(input, JSON.stringify(earlier));
+  await ingestBatch(input, { root, reviewed: true, backfill: true });
+  const before = await loadContent(root);
+  batch.posts[0].createdAt = '2025-06-18T18:00:00+08:00';
+  batch.posts.push({ ...batch.posts[0], id: 'test-old-reply', replyTo: batch.posts[0].id, text: '稍后的回复。', createdAt: '2025-06-19T08:20:00+08:00' });
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /append/);
+  await assert.rejects(ingestBatch(input, { root, reviewed: true, backfill: 'yes' }), /boolean/);
+  const options = { root, reviewed: true, backfill: true };
+  assert.equal((await ingestBatch(input, options)).status, 'archived');
+  assert.equal((await ingestBatch(input, options)).status, 'already-archived');
+  const after = await loadContent(root);
+  const addedIds = new Set(batch.posts.map(post => post.id));
+  assert.deepEqual(after.feed.posts.filter(post => !addedIds.has(post.id)), before.feed.posts);
+  const expectedOrder = [...before.feed.posts, ...batch.posts]
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).map(post => post.id);
+  assert.deepEqual(after.feed.posts.map(post => post.id), expectedOrder);
+  assert.equal(after.feed.posts.find(post => post.id === 'test-old-reply').replyTo, batch.posts[0].id);
+
+  const invalid = newBatch(); invalid.id = 'test-invalid-history'; invalid.posts[0].id = 'test-invalid-old';
+  invalid.posts[0].createdAt = '2099-01-01T12:00:00+08:00';
+  await writeFile(input, JSON.stringify(invalid));
+  await assert.rejects(ingestBatch(input, options), /future timestamp/);
+  invalid.posts[0].createdAt = '2025-06-17T12:00:00+08:00'; invalid.posts[0].replyTo = batch.posts[0].id;
+  await writeFile(input, JSON.stringify(invalid));
+  await assert.rejects(ingestBatch(input, options), /later reply parent/);
+  assert.equal((await loadContent(root)).feed.posts.length, before.feed.posts.length + batch.posts.length);
 });
 
 test('concurrent imports are serialized without overwriting history', async t => {
