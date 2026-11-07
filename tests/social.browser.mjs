@@ -210,8 +210,8 @@ try {
   check(await page.locator('.about-brand').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
   check(await page.locator('.board-guide').innerText().then(text => text.includes('/guide')), 'about includes the entry guide');
   check(await page.locator('.board-rules li').count() === 6, 'about includes six community rules');
-  check(await page.locator('.board-rules li').evaluateAll(rules => rules.every(rule => rule.querySelector('h4')?.textContent.trim() && rule.querySelector('p')?.textContent.trim())), 'each rule has a title and explanation');
-  check(await page.locator('.about-footer').count() === 1, 'about includes its footer');
+  check(await page.locator('.board-rules li').evaluateAll(rules => rules.every(rule => !rule.querySelector('h4') && rule.querySelector('p')?.textContent.trim())), 'each rule has an explanation without a title');
+  check(await page.locator('.about-footer').count() === 0, 'about has no footer');
   check(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme) === 'dark', 'site is dark');
   await screenshot('phone-about.png');
   await page.locator('main').evaluate(element => { element.scrollTop = element.scrollHeight; });
