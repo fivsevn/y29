@@ -9,7 +9,8 @@
       "avatar": "assets/avatars/lixing.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "chenanjing",
@@ -19,7 +20,8 @@
       "avatar": "assets/avatars/chenanjing.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "alan",
@@ -29,7 +31,8 @@
       "avatar": "assets/avatars/alan.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "lidianlong",
@@ -39,7 +42,8 @@
       "avatar": "assets/avatars/lidianlong.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "baiyanyan",
@@ -49,7 +53,8 @@
       "avatar": "assets/avatars/baiyanyan.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "anmianyao",
@@ -59,7 +64,8 @@
       "avatar": "assets/avatars/anmianyao.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "zhaoyangxue",
@@ -69,7 +75,8 @@
       "avatar": "assets/avatars/zhaoyangxue.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "guyu",
@@ -79,7 +86,30 @@
       "avatar": "assets/avatars/guyu.svg",
       "enabled": true,
       "aiScope": "sample",
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
+    },
+    {
+      "id": "passerby17",
+      "handle": "passerby17",
+      "name": "无名氏",
+      "bio": "路过，随便说两句。",
+      "avatar": "assets/avatars/visitor.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample",
+      "kind": "visitor"
+    },
+    {
+      "id": "nightbus3",
+      "handle": "nightbus3",
+      "name": "无名氏",
+      "bio": "坐车的时候看看。",
+      "avatar": "assets/avatars/visitor.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample",
+      "kind": "visitor"
     }
   ]
 }

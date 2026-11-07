@@ -11,11 +11,12 @@
 | `avatar` | `assets/avatars/` 下的固定图片路径，首次分配后不会自动重画 |
 | `enabled` | 是否允许新增内容；关闭仍保留头像、主页和旧帖 |
 | `aiScope` | `none` 不由 AI 发言；`sample` 仅样例；`daily` 经授权的衍生日常 |
+| `kind` | `character` 为小说人物，首次访问默认关注；`visitor` 为陌生人，在世界页出现，可自行关注 |
 | `profileStatus` | `sample` 样例简介；`approved` 经过作者审定的公开简介，不表示私有资料也能公开 |
 
 首版所有账号都为 `sample`，总开关 `automaticPosting` 为 `false`。两者独立；将一个用户改成 `daily` 不会启动自动任务。
 
-当前稳定 ID：`lixing`、`chenanjing`、`alan`、`lidianlong`、`baiyanyan`、`anmianyao`、`zhaoyangxue`、`guyu`。使用公开称呼管理账号，不建立公开真实身份对照表。
+小说人物稳定 ID：`lixing`、`chenanjing`、`alan`、`lidianlong`、`baiyanyan`、`anmianyao`、`zhaoyangxue`、`guyu`。另有 `passerby17`、`nightbus3` 两个陌生人样例，公开名均为「无名氏」，用稳定 ID 区分。使用公开称呼管理账号，不建立公开真实身份对照表。
 
 ## 日常维护
 

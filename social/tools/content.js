@@ -28,13 +28,13 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
   if (registry.version !== 1 || !Array.isArray(registry.users)) fail('Invalid registry');
   const users = new Map(), handles = new Set();
   for (const user of registry.users) {
-    keys(user, ['id', 'handle', 'name', 'bio', 'avatar', 'enabled', 'aiScope', 'profileStatus'], 'user');
+    keys(user, ['id', 'handle', 'name', 'bio', 'avatar', 'enabled', 'aiScope', 'profileStatus', 'kind'], 'user');
     identifier(user.id, 'user.id');
     if (users.has(user.id)) fail(`Duplicate user ID: ${user.id}`);
     if (!/^[a-z0-9_]{2,32}$/.test(user.handle) || handles.has(user.handle)) fail(`Invalid or duplicate handle: ${user.handle}`);
     text(user.name, 40, 'user.name'); text(user.bio, 240, 'user.bio', true);
     if (!asset(user.avatar) || !user.avatar.startsWith('assets/avatars/')) fail('Invalid avatar path');
-    if (typeof user.enabled !== 'boolean' || !['none', 'sample', 'daily'].includes(user.aiScope) || !['sample', 'approved'].includes(user.profileStatus)) fail('Invalid account controls');
+    if (typeof user.enabled !== 'boolean' || !['none', 'sample', 'daily'].includes(user.aiScope) || !['sample', 'approved'].includes(user.profileStatus) || !['character', 'visitor'].includes(user.kind)) fail('Invalid account controls');
     users.set(user.id, user); handles.add(user.handle);
   }
   const posts = new Map(), batchIds = new Set(), fingerprints = new Set();
@@ -79,7 +79,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
   // Explicit projection: operational permissions never become browser data.
   return {
     version: 1,
-    users: [...users.values()].map(({ id, handle, name, bio, avatar, enabled, profileStatus }) => ({ id, handle, name, bio, avatar, enabled, profileStatus })),
+    users: [...users.values()].map(({ id, handle, name, bio, avatar, enabled, profileStatus, kind }) => ({ id, handle, name, bio, avatar, enabled, profileStatus, kind })),
     posts: [...posts.values()].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id))
   };
 }

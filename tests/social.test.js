@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../social/tools/content.js';
 import { prepareContext, validatePrivateProfile } from '../social/tools/private-profiles.js';
-import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel } from '../social/core.js';
+import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../social/core.js';
 
 const source = await loadContent();
 const fixture = () => structuredClone(source);
@@ -28,8 +28,8 @@ const newBatch = () => ({ version: 1, id: 'test-new-batch', mode: 'sample', post
 
 test('public content is complete, stable and contains no private operational fields', () => {
   const feed = validate(fixture());
-  assert.equal(feed.users.length, 8);
-  assert.equal(feed.posts.filter(post => !post.replyTo).length, 6);
+  assert.equal(feed.users.length, 10);
+  assert.equal(feed.posts.filter(post => !post.replyTo).length, 8);
   assert.equal(feed.posts.filter(post => post.replyTo).length, 7);
   assert.ok(feed.posts.every(post => post.canon === 'sample'));
   assert.ok(feed.users.every(user => !Object.hasOwn(user, 'aiScope')));
@@ -104,7 +104,7 @@ test('threads include replies to replies with the actual parent preserved', () =
 
 test('local feed filters and reply bookmarks do not mix into the public main timeline', () => {
   const state = { follows: ['alan'], bookmarks: ['sample-drawing-answer'], likes: [] };
-  assert.equal(selectPosts(source.feed.posts, state).length, 6);
+  assert.equal(selectPosts(source.feed.posts, state).length, 8);
   assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'following' }).map(post => post.id), ['sample-soup']);
   assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'bookmarks' }).map(post => post.id), ['sample-drawing-answer']);
   assert.equal(selectPosts(source.feed.posts, state, { user: 'chenanjing' }).length, 2);
@@ -130,7 +130,7 @@ test('builds are deterministic and preserve source archives', async t => {
   const { root } = await repositoryCopy(t);
   await buildFeed(root); const one = await readFile(join(root, 'data/feed.json'), 'utf8');
   await buildFeed(root); assert.equal(await readFile(join(root, 'data/feed.json'), 'utf8'), one);
-  assert.equal((await loadContent(root)).batches.length, 2);
+  assert.equal((await loadContent(root)).batches.length, 3);
 });
 
 test('reviewed ingestion archives once, retries restore the feed, conflicting retries fail', async t => {
@@ -141,7 +141,7 @@ test('reviewed ingestion archives once, retries restore the feed, conflicting re
   assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'archived');
   await rm(join(root, 'data/feed.json'));
   assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'already-archived');
-  assert.equal((await loadContent(root)).feed.posts.length, 14);
+  assert.equal((await loadContent(root)).feed.posts.length, 16);
   assert.ok(JSON.parse(await readFile(join(root, 'data/feed.json'), 'utf8')).posts.some(post => post.id === batch.posts[0].id));
   batch.posts[0].text = '改过的内容'; await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /different content/);
@@ -159,7 +159,7 @@ test('AI import obeys the master switch and account scope; manual import obeys d
   f.registry.users.find(user => user.id === 'alan').enabled = false;
   await writeFile(join(root, 'users/registry.json'), JSON.stringify(f.registry));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /disabled/);
-  assert.equal((await loadContent(root)).batches.length, 2);
+  assert.equal((await loadContent(root)).batches.length, 3);
 });
 
 test('bad media and backdated batches fail before writing any archive', async t => {
@@ -171,7 +171,7 @@ test('bad media and backdated batches fail before writing any archive', async t 
   batch.posts[0].media = []; batch.posts[0].createdAt = '2026-11-07T09:00:00+08:00';
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /append/);
-  assert.equal((await loadContent(root)).batches.length, 2);
+  assert.equal((await loadContent(root)).batches.length, 3);
 });
 
 test('concurrent imports are serialized without overwriting history', async t => {
@@ -179,7 +179,7 @@ test('concurrent imports are serialized without overwriting history', async t =>
   const input = join(directory, 'batch.json'); await writeFile(input, JSON.stringify(newBatch()));
   await mkdir(join(root, '.publish.lock'));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /Another import/);
-  assert.equal((await loadContent(root)).batches.length, 2);
+  assert.equal((await loadContent(root)).batches.length, 3);
 });
 
 const privateProfile = () => ({ version: 1, userId: 'alan', voice: ['test voice'], postingHabits: [], relationships: [], knowledgeScope: [], boundaries: [], facts: [{ text: 'test fact', status: 'pending', visibility: 'private', source: 'synthetic test fixture' }] });
@@ -193,7 +193,7 @@ test('private context is external-only; pending and private are separate from ca
   const snapshot = JSON.parse(await readFile(output, 'utf8'));
   assert.equal(snapshot.privateProfiles.alan.facts[0].status, 'pending');
   assert.equal(snapshot.privateProfiles.alan.facts[0].visibility, 'private');
-  assert.equal(snapshot.missingPrivateProfiles.length, 7);
+  assert.equal(snapshot.missingPrivateProfiles.length, 9);
   await assert.rejects(prepareContext({ outputPath: join(socialRoot, 'leak.json') }), /outside/);
   await assert.rejects(prepareContext({ privateDirectory: socialRoot, outputPath: join(directory, 'other.json') }), /outside/);
   await assert.rejects(prepareContext({ outputPath: output }), /EEXIST/);
@@ -207,4 +207,23 @@ test('public generated data and tracked content expose no private profile keys',
   const feedText = await readFile(join(socialRoot, 'data/feed.json'), 'utf8');
   assert.doesNotMatch(feedText, /privateProfiles|knowledgeScope|postingHabits|boundaries/);
   assert.ok((await readdir(join(socialRoot, 'users'))).every(file => ['README.md', 'registry.json'].includes(file)));
+});
+
+
+test('first visit follows characters, and existing explicit choices survive the redesign', () => {
+  const defaults = source.feed.users.filter(user => user.kind === 'character').map(user => user.id);
+  assert.equal(defaults.length, 8);
+  const state = readState(undefined, defaults);
+  const following = selectPosts(source.feed.posts, state, { view: 'following' });
+  assert.equal(following.length, 6);
+  assert.ok(following.every(post => source.feed.users.find(user => user.id === post.author).kind === 'character'));
+  assert.deepEqual(readState({ getItem: () => '{"follows":[]}' }, defaults).follows, []);
+  assert.deepEqual(readState({ getItem: () => '{"follows":["alan"]}' }, defaults).follows, ['alan']);
+});
+
+test('forum IDs remain stable, including when the nickname changes', () => {
+  assert.equal(boardID('alan'), boardID(source.feed.users.find(user => user.id === 'alan').id));
+  assert.match(boardID('alan'), /^[A-Z0-9]{7}$/);
+  assert.equal(new Set(source.feed.posts.map(post => postNumber(post.id))).size, source.feed.posts.length);
+  assert.ok(source.feed.posts.every(post => /^\d{10}$/.test(postNumber(post.id))));
 });

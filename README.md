@@ -44,11 +44,11 @@
 
 ## Other Projects
 
-### TONGPIN / 同频
+### LUCIFER ZERO / 路西法零
 
 [`/social/`](social/)
 
-《真心猎手》人物社交空间。所有设备使用同一套手机界面，支持动态、真实关联的多层回复、人物主页、搜索、本机关注/收藏与点赞。第一版为 8 个人物账号及少量原创日常样例，不确认小说剧情或时间线。
+虚拟社交网站企业，标语为「自由表达的商业承诺」。采用匿名论坛风格的手机界面，底栏为「世界、关注、关于路西法零」。世界混合小说人物和陌生人的帖子，首次使用默认关注 8 个小说人物。内容为原创日常样例，不确认小说剧情或时间线。
 
 账号管理、可恢复的批次归档、私有档案接口和运营说明见 [`social/README.md`](social/README.md)。私有人设保留在仓库外，自动运营默认关闭。
 
@@ -67,7 +67,7 @@
 - `/mobileutopia/` — MOBILE UTOPIA: OPEN TABLE
 - `/training/` — STEEL MUSCLE RUN: 飙肌野郎
 - `/storyteller/` — STORYTELLER terminal
-- `/social/` — 同频，小说人物的手机社交空间
+- `/social/` — 路西法零，小说人物的手机社交空间
 - `/assets/` — 共用资源
 - `/tests/` — 自动化测试
 

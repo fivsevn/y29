@@ -4,8 +4,8 @@ export const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[char]));
 
-export function readState(storage) {
-  const fresh = { likes: [], follows: [], bookmarks: [] };
+export function readState(storage, defaultFollows = []) {
+  const fresh = { likes: [], follows: [...new Set(defaultFollows)], bookmarks: [] };
   try {
     const saved = JSON.parse(storage?.getItem(STATE_KEY));
     for (const key of Object.keys(fresh)) {
@@ -28,6 +28,14 @@ export function toggle(state, key, id) {
 
 export const newestFirst = (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id);
 export const oldestFirst = (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt) || a.id.localeCompare(b.id);
+
+// These display labels stay stable; canonical links use the complete stored IDs.
+export function boardID(id) {
+  let hash = 2166136261;
+  for (const character of id) hash = Math.imul(hash ^ character.charCodeAt(0), 16777619);
+  return (hash >>> 0).toString(36).toUpperCase().padStart(7, '0');
+}
+export const postNumber = id => String(parseInt(boardID(id), 36)).padStart(10, '0');
 
 export function rootOf(posts, id) {
   const byId = new Map(posts.map(post => [post.id, post]));

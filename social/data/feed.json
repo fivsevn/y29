@@ -8,7 +8,8 @@
       "bio": "偶尔看一眼。",
       "avatar": "assets/avatars/lixing.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "chenanjing",
@@ -17,7 +18,8 @@
       "bio": "画还没画完。",
       "avatar": "assets/avatars/chenanjing.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "alan",
@@ -26,7 +28,8 @@
       "bio": "钓鱼，写字，等饭熟。",
       "avatar": "assets/avatars/alan.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "lidianlong",
@@ -35,7 +38,8 @@
       "bio": "饭要热的，歌要响的。",
       "avatar": "assets/avatars/lidianlong.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "baiyanyan",
@@ -44,7 +48,8 @@
       "bio": "今天也有自己的安排。",
       "avatar": "assets/avatars/baiyanyan.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "anmianyao",
@@ -53,7 +58,8 @@
       "bio": "耳机里的另一面。",
       "avatar": "assets/avatars/anmianyao.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "zhaoyangxue",
@@ -62,7 +68,8 @@
       "bio": "吃点好的，也做点小东西。",
       "avatar": "assets/avatars/zhaoyangxue.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
     },
     {
       "id": "guyu",
@@ -71,10 +78,51 @@
       "bio": "先记下来。",
       "avatar": "assets/avatars/guyu.svg",
       "enabled": true,
-      "profileStatus": "sample"
+      "profileStatus": "sample",
+      "kind": "character"
+    },
+    {
+      "id": "passerby17",
+      "handle": "passerby17",
+      "name": "无名氏",
+      "bio": "路过，随便说两句。",
+      "avatar": "assets/avatars/visitor.svg",
+      "enabled": true,
+      "profileStatus": "sample",
+      "kind": "visitor"
+    },
+    {
+      "id": "nightbus3",
+      "handle": "nightbus3",
+      "name": "无名氏",
+      "bio": "坐车的时候看看。",
+      "avatar": "assets/avatars/visitor.svg",
+      "enabled": true,
+      "profileStatus": "sample",
+      "kind": "visitor"
     }
   ],
   "posts": [
+    {
+      "id": "sample-nightbus",
+      "author": "nightbus3",
+      "createdAt": "2026-11-07T21:48:00+08:00",
+      "replyTo": null,
+      "text": "坐末班车，司机把车里的灯都关了。整个车厢只剩下一排手机屏幕。",
+      "likes": 3,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-alarm",
+      "author": "passerby17",
+      "createdAt": "2026-11-07T21:35:00+08:00",
+      "replyTo": null,
+      "text": "有没有一种闹钟，是响了以后会替我起床的。",
+      "likes": 3,
+      "canon": "sample",
+      "media": []
+    },
     {
       "id": "sample-drawing-answer",
       "author": "chenanjing",

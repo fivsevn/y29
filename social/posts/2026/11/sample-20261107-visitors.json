@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "id": "sample-20261107-visitors",
+  "mode": "sample",
+  "posts": [
+    {
+      "id": "sample-alarm",
+      "author": "passerby17",
+      "createdAt": "2026-11-07T21:35:00+08:00",
+      "replyTo": null,
+      "text": "有没有一种闹钟，是响了以后会替我起床的。",
+      "likes": 3,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-nightbus",
+      "author": "nightbus3",
+      "createdAt": "2026-11-07T21:48:00+08:00",
+      "replyTo": null,
+      "text": "坐末班车，司机把车里的灯都关了。整个车厢只剩下一排手机屏幕。",
+      "likes": 3,
+      "canon": "sample",
+      "media": []
+    }
+  ]
+}
