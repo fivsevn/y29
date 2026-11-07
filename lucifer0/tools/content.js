@@ -125,7 +125,7 @@ function stableJSON(value) {
   return JSON.stringify(value);
 }
 
-export async function ingestBatch(input, { root = socialRoot, reviewed = false, ai = false } = {}) {
+export async function ingestBatch(input, { root = socialRoot, reviewed = false, ai = false, contextPath, privateDirectory } = {}) {
   if (!reviewed) fail('Review the entire public batch first, then pass --reviewed. No files were written.');
   const lock = join(root, '.publish.lock');
   try { await mkdir(lock); }
@@ -133,11 +133,11 @@ export async function ingestBatch(input, { root = socialRoot, reviewed = false, 
     if (error.code === 'EEXIST') fail('Another import is active; check it before retrying');
     throw error;
   }
-  try { return await ingestLocked(input, { root, ai }); }
+  try { return await ingestLocked(input, { root, ai, contextPath, privateDirectory }); }
   finally { await rm(lock, { recursive: true, force: true }); }
 }
 
-async function ingestLocked(input, { root, ai }) {
+async function ingestLocked(input, { root, ai, contextPath, privateDirectory }) {
   const { registry, policy, batches } = await loadContent(root);
   const batch = await json(resolve(input));
   const existing = batches.find(item => item.id === batch.id);
@@ -149,6 +149,10 @@ async function ingestLocked(input, { root, ai }) {
   const feed = validateContent(registry, [...batches, batch], policy);
   await validateAssets(root, feed);
   if (ai && !policy.automaticPosting) fail('Automatic posting is disabled');
+  if (ai && batch.mode === 'daily') {
+    const { validateRoundForBatch } = await import('./operations.js');
+    await validateRoundForBatch(batch, { root, contextPath, privateDirectory });
+  }
   for (const post of batch.posts) {
     const user = registry.users.find(user => user.id === post.author);
     if (!user.enabled) fail(`Account is disabled: ${user.id}`);

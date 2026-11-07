@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import http from 'node:http';
 import { socialRoot, loadContent, buildFeed } from '../lucifer0/tools/content.js';
-import { emptyProfile, readProfiles, selectCandidates, prepareContext, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { emptyProfile, readProfiles, selectCandidates, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
 import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { createPreviewServer } from '../serve.js';
 
@@ -39,8 +39,8 @@ test('sampling is weighted without replacement, reproducible, fresh and respects
   assert.throws(() => selectCandidates({ ...options, count: 100 }), /count/);
 });
 
-test('editing the account Markdown changes the next context and feed without creating posts', async t => {
-  const { root, directory, privateDirectory } = await fixture(t);
+test('editing the account Markdown changes the next profile read and feed without creating posts', async t => {
+  const { root, privateDirectory } = await fixture(t);
   const before = await loadContent(root);
   const documents = await readUserDocuments(root);
   const user = documents.registry.users.find(user => user.id === 'alan');
@@ -62,40 +62,35 @@ test('editing the account Markdown changes the next context and feed without cre
   const firstRead = await readProfiles({ root, users: documents.registry.users, privateDirectory });
   assert.ok(firstRead.supplementalDocuments[user.id].some(document => document.path.endsWith('/关系.md') && document.text.includes('INITIAL_RELATION_SETTING')));
   await writeFile(supplementPath, '# 关系\n\nUPDATED_RELATION_SETTING\n');
-  const path = join(directory, 'context.json');
-  await prepareContext({ root, privateDirectory, outputPath: path, count: 5, seed: 'fresh' });
-  const context = JSON.parse(await readFile(path, 'utf8'));
-  const fresh = context.users.find(account => account.id === user.id);
+  const latest = await loadContent(root);
+  const context = await readProfiles({ root, users: latest.registry.users, privateDirectory });
+  const fresh = latest.registry.users.find(account => account.id === user.id);
   assert.equal(fresh.name, user.name);
   assert.equal(fresh.inFollowing, false);
   assert.equal(fresh.allowPosts, false);
   assert.equal(context.profiles[user.id].notes, 'UPDATED_PUBLIC_TEST_SETTING');
   assert.deepEqual(context.profiles[user.id].topics, ['新填写的测试话题']);
   assert.ok(context.supplementalDocuments[user.id].some(document => document.path.endsWith('/关系.md') && document.text.includes('UPDATED_RELATION_SETTING')));
-  assert.deepEqual(context.selection.users.map(candidate => candidate.id), [user.id]);
-  assert.deepEqual(context.selection.users[0].supplementalDocuments, context.supplementalDocuments[user.id]);
+  const selection = selectCandidates({ users: latest.registry.users, profiles: context.profiles, count: 5, seed: 'fresh' });
+  assert.deepEqual(selection.users.map(candidate => candidate.id), [user.id]);
   assert.doesNotMatch(JSON.stringify(context), /INITIAL_RELATION_SETTING/);
-  assert.deepEqual(context.posts, before.feed.posts);
-  assert.equal(context.policy.automaticPosting, false);
+  assert.deepEqual(latest.feed.posts, before.feed.posts);
   const feed = await buildFeed(root);
   assert.equal(feed.users.find(account => account.id === user.id).name, user.name);
   assert.deepEqual(feed.posts, before.feed.posts);
   assert.doesNotMatch(JSON.stringify(feed), /UPDATED_PUBLIC_TEST_SETTING|UPDATED_RELATION_SETTING|新填写的测试话题|allowPosts/);
 });
 
-test('private supplements stay external and are reread for each context', async t => {
-  const { root, directory, privateDirectory } = await fixture(t);
+test('private supplements stay external and are reread for each profile read', async t => {
+  const { root, privateDirectory } = await fixture(t);
+  const { registry } = await readUserDocuments(root);
   const privateProfile = { ...emptyProfile('alan'), notes: 'SYNTHETIC_PRIVATE_NOTE' };
   const file = join(privateDirectory, 'alan.json');
   await writeFile(file, JSON.stringify(privateProfile));
-  const firstPath = join(directory, 'first-context.json');
-  await prepareContext({ root, privateDirectory, outputPath: firstPath, count: 5, seed: 'private-round' });
-  assert.equal(JSON.parse(await readFile(firstPath, 'utf8')).privateProfiles.alan.notes, 'SYNTHETIC_PRIVATE_NOTE');
+  assert.equal((await readProfiles({ root, users: registry.users, privateDirectory })).overrides.alan.notes, 'SYNTHETIC_PRIVATE_NOTE');
   privateProfile.notes = 'UPDATED_PRIVATE_SETTING';
   await writeFile(file, JSON.stringify(privateProfile));
-  const secondPath = join(directory, 'second-context.json');
-  await prepareContext({ root, privateDirectory, outputPath: secondPath, count: 5, seed: 'private-round' });
-  assert.equal(JSON.parse(await readFile(secondPath, 'utf8')).privateProfiles.alan.notes, 'UPDATED_PRIVATE_SETTING');
+  assert.equal((await readProfiles({ root, users: registry.users, privateDirectory })).overrides.alan.notes, 'UPDATED_PRIVATE_SETTING');
   await buildFeed(root);
   assert.doesNotMatch(await readFile(join(root, 'data/feed.json'), 'utf8'), /SYNTHETIC_PRIVATE_NOTE|UPDATED_PRIVATE_SETTING/);
   assert.doesNotMatch(await readFile(join(root, 'users/alan/profile.md'), 'utf8'), /SYNTHETIC_PRIVATE_NOTE|UPDATED_PRIVATE_SETTING/);
