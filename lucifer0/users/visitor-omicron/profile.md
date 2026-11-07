@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-omicron |
-| 用户名 | lucifer_omicron |
-| 网名 | 路西法ο |
+| 用户名 | hiss_09 |
+| 网名 | 滋—— |
 | 公开简介 | 冰箱又在独奏。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

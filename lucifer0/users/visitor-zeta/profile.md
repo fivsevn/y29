@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-zeta |
-| 用户名 | lucifer_zeta |
-| 网名 | 路西法ζ |
+| 用户名 | field_out |
+| 网名 | 野地 |
 | 公开简介 | 箱子码好，脑子放空。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

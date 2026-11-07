@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-gamma |
-| 用户名 | lucifer_gamma |
-| 网名 | 路西法γ |
+| 用户名 | hex_key7 |
+| 网名 | 小六角 |
 | 公开简介 | 这颗螺丝还有用。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

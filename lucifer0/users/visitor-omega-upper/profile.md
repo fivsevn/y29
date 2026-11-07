@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-omega-upper |
-| 用户名 | lucifer_omega_upper |
-| 网名 | 路西法Ω |
+| 用户名 | try_one_press |
+| 网名 | 按一下试试 |
 | 公开简介 | 说明书翻到最后一页了吗？ |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

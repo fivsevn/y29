@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-upsilon |
-| 用户名 | lucifer_upsilon |
-| 网名 | 路西法υ |
+| 用户名 | pause_comma |
+| 网名 | 一个顿号 |
 | 公开简介 | 这句再听一遍。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

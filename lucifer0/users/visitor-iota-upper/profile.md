@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-iota-upper |
-| 用户名 | lucifer_iota_upper |
-| 网名 | 路西法Ι |
+| 用户名 | smoothroad54 |
+| 网名 | 一路顺风 |
 | 公开简介 | 来得及，慢一点。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

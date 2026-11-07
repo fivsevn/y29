@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-rho-upper |
-| 用户名 | lucifer_rho_upper |
-| 网名 | 路西法Ρ |
+| 用户名 | lowercase_r |
+| 网名 | 小写的r |
 | 公开简介 | 信封也有自己的手感。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

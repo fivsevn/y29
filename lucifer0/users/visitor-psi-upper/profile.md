@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-psi-upper |
-| 用户名 | lucifer_psi_upper |
-| 网名 | 路西法Ψ |
+| 用户名 | tea_leftcold |
+| 网名 | 热茶凉了 |
 | 公开简介 | 这段留三秒空白。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

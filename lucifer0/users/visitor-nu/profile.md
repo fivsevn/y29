@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-nu |
-| 用户名 | lucifer_nu |
-| 网名 | 路西法ν |
+| 用户名 | faded_blue |
+| 网名 | 褪色蓝 |
 | 公开简介 | 路过的招牌比我会说话。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

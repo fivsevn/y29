@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | lidianlong |
-| 用户名 | e_dragon |
-| 网名 | 李电龙 |
+| 用户名 | turn_up_bass |
+| 网名 | 低音开满 |
 | 公开简介 | 饭要热的，歌要响的。 |
 | 头像路径 | assets/avatars/lidianlong.svg |
 | 账号类型 | 作品人物 |

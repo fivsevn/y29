@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-xi |
-| 用户名 | lucifer_xi |
-| 网名 | 路西法ξ |
+| 用户名 | lunch_ping |
+| 网名 | 饭点再叫我 |
 | 公开简介 | 准点是一种愿望。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-sigma-upper |
-| 用户名 | lucifer_sigma_upper |
-| 网名 | 路西法Σ |
+| 用户名 | rollin_25 |
+| 网名 | rollin |
 | 公开简介 | 今天先把轮子擦干净。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-delta |
-| 用户名 | lucifer_delta |
-| 网名 | 路西法δ |
+| 用户名 | not_risen |
+| 网名 | 未发酵 |
 | 公开简介 | 今天的面团也有自己的想法。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

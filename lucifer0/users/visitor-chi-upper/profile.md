@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-chi-upper |
-| 用户名 | lucifer_chi_upper |
-| 网名 | 路西法Χ |
+| 用户名 | xiaoman_zzz |
+| 网名 | 小满困了 |
 | 公开简介 | 今天的最后一块卖掉了。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

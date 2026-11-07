@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-lambda-upper |
-| 用户名 | lucifer_lambda_upper |
-| 网名 | 路西法Λ |
+| 用户名 | emptybox |
+| 网名 | 空箱 |
 | 公开简介 | 今天也在和纸箱谈判。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

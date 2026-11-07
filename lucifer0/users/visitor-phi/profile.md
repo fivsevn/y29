@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-phi |
-| 用户名 | lucifer_phi |
-| 网名 | 路西法φ |
+| 用户名 | oldbanyan |
+| 网名 | 老榕树 |
 | 公开简介 | 先把电源断了再说。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

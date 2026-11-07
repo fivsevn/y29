@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | lixing |
-| 用户名 | li_xing |
-| 网名 | 黎星 |
+| 用户名 | just_passing |
+| 网名 | 随便看看 |
 | 公开简介 | 偶尔看一眼。 |
 | 头像路径 | assets/avatars/lixing.svg |
 | 账号类型 | 作品人物 |

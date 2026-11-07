@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | zhaoyangxue |
-| 用户名 | yangxue |
-| 网名 | 朝阳雪 |
+| 用户名 | ricepaper |
+| 网名 | 糯米纸 |
 | 公开简介 | 吃点好的，也做点小东西。 |
 | 头像路径 | assets/avatars/zhaoyangxue.svg |
 | 账号类型 | 作品人物 |

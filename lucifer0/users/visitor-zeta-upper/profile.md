@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-zeta-upper |
-| 用户名 | lucifer_zeta_upper |
-| 网名 | 路西法Ζ |
+| 用户名 | miaomile |
+| 网名 | 喵了个咪 |
 | 公开简介 | 歌播完了，红灯还没完。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

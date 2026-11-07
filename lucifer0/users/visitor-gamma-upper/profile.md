@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-gamma-upper |
-| 用户名 | lucifer_gamma_upper |
-| 网名 | 路西法Γ |
+| 用户名 | spring_early |
+| 网名 | 春来早 |
 | 公开简介 | 开门第一件事是烧水。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

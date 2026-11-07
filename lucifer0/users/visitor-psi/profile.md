@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-psi |
-| 用户名 | lucifer_psi |
-| 网名 | 路西法ψ |
+| 用户名 | atuan43 |
+| 网名 | 阿团 |
 | 公开简介 | 这一笼可以了。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

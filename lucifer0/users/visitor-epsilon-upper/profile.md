@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-epsilon-upper |
-| 用户名 | lucifer_epsilon_upper |
-| 网名 | 路西法Ε |
+| 用户名 | oldwood48 |
+| 网名 | oldwood |
 | 公开简介 | 擦完才知道是什么木头。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

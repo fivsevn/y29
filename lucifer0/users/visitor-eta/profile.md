@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-eta |
-| 用户名 | lucifer_eta |
-| 网名 | 路西法η |
+| 用户名 | halfbeat_late |
+| 网名 | 慢半拍 |
 | 公开简介 | 封套比歌先吸引我。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

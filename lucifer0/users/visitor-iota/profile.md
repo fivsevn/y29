@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-iota |
-| 用户名 | lucifer_iota |
-| 网名 | 路西法ι |
+| 用户名 | uu_nosugar |
+| 网名 | uu不加糖 |
 | 公开简介 | 拉花像什么由客人决定。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

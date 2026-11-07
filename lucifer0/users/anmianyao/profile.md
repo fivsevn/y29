@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | anmianyao |
-| 用户名 | anmianyao |
-| 网名 | 安眠药 |
+| 用户名 | side_b |
+| 网名 | B-SIDE |
 | 公开简介 | 耳机里的另一面。 |
 | 头像路径 | assets/avatars/anmianyao.svg |
 | 账号类型 | 作品人物 |

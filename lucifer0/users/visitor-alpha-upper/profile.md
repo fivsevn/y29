@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-alpha-upper |
-| 用户名 | lucifer_alpha_upper |
-| 网名 | 路西法Α |
+| 用户名 | dogear_81 |
+| 网名 | 折页 |
 | 公开简介 | 书架最下面还有一排。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

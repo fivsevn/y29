@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-tau |
-| 用户名 | lucifer_tau |
-| 网名 | 路西法τ |
+| 用户名 | second_half |
+| 网名 | 下半场再说 |
 | 公开简介 | 葱价今天很有想法。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

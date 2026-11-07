@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-theta-upper |
-| 用户名 | lucifer_theta_upper |
-| 网名 | 路西法Θ |
+| 用户名 | koukou26 |
+| 网名 | 口口 |
 | 公开简介 | 这个圆角还可以再圆一点。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

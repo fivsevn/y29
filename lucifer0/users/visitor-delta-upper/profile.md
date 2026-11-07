@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-delta-upper |
-| 用户名 | lucifer_delta_upper |
-| 网名 | 路西法Δ |
+| 用户名 | southbound |
+| 网名 | 南辕 |
 | 公开简介 | 这条小路地图上没有。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

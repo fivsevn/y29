@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-mu-upper |
-| 用户名 | lucifer_mu_upper |
-| 网名 | 路西法Μ |
+| 用户名 | jiji_zip |
+| 网名 | 吉吉.zip |
 | 公开简介 | 电影开始了，我还在门外。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

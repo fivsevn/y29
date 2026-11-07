@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-kappa-upper |
-| 用户名 | lucifer_kappa_upper |
-| 网名 | 路西法Κ |
+| 用户名 | prop_melon |
+| 网名 | 这个瓜是假的 |
 | 公开简介 | 假的水果也挺占地方。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

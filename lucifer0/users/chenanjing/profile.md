@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | chenanjing |
-| 用户名 | anjing |
-| 网名 | 陈安静 |
+| 用户名 | paperbits |
+| 网名 | 纸屑 |
 | 公开简介 | 画还没画完。 |
 | 头像路径 | assets/avatars/chenanjing.svg |
 | 账号类型 | 作品人物 |

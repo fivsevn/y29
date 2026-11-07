@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-mu |
-| 用户名 | lucifer_mu |
-| 网名 | 路西法μ |
+| 用户名 | sunward_5 |
+| 网名 | 向阳 |
 | 公开简介 | 今天这盆不是薄荷。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

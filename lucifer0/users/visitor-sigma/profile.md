@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-sigma |
-| 用户名 | lucifer_sigma |
-| 网名 | 路西法σ |
+| 用户名 | eraserdust21 |
+| 网名 | 橡皮屑 |
 | 公开简介 | 色号记住了，钥匙没记住。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

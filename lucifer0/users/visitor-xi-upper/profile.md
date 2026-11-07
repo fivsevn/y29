@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-xi-upper |
-| 用户名 | lucifer_xi_upper |
-| 网名 | 路西法Ξ |
+| 用户名 | lowbattery33 |
+| 网名 | 暂时没电 |
 | 公开简介 | 今天的耐心余额用完了。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

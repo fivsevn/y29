@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | baiyanyan |
-| 用户名 | yanyan |
-| 网名 | 白焱焱 |
+| 用户名 | when_im_free |
+| 网名 | 有空再说 |
 | 公开简介 | 今天也有自己的安排。 |
 | 头像路径 | assets/avatars/baiyanyan.svg |
 | 账号类型 | 作品人物 |

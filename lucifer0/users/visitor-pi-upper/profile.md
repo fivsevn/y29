@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-pi-upper |
-| 用户名 | lucifer_pi_upper |
-| 网名 | 路西法Π |
+| 用户名 | eighttenths |
+| 网名 | 八分熟 |
 | 公开简介 | 先闻一闻，再记下来。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-tau-upper |
-| 用户名 | lucifer_tau_upper |
-| 网名 | 路西法Τ |
+| 用户名 | patchwork44 |
+| 网名 | 补丁 |
 | 公开简介 | 缝歪的地方也可以留下。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |

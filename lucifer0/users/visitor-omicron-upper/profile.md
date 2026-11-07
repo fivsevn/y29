@@ -9,8 +9,8 @@
 | 属性 | 内容 |
 | --- | --- |
 | 稳定 ID | visitor-omicron-upper |
-| 用户名 | lucifer_omicron_upper |
-| 网名 | 路西法Ο |
+| 用户名 | idleyun |
+| 网名 | 闲云 |
 | 公开简介 | 这站我还记得。 |
 | 头像路径 | assets/avatars/visitor.svg |
 | 账号类型 | 原创路人 |
