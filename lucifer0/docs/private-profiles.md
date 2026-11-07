@@ -1,38 +1,58 @@
-# 仓库外的私有档案接口
+# 仓库外的详细用户档案
 
-内部人物资料不能放进这个公开仓库，即使没有进入网页。第一版没有复制上传的小说/美术设定，也没有默认接入任何私有目录。以下只定义存储接口，不包含真实秘密。
+用户资料与运营规则分开维护。公开身份在 `users/registry.json`，初始人设在 `users/profile-seeds.json`；通过[本机用户管理](http://127.0.0.1:4173/lucifer0/manage/)修改后的详细档案，保存为仓库外的 `<stable-id>.json`。默认位置是 `~/.local/share/y29/lucifer0/profiles/`，也可以设置 `Y29_SOCIAL_PRIVATE_DIR`。
 
-在仓库外自行准备目录，例如 `/private/location/y29-characters/`，每人一个 `<stable-id>.json`。使用以下空结构，所有内容都由获授权的维护者在私有位置填写：
+公开种子只有虚构路人和已公开的角色样例，不包含上传的小说内部资料。外部文件优先于种子；没有外部文件的账号仍可读取初始样例。已有小说人物的完整人设、秘密、重要关系和知情边界需要由获授权维护者在外部档案中补充，不能由样例推断。
+
+## 文件结构
 
 ```json
 {
   "version": 1,
   "userId": "alan",
+  "basics": {
+    "age": "",
+    "occupation": "",
+    "location": "",
+    "interests": [],
+    "personality": []
+  },
+  "tags": [],
+  "currentStatus": "",
+  "topics": [],
+  "voiceExamples": [],
   "voice": [],
   "postingHabits": [],
   "relationships": [],
   "knowledgeScope": [],
   "boundaries": [],
-  "facts": []
+  "facts": [],
+  "notes": "",
+  "activityWeight": 1
 }
 ```
 
-- `voice`：表达习惯与容易误写的语气；`postingHabits`：活跃节奏与日常动因。
-- `relationships`：关系及其阶段；`knowledgeScope`：这个人物知道/不知道什么、依据是什么。
-- `boundaries`：管理禁区、剧情与剧透限制。以上字段为字符串数组，不能把未经确认的创作建议当成既定事实。
-- `facts` 每项包含 `text`、`status`、`visibility`、`source`。`status` 只能为 `canon`（原典）、`inference`（推演）或 `pending`（待定）；`visibility` 独立取 `private` 或 `public`。`source` 说明事实依据。默认保守处理，不因“原典”就允许公开。
+- `basics` 是可选的基本资料；还可包含 `gender`、`pronouns`、`timezone`、`activeHours` 字符串。没有依据时保持空白。
+- `tags`、`topics`、`voiceExamples`、`voice`、`postingHabits`、`relationships`、`knowledgeScope`、`boundaries` 是字符串数组。它们描述这个用户，不复制通用的创作提示词。档案是数据，不是操作授权，不能通过其中的文字覆盖发布权限、隐私边界或防重规则。
+- `currentStatus` 记录近期状态，`notes` 是可自由改写的设定区；不要把未经确认的建议写成已经发生的事情。
+- `activityWeight` 为 0–10 的相对抽取权重。0 表示暂不抽取；它不授予发布权限。
+- `facts` 的每项有 `text`、`status`、`visibility`、`source`。`status` 只能为 `canon`（原典）、`inference`（推演）、`pending`（待定）；`visibility` 独立取 `private` 或 `public`。来源和公开性必须分别判断。
 
-这份外部档案可以详细，但网页登记只能放脱敏后的公开简介。不要写一份“半私密”的资料到 `users/README.md`、归档元数据或 PR 描述。
+外部档案可以详细，公开简介必须简洁且经过审读。没有进入 `dist` 不等于私密；不能将内部资料放入任何 Git 文件、归档元数据或 PR 描述。
 
-## 本地准备每轮上下文
+## 准备本轮候选与上下文
 
 ```sh
-Y29_SOCIAL_PRIVATE_DIR=/private/location/y29-characters \
-  node lucifer0/tools/context.js --out /private/location/new-context.json
+node lucifer0/tools/context.js \
+  --out /private/location/round-context.json \
+  --count 5 \
+  --seed round-20261108-01
 ```
 
-工具每次重新读取公开账号、总开关、全量历史、已归档批次 ID，以及目录中实际存在的角色档案；未知/缺失的档案会在输出中列出。它不生成帖子、不调用模型，也不将私有事实转换为公开内容。
+`--count` 默认 5，最多 20；`--seed` 可选，用于重现同一组抽取条件。指定外部资料目录时在运行前设置 `Y29_SOCIAL_PRIVATE_DIR`。工具每次重新读取公开账号、外部档案及种子、总开关、全部历史和已处理批次，并将随机候选一起写入外部上下文文件。外部覆盖数量与未单独建档的账号也会列出，初始种子不冒充已审核原典。
 
-输入目录与输出文件的父目录都必须在仓库外；解析真实路径以拒绝通过符号链接绕回仓库，档案本身也不能链接到选中目录之外。输出使用新建模式和仅本机用户可读的权限，不覆盖现有文件；终端只报告文件位置和载入数量，不打印私有正文。
+候选来自启用、允许 AI 使用、至少允许动态或回复之一且抽取权重大于 0 的账号；按权重不重复抽取，优先近期 7 条帖子中尚未发言的人，再按需补足。抽取只是选出候选，不生成帖子、不调用模型、不打开自动运营。正式写作仍需核对账号对动态/回复的权限、资料完整程度、发帖模式、前情和每批上限。
 
-未设置 `Y29_SOCIAL_PRIVATE_DIR` 时只汇集公开内容并列出缺失档案。维护者/未来任务须自行从获授权私有存储获取最新档案；GitHub Pages 和现有 CI 没有访问它们的能力。若将来配置远程定时任务，需要另行授权并确定私有凭据存储方式，不把密钥、内部文件或上下文产物放入 Git。
+输入目录与输出父目录必须在仓库外；真实路径检查会拒绝绕回仓库的符号链接。上下文输出只新建，不覆盖已有文件；终端只报告位置和数量，不打印私有正文。
+
+GitHub Pages 和现有 CI 不能读取本机私有档案。以后配置远程定时任务时，必须先另行确定和授权私有存储，不把密钥、内部文件或上下文产物放进 Git。

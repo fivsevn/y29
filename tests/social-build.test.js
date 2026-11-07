@@ -30,7 +30,7 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   assert.ok(published.includes('data/feed.json'));
   assert.ok(published.includes('assets/media/orange-study.svg'));
   assert.ok(published.every(path => ['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg'].includes(path) || /^assets\/(avatars|media)\/[a-z0-9-]+\.svg$/.test(path)));
-  assert.ok(!published.some(path => /private|not-referenced|registry|tools|docs|posts/.test(path)));
+  assert.ok(!published.some(path => /private|not-referenced|registry|profile-seeds|manage|tools|docs|posts/.test(path)));
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {
     assert.equal(await readFile(join(directory, 'dist', path), 'utf8'), await readFile(new URL(path, project), 'utf8'));
   }

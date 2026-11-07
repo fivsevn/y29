@@ -49,7 +49,7 @@ function postMarkup(post, { threaded = false, target, preview = false } = {}) {
   const liked = state.likes.includes(post.id), saved = state.bookmarks.includes(post.id);
   return `<article class="post${threaded && post.replyTo ? ' thread-reply' : ''}${target === post.id ? ' is-target' : ''}" id="post-${esc(post.id)}" aria-label="${esc(user.name)}的${post.replyTo ? '回复' : '动态'}">
     <div class="post-heading"><a class="author-name" href="${userURL(user.id)}">${esc(user.name)}</a><a class="author-id" href="${userURL(user.id)}">ID:${boardID(user.id)}</a><a class="post-number" href="${postURL(post.id)}">${numberLabel(post.id)}</a></div>
-    <div class="post-metadata"><time datetime="${esc(post.createdAt)}" title="${esc(dateLabel(post.createdAt, true))}">${esc(dateLabel(post.createdAt, true))}</time>${post.replyTo ? '<span>回应</span>' : `<a href="${postURL(post.id)}">${replies} 回应</a>`}</div>
+    <div class="post-metadata"><time datetime="${esc(post.createdAt)}" title="${esc(dateLabel(post.createdAt, true))}">${esc(dateLabel(post.createdAt, true))}</time>${post.canon === 'sample' ? '<span>样例</span>' : ''}${post.replyTo ? '<span>回应</span>' : `<a href="${postURL(post.id)}">${replies} 回应</a>`}</div>
     ${parent ? `<a class="reply-context" href="${postURL(parent.id)}" aria-label="回复${esc(users.get(parent.author).name)}的${numberLabel(parent.id)}">&gt;&gt;${postNumber(parent.id)}</a>` : ''}
     <div class="post-content${post.media.length ? ' with-media' : ''}">${post.media.map(image => `<a class="post-image" href="${postURL(post.id)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看附图 ↗</span></a>`).join('')}<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(post.text)}</p></a></div>
     <div class="post-actions"><a class="action reply-action" href="${postURL(post.id)}" aria-label="查看${esc(user.name)}的讨论，${replies}条回复">[ 回应${replies ? ' ' + replies : ''} ]</a><button class="action like-action" data-action="likes" data-id="${esc(post.id)}" aria-pressed="${liked}" aria-label="${liked ? '取消点赞' : '点赞'}${esc(user.name)}的发言，${post.likes + Number(liked)}个赞">${liked ? '已赞' : '赞'} ${post.likes + Number(liked)}</button><button class="action bookmark-action" data-action="bookmarks" data-id="${esc(post.id)}" aria-pressed="${saved}" aria-label="${saved ? '取消收藏' : '收藏'}${esc(user.name)}的发言">${saved ? '已收藏' : '收藏'}</button><button class="action share-action" data-action="share" data-id="${esc(post.id)}" aria-label="复制这条发言的链接">链接</button></div>
@@ -74,7 +74,7 @@ function renderThread(id) {
     (thread.length ? `<div class="thread">${postMarkup(thread[0], { target: id })}${thread.length > 1 ? '<div class="discussion-label">回应 / REPLIES</div>' : ''}${thread.slice(1).map(post => postMarkup(post, { threaded: true, target: id })).join('')}</div><p class="feed-end">${thread.length === 1 ? '还没有人接话。' : '— 串末 —'}</p>` : empty('没有找到这条帖子', '这个链接可能不完整。'));
 }
 function renderPeople() {
-  const characters = feed.users.filter(user => user.kind === 'character');
+  const characters = feed.users.filter(user => user.inFollowing);
   return header() + boardbar('人物', `${characters.length} 人`, '<a href="#/following">/following</a>') + `<div class="directory">${characters.map(user => `<section class="directory-person">${personRow(user)}<p>${esc(user.bio)}</p></section>`).join('')}</div>`;
 }
 function renderSearch(query) {
@@ -85,8 +85,9 @@ function renderSearch(query) {
     (!needle ? empty('想找什么？', '输入一个名字或帖子里的关键词。') : `<p class="search-count">${foundUsers.length} 个用户 · ${foundPosts.length} 条发言</p>${foundUsers.length ? `<div class="search-people">${foundUsers.map(personRow).join('')}</div>` : ''}${foundPosts.map(post => postMarkup(post)).join('')}${!foundUsers.length && !foundPosts.length ? empty('没有找到相关内容', '换个关键词试试。') : ''}`);
 }
 function renderAbout() {
-  return header() + boardbar('关于') + `<div class="about-content"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2><p class="company-intro">路西法零，一家社交网站企业。<br>自行表达，自行选择想听见的声音。</p><div class="about-rule" aria-hidden="true">0 ─────────────────── Ω</div><section><h3>/world 与 /following</h3><p>/world 收录所有公开帖子。熟悉的人、擦肩而过的人，都可以出现在同一页。/following 固定收录《真心猎手》中所有人物的动态；陌生人的帖子可在 /world 浏览。</p></section><section><h3>站点地址</h3><p><code>y29.fivsevn.com/lucifer0</code></p></section><section><h3>关于这个版本</h3><p>这是 Y.29 的小说衍生页面。现有帖子、回复、简介和配图均为原创样例，不对应小说时间线，不确认人物关系或未公开剧情。账号拥有各自稳定的身份。</p></section><section><h3>本机记录</h3><p>点赞和收藏只保存在当前浏览器。无需登录，目前可浏览和收藏，暂不开放访客发帖。自动运营尚未开启。</p><div class="about-links"><a href="#/bookmarks">[ 我的收藏 ]</a><a href="#/search">[ 搜索帖子 ]</a></div></section><footer class="about-footer"><a href="../">↖ Y.29</a><span>LUCIFER ZERO</span></footer></div>`;
+  return header() + boardbar('/about') + `<div class="about-content"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2></div>`;
 }
+
 function render() {
   const current = route();
   const nav = ['following', 'people'].includes(current.page) ? 'following' : ['about', 'bookmarks', 'search'].includes(current.page) ? 'about' : 'home';

@@ -22,7 +22,11 @@ try {
     await page.locator('.boardbar h2').filter({ hasText: title }).waitFor();
   };
   await visit('', '/world');
-  check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '/following', '0关于']), 'exactly three bottom destinations');
+  const feed = await (await page.request.get(new URL('data/feed.json', base).href)).json();
+  const followingUsers = feed.users.filter(user => user.inFollowing);
+  const followingIds = new Set(followingUsers.map(user => user.id));
+  const followingCount = feed.posts.filter(post => !post.replyTo && followingIds.has(post.author)).length;
+  check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '/following', '0/about']), 'exactly three bottom destinations');
   check(await page.locator('.tabs,.welcome-note,.edition-pill').count() === 0, 'redundant tabs and welcome card are removed');
   check((await page.locator('.topbar').innerText()).trim() === '/lucifer0', 'compact header contains only the app path');
   check(await page.locator('.topbar').evaluate(element => element.getBoundingClientRect().height <= 56), 'compact header is at most 56px');
@@ -44,16 +48,15 @@ try {
   await page.locator('#post-sample-drawing button[data-action="bookmarks"]').click();
   await page.reload(); await page.locator(like).waitFor();
   check(await page.locator(like).getAttribute('aria-pressed') === 'true', 'like persists after reload');
-  await page.locator('.main-nav a[data-nav="about"]').click();
-  await page.getByRole('link', { name: '[ 我的收藏 ]', exact: true }).click();
+  await visit('#/bookmarks', '我的收藏');
   await page.locator('.boardbar h2').filter({ hasText: '我的收藏' }).waitFor();
   check(await page.locator('article').count() === 1, 'bookmark view isolates saved posts');
   await page.locator('button[data-action="bookmarks"]').click();
   await page.getByRole('heading', { name: '还没有收藏' }).waitFor(); checks++;
 
   await visit('#/following', '/following');
-  check(await page.locator('article').count() === 6, 'character channel includes all character roots');
-  check(await page.locator('#post-sample-nightbus').count() === 0, 'visitor posts stay outside character channel');
+  check(await page.locator('article').count() === followingCount, 'channel follows managed account switches');
+  check(await page.locator('#post-sample-nightbus').count() === Number(followingIds.has('nightbus3')), 'visitor membership follows its independent switch');
   await page.screenshot({ path: join(output, 'phone-following.png'), fullPage: false });
   await visit('#/user/lixing', '用户');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'character channel does not expose optional follow controls');
@@ -69,8 +72,8 @@ try {
     }, follows);
     await visit('#/following', '/following');
     await page.reload(); await page.locator('.boardbar h2').filter({ hasText: '/following' }).waitFor();
-    check(await page.locator('article').count() === 6, `legacy follows ${JSON.stringify(follows)} cannot hide characters`);
-    check(await page.locator('#post-sample-nightbus,#post-sample-alarm').count() === 0, `legacy follows ${JSON.stringify(follows)} cannot add visitors`);
+    check(await page.locator('article').count() === followingCount, `legacy follows ${JSON.stringify(follows)} cannot hide characters`);
+    check(await page.locator('#post-sample-nightbus,#post-sample-alarm').count() === Number(followingIds.has('nightbus3')) + Number(followingIds.has('passerby17')), `legacy follows ${JSON.stringify(follows)} cannot override visitor switches`);
   }
   await visit('', '/world');
   check(await page.locator('#post-sample-nightbus').count() === 1, 'world still contains visitor posts');
@@ -88,8 +91,8 @@ try {
   await visit('#/user/chenanjing', '用户');
   check(await page.locator('article').count() === 2, 'profile keeps posts and replies');
   await visit('#/people', '人物');
-  check(await page.locator('.directory-person').count() === 8, 'character directory lists all novel characters');
-  check(await page.locator('.directory-person a[href="#/user/nightbus3"],.directory-person a[href="#/user/passerby17"]').count() === 0, 'visitor accounts are absent from character directory');
+  check(await page.locator('.directory-person').count() === followingUsers.length, 'directory lists managed channel members');
+  check(await page.locator('.directory-person a[href="#/user/nightbus3"],.directory-person a[href="#/user/passerby17"]').count() === Number(followingIds.has('nightbus3')) + Number(followingIds.has('passerby17')), 'directory visitor membership matches its switches');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'directory has no per-reader follow controls');
   await page.screenshot({ path: join(output, 'phone-following-people.png'), fullPage: true });
   await visit('#/search', '搜索');
@@ -132,9 +135,12 @@ try {
   await page.screenshot({ path: join(output, 'phone-thread.png'), fullPage: true });
   await visit('#/user/chenanjing', '用户');
   await page.screenshot({ path: join(output, 'phone-profile.png'), fullPage: false });
-  await visit('#/about', '关于');
+  await visit('#/about', '/about');
   check(await page.locator('.about-content').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
-  await page.screenshot({ path: join(output, 'phone-about.png'), fullPage: true });
+  check(await page.locator('.about-content section,.about-content footer,.about-content a').count() === 0, 'about contains only the brand block');
+  check((await page.locator('.about-content').innerText()).replace(/\s+/g, ' ').trim() === 'LUCIFER ZERO / Ω 路西法零 自由表达的商业承诺', 'about copy matches the requested brand fragment');
+  check(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme) === 'dark', 'site is dark');
+  await page.screenshot({ path: join(output, 'phone-about.png'), fullPage: false });
 
   const deniedContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
   await deniedContext.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('denied'); } }));

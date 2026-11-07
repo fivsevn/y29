@@ -8,6 +8,9 @@ import { prepareContext, validatePrivateProfile } from '../lucifer0/tools/privat
 import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
 
 const source = await loadContent();
+// Channel fixtures stay stable when maintainers change real account switches.
+const sampleCharacterIds = ['lixing', 'chenanjing', 'alan', 'lidianlong', 'baiyanyan', 'anmianyao', 'zhaoyangxue', 'guyu'];
+const sampleUsers = source.feed.users.map(user => ({ ...user, inFollowing: sampleCharacterIds.includes(user.id) }));
 const fixture = () => structuredClone(source);
 const validate = ({ registry, batches, policy }, options) => validateContent(registry, batches, policy, options);
 async function temporary(t) {
@@ -28,7 +31,7 @@ const newBatch = () => ({ version: 1, id: 'test-new-batch', mode: 'sample', post
 
 test('public content is complete, stable and contains no private operational fields', () => {
   const feed = validate(fixture());
-  assert.equal(feed.users.length, 10);
+  assert.equal(feed.users.length, source.registry.users.length);
   assert.equal(feed.posts.filter(post => !post.replyTo).length, 8);
   assert.equal(feed.posts.filter(post => post.replyTo).length, 7);
   assert.ok(feed.posts.every(post => post.canon === 'sample'));
@@ -102,10 +105,10 @@ test('threads include replies to replies with the actual parent preserved', () =
   assert.equal(rootOf([{ id: 'a', replyTo: 'b' }, { id: 'b', replyTo: 'a' }], 'a'), null);
 });
 
-test('character channel and reply bookmarks do not mix into the public main timeline', () => {
+test('following channel and reply bookmarks do not mix into the public main timeline', () => {
   const state = { follows: ['alan'], bookmarks: ['sample-drawing-answer'], likes: [] };
   assert.equal(selectPosts(source.feed.posts, state).length, 8);
-  assert.equal(selectPosts(source.feed.posts, state, { view: 'following', users: source.feed.users }).length, 6);
+  assert.equal(selectPosts(source.feed.posts, state, { view: 'following', users: sampleUsers }).length, 6);
   assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'bookmarks' }).map(post => post.id), ['sample-drawing-answer']);
   assert.equal(selectPosts(source.feed.posts, state, { user: 'chenanjing' }).length, 2);
 });
@@ -193,7 +196,7 @@ test('private context is external-only; pending and private are separate from ca
   const snapshot = JSON.parse(await readFile(output, 'utf8'));
   assert.equal(snapshot.privateProfiles.alan.facts[0].status, 'pending');
   assert.equal(snapshot.privateProfiles.alan.facts[0].visibility, 'private');
-  assert.equal(snapshot.missingPrivateProfiles.length, 9);
+  assert.equal(snapshot.missingPrivateProfiles.length, source.registry.users.length - 1);
   await assert.rejects(prepareContext({ outputPath: join(socialRoot, 'leak.json') }), /outside/);
   await assert.rejects(prepareContext({ privateDirectory: socialRoot, outputPath: join(directory, 'other.json') }), /outside/);
   await assert.rejects(prepareContext({ outputPath: output }), /EEXIST/);
@@ -206,27 +209,27 @@ test('private context is external-only; pending and private are separate from ca
 test('public generated data and tracked content expose no private profile keys', async () => {
   const feedText = await readFile(join(socialRoot, 'data/feed.json'), 'utf8');
   assert.doesNotMatch(feedText, /privateProfiles|knowledgeScope|postingHabits|boundaries/);
-  assert.ok((await readdir(join(socialRoot, 'users'))).every(file => ['README.md', 'registry.json'].includes(file)));
+  assert.ok((await readdir(join(socialRoot, 'users'))).every(file => ['README.md', 'registry.json', 'profile-seeds.json'].includes(file)));
 });
 
 
-test('legacy local state remains readable while the character channel includes all novel characters', () => {
-  const defaults = source.feed.users.filter(user => user.kind === 'character').map(user => user.id);
+test('legacy reader state stays compatible while channel membership comes from account switches', () => {
+  const defaults = sampleUsers.filter(user => user.inFollowing).map(user => user.id);
   assert.equal(defaults.length, 8);
   const state = readState(undefined, defaults);
-  const following = selectPosts(source.feed.posts, state, { view: 'following', users: source.feed.users });
+  const following = selectPosts(source.feed.posts, state, { view: 'following', users: sampleUsers });
   assert.equal(following.length, 6);
-  assert.ok(following.every(post => source.feed.users.find(user => user.id === post.author).kind === 'character'));
+  assert.ok(following.every(post => sampleUsers.find(user => user.id === post.author).inFollowing));
   assert.deepEqual(readState({ getItem: () => '{"follows":[]}' }, defaults).follows, []);
   assert.deepEqual(readState({ getItem: () => '{"follows":["alan"]}' }, defaults).follows, ['alan']);
 });
 
-test('following always includes all character roots despite empty, subset or visitor-only legacy follows', () => {
+test('old reader follows cannot override managed channel membership', () => {
   for (const follows of [[], ['alan'], ['passerby17', 'nightbus3']]) {
     const state = readState({ getItem: () => JSON.stringify({ follows }) });
-    const selected = selectPosts(source.feed.posts, state, { view: 'following', users: source.feed.users });
+    const selected = selectPosts(source.feed.posts, state, { view: 'following', users: sampleUsers });
     assert.equal(selected.length, 6);
-    assert.ok(selected.every(post => source.feed.users.find(user => user.id === post.author).kind === 'character'));
+    assert.ok(selected.every(post => sampleUsers.find(user => user.id === post.author).inFollowing));
     assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'following' }), []);
     assert.equal(selectPosts(source.feed.posts, state).length, 8);
     assert.ok(selectPosts(source.feed.posts, state, { user: 'nightbus3' }).length > 0);
@@ -238,4 +241,33 @@ test('forum IDs remain stable, including when the nickname changes', () => {
   assert.match(boardID('alan'), /^[A-Z0-9]{7}$/);
   assert.equal(new Set(source.feed.posts.map(post => postNumber(post.id))).size, source.feed.posts.length);
   assert.ok(source.feed.posts.every(post => /^\d{10}$/.test(postNumber(post.id))));
+});
+
+
+test('channel membership is independent of work source and account kind', () => {
+  const users = structuredClone(sampleUsers);
+  users.find(user => user.id === 'alan').inFollowing = false;
+  users.find(user => user.id === 'nightbus3').inFollowing = true;
+  users.find(user => user.id === 'lixing').sourceWork = '另一部作品';
+  const selected = selectPosts(source.feed.posts, { follows: [] }, { view: 'following', users });
+  assert.ok(!selected.some(post => post.author === 'alan'));
+  assert.ok(selected.some(post => post.author === 'nightbus3'));
+  assert.ok(selected.some(post => post.author === 'lixing'));
+});
+
+test('posting switches prevent new root posts and replies while retaining history', async t => {
+  const { directory, root } = await repositoryCopy(t);
+  const f = fixture();
+  f.registry.users.find(user => user.id === 'alan').allowPosts = false;
+  await writeFile(join(root, 'users/registry.json'), JSON.stringify(f.registry));
+  const input = join(directory, 'new.json'), batch = newBatch();
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /does not allow posts/);
+  f.registry.users.find(user => user.id === 'alan').allowPosts = true;
+  f.registry.users.find(user => user.id === 'alan').allowReplies = false;
+  await writeFile(join(root, 'users/registry.json'), JSON.stringify(f.registry));
+  batch.posts[0].replyTo = 'sample-soup';
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /does not allow replies/);
+  assert.equal((await loadContent(root)).feed.posts.length, 15);
 });

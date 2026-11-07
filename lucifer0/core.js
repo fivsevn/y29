@@ -53,12 +53,12 @@ export function threadPosts(posts, id) {
 
 export function selectPosts(posts, state, { view = 'all', user, query = '', users = [] } = {}) {
   const needle = query.trim().toLocaleLowerCase();
-  const characters = new Set(users.filter(account => account.kind === 'character').map(account => account.id));
+  const following = new Set(users.filter(account => account.inFollowing === true).map(account => account.id));
   return posts.filter(post => {
     if (user) return post.author === user;
     if (view === 'bookmarks') return state.bookmarks.includes(post.id);
     if (post.replyTo) return false;
-    if (view === 'following') return characters.has(post.author);
+    if (view === 'following') return following.has(post.author);
     return true;
   }).filter(post => !needle || post.text.toLocaleLowerCase().includes(needle)).sort(newestFirst);
 }

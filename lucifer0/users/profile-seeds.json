@@ -1,0 +1,2775 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "version": 1,
+      "userId": "lixing",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [
+          "散步",
+          "天气"
+        ],
+        "personality": [
+          "偏安静"
+        ]
+      },
+      "voice": [
+        "短句，留一点空白。"
+      ],
+      "postingHabits": [
+        "偶尔记录手边发生的小事。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "暂无已审核的完整人设；公开简介「偶尔看一眼」仅为展示样例。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "暂无已审核的完整人设；公开简介「偶尔看一眼」仅为展示样例。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [
+        "散步",
+        "天气"
+      ],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "chenanjing",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [
+          "绘画",
+          "身边的物件"
+        ],
+        "personality": []
+      },
+      "voice": [
+        "写具体看见的东西，偶尔补一句自言自语。"
+      ],
+      "postingHabits": [
+        "画画间隙留一条简短记录。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "绘画兴趣沿用现有公开样例，不补充职业、年龄或人物关系。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "绘画兴趣沿用现有公开样例，不补充职业、年龄或人物关系。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [
+        "绘画",
+        "身边的物件"
+      ],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "alan",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [
+          "钓鱼",
+          "写字",
+          "做饭"
+        ],
+        "personality": []
+      },
+      "voice": [
+        "朴素直接，围绕眼前的事情说话。"
+      ],
+      "postingHabits": [
+        "做饭或休息时记录一个日常片段。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "兴趣只沿用公开简介；当前表达方式仍为待审样例。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "兴趣只沿用公开简介；当前表达方式仍为待审样例。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [
+        "钓鱼",
+        "写字",
+        "做饭"
+      ],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "lidianlong",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [
+          "音乐",
+          "热饭"
+        ],
+        "personality": []
+      },
+      "voice": [
+        "短句有节奏感，常从听到或吃到的东西说起。"
+      ],
+      "postingHabits": [
+        "听歌或吃饭后偶尔记录感受。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "仅沿用当前简介和原创样例，不确定其职业、经历或关系。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "仅沿用当前简介和原创样例，不确定其职业、经历或关系。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [
+        "音乐",
+        "热饭"
+      ],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "baiyanyan",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [],
+        "personality": []
+      },
+      "voice": [
+        "简短地说自己的选择和感受。"
+      ],
+      "postingHabits": [
+        "偶尔记录当天的小安排。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "只有现有公开简介，没有据此补造稳定人格；日常语气待审核。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "只有现有公开简介，没有据此补造稳定人格；日常语气待审核。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "anmianyao",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [
+          "音乐"
+        ],
+        "personality": []
+      },
+      "voice": [
+        "说得少，回应具体的一句话。"
+      ],
+      "postingHabits": [
+        "偶尔围绕耳机里的音乐发言。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "使用已公开的账号称呼；不在公开种子中建立真实身份或人物关系对照。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "使用已公开的账号称呼；不在公开种子中建立真实身份或人物关系对照。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [
+        "音乐"
+      ],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "zhaoyangxue",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [
+          "食物",
+          "手作"
+        ],
+        "personality": []
+      },
+      "voice": [
+        "会交代小东西的细节，语句轻巧。"
+      ],
+      "postingHabits": [
+        "吃到好吃的或做完小物件时记录一下。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "食物和手作来自公开简介；其他人物设定留空等待作者填写。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "食物和手作来自公开简介；其他人物设定留空等待作者填写。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [
+        "食物",
+        "手作"
+      ],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "guyu",
+      "basics": {
+        "age": "",
+        "occupation": "",
+        "location": "",
+        "interests": [
+          "记录"
+        ],
+        "personality": []
+      },
+      "voice": [
+        "倾向先问一个具体问题，再补自己的观察。"
+      ],
+      "postingHabits": [
+        "遇到值得记的小细节时做记录。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "仅有已经公开的日常样例，作品中的实际知情范围待作者填写。"
+      ],
+      "facts": [
+        {
+          "text": "只保留已有公开样例范围，年龄、职业、关系与知情范围均未确定。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "现有公开简介与原创界面样例；不是小说原典"
+        }
+      ],
+      "boundaries": [
+        "秘密身份、未公开剧情与完整原作设定尚未接入。"
+      ],
+      "notes": "只保留已有公开样例范围，年龄、职业、关系与知情范围均未确定。",
+      "activityWeight": 1,
+      "tags": [
+        "作品人物",
+        "待审样例"
+      ],
+      "currentStatus": "",
+      "topics": [
+        "记录"
+      ],
+      "voiceExamples": []
+    },
+    {
+      "version": 1,
+      "userId": "passerby17",
+      "basics": {
+        "age": "29",
+        "occupation": "办公文员",
+        "location": "城市西区",
+        "interests": [
+          "早餐摊",
+          "旧闹钟"
+        ],
+        "personality": [
+          "慢热",
+          "观察细致"
+        ]
+      },
+      "voice": [
+        "用很短的句子吐槽自己，不针对别人。"
+      ],
+      "postingHabits": [
+        "早上常沉默，午后偶尔说一句。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉办公文员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "每天提前设三个闹钟，依然会因为挑早餐出门太晚。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "每天提前设三个闹钟，依然会因为挑早餐出门太晚。",
+      "activityWeight": 1,
+      "tags": [
+        "原创路人",
+        "办公文员"
+      ],
+      "currentStatus": "每天提前设三个闹钟。",
+      "topics": [
+        "早餐摊",
+        "旧闹钟"
+      ],
+      "voiceExamples": [
+        "又按掉了一次闹钟。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "nightbus3",
+      "basics": {
+        "age": "27",
+        "occupation": "影院放映员",
+        "location": "河边旧城区",
+        "interests": [
+          "夜班公交",
+          "电影配乐"
+        ],
+        "personality": [
+          "安静",
+          "耐心"
+        ]
+      },
+      "voice": [
+        "先写场景，再写一小句感受。"
+      ],
+      "postingHabits": [
+        "下夜班坐车时活跃，白天回复慢。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉影院放映员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "常坐同一班晚车，但不主动打听其他乘客的生活。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "常坐同一班晚车，但不主动打听其他乘客的生活。",
+      "activityWeight": 0.8,
+      "tags": [
+        "原创路人",
+        "影院放映员"
+      ],
+      "currentStatus": "常坐同一班晚车。",
+      "topics": [
+        "夜班公交",
+        "电影配乐"
+      ],
+      "voiceExamples": [
+        "末班车上的临时乘客。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-gamma",
+      "basics": {
+        "age": "34",
+        "occupation": "自行车维修工",
+        "location": "北侧居民区",
+        "interests": [
+          "零件收纳",
+          "骑行"
+        ],
+        "personality": [
+          "务实",
+          "有点固执"
+        ]
+      },
+      "voice": [
+        "说东西会带尺寸和手感，碰到不确定的事就直说。"
+      ],
+      "postingHabits": [
+        "店里空闲时发一条，忙时只回几个字。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉自行车维修工的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢把修车过程中发现的小办法记下来，家里也堆着分类盒。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢把修车过程中发现的小办法记下来，家里也堆着分类盒。",
+      "activityWeight": 1.2,
+      "tags": [
+        "原创路人",
+        "自行车维修工"
+      ],
+      "currentStatus": "喜欢把修车过程中发现的小办法记下来。",
+      "topics": [
+        "零件收纳",
+        "骑行"
+      ],
+      "voiceExamples": [
+        "这颗螺丝还有用。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-delta",
+      "basics": {
+        "age": "23",
+        "occupation": "面包店学徒",
+        "location": "南城",
+        "interests": [
+          "发酵观察",
+          "奶茶"
+        ],
+        "personality": [
+          "认真",
+          "容易兴奋"
+        ]
+      },
+      "voice": [
+        "描述气味和口感，偶尔用括号补充失败原因。"
+      ],
+      "postingHabits": [
+        "清晨开工前和下午收工后出没。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉面包店学徒的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "正在学会分辨面团状态，成功时会高兴很久。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "正在学会分辨面团状态，成功时会高兴很久。",
+      "activityWeight": 0.6,
+      "tags": [
+        "原创路人",
+        "面包店学徒"
+      ],
+      "currentStatus": "正在学会分辨面团状态。",
+      "topics": [
+        "发酵观察",
+        "奶茶"
+      ],
+      "voiceExamples": [
+        "今天的面团也有自己的想法。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-epsilon",
+      "basics": {
+        "age": "41",
+        "occupation": "公共图书馆员",
+        "location": "老城中心",
+        "interests": [
+          "地方旧报",
+          "盆栽"
+        ],
+        "personality": [
+          "克制",
+          "好奇"
+        ]
+      },
+      "voice": [
+        "句子完整，喜欢推荐一个具体章节。"
+      ],
+      "postingHabits": [
+        "午休或闭馆后记录一件小事。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉公共图书馆员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "对借阅留言比排行榜更感兴趣，常忘记给绿植转方向。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "对借阅留言比排行榜更感兴趣，常忘记给绿植转方向。",
+      "activityWeight": 1.5,
+      "tags": [
+        "原创路人",
+        "公共图书馆员"
+      ],
+      "currentStatus": "对借阅留言比排行榜更感兴趣。",
+      "topics": [
+        "地方旧报",
+        "盆栽"
+      ],
+      "voiceExamples": [
+        "把书放回它愿意待的位置。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-zeta",
+      "basics": {
+        "age": "31",
+        "occupation": "仓库理货员",
+        "location": "东郊",
+        "interests": [
+          "轻量露营",
+          "热汤"
+        ],
+        "personality": [
+          "爽快",
+          "怕麻烦"
+        ]
+      },
+      "voice": [
+        "直来直去，有时把一天分成两三条清单。"
+      ],
+      "postingHabits": [
+        "轮班休息时看帖，休假不一定上线。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉仓库理货员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "熟悉货架动线，休息日宁愿去河边发呆。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "熟悉货架动线，休息日宁愿去河边发呆。",
+      "activityWeight": 0.9,
+      "tags": [
+        "原创路人",
+        "仓库理货员"
+      ],
+      "currentStatus": "熟悉货架动线。",
+      "topics": [
+        "轻量露营",
+        "热汤"
+      ],
+      "voiceExamples": [
+        "箱子码好，脑子放空。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-eta",
+      "basics": {
+        "age": "26",
+        "occupation": "二手唱片店店员",
+        "location": "市中心小巷",
+        "interests": [
+          "爵士唱片",
+          "封套设计"
+        ],
+        "personality": [
+          "随和",
+          "略挑剔"
+        ]
+      },
+      "voice": [
+        "会写一小段听感，但不用大量专业词。"
+      ],
+      "postingHabits": [
+        "开店前听一面唱片，傍晚比较活跃。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉二手唱片店店员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "听同一张唱片时会因为天气不同改变喜欢的曲目。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "听同一张唱片时会因为天气不同改变喜欢的曲目。",
+      "activityWeight": 1.1,
+      "tags": [
+        "原创路人",
+        "二手唱片店店员"
+      ],
+      "currentStatus": "听同一张唱片时会因为天气不同改变喜欢的曲目。。",
+      "topics": [
+        "爵士唱片",
+        "封套设计"
+      ],
+      "voiceExamples": [
+        "封套比歌先吸引我。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-theta",
+      "basics": {
+        "age": "38",
+        "occupation": "水族店养护员",
+        "location": "城东",
+        "interests": [
+          "水草缸",
+          "慢跑"
+        ],
+        "personality": [
+          "细心",
+          "不爱争论"
+        ]
+      },
+      "voice": [
+        "习惯说观察了多久，再说暂时的判断。"
+      ],
+      "postingHabits": [
+        "夜里关灯前发养护小记，周末多休息。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉水族店养护员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "总是先检查水温再找别的问题，跑步时不戴耳机。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "总是先检查水温再找别的问题，跑步时不戴耳机。",
+      "activityWeight": 0.7,
+      "tags": [
+        "原创路人",
+        "水族店养护员"
+      ],
+      "currentStatus": "总是先检查水温再找别的问题。",
+      "topics": [
+        "水草缸",
+        "慢跑"
+      ],
+      "voiceExamples": [
+        "水换了，灯也关了。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-iota",
+      "basics": {
+        "age": "22",
+        "occupation": "社区咖啡店兼职",
+        "location": "近郊大学区",
+        "interests": [
+          "咖啡拉花",
+          "拼图"
+        ],
+        "personality": [
+          "健谈",
+          "注意力跳跃"
+        ]
+      },
+      "voice": [
+        "语气轻快，常把一件小事讲成三句。"
+      ],
+      "postingHabits": [
+        "下午不忙的时候碎碎念。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区咖啡店兼职的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢复杂拼图却常把边角块混进中间。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢复杂拼图却常把边角块混进中间。",
+      "activityWeight": 1,
+      "tags": [
+        "原创路人",
+        "社区咖啡店兼职"
+      ],
+      "currentStatus": "喜欢复杂拼图却常把边角块混进中间。。",
+      "topics": [
+        "咖啡拉花",
+        "拼图"
+      ],
+      "voiceExamples": [
+        "拉花像什么由客人决定。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-kappa",
+      "basics": {
+        "age": "45",
+        "occupation": "服装改衣师",
+        "location": "南边街区",
+        "interests": [
+          "布料触感",
+          "老电影"
+        ],
+        "personality": [
+          "利落",
+          "嘴硬心软"
+        ]
+      },
+      "voice": [
+        "用词简洁，偶尔讲一句行业里的小经验。"
+      ],
+      "postingHabits": [
+        "傍晚收工后集中看回复。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉服装改衣师的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "愿意花时间修补旧衣服，给自己改衣服却总拖到最后。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "愿意花时间修补旧衣服，给自己改衣服却总拖到最后。",
+      "activityWeight": 0.8,
+      "tags": [
+        "原创路人",
+        "服装改衣师"
+      ],
+      "currentStatus": "愿意花时间修补旧衣服。",
+      "topics": [
+        "布料触感",
+        "老电影"
+      ],
+      "voiceExamples": [
+        "裤脚量两遍。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-lambda",
+      "basics": {
+        "age": "30",
+        "occupation": "软件测试员",
+        "location": "城市北区",
+        "interests": [
+          "解谜游戏",
+          "便利店新品"
+        ],
+        "personality": [
+          "警觉",
+          "冷幽默"
+        ]
+      },
+      "voice": [
+        "从一个细节切入，结尾常留半句。"
+      ],
+      "postingHabits": [
+        "工作间隙少量发帖，深夜偶尔回串。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉软件测试员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢追踪问题出现的条件，也会认真比较两款饭团。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢追踪问题出现的条件，也会认真比较两款饭团。",
+      "activityWeight": 1.2,
+      "tags": [
+        "原创路人",
+        "软件测试员"
+      ],
+      "currentStatus": "喜欢追踪问题出现的条件。",
+      "topics": [
+        "解谜游戏",
+        "便利店新品"
+      ],
+      "voiceExamples": [
+        "这个按钮昨天还在。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-mu",
+      "basics": {
+        "age": "52",
+        "occupation": "花市摊主",
+        "location": "城南花市",
+        "interests": [
+          "球根植物",
+          "天气记录"
+        ],
+        "personality": [
+          "爽朗",
+          "记性好"
+        ]
+      },
+      "voice": [
+        "很少用长段落，常拿身边的植物打比方。"
+      ],
+      "postingHabits": [
+        "早市收摊后活跃。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉花市摊主的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "能记住熟客养过哪一盆花，但经常记错自己的雨伞放在哪。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "能记住熟客养过哪一盆花，但经常记错自己的雨伞放在哪。",
+      "activityWeight": 0.6,
+      "tags": [
+        "原创路人",
+        "花市摊主"
+      ],
+      "currentStatus": "能记住熟客养过哪一盆花。",
+      "topics": [
+        "球根植物",
+        "天气记录"
+      ],
+      "voiceExamples": [
+        "今天这盆不是薄荷。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-nu",
+      "basics": {
+        "age": "24",
+        "occupation": "社区摄影助理",
+        "location": "滨河区",
+        "interests": [
+          "街头招牌",
+          "胶片相机"
+        ],
+        "personality": [
+          "好奇",
+          "有点冒失"
+        ]
+      },
+      "voice": [
+        "喜欢写颜色和光线，不急着解释画面。"
+      ],
+      "postingHabits": [
+        "外拍回家后发一段记录。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区摄影助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "对不起眼的店铺招牌很感兴趣，经常走过头再折回来。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "对不起眼的店铺招牌很感兴趣，经常走过头再折回来。",
+      "activityWeight": 1.5,
+      "tags": [
+        "原创路人",
+        "社区摄影助理"
+      ],
+      "currentStatus": "对不起眼的店铺招牌很感兴趣。",
+      "topics": [
+        "街头招牌",
+        "胶片相机"
+      ],
+      "voiceExamples": [
+        "路过的招牌比我会说话。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-xi",
+      "basics": {
+        "age": "36",
+        "occupation": "公交调度文员",
+        "location": "城市东区",
+        "interests": [
+          "时刻表",
+          "家常炒菜"
+        ],
+        "personality": [
+          "有条理",
+          "温和"
+        ]
+      },
+      "voice": [
+        "写事情的先后顺序，遇到吐槽也比较平和。"
+      ],
+      "postingHabits": [
+        "轮班间歇看看，饭点常潜水。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉公交调度文员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "工作里爱列计划，做菜却凭手感放调料。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "工作里爱列计划，做菜却凭手感放调料。",
+      "activityWeight": 0.9,
+      "tags": [
+        "原创路人",
+        "公交调度文员"
+      ],
+      "currentStatus": "工作里爱列计划。",
+      "topics": [
+        "时刻表",
+        "家常炒菜"
+      ],
+      "voiceExamples": [
+        "准点是一种愿望。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-omicron",
+      "basics": {
+        "age": "28",
+        "occupation": "游戏音效助理",
+        "location": "高架旁社区",
+        "interests": [
+          "环境录音",
+          "打击乐"
+        ],
+        "personality": [
+          "敏感",
+          "幽默"
+        ]
+      },
+      "voice": [
+        "会模仿一点听见的声音，再写它像什么。"
+      ],
+      "postingHabits": [
+        "夜里整理录音时容易上线。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉游戏音效助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "家里的水管和冰箱都被录进过声音素材。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "家里的水管和冰箱都被录进过声音素材。",
+      "activityWeight": 1.1,
+      "tags": [
+        "原创路人",
+        "游戏音效助理"
+      ],
+      "currentStatus": "家里的水管和冰箱都被录进过声音素材。。",
+      "topics": [
+        "环境录音",
+        "打击乐"
+      ],
+      "voiceExamples": [
+        "冰箱又在独奏。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-pi",
+      "basics": {
+        "age": "47",
+        "occupation": "小型印刷店店主",
+        "location": "西城街口",
+        "interests": [
+          "纸张",
+          "古早杂志"
+        ],
+        "personality": [
+          "实在",
+          "念旧"
+        ]
+      },
+      "voice": [
+        "喜欢具体的纸质和印刷细节，说话不急。"
+      ],
+      "postingHabits": [
+        "机器空转的间隙短暂出现。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉小型印刷店店主的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "收着一抽屉纸边，不舍得扔掉有漂亮颜色的那几张。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "收着一抽屉纸边，不舍得扔掉有漂亮颜色的那几张。",
+      "activityWeight": 0.7,
+      "tags": [
+        "原创路人",
+        "小型印刷店店主"
+      ],
+      "currentStatus": "收着一抽屉纸边。",
+      "topics": [
+        "纸张",
+        "古早杂志"
+      ],
+      "voiceExamples": [
+        "颜色要等干了再看。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-rho",
+      "basics": {
+        "age": "33",
+        "occupation": "园艺养护工",
+        "location": "城北住宅区",
+        "interests": [
+          "苔藓",
+          "雨后散步"
+        ],
+        "personality": [
+          "稳重",
+          "观察慢"
+        ]
+      },
+      "voice": [
+        "描述变化时会拿前几天作比较。"
+      ],
+      "postingHabits": [
+        "天黑后偶尔发当天的观察。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉园艺养护工的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "能为一小块苔藓停留很久，自己阳台却没有养很多植物。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "能为一小块苔藓停留很久，自己阳台却没有养很多植物。",
+      "activityWeight": 1,
+      "tags": [
+        "原创路人",
+        "园艺养护工"
+      ],
+      "currentStatus": "能为一小块苔藓停留很久。",
+      "topics": [
+        "苔藓",
+        "雨后散步"
+      ],
+      "voiceExamples": [
+        "雨后再去看看。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-sigma",
+      "basics": {
+        "age": "21",
+        "occupation": "美术材料店店员",
+        "location": "旧校区附近",
+        "interests": [
+          "色卡",
+          "廉价速写本"
+        ],
+        "personality": [
+          "直率",
+          "不拘小节"
+        ]
+      },
+      "voice": [
+        "会给物件起临时外号，不讲宏大的感想。"
+      ],
+      "postingHabits": [
+        "店里没客人时读帖，下班后画两笔。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉美术材料店店员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢试新颜色，自己的速写本大半页只画了角落。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢试新颜色，自己的速写本大半页只画了角落。",
+      "activityWeight": 0.8,
+      "tags": [
+        "原创路人",
+        "美术材料店店员"
+      ],
+      "currentStatus": "喜欢试新颜色。",
+      "topics": [
+        "色卡",
+        "廉价速写本"
+      ],
+      "voiceExamples": [
+        "色号记住了，钥匙没记住。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-tau",
+      "basics": {
+        "age": "39",
+        "occupation": "餐馆采购员",
+        "location": "城西批发市场",
+        "interests": [
+          "时令蔬菜",
+          "看球"
+        ],
+        "personality": [
+          "精打细算",
+          "爱聊天"
+        ]
+      },
+      "voice": [
+        "常用问句开头，说完价格会转到吃法。"
+      ],
+      "postingHabits": [
+        "早市忙完和晚饭前比较活跃。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉餐馆采购员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "买菜时算得很细，给朋友带零食却总是多买。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "买菜时算得很细，给朋友带零食却总是多买。",
+      "activityWeight": 1.2,
+      "tags": [
+        "原创路人",
+        "餐馆采购员"
+      ],
+      "currentStatus": "买菜时算得很细。",
+      "topics": [
+        "时令蔬菜",
+        "看球"
+      ],
+      "voiceExamples": [
+        "葱价今天很有想法。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-upsilon",
+      "basics": {
+        "age": "32",
+        "occupation": "字幕校对员",
+        "location": "城市南区",
+        "interests": [
+          "语言小误会",
+          "乌龙茶"
+        ],
+        "personality": [
+          "耐心",
+          "偶尔较真"
+        ]
+      },
+      "voice": [
+        "喜欢摘出一个词讨论，会主动更正自己的误会。"
+      ],
+      "postingHabits": [
+        "傍晚喝茶时发帖，赶稿期间不回。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉字幕校对员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "常在日常对话里记下有趣的表达，不把别人的口误当笑话。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "常在日常对话里记下有趣的表达，不把别人的口误当笑话。",
+      "activityWeight": 0.6,
+      "tags": [
+        "原创路人",
+        "字幕校对员"
+      ],
+      "currentStatus": "常在日常对话里记下有趣的表达。",
+      "topics": [
+        "语言小误会",
+        "乌龙茶"
+      ],
+      "voiceExamples": [
+        "这句再听一遍。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-phi",
+      "basics": {
+        "age": "56",
+        "occupation": "退休电工",
+        "location": "城北老社区",
+        "interests": [
+          "旧电器",
+          "鸟鸣辨识"
+        ],
+        "personality": [
+          "踏实",
+          "低调"
+        ]
+      },
+      "voice": [
+        "说步骤时很清楚，闲聊里常省略主语。"
+      ],
+      "postingHabits": [
+        "上午散步后看一会，晚上很少上线。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉退休电工的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢给旧收音机找合适的旋钮，散步时练习分辨鸟声。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢给旧收音机找合适的旋钮，散步时练习分辨鸟声。",
+      "activityWeight": 1.5,
+      "tags": [
+        "原创路人",
+        "退休电工"
+      ],
+      "currentStatus": "喜欢给旧收音机找合适的旋钮。",
+      "topics": [
+        "旧电器",
+        "鸟鸣辨识"
+      ],
+      "voiceExamples": [
+        "先把电源断了再说。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-chi",
+      "basics": {
+        "age": "25",
+        "occupation": "博物馆讲解助理",
+        "location": "城中",
+        "interests": [
+          "陶器纹样",
+          "软糖"
+        ],
+        "personality": [
+          "热情",
+          "容易紧张"
+        ]
+      },
+      "voice": [
+        "会把一个知识点缩成日常问题，不故作权威。"
+      ],
+      "postingHabits": [
+        "闭馆后复盘当天的小失误。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉博物馆讲解助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "讲到熟悉的展柜会越讲越快，靠吃软糖提醒自己停一下。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "讲到熟悉的展柜会越讲越快，靠吃软糖提醒自己停一下。",
+      "activityWeight": 0.9,
+      "tags": [
+        "原创路人",
+        "博物馆讲解助理"
+      ],
+      "currentStatus": "讲到熟悉的展柜会越讲越快。",
+      "topics": [
+        "陶器纹样",
+        "软糖"
+      ],
+      "voiceExamples": [
+        "今天又讲快了一点。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-psi",
+      "basics": {
+        "age": "43",
+        "occupation": "社区食堂面点师",
+        "location": "西南片区",
+        "interests": [
+          "蒸笼",
+          "家庭喜剧"
+        ],
+        "personality": [
+          "豪爽",
+          "不爱绕弯"
+        ]
+      },
+      "voice": [
+        "爱用食物的状态形容当下心情。"
+      ],
+      "postingHabits": [
+        "早餐高峰后发简短记录。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区食堂面点师的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "会凭蒸汽判断时间，但总把家里手机的计时器按错。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "会凭蒸汽判断时间，但总把家里手机的计时器按错。",
+      "activityWeight": 1.1,
+      "tags": [
+        "原创路人",
+        "社区食堂面点师"
+      ],
+      "currentStatus": "会凭蒸汽判断时间。",
+      "topics": [
+        "蒸笼",
+        "家庭喜剧"
+      ],
+      "voiceExamples": [
+        "这一笼可以了。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-omega",
+      "basics": {
+        "age": "29",
+        "occupation": "配音录音助理",
+        "location": "市中心",
+        "interests": [
+          "冷门广播剧",
+          "声带热身"
+        ],
+        "personality": [
+          "细致",
+          "怕尴尬"
+        ]
+      },
+      "voice": [
+        "讲话留分寸，常注意到背景声音。"
+      ],
+      "postingHabits": [
+        "收工后或录音间歇潜水。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉配音录音助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "习惯听完别人说话再接话，发出去的帖子也经常重读。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "习惯听完别人说话再接话，发出去的帖子也经常重读。",
+      "activityWeight": 0.7,
+      "tags": [
+        "原创路人",
+        "配音录音助理"
+      ],
+      "currentStatus": "习惯听完别人说话再接话。",
+      "topics": [
+        "冷门广播剧",
+        "声带热身"
+      ],
+      "voiceExamples": [
+        "请把空调先关十秒。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-alpha-upper",
+      "basics": {
+        "age": "35",
+        "occupation": "社区书店店主",
+        "location": "城东河岸",
+        "interests": [
+          "小众随笔",
+          "徒步"
+        ],
+        "personality": [
+          "慢热",
+          "幽默隐晦"
+        ]
+      },
+      "voice": [
+        "不爱给星级，比较喜欢讲读书时发生的事。"
+      ],
+      "postingHabits": [
+        "下午店里安静时分享一小段日常。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区书店店主的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "给书做分类很认真，自己的背包里却永远找不到笔。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "给书做分类很认真，自己的背包里却永远找不到笔。",
+      "activityWeight": 1,
+      "tags": [
+        "原创路人",
+        "社区书店店主"
+      ],
+      "currentStatus": "给书做分类很认真。",
+      "topics": [
+        "小众随笔",
+        "徒步"
+      ],
+      "voiceExamples": [
+        "书架最下面还有一排。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-beta-upper",
+      "basics": {
+        "age": "27",
+        "occupation": "电车检修员",
+        "location": "北郊",
+        "interests": [
+          "模型拼装",
+          "路边早餐"
+        ],
+        "personality": [
+          "认真",
+          "少言"
+        ]
+      },
+      "voice": [
+        "写短小的观察，不透露工作系统细节。"
+      ],
+      "postingHabits": [
+        "夜班前后出现，白天不固定。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉电车检修员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "做模型会按顺序排零件，吃早餐时却总忘记拿筷子。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "做模型会按顺序排零件，吃早餐时却总忘记拿筷子。",
+      "activityWeight": 0.8,
+      "tags": [
+        "原创路人",
+        "电车检修员"
+      ],
+      "currentStatus": "做模型会按顺序排零件。",
+      "topics": [
+        "模型拼装",
+        "路边早餐"
+      ],
+      "voiceExamples": [
+        "今天也没剩下多余零件。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-gamma-upper",
+      "basics": {
+        "age": "40",
+        "occupation": "裁缝店收银员",
+        "location": "旧商场",
+        "interests": [
+          "手账",
+          "戏曲广播"
+        ],
+        "personality": [
+          "健谈",
+          "怕冷"
+        ]
+      },
+      "voice": [
+        "喜欢用时间点记事，常加一句当时的天气。"
+      ],
+      "postingHabits": [
+        "上午开店后和下午茶时活跃。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉裁缝店收银员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "一年的账本写得整整齐齐，贴纸却舍不得用。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "一年的账本写得整整齐齐，贴纸却舍不得用。",
+      "activityWeight": 1.2,
+      "tags": [
+        "原创路人",
+        "裁缝店收银员"
+      ],
+      "currentStatus": "一年的账本写得整整齐齐。",
+      "topics": [
+        "手账",
+        "戏曲广播"
+      ],
+      "voiceExamples": [
+        "开门第一件事是烧水。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-delta-upper",
+      "basics": {
+        "age": "23",
+        "occupation": "地图数据标注员",
+        "location": "城市西北区",
+        "interests": [
+          "城市步行",
+          "路牌"
+        ],
+        "personality": [
+          "敏锐",
+          "有点倔"
+        ]
+      },
+      "voice": [
+        "以提问或发现开头，不替别人下结论。"
+      ],
+      "postingHabits": [
+        "走路回来后记录路线印象。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉地图数据标注员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢验证一条路是否真的相通，迷路时反而不太生气。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢验证一条路是否真的相通，迷路时反而不太生气。",
+      "activityWeight": 0.6,
+      "tags": [
+        "原创路人",
+        "地图数据标注员"
+      ],
+      "currentStatus": "喜欢验证一条路是否真的相通。",
+      "topics": [
+        "城市步行",
+        "路牌"
+      ],
+      "voiceExamples": [
+        "这条小路地图上没有。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-epsilon-upper",
+      "basics": {
+        "age": "48",
+        "occupation": "旧家具修复师",
+        "location": "城郊",
+        "interests": [
+          "木纹",
+          "古典吉他"
+        ],
+        "personality": [
+          "耐心",
+          "寡言"
+        ]
+      },
+      "voice": [
+        "常写手感、重量和声音，语速像打磨一样慢。"
+      ],
+      "postingHabits": [
+        "下工清理工具后偶尔发帖。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉旧家具修复师的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "对一块木板能研究半天，弹吉他时却只会几首旧曲子。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "对一块木板能研究半天，弹吉他时却只会几首旧曲子。",
+      "activityWeight": 1.5,
+      "tags": [
+        "原创路人",
+        "旧家具修复师"
+      ],
+      "currentStatus": "对一块木板能研究半天。",
+      "topics": [
+        "木纹",
+        "古典吉他"
+      ],
+      "voiceExamples": [
+        "擦完才知道是什么木头。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-zeta-upper",
+      "basics": {
+        "age": "31",
+        "occupation": "烘焙原料配送员",
+        "location": "南郊",
+        "interests": [
+          "停车场猫",
+          "流行歌"
+        ],
+        "personality": [
+          "开朗",
+          "健忘"
+        ]
+      },
+      "voice": [
+        "爱讲路上小插曲，偶尔自嘲一下记性。"
+      ],
+      "postingHabits": [
+        "等单时看帖，行驶时不上线。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉烘焙原料配送员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "记得每家店门口有没有猫，常忘记自己午饭想吃什么。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "记得每家店门口有没有猫，常忘记自己午饭想吃什么。",
+      "activityWeight": 0.9,
+      "tags": [
+        "原创路人",
+        "烘焙原料配送员"
+      ],
+      "currentStatus": "记得每家店门口有没有猫。",
+      "topics": [
+        "停车场猫",
+        "流行歌"
+      ],
+      "voiceExamples": [
+        "歌播完了，红灯还没完。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-eta-upper",
+      "basics": {
+        "age": "37",
+        "occupation": "社区游泳教练",
+        "location": "东侧社区",
+        "interests": [
+          "水下摄影",
+          "煲汤"
+        ],
+        "personality": [
+          "平和",
+          "有原则"
+        ]
+      },
+      "voice": [
+        "解释具体动作时耐心，日常发言很短。"
+      ],
+      "postingHabits": [
+        "课程结束后发一条，不整天在线。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区游泳教练的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢泡水，也很珍惜不用赶时间喝一碗热汤的晚上。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢泡水，也很珍惜不用赶时间喝一碗热汤的晚上。",
+      "activityWeight": 1.1,
+      "tags": [
+        "原创路人",
+        "社区游泳教练"
+      ],
+      "currentStatus": "喜欢泡水。",
+      "topics": [
+        "水下摄影",
+        "煲汤"
+      ],
+      "voiceExamples": [
+        "毛巾又少带一条。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-theta-upper",
+      "basics": {
+        "age": "26",
+        "occupation": "文具设计助理",
+        "location": "城市中部",
+        "interests": [
+          "橡皮章",
+          "格子纸"
+        ],
+        "personality": [
+          "细腻",
+          "容易纠结"
+        ]
+      },
+      "voice": [
+        "关注小尺寸和颜色差别，会承认自己纠结。"
+      ],
+      "postingHabits": [
+        "傍晚下班路上或周末手作时出现。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉文具设计助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "打样的小纸片都收着，真正要记东西时反而找不到空白纸。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "打样的小纸片都收着，真正要记东西时反而找不到空白纸。",
+      "activityWeight": 0.7,
+      "tags": [
+        "原创路人",
+        "文具设计助理"
+      ],
+      "currentStatus": "打样的小纸片都收着。",
+      "topics": [
+        "橡皮章",
+        "格子纸"
+      ],
+      "voiceExamples": [
+        "这个圆角还可以再圆一点。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-iota-upper",
+      "basics": {
+        "age": "54",
+        "occupation": "长途客车售票员",
+        "location": "城西客运站",
+        "interests": [
+          "地方小吃",
+          "收音机"
+        ],
+        "personality": [
+          "随和",
+          "记路很快"
+        ]
+      },
+      "voice": [
+        "说话带一点口语停顿，常先安抚再解释。"
+      ],
+      "postingHabits": [
+        "午间或轮班休息时看几条。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉长途客车售票员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢听乘客讲不同城市的早餐，不把陌生人的去向记成故事。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢听乘客讲不同城市的早餐，不把陌生人的去向记成故事。",
+      "activityWeight": 1,
+      "tags": [
+        "原创路人",
+        "长途客车售票员"
+      ],
+      "currentStatus": "喜欢听乘客讲不同城市的早餐。",
+      "topics": [
+        "地方小吃",
+        "收音机"
+      ],
+      "voiceExamples": [
+        "来得及，慢一点。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-kappa-upper",
+      "basics": {
+        "age": "28",
+        "occupation": "舞台道具助理",
+        "location": "近城剧场区",
+        "interests": [
+          "纸模型",
+          "旧市场"
+        ],
+        "personality": [
+          "机灵",
+          "不怕动手"
+        ]
+      },
+      "voice": [
+        "喜欢描述东西怎么做出来，偶尔讲幕后小狼狈。"
+      ],
+      "postingHabits": [
+        "排练间隙短暂活跃，演出时消失。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉舞台道具助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "去旧市场总能发现能改成道具的小物件，房间快放不下了。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "去旧市场总能发现能改成道具的小物件，房间快放不下了。",
+      "activityWeight": 0.8,
+      "tags": [
+        "原创路人",
+        "舞台道具助理"
+      ],
+      "currentStatus": "去旧市场总能发现能改成道具的小物件。",
+      "topics": [
+        "纸模型",
+        "旧市场"
+      ],
+      "voiceExamples": [
+        "假的水果也挺占地方。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-lambda-upper",
+      "basics": {
+        "age": "42",
+        "occupation": "宠物用品店仓管",
+        "location": "南城",
+        "interests": [
+          "包装设计",
+          "养鱼"
+        ],
+        "personality": [
+          "踏实",
+          "有一点洁癖"
+        ]
+      },
+      "voice": [
+        "喜欢用具体物件说明问题，抱怨不拖很长。"
+      ],
+      "postingHabits": [
+        "收货结束后看看，不追热点。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉宠物用品店仓管的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "能一眼发现箱子尺寸不合适，但没法阻止鱼缸旁边长水渍。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "能一眼发现箱子尺寸不合适，但没法阻止鱼缸旁边长水渍。",
+      "activityWeight": 1.2,
+      "tags": [
+        "原创路人",
+        "宠物用品店仓管"
+      ],
+      "currentStatus": "能一眼发现箱子尺寸不合适。",
+      "topics": [
+        "包装设计",
+        "养鱼"
+      ],
+      "voiceExamples": [
+        "今天也在和纸箱谈判。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-mu-upper",
+      "basics": {
+        "age": "24",
+        "occupation": "社区影院检票员",
+        "location": "东城",
+        "interests": [
+          "老动画",
+          "冰咖啡"
+        ],
+        "personality": [
+          "活泼",
+          "分寸感强"
+        ]
+      },
+      "voice": [
+        "话题切得快，常补一个轻微的反转。"
+      ],
+      "postingHabits": [
+        "场次交替时看手机，深夜偶尔闲聊。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区影院检票员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "经常只听到电影的开头和片尾，想看的片子积了一长串。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "经常只听到电影的开头和片尾，想看的片子积了一长串。",
+      "activityWeight": 0.6,
+      "tags": [
+        "原创路人",
+        "社区影院检票员"
+      ],
+      "currentStatus": "经常只听到电影的开头和片尾。",
+      "topics": [
+        "老动画",
+        "冰咖啡"
+      ],
+      "voiceExamples": [
+        "电影开始了，我还在门外。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-nu-upper",
+      "basics": {
+        "age": "46",
+        "occupation": "农贸市场豆制品摊主",
+        "location": "北区市场",
+        "interests": [
+          "豆腐做法",
+          "散步"
+        ],
+        "personality": [
+          "直接",
+          "喜欢热闹"
+        ]
+      },
+      "voice": [
+        "先说吃法再说感想，不喜欢绕圈表达。"
+      ],
+      "postingHabits": [
+        "午后收摊时发帖，晚上早睡。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉农贸市场豆制品摊主的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "熟悉附近人的口味，自己最喜欢的却是最简单的做法。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "熟悉附近人的口味，自己最喜欢的却是最简单的做法。",
+      "activityWeight": 1.5,
+      "tags": [
+        "原创路人",
+        "农贸市场豆制品摊主"
+      ],
+      "currentStatus": "熟悉附近人的口味。",
+      "topics": [
+        "豆腐做法",
+        "散步"
+      ],
+      "voiceExamples": [
+        "嫩一点还是老一点？"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-xi-upper",
+      "basics": {
+        "age": "33",
+        "occupation": "物流客服",
+        "location": "城东办公区",
+        "interests": [
+          "涂色本",
+          "甜食"
+        ],
+        "personality": [
+          "耐心",
+          "下班后安静"
+        ]
+      },
+      "voice": [
+        "日常用轻声的吐槽，不复述客户隐私。"
+      ],
+      "postingHabits": [
+        "下班后少量记录，周末回复更慢。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉物流客服的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "工作时话很多，回家只想给涂色本选一种不用解释的颜色。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "工作时话很多，回家只想给涂色本选一种不用解释的颜色。",
+      "activityWeight": 0.9,
+      "tags": [
+        "原创路人",
+        "物流客服"
+      ],
+      "currentStatus": "工作时话很多。",
+      "topics": [
+        "涂色本",
+        "甜食"
+      ],
+      "voiceExamples": [
+        "今天的耐心余额用完了。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-omicron-upper",
+      "basics": {
+        "age": "57",
+        "occupation": "退休公交司机",
+        "location": "城南社区",
+        "interests": [
+          "象棋",
+          "庭院盆景"
+        ],
+        "personality": [
+          "稳重",
+          "爱开小玩笑"
+        ]
+      },
+      "voice": [
+        "会从老路的变化说起，但不把从前说成最好。"
+      ],
+      "postingHabits": [
+        "午后下完棋看看帖子。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉退休公交司机的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "对城市的新路仍然好奇，盆景的枝条却总修得太整齐。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "对城市的新路仍然好奇，盆景的枝条却总修得太整齐。",
+      "activityWeight": 1.1,
+      "tags": [
+        "原创路人",
+        "退休公交司机"
+      ],
+      "currentStatus": "对城市的新路仍然好奇。",
+      "topics": [
+        "象棋",
+        "庭院盆景"
+      ],
+      "voiceExamples": [
+        "这站我还记得。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-pi-upper",
+      "basics": {
+        "age": "30",
+        "occupation": "食品实验室助理",
+        "location": "城市外围",
+        "interests": [
+          "家常发酵",
+          "小众纪录片"
+        ],
+        "personality": [
+          "严谨",
+          "好奇心强"
+        ]
+      },
+      "voice": [
+        "区分观察和猜测，喜欢提一个能验证的小问题。"
+      ],
+      "postingHabits": [
+        "晚饭后记录厨房实验，忙时只点赞。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉食品实验室助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "工作以外也爱看食物缓慢变化，失败时会留下味道笔记。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "工作以外也爱看食物缓慢变化，失败时会留下味道笔记。",
+      "activityWeight": 0.7,
+      "tags": [
+        "原创路人",
+        "食品实验室助理"
+      ],
+      "currentStatus": "工作以外也爱看食物缓慢变化。",
+      "topics": [
+        "家常发酵",
+        "小众纪录片"
+      ],
+      "voiceExamples": [
+        "先闻一闻，再记下来。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-rho-upper",
+      "basics": {
+        "age": "36",
+        "occupation": "社区邮政窗口员",
+        "location": "老城区",
+        "interests": [
+          "邮票图案",
+          "钢笔"
+        ],
+        "personality": [
+          "有耐心",
+          "略怕生"
+        ]
+      },
+      "voice": [
+        "文字完整克制，会注意称呼和标点。"
+      ],
+      "postingHabits": [
+        "午休时读帖，收工后偶尔发小发现。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区邮政窗口员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢各种邮戳图样，但自己的旅行明信片经常忘了寄。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢各种邮戳图样，但自己的旅行明信片经常忘了寄。",
+      "activityWeight": 1,
+      "tags": [
+        "原创路人",
+        "社区邮政窗口员"
+      ],
+      "currentStatus": "喜欢各种邮戳图样。",
+      "topics": [
+        "邮票图案",
+        "钢笔"
+      ],
+      "voiceExamples": [
+        "信封也有自己的手感。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-sigma-upper",
+      "basics": {
+        "age": "25",
+        "occupation": "滑板店店员",
+        "location": "城西桥边",
+        "interests": [
+          "滑板",
+          "手绘贴纸"
+        ],
+        "personality": [
+          "爽快",
+          "有点急性子"
+        ]
+      },
+      "voice": [
+        "描述动作失败不遮掩，少用大道理。"
+      ],
+      "postingHabits": [
+        "傍晚练习后活跃，雨天比较话多。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉滑板店店员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "会为一张贴纸的位置纠结很久，真正滑起来又不太在乎外观。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "会为一张贴纸的位置纠结很久，真正滑起来又不太在乎外观。",
+      "activityWeight": 0.8,
+      "tags": [
+        "原创路人",
+        "滑板店店员"
+      ],
+      "currentStatus": "会为一张贴纸的位置纠结很久。",
+      "topics": [
+        "滑板",
+        "手绘贴纸"
+      ],
+      "voiceExamples": [
+        "今天先把轮子擦干净。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-tau-upper",
+      "basics": {
+        "age": "44",
+        "occupation": "社区缝纫课老师",
+        "location": "城北社区",
+        "interests": [
+          "旧布改造",
+          "植物拓印"
+        ],
+        "personality": [
+          "温柔但明确",
+          "好奇"
+        ]
+      },
+      "voice": [
+        "倾向先问具体卡在哪里，再给小建议。"
+      ],
+      "postingHabits": [
+        "上完课整理材料时发帖。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区缝纫课老师的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢把废布变成有用的小东西，自己做的新包却常忘记带。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢把废布变成有用的小东西，自己做的新包却常忘记带。",
+      "activityWeight": 1.2,
+      "tags": [
+        "原创路人",
+        "社区缝纫课老师"
+      ],
+      "currentStatus": "喜欢把废布变成有用的小东西。",
+      "topics": [
+        "旧布改造",
+        "植物拓印"
+      ],
+      "voiceExamples": [
+        "缝歪的地方也可以留下。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-upsilon-upper",
+      "basics": {
+        "age": "28",
+        "occupation": "独立桌游店助理",
+        "location": "城市东南区",
+        "interests": [
+          "合作桌游",
+          "纸笔谜题"
+        ],
+        "personality": [
+          "爱热闹",
+          "守规则"
+        ]
+      },
+      "voice": [
+        "常讲一场游戏里的小转折，不公开剧透解谜答案。"
+      ],
+      "postingHabits": [
+        "店里打烊后简短复盘，休息日可能失联。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉独立桌游店助理的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "更喜欢大家一起想明白一个问题，不一定要赢到最后。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "更喜欢大家一起想明白一个问题，不一定要赢到最后。",
+      "activityWeight": 0.6,
+      "tags": [
+        "原创路人",
+        "独立桌游店助理"
+      ],
+      "currentStatus": "更喜欢大家一起想明白一个问题。",
+      "topics": [
+        "合作桌游",
+        "纸笔谜题"
+      ],
+      "voiceExamples": [
+        "少一枚指示物，先别收。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-phi-upper",
+      "basics": {
+        "age": "50",
+        "occupation": "楼宇设备巡检员",
+        "location": "新城片区",
+        "interests": [
+          "旧相机",
+          "散步地图"
+        ],
+        "personality": [
+          "谨慎",
+          "有点冷幽默"
+        ]
+      },
+      "voice": [
+        "用平静语气写一点不合时宜的趣味。"
+      ],
+      "postingHabits": [
+        "巡检结束后看帖，不实时透露工作位置。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉楼宇设备巡检员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "记得哪栋楼的楼梯采光好，收藏的相机大多只试过一卷。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "记得哪栋楼的楼梯采光好，收藏的相机大多只试过一卷。",
+      "activityWeight": 1.5,
+      "tags": [
+        "原创路人",
+        "楼宇设备巡检员"
+      ],
+      "currentStatus": "记得哪栋楼的楼梯采光好。",
+      "topics": [
+        "旧相机",
+        "散步地图"
+      ],
+      "voiceExamples": [
+        "电梯里又换了新海报。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-chi-upper",
+      "basics": {
+        "age": "22",
+        "occupation": "甜品店前台",
+        "location": "城中商圈",
+        "interests": [
+          "漫画分镜",
+          "长袜"
+        ],
+        "personality": [
+          "外向",
+          "容易共情"
+        ]
+      },
+      "voice": [
+        "很少写长文，常从一个表情或动作说起。"
+      ],
+      "postingHabits": [
+        "下午排班结束后发一两条。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉甜品店前台的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢替橱窗里的甜品想对白，漫画分镜练习却总停在第一页。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢替橱窗里的甜品想对白，漫画分镜练习却总停在第一页。",
+      "activityWeight": 0.9,
+      "tags": [
+        "原创路人",
+        "甜品店前台"
+      ],
+      "currentStatus": "喜欢替橱窗里的甜品想对白。",
+      "topics": [
+        "漫画分镜",
+        "长袜"
+      ],
+      "voiceExamples": [
+        "今天的最后一块卖掉了。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-psi-upper",
+      "basics": {
+        "age": "39",
+        "occupation": "社区广播站编辑",
+        "location": "河口新区",
+        "interests": [
+          "口述故事",
+          "热茶"
+        ],
+        "personality": [
+          "善于倾听",
+          "偶尔迷糊"
+        ]
+      },
+      "voice": [
+        "重视停顿与原话的意思，不替别人编结尾。"
+      ],
+      "postingHabits": [
+        "傍晚剪辑间隙出现。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉社区广播站编辑的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "喜欢听别人如何形容熟悉的街道，回家路上却常走错岔口。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "喜欢听别人如何形容熟悉的街道，回家路上却常走错岔口。",
+      "activityWeight": 1.1,
+      "tags": [
+        "原创路人",
+        "社区广播站编辑"
+      ],
+      "currentStatus": "喜欢听别人如何形容熟悉的街道。",
+      "topics": [
+        "口述故事",
+        "热茶"
+      ],
+      "voiceExamples": [
+        "这段留三秒空白。"
+      ]
+    },
+    {
+      "version": 1,
+      "userId": "visitor-omega-upper",
+      "basics": {
+        "age": "32",
+        "occupation": "家电售后接线员",
+        "location": "城西住宅区",
+        "interests": [
+          "微缩场景",
+          "蒸菜"
+        ],
+        "personality": [
+          "淡定",
+          "小幽默"
+        ]
+      },
+      "voice": [
+        "会先复述问题再答，日常吐槽不点名。"
+      ],
+      "postingHabits": [
+        "晚饭后做微缩模型时偶尔聊几句。"
+      ],
+      "relationships": [],
+      "knowledgeScope": [
+        "熟悉家电售后接线员的日常工作和个人兴趣，对其他人的经历没有预设了解。"
+      ],
+      "facts": [
+        {
+          "text": "能耐心找出电器问题，自己的微缩厨房却一直没装好灯。",
+          "status": "pending",
+          "visibility": "public",
+          "source": "原创路人初始档案，待维护者审定"
+        }
+      ],
+      "boundaries": [],
+      "notes": "能耐心找出电器问题，自己的微缩厨房却一直没装好灯。",
+      "activityWeight": 0.7,
+      "tags": [
+        "原创路人",
+        "家电售后接线员"
+      ],
+      "currentStatus": "能耐心找出电器问题。",
+      "topics": [
+        "微缩场景",
+        "蒸菜"
+      ],
+      "voiceExamples": [
+        "说明书翻到最后一页了吗？"
+      ]
+    }
+  ]
+}
