@@ -32,12 +32,8 @@ function boardbar(title, meta = '', action = '') {
   return `<div class="boardbar"><h2>${title.startsWith('/') ? esc(title) : `<span aria-hidden="true">/</span> ${esc(title)}`}</h2>${meta ? `<span class="board-meta">${esc(meta)}</span>` : ''}${action}</div>`;
 }
 function backLink() { return `<a class="back-link" href="#/">${icon('back')} /world</a>`; }
-function followButton(user) {
-  const following = state.follows.includes(user.id);
-  return `<button class="follow-button" data-action="follows" data-id="${esc(user.id)}" aria-pressed="${following}" aria-label="${following ? '取消关注' : '关注'}${esc(user.name)}">${following ? '已关注 −' : '关注 +'}</button>`;
-}
 function personRow(user) {
-  return `<div class="person-row"><a class="person-identity" href="${userURL(user.id)}"><strong>${esc(user.name)}</strong><span class="author-id">ID:${boardID(user.id)}</span></a>${followButton(user)}</div>`;
+  return `<div class="person-row"><a class="person-identity" href="${userURL(user.id)}"><strong>${esc(user.name)}</strong><span class="author-id">ID:${boardID(user.id)}</span></a></div>`;
 }
 function empty(title, copy, href = '#/', label = '返回 /world') {
   return `<div class="empty"><span class="empty-symbol" aria-hidden="true">( ´_ゝ｀)</span><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="text-link" href="${href}">[ ${esc(label)} ]</a></div>`;
@@ -61,9 +57,9 @@ function postMarkup(post, { threaded = false, target, preview = false } = {}) {
   </article>`;
 }
 function renderHome(following) {
-  const selected = selectPosts(feed.posts, state, { view: following ? 'following' : 'all' });
-  return header() + boardbar(following ? '关注' : '/world', `${selected.length} 串`, following ? '<a href="#/people">管理关注</a>' : '') +
-    (selected.length ? selected.map(post => postMarkup(post, { preview: true })).join('') + '<p class="feed-end">— 暂时就这些 —</p>' : empty('这里还没有帖子', '关注的人发帖后，会出现在这里。', '#/people', '管理关注'));
+  const selected = selectPosts(feed.posts, state, { view: following ? 'following' : 'all', users: feed.users });
+  return header() + boardbar(following ? '/following' : '/world', `${selected.length} 串`, following ? '<a href="#/people">人物</a>' : '') +
+    (selected.length ? selected.map(post => postMarkup(post, { preview: true })).join('') + '<p class="feed-end">— 暂时就这些 —</p>' : empty('这里还没有帖子', '人物的新动态会出现在这里。', '#/people', '查看人物'));
 }
 function renderProfile(id) {
   const user = users.get(id);
@@ -78,7 +74,8 @@ function renderThread(id) {
     (thread.length ? `<div class="thread">${postMarkup(thread[0], { target: id })}${thread.length > 1 ? '<div class="discussion-label">回应 / REPLIES</div>' : ''}${thread.slice(1).map(post => postMarkup(post, { threaded: true, target: id })).join('')}</div><p class="feed-end">${thread.length === 1 ? '还没有人接话。' : '— 串末 —'}</p>` : empty('没有找到这条帖子', '这个链接可能不完整。'));
 }
 function renderPeople() {
-  return header() + boardbar('管理关注', `${state.follows.length} 个已关注`, '<a href="#/following">返回关注</a>') + `<div class="directory">${feed.users.map(user => `<section class="directory-person">${personRow(user)}<p>${esc(user.bio)}</p></section>`).join('')}</div>`;
+  const characters = feed.users.filter(user => user.kind === 'character');
+  return header() + boardbar('人物', `${characters.length} 人`, '<a href="#/following">/following</a>') + `<div class="directory">${characters.map(user => `<section class="directory-person">${personRow(user)}<p>${esc(user.bio)}</p></section>`).join('')}</div>`;
 }
 function renderSearch(query) {
   const needle = query.trim().toLocaleLowerCase();
@@ -88,7 +85,7 @@ function renderSearch(query) {
     (!needle ? empty('想找什么？', '输入一个名字或帖子里的关键词。') : `<p class="search-count">${foundUsers.length} 个用户 · ${foundPosts.length} 条发言</p>${foundUsers.length ? `<div class="search-people">${foundUsers.map(personRow).join('')}</div>` : ''}${foundPosts.map(post => postMarkup(post)).join('')}${!foundUsers.length && !foundPosts.length ? empty('没有找到相关内容', '换个关键词试试。') : ''}`);
 }
 function renderAbout() {
-  return header() + boardbar('关于') + `<div class="about-content"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2><p class="company-intro">路西法零，一家社交网站企业。<br>自行表达，自行选择想听见的声音。</p><div class="about-rule" aria-hidden="true">0 ─────────────────── Ω</div><section><h3>/world 与关注</h3><p>/world 收录所有公开帖子。熟悉的人、擦肩而过的人，都可以出现在同一页。关注页只收录你选择的账号；首次使用时，已为你关注《真心猎手》中的人物。</p></section><section><h3>站点地址</h3><p><code>y29.fivsevn.com/lucifer0</code></p></section><section><h3>关于这个版本</h3><p>这是 Y.29 的小说衍生页面。现有帖子、回复、简介和配图均为原创样例，不对应小说时间线，不确认人物关系或未公开剧情。账号拥有各自稳定的身份。</p></section><section><h3>本机记录</h3><p>关注、点赞和收藏只保存在当前浏览器。无需登录，目前可浏览和收藏，暂不开放访客发帖。自动运营尚未开启。</p><div class="about-links"><a href="#/bookmarks">[ 我的收藏 ]</a><a href="#/search">[ 搜索帖子 ]</a></div></section><footer class="about-footer"><a href="../">↖ Y.29</a><span>LUCIFER ZERO</span></footer></div>`;
+  return header() + boardbar('关于') + `<div class="about-content"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2><p class="company-intro">路西法零，一家社交网站企业。<br>自行表达，自行选择想听见的声音。</p><div class="about-rule" aria-hidden="true">0 ─────────────────── Ω</div><section><h3>/world 与 /following</h3><p>/world 收录所有公开帖子。熟悉的人、擦肩而过的人，都可以出现在同一页。/following 固定收录《真心猎手》中所有人物的动态；陌生人的帖子可在 /world 浏览。</p></section><section><h3>站点地址</h3><p><code>y29.fivsevn.com/lucifer0</code></p></section><section><h3>关于这个版本</h3><p>这是 Y.29 的小说衍生页面。现有帖子、回复、简介和配图均为原创样例，不对应小说时间线，不确认人物关系或未公开剧情。账号拥有各自稳定的身份。</p></section><section><h3>本机记录</h3><p>点赞和收藏只保存在当前浏览器。无需登录，目前可浏览和收藏，暂不开放访客发帖。自动运营尚未开启。</p><div class="about-links"><a href="#/bookmarks">[ 我的收藏 ]</a><a href="#/search">[ 搜索帖子 ]</a></div></section><footer class="about-footer"><a href="../">↖ Y.29</a><span>LUCIFER ZERO</span></footer></div>`;
 }
 function render() {
   const current = route();
@@ -118,6 +115,7 @@ document.addEventListener('click', async event => {
   const button = event.target.closest('button[data-action]');
   if (!button || !feed) return;
   const { action, id } = button.dataset;
+  if (!['likes', 'bookmarks', 'share'].includes(action)) return;
   if (action === 'share') {
     const url = new URL(location.href); url.hash = postURL(id).slice(1);
     try { await navigator.clipboard.writeText(url.href); notify('链接已复制。'); }
@@ -130,7 +128,6 @@ document.addEventListener('click', async event => {
   window.scrollTo(0, scroll);
   if (!saved) notify('浏览器未允许保存，这次操作仅在当前页面有效。');
   else if (action === 'bookmarks') notify(active ? '已收藏。' : '已取消收藏。');
-  else if (action === 'follows') notify(active ? '已关注。' : '已取消关注。');
 });
 function selectReply() {
   const current = route();
@@ -147,7 +144,7 @@ async function load() {
     feed = await response.json();
     if (feed.version !== 1 || !Array.isArray(feed.users) || !Array.isArray(feed.posts)) throw new Error('Invalid feed');
     users = new Map(feed.users.map(user => [user.id, user])); posts = new Map(feed.posts.map(post => [post.id, post]));
-    state ??= readState(storage, feed.users.filter(user => user.kind === 'character' && user.enabled).map(user => user.id));
+    state ??= readState(storage);
     render(); selectReply();
   } catch {
     feed = null;

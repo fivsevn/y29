@@ -22,7 +22,7 @@ try {
     await page.locator('.boardbar h2').filter({ hasText: title }).waitFor();
   };
   await visit('', '/world');
-  check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '关注', '0关于']), 'exactly three bottom destinations');
+  check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '/following', '0关于']), 'exactly three bottom destinations');
   check(await page.locator('.tabs,.welcome-note,.edition-pill').count() === 0, 'redundant tabs and welcome card are removed');
   check((await page.locator('.topbar').innerText()).trim() === '/lucifer0', 'compact header contains only the app path');
   check(await page.locator('.topbar').evaluate(element => element.getBoundingClientRect().height <= 56), 'compact header is at most 56px');
@@ -51,17 +51,29 @@ try {
   await page.locator('button[data-action="bookmarks"]').click();
   await page.getByRole('heading', { name: '还没有收藏' }).waitFor(); checks++;
 
-  await visit('#/following', '关注');
-  check(await page.locator('article').count() === 6, 'fresh defaults include character roots only');
-  check(await page.locator('#post-sample-nightbus').count() === 0, 'visitor is not followed by default');
+  await visit('#/following', '/following');
+  check(await page.locator('article').count() === 6, 'character channel includes all character roots');
+  check(await page.locator('#post-sample-nightbus').count() === 0, 'visitor posts stay outside character channel');
+  await page.screenshot({ path: join(output, 'phone-following.png'), fullPage: false });
   await visit('#/user/lixing', '用户');
-  await page.locator('button[data-action="follows"]').click();
-  await visit('#/following', '关注');
-  check(await page.locator('article').count() === 5, 'unfollow removes account from following');
-  await visit('#/user/lixing', '用户');
-  await page.locator('button[data-action="follows"]').click();
-  await visit('#/following', '关注');
-  check(await page.locator('#post-sample-umbrella').count() === 1, 'follow restores the correct author');
+  check(await page.locator('button[data-action="follows"]').count() === 0, 'character channel does not expose optional follow controls');
+
+  await visit('#/user/nightbus3', '用户');
+  check(await page.locator('button[data-action="follows"]').count() === 0, 'visitor profiles cannot enter following');
+  check(await page.locator('#post-sample-nightbus').count() === 1, 'visitor profiles remain readable');
+  for (const follows of [[], ['alan'], ['passerby17', 'nightbus3']]) {
+    await page.evaluate(follows => {
+      const state = JSON.parse(localStorage.getItem('y29-social-v1'));
+      state.follows = follows;
+      localStorage.setItem('y29-social-v1', JSON.stringify(state));
+    }, follows);
+    await visit('#/following', '/following');
+    await page.reload(); await page.locator('.boardbar h2').filter({ hasText: '/following' }).waitFor();
+    check(await page.locator('article').count() === 6, `legacy follows ${JSON.stringify(follows)} cannot hide characters`);
+    check(await page.locator('#post-sample-nightbus,#post-sample-alarm').count() === 0, `legacy follows ${JSON.stringify(follows)} cannot add visitors`);
+  }
+  await visit('', '/world');
+  check(await page.locator('#post-sample-nightbus').count() === 1, 'world still contains visitor posts');
 
   await visit('#/post/sample-drawing', '讨论串');
   check(await page.locator('article').count() === 3, 'thread includes nested replies');
@@ -75,8 +87,11 @@ try {
 
   await visit('#/user/chenanjing', '用户');
   check(await page.locator('article').count() === 2, 'profile keeps posts and replies');
-  await visit('#/people', '管理关注');
-  check(await page.locator('.directory-person').count() === 10, 'characters and visitors can be managed');
+  await visit('#/people', '人物');
+  check(await page.locator('.directory-person').count() === 8, 'character directory lists all novel characters');
+  check(await page.locator('.directory-person a[href="#/user/nightbus3"],.directory-person a[href="#/user/passerby17"]').count() === 0, 'visitor accounts are absent from character directory');
+  check(await page.locator('button[data-action="follows"]').count() === 0, 'directory has no per-reader follow controls');
+  await page.screenshot({ path: join(output, 'phone-following-people.png'), fullPage: true });
   await visit('#/search', '搜索');
   await page.getByRole('searchbox').fill('橘子');
   await page.getByRole('button', { name: '搜索', exact: true }).click();

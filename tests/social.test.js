@@ -102,10 +102,10 @@ test('threads include replies to replies with the actual parent preserved', () =
   assert.equal(rootOf([{ id: 'a', replyTo: 'b' }, { id: 'b', replyTo: 'a' }], 'a'), null);
 });
 
-test('local feed filters and reply bookmarks do not mix into the public main timeline', () => {
+test('character channel and reply bookmarks do not mix into the public main timeline', () => {
   const state = { follows: ['alan'], bookmarks: ['sample-drawing-answer'], likes: [] };
   assert.equal(selectPosts(source.feed.posts, state).length, 8);
-  assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'following' }).map(post => post.id), ['sample-soup']);
+  assert.equal(selectPosts(source.feed.posts, state, { view: 'following', users: source.feed.users }).length, 6);
   assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'bookmarks' }).map(post => post.id), ['sample-drawing-answer']);
   assert.equal(selectPosts(source.feed.posts, state, { user: 'chenanjing' }).length, 2);
 });
@@ -210,15 +210,27 @@ test('public generated data and tracked content expose no private profile keys',
 });
 
 
-test('first visit follows characters, and existing explicit choices survive the redesign', () => {
+test('legacy local state remains readable while the character channel includes all novel characters', () => {
   const defaults = source.feed.users.filter(user => user.kind === 'character').map(user => user.id);
   assert.equal(defaults.length, 8);
   const state = readState(undefined, defaults);
-  const following = selectPosts(source.feed.posts, state, { view: 'following' });
+  const following = selectPosts(source.feed.posts, state, { view: 'following', users: source.feed.users });
   assert.equal(following.length, 6);
   assert.ok(following.every(post => source.feed.users.find(user => user.id === post.author).kind === 'character'));
   assert.deepEqual(readState({ getItem: () => '{"follows":[]}' }, defaults).follows, []);
   assert.deepEqual(readState({ getItem: () => '{"follows":["alan"]}' }, defaults).follows, ['alan']);
+});
+
+test('following always includes all character roots despite empty, subset or visitor-only legacy follows', () => {
+  for (const follows of [[], ['alan'], ['passerby17', 'nightbus3']]) {
+    const state = readState({ getItem: () => JSON.stringify({ follows }) });
+    const selected = selectPosts(source.feed.posts, state, { view: 'following', users: source.feed.users });
+    assert.equal(selected.length, 6);
+    assert.ok(selected.every(post => source.feed.users.find(user => user.id === post.author).kind === 'character'));
+    assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'following' }), []);
+    assert.equal(selectPosts(source.feed.posts, state).length, 8);
+    assert.ok(selectPosts(source.feed.posts, state, { user: 'nightbus3' }).length > 0);
+  }
 });
 
 test('forum IDs remain stable, including when the nickname changes', () => {
