@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-11-07T20:16:13.296Z",
+  "coveredBatchIds": [
+    "sample-20261107-day",
+    "sample-20261107-evening",
+    "sample-20261107-visitors"
+  ],
+  "coveredPostIds": [
+    "sample-alarm",
+    "sample-breakfast",
+    "sample-breakfast-answer",
+    "sample-breakfast-reply",
+    "sample-card",
+    "sample-drawing",
+    "sample-drawing-answer",
+    "sample-drawing-reply",
+    "sample-music",
+    "sample-music-reply",
+    "sample-nightbus",
+    "sample-soup",
+    "sample-soup-answer",
+    "sample-soup-reply",
+    "sample-umbrella"
+  ]
+}

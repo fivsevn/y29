@@ -76,7 +76,7 @@ export function renderUserDocument(user, suppliedProfile = emptyProfile(user.id)
     return [label, BOOLS.has(key) ? ((value ?? key !== 'inFollowing') ? '是' : '否') : ENUMS[key] ? ENUMS[key][value] : value ?? ''];
   });
   const sections = [
-    '# 用户档案\n\n[返回用户总目录](../用户总目录.md) · [填写说明](../README.md)\n\n这里只保存可以公开的资料；完整小说设定、秘密和未公开剧情放在私有资料源。',
+    '# 用户档案\n\n[返回用户总目录](../用户总目录.md) · [填写说明](../README.md)',
     '## 账号与开关\n\n' + table(['属性', '内容'], accountRows),
     '## 基本资料\n\n' + table(['属性', '内容'], BASIC.filter(([, key]) => own(profile.basics || {}, key)).map(([label, key]) => [label, profile.basics[key]]))
   ];
@@ -196,7 +196,7 @@ export async function buildUserDirectory(root, { branch = 'main' } = {}) {
     const nickname = cell(user.name).replace(/\[/g, '&#91;').replace(/\]/g, '&#93;');
     lines.push(`| [${nickname}](./${user.id}/) | ${cell(user.sourceWork) || '—'} | ${user.enabled ? '是' : '否'} | ${ENUMS.aiScope[user.aiScope]} | ${user.inFollowing ? '是' : '否'} | ${user.allowPosts ? '是' : '否'} | ${user.allowReplies ? '是' : '否'} | [查看档案](${path}) · [编辑档案](${edit}) |`);
   }
-  lines.push('', '账号资料与运营规则分开维护；作品来源不会自动决定 /following 开关。', '同一用户的更多公开设定可以放在其文件夹的其他 Markdown 文档中，AI 读取档案时会一起读取。', '这里只保存适合公开的资料，完整内部设定与未公开剧情不要写进公开仓库。', '');
+  lines.push('', '账号资料与运营规则分开维护；作品来源不会自动决定 /following 开关。', '同一用户的更多设定可以放在其文件夹的其他 Markdown 文档中，AI 读取档案时会一起读取。', '');
   const path = join(root, 'users/用户总目录.md');
   const text = lines.join('\n');
   let previous;

@@ -1,8 +1,8 @@
-import { realpath, readFile, writeFile, mkdir } from 'node:fs/promises';
+import { realpath, readFile, mkdir } from 'node:fs/promises';
 import { resolve, relative, isAbsolute, dirname, join } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes } from 'node:crypto';
-import { socialRoot, loadContent } from './content.js';
+import { socialRoot } from './content.js';
 import { readUserDocuments } from './user-documents.js';
 import { validatePrivateProfile, emptyProfile } from './profile-schema.js';
 export { validatePrivateProfile, emptyProfile } from './profile-schema.js';
@@ -72,26 +72,4 @@ export function selectCandidates({ users, profiles, posts = [], count = 5, seed 
     }
   }
   return { seed, requestedCount: count, eligibleCount: eligible.length, users: picked.map(user => ({ ...user, profile: profiles[user.id], allowedActions: [user.allowPosts !== false ? 'post' : null, user.allowReplies !== false ? 'reply' : null].filter(Boolean) })), recentAuthorIds: [...recent] };
-}
-
-export async function prepareContext({ privateDirectory = defaultPrivateDirectory(), outputPath, count = 5, seed, root = socialRoot }) {
-  if (!outputPath) throw new Error('Specify --out /an/external/directory/context.json');
-  const destination = resolve(outputPath);
-  await outsideRepository(dirname(destination), root);
-  const { registry, policy, batches, feed } = await loadContent(root);
-  const { profiles, overrides, profileSources, supplementalDocuments } = await readProfiles({ users: registry.users, root, privateDirectory });
-  const selection = selectCandidates({ users: registry.users, profiles, posts: feed.posts, count, seed });
-  for (const candidate of selection.users) {
-    candidate.supplementalDocuments = supplementalDocuments[candidate.id] || [];
-    if (overrides[candidate.id]) candidate.privateProfile = overrides[candidate.id];
-  }
-  const snapshot = {
-    version: 1, preparedAt: new Date().toISOString(), policy, users: registry.users,
-    processedBatchIds: batches.map(batch => batch.id), posts: feed.posts,
-    profiles, supplementalDocuments, privateProfiles: overrides, profileSources, selection,
-    missingPrivateProfiles: registry.users.filter(user => !overrides[user.id]).map(user => user.id),
-    warning: 'Private working context. Never commit or publish. Canon status does not grant public visibility. Read lucifer0/docs/ai-updates.md before use. Selection is a proposal only; no content has been published.'
-  };
-  await writeFile(destination, JSON.stringify(snapshot, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
-  return { path: destination, privateProfileCount: Object.keys(overrides).length, candidateIds: selection.users.map(user => user.id) };
 }

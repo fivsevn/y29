@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "automaticPosting": false,
+  "automaticPosting": true,
   "timezone": "Asia/Shanghai",
-  "maxBatchPosts": 7
+  "maxBatchPosts": 10
 }

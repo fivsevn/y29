@@ -8,7 +8,7 @@
       "bio": "钓鱼，写字，等饭熟。",
       "avatar": "assets/avatars/alan.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
@@ -20,7 +20,7 @@
       "bio": "耳机里的另一面。",
       "avatar": "assets/avatars/anmianyao.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
@@ -32,7 +32,7 @@
       "bio": "今天也有自己的安排。",
       "avatar": "assets/avatars/baiyanyan.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
@@ -44,7 +44,7 @@
       "bio": "画还没画完。",
       "avatar": "assets/avatars/chenanjing.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
@@ -56,7 +56,7 @@
       "bio": "先记下来。",
       "avatar": "assets/avatars/guyu.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
@@ -68,7 +68,7 @@
       "bio": "饭要热的，歌要响的。",
       "avatar": "assets/avatars/lidianlong.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
@@ -80,7 +80,7 @@
       "bio": "偶尔看一眼。",
       "avatar": "assets/avatars/lixing.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
@@ -92,7 +92,7 @@
       "bio": "末班车上的临时乘客。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -104,7 +104,7 @@
       "bio": "又按掉了一次闹钟。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -116,7 +116,7 @@
       "bio": "书架最下面还有一排。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -128,7 +128,7 @@
       "bio": "今天也没剩下多余零件。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -140,7 +140,7 @@
       "bio": "今天又讲快了一点。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -152,7 +152,7 @@
       "bio": "今天的最后一块卖掉了。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -164,7 +164,7 @@
       "bio": "今天的面团也有自己的想法。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -176,7 +176,7 @@
       "bio": "这条小路地图上没有。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -188,7 +188,7 @@
       "bio": "把书放回它愿意待的位置。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -200,7 +200,7 @@
       "bio": "擦完才知道是什么木头。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -212,7 +212,7 @@
       "bio": "封套比歌先吸引我。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -224,7 +224,7 @@
       "bio": "毛巾又少带一条。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -236,7 +236,7 @@
       "bio": "这颗螺丝还有用。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -248,7 +248,7 @@
       "bio": "开门第一件事是烧水。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -260,7 +260,7 @@
       "bio": "拉花像什么由客人决定。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -272,7 +272,7 @@
       "bio": "来得及，慢一点。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -284,7 +284,7 @@
       "bio": "裤脚量两遍。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -296,7 +296,7 @@
       "bio": "假的水果也挺占地方。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -308,7 +308,7 @@
       "bio": "这个按钮昨天还在。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -320,7 +320,7 @@
       "bio": "今天也在和纸箱谈判。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -332,7 +332,7 @@
       "bio": "今天这盆不是薄荷。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -344,7 +344,7 @@
       "bio": "电影开始了，我还在门外。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -356,7 +356,7 @@
       "bio": "路过的招牌比我会说话。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -368,7 +368,7 @@
       "bio": "嫩一点还是老一点？",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -380,7 +380,7 @@
       "bio": "请把空调先关十秒。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -392,7 +392,7 @@
       "bio": "说明书翻到最后一页了吗？",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -404,7 +404,7 @@
       "bio": "冰箱又在独奏。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -416,7 +416,7 @@
       "bio": "这站我还记得。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -428,7 +428,7 @@
       "bio": "先把电源断了再说。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -440,7 +440,7 @@
       "bio": "电梯里又换了新海报。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -452,7 +452,7 @@
       "bio": "颜色要等干了再看。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -464,7 +464,7 @@
       "bio": "先闻一闻，再记下来。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -476,7 +476,7 @@
       "bio": "这一笼可以了。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -488,7 +488,7 @@
       "bio": "这段留三秒空白。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -500,7 +500,7 @@
       "bio": "雨后再去看看。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -512,7 +512,7 @@
       "bio": "信封也有自己的手感。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -524,7 +524,7 @@
       "bio": "色号记住了，钥匙没记住。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -536,7 +536,7 @@
       "bio": "今天先把轮子擦干净。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -548,7 +548,7 @@
       "bio": "葱价今天很有想法。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -560,7 +560,7 @@
       "bio": "缝歪的地方也可以留下。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -572,7 +572,7 @@
       "bio": "水换了，灯也关了。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -584,7 +584,7 @@
       "bio": "这个圆角还可以再圆一点。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -596,7 +596,7 @@
       "bio": "这句再听一遍。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -608,7 +608,7 @@
       "bio": "少一枚指示物，先别收。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -620,7 +620,7 @@
       "bio": "准点是一种愿望。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -632,7 +632,7 @@
       "bio": "今天的耐心余额用完了。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -644,7 +644,7 @@
       "bio": "箱子码好，脑子放空。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -656,7 +656,7 @@
       "bio": "歌播完了，红灯还没完。",
       "avatar": "assets/avatars/visitor.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
@@ -668,7 +668,7 @@
       "bio": "吃点好的，也做点小东西。",
       "avatar": "assets/avatars/zhaoyangxue.svg",
       "enabled": true,
-      "profileStatus": "sample",
+      "profileStatus": "approved",
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true

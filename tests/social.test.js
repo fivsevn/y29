@@ -4,7 +4,7 @@ import { mkdtemp, readFile, writeFile, rm, mkdir, readdir, symlink } from 'node:
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../lucifer0/tools/content.js';
-import { emptyProfile, prepareContext, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { emptyProfile, readProfiles, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
 import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { writeThreadBatch } from '../lucifer0/tools/thread-packages.js';
 import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
@@ -209,21 +209,17 @@ test('concurrent imports are serialized without overwriting history', async t =>
 
 const privateProfile = () => ({ version: 1, userId: 'alan', voice: ['test voice'], postingHabits: [], relationships: [], knowledgeScope: [], boundaries: [], facts: [{ text: 'test fact', status: 'pending', visibility: 'private', source: 'synthetic test fixture' }] });
 
-test('private context is external-only; pending and private are separate from canon', async t => {
+test('private profile reads stay external; pending and private are separate from canon', async t => {
   const { directory, root } = await repositoryCopy(t); const profile = privateProfile();
   await writeFile(join(directory, 'alan.json'), JSON.stringify(profile));
-  const output = join(directory, 'context.json');
-  const result = await prepareContext({ root, privateDirectory: directory, outputPath: output });
-  assert.equal(result.privateProfileCount, 1);
-  const snapshot = JSON.parse(await readFile(output, 'utf8'));
-  assert.equal(snapshot.privateProfiles.alan.facts[0].status, 'pending');
-  assert.equal(snapshot.privateProfiles.alan.facts[0].visibility, 'private');
-  assert.equal(snapshot.missingPrivateProfiles.length, source.registry.users.length - 1);
-  await assert.rejects(prepareContext({ root, outputPath: join(root, 'leak.json') }), /outside/);
-  await assert.rejects(prepareContext({ root, privateDirectory: root, outputPath: join(directory, 'other.json') }), /outside/);
-  await assert.rejects(prepareContext({ root, privateDirectory: directory, outputPath: output }), /EEXIST/);
+  const snapshot = await readProfiles({ root, users: source.registry.users, privateDirectory: directory });
+  assert.equal(Object.keys(snapshot.overrides).length, 1);
+  assert.equal(snapshot.overrides.alan.facts[0].status, 'pending');
+  assert.equal(snapshot.overrides.alan.facts[0].visibility, 'private');
+  assert.equal(Object.keys(snapshot.profiles).length, source.registry.users.length);
+  await assert.rejects(readProfiles({ root, users: source.registry.users, privateDirectory: root }), /outside/);
   const symlinkPath = join(directory, 'linked-repository'); await symlink(root, symlinkPath);
-  await assert.rejects(prepareContext({ root, outputPath: join(symlinkPath, 'leak.json') }), /outside/);
+  await assert.rejects(readProfiles({ root, users: source.registry.users, privateDirectory: symlinkPath }), /outside/);
   profile.facts[0].status = 'confirmed-by-ai';
   assert.throws(() => validatePrivateProfile(profile, 'alan'), /canon status/);
 });
