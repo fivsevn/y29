@@ -23,6 +23,7 @@ test('editable Markdown keeps literal punctuation, multiline notes and separate 
   const profile = emptyProfile(user.id);
   profile.voice = ['简单一点 | 也可以\n换行。'];
   profile.basics.age = '不详';
+  profile.basics.characterName = '测试作品人物';
   profile.facts = [{ text: '文字中包含 | 和 &', source: '公开样例', status: 'inference', visibility: 'public' }];
   profile.notes = '自由文本。\n\n## 自己的小标题\n\n- 不改变权限的角色备注。';
   const parsed = parseUserDocument(renderUserDocument(user, profile), user.id);

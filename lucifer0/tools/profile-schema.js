@@ -12,10 +12,10 @@ export function validatePrivateProfile(profile, id) {
     if (!plainObject(fact) || Object.keys(fact).some(key => !['text', 'status', 'visibility', 'source'].includes(key)) || !['canon', 'inference', 'pending'].includes(fact.status) || !['private', 'public'].includes(fact.visibility) || typeof fact.text !== 'string' || fact.text.length > 4000 || typeof fact.source !== 'string' || fact.source.length > 2000) throw new Error('Private fact needs separate canon status, visibility and source');
   }
   if (profile.basics !== undefined) {
-    if (!plainObject(profile.basics) || Object.keys(profile.basics).some(key => !['age', 'occupation', 'location', 'interests', 'personality', 'gender', 'pronouns', 'timezone', 'activeHours'].includes(key))) throw new Error('Invalid private basics');
+    if (!plainObject(profile.basics) || Object.keys(profile.basics).some(key => !['age', 'occupation', 'location', 'interests', 'personality', 'gender', 'pronouns', 'timezone', 'activeHours', 'characterName'].includes(key))) throw new Error('Invalid private basics');
     for (const key of ['age', 'occupation', 'location']) if (typeof profile.basics[key] !== 'string' || profile.basics[key].length > 240) throw new Error(`Invalid private basics.${key}`);
     for (const key of ['interests', 'personality']) strings(profile.basics[key], key);
-    for (const key of ['gender', 'pronouns', 'timezone', 'activeHours']) if (profile.basics[key] !== undefined && (typeof profile.basics[key] !== 'string' || profile.basics[key].length > 240)) throw new Error(`Invalid private basics.${key}`);
+    for (const key of ['gender', 'pronouns', 'timezone', 'activeHours', 'characterName']) if (profile.basics[key] !== undefined && (typeof profile.basics[key] !== 'string' || profile.basics[key].length > 240)) throw new Error(`Invalid private basics.${key}`);
   }
   for (const key of ['tags', 'topics', 'voiceExamples']) if (profile[key] !== undefined) strings(profile[key], key);
   if (profile.currentStatus !== undefined && (typeof profile.currentStatus !== 'string' || profile.currentStatus.length > 4000)) throw new Error('Private current status must be bounded text');

@@ -9,7 +9,7 @@ const ACCOUNT = [
   ['进入 following', 'inFollowing'], ['允许发主帖', 'allowPosts'], ['允许回复', 'allowReplies'],
   ['抽取权重', 'activityWeight']
 ];
-const BASIC = [['年龄', 'age'], ['职业', 'occupation'], ['所在区域', 'location'], ['性别', 'gender'], ['称呼代词', 'pronouns'], ['时区', 'timezone'], ['常在线时段', 'activeHours']];
+const BASIC = [['对应人物', 'characterName'], ['年龄', 'age'], ['职业', 'occupation'], ['所在区域', 'location'], ['性别', 'gender'], ['称呼代词', 'pronouns'], ['时区', 'timezone'], ['常在线时段', 'activeHours']];
 const LISTS = [
   ['兴趣', 'basics.interests'], ['性格', 'basics.personality'], ['标签', 'tags'],
   ['表达习惯', 'voice'], ['发言习惯', 'postingHabits'], ['常聊话题', 'topics'],
