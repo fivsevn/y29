@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="480" viewBox="0 0 840 480">
+  <defs>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#c7c7b9" stroke-opacity=".35"/></pattern>
+    <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".06"/></feComponentTransfer><feBlend in="SourceGraphic" mode="multiply"/></filter>
+  </defs>
+  <path fill="#d8ddcf" d="M0 0h840v480H0z"/>
+  <path fill="url(#grid)" d="M0 0h840v480H0z"/>
+  <g filter="url(#paper)">
+    <path fill="#eeeee1" d="m84 45 625 25 18 351-626 17Z"/>
+    <path fill="#c9cebf" d="m164 362 454-12 30 15-475 16Z"/>
+    <ellipse cx="332" cy="329" rx="96" ry="21" fill="#d1d1bd"/>
+    <path d="M254 265c-5-42 27-68 63-66 43-8 82 25 82 70 1 45-34 69-75 65-44 2-68-25-70-69Z" fill="#c9793e"/>
+    <path d="M265 246c13-27 46-32 62-25" fill="none" stroke="#dda666" stroke-width="14" stroke-linecap="round"/>
+    <path d="m320 201 6-14" stroke="#4e624b" stroke-width="5"/>
+    <path d="M325 193q24-29 47-8-18 18-47 8" fill="#7b8a59"/>
+    <path d="M416 309c-5-36 19-60 51-60 31-7 67 20 66 53 2 39-22 61-56 59-32 5-58-21-61-52Z" fill="#dfa261"/>
+    <path d="m472 251 5-10" stroke="#4e624b" stroke-width="4"/>
+    <path d="m497 145 100 3-12 110q-42 17-79-1Z" fill="#c1c9bd" stroke="#687b70" stroke-width="3"/>
+    <path d="M595 164c67-8 44 76-4 61" fill="none" stroke="#687b70" stroke-width="8"/>
+    <ellipse cx="548" cy="147" rx="50" ry="12" fill="#e2e5da" stroke="#687b70" stroke-width="3"/>
+    <ellipse cx="548" cy="150" rx="40" ry="6" fill="#7b7565"/>
+    <path d="M175 219c-30 17-37 57-15 79m17 13c35 17 76-13 76-40m-30-48c-10-12-26-17-37-10" fill="none" stroke="#8f9889" stroke-width="2" stroke-linecap="round" stroke-dasharray="45 8 10 5"/>
+    <path d="m649 324 91 107 7-6-90-107Z" fill="#576e63"/>
+    <path d="m649 324-6-17 14 7Z" fill="#ae8961"/>
+    <path d="M128 97h45m-45 8h26" stroke="#8e9c88" stroke-width="2"/>
+    <text x="127" y="400" fill="#7c8977" font-size="12" font-family="monospace" letter-spacing="3">STILL A STILL LIFE.</text>
+  </g>
+</svg>

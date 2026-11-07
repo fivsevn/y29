@@ -1,1 +1,1 @@
-{"name":"y29-arashi","private":true,"type":"module","scripts":{"test":"node --test tests/*.test.js","start":"node serve.js","build":"node build.js"}}
+{"name":"y29-arashi","private":true,"type":"module","scripts":{"test":"node --test tests/*.test.js","start":"node serve.js","build":"node build.js","social:validate":"node social/tools/publish.js validate","social:build":"node social/tools/publish.js build","social:context":"node social/tools/context.js"}}

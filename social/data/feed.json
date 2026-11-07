@@ -1,0 +1,214 @@
+{
+  "version": 1,
+  "users": [
+    {
+      "id": "lixing",
+      "handle": "li_xing",
+      "name": "黎星",
+      "bio": "偶尔看一眼。",
+      "avatar": "assets/avatars/lixing.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    },
+    {
+      "id": "chenanjing",
+      "handle": "anjing",
+      "name": "陈安静",
+      "bio": "画还没画完。",
+      "avatar": "assets/avatars/chenanjing.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    },
+    {
+      "id": "alan",
+      "handle": "alan",
+      "name": "阿岚",
+      "bio": "钓鱼，写字，等饭熟。",
+      "avatar": "assets/avatars/alan.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    },
+    {
+      "id": "lidianlong",
+      "handle": "e_dragon",
+      "name": "李电龙",
+      "bio": "饭要热的，歌要响的。",
+      "avatar": "assets/avatars/lidianlong.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    },
+    {
+      "id": "baiyanyan",
+      "handle": "yanyan",
+      "name": "白焱焱",
+      "bio": "今天也有自己的安排。",
+      "avatar": "assets/avatars/baiyanyan.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    },
+    {
+      "id": "anmianyao",
+      "handle": "anmianyao",
+      "name": "安眠药",
+      "bio": "耳机里的另一面。",
+      "avatar": "assets/avatars/anmianyao.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    },
+    {
+      "id": "zhaoyangxue",
+      "handle": "yangxue",
+      "name": "朝阳雪",
+      "bio": "吃点好的，也做点小东西。",
+      "avatar": "assets/avatars/zhaoyangxue.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    },
+    {
+      "id": "guyu",
+      "handle": "gu_yu",
+      "name": "顾郁",
+      "bio": "先记下来。",
+      "avatar": "assets/avatars/guyu.svg",
+      "enabled": true,
+      "profileStatus": "sample"
+    }
+  ],
+  "posts": [
+    {
+      "id": "sample-drawing-answer",
+      "author": "chenanjing",
+      "createdAt": "2026-11-07T21:23:00+08:00",
+      "replyTo": "sample-drawing-reply",
+      "text": "吃了一个。另一个是模特，暂时留着。",
+      "likes": 9,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-drawing-reply",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-07T21:20:00+08:00",
+      "replyTo": "sample-drawing",
+      "text": "那橘子最后吃了吗？",
+      "likes": 4,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-drawing",
+      "author": "chenanjing",
+      "createdAt": "2026-11-07T21:16:00+08:00",
+      "replyTo": null,
+      "text": "本来只是想画个橘子。\n结果喝完一杯，橘子还没画完。",
+      "likes": 32,
+      "canon": "sample",
+      "media": [
+        {
+          "src": "assets/media/orange-study.svg",
+          "alt": "原创样例插画：纸张上的两只橘子、一只杯子和未完成的轮廓。"
+        }
+      ]
+    },
+    {
+      "id": "sample-music-reply",
+      "author": "anmianyao",
+      "createdAt": "2026-11-07T20:53:00+08:00",
+      "replyTo": "sample-music",
+      "text": "先把整首听完。后面还有。",
+      "likes": 11,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-music",
+      "author": "lidianlong",
+      "createdAt": "2026-11-07T20:41:00+08:00",
+      "replyTo": null,
+      "text": "今晚这首前奏太好听了，已经倒回去三次。\n耳机一戴，回家的路还能再走两站。",
+      "likes": 19,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-card",
+      "author": "baiyanyan",
+      "createdAt": "2026-11-07T19:12:00+08:00",
+      "replyTo": null,
+      "text": "挑了半天耳饰，出门才发现头发把它挡严实了。啧。",
+      "likes": 17,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-soup-answer",
+      "author": "alan",
+      "createdAt": "2026-11-07T18:30:00+08:00",
+      "replyTo": "sample-soup-reply",
+      "text": "碗自己带。大一点的。",
+      "likes": 8,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-soup-reply",
+      "author": "lidianlong",
+      "createdAt": "2026-11-07T18:28:00+08:00",
+      "replyTo": "sample-soup",
+      "text": "捞一半出来给我，我不介意。",
+      "likes": 5,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-soup",
+      "author": "alan",
+      "createdAt": "2026-11-07T18:25:00+08:00",
+      "replyTo": null,
+      "text": "锅太小，面下多了。现在不是煮面，是给面洗热水澡。",
+      "likes": 23,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-umbrella",
+      "author": "lixing",
+      "createdAt": "2026-11-07T15:03:00+08:00",
+      "replyTo": null,
+      "text": "伞拿了，没下雨。没拿伞的时候倒是很准。",
+      "likes": 8,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-breakfast-answer",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-07T10:31:00+08:00",
+      "replyTo": "sample-breakfast-reply",
+      "text": "背面比较自由，等我补两针再拍给你。",
+      "likes": 4,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-breakfast-reply",
+      "author": "guyu",
+      "createdAt": "2026-11-07T10:24:00+08:00",
+      "replyTo": "sample-breakfast",
+      "text": "有背面的照片吗？想看看收线怎么藏。",
+      "likes": 2,
+      "canon": "sample",
+      "media": []
+    },
+    {
+      "id": "sample-breakfast",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-07T10:12:00+08:00",
+      "replyTo": null,
+      "text": "把昨天剩下的布料缝成了杯垫。杯子放上去刚好，歪的那一边就当没看见。",
+      "likes": 12,
+      "canon": "sample",
+      "media": []
+    }
+  ]
+}

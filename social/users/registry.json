@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "users": [
+    {
+      "id": "lixing",
+      "handle": "li_xing",
+      "name": "黎星",
+      "bio": "偶尔看一眼。",
+      "avatar": "assets/avatars/lixing.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    },
+    {
+      "id": "chenanjing",
+      "handle": "anjing",
+      "name": "陈安静",
+      "bio": "画还没画完。",
+      "avatar": "assets/avatars/chenanjing.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    },
+    {
+      "id": "alan",
+      "handle": "alan",
+      "name": "阿岚",
+      "bio": "钓鱼，写字，等饭熟。",
+      "avatar": "assets/avatars/alan.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    },
+    {
+      "id": "lidianlong",
+      "handle": "e_dragon",
+      "name": "李电龙",
+      "bio": "饭要热的，歌要响的。",
+      "avatar": "assets/avatars/lidianlong.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    },
+    {
+      "id": "baiyanyan",
+      "handle": "yanyan",
+      "name": "白焱焱",
+      "bio": "今天也有自己的安排。",
+      "avatar": "assets/avatars/baiyanyan.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    },
+    {
+      "id": "anmianyao",
+      "handle": "anmianyao",
+      "name": "安眠药",
+      "bio": "耳机里的另一面。",
+      "avatar": "assets/avatars/anmianyao.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    },
+    {
+      "id": "zhaoyangxue",
+      "handle": "yangxue",
+      "name": "朝阳雪",
+      "bio": "吃点好的，也做点小东西。",
+      "avatar": "assets/avatars/zhaoyangxue.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    },
+    {
+      "id": "guyu",
+      "handle": "gu_yu",
+      "name": "顾郁",
+      "bio": "先记下来。",
+      "avatar": "assets/avatars/guyu.svg",
+      "enabled": true,
+      "aiScope": "sample",
+      "profileStatus": "sample"
+    }
+  ]
+}
