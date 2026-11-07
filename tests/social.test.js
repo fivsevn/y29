@@ -1,14 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, cp, readFile, writeFile, rm, mkdir, readdir, symlink } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm, mkdir, readdir, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../lucifer0/tools/content.js';
-import { prepareContext, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { emptyProfile, prepareContext, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
+import { writeThreadBatch } from '../lucifer0/tools/thread-packages.js';
 import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
 
-const source = await loadContent();
-// Channel fixtures stay stable when maintainers change real account switches.
+// Fixed synthetic content keeps behavior checks independent of editorial updates.
+const source = JSON.parse(await readFile(new URL('./fixtures/social-content.json', import.meta.url), 'utf8'));
+source.feed = validateContent(source.registry, source.batches, source.policy);
 const sampleCharacterIds = ['lixing', 'chenanjing', 'alan', 'lidianlong', 'baiyanyan', 'anmianyao', 'zhaoyangxue', 'guyu'];
 const sampleUsers = source.feed.users.map(user => ({ ...user, inFollowing: sampleCharacterIds.includes(user.id) }));
 const fixture = () => structuredClone(source);
@@ -20,9 +23,28 @@ async function temporary(t) {
 }
 async function repositoryCopy(t) {
   const directory = await temporary(t);
-  const root = join(directory, 'social');
-  await cp(socialRoot, root, { recursive: true });
+  const root = join(directory, 'project', 'lucifer0');
+  await mkdir(join(root, 'assets/avatars'), { recursive: true });
+  await mkdir(join(root, 'posts'), { recursive: true });
+  await writeFile(join(root, 'publication.json'), JSON.stringify(source.policy));
+  const image = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>';
+  await writeFile(join(root, 'assets/icon.svg'), image);
+  await writeFile(join(root, 'assets/avatars/test.svg'), image);
+  for (const user of source.registry.users) {
+    await mkdir(join(root, 'users', user.id), { recursive: true });
+    await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, emptyProfile(user.id)));
+  }
+  const existing = [];
+  for (const batch of source.batches) {
+    await writeThreadBatch(root, batch, existing);
+    existing.push(batch);
+  }
+  await buildFeed(root);
   return { directory, root };
+}
+async function saveUser(root, user) {
+  const { profiles } = await readUserDocuments(root);
+  await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profiles[user.id]));
 }
 const newBatch = () => ({ version: 1, id: 'test-new-batch', mode: 'sample', posts: [{
   id: 'test-new-post', author: 'alan', createdAt: '2026-11-07T22:00:00+08:00', replyTo: null,
@@ -157,10 +179,10 @@ test('AI import obeys the master switch and account scope; manual import obeys d
   const f = fixture(); f.policy.automaticPosting = true;
   await writeFile(join(root, 'publication.json'), JSON.stringify(f.policy));
   f.registry.users.find(user => user.id === 'alan').aiScope = 'none';
-  await writeFile(join(root, 'users/registry.json'), JSON.stringify(f.registry));
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
   await assert.rejects(ingestBatch(input, { root, reviewed: true, ai: true }), /AI scope/);
   f.registry.users.find(user => user.id === 'alan').enabled = false;
-  await writeFile(join(root, 'users/registry.json'), JSON.stringify(f.registry));
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /disabled/);
   assert.equal((await loadContent(root)).batches.length, 3);
 });
@@ -188,28 +210,33 @@ test('concurrent imports are serialized without overwriting history', async t =>
 const privateProfile = () => ({ version: 1, userId: 'alan', voice: ['test voice'], postingHabits: [], relationships: [], knowledgeScope: [], boundaries: [], facts: [{ text: 'test fact', status: 'pending', visibility: 'private', source: 'synthetic test fixture' }] });
 
 test('private context is external-only; pending and private are separate from canon', async t => {
-  const directory = await temporary(t); const profile = privateProfile();
+  const { directory, root } = await repositoryCopy(t); const profile = privateProfile();
   await writeFile(join(directory, 'alan.json'), JSON.stringify(profile));
   const output = join(directory, 'context.json');
-  const result = await prepareContext({ privateDirectory: directory, outputPath: output });
+  const result = await prepareContext({ root, privateDirectory: directory, outputPath: output });
   assert.equal(result.privateProfileCount, 1);
   const snapshot = JSON.parse(await readFile(output, 'utf8'));
   assert.equal(snapshot.privateProfiles.alan.facts[0].status, 'pending');
   assert.equal(snapshot.privateProfiles.alan.facts[0].visibility, 'private');
   assert.equal(snapshot.missingPrivateProfiles.length, source.registry.users.length - 1);
-  await assert.rejects(prepareContext({ outputPath: join(socialRoot, 'leak.json') }), /outside/);
-  await assert.rejects(prepareContext({ privateDirectory: socialRoot, outputPath: join(directory, 'other.json') }), /outside/);
-  await assert.rejects(prepareContext({ outputPath: output }), /EEXIST/);
-  const symlinkPath = join(directory, 'linked-repository'); await symlink(socialRoot, symlinkPath);
-  await assert.rejects(prepareContext({ outputPath: join(symlinkPath, 'leak.json') }), /outside/);
+  await assert.rejects(prepareContext({ root, outputPath: join(root, 'leak.json') }), /outside/);
+  await assert.rejects(prepareContext({ root, privateDirectory: root, outputPath: join(directory, 'other.json') }), /outside/);
+  await assert.rejects(prepareContext({ root, privateDirectory: directory, outputPath: output }), /EEXIST/);
+  const symlinkPath = join(directory, 'linked-repository'); await symlink(root, symlinkPath);
+  await assert.rejects(prepareContext({ root, outputPath: join(symlinkPath, 'leak.json') }), /outside/);
   profile.facts[0].status = 'confirmed-by-ai';
   assert.throws(() => validatePrivateProfile(profile, 'alan'), /canon status/);
 });
 
 test('public generated data and tracked content expose no private profile keys', async () => {
+  const live = await loadContent();
+  assert.ok(live.registry.users.length > 0);
   const feedText = await readFile(join(socialRoot, 'data/feed.json'), 'utf8');
   assert.doesNotMatch(feedText, /privateProfiles|knowledgeScope|postingHabits|boundaries/);
-  assert.ok((await readdir(join(socialRoot, 'users'))).every(file => ['README.md', 'registry.json', 'profile-seeds.json'].includes(file)));
+  const { registry, profiles } = await readUserDocuments(socialRoot);
+  assert.equal(Object.keys(profiles).length, registry.users.length);
+  assert.ok(!(await readdir(join(socialRoot, 'users'))).includes('registry.json'));
+  assert.ok(!(await readdir(join(socialRoot, 'users'))).includes('profile-seeds.json'));
 });
 
 
@@ -259,13 +286,13 @@ test('posting switches prevent new root posts and replies while retaining histor
   const { directory, root } = await repositoryCopy(t);
   const f = fixture();
   f.registry.users.find(user => user.id === 'alan').allowPosts = false;
-  await writeFile(join(root, 'users/registry.json'), JSON.stringify(f.registry));
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
   const input = join(directory, 'new.json'), batch = newBatch();
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /does not allow posts/);
   f.registry.users.find(user => user.id === 'alan').allowPosts = true;
   f.registry.users.find(user => user.id === 'alan').allowReplies = false;
-  await writeFile(join(root, 'users/registry.json'), JSON.stringify(f.registry));
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
   batch.posts[0].replyTo = 'sample-soup';
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /does not allow replies/);

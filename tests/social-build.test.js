@@ -27,9 +27,10 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   await writeFile(join(directory, 'lucifer0/assets/not-referenced.txt'), 'syntheticPrivateMarker');
   execFileSync(process.execPath, ['build.js'], { cwd: directory });
   const published = await files(join(directory, 'dist/lucifer0'));
-  assert.ok(published.includes('data/feed.json'));
-  assert.ok(published.includes('assets/media/orange-study.svg'));
-  assert.ok(published.every(path => ['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg'].includes(path) || /^assets\/(avatars|media)\/[a-z0-9-]+\.svg$/.test(path)));
+  const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
+  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg',
+    ...feed.users.map(user => user.avatar), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
+  assert.deepEqual(published, [...expected].sort());
   assert.ok(!published.some(path => /private|not-referenced|registry|profile-seeds|manage|tools|docs|posts/.test(path)));
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {
     assert.equal(await readFile(join(directory, 'dist', path), 'utf8'), await readFile(new URL(path, project), 'utf8'));

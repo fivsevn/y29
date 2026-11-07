@@ -1,6 +1,8 @@
-import { readFile, readdir, mkdir, writeFile, realpath, lstat, rm } from 'node:fs/promises';
+import { readFile, mkdir, writeFile, realpath, lstat, rm } from 'node:fs/promises';
 import { resolve, join, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readUserDocuments, buildUserDirectory } from './user-documents.js';
+import { readThreadPackages, writeThreadBatch } from './thread-packages.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
 const fail = message => { throw new Error(message); };
@@ -89,20 +91,10 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
 }
 
 async function json(path) { return JSON.parse(await readFile(path, 'utf8')); }
-async function archives(directory) {
-  const files = [];
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (entry.isDirectory()) files.push(...await archives(join(directory, entry.name)));
-    else if (entry.name.endsWith('.json')) files.push(join(directory, entry.name));
-  }
-  return files.sort();
-}
-
 export async function loadContent(root = socialRoot) {
-  const [registry, policy, files] = await Promise.all([
-    json(join(root, 'users/registry.json')), json(join(root, 'publication.json')), archives(join(root, 'posts'))
+  const [{ registry }, policy, { batches, files }] = await Promise.all([
+    readUserDocuments(root), json(join(root, 'publication.json')), readThreadPackages(root)
   ]);
-  const batches = await Promise.all(files.map(json));
   const feed = validateContent(registry, batches, policy);
   await validateAssets(root, feed);
   return { registry, policy, batches, feed, files };
@@ -123,6 +115,7 @@ export async function buildFeed(root = socialRoot) {
   const path = join(root, 'data/feed.json');
   await mkdir(dirname(path), { recursive: true });
   await writeFile(path, JSON.stringify(feed, null, 2) + '\n');
+  await buildUserDirectory(root, { branch: process.env.Y29_EDIT_BRANCH || 'main' });
   return feed;
 }
 
@@ -164,11 +157,7 @@ async function ingestLocked(input, { root, ai }) {
   }
   const latest = Math.max(0, ...batches.flatMap(item => item.posts.map(post => Date.parse(post.createdAt))));
   if (batch.posts.some(post => Date.parse(post.createdAt) < latest)) fail('New batches must append to the existing timeline');
-  const date = Object.fromEntries(new Intl.DateTimeFormat('en', { timeZone: policy.timezone, year: 'numeric', month: '2-digit' }).formatToParts(new Date(batch.posts[0].createdAt)).map(part => [part.type, part.value]));
-  const path = join(root, 'posts', date.year, date.month, `${batch.id}.json`);
-  await mkdir(dirname(path), { recursive: true });
-  // Exclusive creation makes concurrent retries fail safely instead of overwriting history.
-  await writeFile(path, JSON.stringify(batch, null, 2) + '\n', { flag: 'wx' });
+  const { path } = await writeThreadBatch(root, batch, batches);
   await buildFeed(root);
   return { status: 'archived', id: batch.id, path };
 }
