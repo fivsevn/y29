@@ -1,0 +1,300 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, readFile, writeFile, rm, mkdir, readdir, symlink } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../lucifer0/tools/content.js';
+import { emptyProfile, prepareContext, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
+import { writeThreadBatch } from '../lucifer0/tools/thread-packages.js';
+import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
+
+// Fixed synthetic content keeps behavior checks independent of editorial updates.
+const source = JSON.parse(await readFile(new URL('./fixtures/social-content.json', import.meta.url), 'utf8'));
+source.feed = validateContent(source.registry, source.batches, source.policy);
+const sampleCharacterIds = ['lixing', 'chenanjing', 'alan', 'lidianlong', 'baiyanyan', 'anmianyao', 'zhaoyangxue', 'guyu'];
+const sampleUsers = source.feed.users.map(user => ({ ...user, inFollowing: sampleCharacterIds.includes(user.id) }));
+const fixture = () => structuredClone(source);
+const validate = ({ registry, batches, policy }, options) => validateContent(registry, batches, policy, options);
+async function temporary(t) {
+  const directory = await mkdtemp(join(tmpdir(), 'y29-social-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  return directory;
+}
+async function repositoryCopy(t) {
+  const directory = await temporary(t);
+  const root = join(directory, 'project', 'lucifer0');
+  await mkdir(join(root, 'assets/avatars'), { recursive: true });
+  await mkdir(join(root, 'posts'), { recursive: true });
+  await writeFile(join(root, 'publication.json'), JSON.stringify(source.policy));
+  const image = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>';
+  await writeFile(join(root, 'assets/icon.svg'), image);
+  await writeFile(join(root, 'assets/avatars/test.svg'), image);
+  for (const user of source.registry.users) {
+    await mkdir(join(root, 'users', user.id), { recursive: true });
+    await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, emptyProfile(user.id)));
+  }
+  const existing = [];
+  for (const batch of source.batches) {
+    await writeThreadBatch(root, batch, existing);
+    existing.push(batch);
+  }
+  await buildFeed(root);
+  return { directory, root };
+}
+async function saveUser(root, user) {
+  const { profiles } = await readUserDocuments(root);
+  await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profiles[user.id]));
+}
+const newBatch = () => ({ version: 1, id: 'test-new-batch', mode: 'sample', posts: [{
+  id: 'test-new-post', author: 'alan', createdAt: '2026-11-07T22:00:00+08:00', replyTo: null,
+  text: '这是发布器测试中的一条新文字。', likes: 0, canon: 'sample', media: []
+}] });
+
+test('public content is complete, stable and contains no private operational fields', () => {
+  const feed = validate(fixture());
+  assert.equal(feed.users.length, source.registry.users.length);
+  assert.equal(feed.posts.filter(post => !post.replyTo).length, 8);
+  assert.equal(feed.posts.filter(post => post.replyTo).length, 7);
+  assert.ok(feed.posts.every(post => post.canon === 'sample'));
+  assert.ok(feed.users.every(user => !Object.hasOwn(user, 'aiScope')));
+  assert.equal(source.policy.automaticPosting, false);
+});
+
+test('duplicate users, handles, batches, IDs and disguised repeat content are rejected', () => {
+  const mutations = [
+    f => f.registry.users.push(f.registry.users[0]),
+    f => { f.registry.users[1].handle = f.registry.users[0].handle; },
+    f => f.batches.push(f.batches[0]),
+    f => { f.batches[1].posts[0].id = f.batches[0].posts[0].id; },
+    f => { const a = f.batches[0].posts[0]; f.batches[1].posts[0] = { ...a, id: 'another-copy', text: '  ' + a.text + '\n' }; }
+  ];
+  for (const mutate of mutations) { const f = fixture(); mutate(f); assert.throws(() => validate(f), /Duplicate|duplicate/); }
+});
+
+test('deleted historical accounts fail while disabled historical accounts remain readable', () => {
+  const f = fixture(); f.registry.users.find(user => user.id === 'alan').enabled = false;
+  assert.ok(validate(f).posts.some(post => post.author === 'alan'));
+  f.registry.users = f.registry.users.filter(user => user.id !== 'alan');
+  assert.throws(() => validate(f), /Unknown author/);
+});
+
+test('renaming a user preserves post identity and the assigned avatar', () => {
+  const f = fixture(); const user = f.registry.users[0], before = structuredClone(user);
+  user.name = '改过的昵称'; const feed = validate(f);
+  assert.equal(feed.users[0].id, before.id); assert.equal(feed.users[0].avatar, before.avatar);
+  assert.ok(feed.posts.some(post => post.author === before.id));
+});
+
+test('private fields, external assets, path traversal and invalid counters cannot enter public data', () => {
+  const mutations = [
+    f => { f.registry.users[0].privateNotes = 'secret'; },
+    f => { f.batches[0].posts[0].knowledgeScope = 'secret'; },
+    f => { f.batches[0].privateProfiles = {}; },
+    f => { f.registry.users[0].avatar = 'https://example.com/avatar.svg'; },
+    f => { f.registry.users[0].avatar = 'assets/avatars/../../private.svg'; },
+    f => { f.batches[0].posts[0].likes = -1; },
+    f => { f.batches[0].posts[0].canon = 'canon'; },
+    f => { f.batches[0].posts[0].media = [{ src: 'assets/media/test.svg', alt: '' }]; }
+  ];
+  for (const mutate of mutations) { const f = fixture(); mutate(f); assert.throws(() => validate(f)); }
+});
+
+test('timestamps require a real date, timezone, no future, and correct reply chronology', () => {
+  for (const value of ['yesterday', '2026-11-07T10:00:00', '2026-02-30T10:00:00+08:00', '2099-11-07T10:00:00+08:00']) {
+    const f = fixture(); f.batches[0].posts[0].createdAt = value;
+    assert.throws(() => validate(f), /timestamp/);
+  }
+  const f = fixture(); f.batches[0].posts[1].createdAt = '2026-11-07T09:00:00+08:00';
+  assert.throws(() => validate(f), /later reply parent/);
+});
+
+test('orphan, self-referential and cyclic replies fail validation', () => {
+  const f = fixture(); f.batches[0].posts[1].replyTo = 'not-found';
+  assert.throws(() => validate(f), /Missing/);
+  f.batches[0].posts[1].replyTo = f.batches[0].posts[1].id;
+  assert.throws(() => validate(f), /Missing/);
+  f.batches[0].posts[1].replyTo = f.batches[0].posts[2].id;
+  f.batches[0].posts[1].createdAt = f.batches[0].posts[2].createdAt;
+  assert.throws(() => validate(f), /cycle/);
+});
+
+test('threads include replies to replies with the actual parent preserved', () => {
+  const thread = threadPosts(source.feed.posts, 'sample-drawing-answer');
+  assert.deepEqual(thread.map(post => post.id), ['sample-drawing', 'sample-drawing-reply', 'sample-drawing-answer']);
+  assert.equal(thread[2].replyTo, thread[1].id);
+  assert.deepEqual(threadPosts(source.feed.posts, 'unknown'), []);
+  assert.equal(rootOf([{ id: 'a', replyTo: 'b' }, { id: 'b', replyTo: 'a' }], 'a'), null);
+});
+
+test('following channel and reply bookmarks do not mix into the public main timeline', () => {
+  const state = { follows: ['alan'], bookmarks: ['sample-drawing-answer'], likes: [] };
+  assert.equal(selectPosts(source.feed.posts, state).length, 8);
+  assert.equal(selectPosts(source.feed.posts, state, { view: 'following', users: sampleUsers }).length, 6);
+  assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'bookmarks' }).map(post => post.id), ['sample-drawing-answer']);
+  assert.equal(selectPosts(source.feed.posts, state, { user: 'chenanjing' }).length, 2);
+});
+
+test('local storage corruption or denial falls back safely and toggles are reversible', () => {
+  const empty = { likes: [], follows: [], bookmarks: [] };
+  assert.deepEqual(readState({ getItem() { throw new Error('blocked'); } }), empty);
+  assert.deepEqual(readState({ getItem() { return 'bad json'; } }), empty);
+  assert.deepEqual(readState({ getItem() { return '{"likes":["a","a",null,3],"follows":"wrong"}'; } }), { ...empty, likes: ['a'] });
+  assert.equal(toggle(empty, 'likes', 'post'), true); assert.equal(toggle(empty, 'likes', 'post'), false);
+  assert.equal(saveState(undefined, empty), false);
+  assert.equal(saveState({ setItem() { throw new Error('full'); } }, empty), false);
+  assert.throws(() => toggle(empty, 'unknown', 'post'));
+});
+
+test('user-supplied text is escaped and dates display in Shanghai time', () => {
+  assert.equal(escapeHTML('<img onerror="x">&'), '&lt;img onerror=&quot;x&quot;&gt;&amp;');
+  assert.match(dateLabel('2026-11-07T13:16:00Z'), /21:16/);
+});
+
+test('builds are deterministic and preserve source archives', async t => {
+  const { root } = await repositoryCopy(t);
+  await buildFeed(root); const one = await readFile(join(root, 'data/feed.json'), 'utf8');
+  await buildFeed(root); assert.equal(await readFile(join(root, 'data/feed.json'), 'utf8'), one);
+  assert.equal((await loadContent(root)).batches.length, 3);
+});
+
+test('reviewed ingestion archives once, retries restore the feed, conflicting retries fail', async t => {
+  const { root, directory } = await repositoryCopy(t);
+  const input = join(directory, 'batch.json'); const batch = newBatch();
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root }), /--reviewed/);
+  assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'archived');
+  await rm(join(root, 'data/feed.json'));
+  assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'already-archived');
+  assert.equal((await loadContent(root)).feed.posts.length, 16);
+  assert.ok(JSON.parse(await readFile(join(root, 'data/feed.json'), 'utf8')).posts.some(post => post.id === batch.posts[0].id));
+  batch.posts[0].text = '改过的内容'; await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /different content/);
+});
+
+test('AI import obeys the master switch and account scope; manual import obeys disabled accounts', async t => {
+  const { root, directory } = await repositoryCopy(t);
+  const input = join(directory, 'batch.json'); await writeFile(input, JSON.stringify(newBatch()));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true, ai: true }), /disabled/);
+  const f = fixture(); f.policy.automaticPosting = true;
+  await writeFile(join(root, 'publication.json'), JSON.stringify(f.policy));
+  f.registry.users.find(user => user.id === 'alan').aiScope = 'none';
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true, ai: true }), /AI scope/);
+  f.registry.users.find(user => user.id === 'alan').enabled = false;
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /disabled/);
+  assert.equal((await loadContent(root)).batches.length, 3);
+});
+
+test('bad media and backdated batches fail before writing any archive', async t => {
+  const { root, directory } = await repositoryCopy(t);
+  const input = join(directory, 'batch.json'), batch = newBatch();
+  batch.posts[0].media = [{ src: 'assets/media/missing.svg', alt: 'missing image' }];
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /ENOENT/);
+  batch.posts[0].media = []; batch.posts[0].createdAt = '2026-11-07T09:00:00+08:00';
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /append/);
+  assert.equal((await loadContent(root)).batches.length, 3);
+});
+
+test('concurrent imports are serialized without overwriting history', async t => {
+  const { root, directory } = await repositoryCopy(t);
+  const input = join(directory, 'batch.json'); await writeFile(input, JSON.stringify(newBatch()));
+  await mkdir(join(root, '.publish.lock'));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /Another import/);
+  assert.equal((await loadContent(root)).batches.length, 3);
+});
+
+const privateProfile = () => ({ version: 1, userId: 'alan', voice: ['test voice'], postingHabits: [], relationships: [], knowledgeScope: [], boundaries: [], facts: [{ text: 'test fact', status: 'pending', visibility: 'private', source: 'synthetic test fixture' }] });
+
+test('private context is external-only; pending and private are separate from canon', async t => {
+  const { directory, root } = await repositoryCopy(t); const profile = privateProfile();
+  await writeFile(join(directory, 'alan.json'), JSON.stringify(profile));
+  const output = join(directory, 'context.json');
+  const result = await prepareContext({ root, privateDirectory: directory, outputPath: output });
+  assert.equal(result.privateProfileCount, 1);
+  const snapshot = JSON.parse(await readFile(output, 'utf8'));
+  assert.equal(snapshot.privateProfiles.alan.facts[0].status, 'pending');
+  assert.equal(snapshot.privateProfiles.alan.facts[0].visibility, 'private');
+  assert.equal(snapshot.missingPrivateProfiles.length, source.registry.users.length - 1);
+  await assert.rejects(prepareContext({ root, outputPath: join(root, 'leak.json') }), /outside/);
+  await assert.rejects(prepareContext({ root, privateDirectory: root, outputPath: join(directory, 'other.json') }), /outside/);
+  await assert.rejects(prepareContext({ root, privateDirectory: directory, outputPath: output }), /EEXIST/);
+  const symlinkPath = join(directory, 'linked-repository'); await symlink(root, symlinkPath);
+  await assert.rejects(prepareContext({ root, outputPath: join(symlinkPath, 'leak.json') }), /outside/);
+  profile.facts[0].status = 'confirmed-by-ai';
+  assert.throws(() => validatePrivateProfile(profile, 'alan'), /canon status/);
+});
+
+test('public generated data and tracked content expose no private profile keys', async () => {
+  const live = await loadContent();
+  assert.ok(live.registry.users.length > 0);
+  const feedText = await readFile(join(socialRoot, 'data/feed.json'), 'utf8');
+  assert.doesNotMatch(feedText, /privateProfiles|knowledgeScope|postingHabits|boundaries/);
+  const { registry, profiles } = await readUserDocuments(socialRoot);
+  assert.equal(Object.keys(profiles).length, registry.users.length);
+  assert.ok(!(await readdir(join(socialRoot, 'users'))).includes('registry.json'));
+  assert.ok(!(await readdir(join(socialRoot, 'users'))).includes('profile-seeds.json'));
+});
+
+
+test('legacy reader state stays compatible while channel membership comes from account switches', () => {
+  const defaults = sampleUsers.filter(user => user.inFollowing).map(user => user.id);
+  assert.equal(defaults.length, 8);
+  const state = readState(undefined, defaults);
+  const following = selectPosts(source.feed.posts, state, { view: 'following', users: sampleUsers });
+  assert.equal(following.length, 6);
+  assert.ok(following.every(post => sampleUsers.find(user => user.id === post.author).inFollowing));
+  assert.deepEqual(readState({ getItem: () => '{"follows":[]}' }, defaults).follows, []);
+  assert.deepEqual(readState({ getItem: () => '{"follows":["alan"]}' }, defaults).follows, ['alan']);
+});
+
+test('old reader follows cannot override managed channel membership', () => {
+  for (const follows of [[], ['alan'], ['passerby17', 'nightbus3']]) {
+    const state = readState({ getItem: () => JSON.stringify({ follows }) });
+    const selected = selectPosts(source.feed.posts, state, { view: 'following', users: sampleUsers });
+    assert.equal(selected.length, 6);
+    assert.ok(selected.every(post => sampleUsers.find(user => user.id === post.author).inFollowing));
+    assert.deepEqual(selectPosts(source.feed.posts, state, { view: 'following' }), []);
+    assert.equal(selectPosts(source.feed.posts, state).length, 8);
+    assert.ok(selectPosts(source.feed.posts, state, { user: 'nightbus3' }).length > 0);
+  }
+});
+
+test('forum IDs remain stable, including when the nickname changes', () => {
+  assert.equal(boardID('alan'), boardID(source.feed.users.find(user => user.id === 'alan').id));
+  assert.match(boardID('alan'), /^[A-Z0-9]{7}$/);
+  assert.equal(new Set(source.feed.posts.map(post => postNumber(post.id))).size, source.feed.posts.length);
+  assert.ok(source.feed.posts.every(post => /^\d{10}$/.test(postNumber(post.id))));
+});
+
+
+test('channel membership is independent of work source and account kind', () => {
+  const users = structuredClone(sampleUsers);
+  users.find(user => user.id === 'alan').inFollowing = false;
+  users.find(user => user.id === 'nightbus3').inFollowing = true;
+  users.find(user => user.id === 'lixing').sourceWork = '另一部作品';
+  const selected = selectPosts(source.feed.posts, { follows: [] }, { view: 'following', users });
+  assert.ok(!selected.some(post => post.author === 'alan'));
+  assert.ok(selected.some(post => post.author === 'nightbus3'));
+  assert.ok(selected.some(post => post.author === 'lixing'));
+});
+
+test('posting switches prevent new root posts and replies while retaining history', async t => {
+  const { directory, root } = await repositoryCopy(t);
+  const f = fixture();
+  f.registry.users.find(user => user.id === 'alan').allowPosts = false;
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
+  const input = join(directory, 'new.json'), batch = newBatch();
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /does not allow posts/);
+  f.registry.users.find(user => user.id === 'alan').allowPosts = true;
+  f.registry.users.find(user => user.id === 'alan').allowReplies = false;
+  await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
+  batch.posts[0].replyTo = 'sample-soup';
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /does not allow replies/);
+  assert.equal((await loadContent(root)).feed.posts.length, 15);
+});

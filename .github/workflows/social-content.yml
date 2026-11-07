@@ -1,0 +1,41 @@
+name: Update Lucifer Zero directory and feed
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'lucifer0/users/**'
+      - 'lucifer0/posts/**'
+      - 'lucifer0/rounds/**'
+      - 'lucifer0/tools/**'
+      - 'lucifer0/publication.json'
+      - '.github/workflows/social-content.yml'
+      - '.github/scripts/social-content-sync.mjs'
+permissions:
+  contents: read
+concurrency:
+  group: lucifer0-content-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    env:
+      Y29_EDIT_BRANCH: main
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Rebuild directory and feed from the latest source documents
+        run: node .github/scripts/social-content-sync.mjs
+      # A GITHUB_TOKEN commit does not trigger the existing branch Pages build.
+      - name: Refresh the existing Pages publishing source
+        uses: actions/github-script@v7
+        with:
+          script: await github.rest.repos.requestPagesBuild(context.repo);

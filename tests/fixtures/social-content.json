@@ -1,0 +1,336 @@
+{
+  "registry": {
+    "version": 1,
+    "users": [
+      {
+        "id": "lixing",
+        "handle": "li_xing",
+        "name": "测试用户1",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "chenanjing",
+        "handle": "anjing",
+        "name": "测试用户2",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "alan",
+        "handle": "alan",
+        "name": "测试用户3",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "lidianlong",
+        "handle": "e_dragon",
+        "name": "测试用户4",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "baiyanyan",
+        "handle": "yanyan",
+        "name": "测试用户5",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "anmianyao",
+        "handle": "anmianyao",
+        "name": "测试用户6",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "zhaoyangxue",
+        "handle": "yangxue",
+        "name": "测试用户7",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "guyu",
+        "handle": "gu_yu",
+        "name": "测试用户8",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "character",
+        "sourceWork": "测试作品",
+        "inFollowing": true,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "passerby17",
+        "handle": "passerby17",
+        "name": "测试用户9",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "visitor",
+        "sourceWork": "",
+        "inFollowing": false,
+        "allowPosts": true,
+        "allowReplies": true
+      },
+      {
+        "id": "nightbus3",
+        "handle": "nightbus3",
+        "name": "测试用户10",
+        "bio": "测试公开简介",
+        "avatar": "assets/avatars/test.svg",
+        "enabled": true,
+        "aiScope": "sample",
+        "profileStatus": "sample",
+        "kind": "visitor",
+        "sourceWork": "",
+        "inFollowing": false,
+        "allowPosts": true,
+        "allowReplies": true
+      }
+    ]
+  },
+  "policy": {
+    "version": 1,
+    "automaticPosting": false,
+    "timezone": "Asia/Shanghai",
+    "maxBatchPosts": 7
+  },
+  "batches": [
+    {
+      "version": 1,
+      "id": "sample-20261107-day",
+      "mode": "sample",
+      "posts": [
+        {
+          "id": "sample-breakfast",
+          "author": "zhaoyangxue",
+          "createdAt": "2026-11-07T10:12:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-breakfast",
+          "likes": 12,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-breakfast-reply",
+          "author": "guyu",
+          "createdAt": "2026-11-07T10:24:00+08:00",
+          "replyTo": "sample-breakfast",
+          "text": "测试发言 sample-breakfast-reply",
+          "likes": 2,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-breakfast-answer",
+          "author": "zhaoyangxue",
+          "createdAt": "2026-11-07T10:31:00+08:00",
+          "replyTo": "sample-breakfast-reply",
+          "text": "测试发言 sample-breakfast-answer",
+          "likes": 4,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-umbrella",
+          "author": "lixing",
+          "createdAt": "2026-11-07T15:03:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-umbrella",
+          "likes": 8,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-soup",
+          "author": "alan",
+          "createdAt": "2026-11-07T18:25:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-soup",
+          "likes": 23,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-soup-reply",
+          "author": "lidianlong",
+          "createdAt": "2026-11-07T18:28:00+08:00",
+          "replyTo": "sample-soup",
+          "text": "测试发言 sample-soup-reply",
+          "likes": 5,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-soup-answer",
+          "author": "alan",
+          "createdAt": "2026-11-07T18:30:00+08:00",
+          "replyTo": "sample-soup-reply",
+          "text": "测试发言 sample-soup-answer",
+          "likes": 8,
+          "canon": "sample",
+          "media": []
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "id": "sample-20261107-evening",
+      "mode": "sample",
+      "posts": [
+        {
+          "id": "sample-card",
+          "author": "baiyanyan",
+          "createdAt": "2026-11-07T19:12:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-card",
+          "likes": 17,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-music",
+          "author": "lidianlong",
+          "createdAt": "2026-11-07T20:41:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-music",
+          "likes": 19,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-music-reply",
+          "author": "anmianyao",
+          "createdAt": "2026-11-07T20:53:00+08:00",
+          "replyTo": "sample-music",
+          "text": "测试发言 sample-music-reply",
+          "likes": 11,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-drawing",
+          "author": "chenanjing",
+          "createdAt": "2026-11-07T21:16:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-drawing",
+          "likes": 32,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-drawing-reply",
+          "author": "zhaoyangxue",
+          "createdAt": "2026-11-07T21:20:00+08:00",
+          "replyTo": "sample-drawing",
+          "text": "测试发言 sample-drawing-reply",
+          "likes": 4,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-drawing-answer",
+          "author": "chenanjing",
+          "createdAt": "2026-11-07T21:23:00+08:00",
+          "replyTo": "sample-drawing-reply",
+          "text": "测试发言 sample-drawing-answer",
+          "likes": 9,
+          "canon": "sample",
+          "media": []
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "id": "sample-20261107-visitors",
+      "mode": "sample",
+      "posts": [
+        {
+          "id": "sample-alarm",
+          "author": "passerby17",
+          "createdAt": "2026-11-07T21:35:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-alarm",
+          "likes": 3,
+          "canon": "sample",
+          "media": []
+        },
+        {
+          "id": "sample-nightbus",
+          "author": "nightbus3",
+          "createdAt": "2026-11-07T21:48:00+08:00",
+          "replyTo": null,
+          "text": "测试发言 sample-nightbus",
+          "likes": 3,
+          "canon": "sample",
+          "media": []
+        }
+      ]
+    }
+  ]
+}

@@ -44,6 +44,16 @@
 
 ## Other Projects
 
+### LUCIFER ZERO / 路西法零
+
+[`/lucifer0/`](lucifer0/) · 计划发布地址：[y29.fivsevn.com/lucifer0/](https://y29.fivsevn.com/lucifer0/)
+
+虚拟社交网站企业，标语为「自由表达的商业承诺」。采用紧凑的匿名论坛式手机界面，顶栏仅显示 `/lucifer0`，采用深色配色，底栏为「/world、/following、/about」。/world 混合人物和路人的帖子，/following 由各账号独立的显示开关决定，与作品来源无关。/about 仅保留品牌名与标语。内容为原创日常样例，不确认小说剧情或时间线。
+
+用户管理从 [用户总目录](lucifer0/users/用户总目录.md) 进入：按网名找人，点进个人文件夹或直接编辑设定。每个用户一个文件夹，`profile.md` 维护资料和独立开关，同目录可以继续添加关系、经历等 Markdown 设定。初始 56 个账号；总表和网页数据会在 main 上修改档案后自动更新。AI 每轮重新读取主档案、补充文档和历史；通用运营规则单独维护，私密设定保留在仓库外，自动发帖仍关闭。
+
+账号管理、一串一包的帖子归档、私有资料接口和运营说明见 [`lucifer0/README.md`](lucifer0/README.md)。私有人设保留在仓库外，自动运营默认关闭。
+
 ### STORYTELLER
 
 [`/storyteller/`](storyteller/)
@@ -59,6 +69,8 @@
 - `/mobileutopia/` — MOBILE UTOPIA: OPEN TABLE
 - `/training/` — STEEL MUSCLE RUN: 飙肌野郎
 - `/storyteller/` — STORYTELLER terminal
+- `/lucifer0/` — 路西法零，小说人物的手机社交空间
+- `/social/` — 旧入口，保留查询参数及帖子链接并转向 `/lucifer0/`
 - `/assets/` — 共用资源
 - `/tests/` — 自动化测试
 
