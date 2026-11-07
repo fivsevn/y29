@@ -63,9 +63,9 @@ function renderHome(following) {
 }
 function renderProfile(id) {
   const user = users.get(id);
-  if (!user) return header() + boardbar('用户', '', backLink()) + empty('没有找到这个账号', '检查链接，或回 /world 看看。');
+  if (!user) return header() + boardbar('/user', '', backLink()) + empty('没有找到这个账号', '检查链接，或回 /world 看看。');
   const history = selectPosts(feed.posts, state, { user: id });
-  return header() + boardbar('用户', '', backLink()) + `<section class="profile">${personRow(user)}<p class="profile-bio">${esc(user.bio)}</p><div class="profile-meta"><span>@${esc(user.handle)}</span><span>${history.length} 条发言</span>${!user.enabled ? '<span>暂时休息中</span>' : ''}</div></section>` +
+  return header() + boardbar('/user', '', backLink()) + `<section class="profile">${personRow(user)}<p class="profile-bio">${esc(user.bio)}</p><div class="profile-meta"><span>@${esc(user.handle)}</span><span>${history.length} 条发言</span>${!user.enabled ? '<span>暂时休息中</span>' : ''}</div></section>` +
     (history.length ? history.map(post => postMarkup(post)).join('') : empty('还没有发言', '偶尔来看看。'));
 }
 function renderThread(id) {

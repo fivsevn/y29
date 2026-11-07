@@ -58,10 +58,10 @@ try {
   check(await page.locator('article').count() === followingCount, 'channel follows managed account switches');
   check(await page.locator('#post-sample-nightbus').count() === Number(followingIds.has('nightbus3')), 'visitor membership follows its independent switch');
   await page.screenshot({ path: join(output, 'phone-following.png'), fullPage: false });
-  await visit('#/user/lixing', '用户');
+  await visit('#/user/lixing', '/user');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'character channel does not expose optional follow controls');
 
-  await visit('#/user/nightbus3', '用户');
+  await visit('#/user/nightbus3', '/user');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'visitor profiles cannot enter following');
   check(await page.locator('#post-sample-nightbus').count() === 1, 'visitor profiles remain readable');
   for (const follows of [[], ['alan'], ['passerby17', 'nightbus3']]) {
@@ -88,7 +88,7 @@ try {
   await page.locator('.boardbar h2').filter({ hasText: '讨论串' }).waitFor();
   check(await page.locator('#post-sample-drawing-answer').evaluate(element => element.classList.contains('is-target')), 'reply permalink selects the reply');
 
-  await visit('#/user/chenanjing', '用户');
+  await visit('#/user/chenanjing', '/user');
   check(await page.locator('article').count() === 2, 'profile keeps posts and replies');
   await visit('#/people', '人物');
   check(await page.locator('.directory-person').count() === followingUsers.length, 'directory lists managed channel members');
@@ -105,7 +105,7 @@ try {
   await page.getByRole('heading', { name: '没有找到相关内容' }).waitFor(); checks++;
   await visit('#/post/does-not-exist', '讨论串');
   await page.getByRole('heading', { name: '没有找到这条帖子' }).waitFor(); checks++;
-  await visit('#/user/does-not-exist', '用户');
+  await visit('#/user/does-not-exist', '/user');
   await page.getByRole('heading', { name: '没有找到这个账号' }).waitFor(); checks++;
 
   const legacy = new URL('../social/?entry=legacy#/post/sample-drawing-answer', base);
@@ -133,7 +133,7 @@ try {
   await page.screenshot({ path: join(output, 'phone-feed.png'), fullPage: false });
   await visit('#/post/sample-drawing', '讨论串');
   await page.screenshot({ path: join(output, 'phone-thread.png'), fullPage: true });
-  await visit('#/user/chenanjing', '用户');
+  await visit('#/user/chenanjing', '/user');
   await page.screenshot({ path: join(output, 'phone-profile.png'), fullPage: false });
   await visit('#/about', '/about');
   check(await page.locator('.about-content').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
