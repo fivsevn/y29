@@ -125,19 +125,20 @@ function stableJSON(value) {
   return JSON.stringify(value);
 }
 
-export async function ingestBatch(input, { root = socialRoot, reviewed = false, ai = false, contextPath, privateDirectory } = {}) {
+export async function ingestBatch(input, { root = socialRoot, reviewed = false, ai = false, contextPath, privateDirectory, backfill = false } = {}) {
   if (!reviewed) fail('Review the entire public batch first, then pass --reviewed. No files were written.');
+  if (typeof backfill !== 'boolean') fail('Backfill must be an explicit boolean option');
   const lock = join(root, '.publish.lock');
   try { await mkdir(lock); }
   catch (error) {
     if (error.code === 'EEXIST') fail('Another import is active; check it before retrying');
     throw error;
   }
-  try { return await ingestLocked(input, { root, ai, contextPath, privateDirectory }); }
+  try { return await ingestLocked(input, { root, ai, contextPath, privateDirectory, backfill }); }
   finally { await rm(lock, { recursive: true, force: true }); }
 }
 
-async function ingestLocked(input, { root, ai, contextPath, privateDirectory }) {
+async function ingestLocked(input, { root, ai, contextPath, privateDirectory, backfill }) {
   const { registry, policy, batches } = await loadContent(root);
   const batch = await json(resolve(input));
   const existing = batches.find(item => item.id === batch.id);
@@ -160,7 +161,7 @@ async function ingestLocked(input, { root, ai, contextPath, privateDirectory }) 
     if (ai && user.aiScope !== batch.mode) fail(`AI scope does not permit this batch: ${user.id}`);
   }
   const latest = Math.max(0, ...batches.flatMap(item => item.posts.map(post => Date.parse(post.createdAt))));
-  if (batch.posts.some(post => Date.parse(post.createdAt) < latest)) fail('New batches must append to the existing timeline');
+  if (!backfill && batch.posts.some(post => Date.parse(post.createdAt) < latest)) fail('New batches must append to the existing timeline; use --backfill only for an explicitly requested historical update');
   const { path } = await writeThreadBatch(root, batch, batches);
   await buildFeed(root);
   return { status: 'archived', id: batch.id, path };

@@ -63,9 +63,13 @@ export function selectPosts(posts, state, { view = 'all', user, query = '', user
   }).filter(post => !needle || post.text.toLocaleLowerCase().includes(needle)).sort(newestFirst);
 }
 
+const displayClock = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+  hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+});
+
 export function dateLabel(value, full = false) {
-  return new Intl.DateTimeFormat('zh-CN', {
-    timeZone: 'Asia/Shanghai', ...(full ? { year: 'numeric' } : {}),
-    month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false
-  }).format(new Date(value));
+  const parts = Object.fromEntries(displayClock.formatToParts(new Date(value)).map(part => [part.type, part.value]));
+  const year = full ? `Ω.${String(Number(parts.year) - 2016).padStart(2, '0')}/` : '';
+  return `${year}${parts.month}/${parts.day} ${parts.hour}:${parts.minute}`;
 }
