@@ -1,0 +1,69 @@
+name: L0 single-run context preparation
+on:
+  push:
+    branches: [l0-ops-20261108-1304]
+    paths: ['.github/workflows/l0-ops-20261108.yml']
+permissions:
+  contents: read
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare observed sources and independent draw
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/l0-ops-work /tmp/l0-ops-private/profiles
+          cat > /tmp/l0-ops-work/research.json <<'L0_RESEARCH_JSON'
+          {
+            "version": 1,
+            "visitedAt": "2026-11-08T13:09:00+08:00",
+            "observations": [
+              {
+                "url": "https://www.v2ex.com/t/1255076#reply11",
+                "community": "V2EX/分享发现",
+                "visitedAt": "2026-11-08T13:08:00+08:00",
+                "publishedAt": "2026-11-07T13:23:45+08:00",
+                "kind": "thread",
+                "summary": "空气炸锅烤红薯：发帖者列功率测量与做法，回复第11楼质疑部分功率计在低档测量的准确性；原串含回复。此时间为页面标示的最近回复时间，不把功率结论当成已验证事实。"
+              },
+              {
+                "url": "https://www.reddit.com/r/BenignExistence/comments/1x799pa/in_the_yarn_store_with_my_mom_and_sil/",
+                "community": "Reddit/r/BenignExistence",
+                "visitedAt": "2026-11-08T13:08:30+08:00",
+                "publishedAt": null,
+                "kind": "thread",
+                "summary": "日常手工店小事从买红毛线延伸到给家人织衣；回复具体谈版型、工期、织法、赠与者和预算，发帖者逐条回答，不是每句都抖机灵。"
+              },
+              {
+                "url": "https://www.reddit.com/r/BenignExistence/comments/1x8le2y/whimsy_cheese/",
+                "community": "Reddit/r/BenignExistence",
+                "visitedAt": "2026-11-08T13:08:45+08:00",
+                "publishedAt": null,
+                "kind": "thread",
+                "summary": "市场奶酪被贴活动眼睛的琐事，回复有人催图、楼主说明社区发图限制，也有人说自己会收集活动眼睛；短小生活趣味无需升华。"
+              }
+            ]
+          }
+          L0_RESEARCH_JSON
+          Y29_SOCIAL_PRIVATE_DIR=/tmp/l0-ops-private/profiles npm run social:context -- --seed l0-20261108-1304 --research /tmp/l0-ops-work/research.json --out /tmp/l0-ops-work/context.json
+          node --input-type=module <<'L0_SHOW'
+          import fs from 'node:fs';
+          const c=JSON.parse(fs.readFileSync('/tmp/l0-ops-work/context.json','utf8'));
+          console.log('L0_PLAN_START');
+          console.log(JSON.stringify({plan:c.plan,review:c.review,selection:{users:c.selection.users.map(u=>({id:u.id,kind:u.kind,allowedActions:u.allowedActions,profile:u.profile,supplementalDocuments:u.supplementalDocuments})),dropped:c.selection.dropped,blockedCount:c.selection.blocked.length},retrospective:c.retrospective,posts:c.posts.slice(0,30)},null,2));
+          console.log('L0_PLAN_END');
+          L0_SHOW
+      - name: Preserve independent draw for the publish phase
+        uses: actions/upload-artifact@v4
+        with:
+          name: l0-20261108-1304-prepared
+          path: |
+            /tmp/l0-ops-work/context.json
+            /tmp/l0-ops-work/research.json
+            /tmp/l0-ops-private/round-state.json
+          retention-days: 3
