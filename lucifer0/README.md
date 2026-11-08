@@ -10,6 +10,7 @@
 
 - **[用户总目录](users/用户总目录.md)**：按网名找人，进入个人文件夹或直接编辑 `profile.md`。
 - **[用户填写说明](users/README.md)**：账号开关、人物资料和补充文档；通用运营规则与个人设定分开维护。
+- **[可复用人物库](docs/population.md)**：原创人物基础档案、平台适配、作者知情与状态更新；[研究索引](docs/research/population-sources.md)记录实际取材范围。
 - **[AI 运营总控](docs/ai-updates.md)**：执行顺序与各部分入口。
 - **[社交媒体参考](docs/social-reference.md)**：观察方法、参考来源与表达审读。
 - **[发布说明](docs/publishing.md)**：一串一包、回复关系、导入与中断恢复。
@@ -29,6 +30,8 @@
 | 位置 | 用途 |
 | --- | --- |
 | `users/<id>/profile.md` | 账号、开关与人物资料，手工编辑 |
+| `users/<id>/person.md` | 原创路人的可迁移生活、内心与成长条件，可公开入库的作者层 |
+| `population.json` | 原创人口文件索引、来源、历史锚点与作者新设线下关系，不控制账号权限 |
 | `users/<id>/` | 本人的补充设定与可选头像 |
 | `users/用户总目录.md`、`data/feed.json` | 自动生成，不手改 |
 | `posts/YYYY/MM/<串ID>/` | 主帖 `index.md`、回复 `replies/`、配图 `media/` |

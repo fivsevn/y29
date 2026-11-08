@@ -67,11 +67,14 @@ test('catalog uses names, folder links and branch-specific edit links without de
   const user = account(), root = await fixture(t, [user, account('second-user')]);
   const profile = emptyProfile(user.id); profile.notes = 'SYNTHETIC_DETAIL_NOT_FOR_INDEX';
   await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
+  await writeFile(join(root, 'users', user.id, 'person.md'), '# SYNTHETIC_AUTHOR_LAYER');
   const result = await buildUserDirectory(root, { branch: 'feat/social-first-edition' });
   const text = await readFile(result.path, 'utf8');
   assert.equal(result.count, 2);
   assert.match(text, /\[窗边的人\]\(\.\/sample-user\/\)/);
   assert.match(text, /\[查看档案\]\(\.\/sample-user\/profile.md\)/);
+  assert.match(text, /\[人物基础\]\(\.\/sample-user\/person.md\)/);
+  assert.doesNotMatch(text, /second-user\/person\.md|SYNTHETIC_AUTHOR_LAYER/);
   assert.match(text, /https:\/\/github.com\/fivsevn\/y29\/edit\/feat%2Fsocial-first-edition\/lucifer0\/users\/sample-user\/profile.md/);
   assert.doesNotMatch(text, /SYNTHETIC_DETAIL_NOT_FOR_INDEX|表达习惯|知情范围/);
   await buildUserDirectory(root, { branch: 'feat/social-first-edition' });

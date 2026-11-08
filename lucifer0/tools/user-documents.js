@@ -189,13 +189,15 @@ export async function readUserDocuments(root) {
 
 export async function buildUserDirectory(root, { branch = 'main' } = {}) {
   if (typeof branch !== 'string' || !branch || /[\x00-\x20?#]/.test(branch)) fail('编辑链接分支名无效');
-  const { registry } = await readUserDocuments(root);
+  const { registry, supplementalDocuments } = await readUserDocuments(root);
   const users = [...registry.users].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN') || a.id.localeCompare(b.id, 'en'));
   const lines = ['# 用户总目录', '', '从网名进入这个用户的文件夹；“查看档案”打开资料，“编辑档案”直接打开 GitHub 编辑器。', '', `共 **${users.length} 个用户**。此目录自动生成，修改资料请点对应的编辑链接。`, '', '[新增用户和填写说明](README.md) · [空白档案模板](TEMPLATE.md)', '', '| 网名 / 用户文件夹 | 作品来源 | 启用 | AI | /following | 主帖 | 回复 | 档案 |', '| --- | --- | --- | --- | --- | --- | --- | --- |'];
   for (const user of users) {
     const path = `./${user.id}/profile.md`, edit = `https://github.com/fivsevn/y29/edit/${encodeURIComponent(branch)}/lucifer0/users/${user.id}/profile.md`;
     const nickname = cell(user.name).replace(/\[/g, '&#91;').replace(/\]/g, '&#93;');
-    lines.push(`| [${nickname}](./${user.id}/) | ${cell(user.sourceWork) || '—'} | ${user.enabled ? '是' : '否'} | ${ENUMS.aiScope[user.aiScope]} | ${user.inFollowing ? '是' : '否'} | ${user.allowPosts ? '是' : '否'} | ${user.allowReplies ? '是' : '否'} | [查看档案](${path}) · [编辑档案](${edit}) |`);
+    const person = supplementalDocuments[user.id].some(document => document.path === `users/${user.id}/person.md`)
+      ? ` · [人物基础](./${user.id}/person.md)` : '';
+    lines.push(`| [${nickname}](./${user.id}/) | ${cell(user.sourceWork) || '—'} | ${user.enabled ? '是' : '否'} | ${ENUMS.aiScope[user.aiScope]} | ${user.inFollowing ? '是' : '否'} | ${user.allowPosts ? '是' : '否'} | ${user.allowReplies ? '是' : '否'} | [查看档案](${path}) · [编辑档案](${edit})${person} |`);
   }
   lines.push('', '账号资料与运营规则分开维护；作品来源不会自动决定 /following 开关。', '同一用户的更多设定可以放在其文件夹的其他 Markdown 文档中，AI 读取档案时会一起读取。', '');
   const path = join(root, 'users/用户总目录.md');
