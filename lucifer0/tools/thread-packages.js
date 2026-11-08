@@ -1,6 +1,8 @@
 import { readFile, readdir, mkdir, writeFile, lstat, realpath, rm, link } from 'node:fs/promises';
 import { join, dirname, relative, resolve, sep } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
 const POST_PATH = /^posts\/\d{4}\/\d{2}\/([a-z0-9][a-z0-9-]{1,63})\/(?:index\.md|replies\/([a-z0-9][a-z0-9-]{1,63})\.md)$/;
@@ -15,6 +17,7 @@ const objectKeys = (value, allowed, label) => {
   if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).some(key => !allowed.includes(key))) fail(`Invalid ${label}`);
 };
 const json = async path => JSON.parse(await readFile(path, 'utf8'));
+const runFile = promisify(execFile);
 
 export function renderPostDocument(post) {
   const fields = [...META, ...OPTIONAL_META.filter(key => Object.hasOwn(post, key))];
@@ -143,6 +146,60 @@ export async function readThreadPackages(root, attempt = 0) {
     batches.push({ version: 1, id, mode: post.canon === 'sample' ? 'sample' : 'daily', posts: [post] });
   }
   return { batches, files: [...pathsById.values()].sort().map(path => join(root, path)), pending };
+}
+
+async function untrackedPendingFiles(root, files) {
+  try { await runFile('git', ['-C', root, 'rev-parse', '--show-toplevel']); }
+  catch (error) {
+    if (/not a git repository/i.test(error.stderr || '')) return;
+    fail('Cannot verify pending files against Git: ' + error.message);
+  }
+  const paths = files.map(file => file.path);
+  const { stdout: tracked } = await runFile('git', ['-C', root, 'ls-files', '-z', '--', ...paths]);
+  if (tracked) fail('Pending files are already tracked by Git; preserve them and correct the published source');
+  let hasHead = true;
+  try { await runFile('git', ['-C', root, 'rev-parse', '--verify', '--quiet', 'HEAD']); }
+  catch (error) { if (error.code === 1) hasHead = false; else throw error; }
+  if (hasHead) {
+    const { stdout: committed } = await runFile('git', ['-C', root, 'ls-tree', '-r', '-z', '--name-only', 'HEAD', '--', ...paths]);
+    if (committed) fail('Pending files are already committed in Git; preserve them and correct the published source');
+  }
+}
+
+async function matchingPendingFile(root, file) {
+  const parts = file.path.split('/');
+  let path = root;
+  for (let index = 0; index < parts.length; index++) {
+    path = join(path, parts[index]);
+    let stat;
+    try { stat = await lstat(path); }
+    catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+    if (stat.isSymbolicLink() || (index === parts.length - 1 ? !stat.isFile() : !stat.isDirectory())) fail('Pending archive must use regular files and directories: ' + file.path);
+  }
+  if (hash(await readFile(path)) !== file.sha256) fail('Unfinished archive was changed; preserve it and inspect before cancelling: ' + file.path);
+  return path;
+}
+
+// Caller holds .publish.lock. The journal owns only its unchanged, untracked files;
+// the editable operation draft may already differ from the interrupted import.
+export async function cancelPendingBatch(root, { id }) {
+  if (typeof id !== 'string' || !ID.test(id)) fail('A stable update ID is required to cancel pending files');
+  const pending = await readPending(root);
+  if (!pending) return { status: 'no-pending', id, count: 0 };
+  if (pending.id !== id) fail('The unfinished import belongs to a different update');
+  const stat = await lstat(root);
+  if (!stat.isDirectory() || stat.isSymbolicLink()) fail('The archive root must be a regular directory');
+  root = await realpath(root);
+  await untrackedPendingFiles(root, pending.files);
+  const paths = [];
+  for (const file of pending.files) {
+    const path = await matchingPendingFile(root, file);
+    if (path) paths.push(path);
+  }
+  if (canonical(await readPending(root)) !== canonical(pending)) fail('The pending import changed while cancelling; retry after the active operation finishes');
+  for (const path of paths) await rm(path);
+  await rm(join(root, PENDING_PATH));
+  return { status: 'cancelled', id, count: paths.length };
 }
 
 async function safeDirectory(root, path) {

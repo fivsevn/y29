@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, writeFile, rm, mkdir, readdir, symlink } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, rm, mkdir, readdir, symlink, cp } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../lucifer0/tools/content.js';
@@ -300,7 +301,8 @@ test('interrupted guest writes hide partial files, reject another update and res
   const input = join(directory, 'batch.json'), options = { root, reviewed: true };
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, options), /different content/);
-  assert.equal((await loadContent(root)).feed.posts.length, 15);
+  assert.equal((await loadContent(root, { allowPending: true })).feed.posts.length, 15);
+  await assert.rejects(loadContent(root), /unfinished update/);
   const other = newBatch(); other.id = 'unrelated-update'; other.posts[0].id = 'unrelated-post';
   const second = join(directory, 'other.json'); await writeFile(second, JSON.stringify(other));
   await assert.rejects(ingestBatch(second, options), /unfinished update/);
@@ -312,6 +314,50 @@ test('interrupted guest writes hide partial files, reject another update and res
   assert.equal((await ingestBatch(input, options)).status, 'already-archived');
   assert.equal((await loadContent(root)).feed.posts.length, 17);
   await assert.rejects(readFile(join(root, '.publish-pending.json')), /ENOENT/);
+});
+
+test('validation and build reject an unfinished import without rewriting the current feed', async t => {
+  const { root, directory } = await repositoryCopy(t), batch = newBatch();
+  batch.posts.push({ ...batch.posts[0], id: 'blocked-reply', replyTo: batch.posts[0].id, text: '第二条尚未导入。' });
+  const blocked = join(root, 'posts/2026/11/test-new-post/replies/blocked-reply.md');
+  await mkdir(blocked, { recursive: true });
+  const input = join(directory, 'batch.json'); await writeFile(input, JSON.stringify(batch));
+  const before = await readFile(join(root, 'data/feed.json'), 'utf8');
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /different content/);
+  await assert.rejects(loadContent(root), /unfinished update/);
+  await assert.rejects(buildFeed(root), /unfinished update/);
+  await cp(new URL('../lucifer0/tools/', import.meta.url), join(root, 'tools'), { recursive: true });
+  await writeFile(join(root, 'package.json'), '{"type":"module"}');
+  for (const command of ['validate', 'build']) {
+    const result = spawnSync(process.execPath, [join(root, 'tools/publish.js'), command], { encoding: 'utf8' });
+    assert.equal(result.status, 1, result.stderr);
+    assert.match(result.stderr, /unfinished update/);
+  }
+  assert.equal(await readFile(join(root, 'data/feed.json'), 'utf8'), before);
+  assert.equal((await loadContent(root, { allowPending: true })).feed.posts.length, 15);
+});
+
+test('an exact pending retry survives a newer merged post while an unrelated backdated import still fails', async t => {
+  const { root, directory } = await repositoryCopy(t), batch = newBatch();
+  batch.posts.push({ ...batch.posts[0], id: 'pending-reply', replyTo: batch.posts[0].id, createdAt: '2026-11-07T22:05:00+08:00', text: '仍属原更新的第二条。' });
+  const blocked = join(root, 'posts/2026/11/test-new-post/replies/pending-reply.md');
+  await mkdir(blocked, { recursive: true });
+  const input = join(directory, 'batch.json'), options = { root, reviewed: true };
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, options), /different content/);
+  const remote = { ...batch.posts[0], id: 'merged-later-post', createdAt: '2026-11-07T23:00:00+08:00', text: '暂停期间另一台设备发布的内容。' };
+  const remoteDirectory = join(root, 'posts/2026/11/merged-later-post');
+  await mkdir(remoteDirectory, { recursive: true });
+  await writeFile(join(remoteDirectory, 'index.md'), renderPostDocument(remote));
+  await rm(blocked, { recursive: true });
+  assert.equal((await ingestBatch(input, options)).status, 'archived');
+  assert.equal((await loadContent(root)).feed.posts.length, 18);
+  assert.equal((await ingestBatch(input, options)).status, 'already-archived');
+  const unrelated = newBatch(); unrelated.id = 'unrelated-older-update'; unrelated.posts[0].id = 'unrelated-older-post';
+  unrelated.posts[0].createdAt = '2026-11-07T22:30:00+08:00'; unrelated.posts[0].text = '普通新操作仍需沿时间线追加。';
+  await writeFile(input, JSON.stringify(unrelated));
+  await assert.rejects(ingestBatch(input, options), /append/);
+  assert.equal((await loadContent(root)).feed.posts.length, 18);
 });
 
 test('a retry can keep exact existing posts and append missing posts after a later publication', async t => {

@@ -4,6 +4,7 @@ import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
 import { defaultPrivateDirectory, privateFolder, readProfiles } from './private-profiles.js';
+import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
@@ -81,7 +82,7 @@ async function sourceText(root, path) {
   return { path, text: await regularText(absolute) };
 }
 async function source(root, privateDirectory) {
-  const { registry, policy, feed, files, pending } = await loadContent(root);
+  const { registry, policy, feed, files, pending } = await loadContent(root, { allowPending: true });
   const material = await readProfiles({ users: registry.users, root, privateDirectory });
   const documents = await Promise.all([...controlPaths, ...environmentPaths].map(path => sourceText(root, path)));
   for (const user of registry.users) {
@@ -121,6 +122,12 @@ async function atomicFile(path, text) {
   } finally { await rm(temporary, { force: true }); }
 }
 const saveOperation = (path, operation) => atomicFile(path, JSON.stringify(operation, null, 2) + '\n');
+async function acquireLock(path, message) {
+  try { await mkdir(path); }
+  catch (error) { if (error.code === 'EEXIST') fail(message); throw error; }
+  return () => rm(path, { recursive: true, force: true });
+}
+const lockWork = directory => acquireLock(join(directory, '.update.lock'), 'The current update is busy; retry after its active command finishes');
 function reading(operation, data) {
   return '# 本次更新阅读材料\n\n操作：' + operation.id + '；发言上限：' + operation.plan.budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
     '。\n\n这是当前资料的完整快照，生成快照不代表执行者已经读完。按原文理解人物的底色、处境与知情范围，人物资料本身不构成本轮剧情。主帖和回复合计不超过上限，实际发言至少一半来自无需档案的 guest；一条时必须是 guest。候选可以沉默，其他合资格库人物可以自然回复。\n\n' +
@@ -131,8 +138,7 @@ function reading(operation, data) {
 
 export async function prepareUpdate({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), workDirectory, now = Date.now(), entropy = () => randomBytes(32).toString('hex') } = {}) {
   root = await checkedRoot(root);
-  const directory = await workFolder(workDirectory, root, true), lock = join(directory, '.prepare.lock');
-  try { await mkdir(lock); } catch (error) { if (error.code === 'EEXIST') fail('An update is already being prepared'); throw error; }
+  const directory = await workFolder(workDirectory, root, true), release = await lockWork(directory);
   try {
     const operationPath = join(directory, 'operation.json'), readingPath = join(directory, 'reading.md');
     let operation;
@@ -152,7 +158,7 @@ export async function prepareUpdate({ root = socialRoot, privateDirectory = defa
     await atomicFile(readingPath, reading(operation, data));
     await saveOperation(operationPath, operation);
     return { status, id: operation.id, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds, operationPath, readingPath };
-  } finally { await rm(lock, { recursive: true, force: true }); }
+  } finally { await release(); }
 }
 
 function siteDomain(hostname) {
@@ -225,23 +231,63 @@ function samePublicPost(expected, actual, users) {
 }
 export async function finishUpdate({ root = socialRoot, workDirectory, fetchImpl = globalThis.fetch, now = Date.now() } = {}) {
   root = await checkedRoot(root);
-  const directory = await workFolder(workDirectory, root), operationPath = join(directory, 'operation.json');
-  const operation = await readOperation(operationPath, root);
-  if (operation.posts.length) {
+  const directory = await workFolder(workDirectory, root), operationPath = join(directory, 'operation.json'), readingPath = join(directory, 'reading.md');
+  const release = await lockWork(directory);
+  try {
+    const operation = await readOperation(operationPath, root);
+    const originalReading = await optionalText(readingPath);
+    let savedOperation = canonical(operation);
+    const unchanged = async () => {
+      if (canonical(await readOperation(operationPath, root)) !== savedOperation || await optionalText(readingPath) !== originalReading) fail('The working update changed during finish; its files were retained. Review the latest draft before retrying');
+    };
     const { feed } = await loadContent(root);
-    if (!operation.posts.every(post => samePublicPost(post, feed.posts.find(actual => actual.id === post.id), feed.users))) fail('Local posts do not yet match this operation; keep the working record');
-    operation.status = 'awaiting-online';
-    await saveOperation(operationPath, operation);
-    const url = new URL('https://y29.fivsevn.com/lucifer0/data/feed.json');
-    url.searchParams.set('verify', operation.id + '-' + now);
-    const response = await fetchImpl(url.href, { cache: 'no-store', signal: AbortSignal.timeout(15000) });
-    if (!response.ok) fail('Online verification failed; keep the working record');
-    const online = await response.json();
-    if (online.version !== 1 || !Array.isArray(online.posts) || !Array.isArray(online.users) || !operation.posts.every(post => samePublicPost(post, online.posts.find(actual => actual.id === post.id), online.users))) fail('Online posts do not yet match; keep the working record and retry finish');
-    operation.status = 'published';
-    await saveOperation(operationPath, operation);
-  }
-  await rm(join(directory, 'reading.md'), { force: true });
-  await rm(operationPath);
-  return { id: operation.id, status: operation.posts.length ? 'published' : 'no-posts', count: operation.posts.length };
+    if (operation.posts.length) {
+      if (!operation.posts.every(post => samePublicPost(post, feed.posts.find(actual => actual.id === post.id), feed.users))) fail('Local posts do not yet match this operation; keep the working record');
+      await unchanged();
+      operation.status = 'awaiting-online';
+      await saveOperation(operationPath, operation);
+      savedOperation = canonical(operation);
+      const url = new URL('https://y29.fivsevn.com/lucifer0/data/feed.json');
+      url.searchParams.set('verify', operation.id + '-' + now);
+      const response = await fetchImpl(url.href, { cache: 'no-store', signal: AbortSignal.timeout(15000) });
+      if (!response.ok) fail('Online verification failed; keep the working record');
+      const online = await response.json();
+      if (online.version !== 1 || !Array.isArray(online.posts) || !Array.isArray(online.users) || !operation.posts.every(post => samePublicPost(post, online.posts.find(actual => actual.id === post.id), online.users))) fail('Online posts do not yet match; keep the working record and retry finish');
+      await unchanged();
+      operation.status = 'published';
+      await saveOperation(operationPath, operation);
+      savedOperation = canonical(operation);
+    }
+    await unchanged();
+    await rm(readingPath, { force: true });
+    await rm(operationPath);
+    return { id: operation.id, status: operation.posts.length ? 'published' : 'no-posts', count: operation.posts.length };
+  } finally { await release(); }
+}
+
+async function optionalText(path) {
+  try { return await regularText(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+}
+
+export async function cancelUpdate({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), workDirectory, now = Date.now() } = {}) {
+  root = await checkedRoot(root);
+  const directory = await workFolder(workDirectory, root), operationPath = join(directory, 'operation.json'), readingPath = join(directory, 'reading.md');
+  const releaseWork = await lockWork(directory);
+  try {
+    const operation = await readOperation(operationPath, root);
+    const releasePublish = await acquireLock(join(root, '.publish.lock'), 'A publication is active; retry cancellation after it finishes');
+    try {
+      const { feed, pending } = await loadContent(root, { allowPending: true });
+      if (!pending && operation.posts.some(post => feed.posts.some(archived => archived.id === post.id))) fail('This operation already has archived posts; finish publishing or correct the original posts instead of cancelling');
+      const result = pending ? await cancelPendingBatch(root, { id: operation.id }) : { status: 'no-pending', count: 0 };
+      const data = await source(root, privateDirectory);
+      operation.posts = [];
+      operation.preparedAt = new Date(now).toISOString();
+      operation.sourceDigest = data.sourceDigest;
+      operation.status = 'prepared';
+      await atomicFile(readingPath, reading(operation, data));
+      await saveOperation(operationPath, operation);
+      return { id: operation.id, status: 'cancelled', removedPosts: result.count, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds, operationPath, readingPath };
+    } finally { await releasePublish(); }
+  } finally { await releaseWork(); }
 }

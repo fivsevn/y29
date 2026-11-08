@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, writeFile, rm, symlink, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { readThreadPackages, writeThreadBatch, renderPostDocument, parsePostDocument } from '../lucifer0/tools/thread-packages.js';
+import { execFileSync } from 'node:child_process';
+import { readThreadPackages, writeThreadBatch, renderPostDocument, parsePostDocument, cancelPendingBatch } from '../lucifer0/tools/thread-packages.js';
 
 async function fixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'y29-thread-packages-'));
@@ -14,6 +15,20 @@ const post = (id, replyTo = null, text = '测试文字。') => ({ id, author: 't
 const round = (id, posts) => ({ version: 1, id, mode: 'sample', posts });
 const archivedPosts = archive => archive.batches.flatMap(batch => batch.posts).sort((a, b) => a.id.localeCompare(b.id));
 const sortedPosts = (...batches) => batches.flatMap(batch => batch.posts).sort((a, b) => a.id.localeCompare(b.id));
+async function interruptedArchive(t) {
+  const root = await fixture(t), previous = round('previous-update', [post('previous-thread', null, '已经归档的内容。')]);
+  await writeThreadBatch(root, previous);
+  const batch = round('cancel-this-update', [post('cancel-thread', null, '尚未完成的根帖。'), post('cancel-reply', 'cancel-thread', '尚未完成的回复。'), post('cancel-last', 'cancel-reply', '缺少的最后一条。')]);
+  const folder = join(root, 'posts/2026/11/cancel-thread');
+  const media = join(folder, 'media/keep.svg');
+  await mkdir(join(folder, 'media'), { recursive: true });
+  await writeFile(media, '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  const blocked = join(folder, 'replies/cancel-last.md');
+  await mkdir(blocked, { recursive: true });
+  await assert.rejects(writeThreadBatch(root, batch, [previous]), /different content/);
+  await rm(blocked, { recursive: true });
+  return { root, batch, previous, media, first: join(folder, 'index.md'), second: join(folder, 'replies/cancel-reply.md') };
+}
 
 test('Markdown keeps exact multiline text, metadata and media; unknown or duplicate metadata is rejected', () => {
   const original = { ...post('test-thread', null, '第一行。\n\n第二行。\n'), media: [{ src: 'posts/2026/11/test-thread/media/test.svg', alt: '示例："杯子"' }] };
@@ -158,4 +173,51 @@ test('pending journals cannot follow symlinks or hide an archived ID in another 
   await mkdir(other, { recursive: true });
   await writeFile(join(other, 'index.md'), renderPostDocument(post('test-thread')));
   await assert.rejects(readThreadPackages(root), /reuses an existing post ID/);
+});
+
+test('cancelling removes only unchanged pending Markdown, tolerates missing files and keeps edited drafts out of the decision', async t => {
+  const f = await interruptedArchive(t);
+  await assert.rejects(cancelPendingBatch(f.root, { id: 'wrong-update' }), /different update/);
+  const changedDraft = { ...f.batch, posts: [{ ...f.batch.posts[0], text: '操作文件中的新草稿。' }] };
+  assert.deepEqual(await cancelPendingBatch(f.root, changedDraft), { status: 'cancelled', id: f.batch.id, count: 2 });
+  await assert.rejects(readFile(f.first), /ENOENT/);
+  await assert.rejects(readFile(f.second), /ENOENT/);
+  assert.match(await readFile(f.media, 'utf8'), /svg/);
+  assert.deepEqual(archivedPosts(await readThreadPackages(f.root)), sortedPosts(f.previous));
+  assert.deepEqual(await cancelPendingBatch(f.root, { id: f.batch.id }), { status: 'no-pending', id: f.batch.id, count: 0 });
+});
+
+test('cancellation validates every pending file before removing any and preserves external changes', async t => {
+  const f = await interruptedArchive(t), original = await readFile(f.second, 'utf8');
+  await writeFile(f.second, original.replace('尚未完成的回复。', '人工编辑的回复。'));
+  await assert.rejects(cancelPendingBatch(f.root, { id: f.batch.id }), /was changed/);
+  assert.match(await readFile(f.first, 'utf8'), /尚未完成的根帖/);
+  assert.match(await readFile(f.second, 'utf8'), /人工编辑/);
+  assert.ok(await readFile(join(f.root, '.publish-pending.json'), 'utf8'));
+  await writeFile(f.second, original);
+  await rm(f.first);
+  assert.equal((await cancelPendingBatch(f.root, { id: f.batch.id })).count, 1);
+  assert.deepEqual(archivedPosts(await readThreadPackages(f.root)), sortedPosts(f.previous));
+});
+
+test('cancellation refuses symlinked pending files without removing earlier matching files', async t => {
+  const f = await interruptedArchive(t), external = await fixture(t), target = join(external, 'keep.md');
+  await writeFile(target, await readFile(f.second, 'utf8'));
+  await rm(f.second); await symlink(target, f.second);
+  await assert.rejects(cancelPendingBatch(f.root, { id: f.batch.id }), /regular files/);
+  assert.match(await readFile(f.first, 'utf8'), /尚未完成的根帖/);
+  assert.match(await readFile(target, 'utf8'), /尚未完成的回复/);
+});
+
+test('cancellation preserves pending paths already staged or committed in Git', async t => {
+  const f = await interruptedArchive(t);
+  execFileSync('git', ['init', '--quiet', f.root]);
+  execFileSync('git', ['-C', f.root, 'add', '--', 'posts/2026/11/cancel-thread/index.md']);
+  await assert.rejects(cancelPendingBatch(f.root, { id: f.batch.id }), /tracked by Git/);
+  assert.match(await readFile(f.second, 'utf8'), /尚未完成的回复/);
+  execFileSync('git', ['-C', f.root, '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', '-c', 'core.hooksPath=/dev/null', 'commit', '--quiet', '--no-gpg-sign', '-m', 'Temporary cancellation fixture']);
+  execFileSync('git', ['-C', f.root, 'rm', '--cached', '--quiet', '--', 'posts/2026/11/cancel-thread/index.md']);
+  await assert.rejects(cancelPendingBatch(f.root, { id: f.batch.id }), /committed in Git/);
+  assert.match(await readFile(f.first, 'utf8'), /尚未完成的根帖/);
+  assert.ok(await readFile(join(f.root, '.publish-pending.json'), 'utf8'));
 });

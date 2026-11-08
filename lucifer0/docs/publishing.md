@@ -59,7 +59,9 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 ## 导入与上线
 
-审读完成后，用工具输出的实际路径执行：
+`posts` 为空时，直接执行 `node lucifer0/tools/update.js finish --work /outside/work`，报告已经做的观察及未发帖原因，本次更新结束。工作目录使用工具输出的实际位置。
+
+有正文且审读完成后，用工具输出的实际路径执行：
 
 ```sh
 node lucifer0/tools/publish.js ingest /outside/work/operation.json --reviewed --ai
@@ -92,10 +94,22 @@ node lucifer0/tools/update.js finish --work /outside/work
 
 ## 恢复与修正
 
-中断后继续使用原工作目录、原帖子 ID 和草稿。已经存在且内容相同的帖子由工具跳过，缺少的部分继续补齐；同 ID 的不同内容会要求核对。`.publish-pending.json` 暂存未完成导入，`.publish.lock/` 与 `.publish-staging/` 服务写入过程，均由工具管理。
+中断后继续使用原工作目录、原帖子 ID 和草稿。已经存在且内容相同的帖子由工具跳过，缺少的部分继续补齐；同 ID 的不同内容会要求核对。`.publish-pending.json` 暂存未完成导入，`.publish.lock/` 与 `.publish-staging/` 服务写入过程，工作目录的 `.update.lock/` 协调准备、收尾与撤回，均由工具管理。发布校验和构建要求当前导入已完成，准备及恢复仍可读取此前已完成的内容。
 
 执行器被强制结束并留下锁时，AI 先核对该仓库的发布或准备进程已经退出，再清理相应的遗留锁目录，保留当前操作文件与 pending 记录，沿原命令恢复。
 
 推送或上线尚未完成时，继续完成当前步骤；成功核验后再清理工作记录。旧帖修正直接编辑原 Markdown，保留 ID、作者、时间及回复关系，然后重新校验与构建。
 
 补录历史使用用户明确指定的时间范围，并在导入时加 `--backfill`。当时的世界状况与人物阶段决定可用材料。日常更新沿当前时间线追加。
+
+## 撤回未完成导入
+
+旧稿因账号权限变化或内容调整需要重写时，使用原工作目录执行：
+
+```sh
+node lucifer0/tools/update.js cancel --work /outside/work
+```
+
+工具按当前操作的未完成写入记录逐一核对，只撤回其中仍与记录吻合、尚未进入 Git 的帖子文件。既有帖子、配图和手工改动继续保留；发现文件冲突时保留现场并报告具体路径。
+
+成功撤回后，原操作编号、抽签与观察继续保留，草稿清空，阅读材料刷新。沿同一操作重写、审读并导入。撤回中途被打断时，可重复执行原命令。已经完成归档的正文按旧帖修正流程处理。

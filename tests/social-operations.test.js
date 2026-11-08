@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, readdir, cp, symlink } from 'n
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate } from '../lucifer0/tools/operations.js';
+import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate } from '../lucifer0/tools/operations.js';
 import { emptyProfile } from '../lucifer0/tools/private-profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
@@ -61,6 +61,18 @@ async function draft(prepared, now, posts) {
   operation.research = research(now); operation.posts = posts;
   await writeFile(prepared.operationPath, JSON.stringify(operation));
   return { operation, batch: { version: 1, id: operation.id, mode: 'daily', posts } };
+}
+async function interruptedDraft(t) {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
+  const author = users().find(user => user.id === original.plan.selectedIds[0]);
+  const entries = [post('cancel-root', 'guest-cancel-root', f.now), post('cancel-library', author.id, f.now, 'cancel-root'), post('cancel-last', 'guest-cancel-last', f.now, 'cancel-root')];
+  const { batch } = await draft(prepared, f.now, entries);
+  const thread = join(f.root, threadDirectory(entries[0], new Map(entries.map(item => [item.id, item]))));
+  const blocked = join(thread, 'replies/cancel-last.md');
+  await mkdir(blocked, { recursive: true });
+  await assert.rejects(writeThreadBatch(f.root, batch, (await loadContent(f.root)).batches), /different content/);
+  await rm(blocked, { recursive: true });
+  return { ...f, prepared, original, author, entries, thread };
 }
 
 test('one draw reaches all ten ceilings and samples one shared weighted pool with a soft recent penalty', () => {
@@ -196,7 +208,7 @@ test('an exact partial write resumes after three days with fresh reading and res
   await mkdir(blocked, { recursive: true });
   await assert.rejects(writeThreadBatch(f.root, batch, (await loadContent(f.root)).batches), /different content/);
   assert.equal((await readJSON(join(f.root, '.publish-pending.json'))).id, original.id);
-  assert.ok(!(await loadContent(f.root)).feed.posts.some(item => item.id === 'pending-root'));
+  assert.ok(!(await loadContent(f.root, { allowPending: true })).feed.posts.some(item => item.id === 'pending-root'));
 
   const resumed = await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
   const current = await readJSON(resumed.operationPath);
@@ -248,11 +260,109 @@ test('finish keeps an awaiting-online operation until exact online posts and gue
   assert.deepEqual(await readdir(f.workDirectory), []);
 });
 
+test('finish retains direct draft or reading edits made while online verification is waiting', async t => {
+  for (const target of ['operation', 'reading']) {
+    const f = await fixture(t), result = await prepareUpdate(f.options);
+    await draft(result, f.now, [post('concurrent-guest', 'guest-concurrent', f.now)]);
+    await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+    const { feed } = await loadContent(f.root), originalReading = await readFile(result.readingPath, 'utf8');
+    let entered, release;
+    const enteredNetwork = new Promise(resolve => { entered = resolve; }), network = new Promise(resolve => { release = resolve; });
+    const finishing = finishUpdate({ ...f.options, fetchImpl: async () => { entered(); await network; return { ok: true, json: async () => feed }; } });
+    await enteredNetwork;
+    if (target === 'operation') {
+      const current = await readJSON(result.operationPath); current.posts[0].text = 'A new correction is being reviewed.';
+      await writeFile(result.operationPath, JSON.stringify(current));
+    } else await writeFile(result.readingPath, originalReading + '\nNew reading annotation.\n');
+    release();
+    await assert.rejects(finishing, /changed during finish/);
+    assert.equal((await readJSON(result.operationPath)).status, 'awaiting-online');
+    if (target === 'operation') {
+      assert.equal((await readJSON(result.operationPath)).posts[0].text, 'A new correction is being reviewed.');
+      assert.equal(await readFile(result.readingPath, 'utf8'), originalReading);
+    } else assert.ok((await readFile(result.readingPath, 'utf8')).endsWith('New reading annotation.\n'));
+    assert.deepEqual((await readdir(f.workDirectory)).sort(), ['operation.json', 'reading.md']);
+  }
+});
+
+test('prepare, finish and cancel share one work lock and never remove another command lock', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options);
+  await draft(result, f.now, [post('locking-guest', 'guest-locking', f.now)]);
+  await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  const { feed } = await loadContent(f.root);
+  let entered, release;
+  const enteredNetwork = new Promise(resolve => { entered = resolve; }), network = new Promise(resolve => { release = resolve; });
+  const finishing = finishUpdate({ ...f.options, fetchImpl: async () => { entered(); await network; return { ok: true, json: async () => feed }; } });
+  await enteredNetwork;
+  try {
+    for (const command of [prepareUpdate, finishUpdate, cancelUpdate]) {
+      await assert.rejects(command(f.options), /busy/);
+      assert.ok((await readdir(f.workDirectory)).includes('.update.lock'));
+    }
+  } finally { release(); }
+  assert.equal((await finishing).status, 'published');
+  assert.deepEqual(await readdir(f.workDirectory), []);
+});
+
+test('cancel withdraws a disabled-author partial write even after draft edits and keeps the same draw', async t => {
+  const f = await interruptedDraft(t), historyPath = join(f.root, 'posts/2025/04/history-entry/index.md');
+  const history = await readFile(historyPath, 'utf8');
+  await writeFile(join(f.root, 'users', f.author.id, 'profile.md'), renderUserDocument({ ...f.author, enabled: false }, emptyProfile(f.author.id)));
+  await prepareUpdate(f.options);
+  await assert.rejects(ingestBatch(f.prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory }), /not ready/);
+  await draft(f.prepared, f.now, f.entries.filter(entry => entry.author !== f.author.id));
+  await assert.rejects(ingestBatch(f.prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory }), /different content/);
+  const cancelled = await cancelUpdate(f.options), operation = await readJSON(cancelled.operationPath);
+  assert.equal(operation.id, f.original.id); assert.deepEqual(operation.plan, f.original.plan);
+  assert.deepEqual(operation.posts, []); assert.deepEqual(operation.research, research(f.now)); assert.equal(operation.status, 'prepared');
+  assert.equal(await readFile(historyPath, 'utf8'), history);
+  await assert.rejects(readFile(join(f.thread, 'index.md')), /ENOENT/);
+  await assert.rejects(readFile(join(f.thread, 'replies/cancel-library.md')), /ENOENT/);
+  await assert.rejects(readFile(join(f.root, '.publish-pending.json')), /ENOENT/);
+  const reading = await readFile(cancelled.readingPath, 'utf8');
+  assert.ok(reading.includes(f.original.id) && reading.includes('SYNTHETIC_HISTORY_BODY'));
+  await draft(cancelled, f.now, [post('replacement-guest', 'guest-replacement', f.now)]);
+  assert.equal((await ingestBatch(cancelled.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory })).status, 'archived');
+});
+
+test('cancel refuses modified partial files and already archived posts, preserving work and publisher locks', async t => {
+  const partial = await interruptedDraft(t), file = join(partial.thread, 'index.md');
+  const changed = (await readFile(file, 'utf8')) + '\nA manual change outside the importer.\n';
+  await writeFile(file, changed);
+  const workBefore = await readFile(partial.prepared.operationPath, 'utf8');
+  await assert.rejects(cancelUpdate(partial.options), /changed|modified|different|match/);
+  assert.equal(await readFile(file, 'utf8'), changed);
+  assert.equal(await readFile(partial.prepared.operationPath, 'utf8'), workBefore);
+  assert.ok(await readJSON(join(partial.root, '.publish-pending.json')));
+
+  const f = await fixture(t), prepared = await prepareUpdate(f.options);
+  await draft(prepared, f.now, [post('already-archived', 'guest-archived', f.now)]);
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  await assert.rejects(cancelUpdate(f.options), /already has archived/);
+  assert.equal((await readJSON(prepared.operationPath)).posts.length, 1);
+  assert.ok((await loadContent(f.root)).feed.posts.some(item => item.id === 'already-archived'));
+  await mkdir(join(f.root, '.publish.lock'));
+  await assert.rejects(cancelUpdate(f.options), /publication is active/);
+  assert.ok((await readdir(f.root)).includes('.publish.lock'));
+  assert.ok(!(await readdir(f.workDirectory)).includes('.update.lock'));
+});
+
 test('a zero-post update can finish without contacting the site', async t => {
   const f = await fixture(t), result = await prepareUpdate(f.options);
   const finished = await finishUpdate({ ...f.options, fetchImpl: () => { throw new Error('No network for zero posts'); } });
   assert.equal(finished.id, result.id); assert.equal(finished.status, 'no-posts');
   assert.deepEqual(await readdir(f.workDirectory), []);
+});
+
+test('zero-post finish cannot discard a still-pending update', async t => {
+  const f = await interruptedDraft(t);
+  await draft(f.prepared, f.now, []);
+  await assert.rejects(finishUpdate({ ...f.options, fetchImpl: () => { throw new Error('No network while pending'); } }), /unfinished update/);
+  assert.equal((await readJSON(f.prepared.operationPath)).id, f.original.id);
+  assert.ok((await readdir(f.workDirectory)).includes('reading.md'));
+  assert.ok(await readJSON(join(f.root, '.publish-pending.json')));
+  await cancelUpdate(f.options);
+  assert.equal((await readJSON(f.prepared.operationPath)).id, f.original.id);
 });
 
 test('the real prepare and publish CLIs use operation.json directly and recover exact retries', async t => {
@@ -261,6 +371,12 @@ test('the real prepare and publish CLIs use operation.json directly and recover 
   await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
   const env = { ...process.env, Y29_SOCIAL_PRIVATE_DIR: f.privateDirectory };
   const prepared = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', '--work', f.workDirectory], { env, encoding: 'utf8' }));
+  const originalPlan = (await readJSON(prepared.operationPath)).plan;
+  await draft(prepared, f.now, [post('cancelled-cli-draft', 'guest-cli-draft', f.now)]);
+  const cancelled = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'cancel', '--work', f.workDirectory], { env, encoding: 'utf8' }));
+  assert.equal(cancelled.id, prepared.id);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, originalPlan);
+  assert.deepEqual((await readJSON(prepared.operationPath)).posts, []);
   await draft(prepared, f.now, [post('cli-guest-post', 'guest-cli', f.now)]);
   const command = [join(f.root, 'tools/publish.js'), 'ingest', prepared.operationPath, '--reviewed', '--ai'];
   const first = JSON.parse(execFileSync(process.execPath, command, { env, encoding: 'utf8' }));

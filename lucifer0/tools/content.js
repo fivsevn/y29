@@ -118,10 +118,11 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
 }
 
 async function json(path) { return JSON.parse(await readFile(path, 'utf8')); }
-export async function loadContent(root = socialRoot) {
+export async function loadContent(root = socialRoot, { allowPending = false } = {}) {
   const [{ registry }, policy, { batches, files, pending }] = await Promise.all([
     readUserDocuments(root), json(join(root, 'publication.json')), readThreadPackages(root)
   ]);
+  if (pending && !allowPending) fail(`An unfinished update must be completed or cancelled before validation or build: ${pending.id}`);
   const feed = validateContent(registry, batches, policy);
   await validateAssets(root, feed);
   return { registry, policy, batches, feed, files, pending };
@@ -173,7 +174,7 @@ export async function ingestBatch(input, { root = socialRoot, reviewed = false, 
 }
 
 async function ingestLocked(input, { root, ai, contextPath, privateDirectory, backfill }) {
-  const { registry, policy, batches, feed: existingFeed, pending } = await loadContent(root);
+  const { registry, policy, batches, feed: existingFeed, pending } = await loadContent(root, { allowPending: true });
   const value = await json(resolve(input));
   const isUpdate = value?.version === 1 && Object.hasOwn(value, 'plan');
   const batch = isUpdate ? { version: 1, id: value.id, mode: 'daily', posts: value.posts } : value;
@@ -181,6 +182,7 @@ async function ingestLocked(input, { root, ai, contextPath, privateDirectory, ba
   validateBatch(batch, policy);
   if (pending && pending.id !== batch.id) fail(`An unfinished update must be retried first: ${pending.id}`);
   if (pending && pending.batchDigest !== createHash('sha256').update(stableJSON(batch)).digest('hex')) fail('Update ID already has an unfinished import with different content');
+  const resumingPartialWrite = Boolean(pending);
   const existing = new Map(existingFeed.posts.map(post => [post.id, post])), seen = new Set(), fresh = [];
   for (const post of batch.posts) {
     identifier(post.id, 'post.id');
@@ -209,7 +211,7 @@ async function ingestLocked(input, { root, ai, contextPath, privateDirectory, ba
     if (ai && user.aiScope !== batch.mode) fail(`AI scope does not permit this batch: ${user.id}`);
   }
   const latest = Math.max(0, ...existingFeed.posts.map(post => Date.parse(post.createdAt)));
-  if (!backfill && fresh.some(post => Date.parse(post.createdAt) < latest)) fail('New posts must append to the existing timeline; use --backfill only for an explicitly requested historical update');
+  if (!backfill && !resumingPartialWrite && fresh.some(post => Date.parse(post.createdAt) < latest)) fail('New posts must append to the existing timeline; use --backfill only for an explicitly requested historical update');
   const { path } = await writeThreadBatch(root, batch, batches);
   await buildFeed(root);
   return { status: 'archived', id: batch.id, count: batch.posts.length, path };

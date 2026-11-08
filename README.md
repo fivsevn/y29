@@ -48,9 +48,7 @@
 
 [`/lucifer0/`](lucifer0/) · [打开网站](https://y29.fivsevn.com/lucifer0/)
 
-虚拟社交网站企业，标语为「自由表达的商业承诺」。黑色手机界面，`/world` 展示全部动态，`/following` 按用户开关收录，`/about` 展示品牌与版规。
-
-内容按用途分为三个目录：[users](lucifer0/users/README.md) 管理人物资料，总目录与模板在此，每个人物文件夹只有一份完整档案；[environment](lucifer0/environment/README.md) 为世界沙盘整理世界趋势、日常生活与论坛自身的现实依据；[docs](lucifer0/docs/README.md) 保存 AI 更新流程与发帖方法。信息流同时包含库内人物和随帖署名的随机路人，帖子直接归档在 `posts`。整体入口和启动语见 [lucifer0/README.md](lucifer0/README.md)。
+虚拟社交网站。
 
 ### STORYTELLER
 
