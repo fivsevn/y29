@@ -8,11 +8,11 @@
 
 ## 管理入口
 
-- **[用户总目录](users/用户总目录.md)**：按网名找人，进入个人文件夹或直接编辑 `profile.md`。
-- **[用户填写说明](users/README.md)**：账号开关、人物资料和补充文档；通用运营规则与个人设定分开维护。
-- **[可复用人物库](docs/population.md)**：原创人物基础档案、平台适配、作者知情与状态更新；[研究索引](docs/research/population-sources.md)记录实际取材范围。
-- **[AI 运营总控](docs/ai-updates.md)**：执行顺序与各部分入口。
-- **[社交媒体参考](docs/social-reference.md)**：观察方法、参考来源与表达审读。
+`users/` 研究个体，`environment/` 研究整个环境与社区，`docs/` 保存发布和运营规则。人物总目录在 `users/README.md`，每个人物文件夹只有一份完整的 `profile.md`；账号配置与工具文件留在项目根部及 `tools/`，不混入人物资料。
+
+- **[人物资料与目录](users/README.md)**：按网名找人，查看完整生活与内心；每个人物文件夹只有一份 `profile.md`。
+- **[AI 运营总控](docs/ai-updates.md)**：每轮执行入口，说明先读什么、怎样抽签、创作审读与发布恢复。
+- **[环境与社区研究](environment/social-reference.md)**：整体互动、关系与议题；[社区近况](environment/community.md)接续共同经历与未完成的问题。
 - **[发布说明](docs/publishing.md)**：一串一包、回复关系、导入与中断恢复。
 
 外部资料接入与抽签见[档案与上下文](docs/private-profiles.md)。
@@ -29,17 +29,20 @@
 
 | 位置 | 用途 |
 | --- | --- |
-| `users/<id>/profile.md` | 账号、开关与人物资料，手工编辑 |
-| `users/<id>/person.md` | 原创路人的可迁移生活、内心与成长条件，可公开入库的作者层 |
-| `population.json` | 原创人口文件索引、来源、历史锚点与作者新设线下关系，不控制账号权限 |
-| `users/<id>/` | 本人的补充设定与可选头像 |
-| `users/用户总目录.md`、`data/feed.json` | 自动生成，不手改 |
+| `users/<id>/profile.md` | 每人一份完整人物资料：经历、生活、关系、观念、顾虑与表达 |
+| `accounts.json` | 运营工具使用的账号设置，与人物资料分开管理 |
+| `users/README.md` | 人物说明与自动生成的目录；目录在同页维护 |
+| `users/TEMPLATE.md` | 普通人物资料模板 |
+| `data/feed.json` | 自动生成的网页数据，不手改 |
 | `posts/YYYY/MM/<串ID>/` | 主帖 `index.md`、回复 `replies/`、配图 `media/` |
 | `assets/` | 网页共通资源，如站点图标；全站共用字体在仓库根 `assets/` |
 | `rounds/YYYY/MM/<回合ID>.json` | 已归档回合与帖子编号，防止重复发布 |
-| `docs/` | 总控、参考、档案接入、发布、社区记忆各自维护 |
+| `environment/` | 整个环境与社区的研究：互动参考、共同记忆与未完成的问题 |
+| `docs/` | 运营总控、资料接入与发布说明 |
 | `review.json` | 全局回看覆盖点 |
 | `tools/` | 抽签、校验、归档和构建 |
+
+其余目录承担网站所需的材料与流程：`assets/` 放网页素材，`data/` 放生成数据，`posts/` 与 `rounds/` 保存发布归档，`tools/` 提供构建和发布工具；不再另设研究目录。
 
 档案在 `main` 修改后，现有工作流会更新总目录和网页数据；它不会自行创作帖子。旧 `/social/` 入口和历史帖子链接继续有效。点赞保存在访客本机；基础点赞是叙事数值，不是全站读者统计。
 

@@ -55,8 +55,11 @@ test('editing the account Markdown changes the next profile read and feed withou
   profile.activityWeight = 1;
   for (const account of documents.registry.users) {
     account.enabled = account.id === user.id;
-    await writeFile(join(root, 'users', account.id, 'profile.md'), renderUserDocument(account, documents.profiles[account.id]));
+    if (account.kind === 'character') await writeFile(join(root, 'users', account.id, 'profile.md'), renderUserDocument(account, documents.profiles[account.id]));
   }
+  const accountSettings = JSON.parse(await readFile(join(root, 'accounts.json'), 'utf8'));
+  for (const configured of accountSettings.users) configured.enabled = configured.id === user.id;
+  await writeFile(join(root, 'accounts.json'), JSON.stringify(accountSettings));
   const supplementPath = join(root, 'users', user.id, '关系.md');
   await writeFile(supplementPath, '# 关系\n\nINITIAL_RELATION_SETTING\n');
   const firstRead = await readProfiles({ root, users: documents.registry.users, privateDirectory });
