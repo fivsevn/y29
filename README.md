@@ -5,8 +5,6 @@
 这里收录独立网页游戏、互动叙事与实验性终端项目。  
 项目主要以静态网页形式运行，并发布于 GitHub Pages。
 
-继续开发先看 [开发导航](docs/DEVELOPMENT.md)：按修改目标找文件、运行游戏、检查与预览。当前问题和后续拆分顺序见 [仓库检查与深化清单](docs/REPOSITORY_REVIEW.md)。
-
 ## Games
 
 ### 01 / ARASHI: SIGNAL LOCK
