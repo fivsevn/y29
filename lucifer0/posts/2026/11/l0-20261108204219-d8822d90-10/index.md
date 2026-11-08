@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-10"
 author: "guest-half-pancake"
 createdAt: "2026-11-08T18:42:00+08:00"
 replyTo: null
-likes: 0
+likes: 9
 canon: "derivative"
 media: []
 guest: {"name":"差半张饼"}

@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-06"
 author: "visitor-gamma-upper"
 createdAt: "2026-11-08T19:36:00+08:00"
 replyTo: null
-likes: 0
+likes: 2
 canon: "derivative"
 media: []
 ---

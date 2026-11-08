@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-12"
 author: "guest-screen-on"
 createdAt: "2026-11-08T21:54:00+08:00"
 replyTo: null
-likes: 0
+likes: 17
 canon: "derivative"
 media: []
 guest: {"name":"qiu7"}

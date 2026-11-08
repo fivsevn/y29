@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-02"
 author: "guest-balconygap"
 createdAt: "2026-11-08T10:14:00+08:00"
 replyTo: null
-likes: 0
+likes: 12
 canon: "derivative"
 media: []
 guest: {"name":"阿芋"}

@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, readdir, cp, symlink } from 'n
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate } from '../lucifer0/tools/operations.js';
+import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation, suggestUpdatePresentation } from '../lucifer0/tools/operations.js';
 import { emptyProfile } from '../lucifer0/tools/private-profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
@@ -91,6 +91,52 @@ test('one draw reaches all ten ceilings and samples one shared weighted pool wit
   assert.ok(mixed > 0 && mixed < 500, 'the shared pool does not force two identities into every draw');
   const withoutCanon = drawUpdatePlan({ ...input, overrides: {}, seed: 'no-canon' });
   assert.ok(withoutCanon.selectedIds.every(id => input.users.find(user => user.id === id).kind === 'visitor'));
+});
+
+test('presentation suggestions select one actual post and keep each post stable across reordering', () => {
+  const now = Date.now(), entries = [post('image-one', 'guest-one', now), post('image-two', 'guest-two', now, 'image-one'), post('image-three', 'guest-three', now)];
+  const before = structuredClone(entries), first = suggestPostPresentation({ seed: 'presentation-seed', posts: entries });
+  const reordered = suggestPostPresentation({ seed: 'presentation-seed', posts: [...entries].reverse() });
+  assert.deepEqual(entries, before, 'suggestions must not edit posts, dates, media or authors');
+  assert.ok(entries.some(entry => entry.id === first.imagePostId));
+  assert.equal(reordered.imagePostId, first.imagePostId);
+  assert.deepEqual([...reordered.likes].sort((a, b) => a.id.localeCompare(b.id)), [...first.likes].sort((a, b) => a.id.localeCompare(b.id)));
+  assert.deepEqual(suggestPostPresentation({ seed: 'presentation-seed', posts: [] }), { imagePostId: null, likes: [] });
+  assert.equal(suggestPostPresentation({ seed: 'presentation-seed', posts: [entries[1]] }).imagePostId, entries[1].id);
+  assert.throws(() => suggestPostPresentation({ seed: 'presentation-seed', posts: [{ replyTo: null }] }), /valid posts/);
+  const chosen = new Set(Array.from({ length: 100 }, (_, index) => suggestPostPresentation({ seed: 'image-draw-' + index, posts: entries }).imagePostId));
+  assert.equal(chosen.size, entries.length, 'image selection must not always choose the first or a root post');
+});
+
+test('suggested likes retain zeros and rare high values while roots usually receive more', () => {
+  const now = Date.now();
+  const roots = Array.from({ length: 800 }, (_, index) => post('likes-root-' + index, 'guest-root', now));
+  const replies = Array.from({ length: 800 }, (_, index) => post('likes-reply-' + index, 'guest-reply', now, 'history-entry'));
+  const { likes } = suggestPostPresentation({ seed: 'likes-distribution', posts: [...roots, ...replies] });
+  const rootLikes = likes.slice(0, roots.length).map(item => item.likes), replyLikes = likes.slice(roots.length).map(item => item.likes);
+  const mean = values => values.reduce((sum, count) => sum + count, 0) / values.length;
+  assert.ok(likes.every(item => Number.isSafeInteger(item.likes) && item.likes >= 0 && item.likes <= 160));
+  assert.ok(likes.filter(item => item.likes <= 20).length > likes.length * 0.9);
+  assert.ok(rootLikes.includes(0) && replyLikes.includes(0));
+  assert.ok(rootLikes.some(count => count > 20) && replyLikes.some(count => count > 20));
+  assert.ok(new Set(rootLikes).size > 10 && new Set(replyLikes).size > 10);
+  assert.ok(mean(rootLikes) > mean(replyLikes));
+});
+
+test('the suggest API and CLI read the current actual posts without changing the operation or draw', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options);
+  assert.deepEqual(await suggestUpdatePresentation(f.options), { id: prepared.id, count: 0, imagePostId: null, likes: [] });
+  const entries = [post('suggest-one', 'guest-one', f.now), post('suggest-two', 'guest-two', f.now, 'suggest-one')];
+  await draft(prepared, f.now, entries);
+  const operationBefore = await readFile(prepared.operationPath, 'utf8'), readingBefore = await readFile(prepared.readingPath, 'utf8');
+  await cp(new URL('../lucifer0/tools', import.meta.url), join(f.root, 'tools'), { recursive: true });
+  await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
+  const suggestion = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'suggest', '--work', f.workDirectory], { encoding: 'utf8' }));
+  assert.equal(suggestion.count, entries.length);
+  assert.ok(entries.some(entry => entry.id === suggestion.imagePostId));
+  assert.deepEqual(suggestion, await suggestUpdatePresentation(f.options));
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), operationBefore);
+  assert.equal(await readFile(prepared.readingPath, 'utf8'), readingBefore);
 });
 
 test('an explicit count of seventeen imports nine guest posts and refuses only eight', async t => {

@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-14"
 author: "guest-stopped-lift"
 createdAt: "2026-11-08T21:09:00+08:00"
 replyTo: null
-likes: 0
+likes: 14
 canon: "derivative"
 media: []
 guest: {"name":"橙汁分我一半"}

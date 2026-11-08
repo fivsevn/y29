@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-01"
 author: "guest-eastwindow"
 createdAt: "2026-11-08T08:17:00+08:00"
 replyTo: null
-likes: 0
+likes: 7
 canon: "derivative"
 media: []
 guest: {"name":"Luna_08"}

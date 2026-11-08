@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-04"
 author: "guest-mealcost"
 createdAt: "2026-11-08T12:23:00+08:00"
 replyTo: null
-likes: 0
+likes: 23
 canon: "derivative"
 media: []
 guest: {"name":"晚点再说"}

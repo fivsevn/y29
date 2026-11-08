@@ -912,9 +912,159 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-dont-rush",
+      "handle": "guest_753b240b888705e3ae34",
+      "name": "哎呀别急",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-corridor22",
+      "handle": "guest_31140618547ddf920fc9",
+      "name": "fluffyQ",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-do19",
+      "handle": "guest_1c1a08d729250420dc1c",
+      "name": "dodo_19",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-taroice",
+      "handle": "guest_90461564a1efd072278e",
+      "name": "芋圆去冰",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-yuanyuan-6",
+      "handle": "guest_6fdd1eb685a42c75cc14",
+      "name": "远远",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261108205506-c542614f-07",
+      "author": "guest-yuanyuan-6",
+      "createdAt": "2026-11-09T04:58:00+08:00",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "远远"
+      },
+      "text": "外面有人卖热豆花了，刚拿了一碗回来。甜的，小时候那种。"
+    },
+    {
+      "id": "l0-20261108205506-c542614f-06",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-09T04:46:00+08:00",
+      "replyTo": "l0-20261108205506-c542614f-05",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "先问能不能换、寄回去运费多少吧。落地灯那么大一箱，一个来回的钱够再买个小台灯了。"
+    },
+    {
+      "id": "l0-20261108205506-c542614f-05",
+      "author": "guest-taroice",
+      "createdAt": "2026-11-09T03:12:00+08:00",
+      "replyTo": null,
+      "likes": 13,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "芋圆去冰"
+      },
+      "text": "朋友寄了个落地灯，说我家拍照太暗。我这屋摆开晾衣架就开不了柜门，灯还在盒子里。她晚上问有没有用上，我说在找合适的位置，真是在找。能直接说想换成台灯吗，有点怕她觉得我挑。"
+    },
+    {
+      "id": "l0-20261108205506-c542614f-04",
+      "author": "guest-do19",
+      "createdAt": "2026-11-09T02:41:00+08:00",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "dodo_19"
+      },
+      "text": "现在连纸片人自动配音的小短剧都能刷一小时了。看一个管家找丢掉的锅，看了六集还没找到。明知道它在拖，手就是往下划，还有人看过这个吗"
+    },
+    {
+      "id": "l0-20261108205506-c542614f-03",
+      "author": "guest-dont-rush",
+      "createdAt": "2026-11-09T02:16:00+08:00",
+      "replyTo": "l0-20261108205506-c542614f-01",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "哎呀别急"
+      },
+      "text": "我最怕这种能用但不好用的东西。彻底坏掉反而能痛快退"
+    },
+    {
+      "id": "l0-20261108205506-c542614f-02",
+      "author": "guest-corridor22",
+      "createdAt": "2026-11-09T02:07:00+08:00",
+      "replyTo": null,
+      "likes": 36,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261108205506-c542614f-02/media/cat-house.jpg",
+          "alt": "地板上的纸箱猫窝开着门和窗，里面铺了布；橘猫蜷在旁边的棕色包装纸上睡觉。"
+        }
+      ],
+      "guest": {
+        "name": "fluffyQ"
+      },
+      "text": "晚上给它搭的小房子，剪窗户剪了半天。现在睡旁边那张纸上。进去坐两分钟也行啊"
+    },
+    {
+      "id": "l0-20261108205506-c542614f-01",
+      "author": "visitor-lambda",
+      "createdAt": "2026-11-09T01:49:00+08:00",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "本来想省点钱收个二手标签机，晚上光试纸就废掉一截。预览是正的，打出来永远往右偏，换了两卷纸都一样。卖家叫我再校准一次。算了，纸卷全拆开了又得卷回去寄，我现在就想它从桌上消失。"
+    },
     {
       "id": "l0-20261108204219-d8822d90-17",
       "author": "guest-one-more",
@@ -933,7 +1083,7 @@
       "author": "guest-call-me-zhou",
       "createdAt": "2026-11-08T23:48:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 5,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -959,7 +1109,7 @@
       "author": "visitor-halfkettle",
       "createdAt": "2026-11-08T22:18:00+08:00",
       "replyTo": "l0-20261108204219-d8822d90-12",
-      "likes": 0,
+      "likes": 4,
       "canon": "derivative",
       "media": [],
       "text": "别说那天有事，直接说不去了。说有事还会问你几点忙完。"
@@ -969,7 +1119,7 @@
       "author": "guest-screen-on",
       "createdAt": "2026-11-08T21:54:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 17,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -982,7 +1132,7 @@
       "author": "guest-stopped-lift",
       "createdAt": "2026-11-08T21:09:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 14,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -995,7 +1145,7 @@
       "author": "guest-five-minutes",
       "createdAt": "2026-11-08T20:28:00+08:00",
       "replyTo": "l0-20261108204219-d8822d90-08",
-      "likes": 0,
+      "likes": 1,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -1008,7 +1158,7 @@
       "author": "visitor-clearcalendar",
       "createdAt": "2026-11-08T20:12:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 6,
       "canon": "derivative",
       "media": [],
       "text": "石榴听书的自动续费到底在哪关。账户、钱包、订阅我都找过了，能让我续的地方有三个，关的地方一个没找到。"
@@ -1018,7 +1168,7 @@
       "author": "visitor-gamma-upper",
       "createdAt": "2026-11-08T19:36:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 2,
       "canon": "derivative",
       "media": [],
       "text": "说好家里旧袋子扔掉一半的。我婆婆挑了六个出来，折好，装进另一个袋子，又塞回抽屉。呀我刚才一拉，那个大袋子还卡住了。"
@@ -1028,7 +1178,7 @@
       "author": "guest-mop-curls",
       "createdAt": "2026-11-08T19:01:00+08:00",
       "replyTo": "l0-20261108204219-d8822d90-10",
-      "likes": 0,
+      "likes": 2,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -1041,7 +1191,7 @@
       "author": "guest-half-pancake",
       "createdAt": "2026-11-08T18:42:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 9,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -1054,7 +1204,7 @@
       "author": "guest-cartonroom",
       "createdAt": "2026-11-08T17:05:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 16,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -1067,7 +1217,7 @@
       "author": "visitor-tau",
       "createdAt": "2026-11-08T14:08:00+08:00",
       "replyTo": "l0-20261108204219-d8822d90-04",
-      "likes": 0,
+      "likes": 8,
       "canon": "derivative",
       "media": [],
       "text": "你得看那盒奶和剩下的洋葱下顿还用不用。七十多是这回掏的钱，四十二是四顿吃掉的钱，混着比肯定对不上。要是剩下的最后全扔了，那你就按七十多算。"
@@ -1077,7 +1227,7 @@
       "author": "guest-mealcost",
       "createdAt": "2026-11-08T12:23:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 23,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -1090,7 +1240,7 @@
       "author": "visitor-mu",
       "createdAt": "2026-11-08T10:39:00+08:00",
       "replyTo": "l0-20261108204219-d8822d90-02",
-      "likes": 0,
+      "likes": 3,
       "canon": "derivative",
       "media": [],
       "text": "摆室内还是外阳台？我还以为你种了一大片，往下看就两盆呀。提壶水过去比收拾这些东西快。"
@@ -1100,7 +1250,7 @@
       "author": "guest-balconygap",
       "createdAt": "2026-11-08T10:14:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 12,
       "canon": "derivative",
       "media": [],
       "guest": {
@@ -1113,7 +1263,7 @@
       "author": "guest-eastwindow",
       "createdAt": "2026-11-08T08:17:00+08:00",
       "replyTo": null,
-      "likes": 0,
+      "likes": 7,
       "canon": "derivative",
       "media": [],
       "guest": {

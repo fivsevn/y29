@@ -3,7 +3,7 @@ id: "l0-20261108204219-d8822d90-16"
 author: "guest-call-me-zhou"
 createdAt: "2026-11-08T23:48:00+08:00"
 replyTo: null
-likes: 0
+likes: 5
 canon: "derivative"
 media: []
 guest: {"name":"小周"}

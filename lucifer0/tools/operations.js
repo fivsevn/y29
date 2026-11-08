@@ -52,6 +52,30 @@ export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], se
   return { seed, budget, selectedIds, ...(requestedCount !== undefined ? { requestedCount } : {}) };
 }
 
+export function suggestPostPresentation({ seed, posts }) {
+  if (!bounded(seed, 200) || !Array.isArray(posts)) fail('Presentation suggestions need the saved seed and actual posts');
+  const seen = new Set();
+  for (const post of posts) {
+    if (!plain(post) || typeof post.id !== 'string' || !ID.test(post.id) || seen.has(post.id) || !(post.replyTo === null || typeof post.replyTo === 'string' && ID.test(post.replyTo))) fail('Presentation suggestions need distinct valid posts');
+    seen.add(post.id);
+  }
+  // Separate namespaces keep these choices independent of the budget and authors.
+  const imageRank = id => createHash('sha256').update(seed + '\0image\0' + id).digest('hex');
+  const imagePostId = posts.map(post => ({ id: post.id, rank: imageRank(post.id) }))
+    .sort((a, b) => a.rank.localeCompare(b.rank, 'en') || a.id.localeCompare(b.id, 'en'))[0]?.id ?? null;
+  const likes = posts.map(post => {
+    const random = randomFor(seed + '\0likes\0' + post.id), tier = random(), root = post.replyTo === null;
+    const integer = (low, high) => low + Math.floor(random() * (high - low + 1));
+    let count;
+    if (tier < (root ? 0.2 : 0.35)) count = 0;
+    else if (tier < (root ? 0.93 : 0.97)) count = integer(1, root ? 20 : 12);
+    else if (tier < 0.99) count = root ? integer(21, 60) : integer(13, 35);
+    else count = root ? integer(61, 160) : integer(36, 90);
+    return { id: post.id, likes: count };
+  });
+  return { imagePostId, likes };
+}
+
 function planSeal(id, root, plan) {
   return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...(plan.requestedCount !== undefined ? { requestedCount: plan.requestedCount } : {}) });
 }
@@ -169,6 +193,12 @@ export async function prepareUpdate({ root = socialRoot, privateDirectory = defa
     await saveOperation(operationPath, operation);
     return { status, id: operation.id, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds, operationPath, readingPath };
   } finally { await release(); }
+}
+
+export async function suggestUpdatePresentation({ root = socialRoot, workDirectory } = {}) {
+  root = await checkedRoot(root);
+  const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
+  return { id: operation.id, count: operation.posts.length, ...suggestPostPresentation({ seed: operation.plan.seed, posts: operation.posts }) };
 }
 
 function siteDomain(hostname) {
