@@ -7,7 +7,7 @@ import { socialRoot, loadContent } from '../lucifer0/tools/content.js';
 import { readUserDocuments, parseUserDocument } from '../lucifer0/tools/user-documents.js';
 import { readProfiles, selectCandidates } from '../lucifer0/tools/private-profiles.js';
 
-const headings = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算', '资料参考'];
+const headings = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算'];
 const settings = (id = 'sample-person') => ({ id, avatar: '', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'daily', profileStatus: 'approved', inFollowing: false, allowPosts: true, allowReplies: true, activityWeight: 0.5, timezone: 'Asia/Shanghai', activeHours: '轮休下午' });
 const person = (id = 'sample-person') => `# 窗边的人
 
@@ -46,14 +46,13 @@ test('each original person has one complete human dossier, with operating contro
   const documents = await readUserDocuments(socialRoot);
   const configuration = JSON.parse(await readFile(join(socialRoot, 'accounts.json'), 'utf8'));
   const visitors = documents.registry.users.filter(user => user.kind === 'visitor');
-  assert.equal(visitors.length, 56);
   assert.deepEqual(configuration.users.map(user => user.id).sort(), visitors.map(user => user.id).sort());
   for (const user of visitors) {
     const folder = join(socialRoot, 'users', user.id);
     assert.deepEqual((await readdir(folder)).filter(name => name.endsWith('.md')), ['profile.md'], user.id);
     const text = await readFile(join(folder, 'profile.md'), 'utf8');
     for (const heading of headings) assert.ok(text.includes(`## ${heading}\n`), `${user.id}: missing ${heading}`);
-    assert.doesNotMatch(text, /^## (?:账号与开关|事实依据|自由备注|成长与状态转移)/m);
+    assert.doesNotMatch(text, /^## (?:账号与开关|事实依据|自由备注|成长与状态转移|资料参考)/m);
     assert.doesNotMatch(text, /\| (?:AI 使用范围|资料状态|抽取权重|允许发主帖|允许回复|格式版本) \||（作者层）|（未发生分支）/);
     const configured = configuration.users.find(account => account.id === user.id);
     assert.deepEqual(parseUserDocument(text, user.id, configured), { user, profile: documents.profiles[user.id] });
@@ -76,10 +75,10 @@ test('person and environment references resolve within their own research folder
     assert.equal(unique.size, expectedCount, `${label}: missing or unexpected source entries`);
     return unique;
   };
-  const references = new Map([
-    ['../README.md', sourceIds(individualNotes, 27, 'individual references')],
-    ['../../environment/social-reference.md', sourceIds(environmentNotes, 5, 'environment references')]
-  ]);
+  const individualSources = sourceIds(individualNotes, 27, 'individual references');
+  const environmentSources = sourceIds(environmentNotes, 5, 'environment references');
+  assert.deepEqual([...environmentSources].sort(), ['I01', 'I02', 'I03', 'M02', 'M03']);
+  assert.ok([...individualSources].every(id => !environmentSources.has(id)), 'individual and environmental sources must have distinct homes');
   assert.match(await readFile(join(socialRoot, 'environment/community.md'), 'utf8'), /社区/);
   for (const oldFile of ['docs/community.md', 'docs/social-reference.md']) {
     await assert.rejects(readFile(join(socialRoot, oldFile)), { code: 'ENOENT' });
@@ -88,15 +87,7 @@ test('person and environment references resolve within their own research folder
   assert.doesNotMatch(individualNotes, /\| (?:AI 使用范围|资料状态|抽取权重|允许发主帖|允许回复) \|/);
   for (const user of registry.users.filter(user => user.kind === 'visitor')) {
     const text = await readFile(join(socialRoot, 'users', user.id, 'profile.md'), 'utf8');
-    const citations = [...text.matchAll(/\[([SOLIM]\d{2})\]\((\.\.\/README\.md|\.\.\/\.\.\/environment\/social-reference\.md)#([a-z]\d{2})\)/g)];
-    assert.ok(citations.length, `${user.id}: missing background references`);
-    assert.doesNotMatch(text, /docs\/social-reference\.md/);
-    for (const [, id, target, anchor] of citations) {
-      const expected = /^I|^M0[23]$/.test(id) ? '../../environment/social-reference.md' : '../README.md';
-      assert.equal(target, expected, `${user.id}: ${id} is linked to the wrong research folder`);
-      assert.ok(references.get(target).has(id), `${user.id}: unknown source ${id}`);
-      assert.equal(anchor, id.toLowerCase());
-    }
+    assert.doesNotMatch(text, /\[[SOLIM]\d{2}\]\([^)]*#[a-z]\d{2}\)/, `${user.id}: references are scattered into the person dossier`);
   }
 });
 
