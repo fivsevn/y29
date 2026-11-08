@@ -9,7 +9,7 @@
 | 目录与入口 | 内容 |
 | --- | --- |
 | [lucifer0/users/](users/README.md) | 人物研究：个体档案、人物目录、模板与参考资料 |
-| [lucifer0/environment/](environment/social-reference.md) | 环境研究：社区近况、群体互动与共同记忆 |
+| [lucifer0/environment/](environment/README.md) | 环境资料：世界趋势、日常生活与论坛自身 |
 | [lucifer0/docs/](docs/ai-updates.md) | AI 运营：资料读取、抽签、创作、发布与恢复 |
 
 ## 给 AI 的启动语

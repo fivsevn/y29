@@ -63,10 +63,17 @@ test('each original person has one complete human dossier, with operating contro
   assert.deepEqual(topLevel, ['README.md', 'TEMPLATE.md']);
 });
 
-test('person and environment references resolve within their own research folders', async () => {
+test('individual references stay with users and the environment has four documented entrypoints', async () => {
   const { registry } = await readUserDocuments(socialRoot);
   const individualNotes = await readFile(join(socialRoot, 'users/README.md'), 'utf8');
-  const environmentNotes = await readFile(join(socialRoot, 'environment/social-reference.md'), 'utf8');
+  const environmentPath = join(socialRoot, 'environment');
+  const environmentFiles = ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md'];
+  assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles].sort());
+  const environmentIndex = await readFile(join(environmentPath, 'README.md'), 'utf8');
+  for (const name of environmentFiles) {
+    assert.ok((await readFile(join(environmentPath, name), 'utf8')).trim(), `${name}: empty environment document`);
+    if (name !== 'README.md') assert.ok(environmentIndex.includes(`(${name})`), `${name}: missing from the environment entrypoint`);
+  }
   const sourceIds = (text, expectedCount, label) => {
     const headings = [...text.matchAll(/^### ([SOLIM]\d{2})$/gm)].map(match => match[1]);
     const anchors = [...text.matchAll(/<a\s+(?:name|id)=["']([solim]\d{2})["']\s*><\/a>/gi)].map(match => match[1].toUpperCase());
@@ -75,12 +82,8 @@ test('person and environment references resolve within their own research folder
     assert.equal(unique.size, expectedCount, `${label}: missing or unexpected source entries`);
     return unique;
   };
-  const individualSources = sourceIds(individualNotes, 27, 'individual references');
-  const environmentSources = sourceIds(environmentNotes, 5, 'environment references');
-  assert.deepEqual([...environmentSources].sort(), ['I01', 'I02', 'I03', 'M02', 'M03']);
-  assert.ok([...individualSources].every(id => !environmentSources.has(id)), 'individual and environmental sources must have distinct homes');
-  assert.match(await readFile(join(socialRoot, 'environment/community.md'), 'utf8'), /社区/);
-  for (const oldFile of ['docs/community.md', 'docs/social-reference.md']) {
+  sourceIds(individualNotes, 27, 'individual references');
+  for (const oldFile of ['docs/community.md', 'docs/social-reference.md', 'environment/community.md', 'environment/social-reference.md']) {
     await assert.rejects(readFile(join(socialRoot, oldFile)), { code: 'ENOENT' });
   }
   assert.doesNotMatch(individualNotes, /^### I\d{2}$|^## (?:社区近况|应用与审读)$/m);

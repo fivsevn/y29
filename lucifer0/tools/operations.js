@@ -7,6 +7,7 @@ import { defaultPrivateDirectory, privateFolder, outsideRepository, isInside, re
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
 const kinds = ['character', 'visitor'];
+const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md'];
 const fail = message => { throw new Error(message); };
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : plain(value) ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
@@ -136,12 +137,15 @@ async function readState(path, root) {
 }
 
 async function source(root, privateDirectory, now) {
-  const { registry, policy, batches, feed } = await loadContent(root);
+  const [{ registry, policy, batches, feed }, environmentDocuments] = await Promise.all([
+    loadContent(root),
+    Promise.all(environmentPaths.map(async path => ({ path, text: await readFile(join(root, path), 'utf8') })))
+  ]);
   const material = await readProfiles({ users: registry.users, root, privateDirectory });
   const review = await readReview(root, batches, feed.posts, now);
-  return { registry, policy, batches, feed, material, review };
+  return { registry, policy, batches, feed, material, review, environmentDocuments };
 }
-const sourceDigest = data => digest({ users: data.registry.users, policy: data.policy, batches: data.batches, profiles: data.material.profiles, overrides: data.material.overrides, supplements: data.material.supplementalDocuments, checkpoint: data.review.checkpoint });
+const sourceDigest = data => digest({ users: data.registry.users, policy: data.policy, batches: data.batches, profiles: data.material.profiles, overrides: data.material.overrides, supplements: data.material.supplementalDocuments, checkpoint: data.review.checkpoint, environmentDocuments: data.environmentDocuments });
 
 export async function prepareRound({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), outputPath, researchPath, seed, now = Date.now(), entropy = () => randomBytes(16).toString('hex') }) {
   if (!outputPath || !seed || !researchPath) fail('Provide --out, --seed and --research');
@@ -179,6 +183,7 @@ export async function prepareRound({ root = socialRoot, privateDirectory = defau
       version: 2, preparedAt: new Date(now).toISOString(), plan, research, sourceDigest: sourceDigest(data), policy: data.policy,
       selection: { users: candidates, dropped, blocked: data.registry.users.filter(user => user.kind === 'character' && !hasCanon(data.material.overrides[user.id])).map(user => ({ id: user.id, reason: 'missing-canon' })) },
       users: data.registry.users, posts: data.feed.posts, processedBatchIds: data.batches.map(batch => batch.id), review: data.review,
+      environmentDocuments: data.environmentDocuments,
       retrospective: plan.retrospectiveIds.map(id => data.feed.posts.find(post => post.id === id)).filter(Boolean),
       status: data.batches.some(batch => batch.id === seed) ? 'already-archived' : 'prepared'
     };
@@ -196,7 +201,7 @@ export async function validateRoundForBatch(batch, { root = socialRoot, contextP
   const ledger = await readState(await stateLocation(privateDirectory, root), root);
   if (!Object.hasOwn(ledger.plans, batch.id) || canonical(ledger.plans[batch.id]) !== canonical(context.plan)) fail('The saved round plan was changed or is missing');
   const data = await source(root, privateDirectory, now);
-  if (context.sourceDigest !== sourceDigest(data)) fail('Context is stale; refresh the same round with the latest profiles and history');
+  if (context.sourceDigest !== sourceDigest(data)) fail('Context is stale; refresh the same round with the latest profiles, environment and history');
   if (data.review.due) fail('Global review is due; update review.json and refresh this round');
   if (batch.posts.length > context.plan.budget) fail('Batch exceeds its random budget');
   const totals = { character: 0, visitor: 0 };

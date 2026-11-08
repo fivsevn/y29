@@ -50,7 +50,7 @@
 
 虚拟社交网站企业，标语为「自由表达的商业承诺」。黑色手机界面，`/world` 展示全部动态，`/following` 按用户开关收录，`/about` 展示品牌与版规。
 
-内容按用途分为三个目录：[users](lucifer0/users/README.md) 管理个人研究，总目录与模板在此，每个人物文件夹只有一份完整档案；[environment](lucifer0/environment/social-reference.md) 研究整个环境、社区与群体互动；[docs](lucifer0/docs/ai-updates.md) 保存发布与运营规则，AI 总控说明每轮阅读顺序、抽签和发布流程。其余目录用于网页素材、数据、帖子归档与构建。整体入口和启动语见 [lucifer0/README.md](lucifer0/README.md)。
+内容按用途分为三个目录：[users](lucifer0/users/README.md) 管理个人研究，总目录与模板在此，每个人物文件夹只有一份完整档案；[environment](lucifer0/environment/README.md) 为世界沙盘整理世界趋势、日常生活与论坛自身的现实依据；[docs](lucifer0/docs/ai-updates.md) 保存发布与运营规则，AI 总控说明每轮阅读顺序、抽签和发布流程。其余目录用于网页素材、数据、帖子归档与构建。整体入口和启动语见 [lucifer0/README.md](lucifer0/README.md)。
 
 ### STORYTELLER
 

@@ -9,6 +9,7 @@ import { renderUserDocument, readUserDocuments } from '../lucifer0/tools/user-do
 import { ingestBatch, loadContent } from '../lucifer0/tools/content.js';
 
 const DAY = 86400000;
+const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md'];
 const iso = time => new Date(time).toISOString();
 const research = now => ({ version: 1, visitedAt: iso(now), observations: [
   { url: 'https://www.reddit.com/r/casual/comments/test-one', community: 'casual', visitedAt: iso(now), publishedAt: iso(now - DAY), kind: 'thread', summary: 'Synthetic observation: a mundane question gets short replies.' },
@@ -34,6 +35,8 @@ async function fixture(t, { canon = true } = {}) {
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = join(directory, 'project', 'lucifer0'), privateDirectory = join(directory, 'profiles'), now = Date.now() - 2000;
   await mkdir(join(root, 'assets'), { recursive: true });
+  await mkdir(join(root, 'environment'));
+  for (const path of environmentPaths) await writeFile(join(root, path), `# Synthetic environment\n\nSource: ${path}\n`);
   await mkdir(privateDirectory);
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts: 10 }));
@@ -107,6 +110,30 @@ test('refresh preserves the draw, reloads edited settings, and withdraws suspend
   assert.ok(!refreshed.selection.users.some(user => user.id === suspended.id));
   assert.deepEqual(refreshed.selection.dropped, [{ id: suspended.id, reason: 'account-not-ready' }]);
   assert.ok(refreshed.selection.users.every(user => original.selection.users.some(previous => previous.id === user.id)));
+});
+
+test('environment context uses the named documents and refreshes changes without redrawing', async t => {
+  const { root, options } = await fixture(t);
+  await writeFile(join(root, 'environment/unlisted.md'), 'SYNTHETIC_UNLISTED_DRAFT');
+  await prepareRound(options);
+  let context = await read(options.outputPath);
+  const plan = context.plan;
+  assert.deepEqual(context.environmentDocuments, await Promise.all(environmentPaths.map(async path => ({ path, text: await readFile(join(root, path), 'utf8') }))));
+  assert.ok(!JSON.stringify(context).includes('SYNTHETIC_UNLISTED_DRAFT'));
+  assert.deepEqual(await validateRoundForBatch(batchFrom(context), { ...options, contextPath: options.outputPath }), plan);
+
+  for (const path of environmentPaths) {
+    const latest = `# Updated environment\n\nUpdated source: ${path}\n`;
+    await writeFile(join(root, path), latest);
+    await assert.rejects(validateRoundForBatch(batchFrom(context), { ...options, contextPath: options.outputPath }), /stale/);
+    await prepareRound({ ...options, entropy: () => { throw new Error('Must not redraw'); } });
+    const refreshed = await read(options.outputPath);
+    assert.deepEqual(refreshed.plan, plan);
+    assert.equal(refreshed.environmentDocuments.find(document => document.path === path).text, latest);
+    assert.notEqual(refreshed.sourceDigest, context.sourceDigest);
+    assert.deepEqual(await validateRoundForBatch(batchFrom(refreshed), { ...options, contextPath: options.outputPath }), plan);
+    context = refreshed;
+  }
 });
 
 test('characters without sourced canon stay blocked, and their places are not handed to visitors', async t => {
