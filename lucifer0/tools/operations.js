@@ -308,7 +308,8 @@ export function validateResearch(research, now = Date.now(), postIds) {
   const categories = new Set(), domains = new Set(), urls = new Set();
   let thread = false, recent = false;
   for (const entry of research) {
-    onlyKeys(entry, ['category', 'kind', 'url', 'visitedAt', 'publishedAt', 'summary', 'adaptedPostIds'], 'research page');
+    onlyKeys(entry, ['category', 'kind', 'url', 'visitedAt', 'publishedAt', 'summary', 'adaptedPostIds', 'purpose'], 'research page');
+    if (Object.hasOwn(entry, 'purpose') && entry.purpose !== 'meme') fail('Optional research purpose must be meme');
     let url;
     try { url = new URL(entry.url); } catch { fail('Research needs a valid source URL'); }
     if (url.protocol !== 'https:' || url.username || url.password || !url.hostname.includes('.') || !bounded(entry.url, 2000) || !['news', 'trend', 'daily'].includes(entry.category) || !['feed', 'thread'].includes(entry.kind) || !bounded(entry.summary) || !validDate(entry.visitedAt) || Date.parse(entry.visitedAt) > now + 300000 || now - Date.parse(entry.visitedAt) > 2 * DAY) fail('Invalid or stale research page');

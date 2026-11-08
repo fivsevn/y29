@@ -29,6 +29,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 | 字段 | 内容 |
 | --- | --- |
 | `category` | `news` 正式资讯、`trend` 社交话题、`daily` 日常经历 |
+| `purpose` | Meme 采样页填 `"meme"`，其他观察可省略；发现入口与近期原用法分别记录，步骤见[Meme 研究](../environment/meme.md#每次更新读取近期-meme) |
 | `kind` | `feed` 资讯、榜单或单篇材料；`thread` 带回复的讨论 |
 | `url` | 原页 HTTPS 链接 |
 | `visitedAt` | 实际访问时间，带时区的 ISO 时间 |

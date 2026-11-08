@@ -355,6 +355,12 @@ test('prepare creates only one work record and a full raw-source reading, then r
 
 test('research covers formal news, trends and daily life with real fresh page metadata', () => {
   const now = Date.now(), valid = research(now); assert.deepEqual(validateResearch(valid, now), valid);
+  const meme = structuredClone(valid); meme[1].purpose = 'meme';
+  assert.deepEqual(validateResearch(meme, now), meme);
+  for (const purpose of ['unknown', null, '', undefined]) {
+    const changed = structuredClone(valid); changed[1].purpose = purpose;
+    assert.throws(() => validateResearch(changed, now), /purpose must be meme/);
+  }
   for (const mutate of [
     value => value.pop(),
     value => { value[0].category = 'daily'; },
