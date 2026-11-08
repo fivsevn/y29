@@ -57,6 +57,6 @@ npm run build
 npm start
 ```
 
-打开 [本机页面](http://127.0.0.1:4173/lucifer0/)。修改资料或归档后运行 `npm run social:build`；`Y29_EDIT_BRANCH` 可指定总表编辑链接的分支，默认 `main`。`Y29_PREVIEW_DIR=dist npm start` 预览构建结果。可选浏览器检查见 `tests/social.browser.mjs`，使用已有 Playwright，不随网站安装。
+打开 [本机页面](http://127.0.0.1:4173/lucifer0/)。修改资料或归档后运行 `npm run social:build`。`Y29_PREVIEW_DIR=dist npm start` 预览构建结果。可选浏览器检查见 `tests/social.browser.mjs`，使用已有 Playwright，不随网站安装。
 
 本项目借鉴 [GSM 的运营方式](https://github.com/fivsevn/umwelt/blob/main/gsm/docs/ai-updates.md)、[抽签与恢复](https://github.com/fivsevn/umwelt/blob/main/gsm/docs/randomness.md)及[回看自省](https://github.com/fivsevn/umwelt/blob/main/gsm/docs/research/README.md)，保留 y29 自己的用户档案和串包结构。

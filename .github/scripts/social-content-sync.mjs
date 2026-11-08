@@ -11,7 +11,7 @@ for (let attempt = 0; attempt < 3; attempt++) {
   // Only the disposable Actions checkout is reset; human source edits live on main.
   git('reset', '--hard', 'origin/main');
   execFileSync(process.execPath, ['--test', ...git('ls-files', 'tests/*.test.js').split('\n')], { stdio: 'inherit' });
-  execFileSync(process.execPath, ['build.js'], { stdio: 'inherit', env: { ...process.env, Y29_EDIT_BRANCH: 'main' } });
+  execFileSync(process.execPath, ['build.js'], { stdio: 'inherit' });
   git('add', '--', ...generated);
   if (!git('diff', '--cached', '--name-only')) break;
   git('commit', '-m', 'Refresh Lucifer Zero user directory and feed');

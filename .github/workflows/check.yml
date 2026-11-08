@@ -8,8 +8,6 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    env:
-      Y29_EDIT_BRANCH: ${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

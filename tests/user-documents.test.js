@@ -63,27 +63,29 @@ test('avatar is optional and only accepts the current user package filename', ()
   }
 });
 
-test('catalog uses names, folder links and branch-specific edit links without detailed settings', async t => {
-  const user = account(), root = await fixture(t, [user, account('second-user')]);
+test('catalog groups comma-separated names linking directly to profiles and preserves handwritten text', async t => {
+  const user = account(), character = { ...account('work-user'), name: '作品例', kind: 'character', sourceWork: '测试作品' };
+  const root = await fixture(t, [user, account('second-user'), character]);
   const profile = emptyProfile(user.id); profile.notes = 'SYNTHETIC_DETAIL_NOT_FOR_INDEX';
   await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
   const handwritten = '# 用户档案\n\n写给维护者的说明。\n\n<!-- users:start -->\n旧目录\n<!-- users:end -->\n\n模板填写提示保留在这里。\n';
   await writeFile(join(root, 'users/README.md'), handwritten);
-  const result = await buildUserDirectory(root, { branch: 'feat/social-first-edition' });
+  const result = await buildUserDirectory(root);
   const text = await readFile(result.path, 'utf8');
-  assert.equal(result.count, 2);
+  assert.equal(result.count, 3);
   assert.equal(result.path, join(root, 'users/README.md'));
   assert.ok(text.startsWith('# 用户档案\n\n写给维护者的说明。\n\n<!-- users:start -->'));
   assert.ok(text.endsWith('<!-- users:end -->\n\n模板填写提示保留在这里。\n'));
   assert.doesNotMatch(text, /旧目录|\| 启用 \||\| AI \||\| 主帖 \||\| 回复 \|/);
   await assert.rejects(readFile(join(root, 'users/用户总目录.md')), { code: 'ENOENT' });
-  assert.match(text, /\[窗边的人\]\(\.\/sample-user\/\)/);
-  assert.match(text, /\[查看档案\]\(\.\/sample-user\/profile.md\)/);
-  assert.match(text, /https:\/\/github.com\/fivsevn\/y29\/edit\/feat%2Fsocial-first-edition\/lucifer0\/users\/sample-user\/profile.md/);
+  assert.match(text, /### 本库人物\n\n\[窗边的人\]\(\.\/sample-user\/profile.md\)，\[窗边的人\]\(\.\/second-user\/profile.md\)/);
+  assert.match(text, /### 其他作品人物\n\n\[作品例\]\(\.\/work-user\/profile.md\)/);
+  const generated = text.split('<!-- users:start -->')[1].split('<!-- users:end -->')[0];
+  assert.doesNotMatch(generated, /查看档案|编辑档案|github\.com\/.*\/edit\/|^\|/m);
+  assert.equal((generated.match(/\]\(\.\/[^/]+\/profile\.md\)/g) || []).length, 3);
   assert.doesNotMatch(text, /SYNTHETIC_DETAIL_NOT_FOR_INDEX|表达习惯|知情范围/);
-  await buildUserDirectory(root, { branch: 'feat/social-first-edition' });
+  await buildUserDirectory(root);
   assert.equal(await readFile(result.path, 'utf8'), text);
-  await assert.rejects(buildUserDirectory(root, { branch: 'main?ref=evil' }), /分支名/);
 });
 
 test('all additional Markdown settings are read, with templates and unrelated assets excluded', async t => {
