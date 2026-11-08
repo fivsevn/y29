@@ -8,7 +8,7 @@ import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
-const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md'];
+const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md', 'environment/meme.md'];
 const controlPaths = ['docs/README.md', 'docs/writing.md', 'docs/publishing.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;

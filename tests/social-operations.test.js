@@ -39,7 +39,7 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery } = {})
   await mkdir(privateDirectory);
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}) }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md']]]) {
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
@@ -168,7 +168,7 @@ test('old plans retain total-post semantics when policy enables reply lotteries'
   assert.deepEqual((await readJSON(prepared.operationPath)).plan, original.plan);
 });
 
-test('comments and policy refresh keep saved reply draws; changed saved lottery settings are rejected', async t => {
+test('comment and meme research refresh keep saved reply draws; changed saved lottery settings are rejected', async t => {
   const f = await fixture(t, 1, { maxBatchPosts: 120, replyLottery: fixedReplies(2) }), prepared = await prepareUpdate(f.options);
   const original = await readJSON(prepared.operationPath);
   const entries = [post('frozen-root', 'guest-frozen', f.now), ...Array.from({ length: 3 }, (_, index) => post('frozen-reply-' + index, 'guest-frozen-' + index, f.now, 'frozen-root'))];
@@ -183,8 +183,17 @@ test('comments and policy refresh keep saved reply draws; changed saved lottery 
   assert.ok((await readFile(prepared.readingPath, 'utf8')).includes('SYNTHETIC_NEW_COMMENT_RESEARCH'));
   assert.equal((await suggestUpdateReplies(f.options)).threads[0].replyCount, 2);
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /saved reply limit/);
-  refreshed.plan.replyLottery.bands[0].max = 3;
-  await writeFile(prepared.operationPath, JSON.stringify(refreshed));
+  await writeFile(join(f.root, 'environment/meme.md'), '# Updated meme research\n\nSYNTHETIC_NEW_MEME_RESEARCH');
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
+  await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  const memeRefreshed = await readJSON(prepared.operationPath);
+  assert.equal(memeRefreshed.id, original.id);
+  assert.deepEqual(memeRefreshed.plan, original.plan);
+  assert.notEqual(memeRefreshed.sourceDigest, refreshed.sourceDigest);
+  assert.ok((await readFile(prepared.readingPath, 'utf8')).includes('SYNTHETIC_NEW_MEME_RESEARCH'));
+  assert.equal((await suggestUpdateReplies(f.options)).threads[0].replyCount, 2);
+  memeRefreshed.plan.replyLottery.bands[0].max = 3;
+  await writeFile(prepared.operationPath, JSON.stringify(memeRefreshed));
   await assert.rejects(prepareUpdate(f.options), /draw was changed/);
 });
 
@@ -329,7 +338,7 @@ test('prepare creates only one work record and a full raw-source reading, then r
     assert.ok(reading.includes('users/' + user.id + '/profile.md'));
     assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
-  for (const name of ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
+  for (const name of ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
   assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY') && reading.includes('SYNTHETIC_PRIVATE_CANON'));
   assert.ok(reading.includes('docs/README.md') && reading.includes('docs/writing.md') && reading.includes('docs/publishing.md'));
   assert.ok(!JSON.stringify(original).includes('SYNTHETIC_FULL_PERSON_'));

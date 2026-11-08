@@ -9,7 +9,7 @@
 | 目录与入口 | 内容 |
 | --- | --- |
 | [lucifer0/users/](users/README.md) | 人物研究：个体档案、人物目录、模板与参考资料 |
-| [lucifer0/environment/](environment/README.md) | 环境资料：世界趋势、日常生活、评论区与论坛自身 |
+| [lucifer0/environment/](environment/README.md) | 环境资料：世界趋势、日常生活、Meme、评论区与论坛自身 |
 | [lucifer0/docs/](docs/README.md) | AI 更新：完整阅读、现实取材、自然发帖与发布 |
 
 ## 给 AI 的启动语
