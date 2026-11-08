@@ -16,7 +16,7 @@ const research = now => ({ version: 1, visitedAt: iso(now), observations: [
   { url: 'https://dat.2chan.net/t/futaba.htm', community: 'food', visitedAt: iso(now), publishedAt: null, kind: 'feed', summary: 'Synthetic observation: small cooking conversations and quoted IDs.' }
 ] });
 const registry = () => Array.from({ length: 20 }, (_, index) => ({
-  id: `${index < 8 ? 'character' : 'visitor'}-${index}`, handle: `account_${index}`, name: `Account ${index}`, bio: '', avatar: 'assets/avatars/test.svg',
+  id: `${index < 8 ? 'character' : 'visitor'}-${index}`, handle: `account_${index}`, name: `Account ${index}`, bio: '', avatar: '',
   kind: index < 8 ? 'character' : 'visitor', sourceWork: index < 8 ? 'Synthetic work' : '', enabled: true, aiScope: 'daily', profileStatus: 'approved', inFollowing: index < 8, allowPosts: true, allowReplies: true
 }));
 const canonProfile = id => ({ ...emptyProfile(id), facts: [{ text: 'Synthetic canon trait', status: 'canon', visibility: 'private', source: 'Synthetic source paragraph' }] });
@@ -33,10 +33,9 @@ async function fixture(t, { canon = true } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-operations-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = join(directory, 'project', 'lucifer0'), privateDirectory = join(directory, 'profiles'), now = Date.now() - 2000;
-  await mkdir(join(root, 'assets/avatars'), { recursive: true });
+  await mkdir(join(root, 'assets'), { recursive: true });
   await mkdir(privateDirectory);
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
-  await writeFile(join(root, 'assets/avatars/test.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts: 10 }));
   await writeFile(join(root, 'review.json'), JSON.stringify({ version: 1, reviewedAt: iso(now), coveredBatchIds: [], coveredPostIds: [] }));
   for (const user of registry()) {

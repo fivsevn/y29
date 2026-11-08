@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../lucifer0/tools/content.js';
 import { emptyProfile, readProfiles, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
 import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
-import { writeThreadBatch } from '../lucifer0/tools/thread-packages.js';
+import { writeThreadBatch, parsePostDocument, renderPostDocument } from '../lucifer0/tools/thread-packages.js';
 import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
 
 // Fixed synthetic content keeps behavior checks independent of editorial updates.
@@ -24,15 +24,15 @@ async function temporary(t) {
 async function repositoryCopy(t) {
   const directory = await temporary(t);
   const root = join(directory, 'project', 'lucifer0');
-  await mkdir(join(root, 'assets/avatars'), { recursive: true });
+  await mkdir(join(root, 'assets'), { recursive: true });
   await mkdir(join(root, 'posts'), { recursive: true });
   await writeFile(join(root, 'publication.json'), JSON.stringify(source.policy));
   const image = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>';
   await writeFile(join(root, 'assets/icon.svg'), image);
-  await writeFile(join(root, 'assets/avatars/test.svg'), image);
   for (const user of source.registry.users) {
     await mkdir(join(root, 'users', user.id), { recursive: true });
     await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, emptyProfile(user.id)));
+    if (user.avatar) await writeFile(join(root, user.avatar), image);
   }
   const existing = [];
   for (const batch of source.batches) {
@@ -92,12 +92,74 @@ test('private fields, external assets, path traversal and invalid counters canno
     f => { f.batches[0].posts[0].knowledgeScope = 'secret'; },
     f => { f.batches[0].privateProfiles = {}; },
     f => { f.registry.users[0].avatar = 'https://example.com/avatar.svg'; },
-    f => { f.registry.users[0].avatar = 'assets/avatars/../../private.svg'; },
+    f => { f.registry.users[0].avatar = 'users/../private.svg'; },
     f => { f.batches[0].posts[0].likes = -1; },
     f => { f.batches[0].posts[0].canon = 'canon'; },
-    f => { f.batches[0].posts[0].media = [{ src: 'assets/media/test.svg', alt: '' }]; }
+    f => { const post = f.batches[0].posts[0]; post.media = [{ src: `posts/2026/11/${post.id}/media/test.svg`, alt: '' }]; }
   ];
   for (const mutate of mutations) { const f = fixture(); mutate(f); assert.throws(() => validate(f)); }
+});
+
+test('optional avatars stay in their own user package and thread media belongs to the root across reply dates', () => {
+  const f = fixture();
+  f.registry.users[0].avatar = '';
+  assert.equal(validate(f).users[0].avatar, '');
+  for (const avatar of ['assets/avatars/test.svg', 'users/another-user/avatar.svg', 'users/lixing/../alan/avatar.svg', 'users/lixing/photo.svg', 'users/lixing/avatar.svg?x=1']) {
+    const invalid = fixture(); invalid.registry.users[0].avatar = avatar;
+    assert.throws(() => validate(invalid), /Invalid avatar path/);
+  }
+  const drawing = f.batches.flatMap(batch => batch.posts).find(post => post.id === 'sample-drawing');
+  const reply = f.batches.flatMap(batch => batch.posts).find(post => post.id === 'sample-drawing-answer');
+  drawing.createdAt = '2026-10-31T23:50:00+08:00';
+  const image = { src: 'posts/2026/10/sample-drawing/media/study.svg', alt: '同一串的配图' };
+  drawing.media = [image]; reply.media = [image];
+  assert.equal(validate(f).posts.find(post => post.id === reply.id).media[0].src, image.src);
+  for (const src of [
+    'assets/media/study.svg',
+    'posts/2026/10/sample-drawing/media/../study.svg',
+    'posts/2026/10/sample-drawing/media/%2e%2e.svg',
+    'posts/2026/10/sample-drawing/media/sub/study.svg',
+    'posts/2026/10/sample-drawing/media/study.svg?x=1',
+    'posts/2026/10/sample-soup/media/study.svg',
+    'posts/2026/11/sample-drawing/media/study.svg',
+    'posts/2026/11/sample-drawing-answer/media/study.svg'
+  ]) {
+    reply.media = [{ ...image, src }];
+    assert.throws(() => validate(f), /Invalid media path|root thread/);
+  }
+});
+
+test('referenced package images must exist as regular files and cannot follow file or directory symlinks', async t => {
+  const { root, directory } = await repositoryCopy(t);
+  const path = join(root, 'posts/2026/11/sample-drawing/index.md');
+  const drawing = parsePostDocument(await readFile(path, 'utf8'));
+  const src = 'posts/2026/11/sample-drawing/media/study.svg', image = join(root, src);
+  drawing.media = [{ src, alt: '测试配图' }];
+  await mkdir(join(root, 'posts/2026/11/sample-drawing/media'));
+  await writeFile(path, renderPostDocument(drawing));
+  await assert.rejects(loadContent(root), /ENOENT/);
+  await writeFile(image, '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await writeFile(join(root, 'posts/2026/11/sample-drawing/media/unused.png'), 'draft');
+  assert.equal((await loadContent(root)).feed.posts.find(post => post.id === drawing.id).media[0].src, src);
+  const external = join(directory, 'private.svg');
+  await writeFile(external, 'SYNTHETIC_PRIVATE_MARKER');
+  await rm(image); await symlink(external, image);
+  await assert.rejects(loadContent(root), /symlink/);
+  await rm(image); await writeFile(image, '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  const media = join(root, 'posts/2026/11/sample-drawing/media');
+  const moved = join(root, 'posts/2026/11/sample-drawing/stashed');
+  await mkdir(moved); await writeFile(join(moved, 'study.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await rm(media, { recursive: true }); await symlink(moved, media);
+  await assert.rejects(loadContent(root), /symlink/);
+});
+
+test('an avatar cannot be loaded through a symlink even when its path names the right user', async t => {
+  const { root, directory } = await repositoryCopy(t);
+  const avatar = join(root, source.registry.users[0].avatar);
+  const external = join(directory, 'avatar.svg');
+  await writeFile(external, 'SYNTHETIC_PRIVATE_MARKER');
+  await rm(avatar); await symlink(external, avatar);
+  await assert.rejects(loadContent(root), /符号链接|regular file/);
 });
 
 test('timestamps require a real date, timezone, no future, and correct reply chronology', () => {
@@ -194,13 +256,28 @@ test('AI import obeys the master switch and account scope; manual import obeys d
 test('bad media and backdated batches fail before writing any archive', async t => {
   const { root, directory } = await repositoryCopy(t);
   const input = join(directory, 'batch.json'), batch = newBatch();
-  batch.posts[0].media = [{ src: 'assets/media/missing.svg', alt: 'missing image' }];
+  batch.posts[0].media = [{ src: 'posts/2026/11/test-new-post/media/missing.svg', alt: 'missing image' }];
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /ENOENT/);
   batch.posts[0].media = []; batch.posts[0].createdAt = '2026-11-07T09:00:00+08:00';
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /append/);
   assert.equal((await loadContent(root)).batches.length, 3);
+});
+
+test('new image posts import from prepared package media without publishing unused draft files', async t => {
+  const { root, directory } = await repositoryCopy(t), batch = newBatch();
+  const src = 'posts/2026/11/test-new-post/media/new.svg';
+  await mkdir(join(root, 'posts/2026/11/test-new-post/media'), { recursive: true });
+  await writeFile(join(root, src), '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await writeFile(join(root, 'posts/2026/11/test-new-post/media/unused.png'), 'not referenced');
+  batch.posts[0].media = [{ src, alt: '新帖配图' }];
+  batch.posts.push({ ...batch.posts[0], id: 'test-new-reply', replyTo: 'test-new-post', createdAt: '2026-11-07T22:05:00+08:00', text: '回复附上同一串里的图。' });
+  const input = join(directory, 'batch.json');
+  await writeFile(input, JSON.stringify(batch));
+  assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'archived');
+  const { feed } = await loadContent(root);
+  assert.ok(feed.posts.filter(post => post.id.startsWith('test-new-')).every(post => post.media[0].src === src));
 });
 
 test('explicit historical import preserves chronology, existing posts and idempotent retries', async t => {

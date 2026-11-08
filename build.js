@@ -3,12 +3,13 @@ import {buildFeed} from './lucifer0/tools/content.js';
 const socialFeed=await buildFeed();
 await rm('dist',{recursive:true,force:true});
 for(const dir of ['signallock','mobileutopia','training'])await mkdir('dist/'+dir,{recursive:true});
-for(const p of ['index.html','.nojekyll','signallock/index.html','signallock/style.css','signallock/app.js','signallock/engine.js','mobileutopia/index.html','mobileutopia/style.css','mobileutopia/engine.js','mobileutopia/app.js','training/index.html','training/style.css','training/game.js','training/content.js','training/narrative.js','training/expansion.js','training/variety.js'])await copyFile(p,'dist/'+p);
+for(const p of ['index.html','style.css','.nojekyll','signallock/index.html','signallock/style.css','signallock/app.js','signallock/engine.js','mobileutopia/index.html','mobileutopia/style.css','mobileutopia/engine.js','mobileutopia/app.js','training/index.html','training/style.css','training/game.js','training/content.js','training/narrative.js','training/expansion.js','training/variety.js'])await copyFile(p,'dist/'+p);
 await cp('assets','dist/assets',{recursive:true});
-await cp('storyteller','dist/storyteller',{recursive:true});
+await mkdir('dist/storyteller',{recursive:true});
+for(const p of ['index.html','style.css','app.js','state.js','current.json'])await copyFile('storyteller/'+p,'dist/storyteller/'+p);
 await mkdir('dist/lucifer0/data',{recursive:true});
 for(const p of ['index.html','style.css','app.js','core.js','data/feed.json'])await copyFile('lucifer0/'+p,'dist/lucifer0/'+p);
-const socialAssets=new Set(['assets/icon.svg',...socialFeed.users.map(user=>user.avatar),...socialFeed.posts.flatMap(post=>post.media.map(image=>image.src))]);
+const socialAssets=new Set(['assets/icon.svg',...socialFeed.users.map(user=>user.avatar).filter(Boolean),...socialFeed.posts.flatMap(post=>post.media.map(image=>image.src))]);
 for(const p of socialAssets){await mkdir('dist/lucifer0/'+p.slice(0,p.lastIndexOf('/')),{recursive:true});await copyFile('lucifer0/'+p,'dist/lucifer0/'+p);}
 await mkdir('dist/social',{recursive:true});
 for(const p of ['index.html','redirect.js'])await copyFile('social/'+p,'dist/social/'+p);

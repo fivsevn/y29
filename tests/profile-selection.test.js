@@ -18,7 +18,7 @@ async function fixture(t) {
   return { directory, project, root, privateDirectory };
 }
 
-const newUser = () => ({ id: 'test-new-user', handle: 'test_new_user', name: '测试网名', bio: '测试公开简介', avatar: 'assets/avatars/visitor.svg', enabled: true, aiScope: 'sample', profileStatus: 'sample', kind: 'visitor', sourceWork: '', inFollowing: false, allowPosts: true, allowReplies: true });
+const newUser = () => ({ id: 'test-new-user', handle: 'test_new_user', name: '测试网名', bio: '测试公开简介', avatar: '', enabled: true, aiScope: 'sample', profileStatus: 'sample', kind: 'visitor', sourceWork: '', inFollowing: false, allowPosts: true, allowReplies: true });
 
 test('sampling is weighted without replacement, reproducible, fresh and respects account action controls', () => {
   const users = Array.from({ length: 12 }, (_, index) => ({ ...newUser(), id: `candidate-${index}` }));

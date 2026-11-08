@@ -30,6 +30,7 @@ const fail = message => { throw new Error(`用户档案：${message}`); };
 const get = (object, path) => path.split('.').reduce((value, key) => value?.[key], object);
 const set = (object, path, value) => { const parts = path.split('.'); if (parts.length === 2) object[parts[0]][parts[1]] = value; else object[path] = value; };
 const own = (value, key) => Object.hasOwn(value, key);
+export const isUserAvatarPath = (path, id) => path === '' || typeof path === 'string' && /^users\/[a-z0-9][a-z0-9-]{1,63}\/avatar\.(svg|png|jpg|webp)$/.test(path) && path.split('/')[1] === id;
 
 function table(headers, rows) {
   return ['| ' + headers.join(' | ') + ' |', '| ' + headers.map(() => '---').join(' | ') + ' |', ...rows.map(row => '| ' + row.map(cell).join(' | ') + ' |')].join('\n');
@@ -65,7 +66,7 @@ function validateUser(user) {
   if (!/^[a-z0-9_]{2,32}$/.test(user.handle)) fail('用户名只能包含 2–32 位小写字母、数字和下划线');
   if (!user.name.trim() || user.name.length > 40) fail('网名应为 1–40 个字符');
   if (user.bio.length > 240 || user.sourceWork.length > 80) fail('公开简介或作品来源过长');
-  if (!/^assets\/avatars\/[a-z0-9-]+\.(svg|png|jpg|webp)$/.test(user.avatar)) fail('头像路径应指向现有 assets/avatars/ 素材');
+  if (!isUserAvatarPath(user.avatar, user.id)) fail('头像路径留空，或填写 users/当前用户ID/avatar.svg（也支持 png、jpg、webp）');
 }
 
 export function renderUserDocument(user, suppliedProfile = emptyProfile(user.id)) {

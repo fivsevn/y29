@@ -4,6 +4,7 @@ import { createHash, randomUUID } from 'node:crypto';
 
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
 const POST_PATH = /^posts\/\d{4}\/\d{2}\/([a-z0-9][a-z0-9-]{1,63})\/(?:index\.md|replies\/([a-z0-9][a-z0-9-]{1,63})\.md)$/;
+const MEDIA_PATH = /^posts\/\d{4}\/(?:0[1-9]|1[0-2])\/[a-z0-9][a-z0-9-]{1,63}\/media\/[a-z0-9][a-z0-9-]{0,95}\.(?:svg|png|jpg|webp)$/;
 const ROUND_PATH = /^rounds\/\d{4}\/\d{2}\/([a-z0-9][a-z0-9-]{1,63})\.json$/;
 const META = ['id', 'author', 'createdAt', 'replyTo', 'likes', 'canon', 'media'];
 const hash = text => createHash('sha256').update(text).digest('hex');
@@ -56,9 +57,14 @@ function rootPost(post, posts) {
   return post;
 }
 
-function postPath(post, posts) {
+export const isPostMediaPath = path => typeof path === 'string' && MEDIA_PATH.test(path);
+export function threadDirectory(post, posts) {
   const thread = rootPost(post, posts);
-  return `posts/${month(thread.createdAt)}/${thread.id}/${post.replyTo === null ? 'index.md' : `replies/${post.id}.md`}`;
+  return `posts/${month(thread.createdAt)}/${thread.id}`;
+}
+
+function postPath(post, posts) {
+  return `${threadDirectory(post, posts)}/${post.replyTo === null ? 'index.md' : `replies/${post.id}.md`}`;
 }
 
 async function walk(root, folder) {
@@ -130,6 +136,9 @@ export async function readThreadPackages(root) {
   const registered = new Set(manifests.flatMap(({ value }) => value.postIds));
   const posts = new Map(), pathsById = new Map();
   for (const path of await walk(root, 'posts')) {
+    // Media may be prepared before a batch is imported. Only references from
+    // validated post metadata are eligible for the published build.
+    if (isPostMediaPath(path)) continue;
     if (!POST_PATH.test(path)) fail(`Unexpected archive file: ${path}`);
     const source = await readFile(join(root, path), 'utf8');
     const pathMatch = POST_PATH.exec(path), pathId = pathMatch[2] || pathMatch[1];
