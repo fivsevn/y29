@@ -158,6 +158,18 @@
       "inFollowing": false
     },
     {
+      "id": "visitor-clearcalendar",
+      "handle": "clear_calendar",
+      "name": "空出周末",
+      "bio": "日历留了一格。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "visitor-delta",
       "handle": "not_risen",
       "name": "未发酵",
@@ -254,6 +266,18 @@
       "inFollowing": false
     },
     {
+      "id": "visitor-halfkettle",
+      "handle": "half_kettle",
+      "name": "水还没开",
+      "bio": "看完不一定能回完。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "visitor-iota",
       "handle": "uu_nosugar",
       "name": "uu不加糖",
@@ -318,6 +342,30 @@
       "handle": "emptybox",
       "name": "空箱",
       "bio": "今天也在和纸箱谈判。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "visitor-latebell",
+      "handle": "late_bell",
+      "name": "还有一节",
+      "bio": "下课再回。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "visitor-levelpath",
+      "handle": "level_path",
+      "name": "平路优先",
+      "bio": "先把入口说清楚。",
       "avatar": "",
       "enabled": true,
       "profileStatus": "approved",
@@ -494,6 +542,18 @@
       "inFollowing": false
     },
     {
+      "id": "visitor-rainledger",
+      "handle": "rain_ledger",
+      "name": "雨前收好",
+      "bio": "先看天，再安排。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "visitor-rho",
       "handle": "lucifer_rho",
       "name": "路西法ρ",
@@ -518,6 +578,30 @@
       "inFollowing": false
     },
     {
+      "id": "visitor-secondpage",
+      "handle": "second_page",
+      "name": "翻到背面",
+      "bio": "先看完再说。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "visitor-shiftcard",
+      "handle": "shift_card",
+      "name": "换班见",
+      "bio": "忙起来就没看见。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "visitor-sigma",
       "handle": "eraserdust21",
       "name": "橡皮屑",
@@ -534,6 +618,18 @@
       "handle": "rollin_25",
       "name": "rollin",
       "bio": "今天先把轮子擦干净。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "visitor",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "visitor-slowradio",
+      "handle": "slow_radio",
+      "name": "慢慢放",
+      "bio": "这段还没听完。",
       "avatar": "",
       "enabled": true,
       "profileStatus": "approved",

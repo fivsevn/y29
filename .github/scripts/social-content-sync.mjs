@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 
 // This job only regenerates views of edited documents. It never creates posts.
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-const generated = ['lucifer0/users/用户总目录.md', 'lucifer0/data/feed.json'];
+const generated = ['lucifer0/users/README.md', 'lucifer0/data/feed.json'];
 git('config', 'user.name', 'github-actions[bot]');
 git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com');
 
