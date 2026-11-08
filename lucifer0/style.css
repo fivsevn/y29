@@ -68,6 +68,7 @@ main::-webkit-scrollbar{display:none}
 .quote-mark,.reply-context{color:var(--red);font:9px/1.7 Plex,monospace}
 .preview-reply strong{font-size:10px;color:var(--red);font-weight:500;text-shadow:0 1px 2px #00000066}
 .preview-reply p{font-size:11px;line-height:1.6;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.preview-more{display:flex;align-items:center;gap:6px;min-height:36px;padding:6px 0;border-top:1px solid #ffffff14;color:var(--red);font-size:11px}
 .reply-context{display:block;margin-top:11px}
 .reply-context+.post-content{margin-top:5px}
 .discussion-label{font:10px/1.6 Plex,sans-serif;color:var(--muted);padding:10px 20px 4px}

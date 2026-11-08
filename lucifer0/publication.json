@@ -2,5 +2,12 @@
   "version": 1,
   "automaticPosting": true,
   "timezone": "Asia/Shanghai",
-  "maxBatchPosts": 20
+  "maxBatchPosts": 120,
+  "replyLottery": {
+    "bands": [
+      { "weight": 90, "min": 0, "max": 10 },
+      { "weight": 10, "min": 21, "max": 60 }
+    ],
+    "maxReplies": 100
+  }
 }

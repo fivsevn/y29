@@ -63,11 +63,11 @@ test('each original person has one complete human dossier, with operating contro
   assert.deepEqual(topLevel, ['README.md', 'TEMPLATE.md']);
 });
 
-test('individual references stay with users and the environment has four documented entrypoints', async () => {
+test('individual references stay with users and the environment includes comment interaction research', async () => {
   const { registry } = await readUserDocuments(socialRoot);
   const individualNotes = await readFile(join(socialRoot, 'users/README.md'), 'utf8');
   const environmentPath = join(socialRoot, 'environment');
-  const environmentFiles = ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md'];
+  const environmentFiles = ['README.md', 'world-trends.md', 'everyday-life.md', 'comments.md', 'forum.md'];
   assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles].sort());
   const environmentIndex = await readFile(join(environmentPath, 'README.md'), 'utf8');
   for (const name of environmentFiles) {

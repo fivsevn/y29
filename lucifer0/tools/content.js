@@ -32,9 +32,20 @@ function validateBatch(batch, policy) {
   }
 }
 
+export function validateReplyLottery(lottery) {
+  keys(lottery, ['bands', 'maxReplies'], 'reply lottery');
+  if (!Array.isArray(lottery.bands) || !lottery.bands.length || lottery.bands.length > 10 || !Number.isInteger(lottery.maxReplies) || lottery.maxReplies < 0 || lottery.maxReplies > 120) fail('Invalid reply lottery');
+  for (const band of lottery.bands) {
+    keys(band, ['weight', 'min', 'max'], 'reply band');
+    if (typeof band.weight !== 'number' || !Number.isFinite(band.weight) || band.weight <= 0 || band.weight > 1000000 || !Number.isInteger(band.min) || !Number.isInteger(band.max) || band.min < 0 || band.max < band.min || band.max > 120) fail('Invalid reply lottery band');
+  }
+  return lottery;
+}
+
 export function validateContent(registry, batches, policy, { now = Date.now() } = {}) {
-  keys(policy, ['version', 'automaticPosting', 'timezone', 'maxBatchPosts'], 'policy');
-  if (policy.version !== 1 || typeof policy.automaticPosting !== 'boolean' || policy.timezone !== 'Asia/Shanghai' || !Number.isInteger(policy.maxBatchPosts) || policy.maxBatchPosts < 1 || policy.maxBatchPosts > 20) fail('Invalid publication policy');
+  keys(policy, ['version', 'automaticPosting', 'timezone', 'maxBatchPosts', 'replyLottery'], 'policy');
+  if (policy.version !== 1 || typeof policy.automaticPosting !== 'boolean' || policy.timezone !== 'Asia/Shanghai' || !Number.isInteger(policy.maxBatchPosts) || policy.maxBatchPosts < 1 || policy.maxBatchPosts > 120) fail('Invalid publication policy');
+  if (policy.replyLottery !== undefined) validateReplyLottery(policy.replyLottery);
   keys(registry, ['version', 'users'], 'registry');
   if (registry.version !== 1 || !Array.isArray(registry.users)) fail('Invalid registry');
   const users = new Map(), handles = new Set(), names = new Map();

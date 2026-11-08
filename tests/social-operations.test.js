@@ -4,13 +4,15 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, readdir, cp, symlink } from 'n
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation, suggestUpdatePresentation } from '../lucifer0/tools/operations.js';
+import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies } from '../lucifer0/tools/operations.js';
 import { emptyProfile } from '../lucifer0/tools/private-profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
 import { loadContent, ingestBatch } from '../lucifer0/tools/content.js';
 
 const DAY = 86400000;
+const replyLottery = { bands: [{ weight: 90, min: 0, max: 10 }, { weight: 10, min: 21, max: 60 }], maxReplies: 100 };
+const fixedReplies = (count, maxReplies = 100) => ({ bands: [{ weight: 1, min: count, max: count }], maxReplies });
 const iso = time => new Date(time).toISOString();
 const readJSON = async path => JSON.parse(await readFile(path, 'utf8'));
 const users = () => Array.from({ length: 8 }, (_, index) => ({
@@ -29,15 +31,15 @@ const research = now => [
   { category: 'trend', kind: 'thread', url: 'https://forum.example.net/topic', visitedAt: iso(now), publishedAt: iso(now), summary: 'Synthetic source: read the root and visible disagreement replies.' },
   { category: 'daily', kind: 'thread', url: 'https://forum.example.net/daily', visitedAt: iso(now), publishedAt: null, summary: 'Synthetic source: read a daily-life account and its follow-up.' }
 ];
-async function fixture(t, budget = 4, { maxBatchPosts = 10 } = {}) {
+async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-update-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = join(directory, 'project/lucifer0'), privateDirectory = join(directory, 'profiles'), workDirectory = join(directory, 'current'), now = Date.now() - 2000;
   await mkdir(join(root, 'assets'), { recursive: true });
   await mkdir(privateDirectory);
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
-  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md']]]) {
+  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}) }));
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
@@ -93,18 +95,138 @@ test('one draw reaches all ten ceilings and samples one shared weighted pool wit
   assert.ok(withoutCanon.selectedIds.every(id => input.users.find(user => user.id === id).kind === 'visitor'));
 });
 
+test('reply draws are independent per thread, usually span zero to ten, and sometimes exceed twenty', () => {
+  const counts = Array.from({ length: 4000 }, (_, index) => drawThreadReplyCount({ seed: 'reply-distribution', rootId: 'thread-' + index, replyLottery }));
+  assert.ok(counts.every(count => Number.isInteger(count) && (count >= 0 && count <= 10 || count >= 21 && count <= 60)));
+  const ordinary = counts.filter(count => count <= 10);
+  assert.ok(ordinary.length > counts.length * 0.86 && ordinary.length < counts.length * 0.94);
+  assert.deepEqual([...new Set(ordinary)].sort((a, b) => a - b), Array.from({ length: 11 }, (_, index) => index));
+  const entries = [post('thread-first', 'guest-first', Date.now()), post('thread-second', 'guest-second', Date.now())];
+  const first = planThreadReplies({ seed: 'reply-distribution', posts: entries, replyLottery });
+  assert.deepEqual(planThreadReplies({ seed: 'reply-distribution', posts: [...entries].reverse(), replyLottery }), first);
+  assert.equal(planThreadReplies({ seed: 'reply-distribution', posts: entries.slice(0, 1), replyLottery })[0].replyCount, first[0].replyCount);
+});
+
+test('new root budgets permit a sixty-reply thread and count nested descendants against that root', async t => {
+  const f = await fixture(t, 1, { maxBatchPosts: 120, replyLottery: fixedReplies(60) });
+  const prepared = await prepareUpdate(f.options), operation = await readJSON(prepared.operationPath);
+  assert.equal(operation.plan.budget, 1); assert.equal(operation.plan.totalBudget, 120);
+  assert.equal(prepared.budgetScope, 'roots');
+  const entries = [post('hot-root', 'guest-hot-root', f.now),
+    ...Array.from({ length: 60 }, (_, index) => post('hot-reply-' + index, 'guest-hot-' + index, f.now, index ? 'hot-reply-' + (index - 1) : 'hot-root'))];
+  const { batch } = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
+  assert.equal((await suggestUpdatePresentation(f.options)).imagePostIds.length, 31);
+  const extra = [...entries, post('hot-over-quota', 'guest-hot-extra', f.now, 'hot-reply-59')];
+  const over = await draft(prepared, f.now, extra);
+  await assert.rejects(validateUpdateForBatch(over.batch, { ...f.options, contextPath: prepared.operationPath }), /saved reply limit/);
+  const tooManyRoots = await draft(prepared, f.now, [entries[0], post('second-root', 'guest-second-root', f.now)]);
+  await assert.rejects(validateUpdateForBatch(tooManyRoots.batch, { ...f.options, contextPath: prepared.operationPath }), /new-root budget/);
+  await draft(prepared, f.now, entries);
+  assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory })).count, 61);
+});
+
+test('root mode enforces overall replies, explicit total counts and stricter current limits', async t => {
+  const f = await fixture(t, 4, { maxBatchPosts: 120, replyLottery: fixedReplies(60) }), prepared = await prepareUpdate(f.options);
+  const entries = [post('overall-a', 'guest-overall-a', f.now), post('overall-b', 'guest-overall-b', f.now),
+    ...Array.from({ length: 101 }, (_, index) => post('overall-reply-' + index, 'guest-overall-' + index, f.now, index < 60 ? 'overall-a' : 'overall-b'))];
+  const over = await draft(prepared, f.now, entries);
+  await assert.rejects(validateUpdateForBatch(over.batch, { ...f.options, contextPath: prepared.operationPath }), /overall reply hard limit/);
+  const actual = entries.slice(0, -1), valid = await draft(prepared, f.now, actual);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.replyLottery.maxReplies = 99; await writeFile(policyPath, JSON.stringify(policy)); await prepareUpdate(f.options);
+  await assert.rejects(validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath }), /overall reply hard limit/);
+  policy.replyLottery.maxReplies = 100; policy.maxBatchPosts = 100;
+  await writeFile(policyPath, JSON.stringify(policy)); await prepareUpdate(f.options);
+  await assert.rejects(validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath }), /total budget/);
+
+  const fixed = await fixture(t, 4, { maxBatchPosts: 120, replyLottery: fixedReplies(60) });
+  const fixedPrepared = await prepareUpdate({ ...fixed.options, requestedCount: 17 }), fixedOperation = await readJSON(fixedPrepared.operationPath);
+  assert.equal(fixedOperation.plan.budget, 4); assert.equal(fixedOperation.plan.totalBudget, 17);
+  const fixedPosts = [post('fixed-root', 'guest-fixed-root', fixed.now), ...Array.from({ length: 16 }, (_, index) => post('fixed-new-reply-' + index, 'guest-fixed-new-' + index, fixed.now, 'fixed-root'))];
+  const fixedDraft = await draft(fixedPrepared, fixed.now, fixedPosts);
+  await validateUpdateForBatch(fixedDraft.batch, { ...fixed.options, contextPath: fixedPrepared.operationPath });
+  const fixedOver = await draft(fixedPrepared, fixed.now, [...fixedPosts, post('fixed-new-over', 'guest-fixed-new-over', fixed.now, 'fixed-root')]);
+  await assert.rejects(validateUpdateForBatch(fixedOver.batch, { ...fixed.options, contextPath: fixedPrepared.operationPath }), /total budget/);
+});
+
+test('old plans retain total-post semantics when policy enables reply lotteries', async t => {
+  const f = await fixture(t, 2), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.maxBatchPosts = 120; policy.replyLottery = fixedReplies(60);
+  await writeFile(policyPath, JSON.stringify(policy));
+  await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, original.plan);
+  const entries = [post('legacy-root', 'guest-legacy', f.now), post('legacy-reply', 'guest-legacy-reply', f.now, 'legacy-root'), post('legacy-extra', 'guest-legacy-extra', f.now, 'legacy-root')];
+  const { batch } = await draft(prepared, f.now, entries);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /saved budget/);
+  await assert.rejects(suggestUpdateReplies(f.options), /original total-post budget/);
+  policy.replyLottery.maxReplies = 0; await writeFile(policyPath, JSON.stringify(policy)); await prepareUpdate(f.options);
+  const withinOldBudget = await draft(prepared, f.now, entries.slice(0, 2));
+  await assert.rejects(validateUpdateForBatch(withinOldBudget.batch, { ...f.options, contextPath: prepared.operationPath }), /overall reply hard limit/);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, original.plan);
+});
+
+test('comments and policy refresh keep saved reply draws; changed saved lottery settings are rejected', async t => {
+  const f = await fixture(t, 1, { maxBatchPosts: 120, replyLottery: fixedReplies(2) }), prepared = await prepareUpdate(f.options);
+  const original = await readJSON(prepared.operationPath);
+  const entries = [post('frozen-root', 'guest-frozen', f.now), ...Array.from({ length: 3 }, (_, index) => post('frozen-reply-' + index, 'guest-frozen-' + index, f.now, 'frozen-root'))];
+  const { batch } = await draft(prepared, f.now, entries);
+  await writeFile(join(f.root, 'environment/comments.md'), '# Updated comment research\n\nSYNTHETIC_NEW_COMMENT_RESEARCH');
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.replyLottery = fixedReplies(9); await writeFile(policyPath, JSON.stringify(policy));
+  await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  const refreshed = await readJSON(prepared.operationPath);
+  assert.deepEqual(refreshed.plan, original.plan);
+  assert.ok((await readFile(prepared.readingPath, 'utf8')).includes('SYNTHETIC_NEW_COMMENT_RESEARCH'));
+  assert.equal((await suggestUpdateReplies(f.options)).threads[0].replyCount, 2);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /saved reply limit/);
+  refreshed.plan.replyLottery.bands[0].max = 3;
+  await writeFile(prepared.operationPath, JSON.stringify(refreshed));
+  await assert.rejects(prepareUpdate(f.options), /draw was changed/);
+});
+
+test('reply planning normalizes old reply targets, counts only new descendants and rejects broken chains', async t => {
+  const f = await fixture(t, 1, { maxBatchPosts: 120, replyLottery: fixedReplies(2) });
+  const historical = Array.from({ length: 5 }, (_, index) => post('archived-reply-' + index, 'guest-archived-' + index, Date.parse('2025-04-02T00:00:00Z'), 'history-entry'));
+  await writeThreadBatch(f.root, { version: 1, id: 'historical-replies', mode: 'daily', posts: historical }, (await loadContent(f.root)).batches);
+  const prepared = await prepareUpdate(f.options);
+  const expected = await suggestUpdateReplies({ ...f.options, threadIds: ['archived-reply-0', 'history-entry'] });
+  assert.deepEqual(expected.threads, [{ rootId: 'history-entry', replyCount: 2 }]);
+  const entries = [post('continued-one', 'guest-continued-one', f.now, 'archived-reply-0'), post('continued-two', 'guest-continued-two', f.now, 'continued-one')];
+  const { batch } = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
+  assert.deepEqual((await suggestUpdateReplies(f.options)).threads, expected.threads);
+  await assert.rejects(suggestUpdateReplies({ ...f.options, threadIds: ['unknown-thread'] }), /Unknown reply target/);
+  const broken = [post('broken-parent', 'guest-broken', f.now, 'missing-parent')];
+  assert.throws(() => planThreadReplies({ seed: 'broken', posts: broken, replyLottery }), /missing parent/);
+  const cycle = [post('cycle-first', 'guest-cycle-first', f.now, 'cycle-second'), post('cycle-second', 'guest-cycle-second', f.now, 'cycle-first')];
+  assert.throws(() => planThreadReplies({ seed: 'cycle', posts: cycle, replyLottery }), /parent cycle/);
+  await cp(new URL('../lucifer0/tools', import.meta.url), join(f.root, 'tools'), { recursive: true });
+  await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
+  const before = await readFile(prepared.operationPath, 'utf8');
+  const cli = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'replies', '--thread', 'archived-reply-0', '--work', f.workDirectory, '--thread', 'history-entry'], { encoding: 'utf8' }));
+  assert.deepEqual(cli.threads, expected.threads);
+  assert.equal(cli.maxReplies, 100); assert.equal(cli.totalBudget, 120);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), before);
+});
+
 test('presentation suggestions select one actual post and keep each post stable across reordering', () => {
   const now = Date.now(), entries = [post('image-one', 'guest-one', now), post('image-two', 'guest-two', now, 'image-one'), post('image-three', 'guest-three', now)];
   const before = structuredClone(entries), first = suggestPostPresentation({ seed: 'presentation-seed', posts: entries });
   const reordered = suggestPostPresentation({ seed: 'presentation-seed', posts: [...entries].reverse() });
   assert.deepEqual(entries, before, 'suggestions must not edit posts, dates, media or authors');
-  assert.ok(entries.some(entry => entry.id === first.imagePostId));
-  assert.equal(reordered.imagePostId, first.imagePostId);
+  assert.equal(first.imagePostIds.length, Math.ceil(entries.length / 2));
+  assert.equal(new Set(first.imagePostIds).size, first.imagePostIds.length);
+  assert.ok(first.imagePostIds.every(id => entries.some(entry => entry.id === id)));
+  assert.deepEqual(reordered.imagePostIds, first.imagePostIds);
   assert.deepEqual([...reordered.likes].sort((a, b) => a.id.localeCompare(b.id)), [...first.likes].sort((a, b) => a.id.localeCompare(b.id)));
-  assert.deepEqual(suggestPostPresentation({ seed: 'presentation-seed', posts: [] }), { imagePostId: null, likes: [] });
-  assert.equal(suggestPostPresentation({ seed: 'presentation-seed', posts: [entries[1]] }).imagePostId, entries[1].id);
+  assert.deepEqual(suggestPostPresentation({ seed: 'presentation-seed', posts: [] }), { imagePostIds: [], likes: [] });
+  assert.deepEqual(suggestPostPresentation({ seed: 'presentation-seed', posts: [entries[1]] }).imagePostIds, [entries[1].id]);
   assert.throws(() => suggestPostPresentation({ seed: 'presentation-seed', posts: [{ replyTo: null }] }), /valid posts/);
-  const chosen = new Set(Array.from({ length: 100 }, (_, index) => suggestPostPresentation({ seed: 'image-draw-' + index, posts: entries }).imagePostId));
+  const chosen = new Set(Array.from({ length: 100 }, (_, index) => suggestPostPresentation({ seed: 'image-draw-' + index, posts: entries }).imagePostIds).flat());
   assert.equal(chosen.size, entries.length, 'image selection must not always choose the first or a root post');
 });
 
@@ -125,7 +247,7 @@ test('suggested likes retain zeros and rare high values while roots usually rece
 
 test('the suggest API and CLI read the current actual posts without changing the operation or draw', async t => {
   const f = await fixture(t), prepared = await prepareUpdate(f.options);
-  assert.deepEqual(await suggestUpdatePresentation(f.options), { id: prepared.id, count: 0, imagePostId: null, likes: [] });
+  assert.deepEqual(await suggestUpdatePresentation(f.options), { id: prepared.id, count: 0, imagePostIds: [], likes: [] });
   const entries = [post('suggest-one', 'guest-one', f.now), post('suggest-two', 'guest-two', f.now, 'suggest-one')];
   await draft(prepared, f.now, entries);
   const operationBefore = await readFile(prepared.operationPath, 'utf8'), readingBefore = await readFile(prepared.readingPath, 'utf8');
@@ -133,7 +255,8 @@ test('the suggest API and CLI read the current actual posts without changing the
   await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
   const suggestion = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'suggest', '--work', f.workDirectory], { encoding: 'utf8' }));
   assert.equal(suggestion.count, entries.length);
-  assert.ok(entries.some(entry => entry.id === suggestion.imagePostId));
+  assert.equal(suggestion.imagePostIds.length, Math.ceil(entries.length / 2));
+  assert.ok(suggestion.imagePostIds.every(id => entries.some(entry => entry.id === id)));
   assert.deepEqual(suggestion, await suggestUpdatePresentation(f.options));
   assert.equal(await readFile(prepared.operationPath, 'utf8'), operationBefore);
   assert.equal(await readFile(prepared.readingPath, 'utf8'), readingBefore);
@@ -206,7 +329,7 @@ test('prepare creates only one work record and a full raw-source reading, then r
     assert.ok(reading.includes('users/' + user.id + '/profile.md'));
     assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
-  for (const name of ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
+  for (const name of ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
   assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY') && reading.includes('SYNTHETIC_PRIVATE_CANON'));
   assert.ok(reading.includes('docs/README.md') && reading.includes('docs/writing.md') && reading.includes('docs/publishing.md'));
   assert.ok(!JSON.stringify(original).includes('SYNTHETIC_FULL_PERSON_'));

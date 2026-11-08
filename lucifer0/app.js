@@ -1,4 +1,4 @@
-import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, dateLabel, boardID, postNumber } from './core.js';
+import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber } from './core.js?v=20261109-comments';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -40,9 +40,9 @@ function empty(title, copy, href = '#/', label = '返回 /world') {
   return `<div class="empty"><span class="empty-symbol" aria-hidden="true">( ´_ゝ｀)</span><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="text-link" href="${href}">[ ${esc(label)} ]</a></div>`;
 }
 function replyPreview(post) {
-  const replies = threadPosts(feed.posts, post.id).slice(1);
-  if (!replies.length) return '';
-  return `<div class="reply-preview">${replies.slice(-2).map(reply => `<a class="preview-reply" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong>${esc(users.get(reply.author).name)}</strong></div><p>${esc(reply.text)}</p></a>`).join('')}</div>`;
+  const { rootId, replies, total, collapsed } = threadReplyPreview(feed.posts, post.id);
+  if (!total) return '';
+  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong>${esc(users.get(reply.author).name)}</strong></div><p>${esc(reply.text)}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
 }
 function postMarkup(post, { threaded = false, target, preview = false } = {}) {
   const user = users.get(post.author), parent = posts.get(post.replyTo);

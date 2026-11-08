@@ -2,13 +2,13 @@ import { readFile, writeFile, mkdir, rename, rm, lstat, realpath } from 'node:fs
 import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { socialRoot, loadContent } from './content.js';
+import { socialRoot, loadContent, validateReplyLottery } from './content.js';
 import { defaultPrivateDirectory, privateFolder, readProfiles } from './private-profiles.js';
 import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
-const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md'];
+const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md'];
 const controlPaths = ['docs/README.md', 'docs/writing.md', 'docs/publishing.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;
@@ -36,10 +36,14 @@ function checkRequestedCount(count) {
 }
 
 // The saved seed fixes the default budget draw and a single weighted candidate draw.
-export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], seed, requestedCount }) {
+export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], seed, requestedCount, replyLottery, maxBatchPosts = 120 }) {
   if (!bounded(seed, 200)) fail('Invalid update seed');
   checkRequestedCount(requestedCount);
-  const random = randomFor(seed), drawnBudget = 1 + Math.floor(random() * 10), budget = requestedCount ?? drawnBudget;
+  if (replyLottery !== undefined) {
+    validateReplyLottery(replyLottery);
+    if (!Number.isInteger(maxBatchPosts) || maxBatchPosts < 1 || maxBatchPosts > 120 || requestedCount > maxBatchPosts) fail('Invalid publication hard limit for the reply plan');
+  }
+  const random = randomFor(seed), drawnBudget = 1 + Math.floor(random() * 10), budget = replyLottery === undefined ? requestedCount ?? drawnBudget : drawnBudget;
   const recent = new Set([...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 7).map(post => post.author));
   const pool = users.filter(user => ready(user, { profiles, overrides })).sort((a, b) => a.id.localeCompare(b.id, 'en'));
   const selectedIds = [];
@@ -49,7 +53,8 @@ export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], se
     for (let i = 0; i < pool.length; i++) { ticket -= weights[i]; if (ticket < 0) { index = i; break; } }
     selectedIds.push(pool.splice(index, 1)[0].id);
   }
-  return { seed, budget, selectedIds, ...(requestedCount !== undefined ? { requestedCount } : {}) };
+  return { seed, budget, selectedIds, ...(requestedCount !== undefined ? { requestedCount } : {}),
+    ...(replyLottery !== undefined ? { totalBudget: requestedCount ?? maxBatchPosts, replyLottery: structuredClone(replyLottery) } : {}) };
 }
 
 export function suggestPostPresentation({ seed, posts }) {
@@ -61,8 +66,9 @@ export function suggestPostPresentation({ seed, posts }) {
   }
   // Separate namespaces keep these choices independent of the budget and authors.
   const imageRank = id => createHash('sha256').update(seed + '\0image\0' + id).digest('hex');
-  const imagePostId = posts.map(post => ({ id: post.id, rank: imageRank(post.id) }))
-    .sort((a, b) => a.rank.localeCompare(b.rank, 'en') || a.id.localeCompare(b.id, 'en'))[0]?.id ?? null;
+  const imagePostIds = posts.map(post => ({ id: post.id, rank: imageRank(post.id) }))
+    .sort((a, b) => a.rank.localeCompare(b.rank, 'en') || a.id.localeCompare(b.id, 'en'))
+    .slice(0, Math.ceil(posts.length / 2)).map(post => post.id);
   const likes = posts.map(post => {
     const random = randomFor(seed + '\0likes\0' + post.id), tier = random(), root = post.replyTo === null;
     const integer = (low, high) => low + Math.floor(random() * (high - low + 1));
@@ -73,21 +79,100 @@ export function suggestPostPresentation({ seed, posts }) {
     else count = root ? integer(61, 160) : integer(36, 90);
     return { id: post.id, likes: count };
   });
-  return { imagePostId, likes };
+  return { imagePostIds, likes };
 }
 
-function planSeal(id, root, plan) {
-  return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...(plan.requestedCount !== undefined ? { requestedCount: plan.requestedCount } : {}) });
+export function drawThreadReplyCount({ seed, rootId, replyLottery }) {
+  if (!bounded(seed, 200) || typeof rootId !== 'string' || !ID.test(rootId)) fail('Reply planning needs the saved seed and a valid root ID');
+  validateReplyLottery(replyLottery);
+  const random = randomFor(seed + '\0replies\0' + rootId);
+  let ticket = random() * replyLottery.bands.reduce((sum, band) => sum + band.weight, 0);
+  let selected = replyLottery.bands[replyLottery.bands.length - 1];
+  for (const band of replyLottery.bands) { ticket -= band.weight; if (ticket < 0) { selected = band; break; } }
+  return selected.min + Math.floor(random() * (selected.max - selected.min + 1));
 }
-const operationSourceDigest = (data, plan) => plan.requestedCount === undefined ? data.sourceDigest : digest({ sourceDigest: data.sourceDigest, requestedCount: plan.requestedCount });
+
+function postIndex(posts, history = []) {
+  if (!Array.isArray(posts) || !Array.isArray(history)) fail('Reply planning needs actual posts and archived history');
+  const byId = new Map(history.map(post => [post.id, post])), seen = new Set();
+  for (const post of posts) {
+    if (!plain(post) || typeof post.id !== 'string' || !ID.test(post.id) || seen.has(post.id) || !(post.replyTo === null || typeof post.replyTo === 'string' && ID.test(post.replyTo))) fail('Reply planning needs distinct valid posts');
+    seen.add(post.id); byId.set(post.id, post);
+  }
+  return byId;
+}
+function threadRoot(id, byId) {
+  const seen = new Set();
+  let post = byId.get(id);
+  if (!post) fail('Unknown reply target: ' + id);
+  while (post.replyTo !== null) {
+    if (seen.has(post.id)) fail('Reply planning found a parent cycle');
+    seen.add(post.id);
+    if (typeof post.replyTo !== 'string' || !ID.test(post.replyTo)) fail('Reply planning needs a real parent for ' + post.id);
+    post = byId.get(post.replyTo);
+    if (!post) fail('Reply planning found a missing parent');
+  }
+  return post;
+}
+
+export function planThreadReplies({ seed, posts, history = [], replyLottery, threadIds = [] }) {
+  validateReplyLottery(replyLottery);
+  if (!Array.isArray(threadIds) || threadIds.some(id => typeof id !== 'string' || !ID.test(id))) fail('Continuation targets must be valid post IDs');
+  const byId = postIndex(posts, history), roots = new Set();
+  for (const post of posts) roots.add(threadRoot(post.id, byId).id);
+  for (const id of threadIds) roots.add(threadRoot(id, byId).id);
+  return [...roots].sort((a, b) => a.localeCompare(b, 'en')).map(rootId => ({ rootId, replyCount: drawThreadReplyCount({ seed, rootId, replyLottery }) }));
+}
+
+function replyLimits(plan, policy) {
+  return {
+    totalBudget: Math.min(plan.totalBudget, policy.maxBatchPosts),
+    maxReplies: Math.min(plan.replyLottery.maxReplies, policy.replyLottery?.maxReplies ?? plan.replyLottery.maxReplies)
+  };
+}
+function validatePostBudget(plan, posts, history, policy) {
+  if (policy.replyLottery !== undefined && posts.filter(post => post.replyTo !== null).length > policy.replyLottery.maxReplies) fail('The update exceeds its current overall reply hard limit');
+  if (plan.replyLottery === undefined) {
+    if (posts.length > plan.budget || posts.length > policy.maxBatchPosts) fail('The update exceeds its saved budget');
+    return;
+  }
+  const limits = replyLimits(plan, policy), roots = posts.filter(post => post.replyTo === null);
+  const replies = posts.filter(post => post.replyTo !== null);
+  if (posts.length > limits.totalBudget) fail('The update exceeds its total budget');
+  if (roots.length > plan.budget) fail('The update exceeds its new-root budget');
+  if (replies.length > limits.maxReplies) fail('The update exceeds its overall reply hard limit');
+  const byId = postIndex(posts, history), counts = new Map();
+  for (const post of replies) {
+    const rootId = threadRoot(post.id, byId).id;
+    counts.set(rootId, (counts.get(rootId) || 0) + 1);
+  }
+  for (const [rootId, count] of counts) {
+    const limit = drawThreadReplyCount({ seed: plan.seed, rootId, replyLottery: plan.replyLottery });
+    if (count > limit) fail('Thread ' + rootId + ' exceeds its saved reply limit of ' + limit);
+  }
+}
+
+const planExtensions = plan => ({
+  ...(plan.requestedCount !== undefined ? { requestedCount: plan.requestedCount } : {}),
+  ...(plan.replyLottery !== undefined ? { totalBudget: plan.totalBudget, replyLottery: plan.replyLottery } : {})
+});
+function planSeal(id, root, plan) {
+  return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...planExtensions(plan) });
+}
+const operationSourceDigest = (data, plan) => Object.keys(planExtensions(plan)).length ? digest({ sourceDigest: data.sourceDigest, ...planExtensions(plan) }) : data.sourceDigest;
 function checkOperation(value, root) {
   onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
-  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount'], 'saved plan');
+  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery'], 'saved plan');
   checkRequestedCount(plan.requestedCount);
+  if (plan.replyLottery !== undefined || plan.totalBudget !== undefined) {
+    validateReplyLottery(plan.replyLottery);
+    if (!Number.isInteger(plan.totalBudget) || plan.totalBudget < 1 || plan.totalBudget > 120 || plan.requestedCount !== undefined && plan.totalBudget !== plan.requestedCount) fail('Invalid saved total budget');
+  }
   if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 20 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
-  if (plan.budget !== (plan.requestedCount ?? 1 + Math.floor(randomFor(plan.seed)() * 10)) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
+  const drawnBudget = 1 + Math.floor(randomFor(plan.seed)() * 10);
+  if (plan.budget !== (plan.replyLottery === undefined ? plan.requestedCount ?? drawnBudget : drawnBudget) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
   return value;
 }
 
@@ -160,8 +245,10 @@ async function acquireLock(path, message) {
 }
 const lockWork = directory => acquireLock(join(directory, '.update.lock'), 'The current update is busy; retry after its active command finishes');
 function reading(operation, data) {
-  return '# 本次更新阅读材料\n\n操作：' + operation.id + '；发言上限：' + operation.plan.budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
-    '。\n\n这是当前资料的完整快照，生成快照不代表执行者已经读完。按原文理解人物的底色、处境与知情范围，人物资料本身不构成本轮剧情。主帖和回复合计不超过上限，实际发言至少一半来自无需档案的 guest；一条时必须是 guest。候选可以沉默，其他合资格库人物可以自然回复。\n\n' +
+  const budget = operation.plan.replyLottery === undefined ? '发言上限：' + operation.plan.budget : '新主帖上限：' + operation.plan.budget + '；发言总上限：' + replyLimits(operation.plan, data.policy).totalBudget + '；回复合计上限：' + replyLimits(operation.plan, data.policy).maxReplies;
+  const explanation = operation.plan.replyLottery === undefined ? '主帖和回复合计不超过上限。' : '先确定新主帖和要接续的旧串，再用 replies 命令逐串抽回复上限；所有楼中楼都计入原根串，实际回复可以少于抽取数。';
+  return '# 本次更新阅读材料\n\n操作：' + operation.id + '；' + budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
+    '。\n\n这是当前资料的完整快照，生成快照不代表执行者已经读完。按原文理解人物的底色、处境与知情范围，人物资料本身不构成本轮剧情。' + explanation + '实际发言至少一半来自无需档案的 guest；一条时必须是 guest。候选可以沉默，其他合资格库人物可以自然回复。\n\n' +
     '## 当前账号权限\n\n| 账号 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- |\n' +
     data.registry.users.map(user => '| ' + user.id + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
     '\n\n' + data.documents.map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
@@ -182,7 +269,7 @@ export async function prepareUpdate({ root = socialRoot, privateDirectory = defa
     const status = operation ? 'resumed' : 'prepared';
     if (!operation) {
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
-      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, overrides: data.material.overrides, posts: data.feed.posts, seed, requestedCount });
+      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, overrides: data.material.overrides, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, maxBatchPosts: data.policy.maxBatchPosts });
       plan.seal = planSeal(id, root, plan);
       operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared' };
     } else {
@@ -191,7 +278,7 @@ export async function prepareUpdate({ root = socialRoot, privateDirectory = defa
     }
     await atomicFile(readingPath, reading(operation, data));
     await saveOperation(operationPath, operation);
-    return { status, id: operation.id, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds, operationPath, readingPath };
+    return { status, id: operation.id, budget: operation.plan.budget, budgetScope: operation.plan.replyLottery === undefined ? 'posts' : 'roots', totalBudget: operation.plan.totalBudget ?? operation.plan.budget, selectedIds: operation.plan.selectedIds, operationPath, readingPath };
   } finally { await release(); }
 }
 
@@ -199,6 +286,15 @@ export async function suggestUpdatePresentation({ root = socialRoot, workDirecto
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
   return { id: operation.id, count: operation.posts.length, ...suggestPostPresentation({ seed: operation.plan.seed, posts: operation.posts }) };
+}
+
+export async function suggestUpdateReplies({ root = socialRoot, workDirectory, threadIds = [] } = {}) {
+  root = await checkedRoot(root);
+  const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
+  if (operation.plan.replyLottery === undefined) fail('This saved update uses the original total-post budget; finish it under its original plan');
+  const { feed, policy } = await loadContent(root, { allowPending: true });
+  return { id: operation.id, rootBudget: operation.plan.budget, ...replyLimits(operation.plan, policy),
+    threads: planThreadReplies({ seed: operation.plan.seed, posts: operation.posts, history: feed.posts, replyLottery: operation.plan.replyLottery, threadIds }) };
 }
 
 function siteDomain(hostname) {
@@ -244,7 +340,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
   if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
   const resumingPartialWrite = data.pending?.id === batch.id && data.pending.batchDigest === digest(batch);
-  if (batch.posts.length > operation.plan.budget || batch.posts.length > data.policy.maxBatchPosts) fail('The update exceeds its saved budget');
+  validatePostBudget(operation.plan, batch.posts, data.feed.posts, data.policy);
   const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));
   if (guests.length < Math.ceil(batch.posts.length / 2)) fail('At least half of the actual posts must be guests');
   const users = new Map(data.registry.users.map(user => [user.id, user]));

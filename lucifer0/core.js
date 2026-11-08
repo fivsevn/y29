@@ -51,6 +51,11 @@ export function threadPosts(posts, id) {
   return [root, ...posts.filter(post => post.id !== root.id && rootOf(posts, post.id)?.id === root.id).sort(oldestFirst)];
 }
 
+export function threadReplyPreview(posts, id) {
+  const thread = threadPosts(posts, id), total = Math.max(0, thread.length - 1);
+  return { rootId: thread[0]?.id ?? null, replies: thread.slice(1, 11), total, collapsed: total > 10 };
+}
+
 export function selectPosts(posts, state, { view = 'all', user, query = '', users = [] } = {}) {
   const needle = query.trim().toLocaleLowerCase();
   const following = new Set(users.filter(account => account.inFollowing === true).map(account => account.id));
