@@ -23,8 +23,6 @@ jobs:
     permissions:
       contents: write
       pages: write
-    env:
-      Y29_EDIT_BRANCH: main
     steps:
       - uses: actions/checkout@v4
         with:

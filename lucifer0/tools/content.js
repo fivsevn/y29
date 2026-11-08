@@ -124,7 +124,7 @@ export async function buildFeed(root = socialRoot) {
   const path = join(root, 'data/feed.json');
   await mkdir(dirname(path), { recursive: true });
   await writeFile(path, JSON.stringify(feed, null, 2) + '\n');
-  await buildUserDirectory(root, { branch: process.env.Y29_EDIT_BRANCH || 'main' });
+  await buildUserDirectory(root);
   return feed;
 }
 
