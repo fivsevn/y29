@@ -24,7 +24,7 @@ const BOOLS = new Set(['enabled', 'inFollowing', 'allowPosts', 'allowReplies']);
 const FACT_STATUS = { canon: '原典', inference: '推演', pending: '待定' };
 const HEADINGS = ['账号与开关', '基本资料', ...LISTS.map(([title]) => title), '近期状态', '事实依据', '自由备注'];
 const PERSON_FIELDS = ['编号', '网名', '用户名', '个人简介', '年龄', '性别', '职业', '居住区域', '教育与训练', '家庭与居住', '资料更新'];
-const PERSON_HEADINGS = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算', '资料参考'];
+const PERSON_HEADINGS = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算'];
 const SETTING_FIELDS = ['id', 'avatar', 'kind', 'sourceWork', 'enabled', 'aiScope', 'profileStatus', 'inFollowing', 'allowPosts', 'allowReplies', 'activityWeight', 'timezone', 'activeHours'];
 const entities = { '&amp;': '&', '&#124;': '|', '&#10;': '\n', '&#13;': '\r', '&lt;': '<', '&gt;': '>' };
 const cell = value => String(value ?? '').replace(/&/g, '&amp;').replace(/\|/g, '&#124;').replace(/\r/g, '&#13;').replace(/\n/g, '&#10;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
