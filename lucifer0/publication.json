@@ -2,5 +2,5 @@
   "version": 1,
   "automaticPosting": true,
   "timezone": "Asia/Shanghai",
-  "maxBatchPosts": 10
+  "maxBatchPosts": 20
 }

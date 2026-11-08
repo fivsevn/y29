@@ -31,10 +31,15 @@ function ready(user, material) {
     (user.kind !== 'character' || hasCanon(material.overrides[user.id]));
 }
 
-// The saved seed fixes the one budget draw and a single weighted candidate draw.
-export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], seed }) {
+function checkRequestedCount(count) {
+  if (count !== undefined && (!Number.isInteger(count) || count < 1 || count > 20)) fail('The requested count must be an integer from 1 to 20');
+}
+
+// The saved seed fixes the default budget draw and a single weighted candidate draw.
+export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], seed, requestedCount }) {
   if (!bounded(seed, 200)) fail('Invalid update seed');
-  const random = randomFor(seed), budget = 1 + Math.floor(random() * 10);
+  checkRequestedCount(requestedCount);
+  const random = randomFor(seed), drawnBudget = 1 + Math.floor(random() * 10), budget = requestedCount ?? drawnBudget;
   const recent = new Set([...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 7).map(post => post.author));
   const pool = users.filter(user => ready(user, { profiles, overrides })).sort((a, b) => a.id.localeCompare(b.id, 'en'));
   const selectedIds = [];
@@ -44,19 +49,21 @@ export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], se
     for (let i = 0; i < pool.length; i++) { ticket -= weights[i]; if (ticket < 0) { index = i; break; } }
     selectedIds.push(pool.splice(index, 1)[0].id);
   }
-  return { seed, budget, selectedIds };
+  return { seed, budget, selectedIds, ...(requestedCount !== undefined ? { requestedCount } : {}) };
 }
 
 function planSeal(id, root, plan) {
-  return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds });
+  return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...(plan.requestedCount !== undefined ? { requestedCount: plan.requestedCount } : {}) });
 }
+const operationSourceDigest = (data, plan) => plan.requestedCount === undefined ? data.sourceDigest : digest({ sourceDigest: data.sourceDigest, requestedCount: plan.requestedCount });
 function checkOperation(value, root) {
   onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
-  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal'], 'saved plan');
-  if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 10 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
-  if (plan.budget !== 1 + Math.floor(randomFor(plan.seed)() * 10) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
+  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount'], 'saved plan');
+  checkRequestedCount(plan.requestedCount);
+  if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 20 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
+  if (plan.budget !== (plan.requestedCount ?? 1 + Math.floor(randomFor(plan.seed)() * 10)) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
   return value;
 }
 
@@ -136,24 +143,27 @@ function reading(operation, data) {
     '\n\n' + data.documents.map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
 }
 
-export async function prepareUpdate({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), workDirectory, now = Date.now(), entropy = () => randomBytes(32).toString('hex') } = {}) {
+export async function prepareUpdate({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), workDirectory, requestedCount, now = Date.now(), entropy = () => randomBytes(32).toString('hex') } = {}) {
+  checkRequestedCount(requestedCount);
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root, true), release = await lockWork(directory);
   try {
     const operationPath = join(directory, 'operation.json'), readingPath = join(directory, 'reading.md');
     let operation;
     try { operation = await readOperation(operationPath, root); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    if (operation && requestedCount !== undefined && operation.plan.requestedCount !== requestedCount) fail('The requested count cannot change an existing update; resume its original plan');
     const data = await source(root, privateDirectory);
     if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
+    if (requestedCount > data.policy.maxBatchPosts) fail('The requested count exceeds the publication hard limit');
     const status = operation ? 'resumed' : 'prepared';
     if (!operation) {
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
-      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, overrides: data.material.overrides, posts: data.feed.posts, seed });
+      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, overrides: data.material.overrides, posts: data.feed.posts, seed, requestedCount });
       plan.seal = planSeal(id, root, plan);
-      operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: data.sourceDigest, research: [], posts: [], status: 'prepared' };
+      operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared' };
     } else {
       operation.preparedAt = new Date(now).toISOString();
-      operation.sourceDigest = data.sourceDigest;
+      operation.sourceDigest = operationSourceDigest(data, operation.plan);
     }
     await atomicFile(readingPath, reading(operation, data));
     await saveOperation(operationPath, operation);
@@ -202,7 +212,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   validateResearch(operation.research, now, batch.posts.map(post => post.id));
   const data = await source(root, privateDirectory);
   if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
-  if (operation.sourceDigest !== data.sourceDigest) fail('Source material changed; prepare again without redrawing');
+  if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
   const resumingPartialWrite = data.pending?.id === batch.id && data.pending.batchDigest === digest(batch);
   if (batch.posts.length > operation.plan.budget || batch.posts.length > data.policy.maxBatchPosts) fail('The update exceeds its saved budget');
   const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));
@@ -283,7 +293,7 @@ export async function cancelUpdate({ root = socialRoot, privateDirectory = defau
       const data = await source(root, privateDirectory);
       operation.posts = [];
       operation.preparedAt = new Date(now).toISOString();
-      operation.sourceDigest = data.sourceDigest;
+      operation.sourceDigest = operationSourceDigest(data, operation.plan);
       operation.status = 'prepared';
       await atomicFile(readingPath, reading(operation, data));
       await saveOperation(operationPath, operation);

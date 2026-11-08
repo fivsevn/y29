@@ -4,6 +4,7 @@ import { mkdtemp, cp, mkdir, writeFile, readFile, readdir, rm } from 'node:fs/pr
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { writeThreadBatch } from '../lucifer0/tools/thread-packages.js';
 
 async function files(directory, prefix = '') {
   const result = [];
@@ -25,7 +26,16 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   await mkdir(join(directory, 'lucifer0/.private'), { recursive: true });
   await writeFile(join(directory, 'lucifer0/.private/test.json'), '{"syntheticPrivateMarker":true}');
   await writeFile(join(directory, 'lucifer0/assets/not-referenced.txt'), 'syntheticPrivateMarker');
-  const mediaDirectory = 'posts/2026/11/sample-drawing/media';
+  const mediaDirectory = 'posts/2026/01/build-media-fixture/media';
+  await mkdir(join(directory, 'lucifer0', mediaDirectory), { recursive: true });
+  await writeFile(join(directory, 'lucifer0', mediaDirectory, 'study.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await writeThreadBatch(join(directory, 'lucifer0'), {
+    version: 1, id: 'build-media-fixture', mode: 'sample', posts: [{
+      id: 'build-media-fixture', author: 'alan', createdAt: '2026-01-01T12:00:00+08:00', replyTo: null,
+      text: 'Synthetic media fixture for build verification.', likes: 0, canon: 'sample',
+      media: [{ src: `${mediaDirectory}/study.svg`, alt: 'Synthetic build image' }]
+    }]
+  });
   await writeFile(join(directory, 'lucifer0', mediaDirectory, 'unused.png'), 'unused draft image');
   const avatarDirectory = 'users/alan';
   const avatar = 'users/alan/avatar.svg';
@@ -42,7 +52,7 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   assert.deepEqual(published, [...expected].sort());
   assert.ok(!published.some(path => /private|not-referenced|unused|registry|profile-seeds|manage|tools|docs|\.md$/.test(path)));
   assert.ok(published.includes(avatar), 'an optional avatar from its owner package is published');
-  assert.ok(published.includes(`${mediaDirectory}/orange-study.svg`), 'referenced media is published from its thread package');
+  assert.ok(published.includes(`${mediaDirectory}/study.svg`), 'referenced media is published from its thread package');
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {
     assert.equal(await readFile(join(directory, 'dist', path), 'utf8'), await readFile(new URL(path, project), 'utf8'));
   }

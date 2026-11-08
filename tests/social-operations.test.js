@@ -29,14 +29,14 @@ const research = now => [
   { category: 'trend', kind: 'thread', url: 'https://forum.example.net/topic', visitedAt: iso(now), publishedAt: iso(now), summary: 'Synthetic source: read the root and visible disagreement replies.' },
   { category: 'daily', kind: 'thread', url: 'https://forum.example.net/daily', visitedAt: iso(now), publishedAt: null, summary: 'Synthetic source: read a daily-life account and its follow-up.' }
 ];
-async function fixture(t, budget = 4) {
+async function fixture(t, budget = 4, { maxBatchPosts = 10 } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-update-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = join(directory, 'project/lucifer0'), privateDirectory = join(directory, 'profiles'), workDirectory = join(directory, 'current'), now = Date.now() - 2000;
   await mkdir(join(root, 'assets'), { recursive: true });
   await mkdir(privateDirectory);
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
-  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts: 10 }));
+  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts }));
   for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
@@ -91,6 +91,65 @@ test('one draw reaches all ten ceilings and samples one shared weighted pool wit
   assert.ok(mixed > 0 && mixed < 500, 'the shared pool does not force two identities into every draw');
   const withoutCanon = drawUpdatePlan({ ...input, overrides: {}, seed: 'no-canon' });
   assert.ok(withoutCanon.selectedIds.every(id => input.users.find(user => user.id === id).kind === 'visitor'));
+});
+
+test('an explicit count of seventeen imports nine guest posts and refuses only eight', async t => {
+  const f = await fixture(t, 4, { maxBatchPosts: 20 }), result = await prepareUpdate({ ...f.options, requestedCount: 17 });
+  const operation = await readJSON(result.operationPath);
+  assert.equal(operation.plan.budget, 17); assert.equal(operation.plan.requestedCount, 17);
+  const author = users().find(user => user.kind === 'visitor');
+  const entries = [
+    ...Array.from({ length: 9 }, (_, index) => post('fixed-guest-' + index, 'guest-fixed-' + index, f.now)),
+    ...Array.from({ length: 8 }, (_, index) => post('fixed-library-' + index, author.id, f.now, 'fixed-guest-0'))
+  ];
+  const { batch } = await draft(result, f.now, entries);
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath });
+  const insufficientGuests = structuredClone(entries);
+  insufficientGuests[8] = post(insufficientGuests[8].id, author.id, f.now, 'fixed-guest-0');
+  const rejected = await draft(result, f.now, insufficientGuests);
+  await assert.rejects(validateUpdateForBatch(rejected.batch, { ...f.options, contextPath: result.operationPath }), /half/);
+  await draft(result, f.now, entries);
+  assert.equal((await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory })).count, 17);
+  assert.equal((await loadContent(f.root)).feed.posts.filter(entry => entries.some(post => post.id === entry.id)).length, 17);
+});
+
+test('explicit counts remain fixed on resume and respect integral range and the publication hard limit', async t => {
+  const f = await fixture(t, 4, { maxBatchPosts: 20 }), result = await prepareUpdate({ ...f.options, requestedCount: 17 });
+  const original = await readJSON(result.operationPath);
+  for (const options of [{}, { requestedCount: 17 }]) {
+    const resumed = await prepareUpdate({ ...f.options, ...options, entropy: () => { throw new Error('Must not redraw'); } });
+    assert.equal(resumed.id, original.id);
+    assert.deepEqual((await readJSON(resumed.operationPath)).plan, original.plan);
+  }
+  await assert.rejects(prepareUpdate({ ...f.options, requestedCount: 18 }), /cannot change/);
+  assert.deepEqual((await readJSON(result.operationPath)).plan, original.plan);
+  for (const requestedCount of [0, 21, 17.5, '17', null, NaN, Infinity]) await assert.rejects(prepareUpdate({ ...f.options, requestedCount }), /integer from 1 to 20/);
+  await writeFile(join(f.root, 'environment/forum.md'), '# Updated source for the fixed count');
+  await prepareUpdate(f.options);
+  const refreshed = await readJSON(result.operationPath);
+  assert.notEqual(refreshed.sourceDigest, original.sourceDigest);
+  assert.deepEqual(refreshed.plan, original.plan);
+  refreshed.plan.requestedCount = 18;
+  await writeFile(result.operationPath, JSON.stringify(refreshed));
+  await assert.rejects(prepareUpdate(f.options), /draw was changed/);
+  const limited = await fixture(t);
+  await assert.rejects(prepareUpdate({ ...limited.options, requestedCount: 17 }), /hard limit/);
+  const boundary = drawUpdatePlan({ ...drawInput(), seed: 'fixed-count-boundary', requestedCount: 20 });
+  assert.equal(boundary.budget, 20);
+});
+
+test('the prepare CLI accepts explicit counts and rejects changed, out-of-range or fractional values', async t => {
+  const f = await fixture(t, 4, { maxBatchPosts: 20 });
+  await cp(new URL('../lucifer0/tools', import.meta.url), join(f.root, 'tools'), { recursive: true });
+  await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
+  const env = { ...process.env, Y29_SOCIAL_PRIVATE_DIR: f.privateDirectory };
+  const run = args => execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', ...args], { env, encoding: 'utf8', stdio: 'pipe' });
+  const prepared = JSON.parse(run(['--count', '17', '--work', f.workDirectory]));
+  assert.equal(prepared.budget, 17);
+  assert.equal((await readJSON(prepared.operationPath)).plan.requestedCount, 17);
+  const resumed = JSON.parse(run(['--work', f.workDirectory, '--count', '17']));
+  assert.equal(resumed.id, prepared.id);
+  for (const count of ['21', '17.5', '18']) assert.throws(() => run(['--work', f.workDirectory, '--count', count]));
 });
 
 test('prepare creates only one work record and a full raw-source reading, then resumes without redrawing', async t => {

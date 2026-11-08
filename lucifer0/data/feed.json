@@ -768,433 +768,358 @@
       "kind": "character",
       "sourceWork": "真心猎手",
       "inFollowing": true
+    },
+    {
+      "id": "guest-eastwindow",
+      "handle": "guest_00e3f5c65d9284cb98c7",
+      "name": "Luna_08",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-balconygap",
+      "handle": "guest_8ae6045fc4a674d676e0",
+      "name": "阿芋",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-mealcost",
+      "handle": "guest_2ad2cb8232a234a9f7ce",
+      "name": "晚点再说",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-cartonroom",
+      "handle": "guest_d9aa2956373e0ada2210",
+      "name": "盒盒",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-five-minutes",
+      "handle": "guest_f26abac88d865ffc48ff",
+      "name": "momo的门牙",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-half-pancake",
+      "handle": "guest_7b980e9779e5f8c82e93",
+      "name": "差半张饼",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-mop-curls",
+      "handle": "guest_6a4d972d4a52ede79795",
+      "name": "歪歪",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-screen-on",
+      "handle": "guest_4d16926e8814147c0d3f",
+      "name": "qiu7",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-stopped-lift",
+      "handle": "guest_5f897c8a4e8f4a20210a",
+      "name": "橙汁分我一半",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-missing-sock",
+      "handle": "guest_f585128f14be1d532340",
+      "name": "跑丢一只袜子",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-call-me-zhou",
+      "handle": "guest_bfe4cd22ce364a3e639e",
+      "name": "小周",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-one-more",
+      "handle": "guest_e1e0390e9bc905831351",
+      "name": "ovo",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
     {
-      "id": "l0-20261108-2055-02",
-      "author": "visitor-sigma-upper",
-      "createdAt": "2026-11-08T20:59:00+08:00",
+      "id": "l0-20261108204219-d8822d90-17",
+      "author": "guest-one-more",
+      "createdAt": "2026-11-09T01:26:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "店里整理贴纸，翻到一张自己画的小轮子。边缘剪得有点歪，没扔，塞回本子里了。"
+      "guest": {
+        "name": "ovo"
+      },
+      "text": "有没有醒着的，刚梦到上班迟到，吓醒一看才一点。闹钟确认两遍了还是睡不着"
     },
     {
-      "id": "l0-20261108-2055-01",
-      "author": "visitor-psi",
-      "createdAt": "2026-11-08T20:58:00+08:00",
+      "id": "l0-20261108204219-d8822d90-16",
+      "author": "guest-call-me-zhou",
+      "createdAt": "2026-11-08T23:48:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "晚饭后蒸了四个包子，计时器又用的手机。刚想把它搁远点，锅里水开了，先这样吧。"
+      "guest": {
+        "name": "小周"
+      },
+      "text": "跟老同学吃饭，点菜点到一半才发现记的还是高中那会儿的口味。现在她能吃辣了，我倒不行了，今天那盘菜基本全是她在吃。她还记得我以前能直接嚼辣椒，我自己都快忘了。聊着聊着店里关了一半灯才走，好久没这么坐着了。"
     },
     {
-      "id": "l0-20261108-1304-06",
-      "author": "visitor-epsilon-upper",
-      "createdAt": "2026-11-08T13:06:00+08:00",
+      "id": "l0-20261108204219-d8822d90-15",
+      "author": "guest-missing-sock",
+      "createdAt": "2026-11-08T23:04:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "那张腿松的小凳子还靠墙放着。找东西时又差点坐上去，贴张纸提醒一下。"
+      "guest": {
+        "name": "跑丢一只袜子"
+      },
+      "text": "明早九点的课，老师刚发消息说八点半先到教室。那这到底是几点的课"
     },
     {
-      "id": "l0-20261108-1304-05",
-      "author": "visitor-xi-upper",
-      "createdAt": "2026-11-08T12:34:00+08:00",
+      "id": "l0-20261108204219-d8822d90-13",
+      "author": "visitor-halfkettle",
+      "createdAt": "2026-11-08T22:18:00+08:00",
+      "replyTo": "l0-20261108204219-d8822d90-12",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "别说那天有事，直接说不去了。说有事还会问你几点忙完。"
+    },
+    {
+      "id": "l0-20261108204219-d8822d90-12",
+      "author": "guest-screen-on",
+      "createdAt": "2026-11-08T21:54:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "涂色本那页全是窗户。涂完四个，没换颜色。"
+      "guest": {
+        "name": "qiu7"
+      },
+      "text": "跟兼职店说了上个月就不做了，今天又来问周一能不能顶三个小时。上回是没找到人，这回是同事有事。拒绝一次还得重新拒绝一次，烦。"
     },
     {
-      "id": "l0-20261108-1304-04",
-      "author": "visitor-nu-upper",
-      "createdAt": "2026-11-08T11:57:00+08:00",
+      "id": "l0-20261108204219-d8822d90-14",
+      "author": "guest-stopped-lift",
+      "createdAt": "2026-11-08T21:09:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "收摊后去看砧板，拿起两块都不顺手。下回再看看。"
+      "guest": {
+        "name": "橙汁分我一半"
+      },
+      "text": "口琴终于吹完一整首生日歌！！中间两处还是会卡，但能听出来是什么歌了。录音听了七遍，还想听，哈哈哈哈哈哈"
     },
     {
-      "id": "l0-20261108-1304-03",
-      "author": "visitor-psi-upper",
-      "createdAt": "2026-11-08T09:16:00+08:00",
+      "id": "l0-20261108204219-d8822d90-09",
+      "author": "guest-five-minutes",
+      "createdAt": "2026-11-08T20:28:00+08:00",
+      "replyTo": "l0-20261108204219-d8822d90-08",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "momo的门牙"
+      },
+      "text": "我这里在购买记录里，点进那一单才有。你看看，我没更新过，不知道新版是不是一样"
+    },
+    {
+      "id": "l0-20261108204219-d8822d90-08",
+      "author": "visitor-clearcalendar",
+      "createdAt": "2026-11-08T20:12:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "旧采访笔记有一页只写了“星期三”，月份没记。先夹着，想不起来就不填。"
+      "text": "石榴听书的自动续费到底在哪关。账户、钱包、订阅我都找过了，能让我续的地方有三个，关的地方一个没找到。"
     },
     {
-      "id": "l0-20261108-1304-02",
-      "author": "visitor-phi",
-      "createdAt": "2026-11-08T08:35:00+08:00",
+      "id": "l0-20261108204219-d8822d90-06",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-08T19:36:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "今早楼后那排树里有个叫声，两短一长。没看见鸟，录了十秒。"
+      "text": "说好家里旧袋子扔掉一半的。我婆婆挑了六个出来，折好，装进另一个袋子，又塞回抽屉。呀我刚才一拉，那个大袋子还卡住了。"
     },
     {
-      "id": "l0-20261108-1304-01",
-      "author": "visitor-delta",
-      "createdAt": "2026-11-08T05:48:00+08:00",
+      "id": "l0-20261108204219-d8822d90-11",
+      "author": "guest-mop-curls",
+      "createdAt": "2026-11-08T19:01:00+08:00",
+      "replyTo": "l0-20261108204219-d8822d90-10",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "歪歪"
+      },
+      "text": "我做过，最后变成了土豆糊拌饭。你还有馒头，我当时米饭都吃完了，只好又下了一碗面"
+    },
+    {
+      "id": "l0-20261108204219-d8822d90-10",
+      "author": "guest-half-pancake",
+      "createdAt": "2026-11-08T18:42:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "昨天记面团手感，只写了“偏凉”，没记室温。早上把温度计放到本子旁边了，省得又忘。"
+      "guest": {
+        "name": "差半张饼"
+      },
+      "text": "折腾了一晚上土豆饼。第一次太软，铲子伸进去就断；第二次加了粉，还是翻不过来，最后整个底留在锅里。我把上面能吃的挖出来装碗了，味道其实还行，就是嘴巴总在等一个脆的东西。现在锅泡着，人在啃馒头。问问做成功过的，加粉到底加到什么程度啊，视频里一勺一勺的，我那个勺好像跟他的不是一回事。"
     },
     {
-      "id": "sample-nightbus",
-      "author": "nightbus3",
-      "createdAt": "2026-11-07T21:48:00+08:00",
-      "replyTo": null,
-      "likes": 3,
-      "canon": "sample",
-      "media": [],
-      "text": "坐末班车，司机把车里的灯都关了。整个车厢只剩下一排手机屏幕。"
-    },
-    {
-      "id": "sample-alarm",
-      "author": "passerby17",
-      "createdAt": "2026-11-07T21:35:00+08:00",
-      "replyTo": null,
-      "likes": 3,
-      "canon": "sample",
-      "media": [],
-      "text": "有没有一种闹钟，是响了以后会替我起床的。"
-    },
-    {
-      "id": "sample-drawing-answer",
-      "author": "chenanjing",
-      "createdAt": "2026-11-07T21:23:00+08:00",
-      "replyTo": "sample-drawing-reply",
-      "likes": 9,
-      "canon": "sample",
-      "media": [],
-      "text": "吃了一个。另一个是模特，暂时留着。"
-    },
-    {
-      "id": "sample-drawing-reply",
-      "author": "zhaoyangxue",
-      "createdAt": "2026-11-07T21:20:00+08:00",
-      "replyTo": "sample-drawing",
-      "likes": 4,
-      "canon": "sample",
-      "media": [],
-      "text": "那橘子最后吃了吗？"
-    },
-    {
-      "id": "sample-drawing",
-      "author": "chenanjing",
-      "createdAt": "2026-11-07T21:16:00+08:00",
-      "replyTo": null,
-      "likes": 32,
-      "canon": "sample",
-      "media": [
-        {
-          "src": "posts/2026/11/sample-drawing/media/orange-study.svg",
-          "alt": "纸张上的两只橘子、一只杯子和未完成的轮廓。"
-        }
-      ],
-      "text": "本来只是想画个橘子。\n结果喝完一杯，橘子还没画完。"
-    },
-    {
-      "id": "sample-music-reply",
-      "author": "anmianyao",
-      "createdAt": "2026-11-07T20:53:00+08:00",
-      "replyTo": "sample-music",
-      "likes": 11,
-      "canon": "sample",
-      "media": [],
-      "text": "先把整首听完。后面还有。"
-    },
-    {
-      "id": "sample-music",
-      "author": "lidianlong",
-      "createdAt": "2026-11-07T20:41:00+08:00",
-      "replyTo": null,
-      "likes": 19,
-      "canon": "sample",
-      "media": [],
-      "text": "今晚这首前奏太好听了，已经倒回去三次。\n耳机一戴，回家的路还能再走两站。"
-    },
-    {
-      "id": "sample-card",
-      "author": "baiyanyan",
-      "createdAt": "2026-11-07T19:12:00+08:00",
-      "replyTo": null,
-      "likes": 17,
-      "canon": "sample",
-      "media": [],
-      "text": "挑了半天耳饰，出门才发现头发把它挡严实了。啧。"
-    },
-    {
-      "id": "sample-soup-answer",
-      "author": "alan",
-      "createdAt": "2026-11-07T18:30:00+08:00",
-      "replyTo": "sample-soup-reply",
-      "likes": 8,
-      "canon": "sample",
-      "media": [],
-      "text": "碗自己带。大一点的。"
-    },
-    {
-      "id": "sample-soup-reply",
-      "author": "lidianlong",
-      "createdAt": "2026-11-07T18:28:00+08:00",
-      "replyTo": "sample-soup",
-      "likes": 5,
-      "canon": "sample",
-      "media": [],
-      "text": "捞一半出来给我，我不介意。"
-    },
-    {
-      "id": "sample-soup",
-      "author": "alan",
-      "createdAt": "2026-11-07T18:25:00+08:00",
-      "replyTo": null,
-      "likes": 23,
-      "canon": "sample",
-      "media": [],
-      "text": "锅太小，面下多了。现在不是煮面，是给面洗热水澡。"
-    },
-    {
-      "id": "sample-umbrella",
-      "author": "lixing",
-      "createdAt": "2026-11-07T15:03:00+08:00",
-      "replyTo": null,
-      "likes": 8,
-      "canon": "sample",
-      "media": [],
-      "text": "伞拿了，没下雨。没拿伞的时候倒是很准。"
-    },
-    {
-      "id": "sample-breakfast-answer",
-      "author": "zhaoyangxue",
-      "createdAt": "2026-11-07T10:31:00+08:00",
-      "replyTo": "sample-breakfast-reply",
-      "likes": 4,
-      "canon": "sample",
-      "media": [],
-      "text": "背面比较自由，等我补两针再拍给你。"
-    },
-    {
-      "id": "sample-breakfast-reply",
-      "author": "guyu",
-      "createdAt": "2026-11-07T10:24:00+08:00",
-      "replyTo": "sample-breakfast",
-      "likes": 2,
-      "canon": "sample",
-      "media": [],
-      "text": "有背面的照片吗？想看看收线怎么藏。"
-    },
-    {
-      "id": "sample-breakfast",
-      "author": "zhaoyangxue",
-      "createdAt": "2026-11-07T10:12:00+08:00",
-      "replyTo": null,
-      "likes": 12,
-      "canon": "sample",
-      "media": [],
-      "text": "把昨天剩下的布料缝成了杯垫。杯子放上去刚好，歪的那一边就当没看见。"
-    },
-    {
-      "id": "l0-history-20261108-05-01",
-      "author": "visitor-upsilon",
-      "createdAt": "2026-10-28T22:06:00+08:00",
+      "id": "l0-20261108204219-d8822d90-07",
+      "author": "guest-cartonroom",
+      "createdAt": "2026-11-08T17:05:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "今晚不戴耳机了。把窗开了一点，能听见楼下收摊。"
+      "guest": {
+        "name": "盒盒"
+      },
+      "text": "现在别人问周末有没有空，我都先问干什么。吃饭有空，搬家没空。"
     },
     {
-      "id": "l0-history-20261108-04-02",
-      "author": "visitor-eta",
-      "createdAt": "2026-07-09T17:46:00+08:00",
+      "id": "l0-20261108204219-d8822d90-05",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-08T14:08:00+08:00",
+      "replyTo": "l0-20261108204219-d8822d90-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "你得看那盒奶和剩下的洋葱下顿还用不用。七十多是这回掏的钱，四十二是四顿吃掉的钱，混着比肯定对不上。要是剩下的最后全扔了，那你就按七十多算。"
+    },
+    {
+      "id": "l0-20261108204219-d8822d90-04",
+      "author": "guest-mealcost",
+      "createdAt": "2026-11-08T12:23:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "下午把试听椅挪到窗边了，能坐两个人。自己坐了一会儿，太阳有点晒，还得找块帘子。"
+      "guest": {
+        "name": "晚点再说"
+      },
+      "text": "用了个配餐清单，写四顿饭食材总共四十二。结果照单买花了七十多，我对了两遍也没买错。后来发现它把一盒奶只算了倒进锅里的那一点，半个洋葱就算半个的钱。道理我懂，结账的时候超市也没给我留半盒啊。一个人做饭到底怎么照着买才省钱"
     },
     {
-      "id": "l0-history-20261108-04-01",
-      "author": "baiyanyan",
-      "createdAt": "2026-05-16T18:38:00+08:00",
+      "id": "l0-20261108204219-d8822d90-03",
+      "author": "visitor-mu",
+      "createdAt": "2026-11-08T10:39:00+08:00",
+      "replyTo": "l0-20261108204219-d8822d90-02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "摆室内还是外阳台？我还以为你种了一大片，往下看就两盆呀。提壶水过去比收拾这些东西快。"
+    },
+    {
+      "id": "l0-20261108204219-d8822d90-02",
+      "author": "guest-balconygap",
+      "createdAt": "2026-11-08T10:14:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "别再给我发人格测试链接了，这个月已经做过两次。"
+      "guest": {
+        "name": "阿芋"
+      },
+      "text": "刷到一个自动浇菜的帖子，传感器、水泵、手机看湿度，一套做得特别漂亮。兴冲冲加完购物车，一百八。我窗台两盆小白菜，连盆九块。先关了。"
     },
     {
-      "id": "l0-history-20261108-03-07",
-      "author": "visitor-epsilon-upper",
-      "createdAt": "2026-03-22T20:17:00+08:00",
+      "id": "l0-20261108204219-d8822d90-01",
+      "author": "guest-eastwindow",
+      "createdAt": "2026-11-08T08:17:00+08:00",
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "换了套吉他弦。今晚不练曲子，就慢慢调。"
-    },
-    {
-      "id": "l0-history-20261108-03-06",
-      "author": "visitor-epsilon",
-      "createdAt": "2026-03-03T19:48:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "今天翻旧报，连着几期都有一则寻物启事，后来就没了。没有后续说明，也不知道是不是找到了。"
-    },
-    {
-      "id": "l0-history-20261108-03-05",
-      "author": "alan",
-      "createdAt": "2026-02-21T16:29:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "下午写了一页两个人吃饭，写完才发现一个人问了四个问题，对面只顾着吃。先不改，至少这顿饭看着挺香。"
-    },
-    {
-      "id": "l0-history-20261108-03-04",
-      "author": "visitor-chi-upper",
-      "createdAt": "2026-01-26T22:18:00+08:00",
-      "replyTo": "l0-history-20261108-03-03",
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "我家系带子的剪刀最后也在拆快递……室友说她以为是装饰"
-    },
-    {
-      "id": "l0-history-20261108-03-03",
-      "author": "visitor-tau-upper",
-      "createdAt": "2026-01-26T17:10:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "给家里又添了把剪布的剪刀，系了条红布做记号。旧的那把搬去厨房，谁要拆袋子就用它。"
-    },
-    {
-      "id": "l0-history-20261108-03-02",
-      "author": "visitor-lambda-upper",
-      "createdAt": "2026-01-09T18:43:00+08:00",
-      "replyTo": "l0-history-20261108-03-01",
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "先拿纸剪个圆放桌上比一下吧。量着合适不一定看着合适，我做抽屉隔板也返工过。"
-    },
-    {
-      "id": "l0-history-20261108-03-01",
-      "author": "visitor-omega-upper",
-      "createdAt": "2026-01-08T20:12:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "给小厨房做了三个碗，全是歪的。已经够小了，放到桌上还是像洗脸盆。"
-    },
-    {
-      "id": "l0-history-20261108-02-08",
-      "author": "lidianlong",
-      "createdAt": "2025-12-14T22:32:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "刚吃完，路过烤串摊又坐下了。这个味儿真没法忍。"
-    },
-    {
-      "id": "l0-history-20261108-02-07",
-      "author": "anmianyao",
-      "createdAt": "2025-11-23T23:51:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "录音里有一声猫叫。先留着，明天再听。"
-    },
-    {
-      "id": "l0-history-20261108-02-06",
-      "author": "zhaoyangxue",
-      "createdAt": "2025-10-19T12:37:00+08:00",
-      "replyTo": "l0-history-20261108-02-05",
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "先别继续搓啦，我以前一块布就是这样搓起毛的。你那个是浅色桌布吗？"
-    },
-    {
-      "id": "l0-history-20261108-02-05",
-      "author": "baiyanyan",
-      "createdAt": "2025-10-18T19:42:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "上次买的那副牌掉色了，洗了两遍桌布还有印子。啧，店家怎么还敢说是正常现象。"
-    },
-    {
-      "id": "l0-history-20261108-02-04",
-      "author": "guyu",
-      "createdAt": "2025-10-12T17:09:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "有人会看完片尾再走吗？今天灯开了，收拾的人就站在旁边，我也不好意思继续坐着。"
-    },
-    {
-      "id": "l0-history-20261108-02-03",
-      "author": "visitor-phi-upper",
-      "createdAt": "2025-09-29T20:17:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "下午把一卷拍了半年才拍完的胶卷送去洗。店里说三天后拿。我已经不记得前十张拍的是什么了。"
-    },
-    {
-      "id": "l0-history-20261108-02-02",
-      "author": "lixing",
-      "createdAt": "2025-09-14T10:56:00+08:00",
-      "replyTo": "l0-history-20261108-02-01",
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "菜市场今天也开门。"
-    },
-    {
-      "id": "l0-history-20261108-02-01",
-      "author": "alan",
-      "createdAt": "2025-09-14T07:23:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "出门前煮了几个鸡蛋，钓到现在一条鱼都没见着，鸡蛋倒是吃完了。等隔壁收竿，问问他桶里的鱼卖不卖。"
-    },
-    {
-      "id": "l0-history-20261108-01-01",
-      "author": "guyu",
-      "createdAt": "2025-03-18T16:42:00+08:00",
-      "replyTo": null,
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "课件打成黑白的了，四条曲线看起来一模一样。早知道至少把这两页单独打彩色。"
+      "guest": {
+        "name": "Luna_08"
+      },
+      "text": "存了澄湾天文馆的十一月观星表，十二号前后可以蹲流星。上回半夜起来看，窗外最亮的是对面楼的广告牌……有没有在楼下就能看到的啊，出城实在折腾不起。"
     }
   ]
 }
