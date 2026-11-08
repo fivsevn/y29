@@ -1,8 +1,8 @@
 import { readFile, mkdir, writeFile, realpath, lstat, rm } from 'node:fs/promises';
-import { resolve, join, dirname, sep } from 'node:path';
+import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readUserDocuments, buildUserDirectory } from './user-documents.js';
-import { readThreadPackages, writeThreadBatch } from './thread-packages.js';
+import { readUserDocuments, buildUserDirectory, isUserAvatarPath } from './user-documents.js';
+import { readThreadPackages, writeThreadBatch, isPostMediaPath, threadDirectory } from './thread-packages.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
 const fail = message => { throw new Error(message); };
@@ -16,7 +16,6 @@ const text = (value, max, label, empty = false) => {
 const identifier = (value, label) => {
   if (typeof value !== 'string' || !/^[a-z0-9][a-z0-9-]{1,63}$/.test(value)) fail(`${label}: invalid stable ID`);
 };
-const asset = path => typeof path === 'string' && /^assets\/(avatars|media)\/[a-z0-9-]+\.(svg|png|jpg|webp)$/.test(path);
 const timestamp = value => {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})$/.test(value) || !Number.isFinite(Date.parse(value))) return false;
   const localDate = value.slice(0, 10);
@@ -35,7 +34,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
     if (users.has(user.id)) fail(`Duplicate user ID: ${user.id}`);
     if (!/^[a-z0-9_]{2,32}$/.test(user.handle) || handles.has(user.handle)) fail(`Invalid or duplicate handle: ${user.handle}`);
     text(user.name, 40, 'user.name'); text(user.bio, 240, 'user.bio', true);
-    if (!asset(user.avatar) || !user.avatar.startsWith('assets/avatars/')) fail('Invalid avatar path');
+    if (!isUserAvatarPath(user.avatar, user.id)) fail('Invalid avatar path: use this user folder or leave it empty');
     if (typeof user.enabled !== 'boolean' || !['none', 'sample', 'daily'].includes(user.aiScope) || !['sample', 'approved'].includes(user.profileStatus) || !['character', 'visitor'].includes(user.kind)) fail('Invalid account controls');
     if (user.sourceWork !== undefined) text(user.sourceWork, 80, 'user.sourceWork', true);
     for (const key of ['inFollowing', 'allowPosts', 'allowReplies']) {
@@ -63,7 +62,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
       if (!Array.isArray(post.media) || post.media.length > 4) fail('Invalid media');
       for (const image of post.media) {
         keys(image, ['src', 'alt'], 'media');
-        if (!asset(image.src) || !image.src.startsWith('assets/media/')) fail('Invalid media path');
+        if (!isPostMediaPath(image.src)) fail('Invalid media path: use the thread package media directory');
         text(image.alt, 240, 'image.alt');
       }
       const fingerprint = JSON.stringify([post.author, post.replyTo, post.text.normalize('NFKC').replace(/\s+/g, ' ').trim()]);
@@ -72,15 +71,18 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
     }
   }
   for (const post of posts.values()) {
-    if (!post.replyTo) continue;
-    const parent = posts.get(post.replyTo);
-    if (!parent || parent.id === post.id || Date.parse(parent.createdAt) > Date.parse(post.createdAt)) fail(`Missing or later reply parent: ${post.id}`);
-    const seen = new Set([post.id]);
-    let ancestor = parent;
-    while (ancestor) {
-      if (seen.has(ancestor.id)) fail(`Reply cycle: ${post.id}`);
-      seen.add(ancestor.id); ancestor = posts.get(ancestor.replyTo);
+    if (post.replyTo) {
+      const parent = posts.get(post.replyTo);
+      if (!parent || parent.id === post.id || Date.parse(parent.createdAt) > Date.parse(post.createdAt)) fail(`Missing or later reply parent: ${post.id}`);
+      const seen = new Set([post.id]);
+      let ancestor = parent;
+      while (ancestor) {
+        if (seen.has(ancestor.id)) fail(`Reply cycle: ${post.id}`);
+        seen.add(ancestor.id); ancestor = posts.get(ancestor.replyTo);
+      }
     }
+    const mediaDirectory = `${threadDirectory(post, posts)}/media/`;
+    if (post.media.some(image => !image.src.startsWith(mediaDirectory))) fail(`Media must belong to its root thread: ${post.id}`);
   }
   // Explicit projection: operational permissions never become browser data.
   return {
@@ -101,12 +103,19 @@ export async function loadContent(root = socialRoot) {
 }
 
 async function validateAssets(root, feed) {
-  const [assetsRoot, actualRoot] = await Promise.all([realpath(join(root, 'assets')), realpath(root)]);
-  if (assetsRoot !== join(actualRoot, 'assets')) fail('Assets directory must not be a symlink to private or external files');
-  for (const path of new Set(['assets/icon.svg', ...feed.users.map(user => user.avatar), ...feed.posts.flatMap(post => post.media.map(image => image.src))])) {
-    const file = join(root, path);
+  const actualRoot = await realpath(root);
+  const paths = new Set(['assets/icon.svg', ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
+  for (const path of paths) {
+    let current = actualRoot;
+    const parts = path.split('/');
+    for (const part of parts.slice(0, -1)) {
+      current = join(current, part);
+      const stat = await lstat(current);
+      if (!stat.isDirectory() || stat.isSymbolicLink()) fail(`Asset directory must be a regular directory: ${path}`);
+    }
+    const file = join(actualRoot, path);
     const [actual, stat] = await Promise.all([realpath(file), lstat(file)]);
-    if (!actual.startsWith(assetsRoot + sep) || !stat.isFile() || stat.isSymbolicLink()) fail(`Asset must be a regular file inside lucifer0/assets: ${path}`);
+    if (actual !== file || !stat.isFile() || stat.isSymbolicLink()) fail(`Asset must be a regular file in its owning package: ${path}`);
   }
 }
 

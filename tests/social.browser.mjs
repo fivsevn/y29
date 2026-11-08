@@ -60,12 +60,26 @@ try {
   const followingUsers = feed.users.filter(user => user.inFollowing);
   const followingIds = new Set(followingUsers.map(user => user.id));
   const followingCount = roots.filter(post => followingIds.has(post.author)).length;
+  // Exercise content shapes rather than editorial IDs, so replacing a feed does
+  // not turn previously published stories into permanent browser fixtures.
+  const usersById = new Map(feed.users.map(user => [user.id, user]));
+  const compactPost = roots.filter(post => !post.media.length && !post.text.includes('\n') && !feed.posts.some(reply => reply.replyTo === post.id)).sort((a, b) => a.text.length - b.text.length)[0];
+  const mediaPost = roots.find(post => post.media.length);
+  const nestedReply = feed.posts.find(post => post.replyTo && byId.get(post.replyTo)?.replyTo);
+  const visitorPost = roots.find(post => usersById.get(post.author)?.kind === 'visitor');
+  const characterUser = feed.users.find(user => user.kind === 'character' && feed.posts.some(post => post.author === user.id));
+  const profileUser = feed.users.find(user => roots.some(post => post.author === user.id) && feed.posts.some(post => post.author === user.id && post.replyTo));
+  assert.ok(compactPost && compactPost.text.length <= 20, 'feed needs a short plain-text root without reply previews for compact-layout checks');
+  assert.ok(mediaPost && nestedReply && visitorPost && characterUser && profileUser, 'feed needs media, nested replies, both account kinds and an author with posts and replies');
+  const nestedRoot = rootOf(nestedReply);
+  const searchTerm = [...new Set(feed.posts.flatMap(post => post.text.match(/[\p{Script=Han}]/gu) || []))].find(term => roots.some(post => post.text.includes(term)) && feed.posts.some(post => post.replyTo && post.text.includes(term)));
+  assert.ok(searchTerm, 'feed needs a searchable term shared by a root and a reply');
   check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '/following', '0/about']), 'exactly three bottom destinations');
   check(await page.locator('.tabs,.welcome-note,.edition-pill').count() === 0, 'redundant tabs and welcome card are removed');
   check((await page.locator('.topbar').innerText()).trim() === '/lucifer0', 'header contains only the app path');
   check(await page.locator('.topbar').evaluate(element => element.getBoundingClientRect().height <= 56), 'compact header is at most 56px');
   check(await page.locator('main .topbar').count() === 0, 'header is outside the content scroller');
-  check(await page.locator('#post-sample-alarm').evaluate(element => element.getBoundingClientRect().height <= 145), 'single-line post stays compact at 390px');
+  check(await page.locator(`#post-${compactPost.id}`).evaluate(element => element.getBoundingClientRect().height <= 145), 'single-line post stays compact at 390px');
   check(await page.locator('.reply-preview').count() > 0, 'forum feed includes quoted reply previews');
   check(!(await page.locator('.post-metadata').allTextContents()).some(text => text.includes('样例')), 'editorial sample labels are absent from posts');
   check(await page.locator('[data-action="bookmarks"],a[href="#/bookmarks"]').count() === 0, 'bookmark controls and links are removed');
@@ -79,10 +93,11 @@ try {
   check(!page.url().endsWith('#content'), 'skip link preserves the app route');
   check(await page.locator('article.post').count() === roots.length, 'main timeline contains roots only');
   await checkPlatformDates('world');
-  await page.locator('.post-image img').evaluate(image => image.decode());
+  for (const image of await page.locator('.post-image img').all()) await image.scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => [...document.querySelectorAll('.post-image img')].every(image => image.complete && image.naturalWidth > 0));
   check(await page.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0)), 'all visible media load');
 
-  const likePost = byId.get('sample-drawing');
+  const likePost = mediaPost;
   const like = `#post-${likePost.id} button[data-action="likes"]`;
   await page.locator(like).click();
   check(await page.locator(like).getAttribute('aria-pressed') === 'true', 'like toggles');
@@ -132,15 +147,15 @@ try {
 
   await visit('#/following', '/following');
   check(await page.locator('article').count() === followingCount, 'channel follows managed account switches');
-  check(await page.locator('#post-sample-nightbus').count() === Number(followingIds.has('nightbus3')), 'visitor membership follows its independent switch');
+  check(await page.locator(`#post-${visitorPost.id}`).count() === Number(followingIds.has(visitorPost.author)), 'visitor membership follows its independent switch');
   check(await page.locator('a[href="#/people"],.directory,.directory-person').count() === 0, 'following has no people directory entry');
   await checkFeedEnd('/following');
   await screenshot('phone-following.png');
-  await visit('#/user/lixing', '/user');
+  await visit(`#/user/${characterUser.id}`, '/user');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'character channel does not expose optional follow controls');
-  await visit('#/user/nightbus3', '/user');
+  await visit(`#/user/${visitorPost.author}`, '/user');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'visitor profiles cannot enter following');
-  check(await page.locator('#post-sample-nightbus').count() === 1, 'visitor profiles remain readable');
+  check(await page.locator(`#post-${visitorPost.id}`).count() === 1, 'visitor profiles remain readable');
   for (const follows of [[], ['alan'], ['passerby17', 'nightbus3']]) {
     await page.evaluate(follows => {
       const state = JSON.parse(localStorage.getItem('y29-social-v1')) || {};
@@ -151,27 +166,27 @@ try {
     check(await page.locator('article').count() === followingCount, `legacy follows ${JSON.stringify(follows)} cannot override channel switches`);
   }
   await visit('', '/world');
-  check(await page.locator('#post-sample-nightbus').count() === 1, 'world still contains visitor posts');
+  check(await page.locator(`#post-${visitorPost.id}`).count() === 1, 'world still contains visitor posts');
 
-  await visit('#/post/sample-drawing', '讨论串');
-  check(await page.locator('article').count() === threadCount('sample-drawing'), 'thread includes nested replies');
+  await visit(`#/post/${nestedRoot.id}`, '讨论串');
+  check(await page.locator('article').count() === threadCount(nestedRoot.id), 'thread includes nested replies');
   await checkPlatformDates('thread');
-  check(await page.locator('#post-sample-drawing-answer .reply-context').getAttribute('href') === '#/post/sample-drawing-reply', 'nested reply links its immediate parent');
-  await visit('#/post/sample-drawing-answer', '讨论串');
-  check(await page.locator('#post-sample-drawing-answer').evaluate(element => element.classList.contains('is-target')), 'reply permalink selects the reply');
+  check(await page.locator(`#post-${nestedReply.id} .reply-context`).getAttribute('href') === `#/post/${nestedReply.replyTo}`, 'nested reply links its immediate parent');
+  await visit(`#/post/${nestedReply.id}`, '讨论串');
+  check(await page.locator(`#post-${nestedReply.id}`).evaluate(element => element.classList.contains('is-target')), 'reply permalink selects the reply');
   check(await page.evaluate(() => window.scrollY === 0), 'reply anchors do not move the outer document');
-  await visit('#/user/chenanjing', '/user');
-  check(await page.locator('article').count() === feed.posts.filter(post => post.author === 'chenanjing').length, 'profile keeps posts and replies');
+  await visit(`#/user/${profileUser.id}`, '/user');
+  check(await page.locator('article').count() === feed.posts.filter(post => post.author === profileUser.id).length, 'profile keeps posts and replies');
   await checkPlatformDates('profile');
   await visit('#/people', '/following');
   check(await page.locator('article').count() === followingCount, 'legacy people route returns to following');
   check(await page.locator('.directory,.directory-person,a[href="#/people"]').count() === 0, 'legacy people route does not render the directory');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'following has no per-reader follow controls');
   await visit('#/search', '搜索');
-  await page.getByRole('searchbox').fill('橘子');
+  await page.getByRole('searchbox').fill(searchTerm);
   await page.getByRole('button', { name: '搜索', exact: true }).click();
   await page.locator('.search-count').waitFor();
-  check(await page.locator('article').count() === feed.posts.filter(post => post.text.includes('橘子')).length, 'search covers posts and replies');
+  check(await page.locator('article').count() === feed.posts.filter(post => post.text.includes(searchTerm)).length, 'search covers posts and replies');
   await page.getByRole('searchbox').fill('找不到的一个词');
   await page.getByRole('button', { name: '搜索', exact: true }).click();
   await page.getByRole('heading', { name: '没有找到相关内容' }).waitFor(); checks++;
@@ -180,11 +195,11 @@ try {
   await visit('#/user/does-not-exist', '/user');
   await page.getByRole('heading', { name: '没有找到这个账号' }).waitFor(); checks++;
 
-  const legacy = new URL('../social/?entry=legacy#/post/sample-drawing-answer', base);
-  await page.goto(legacy.href); await page.locator('#post-sample-drawing-answer').waitFor();
+  const legacy = new URL(`../social/?entry=legacy#/post/${nestedReply.id}`, base);
+  await page.goto(legacy.href); await page.locator(`#post-${nestedReply.id}`).waitFor();
   const redirected = new URL(page.url());
   check(redirected.pathname === new URL(base).pathname, 'old entry redirects to canonical path');
-  check(redirected.search === '?entry=legacy' && redirected.hash === '#/post/sample-drawing-answer', 'legacy redirect preserves query and thread permalink');
+  check(redirected.search === '?entry=legacy' && redirected.hash === `#/post/${nestedReply.id}`, 'legacy redirect preserves query and thread permalink');
 
   await page.evaluate(() => localStorage.clear());
   await page.goto(pageURL()); await page.locator('article').first().waitFor();
@@ -210,9 +225,9 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.locator('main').evaluate(element => { element.scrollTop = 0; });
   await screenshot('phone-feed.png');
-  await visit('#/post/sample-drawing', '讨论串');
+  await visit(`#/post/${nestedRoot.id}`, '讨论串');
   await screenshot('phone-thread.png');
-  await visit('#/user/chenanjing', '/user');
+  await visit(`#/user/${profileUser.id}`, '/user');
   await screenshot('phone-profile.png');
   await visit('#/about', '/about');
   check(await page.locator('.about-brand').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');

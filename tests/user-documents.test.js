@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { emptyProfile } from '../lucifer0/tools/profile-schema.js';
 import { renderUserDocument, parseUserDocument, readUserDocuments, buildUserDirectory } from '../lucifer0/tools/user-documents.js';
 
-const account = (id = 'sample-user') => ({ id, handle: id.replaceAll('-', '_'), name: '窗边的人', bio: '偶尔上线。', avatar: 'assets/avatars/visitor.svg', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'sample', profileStatus: 'sample', inFollowing: false, allowPosts: true, allowReplies: true });
+const account = (id = 'sample-user') => ({ id, handle: id.replaceAll('-', '_'), name: '窗边的人', bio: '偶尔上线。', avatar: '', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'sample', profileStatus: 'sample', inFollowing: false, allowPosts: true, allowReplies: true });
 async function fixture(t, accounts = [account()]) {
   const root = await mkdtemp(join(tmpdir(), 'y29-user-docs-'));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -49,6 +49,18 @@ test('editing table values in the actual file updates identity and independent s
   assert.equal(user.allowPosts, false);
   assert.equal(user.allowReplies, true);
   assert.equal(profiles[user.id].activityWeight, 2.5);
+});
+
+test('avatar is optional and only accepts the current user package filename', () => {
+  const user = account();
+  for (const avatar of ['', 'users/sample-user/avatar.svg', 'users/sample-user/avatar.png', 'users/sample-user/avatar.jpg', 'users/sample-user/avatar.webp']) {
+    user.avatar = avatar;
+    assert.equal(parseUserDocument(renderUserDocument(user), user.id).user.avatar, avatar);
+  }
+  for (const avatar of ['assets/avatars/visitor.svg', 'users/second-user/avatar.svg', 'users/sample-user/../second-user/avatar.svg', 'users/sample-user/avatar.svg?x=1']) {
+    user.avatar = avatar;
+    assert.throws(() => parseUserDocument(renderUserDocument(user), user.id), /头像路径/);
+  }
 });
 
 test('catalog uses names, folder links and branch-specific edit links without detailed settings', async t => {

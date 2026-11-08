@@ -14,7 +14,7 @@ const post = (id, replyTo = null, text = '测试文字。') => ({ id, author: 't
 const round = (id, posts) => ({ version: 1, id, mode: 'sample', posts });
 
 test('Markdown keeps exact multiline text, metadata and media; unknown or duplicate metadata is rejected', () => {
-  const original = { ...post('test-thread', null, '第一行。\n\n第二行。\n'), media: [{ src: 'assets/media/test.svg', alt: '示例："杯子"' }] };
+  const original = { ...post('test-thread', null, '第一行。\n\n第二行。\n'), media: [{ src: 'posts/2026/11/test-thread/media/test.svg', alt: '示例："杯子"' }] };
   assert.deepEqual(parsePostDocument(renderPostDocument(original)), original);
   const source = renderPostDocument(original);
   assert.throws(() => parsePostDocument(source.replace('likes: 3', 'likes: 3\nlikes: 4')), /duplicate/);
@@ -77,6 +77,27 @@ test('unregistered files, missing source posts and files moved to another thread
   await mkdir(join(root, 'posts/2026/11/other-thread/replies'), { recursive: true });
   await writeFile(wrong, text);
   await assert.rejects(readThreadPackages(root), /wrong thread/);
+});
+
+test('safe media can be prepared in a thread package while unrelated files and symlinked media are rejected', async t => {
+  const root = await fixture(t), first = round('test-first', [post('test-thread')]);
+  await writeThreadBatch(root, first);
+  const media = join(root, 'posts/2026/11/test-thread/media');
+  await mkdir(media);
+  const image = join(media, 'draft.svg');
+  await writeFile(image, '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  assert.deepEqual((await readThreadPackages(root)).batches, [first]);
+  const note = join(media, 'private.txt');
+  await writeFile(note, 'not an image');
+  await assert.rejects(readThreadPackages(root), /Unexpected archive file/);
+  await rm(note);
+  const nested = join(media, 'nested'); await mkdir(nested);
+  await writeFile(join(nested, 'draft.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await assert.rejects(readThreadPackages(root), /Unexpected archive file/);
+  await rm(nested, { recursive: true });
+  const external = await fixture(t);
+  await rm(image); await symlink(external, image);
+  await assert.rejects(readThreadPackages(root), /symlink/);
 });
 
 test('unfinished files modified outside the importer are preserved and rejected rather than silently overwritten', async t => {

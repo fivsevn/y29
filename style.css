@@ -1,0 +1,189 @@
+/* Homepage styles are independent of the individual game pages. */
+@font-face {
+  font-family: "Y29 Plex Mono";
+  src: url("./assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Y29 Fusion Pixel";
+  src: url("./assets/fonts/FusionPixel12px-Mono-SC.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  --bg: #06090c;
+  --text: #bed0da;
+  --muted: #728b99;
+  --line: #3f5360;
+  --cyan: #9fc4d6;
+  --green: #8eb9c2;
+  --amber: #91afbf;
+  --red: #c98680;
+  font-family: "Y29 Plex Mono", "Y29 Fusion Pixel", "Courier New", "SimSun", "宋体", Consolas, monospace;
+  font-size: 13px;
+  font-weight: 400;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at 48% 42%, #0b1116 0, #06090c 68%);
+  color: var(--text);
+  text-shadow: 0 0 2px #9fc4d62b;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 3px, #0007 4px), linear-gradient(90deg, #6b92a612, #0000 24%, #8bb6cb0d 72%, #0002);
+  z-index: 5;
+  opacity: .5;
+}
+a { -webkit-tap-highlight-color: transparent; color: var(--text); text-decoration: none; }
+a:hover { background: var(--text); color: #070b0e; text-shadow: none; }
+a:focus-visible { outline: 1px dashed var(--amber); outline-offset: 3px; }
+p { line-height: 1.65; }
+h1, h2, strong, b { font-weight: 400; }
+h1, h2 { font-size: 15px; margin: 0; letter-spacing: .06em; }
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.node-link { display: block; }
+.node-link small { color: var(--green); }
+.node-link p { color: var(--muted); }
+.index .intro { color: var(--muted); }
+.hint { color: var(--muted); font-size: 11px; margin: 10px 0 0; }
+footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: var(--muted);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (max-width: 600px) {
+  :root { font-size: 12px; }
+  footer { padding-top: 5px; flex-direction: column; gap: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; scroll-behavior: auto !important; }
+}
+
+.index{
+  --muted:#8c9da6;
+  --line:#40525c;
+  max-width:840px;
+  min-height:calc(100svh - 64px);
+  margin:32px auto;
+  padding:0 28px;
+  border:3px double var(--line);
+  font-family:"Y29 Plex Mono","Y29 Fusion Pixel","Courier New",Menlo,Consolas,"PingFang SC",monospace;
+}
+.index header{
+  height:42px;
+  margin:0 -28px;
+  padding:0 20px;
+  border-bottom:3px double var(--bg);
+  background:var(--text);
+  color:var(--bg);
+  font-size:13px;
+  letter-spacing:.04em;
+}
+.index header a{color:inherit}
+.index header a:focus-visible{outline-color:var(--bg)}
+.index-main{padding:42px 0 28px}
+.index h1{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-size:40px;
+  line-height:1.3;
+  letter-spacing:0;
+}
+.index h1::after{
+  content:"";
+  display:block;
+  width:.48em;
+  height:.86em;
+  background:var(--text);
+  animation:blink 1.4s step-end infinite;
+}
+.index .intro{margin:24px 0 36px;font-size:13px;line-height:2}
+.index .node-link{padding:0;border:1px solid var(--line)}
+.index .node-link+.node-link{margin-top:24px}
+.index .node-line{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  padding:15px 18px;
+  border-bottom:1px solid var(--line);
+  background:#17232b;
+}
+.index .node-title{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  column-gap:1ch;
+  row-gap:5px;
+  margin:0;
+  letter-spacing:0;
+  line-height:1.5;
+  font-size:20px;
+}
+.index .node-title-cn{grid-column:2;font-size:15px}
+.index .node-line small{white-space:nowrap;padding-top:6px;font-size:11px}
+.index .node-copy{padding:20px 18px}
+.index .node-copy p{margin:0 0 14px;font-size:12px;line-height:1.9}
+.index .node-copy p:last-child{margin-bottom:0}
+.index .node-link:focus-visible .node-line,
+.index .node-link:active .node-line{background:var(--text);color:var(--bg)}
+.index .node-link:focus-visible .node-line small,
+.index .node-link:active .node-line small{color:var(--bg)}
+.index .node-link:focus-visible,
+.index .node-link:active{background:transparent;color:var(--text)}
+.index .node-link.is-offline{opacity:.62}
+.index .node-link.is-offline .node-line{background:#111920}
+.index .node-link.is-offline .node-copy{color:var(--muted)}
+.index .hint{margin-top:16px;line-height:1.8}
+.index .hint::before{content:"> ";color:var(--text)}
+.index footer{
+  margin-top:30px;
+  min-height:54px;
+  justify-content:flex-end;
+  text-align:right;
+  border-top:3px double var(--line);
+  font-size:10px;
+}
+@media(hover:hover){
+  .index .node-link:hover{background:transparent;color:var(--text)}
+  .index .node-link:hover .node-line{background:var(--text);color:var(--bg)}
+  .index .node-link:hover .node-line small{color:var(--bg)}
+  .index .node-link.is-offline:hover .node-line{background:#111920;color:var(--text)}
+  .index .node-link.is-offline:hover .node-line small{color:var(--muted)}
+}
+@media(max-width:880px){
+  .index{margin:20px 20px;min-height:calc(100svh - 40px)}
+}
+@media(max-width:600px){
+  .index{margin:12px;min-height:calc(100svh - 24px);padding:0 16px}
+  .index header{height:38px;margin:0 -16px;padding:0 14px;font-size:12px}
+  .index-main{padding:30px 0 22px}
+  .index h1{font-size:32px}
+  .index .intro{font-size:12px;margin-bottom:28px}
+  .index .node-line{flex-wrap:wrap;gap:10px;padding:13px 12px}
+  .index .node-title{font-size:clamp(13px,3.5vw,20px)}
+  .index .node-title-cn{font-size:13px}
+  .index .node-line small{padding-top:0;margin-left:auto}
+  .index .node-copy{padding:16px 12px}
+  .index .node-copy p{font-size:12px;overflow-wrap:anywhere}
+  .index footer{margin-top:20px;align-items:flex-end;justify-content:center}
+  .index footer>span{font-size:9px}
+}

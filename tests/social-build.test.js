@@ -19,19 +19,30 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   const directory = await mkdtemp(join(tmpdir(), 'y29-build-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const project = new URL('../', import.meta.url);
-  for (const path of ['build.js', 'package.json', 'index.html', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0', 'social']) {
+  for (const path of ['build.js', 'package.json', 'index.html', 'style.css', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0', 'social']) {
     await cp(new URL(path, project), join(directory, path), { recursive: true });
   }
   await mkdir(join(directory, 'lucifer0/.private'), { recursive: true });
   await writeFile(join(directory, 'lucifer0/.private/test.json'), '{"syntheticPrivateMarker":true}');
   await writeFile(join(directory, 'lucifer0/assets/not-referenced.txt'), 'syntheticPrivateMarker');
+  const mediaDirectory = 'posts/2026/11/sample-drawing/media';
+  await writeFile(join(directory, 'lucifer0', mediaDirectory, 'unused.png'), 'unused draft image');
+  const avatarDirectory = 'users/alan';
+  const avatar = 'users/alan/avatar.svg';
+  const profilePath = join(directory, 'lucifer0', avatarDirectory, 'profile.md');
+  const profile = await readFile(profilePath, 'utf8');
+  await writeFile(profilePath, profile.replace('| 头像路径 |  |', `| 头像路径 | ${avatar} |`));
+  await writeFile(join(directory, 'lucifer0', avatar), '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await writeFile(join(directory, 'lucifer0', avatarDirectory, 'unused.png'), 'unused avatar draft');
   execFileSync(process.execPath, ['build.js'], { cwd: directory });
   const published = await files(join(directory, 'dist/lucifer0'));
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
   const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg',
-    ...feed.users.map(user => user.avatar), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
+    ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
   assert.deepEqual(published, [...expected].sort());
-  assert.ok(!published.some(path => /private|not-referenced|registry|profile-seeds|manage|tools|docs|posts/.test(path)));
+  assert.ok(!published.some(path => /private|not-referenced|unused|registry|profile-seeds|manage|tools|docs|\.md$/.test(path)));
+  assert.ok(published.includes(avatar), 'an optional avatar from its owner package is published');
+  assert.ok(published.includes(`${mediaDirectory}/orange-study.svg`), 'referenced media is published from its thread package');
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {
     assert.equal(await readFile(join(directory, 'dist', path), 'utf8'), await readFile(new URL(path, project), 'utf8'));
   }
@@ -39,4 +50,6 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   assert.equal(await readFile(join(directory, 'dist/social/redirect.js'), 'utf8'), await readFile(new URL('social/redirect.js', project), 'utf8'));
   assert.match(await readFile(join(directory, 'dist/social/index.html'), 'utf8'), /https:\/\/y29\.fivsevn\.com\/lucifer0\//);
   assert.match(await readFile(join(directory, 'dist/index.html'), 'utf8'), /href="\.\/lucifer0\/"/);
+  assert.equal(await readFile(join(directory, 'dist/style.css'), 'utf8'), await readFile(new URL('style.css', project), 'utf8'));
+  assert.deepEqual(await files(join(directory, 'dist/storyteller')), ['app.js', 'current.json', 'index.html', 'state.js', 'style.css']);
 });
