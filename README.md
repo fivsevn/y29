@@ -5,6 +5,8 @@
 这里收录独立网页游戏、互动叙事与实验性终端项目。  
 项目主要以静态网页形式运行，并发布于 GitHub Pages。
 
+继续开发先看 [开发导航](docs/DEVELOPMENT.md)：按修改目标找文件、运行游戏、检查与预览。当前问题和后续拆分顺序见 [仓库检查与深化清单](docs/REPOSITORY_REVIEW.md)。
+
 ## Games
 
 ### 01 / ARASHI: SIGNAL LOCK
@@ -91,7 +93,9 @@ npm start
 npm run build
 ```
 
-具体项目的实现说明见各自目录。
+使用 Node.js 22 或更新版本，无需安装第三方运行依赖。`npm run test:games` 只检查游戏；`npm run check` 依次运行全部测试、社交内容校验和构建。
+
+具体项目的修改入口：[阿岚](signallock/README.md)、[移动乌托邦](mobileutopia/README.md)、[飙肌野郎](training/EDITING.md)、[STORYTELLER](storyteller/README.md)、[路西法零](lucifer0/README.md)。
 
 ## Original Work
 

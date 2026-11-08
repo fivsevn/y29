@@ -15,6 +15,7 @@ function evening(seed,place){let s=fresh(seed,place);for(const [choice,...tasks]
 test('all three weather patterns and both locations have a playable complete evening',()=>{
  for(const place of ['bridge','road'])for(let seed=0;seed<3;seed++){
   const s=evening(seed,place);assert.equal(s.phase,'ended');assert.equal(s.ending.fed,true);assert.equal(s.ending.warm,true);assert.equal(s.ending.dry,true);assert.equal(s.ending.fish,true);assert.equal(s.ending.packed,1);assert.equal(s.people,5);
+  assert.deepEqual(s.logs.at(-1),{round:6,time:'20:10',speaker:'开饭',text:s.ending.text});
  }
 });
 test('plans preview in order, undo consumes nothing, unavailable tasks do not alter state',()=>{
@@ -37,6 +38,19 @@ test('save replays mid-plan and finished nights; modified or oversized action lo
  let p=act(act(fresh(2),'choose:later'),'plan:man:food');assert.deepEqual(restoreSave({version:VERSION,seed:2,place:'bridge',actions:p.actions}),p);
  for(const bad of [null,{}, {...save,version:0},{...save,place:'<script>'},{...save,actions:['plan:arashi:fish']},{...save,actions:Array(251).fill('undo')},{...save,seed:'1'}])assert.equal(restoreSave(bad),null);
 });
+test('repeated plan changes keep a resumable save without losing resolved actions',()=>{
+ let s=act(fresh(2),'choose:later');
+ for(let i=0;i<300;i++){
+  s=act(s,'plan:man:food');s=act(s,'undo');
+  assert.deepEqual(s.actions,['choose:later']);
+ }
+ s=act(s,'plan:man:food');s=act(s,'plan:zhou:shelter');s=act(s,'resolve');
+ s=act(s,'choose:cover');s=act(s,'plan:you:fuel');s=act(s,'plan:arashi:talk');s=act(s,'undo');
+ assert.deepEqual(s.actions,['choose:later','plan:man:food','plan:zhou:shelter','resolve','choose:cover','plan:you:fuel']);
+ assert.deepEqual(restoreSave({version:VERSION,seed:s.seed,place:s.place,actions:s.actions}),s);
+ const legacy={version:VERSION,seed:2,place:'bridge',actions:['choose:later','plan:man:food','undo','plan:zhou:shelter']};
+ assert.deepEqual(restoreSave(legacy).actions,['choose:later','plan:zhou:shelter']);
+});
 test('600 deterministic mixed-strategy evenings finish safely and reach all five endings',()=>{
  const endings=new Set();let rand=7411;
  const random=()=>{rand=(Math.imul(rand,1664525)+1013904223)>>>0;return rand/2**32;};
@@ -48,7 +62,7 @@ test('600 deterministic mixed-strategy evenings finish safely and reach all five
    for(const key of ['raw','water','fuel','meals','heat','seats'])assert.ok(Number.isInteger(s[key])&&s[key]>=0,key);
    assert.ok(s.heat<=3&&s.seats<=7);assert.ok(Object.values(s.fatigue).every(v=>v>=0&&v<=2));
   }
-  endings.add(s.ending.id);assert.deepEqual(available(s),[]);assert.deepEqual(restoreSave({version:VERSION,seed:s.seed,place:s.place,actions:s.actions}),s);
+  endings.add(s.ending.id);assert.equal(s.actions.length,24);assert.deepEqual(available(s),[]);assert.deepEqual(restoreSave({version:VERSION,seed:s.seed,place:s.place,actions:s.actions}),s);
  }
  assert.deepEqual([...endings].sort(),['cold','company','rain','ready','share']);
 });

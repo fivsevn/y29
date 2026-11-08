@@ -149,3 +149,16 @@ test('dialogue reveal, compact watch HUD and fixed viewport are built into the r
   assert.match(styleSource,/\.food-pixel/);
   assert.match(gameSource,/THOUGHT_POOLS/);
 });
+
+
+test('front desk recovery and confidence answers affect the player at check-in',()=>{
+  const choices=START_QUESTIONS.flatMap(question=>question.choices);
+  const recovery=choices.find(choice=>choice.id==='long').delta.recovery+choices.find(choice=>choice.id==='good').delta.recovery;
+  const confidence=choices.find(choice=>choice.id==='solid').delta.confidence;
+  const specs=[{name:'我'},CHARACTER_DATA[0]],baseline=createGame(57,specs);
+  const state=createGame(57,specs,{traits:{recovery,confidence},needs:{sleep:2}});
+  assert.equal(state.party[0].hidden.recovery,baseline.party[0].hidden.recovery+recovery);
+  assert.equal(state.party[0].hidden.confidence,baseline.party[0].hidden.confidence+confidence);
+  assert.deepEqual(state.party[1],baseline.party[1]);
+  assert.equal(state.needs.sleep,baseline.needs.sleep+2);
+});

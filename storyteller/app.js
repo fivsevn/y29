@@ -1,4 +1,4 @@
-import {normalizeState,currentView,wrapMessage,POLL_MS} from './state.js?v=2';
+import {normalizeState,currentView,wrapMessage,POLL_MS} from './state.js?v=3';
 const el = id => document.getElementById(id);
 const endpoint = new URLSearchParams(location.search).get('state') || './current.json';
 let state = null, failed = false;

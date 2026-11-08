@@ -20,3 +20,19 @@ test('dx offers rotating fast food, preference invitations and honest attendance
  }
  assert.ok(joined>ordinary);assert.ok(joined<300,'Deng still only joins some meals');
 });
+
+
+test('a previous dx dinner does not carry its attendance bonus into the next day',()=>{
+ let boosted=0;
+ for(let seed=0;seed<200;seed++){
+  const specs=[{name:'我'},g.CHARACTER_DATA.find(p=>p.id==='deng')];
+  const yesterday={...g.createGame(seed,specs),step:'summary',selectedStore:'dx捕鲸堡'};
+  const today=g.advanceDay(yesterday);
+  const ordinary={...g.createGame(seed,specs),day:2};
+  const ids=state=>g.attendance(state,'meal').map(person=>person.id);
+  assert.deepEqual(ids(today),ids(ordinary),'attendance before choosing a restaurant uses today only');
+  const invited=g.chooseStore({...today,step:'mealPlace'},'dx捕鲸堡');
+  if(ids(invited).length>ids(today).length)boosted++;
+ }
+ assert.ok(boosted>0,'choosing dx again still grants its normal dining bonus');
+});

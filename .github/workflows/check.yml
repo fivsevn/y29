@@ -15,8 +15,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm test
-      - run: npm run build
+      - name: Check rules, public content and static build
+        run: npm run check
       - name: Keep reviewable static preview
         uses: actions/upload-artifact@v4
         with:

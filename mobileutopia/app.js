@@ -2,7 +2,7 @@ import {VERSION,TIMES,CREW,NIGHTS,TASKS,fresh,weather,cooling,event,preview,reas
 const $=id=>document.getElementById(id),SAVE='y29.mobileutopia.session.v1',ARCHIVE='y29.mobileutopia.archive.v1';
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let storageOK=true,selected='arashi';
-function read(key){try{return JSON.parse(localStorage.getItem(key));}catch{storageOK=false;return null;}}
+function read(key){let raw;try{raw=localStorage.getItem(key);}catch{storageOK=false;return null;}try{return JSON.parse(raw);}catch{return null;}}
 function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch{storageOK=false;}}
 function compact(s){return {version:VERSION,seed:s.seed,place:s.place,actions:s.actions};}
 let state=restoreSave(read(SAVE));
@@ -36,7 +36,7 @@ function exportNote(){const text=`移动乌托邦：留个位置\n${NIGHTS[state
 document.addEventListener('click',e=>{
  const b=e.target.closest('button[data-act]');if(!b||b.disabled)return;const a=b.dataset.act;
  if(a==='help'){help();return;}if(a==='close'){$('dialog').close();return;}if(a==='archive'){archiveDialog();return;}
- if(a==='restart'){if(!state||state.phase==='ended'){state=null;intro();}else openDialog('换一个晚上？',`<p>当前这一晚的进度会被替换，已经完成的小记仍然保留。</p><div class="ending-actions">${btn('new','开始另一个晚上')}${btn('close','继续这一晚')}</div>`);return;}
+ if(a==='restart'){if(!state||state.phase==='ended'){state=null;write(SAVE,null);intro();}else openDialog('换一个晚上？',`<p>当前这一晚的进度会被替换，已经完成的小记仍然保留。</p><div class="ending-actions">${btn('new','开始另一个晚上')}${btn('close','继续这一晚')}</div>`);return;}
  if(a==='new'){$('dialog').close();state=null;write(SAVE,null);intro();return;}
  if(a==='begin'){state=fresh(Number($('night').value),$('place').value);selected='arashi';save();render(true);return;}
  if(a==='again'&&state?.phase==='ended'){state=fresh(state.seed,state.place);selected='arashi';save();render(true);return;}
