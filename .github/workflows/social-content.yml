@@ -6,7 +6,6 @@ on:
     paths:
       - 'lucifer0/users/**'
       - 'lucifer0/posts/**'
-      - 'lucifer0/rounds/**'
       - 'lucifer0/tools/**'
       - 'lucifer0/publication.json'
       - 'lucifer0/accounts.json'

@@ -1,64 +1,101 @@
-# 发布与恢复
+# 执行与发布
 
-## 归档结构
+本页说明工具命令、工作记录和上线核验。创作要求见[发帖与改编](writing.md)，每次更新从[总入口](README.md)开始。
 
-```text
-posts/YYYY/MM/<根帖ID>/
-  index.md
-  replies/<回复ID>.md
-  media/<图片文件>
-rounds/YYYY/MM/<回合ID>.json
+## 准备
+
+使用 Node.js 22 或更新版本。执行环境提供内置运行时时，执行者自动使用其可用路径。在仓库根目录运行：
+
+```sh
+node lucifer0/tools/update.js prepare
 ```
 
-一串一包，按根帖的上海年月归档。回复和配图都留在根串包内；`replyTo` 指向真正父帖。Markdown 是正文唯一来源，`rounds/` 只登记编号。图片路径写成 `posts/YYYY/MM/<根帖ID>/media/<文件名>`，不能跨串借图；共通 `assets/` 不放帖子素材。
+工具输出 `operation.json` 与 `reading.md` 的绝对路径。前者保存当前更新的抽签、观察和草稿，后者按来源路径汇集完整原文，供 AI 阅读。默认工作目录位于仓库外的 `~/.local/state/y29/lucifer0/current`。指定其他工作目录时使用：
 
-## 批次格式
+```sh
+node lucifer0/tools/update.js prepare --work /outside/work
+```
 
-在外部工作目录写 JSON，`id` 与原上下文的回合 ID 一致：
+再次执行同一命令会恢复当前更新，保留原编号、预算与抽中的人物，同时刷新阅读材料。每次处理一份当前更新，完成后再开始下一次。
+
+## 填写当前更新
+
+在 `operation.json` 中填写 `research` 与 `posts`。其余自动字段由工具管理。工具汇集材料后，执行者实际读完 `reading.md`，再开展观察与写作。
+
+`research` 每项记录一个实际读到的公开页面：
+
+| 字段 | 内容 |
+| --- | --- |
+| `category` | `news` 正式资讯、`trend` 社交话题、`daily` 日常经历 |
+| `kind` | `feed` 资讯、榜单或单篇材料；`thread` 带回复的讨论 |
+| `url` | 原页 HTTPS 链接 |
+| `visitedAt` | 实际访问时间，带时区的 ISO 时间 |
+| `publishedAt` | 原始发布时间；无法确认时填 `null` |
+| `summary` | 实际读到的范围、值得参考的情境或交流；采用时补对应帖子 ID 和改编方向 |
+
+观察覆盖三个类别、至少三个不同页面和两个来源域名，其中有一段实际读到回复的讨论。访问发生在本次更新前 48 小时内，至少一项材料发表于最近七天。旧材料保留原日期，当前话题的热度按本次可读内容记录。
+
+`posts` 使用以下结构；编号由本次更新编号加序号形成，署名在同一账号的后续回复中保持一致：
 
 ```json
 {
-  "version": 1,
-  "id": "l0-20261108-01",
-  "mode": "daily",
-  "posts": [
-    {
-      "id": "l0-20261108-01-01",
-      "author": "nightbus3",
-      "createdAt": "2026-11-08T03:00:00+08:00",
-      "replyTo": null,
-      "text": "填写审读完成的正文。",
-      "likes": 0,
-      "canon": "derivative",
-      "media": []
-    }
-  ]
+  "id": "update-example-01",
+  "author": "guest-example",
+  "guest": { "name": "随手取的网名" },
+  "createdAt": "2026-11-09T00:00:00+08:00",
+  "replyTo": null,
+  "text": "这里填写审读完成的发言。",
+  "likes": 0,
+  "canon": "derivative",
+  "media": []
 }
 ```
 
-正式内容用 `daily / derivative`；既有样例保留 `sample`。时间带时区、不在未来、回复不早于父帖，日常批次追加到现有时间线。基础点赞可以为 0，不代表真实读者统计。配图先放进所属串包，再用 `{"src":"posts/2026/11/l0-20261108-01-01/media/photo.webp","alt":"图片说明"}` 登记；每帖最多 4 张，不自动抓取远程图片。
+随机路人的 `author` 使用唯一的 `guest-` 编号，`guest.name` 保存公开网名。署名随帖子归档，网页自动汇集该账号的发言。库内人物使用原 `author` 编号，并省略 `guest` 字段。
+
+主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用上海时区，处在已有时间线之后、实际当前时刻之前，回复时间晚于或等于父帖。时间间隔按发言情境安排。示例时间与正文在使用时替换为本次实际内容。
+
+配图放在所属根串的 `media/` 中，登记 `{"src":"posts/YYYY/MM/根帖ID/media/文件名.webp","alt":"图片说明"}`。每帖最多四张；素材须可用于本次发布。
 
 ## 导入与上线
 
-1. 刷新原上下文后执行正式 AI 导入：
+审读完成后，用工具输出的实际路径执行：
 
-   ```sh
-   node lucifer0/tools/publish.js ingest /outside/work/batch.json \
-     --reviewed --ai --context /outside/work/context.json
-   npm run social:validate
-   npm run build
-   ```
+```sh
+node lucifer0/tools/publish.js ingest /outside/work/operation.json --reviewed --ai
+node lucifer0/tools/publish.js validate
+node build.js
+```
 
-   `--reviewed` 表示 AI 已完成审读。导入器核对权限、原抽签、预算、资料、历史和回看覆盖点；正式运营不得省略 `--ai` 绕过校验。人工及既有样例批次可使用 `--reviewed` 导入。
-2. 查看差异与手机页面；提交串包、轮次清单、必要资料与生成数据。重新核对最新 `main`，正常合并工作分支；别人有新内容时先补读，不强推。
-3. 构建与 Pages 成功后，读取线上 `data/feed.json`，逐项核对本批 ID、作者、正文、时间、回复对象与图片。结果不明继续查原提交，不另发一批。
+导入器核对当前更新、预算、实际作者比例、账号权限、资料变化、观察记录、重复内容、回复关系、时间和媒体。资料在创作期间发生变化时，用原工作目录重新执行 `prepare`，读清变化并重新审读原草稿。
 
-只有用户明确要求补录历史时才加 `--backfill`：日期限于指定范围，主帖分散、回复间隔自然；只使用当时已知前情，不把当前热点倒写过去。此开关不放宽其他检查，后续日常不沿用。
+帖子 Markdown 是正文来源：
 
-## 中断与修正
+```text
+posts/YYYY/MM/根帖ID/
+  index.md
+  replies/回复ID.md
+  media/配图文件
+```
 
-- 沿用原回合 ID 与原内容重试，可补齐归档与构建；不换 ID 重发，同 ID 换内容会被拒绝。已提交、尚未核验的内容也占预算。
-- `.publish.lock/`、`.publish-staging/` 和 `rounds/.pending/` 是临时执行目录，不提交。先确认没有导入运行，再恢复遗留回合；有未完成回合时先恢复，不另开回合绕过。
-- 旧帖一般直接改原 Markdown，保留 ID、作者、时间及回复关系；点赞只改 `likes`。本机锁不能保护另一台设备，提交仍需核对远端。
+回复和图片归入原根串，即使回复发生在其他月份。工具直接读取这些帖子；每次导入的清单只用于当前工作记录。
 
-构建只发布网页运行文件、生成信息流及实际引用的图片；帖子 Markdown、用户设定和管理文档留在源仓库。
+导入完成后，按[资料回写](writing.md#资料回写)整理有持续影响的变化，运行仓库检查并查看手机页面。把帖子、必要的资料回写和生成信息流一起提交，核对最新 `main` 后正常推送。远端有新内容时先合并、补读并检查。保留既有网页样式。
+
+确认 GitHub 构建与 Pages 发布成功，再使用同一工作目录执行：
+
+```sh
+node lucifer0/tools/update.js finish --work /outside/work
+```
+
+工具核对本地帖子和线上 `https://y29.fivsevn.com/lucifer0/data/feed.json` 的本次内容，成功后清理当前工作文件。报告实际条数、随机路人与库内人物各自条数、提交和线上核验结果。实际为零条时，报告已经做的观察、受限缺项或其他原因，再结束当前更新。
+
+## 恢复与修正
+
+中断后继续使用原工作目录、原帖子 ID 和草稿。已经存在且内容相同的帖子由工具跳过，缺少的部分继续补齐；同 ID 的不同内容会要求核对。`.publish-pending.json` 暂存未完成导入，`.publish.lock/` 与 `.publish-staging/` 服务写入过程，均由工具管理。
+
+执行器被强制结束并留下锁时，AI 先核对该仓库的发布或准备进程已经退出，再清理相应的遗留锁目录，保留当前操作文件与 pending 记录，沿原命令恢复。
+
+推送或上线尚未完成时，继续完成当前步骤；成功核验后再清理工作记录。旧帖修正直接编辑原 Markdown，保留 ID、作者、时间及回复关系，然后重新校验与构建。
+
+补录历史使用用户明确指定的时间范围，并在导入时加 `--backfill`。当时的世界状况与人物阶段决定可用材料。日常更新沿当前时间线追加。

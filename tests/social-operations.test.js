@@ -1,241 +1,272 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, readFile, rm, symlink } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, rm, readdir, cp, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { drawPlan, prepareRound, validateResearch, validateRoundForBatch, readReview } from '../lucifer0/tools/operations.js';
+import { execFileSync } from 'node:child_process';
+import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate } from '../lucifer0/tools/operations.js';
 import { emptyProfile } from '../lucifer0/tools/private-profiles.js';
-import { renderUserDocument, readUserDocuments } from '../lucifer0/tools/user-documents.js';
-import { ingestBatch, loadContent } from '../lucifer0/tools/content.js';
+import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
+import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
+import { loadContent, ingestBatch } from '../lucifer0/tools/content.js';
 
 const DAY = 86400000;
-const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md'];
 const iso = time => new Date(time).toISOString();
-const research = now => ({ version: 1, visitedAt: iso(now), observations: [
-  { url: 'https://www.reddit.com/r/casual/comments/test-one', community: 'casual', visitedAt: iso(now), publishedAt: iso(now - DAY), kind: 'thread', summary: 'Synthetic observation: a mundane question gets short replies.' },
-  { url: 'https://www.v2ex.com/t/12345', community: 'life', visitedAt: iso(now), publishedAt: iso(now - DAY), kind: 'thread', summary: 'Synthetic observation: practical follow-up and corrections.' },
-  { url: 'https://dat.2chan.net/t/futaba.htm', community: 'food', visitedAt: iso(now), publishedAt: null, kind: 'feed', summary: 'Synthetic observation: small cooking conversations and quoted IDs.' }
-] });
-const registry = () => Array.from({ length: 20 }, (_, index) => ({
-  id: `${index < 8 ? 'character' : 'visitor'}-${index}`, handle: `account_${index}`, name: `Account ${index}`, bio: '', avatar: '',
-  kind: index < 8 ? 'character' : 'visitor', sourceWork: index < 8 ? 'Synthetic work' : '', enabled: true, aiScope: 'daily', profileStatus: 'approved', inFollowing: index < 8, allowPosts: true, allowReplies: true
+const readJSON = async path => JSON.parse(await readFile(path, 'utf8'));
+const users = () => Array.from({ length: 8 }, (_, index) => ({
+  id: 'person-' + index, handle: 'person_' + index, name: 'Synthetic person ' + index, bio: '', avatar: '',
+  kind: index < 2 ? 'character' : 'visitor', sourceWork: index < 2 ? 'Synthetic work' : '', enabled: true,
+  aiScope: 'daily', profileStatus: 'approved', inFollowing: index < 2, allowPosts: true, allowReplies: true
 }));
-const canonProfile = id => ({ ...emptyProfile(id), facts: [{ text: 'Synthetic canon trait', status: 'canon', visibility: 'private', source: 'Synthetic source paragraph' }] });
-function drawInput() {
-  const users = registry();
-  return { users, profiles: Object.fromEntries(users.map(user => [user.id, emptyProfile(user.id)])), overrides: Object.fromEntries(users.filter(user => user.kind === 'character').map(user => [user.id, canonProfile(user.id)])) };
+const canon = id => ({ ...emptyProfile(id), facts: [{ text: 'SYNTHETIC_PRIVATE_CANON', status: 'canon', visibility: 'private', source: 'Synthetic original paragraph' }] });
+const drawInput = () => ({ users: users(), profiles: Object.fromEntries(users().map(user => [user.id, emptyProfile(user.id)])), overrides: Object.fromEntries(users().filter(user => user.kind === 'character').map(user => [user.id, canon(user.id)])) });
+function seedFor(budget) {
+  for (let index = 0; index < 1000; index++) { const seed = 'synthetic-seed-' + index; if (drawUpdatePlan({ ...drawInput(), seed }).budget === budget) return seed; }
+  throw new Error('No matching synthetic seed');
 }
-function seedFor(budget, prefix = 'round') {
-  for (let i = 0; i < 1000; i++) { const seed = `${prefix}-${i}`; if (drawPlan({ ...drawInput(), seed }).budget === budget) return seed; }
-  throw new Error('No seed found');
-}
-
-async function fixture(t, { canon = true } = {}) {
-  const directory = await mkdtemp(join(tmpdir(), 'y29-operations-'));
+const research = now => [
+  { category: 'news', kind: 'feed', url: 'https://news.example.org/story', visitedAt: iso(now), publishedAt: iso(now - DAY), summary: 'Synthetic source: read the full announcement and its stated scope.' },
+  { category: 'trend', kind: 'thread', url: 'https://forum.example.net/topic', visitedAt: iso(now), publishedAt: iso(now), summary: 'Synthetic source: read the root and visible disagreement replies.' },
+  { category: 'daily', kind: 'thread', url: 'https://forum.example.net/daily', visitedAt: iso(now), publishedAt: null, summary: 'Synthetic source: read a daily-life account and its follow-up.' }
+];
+async function fixture(t, budget = 4) {
+  const directory = await mkdtemp(join(tmpdir(), 'y29-update-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
-  const root = join(directory, 'project', 'lucifer0'), privateDirectory = join(directory, 'profiles'), now = Date.now() - 2000;
+  const root = join(directory, 'project/lucifer0'), privateDirectory = join(directory, 'profiles'), workDirectory = join(directory, 'current'), now = Date.now() - 2000;
   await mkdir(join(root, 'assets'), { recursive: true });
-  await mkdir(join(root, 'environment'));
-  for (const path of environmentPaths) await writeFile(join(root, path), `# Synthetic environment\n\nSource: ${path}\n`);
   await mkdir(privateDirectory);
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts: 10 }));
-  await writeFile(join(root, 'review.json'), JSON.stringify({ version: 1, reviewedAt: iso(now), coveredBatchIds: [], coveredPostIds: [] }));
-  for (const user of registry()) {
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md']]]) {
+    await mkdir(join(root, folder));
+    for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
+  }
+  for (const user of users()) {
     await mkdir(join(root, 'users', user.id), { recursive: true });
-    await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, emptyProfile(user.id)));
-    if (canon && user.kind === 'character') await writeFile(join(privateDirectory, `${user.id}.json`), JSON.stringify(canonProfile(user.id)));
+    const profile = emptyProfile(user.id); profile.notes = 'SYNTHETIC_FULL_PERSON_' + user.id;
+    await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
+    if (user.kind === 'character') await writeFile(join(privateDirectory, user.id + '.json'), JSON.stringify(canon(user.id)));
   }
-  const researchPath = join(directory, 'research.json'); await writeFile(researchPath, JSON.stringify(research(now)));
-  const options = { root, privateDirectory, researchPath, now, seed: 'test-round', entropy: () => seedFor(6), outputPath: join(directory, 'context.json') };
-  return { directory, root, privateDirectory, now, options };
+  const historical = { id: 'history-entry', author: 'person-0', createdAt: '2025-04-01T00:00:00Z', replyTo: null, text: 'SYNTHETIC_HISTORY_BODY', likes: 1, canon: 'derivative', media: [] };
+  await mkdir(join(root, 'posts/2025/04/history-entry'), { recursive: true });
+  await writeFile(join(root, 'posts/2025/04/history-entry/index.md'), renderPostDocument(historical));
+  const options = { root, privateDirectory, workDirectory, now, entropy: () => seedFor(budget) };
+  return { directory, root, privateDirectory, workDirectory, now, options };
 }
-const read = async path => JSON.parse(await readFile(path, 'utf8'));
-const batchFrom = context => ({ version: 1, id: context.plan.id, mode: 'daily', posts: context.selection.users.map((user, index) => ({ id: `${context.plan.id}-post-${index}`, author: user.id, createdAt: context.preparedAt.replace(/\.\d{3}Z$/, 'Z'), text: `Synthetic daily entry ${index}`, replyTo: null, likes: 0, canon: 'derivative', media: [] })) });
+function post(id, author, now, replyTo = null) {
+  return { id, author, createdAt: iso(now).replace(/\.\d{3}Z$/, 'Z'), replyTo, text: 'Synthetic current text ' + id, likes: 0, canon: 'derivative', media: [], ...(author.startsWith('guest-') ? { guest: { name: 'Guest ' + author.slice(6) } } : {}) };
+}
+async function draft(prepared, now, posts) {
+  const operation = await readJSON(prepared.operationPath);
+  operation.research = research(now); operation.posts = posts;
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  return { operation, batch: { version: 1, id: operation.id, mode: 'daily', posts } };
+}
 
-test('every budget from 1 to 10 is reachable and both pools have independent nonzero draws', () => {
-  const input = drawInput(), sizes = new Set();
-  for (let index = 0; index < 250; index++) {
-    const plan = drawPlan({ ...input, seed: `round-${index}`, now: 1000 }); sizes.add(plan.budget);
-    assert.deepEqual(plan, drawPlan({ ...input, seed: `round-${index}`, now: 1000 }));
-    if (plan.budget > 1) assert.ok(plan.poolBudgets.character > 0 && plan.poolBudgets.visitor > 0);
-    assert.ok(plan.selectedIds.character.every(id => id.startsWith('character')));
-    assert.ok(plan.selectedIds.visitor.every(id => id.startsWith('visitor')));
-    assert.equal(new Set(Object.values(plan.selectedIds).flat()).size, Object.values(plan.selectedIds).flat().length);
+test('one draw reaches all ten ceilings and samples one shared weighted pool with a soft recent penalty', () => {
+  const input = drawInput(), budgets = new Set(), recent = [{ author: 'person-0', createdAt: iso(Date.now()) }];
+  let pickedRecent = 0, mixed = 0;
+  for (let index = 0; index < 500; index++) {
+    const plan = drawUpdatePlan({ ...input, posts: recent, seed: 'sampling-' + index });
+    budgets.add(plan.budget);
+    assert.equal(plan.selectedIds.length, 3);
+    assert.equal(new Set(plan.selectedIds).size, 3);
+    pickedRecent += Number(plan.selectedIds.includes('person-0'));
+    mixed += Number(plan.selectedIds.some(id => input.users.find(user => user.id === id).kind === 'character') && plan.selectedIds.some(id => input.users.find(user => user.id === id).kind === 'visitor'));
   }
-  assert.deepEqual([...sizes].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  assert.deepEqual([...budgets].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  assert.ok(pickedRecent > 0 && pickedRecent < 500);
+  assert.ok(mixed > 0 && mixed < 500, 'the shared pool does not force two identities into every draw');
+  const withoutCanon = drawUpdatePlan({ ...input, overrides: {}, seed: 'no-canon' });
+  assert.ok(withoutCanon.selectedIds.every(id => input.users.find(user => user.id === id).kind === 'visitor'));
 });
 
-test('research rejects missing pages, stale browsing, one-source samples and imaginary recent dates', () => {
-  const now = Date.now(); assert.equal(validateResearch(research(now), now).version, 1);
-  const mutations = [
-    value => { value.observations.pop(); },
-    value => { value.visitedAt = iso(now - 3 * DAY); },
-    value => { value.observations[1].visitedAt = iso(now - 3 * DAY); },
-    value => { value.observations.forEach(entry => { entry.publishedAt = iso(now - 8 * DAY); }); },
-    value => { value.observations[0].publishedAt = iso(now + DAY); },
-    value => { value.observations.forEach((entry, i) => { entry.url = `https://www.reddit.com/r/casual/new/${i}`; entry.community = 'casual'; }); },
-    value => { value.observations.forEach(entry => { entry.kind = 'feed'; }); },
-    value => { value.observations[1].url = value.observations[0].url; }
-  ];
-  for (const mutate of mutations) { const value = research(now); mutate(value); assert.throws(() => validateResearch(value, now)); }
-});
-
-test('single-slot rounds alternate the two pools and cannot be redrawn through another output file', async t => {
-  const { directory, options } = await fixture(t);
-  const first = { ...options, seed: 'solo-a', entropy: () => seedFor(1, 'solo-a') }; await prepareRound(first);
-  const one = await read(first.outputPath);
-  assert.equal(one.plan.poolBudgets.character, 1);
-  const second = { ...options, seed: 'solo-b', entropy: () => seedFor(1, 'solo-b'), outputPath: join(directory, 'second.json') }; await prepareRound(second);
-  const two = await read(second.outputPath);
-  assert.equal(two.plan.poolBudgets.visitor, 1);
-  const retry = { ...first, outputPath: join(directory, 'retry.json'), now: options.now + 1000, entropy: () => { throw new Error('Must not redraw'); } }; await prepareRound(retry);
-  assert.deepEqual((await read(retry.outputPath)).plan, one.plan);
-  await assert.rejects(prepareRound({ ...second, outputPath: first.outputPath }), /different round/);
-});
-
-test('refresh preserves the draw, reloads edited settings, and withdraws suspended candidates', async t => {
-  const { root, options } = await fixture(t);
-  await prepareRound(options); const original = await read(options.outputPath);
-  const documents = await readUserDocuments(root), [changed, suspended] = original.selection.users;
-  const changedUser = documents.registry.users.find(user => user.id === changed.id);
-  documents.profiles[changed.id].notes = 'LATEST_SETTING';
-  await writeFile(join(root, 'users', changed.id, 'profile.md'), renderUserDocument(changedUser, documents.profiles[changed.id]));
-  const suspendedUser = documents.registry.users.find(user => user.id === suspended.id); suspendedUser.enabled = false;
-  await writeFile(join(root, 'users', suspended.id, 'profile.md'), renderUserDocument(suspendedUser, documents.profiles[suspended.id]));
-  await assert.rejects(validateRoundForBatch(batchFrom(original), { ...options, contextPath: options.outputPath }), /stale/);
-  await prepareRound({ ...options, now: options.now + 1000 }); const refreshed = await read(options.outputPath);
-  assert.deepEqual(refreshed.plan, original.plan);
-  assert.equal(refreshed.selection.users.find(user => user.id === changed.id).profile.notes, 'LATEST_SETTING');
-  assert.ok(!refreshed.selection.users.some(user => user.id === suspended.id));
-  assert.deepEqual(refreshed.selection.dropped, [{ id: suspended.id, reason: 'account-not-ready' }]);
-  assert.ok(refreshed.selection.users.every(user => original.selection.users.some(previous => previous.id === user.id)));
-});
-
-test('environment context uses the named documents and refreshes changes without redrawing', async t => {
-  const { root, options } = await fixture(t);
-  await writeFile(join(root, 'environment/unlisted.md'), 'SYNTHETIC_UNLISTED_DRAFT');
-  await prepareRound(options);
-  let context = await read(options.outputPath);
-  const plan = context.plan;
-  assert.deepEqual(context.environmentDocuments, await Promise.all(environmentPaths.map(async path => ({ path, text: await readFile(join(root, path), 'utf8') }))));
-  assert.ok(!JSON.stringify(context).includes('SYNTHETIC_UNLISTED_DRAFT'));
-  assert.deepEqual(await validateRoundForBatch(batchFrom(context), { ...options, contextPath: options.outputPath }), plan);
-
-  for (const path of environmentPaths) {
-    const latest = `# Updated environment\n\nUpdated source: ${path}\n`;
-    await writeFile(join(root, path), latest);
-    await assert.rejects(validateRoundForBatch(batchFrom(context), { ...options, contextPath: options.outputPath }), /stale/);
-    await prepareRound({ ...options, entropy: () => { throw new Error('Must not redraw'); } });
-    const refreshed = await read(options.outputPath);
-    assert.deepEqual(refreshed.plan, plan);
-    assert.equal(refreshed.environmentDocuments.find(document => document.path === path).text, latest);
-    assert.notEqual(refreshed.sourceDigest, context.sourceDigest);
-    assert.deepEqual(await validateRoundForBatch(batchFrom(refreshed), { ...options, contextPath: options.outputPath }), plan);
-    context = refreshed;
+test('prepare creates only one work record and a full raw-source reading, then resumes without redrawing', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options), original = await readJSON(result.operationPath);
+  assert.deepEqual((await readdir(f.workDirectory)).sort(), ['operation.json', 'reading.md']);
+  const reading = await readFile(result.readingPath, 'utf8');
+  for (const user of users()) {
+    assert.ok(reading.includes('users/' + user.id + '/profile.md'));
+    assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
+  for (const name of ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
+  assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY') && reading.includes('SYNTHETIC_PRIVATE_CANON'));
+  assert.ok(reading.includes('docs/README.md') && reading.includes('docs/writing.md') && reading.includes('docs/publishing.md'));
+  assert.ok(!JSON.stringify(original).includes('SYNTHETIC_FULL_PERSON_'));
+  original.research = research(f.now); await writeFile(result.operationPath, JSON.stringify(original));
+  await writeFile(join(f.root, 'environment/forum.md'), '# Updated source\n\nSYNTHETIC_UPDATED_ENVIRONMENT');
+  const resumed = await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  const current = await readJSON(resumed.operationPath);
+  assert.equal(current.id, original.id); assert.deepEqual(current.plan, original.plan);
+  assert.notEqual(current.sourceDigest, original.sourceDigest);
+  assert.deepEqual(current.research, original.research);
+  assert.ok((await readFile(resumed.readingPath, 'utf8')).includes('SYNTHETIC_UPDATED_ENVIRONMENT'));
+  assert.ok(!(await readdir(f.root)).includes('rounds'));
 });
 
-test('characters without sourced canon stay blocked, and their places are not handed to visitors', async t => {
-  const { options } = await fixture(t, { canon: false }); await prepareRound(options);
-  const context = await read(options.outputPath);
-  assert.equal(context.selection.blocked.length, 8);
-  assert.equal(context.plan.selectedIds.character.length, 0);
-  assert.equal(context.selection.users.length, context.plan.poolBudgets.visitor);
-  assert.ok(context.selection.users.every(user => user.kind === 'visitor'));
+test('research covers formal news, trends and daily life with real fresh page metadata', () => {
+  const now = Date.now(), valid = research(now); assert.deepEqual(validateResearch(valid, now), valid);
+  for (const mutate of [
+    value => value.pop(),
+    value => { value[0].category = 'daily'; },
+    value => value.forEach(item => { item.kind = 'feed'; }),
+    value => value.forEach(item => { item.url = 'https://same.example.org/' + item.category; }),
+    value => { value[0].visitedAt = iso(now - 3 * DAY); },
+    value => value.forEach(item => { item.publishedAt = null; }),
+    value => { value[0].summary = ''; }
+  ]) { const changed = structuredClone(valid); mutate(changed); assert.throws(() => validateResearch(changed, now)); }
+  const adapted = structuredClone(valid); adapted[0].adaptedPostIds = ['missing-post'];
+  assert.throws(() => validateResearch(adapted, now, ['actual-post']), /Adapted/);
 });
 
-test('old-post sampling excludes the latest thirty and review checkpoints use real coverage', async () => {
-  const input = drawInput(), now = Date.now(), posts = Array.from({ length: 45 }, (_, i) => ({ id: `post-${i}`, author: 'visitor-8', createdAt: iso(now - i * DAY) }));
-  const plan = drawPlan({ ...input, posts, seed: 'review-round' });
-  assert.equal(plan.retrospectiveIds.length, 2);
-  assert.ok(plan.retrospectiveIds.every(id => Number(id.slice(5)) >= 30));
-  assert.equal(new Set(plan.retrospectiveIds).size, 2);
-  const decisions = Array.from({ length: 100 }, (_, i) => drawPlan({ ...input, seed: `review-${i}` }).localReview);
-  assert.ok(decisions.some(Boolean) && decisions.some(value => !value));
+test('actual guest majority includes a single guest post; a lone library post cannot publish', async t => {
+  const f = await fixture(t, 1), result = await prepareUpdate(f.options);
+  const { batch } = await draft(result, f.now, [post('single-guest', 'guest-one', f.now)]);
+  assert.equal((await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath })).budget, 1);
+  const operation = await readJSON(result.operationPath);
+  const invalid = post('single-library', operation.plan.selectedIds[0], f.now);
+  const second = await draft(result, f.now, [invalid]);
+  await assert.rejects(validateUpdateForBatch(second.batch, { ...f.options, contextPath: result.operationPath }), /half/);
+  const over = await draft(result, f.now, [post('first-guest', 'guest-one', f.now), post('second-guest', 'guest-two', f.now)]);
+  await assert.rejects(validateUpdateForBatch(over.batch, { ...f.options, contextPath: result.operationPath }), /budget/);
 });
 
-test('first, thirty-post and thirty-day global reviews are due; invalid coverage fails', async t => {
-  const { root, now } = await fixture(t), posts = Array.from({ length: 30 }, (_, i) => ({ id: `post-${i}` }));
-  const path = join(root, 'review.json');
-  await rm(path); assert.deepEqual((await readReview(root, [], [], now)).reasons, ['first-review']);
-  await writeFile(path, JSON.stringify({ version: 1, reviewedAt: iso(now), coveredBatchIds: [], coveredPostIds: [] }));
-  assert.deepEqual((await readReview(root, [], posts, now)).reasons, ['thirty-posts']);
-  await writeFile(path, JSON.stringify({ version: 1, reviewedAt: iso(now - 30 * DAY), coveredBatchIds: [], coveredPostIds: posts.map(post => post.id) }));
-  assert.deepEqual((await readReview(root, [], posts, now)).reasons, ['thirty-days']);
-  await assert.rejects(readReview(root, [], [], now), /unknown/);
-  await writeFile(path, JSON.stringify({ version: 1, reviewedAt: iso(now), coveredBatchIds: ['round-one'], coveredPostIds: ['post-0'] }));
-  await assert.rejects(readReview(root, [{ id: 'round-one', posts: posts.slice(0, 2) }], posts, now), /all of its posts/);
+test('nonselected ready library users can reply to a real parent, while new roots need selection', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options), operation = await readJSON(result.operationPath);
+  const outsider = users().find(user => !operation.plan.selectedIds.includes(user.id));
+  const entries = [post('guest-start', 'guest-one', f.now), post('guest-another', 'guest-two', f.now), post('natural-reply', outsider.id, f.now, 'guest-start')];
+  const { batch } = await draft(result, f.now, entries);
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath });
+  entries[2].replyTo = null; await draft(result, f.now, entries);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /selected/);
+  entries[2].replyTo = 'does-not-exist'; await draft(result, f.now, entries);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /parent/);
 });
 
-test('AI ingestion enforces the recorded author draw, total and pool budgets, and exact retries', async t => {
-  const { directory, root, options } = await fixture(t); await prepareRound(options);
-  const context = await read(options.outputPath), batch = batchFrom(context), input = join(directory, 'batch.json');
-  const publishOptions = { root, reviewed: true, ai: true, contextPath: options.outputPath, privateDirectory: options.privateDirectory };
-  await assert.rejects(validateRoundForBatch(batch, { ...publishOptions, contextPath: undefined }), /--context/);
-  const outsideAuthor = registry().find(user => !context.selection.users.some(candidate => candidate.id === user.id));
-  await assert.rejects(validateRoundForBatch({ ...batch, posts: [{ ...batch.posts[0], author: outsideAuthor.id }] }, publishOptions), /not selected/);
-  await assert.rejects(validateRoundForBatch({ ...batch, posts: Array(context.plan.budget + 1).fill(batch.posts[0]) }, publishOptions), /random budget/);
-  const kind = context.plan.poolBudgets.visitor < context.plan.budget ? 'visitor' : 'character';
-  const author = context.selection.users.find(user => user.kind === kind);
-  await assert.rejects(validateRoundForBatch({ ...batch, posts: Array(context.plan.poolBudgets[kind] + 1).fill({ ...batch.posts[0], author: author.id }) }, publishOptions), /pool budget/);
-  await writeFile(input, JSON.stringify(batch));
-  assert.equal((await ingestBatch(input, publishOptions)).status, 'archived');
-  assert.equal((await ingestBatch(input, publishOptions)).status, 'already-archived');
-  assert.equal((await loadContent(root)).feed.posts.length, batch.posts.length);
-  const changed = structuredClone(batch); changed.posts[0].text = 'Conflicting retry'; await writeFile(input, JSON.stringify(changed));
-  await assert.rejects(ingestBatch(input, publishOptions), /different content/);
+test('changed source, disabled accounts, missing canon and accidental draw edits block publication', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options);
+  const entries = [post('guest-first', 'guest-one', f.now), post('guest-second', 'guest-two', f.now), post('canon-reply', 'person-0', f.now, 'guest-first')];
+  const { batch } = await draft(result, f.now, entries);
+  const environment = join(f.root, 'environment/world-trends.md');
+  await writeFile(environment, '# New world source');
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /Source material changed/);
+  await prepareUpdate(f.options); await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath });
+  await rm(join(f.privateDirectory, 'person-0.json'));
+  await prepareUpdate(f.options);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /not ready/);
+  await writeFile(join(f.privateDirectory, 'person-0.json'), JSON.stringify(canon('person-0')));
+  const disabled = { ...users()[0], enabled: false };
+  await writeFile(join(f.root, 'users/person-0/profile.md'), renderUserDocument(disabled, emptyProfile(disabled.id)));
+  await prepareUpdate(f.options);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /not ready/);
+  disabled.enabled = true; disabled.allowReplies = false;
+  await writeFile(join(f.root, 'users/person-0/profile.md'), renderUserDocument(disabled, emptyProfile(disabled.id)));
+  await prepareUpdate(f.options);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /action is disabled/);
+  const operation = await readJSON(result.operationPath);
+  operation.plan.budget = operation.plan.budget === 10 ? 9 : 10;
+  await writeFile(result.operationPath, JSON.stringify(operation));
+  await assert.rejects(prepareUpdate(f.options), /draw was changed/);
 });
 
-test('historical AI import still requires its current context and selected authors', async t => {
-  const { directory, root, options } = await fixture(t);
-  const input = join(directory, 'batch.json');
-  const baseline = { version: 1, id: 'existing-day', mode: 'daily', posts: [{ id: 'existing-entry', author: 'visitor-8', createdAt: new Date(options.now).toISOString().replace(/\.\d{3}Z$/, 'Z'), text: 'Existing synthetic entry', replyTo: null, likes: 0, canon: 'derivative', media: [] }] };
-  await writeFile(input, JSON.stringify(baseline));
-  await ingestBatch(input, { root, reviewed: true });
-  await prepareRound(options);
-  const context = await read(options.outputPath), batch = batchFrom(context);
-  batch.posts.forEach(post => { post.createdAt = new Date(options.now - 365 * DAY).toISOString().replace(/\.\d{3}Z$/, 'Z'); });
-  const publishOptions = { root, reviewed: true, ai: true, contextPath: options.outputPath, privateDirectory: options.privateDirectory };
-  await writeFile(input, JSON.stringify(batch));
-  await assert.rejects(ingestBatch(input, publishOptions), /append/);
-  await assert.rejects(ingestBatch(input, { ...publishOptions, contextPath: undefined, backfill: true }), /--context/);
-  const outside = registry().find(user => !context.selection.users.some(candidate => candidate.id === user.id));
-  const invalid = structuredClone(batch); invalid.posts[0].author = outside.id;
-  await writeFile(input, JSON.stringify(invalid));
-  await assert.rejects(ingestBatch(input, { ...publishOptions, backfill: true }), /not selected/);
-  await writeFile(input, JSON.stringify(batch));
-  assert.equal((await ingestBatch(input, { ...publishOptions, backfill: true })).status, 'archived');
-  assert.equal((await ingestBatch(input, { ...publishOptions, backfill: true })).status, 'already-archived');
-  assert.equal((await loadContent(root)).feed.posts.length, baseline.posts.length + batch.posts.length);
+test('explicit backfill allows historical post dates while research stays fresh and parents stay earlier', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options);
+  const historical = post('historical-guest', 'guest-historical', Date.parse('2025-05-01T00:00:00Z'), 'history-entry');
+  const { batch } = await draft(result, f.now, [historical]);
+  const options = { ...f.options, contextPath: result.operationPath };
+  await assert.rejects(validateUpdateForBatch(batch, options), /timestamps/);
+  await validateUpdateForBatch(batch, { ...options, backfill: true });
+  historical.createdAt = iso(f.now + DAY); await draft(result, f.now, [historical]);
+  await assert.rejects(validateUpdateForBatch(batch, { ...options, backfill: true }), /timestamps/);
+  historical.createdAt = '2025-03-01T00:00:00Z'; await draft(result, f.now, [historical]);
+  await assert.rejects(validateUpdateForBatch(batch, { ...options, backfill: true }), /parent/);
+  historical.createdAt = '2025-05-01T00:00:00Z'; await draft(result, f.now, [historical]);
+  const operation = await readJSON(result.operationPath); operation.research[0].visitedAt = iso(f.now - 3 * DAY);
+  await writeFile(result.operationPath, JSON.stringify(operation));
+  await assert.rejects(validateUpdateForBatch(batch, { ...options, backfill: true }), /stale research/);
 });
 
-test('changing plan, stale profiles, withdrawn canon and overdue reviews cannot publish', async t => {
-  const { root, options } = await fixture(t); await prepareRound(options);
-  const saved = await read(options.outputPath), batch = batchFrom(saved), validateOptions = { ...options, contextPath: options.outputPath };
-  const changed = structuredClone(saved); changed.plan.localReview = !changed.plan.localReview;
-  await writeFile(options.outputPath, JSON.stringify(changed));
-  await assert.rejects(validateRoundForBatch(batch, validateOptions), /plan was changed/);
-  await assert.rejects(prepareRound(options), /plan was changed/);
-  await writeFile(options.outputPath, JSON.stringify(saved));
-  const character = saved.selection.users.find(user => user.kind === 'character');
-  await rm(join(options.privateDirectory, `${character.id}.json`));
-  await assert.rejects(validateRoundForBatch(batch, validateOptions), /stale/);
-  await prepareRound(options);
-  await assert.rejects(validateRoundForBatch(batch, validateOptions), /not ready/);
-  await rm(join(root, 'review.json')); await prepareRound(options);
-  await assert.rejects(validateRoundForBatch(batchFrom(await read(options.outputPath)), validateOptions), /Global review/);
+test('an exact partial write resumes after three days with fresh reading and research but unchanged post times', async t => {
+  const f = await fixture(t), initialTime = f.now - 3 * DAY;
+  const result = await prepareUpdate({ ...f.options, now: initialTime });
+  const original = await readJSON(result.operationPath);
+  const entries = [post('pending-root', 'guest-pending-root', initialTime), post('pending-reply', 'guest-pending-reply', initialTime, 'pending-root')];
+  const { batch } = await draft(result, initialTime, entries);
+  const blocked = join(f.root, threadDirectory(entries[0], new Map(entries.map(item => [item.id, item]))), 'replies/pending-reply.md');
+  await mkdir(blocked, { recursive: true });
+  await assert.rejects(writeThreadBatch(f.root, batch, (await loadContent(f.root)).batches), /different content/);
+  assert.equal((await readJSON(join(f.root, '.publish-pending.json'))).id, original.id);
+  assert.ok(!(await loadContent(f.root)).feed.posts.some(item => item.id === 'pending-root'));
+
+  const resumed = await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  const current = await readJSON(resumed.operationPath);
+  assert.equal(current.id, original.id); assert.deepEqual(current.plan, original.plan);
+  assert.equal(current.sourceDigest, original.sourceDigest, 'temporary partial files do not change archived source material');
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /stale research/);
+  await draft(result, f.now, entries);
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath });
+  const changed = structuredClone(entries); changed[0].text += ' Changed after interruption.';
+  const changedDraft = await draft(result, f.now, changed);
+  await assert.rejects(validateUpdateForBatch(changedDraft.batch, { ...f.options, contextPath: result.operationPath }), /timestamps/);
+  await draft(result, f.now, entries);
+  await rm(blocked, { recursive: true });
+  const imported = await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  assert.equal(imported.status, 'archived');
+  assert.equal((await loadContent(f.root)).feed.posts.filter(item => entries.some(entry => entry.id === item.id)).length, 2);
+  await assert.rejects(readFile(join(f.root, '.publish-pending.json')), /ENOENT/);
+
+  const other = await fixture(t), otherResult = await prepareUpdate(other.options);
+  const withoutPending = await draft(otherResult, other.now, [post('old-without-pending', 'guest-not-pending', initialTime)]);
+  await assert.rejects(validateUpdateForBatch(withoutPending.batch, { ...other.options, contextPath: otherResult.operationPath }), /timestamps/);
 });
 
-test('research, contexts and ledger cannot be stored through repository paths or file symlinks', async t => {
-  const { root, directory, options } = await fixture(t);
-  await assert.rejects(prepareRound({ ...options, outputPath: join(root, 'context.json') }), /outside/);
-  await assert.rejects(prepareRound({ ...options, outputPath: join(directory, 'round-state.json') }), /separate/);
-  await assert.rejects(prepareRound({ ...options, outputPath: join(options.privateDirectory, 'context.json') }), /separate/);
-  const link = join(directory, 'alias.json'); await symlink(join(root, 'publication.json'), link);
-  await assert.rejects(prepareRound({ ...options, researchPath: link }), /outside/);
-  await prepareRound(options);
-  const context = await read(options.outputPath);
-  assert.ok(!JSON.stringify(context).includes('profiles":{'), 'only selected dossiers are expanded');
-  assert.equal(context.selection.users.length, Object.values(context.plan.selectedIds).flat().length);
+test('work records stay external and regular; a disabled policy cannot start an update', async t => {
+  const f = await fixture(t);
+  await assert.rejects(prepareUpdate({ ...f.options, workDirectory: join(f.root, 'draft-work') }), /outside/);
+  const link = join(f.directory, 'work-link'); await mkdir(f.workDirectory); await symlink(f.workDirectory, link);
+  await assert.rejects(prepareUpdate({ ...f.options, workDirectory: link }), /symlink/);
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath); policy.automaticPosting = false;
+  await writeFile(policyPath, JSON.stringify(policy));
+  await assert.rejects(prepareUpdate(f.options), /disabled/);
+  assert.deepEqual(await readdir(f.workDirectory), []);
+});
+
+test('finish keeps an awaiting-online operation until exact online posts and guest names match', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options);
+  await draft(result, f.now, [post('verified-guest', 'guest-verified', f.now)]);
+  await assert.rejects(finishUpdate({ ...f.options, fetchImpl: () => { throw new Error('Must not fetch before local import'); } }), /Local posts/);
+  await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  const { feed } = await loadContent(f.root), wrong = structuredClone(feed);
+  wrong.users.find(user => user.id === 'guest-verified').name = 'Wrong signature';
+  await assert.rejects(finishUpdate({ ...f.options, fetchImpl: async () => ({ ok: true, json: async () => wrong }) }), /Online posts/);
+  assert.equal((await readJSON(result.operationPath)).status, 'awaiting-online');
+  assert.ok((await readdir(f.workDirectory)).includes('reading.md'));
+  const finished = await finishUpdate({ ...f.options, fetchImpl: async url => {
+    assert.equal(new URL(url).protocol, 'https:'); return { ok: true, json: async () => feed };
+  } });
+  assert.equal(finished.status, 'published'); assert.equal(finished.count, 1);
+  assert.deepEqual(await readdir(f.workDirectory), []);
+});
+
+test('a zero-post update can finish without contacting the site', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options);
+  const finished = await finishUpdate({ ...f.options, fetchImpl: () => { throw new Error('No network for zero posts'); } });
+  assert.equal(finished.id, result.id); assert.equal(finished.status, 'no-posts');
+  assert.deepEqual(await readdir(f.workDirectory), []);
+});
+
+test('the real prepare and publish CLIs use operation.json directly and recover exact retries', async t => {
+  const f = await fixture(t);
+  await cp(new URL('../lucifer0/tools', import.meta.url), join(f.root, 'tools'), { recursive: true });
+  await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
+  const env = { ...process.env, Y29_SOCIAL_PRIVATE_DIR: f.privateDirectory };
+  const prepared = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', '--work', f.workDirectory], { env, encoding: 'utf8' }));
+  await draft(prepared, f.now, [post('cli-guest-post', 'guest-cli', f.now)]);
+  const command = [join(f.root, 'tools/publish.js'), 'ingest', prepared.operationPath, '--reviewed', '--ai'];
+  const first = JSON.parse(execFileSync(process.execPath, command, { env, encoding: 'utf8' }));
+  assert.equal(first.status, 'archived');
+  const retry = JSON.parse(execFileSync(process.execPath, command, { env, encoding: 'utf8' }));
+  assert.equal(retry.status, 'already-archived');
+  assert.equal((await loadContent(f.root)).feed.posts.filter(item => item.id === 'cli-guest-post').length, 1);
+  assert.ok(!(await readdir(f.root)).includes('rounds'));
 });

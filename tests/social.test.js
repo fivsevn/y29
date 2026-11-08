@@ -169,6 +169,13 @@ test('timestamps require a real date, timezone, no future, and correct reply chr
   }
   const f = fixture(); f.batches[0].posts[1].createdAt = '2026-11-07T09:00:00+08:00';
   assert.throws(() => validate(f), /later reply parent/);
+  for (const value of ['2026-11-07T00:00:00.123Z', '2026-11-07T08:00:00.123+08:00']) {
+    const precise = fixture(), parent = precise.batches[0].posts[0];
+    parent.createdAt = value;
+    assert.equal(validate(precise).posts.find(post => post.id === parent.id).createdAt, value);
+    precise.batches[0].posts[1].createdAt = '2026-11-07T08:00:00.122+08:00';
+    assert.throws(() => validate(precise), /later reply parent/);
+  }
 });
 
 test('orphan, self-referential and cyclic replies fail validation', () => {
@@ -221,7 +228,7 @@ test('builds are deterministic and preserve source archives', async t => {
   const { root } = await repositoryCopy(t);
   await buildFeed(root); const one = await readFile(join(root, 'data/feed.json'), 'utf8');
   await buildFeed(root); assert.equal(await readFile(join(root, 'data/feed.json'), 'utf8'), one);
-  assert.equal((await loadContent(root)).batches.length, 3);
+  assert.equal((await loadContent(root)).feed.posts.length, 15);
 });
 
 test('reviewed ingestion archives once, retries restore the feed, conflicting retries fail', async t => {
@@ -238,6 +245,99 @@ test('reviewed ingestion archives once, retries restore the feed, conflicting re
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /different content/);
 });
 
+test('guest identities derive from posts and cannot impersonate registered or other guest authors', () => {
+  const f = fixture(), batch = newBatch();
+  batch.posts[0].author = 'guest-bystander'; batch.posts[0].guest = { name: '临时路过' };
+  batch.posts.push({ ...batch.posts[0], id: 'test-guest-reply', replyTo: batch.posts[0].id, text: '补充一点。' });
+  f.batches.push(batch);
+  const feed = validate(f), guest = feed.users.find(user => user.id === 'guest-bystander');
+  assert.deepEqual({ name: guest.name, kind: guest.kind, inFollowing: guest.inFollowing, bio: guest.bio, avatar: guest.avatar }, { name: '临时路过', kind: 'guest', inFollowing: false, bio: '', avatar: '' });
+  assert.match(guest.handle, /^guest_[a-f0-9]{20}$/);
+  assert.equal(feed.posts.filter(post => post.author === guest.id).length, 2);
+  const mutations = [
+    b => { delete b.posts[0].guest; },
+    b => { b.posts[0].author = 'not-a-guest'; },
+    b => { b.posts[0].author = 'alan'; },
+    b => { b.posts[0].guest.privateNotes = 'hidden'; },
+    b => { b.posts[0].guest.name = ' '; },
+    b => { b.posts[0].guest.name = f.registry.users[0].name; },
+    b => { b.posts[1].guest = { name: '另一个名字' }; },
+    b => { b.posts[1].author = 'guest-different'; }
+  ];
+  for (const mutate of mutations) {
+    const invalid = fixture(), modified = structuredClone(batch); mutate(modified); invalid.batches.push(modified);
+    assert.throws(() => validate(invalid), /Unknown author|Guest|guest/);
+  }
+});
+
+test('guest ingestion and exact retries need no profile or permanent update index', async t => {
+  const { root, directory } = await repositoryCopy(t), batch = newBatch();
+  batch.posts[0].author = 'guest-new-reader'; batch.posts[0].guest = { name: '顺手问问' };
+  batch.posts.push({ ...batch.posts[0], id: 'guest-follow-up', replyTo: batch.posts[0].id, createdAt: '2026-11-07T22:03:00+08:00', text: '刚才漏了一句。' });
+  const input = join(directory, 'guest.json'); await writeFile(input, JSON.stringify(batch));
+  const options = { root, reviewed: true };
+  assert.equal((await ingestBatch(input, options)).status, 'archived');
+  const first = await readFile(join(root, 'data/feed.json'), 'utf8');
+  await rm(join(root, 'data/feed.json'));
+  assert.equal((await ingestBatch(input, options)).status, 'already-archived');
+  assert.equal(await readFile(join(root, 'data/feed.json'), 'utf8'), first);
+  const { feed } = await loadContent(root);
+  assert.equal(feed.posts.length, 17);
+  assert.equal(feed.users.filter(user => user.kind === 'guest').length, 1);
+  assert.ok(!(await readdir(join(root, 'users'))).includes('guest-new-reader'));
+  assert.ok(!(await readdir(root)).includes('rounds'));
+  await assert.rejects(readFile(join(root, '.publish-pending.json')), /ENOENT/);
+  batch.posts[1].guest = { name: '换个名字' }; await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, options), /different content/);
+});
+
+test('interrupted guest writes hide partial files, reject another update and resume from the same input', async t => {
+  const { root, directory } = await repositoryCopy(t), batch = newBatch();
+  batch.posts[0].author = 'guest-interrupted'; batch.posts[0].guest = { name: '晚点再来' };
+  batch.posts.push({ ...batch.posts[0], id: 'interrupted-reply', replyTo: batch.posts[0].id, text: '接着刚才的。' });
+  const blocked = join(root, 'posts/2026/11/test-new-post/replies/interrupted-reply.md');
+  await mkdir(blocked, { recursive: true });
+  const input = join(directory, 'batch.json'), options = { root, reviewed: true };
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, options), /different content/);
+  assert.equal((await loadContent(root)).feed.posts.length, 15);
+  const other = newBatch(); other.id = 'unrelated-update'; other.posts[0].id = 'unrelated-post';
+  const second = join(directory, 'other.json'); await writeFile(second, JSON.stringify(other));
+  await assert.rejects(ingestBatch(second, options), /unfinished update/);
+  const changed = structuredClone(batch); changed.posts[0].text = '改写过的内容。';
+  await writeFile(second, JSON.stringify(changed));
+  await assert.rejects(ingestBatch(second, options), /different content/);
+  await rm(blocked, { recursive: true });
+  assert.equal((await ingestBatch(input, options)).status, 'archived');
+  assert.equal((await ingestBatch(input, options)).status, 'already-archived');
+  assert.equal((await loadContent(root)).feed.posts.length, 17);
+  await assert.rejects(readFile(join(root, '.publish-pending.json')), /ENOENT/);
+});
+
+test('a retry can keep exact existing posts and append missing posts after a later publication', async t => {
+  const { root, directory } = await repositoryCopy(t), first = newBatch(), options = { root, reviewed: true };
+  const input = join(directory, 'batch.json'); await writeFile(input, JSON.stringify(first));
+  await ingestBatch(input, options);
+  const later = newBatch(); later.id = 'later-update'; later.posts[0].id = 'later-post';
+  later.posts[0].createdAt = '2026-11-07T23:00:00+08:00'; later.posts[0].text = '另一条较晚的发言。';
+  await writeFile(input, JSON.stringify(later)); await ingestBatch(input, options);
+  first.posts.push({ ...first.posts[0], id: 'missing-reply', replyTo: first.posts[0].id, createdAt: '2026-11-07T23:02:00+08:00', text: '本次只补这一条。' });
+  await writeFile(input, JSON.stringify(first));
+  assert.equal((await ingestBatch(input, options)).status, 'archived');
+  assert.equal((await loadContent(root)).feed.posts.length, 18);
+});
+
+test('an operation document imports its posts without exposing working fields', async t => {
+  const { root, directory } = await repositoryCopy(t), batch = newBatch();
+  const post = { ...batch.posts[0], author: 'guest-operation', guest: { name: '这边看看' }, canon: 'derivative' };
+  const input = join(directory, 'operation.json');
+  await writeFile(input, JSON.stringify({ version: 1, id: batch.id, plan: { budget: 1 }, sourceDigest: 'working-only', research: [], posts: [post], status: 'prepared' }));
+  assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'archived');
+  const text = await readFile(join(root, 'data/feed.json'), 'utf8');
+  assert.ok(JSON.parse(text).posts.some(item => item.id === post.id && item.guest.name === '这边看看'));
+  assert.doesNotMatch(text, /sourceDigest|working-only|prepared/);
+});
+
 test('AI import obeys the master switch and account scope; manual import obeys disabled accounts', async t => {
   const { root, directory } = await repositoryCopy(t);
   const input = join(directory, 'batch.json'); await writeFile(input, JSON.stringify(newBatch()));
@@ -250,7 +350,7 @@ test('AI import obeys the master switch and account scope; manual import obeys d
   f.registry.users.find(user => user.id === 'alan').enabled = false;
   await saveUser(root, f.registry.users.find(user => user.id === 'alan'));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /disabled/);
-  assert.equal((await loadContent(root)).batches.length, 3);
+  assert.equal((await loadContent(root)).feed.posts.length, 15);
 });
 
 test('bad media and backdated batches fail before writing any archive', async t => {
@@ -262,7 +362,7 @@ test('bad media and backdated batches fail before writing any archive', async t 
   batch.posts[0].media = []; batch.posts[0].createdAt = '2026-11-07T09:00:00+08:00';
   await writeFile(input, JSON.stringify(batch));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /append/);
-  assert.equal((await loadContent(root)).batches.length, 3);
+  assert.equal((await loadContent(root)).feed.posts.length, 15);
 });
 
 test('new image posts import from prepared package media without publishing unused draft files', async t => {
@@ -319,7 +419,7 @@ test('concurrent imports are serialized without overwriting history', async t =>
   const input = join(directory, 'batch.json'); await writeFile(input, JSON.stringify(newBatch()));
   await mkdir(join(root, '.publish.lock'));
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /Another import/);
-  assert.equal((await loadContent(root)).batches.length, 3);
+  assert.equal((await loadContent(root)).feed.posts.length, 15);
 });
 
 const privateProfile = () => ({ version: 1, userId: 'alan', voice: ['test voice'], postingHabits: [], relationships: [], knowledgeScope: [], boundaries: [], facts: [{ text: 'test fact', status: 'pending', visibility: 'private', source: 'synthetic test fixture' }] });

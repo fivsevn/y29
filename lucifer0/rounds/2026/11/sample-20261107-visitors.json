@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "id": "sample-20261107-visitors",
-  "mode": "sample",
-  "postIds": [
-    "sample-alarm",
-    "sample-nightbus"
-  ]
-}

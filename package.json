@@ -11,6 +11,7 @@
     "check": "node --test tests/*.test.js && node lucifer0/tools/publish.js validate && node build.js",
     "social:validate": "node lucifer0/tools/publish.js validate",
     "social:build": "node lucifer0/tools/publish.js build",
-    "social:context": "node lucifer0/tools/context.js"
+    "social:prepare": "node lucifer0/tools/update.js prepare",
+    "social:finish": "node lucifer0/tools/update.js finish"
   }
 }

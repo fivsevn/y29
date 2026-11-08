@@ -10,7 +10,7 @@ test-results/
 
 lucifer0/.publish.lock/
 lucifer0/.publish-staging/
-lucifer0/rounds/.pending/
+lucifer0/.publish-pending.json
 lucifer0/.private/
 lucifer0/private/
 lucifer0/drafts/

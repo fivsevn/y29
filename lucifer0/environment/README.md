@@ -8,4 +8,4 @@
 | [日常生活](everyday-life.md) | 学习、工作、家庭、消费和闲暇中的具体经历与选择 | 每轮观察 |
 | [论坛自身](forum.md) | 路西法零作为世界中一个平台的低频事件与公共记忆 | 有相关变化或原串时 |
 
-人物的经历、私人关系和持续变化保存在 [users](../users/README.md)。浏览记录、改编方法和更新步骤统一见[发布前观察](../docs/private-profiles.md#发布前观察)；已发布内容保存在 [posts](../posts/)。
+人物的经历、私人关系和持续变化保存在 [users](../users/README.md)。观察、发帖与改编方法见[发帖与改编](../docs/writing.md)，更新步骤见[AI 更新入口](../docs/README.md)；已发布内容保存在 [posts](../posts/)。

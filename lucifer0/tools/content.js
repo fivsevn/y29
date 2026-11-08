@@ -1,6 +1,7 @@
 import { readFile, mkdir, writeFile, realpath, lstat, rm } from 'node:fs/promises';
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { readUserDocuments, buildUserDirectory, isUserAvatarPath } from './user-documents.js';
 import { readThreadPackages, writeThreadBatch, isPostMediaPath, threadDirectory } from './thread-packages.js';
 
@@ -17,20 +18,30 @@ const identifier = (value, label) => {
   if (typeof value !== 'string' || !/^[a-z0-9][a-z0-9-]{1,63}$/.test(value)) fail(`${label}: invalid stable ID`);
 };
 const timestamp = value => {
-  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(Z|[+-]\d{2}:\d{2})$/.test(value) || !Number.isFinite(Date.parse(value))) return false;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(Z|[+-]\d{2}:\d{2})$/.test(value) || !Number.isFinite(Date.parse(value))) return false;
   const localDate = value.slice(0, 10);
   return new Date(`${localDate}T00:00:00Z`).toISOString().startsWith(localDate);
 };
+const normalizedName = value => value.normalize('NFKC').trim().toLocaleLowerCase();
+function validateBatch(batch, policy) {
+  keys(batch, ['version', 'id', 'mode', 'posts'], 'batch');
+  identifier(batch.id, 'batch.id');
+  if (batch.version !== 1 || !['sample', 'daily'].includes(batch.mode) || !Array.isArray(batch.posts) || !batch.posts.length || batch.posts.length > policy.maxBatchPosts) fail(`Invalid batch: ${batch.id}`);
+  for (const post of batch.posts) {
+    if (!post || post.canon !== (batch.mode === 'sample' ? 'sample' : 'derivative')) fail('Sample and derivative labels must match batch mode');
+  }
+}
 
 export function validateContent(registry, batches, policy, { now = Date.now() } = {}) {
   keys(policy, ['version', 'automaticPosting', 'timezone', 'maxBatchPosts'], 'policy');
   if (policy.version !== 1 || typeof policy.automaticPosting !== 'boolean' || policy.timezone !== 'Asia/Shanghai' || !Number.isInteger(policy.maxBatchPosts) || policy.maxBatchPosts < 1 || policy.maxBatchPosts > 20) fail('Invalid publication policy');
   keys(registry, ['version', 'users'], 'registry');
   if (registry.version !== 1 || !Array.isArray(registry.users)) fail('Invalid registry');
-  const users = new Map(), handles = new Set();
+  const users = new Map(), handles = new Set(), names = new Map();
   for (const user of registry.users) {
     keys(user, ['id', 'handle', 'name', 'bio', 'avatar', 'enabled', 'aiScope', 'profileStatus', 'kind', 'sourceWork', 'inFollowing', 'allowPosts', 'allowReplies'], 'user');
     identifier(user.id, 'user.id');
+    if (user.id.startsWith('guest-')) fail('The guest- ID prefix is reserved for unprofiled guests');
     if (users.has(user.id)) fail(`Duplicate user ID: ${user.id}`);
     if (!/^[a-z0-9_]{2,32}$/.test(user.handle) || handles.has(user.handle)) fail(`Invalid or duplicate handle: ${user.handle}`);
     text(user.name, 40, 'user.name'); text(user.bio, 240, 'user.bio', true);
@@ -41,24 +52,38 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
       if (user[key] !== undefined && typeof user[key] !== 'boolean') fail(`Invalid account control: ${key}`);
     }
     users.set(user.id, user); handles.add(user.handle);
+    names.set(normalizedName(user.name), user.id);
   }
-  const posts = new Map(), batchIds = new Set(), fingerprints = new Set();
+  const posts = new Map(), fingerprints = new Set();
   for (const batch of batches) {
-    keys(batch, ['version', 'id', 'mode', 'posts'], 'batch');
-    identifier(batch.id, 'batch.id');
-    if (batch.version !== 1 || !['sample', 'daily'].includes(batch.mode) || !Array.isArray(batch.posts) || !batch.posts.length || batch.posts.length > policy.maxBatchPosts) fail(`Invalid batch: ${batch.id}`);
-    if (batchIds.has(batch.id)) fail(`Duplicate batch: ${batch.id}`);
-    batchIds.add(batch.id);
+    validateBatch(batch, policy);
     for (const post of batch.posts) {
-      keys(post, ['id', 'author', 'createdAt', 'replyTo', 'text', 'likes', 'canon', 'media'], 'post');
+      keys(post, ['id', 'author', 'createdAt', 'replyTo', 'text', 'likes', 'canon', 'media', 'guest'], 'post');
       identifier(post.id, 'post.id');
+      identifier(post.author, 'post.author');
       if (posts.has(post.id)) fail(`Duplicate post ID: ${post.id}`);
-      if (!users.has(post.author)) fail(`Unknown author (keep historical accounts): ${post.author}`);
+      const user = users.get(post.author);
+      if (user && user.kind !== 'guest') {
+        if (Object.hasOwn(post, 'guest')) fail('Guest metadata cannot be attached to a registered account');
+      } else {
+        if (!/^guest-[a-z0-9][a-z0-9-]*$/.test(post.author) || !post.guest) fail(`Unknown author (keep historical accounts): ${post.author}`);
+        keys(post.guest, ['name'], 'guest');
+        text(post.guest.name, 40, 'guest.name');
+        if (post.guest.name !== post.guest.name.trim()) fail('Guest names must not have surrounding whitespace');
+        if (user && user.name !== post.guest.name) fail(`Guest identity changed: ${post.author}`);
+        const name = normalizedName(post.guest.name);
+        if (names.has(name) && names.get(name) !== post.author) fail(`Guest name conflicts with another author: ${post.guest.name}`);
+        if (!user) {
+          const handle = 'guest_' + createHash('sha256').update(post.author).digest('hex').slice(0, 20);
+          if (handles.has(handle)) fail(`Guest handle conflicts with another author: ${post.author}`);
+          users.set(post.author, { id: post.author, handle, name: post.guest.name, bio: '', avatar: '', enabled: true, profileStatus: 'approved', kind: 'guest', sourceWork: '', inFollowing: false });
+          handles.add(handle); names.set(name, post.author);
+        }
+      }
       if (!timestamp(post.createdAt) || Date.parse(post.createdAt) > now) fail(`Invalid or future timestamp: ${post.id}`);
       if (post.replyTo !== null) identifier(post.replyTo, 'replyTo');
       text(post.text, 2000, 'post.text');
       if (!Number.isSafeInteger(post.likes) || post.likes < 0) fail('Invalid likes');
-      if (post.canon !== (batch.mode === 'sample' ? 'sample' : 'derivative')) fail('Sample and derivative labels must match batch mode');
       if (!Array.isArray(post.media) || post.media.length > 4) fail('Invalid media');
       for (const image of post.media) {
         keys(image, ['src', 'alt'], 'media');
@@ -94,12 +119,12 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
 
 async function json(path) { return JSON.parse(await readFile(path, 'utf8')); }
 export async function loadContent(root = socialRoot) {
-  const [{ registry }, policy, { batches, files }] = await Promise.all([
+  const [{ registry }, policy, { batches, files, pending }] = await Promise.all([
     readUserDocuments(root), json(join(root, 'publication.json')), readThreadPackages(root)
   ]);
   const feed = validateContent(registry, batches, policy);
   await validateAssets(root, feed);
-  return { registry, policy, batches, feed, files };
+  return { registry, policy, batches, feed, files, pending };
 }
 
 async function validateAssets(root, feed) {
@@ -148,30 +173,44 @@ export async function ingestBatch(input, { root = socialRoot, reviewed = false, 
 }
 
 async function ingestLocked(input, { root, ai, contextPath, privateDirectory, backfill }) {
-  const { registry, policy, batches } = await loadContent(root);
-  const batch = await json(resolve(input));
-  const existing = batches.find(item => item.id === batch.id);
-  if (existing) {
-    if (stableJSON(existing) !== stableJSON(batch)) fail('Batch ID already exists with different content; do not republish');
-    await buildFeed(root); // Recover a previously archived batch after an interrupted build.
-    return { status: 'already-archived', id: batch.id };
+  const { registry, policy, batches, feed: existingFeed, pending } = await loadContent(root);
+  const value = await json(resolve(input));
+  const isUpdate = value?.version === 1 && Object.hasOwn(value, 'plan');
+  const batch = isUpdate ? { version: 1, id: value.id, mode: 'daily', posts: value.posts } : value;
+  if (isUpdate) contextPath ||= resolve(input);
+  validateBatch(batch, policy);
+  if (pending && pending.id !== batch.id) fail(`An unfinished update must be retried first: ${pending.id}`);
+  if (pending && pending.batchDigest !== createHash('sha256').update(stableJSON(batch)).digest('hex')) fail('Update ID already has an unfinished import with different content');
+  const existing = new Map(existingFeed.posts.map(post => [post.id, post])), seen = new Set(), fresh = [];
+  for (const post of batch.posts) {
+    identifier(post.id, 'post.id');
+    if (seen.has(post.id)) fail(`Duplicate post ID: ${post.id}`);
+    seen.add(post.id);
+    if (existing.has(post.id)) {
+      if (stableJSON(existing.get(post.id)) !== stableJSON(post)) fail(`Post ID already exists with different content: ${post.id}`);
+    } else fresh.push(post);
   }
-  const feed = validateContent(registry, [...batches, batch], policy);
+  if (!fresh.length) {
+    await buildFeed(root);
+    return { status: 'already-archived', id: batch.id, count: batch.posts.length };
+  }
+  const feed = validateContent(registry, [...batches, { ...batch, posts: fresh }], policy);
   await validateAssets(root, feed);
   if (ai && !policy.automaticPosting) fail('Automatic posting is disabled');
   if (ai && batch.mode === 'daily') {
-    const { validateRoundForBatch } = await import('./operations.js');
-    await validateRoundForBatch(batch, { root, contextPath, privateDirectory });
+    const { validateUpdateForBatch } = await import('./operations.js');
+    await validateUpdateForBatch(batch, { root, contextPath, privateDirectory, backfill });
   }
-  for (const post of batch.posts) {
+  for (const post of fresh) {
+    if (post.guest) continue;
     const user = registry.users.find(user => user.id === post.author);
     if (!user.enabled) fail(`Account is disabled: ${user.id}`);
     if (post.replyTo ? user.allowReplies === false : user.allowPosts === false) fail(`Account does not allow ${post.replyTo ? 'replies' : 'posts'}: ${user.id}`);
     if (ai && user.aiScope !== batch.mode) fail(`AI scope does not permit this batch: ${user.id}`);
   }
-  const latest = Math.max(0, ...batches.flatMap(item => item.posts.map(post => Date.parse(post.createdAt))));
-  if (!backfill && batch.posts.some(post => Date.parse(post.createdAt) < latest)) fail('New batches must append to the existing timeline; use --backfill only for an explicitly requested historical update');
+  const latest = Math.max(0, ...existingFeed.posts.map(post => Date.parse(post.createdAt)));
+  if (!backfill && fresh.some(post => Date.parse(post.createdAt) < latest)) fail('New posts must append to the existing timeline; use --backfill only for an explicitly requested historical update');
   const { path } = await writeThreadBatch(root, batch, batches);
   await buildFeed(root);
-  return { status: 'archived', id: batch.id, path };
+  return { status: 'archived', id: batch.id, count: batch.posts.length, path };
 }

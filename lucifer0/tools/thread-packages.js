@@ -5,8 +5,9 @@ import { createHash, randomUUID } from 'node:crypto';
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
 const POST_PATH = /^posts\/\d{4}\/\d{2}\/([a-z0-9][a-z0-9-]{1,63})\/(?:index\.md|replies\/([a-z0-9][a-z0-9-]{1,63})\.md)$/;
 const MEDIA_PATH = /^posts\/\d{4}\/(?:0[1-9]|1[0-2])\/[a-z0-9][a-z0-9-]{1,63}\/media\/[a-z0-9][a-z0-9-]{0,95}\.(?:svg|png|jpg|webp)$/;
-const ROUND_PATH = /^rounds\/\d{4}\/\d{2}\/([a-z0-9][a-z0-9-]{1,63})\.json$/;
 const META = ['id', 'author', 'createdAt', 'replyTo', 'likes', 'canon', 'media'];
+const OPTIONAL_META = ['guest'];
+const PENDING_PATH = '.publish-pending.json';
 const hash = text => createHash('sha256').update(text).digest('hex');
 const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : value && typeof value === 'object' ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
 const fail = message => { throw new Error(message); };
@@ -14,10 +15,10 @@ const objectKeys = (value, allowed, label) => {
   if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value).some(key => !allowed.includes(key))) fail(`Invalid ${label}`);
 };
 const json = async path => JSON.parse(await readFile(path, 'utf8'));
-const maybeJSON = async path => { try { return await json(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; } };
 
 export function renderPostDocument(post) {
-  return '---\n' + META.map(key => `${key}: ${JSON.stringify(post[key])}`).join('\n') + '\n---\n\n' + post.text + '\n';
+  const fields = [...META, ...OPTIONAL_META.filter(key => Object.hasOwn(post, key))];
+  return '---\n' + fields.map(key => `${key}: ${JSON.stringify(post[key])}`).join('\n') + '\n---\n\n' + post.text + '\n';
 }
 
 // A deliberately narrow front matter format: every value is a JSON literal.
@@ -29,7 +30,7 @@ export function parsePostDocument(source, label = 'post') {
   const post = {};
   for (const line of match[1].split('\n')) {
     const field = /^([A-Za-z][A-Za-z0-9]*): (.+)$/.exec(line);
-    if (!field || !META.includes(field[1]) || Object.hasOwn(post, field[1])) fail(`${label}: unknown or duplicate metadata field`);
+    if (!field || ![...META, ...OPTIONAL_META].includes(field[1]) || Object.hasOwn(post, field[1])) fail(`${label}: unknown or duplicate metadata field`);
     try { post[field[1]] = JSON.parse(field[2]); }
     catch { fail(`${label}: ${field[1]} must be a JSON literal (quote text values)`); }
   }
@@ -84,58 +85,36 @@ async function walk(root, folder) {
   return result.sort();
 }
 
-function checkManifest(manifest, path) {
-  objectKeys(manifest, ['version', 'id', 'mode', 'postIds'], 'round manifest');
-  const expected = ROUND_PATH.exec(path);
-  if (!expected || manifest.id !== expected[1] || manifest.version !== 1 || !['sample', 'daily'].includes(manifest.mode) || !Array.isArray(manifest.postIds) || !manifest.postIds.length || manifest.postIds.some(id => typeof id !== 'string' || !ID.test(id)) || new Set(manifest.postIds).size !== manifest.postIds.length) fail(`Invalid round manifest: ${path}`);
-}
-
-function checkJournal(journal, path) {
-  objectKeys(journal, ['version', 'id', 'batchDigest', 'manifestPath', 'manifest', 'files'], 'pending journal');
-  if (!ID.test(journal.id) || path !== `rounds/.pending/${journal.id}.json` || journal.version !== 1 || !/^[a-f0-9]{64}$/.test(journal.batchDigest) || !Array.isArray(journal.files)) fail(`Invalid pending journal: ${path}`);
-  checkManifest(journal.manifest, journal.manifestPath);
-  if (journal.manifest.id !== journal.id || journal.files.length !== journal.manifest.postIds.length) fail(`Invalid pending journal: ${path}`);
+function checkJournal(journal) {
+  objectKeys(journal, ['version', 'id', 'batchDigest', 'files'], 'pending journal');
+  if (typeof journal.id !== 'string' || !ID.test(journal.id) || journal.version !== 1 || !/^[a-f0-9]{64}$/.test(journal.batchDigest) || !Array.isArray(journal.files) || !journal.files.length) fail('Invalid pending journal');
   const paths = new Set(), ids = new Set();
   for (const file of journal.files) {
     objectKeys(file, ['path', 'sha256'], 'pending file');
     const match = typeof file.path === 'string' && POST_PATH.exec(file.path);
-    if (!match || !/^[a-f0-9]{64}$/.test(file.sha256) || paths.has(file.path)) fail(`Invalid pending file: ${path}`);
+    if (!match || !/^[a-f0-9]{64}$/.test(file.sha256) || paths.has(file.path) || ids.has(match[2] || match[1])) fail('Invalid pending file');
     paths.add(file.path); ids.add(match[2] || match[1]);
   }
-  if (ids.size !== journal.manifest.postIds.length || journal.manifest.postIds.some(id => !ids.has(id))) fail(`Pending journal post IDs do not match files: ${path}`);
 }
 
-async function roundSources(root) {
-  const paths = await walk(root, 'rounds'), manifests = [], journals = [];
-  for (const path of paths) {
-    const value = await json(join(root, path));
-    if (path.startsWith('rounds/.pending/')) { checkJournal(value, path); journals.push({ path, value }); }
-    else { checkManifest(value, path); manifests.push({ path, value }); }
-  }
-  const committed = new Map();
-  for (const item of manifests) {
-    if (committed.has(item.value.id)) fail(`Duplicate batch: ${item.value.id}`);
-    committed.set(item.value.id, item);
-  }
-  const pending = journals.filter(item => {
-    const complete = committed.get(item.value.id);
-    if (!complete) return true;
-    if (complete.path !== item.value.manifestPath || canonical(complete.value) !== canonical(item.value.manifest)) fail(`Pending journal conflicts with committed round: ${item.value.id}`);
-    return false;
-  });
-  return { manifests, pending };
+async function readPending(root) {
+  const path = join(root, PENDING_PATH);
+  let stat;
+  try { stat = await lstat(path); }
+  catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+  if (!stat.isFile() || stat.isSymbolicLink()) fail('Pending journal must be a regular file');
+  const pending = await json(path);
+  checkJournal(pending);
+  return pending;
 }
 
-export async function readThreadPackages(root) {
-  const { manifests, pending } = await roundSources(root);
-  const ignored = new Map();
-  for (const { value } of pending) for (const file of value.files) {
-    if (ignored.has(file.path)) fail(`Multiple unfinished rounds claim ${file.path}`);
-    ignored.set(file.path, file.sha256);
-  }
-  const registered = new Set(manifests.flatMap(({ value }) => value.postIds));
+export async function readThreadPackages(root, attempt = 0) {
+  const pending = await readPending(root);
+  const ignored = new Map((pending?.files || []).map(file => [file.path, file.sha256]));
+  const pendingIds = new Set((pending?.files || []).map(file => { const match = POST_PATH.exec(file.path); return match[2] || match[1]; }));
   const posts = new Map(), pathsById = new Map();
-  for (const path of await walk(root, 'posts')) {
+  const paths = await walk(root, 'posts');
+  for (const path of paths) {
     // Media may be prepared before a batch is imported. Only references from
     // validated post metadata are eligible for the published build.
     if (isPostMediaPath(path)) continue;
@@ -143,31 +122,27 @@ export async function readThreadPackages(root) {
     const source = await readFile(join(root, path), 'utf8');
     const pathMatch = POST_PATH.exec(path), pathId = pathMatch[2] || pathMatch[1];
     if (ignored.has(path)) {
-      if (registered.has(pathId)) fail(`Unfinished round reuses an existing post: ${pathId}`);
       if (hash(source) !== ignored.get(path)) fail(`Unfinished archive was changed; preserve it and recover manually: ${path}`);
       continue;
     }
     const post = parsePostDocument(source, path);
+    if (pendingIds.has(post.id)) fail(`Unfinished update reuses an existing post ID: ${post.id}`);
     if (posts.has(post.id)) fail(`Duplicate post ID: ${post.id}`);
     if (post.id !== pathId) fail(`Post ID does not match its filename: ${path}`);
     posts.set(post.id, post); pathsById.set(post.id, path);
   }
-  const used = new Set(), batches = [];
-  for (const { value, path } of manifests) {
-    const batch = { version: value.version, id: value.id, mode: value.mode, posts: [] };
-    for (const id of value.postIds) {
-      if (used.has(id)) fail(`Duplicate post in round manifests: ${id}`);
-      if (!posts.has(id)) fail(`Missing archived post: ${id}`);
-      used.add(id); batch.posts.push(posts.get(id));
-    }
-    if (path !== `rounds/${month(batch.posts[0].createdAt)}/${batch.id}.json`) fail(`Round date does not match its location: ${path}`);
-    batches.push(batch);
+  const [afterPending, afterPaths] = await Promise.all([readPending(root), walk(root, 'posts')]);
+  if (canonical(pending) !== canonical(afterPending) || canonical(paths) !== canonical(afterPaths)) {
+    if (attempt >= 3) fail('Archive changed while reading; retry after the active update finishes');
+    return readThreadPackages(root, attempt + 1);
   }
+  const batches = [];
   for (const [id, post] of posts) {
-    if (!used.has(id)) fail(`Unregistered archive: ${pathsById.get(id)}; add it through the batch importer`);
     if (pathsById.get(id) !== postPath(post, posts)) fail(`Post is in the wrong thread package: ${id}`);
+    if (!['sample', 'derivative'].includes(post.canon)) fail(`Invalid archive label: ${id}`);
+    batches.push({ version: 1, id, mode: post.canon === 'sample' ? 'sample' : 'daily', posts: [post] });
   }
-  return { batches, files: [...manifests.map(item => item.path), ...pathsById.values()].sort().map(path => join(root, path)) };
+  return { batches, files: [...pathsById.values()].sort().map(path => join(root, path)), pending };
 }
 
 async function safeDirectory(root, path) {
@@ -205,28 +180,29 @@ async function writeOnce(root, path, text) {
 }
 
 // Caller holds .publish.lock and has validated public content and permissions.
-// The manifest is the commit point. A journal permits exact retries after a crash;
-// only its hash-matched partial files are excluded from the readable archive.
+// A single temporary journal keeps hash-matched partial files out of the archive.
+// Removing it commits all of this update's files; completed posts need no index.
 export async function writeThreadBatch(root, batch, existingBatches = []) {
   if (!ID.test(batch.id) || !Array.isArray(batch.posts) || !batch.posts.length) fail('Invalid archive batch');
   const posts = new Map(existingBatches.flatMap(item => item.posts).map(post => [post.id, post]));
+  const seen = new Set(), fresh = [];
   for (const post of batch.posts) {
-    if (!ID.test(post.id) || posts.has(post.id)) fail(`Duplicate post ID: ${post.id}`);
+    if (!ID.test(post.id) || seen.has(post.id)) fail(`Duplicate post ID: ${post.id}`);
+    seen.add(post.id);
+    if (posts.has(post.id)) {
+      if (canonical(posts.get(post.id)) !== canonical(post)) fail(`Post ID already exists with different content: ${post.id}`);
+    } else fresh.push(post);
     posts.set(post.id, post);
   }
-  const documents = batch.posts.map(post => ({ path: postPath(post, posts), text: renderPostDocument(post) }));
-  const manifest = { version: batch.version, id: batch.id, mode: batch.mode, postIds: batch.posts.map(post => post.id) };
-  const manifestPath = `rounds/${month(batch.posts[0].createdAt)}/${batch.id}.json`;
-  checkManifest(manifest, manifestPath);
-  const journal = { version: 1, id: batch.id, batchDigest: hash(canonical(batch)), manifestPath, manifest, files: documents.map(({ path, text }) => ({ path, sha256: hash(text) })) };
-  const journalPath = `rounds/.pending/${batch.id}.json`;
-  const { pending } = await roundSources(root);
-  if (pending.some(item => item.value.id !== batch.id)) fail(`An unfinished round must be retried first: ${pending.find(item => item.value.id !== batch.id).value.id}`);
-  const previous = await maybeJSON(join(root, journalPath));
-  if (previous && canonical(previous) !== canonical(journal)) fail('Batch ID already has an unfinished import with different content');
-  await writeOnce(root, journalPath, JSON.stringify(journal, null, 2) + '\n');
+  const documents = fresh.map(post => ({ path: postPath(post, posts), text: renderPostDocument(post) }));
+  const previous = await readPending(root);
+  if (previous && previous.id !== batch.id) fail(`An unfinished update must be retried first: ${previous.id}`);
+  const journal = { version: 1, id: batch.id, batchDigest: hash(canonical(batch)), files: documents.map(({ path, text }) => ({ path, sha256: hash(text) })) };
+  if (previous && canonical(previous) !== canonical(journal)) fail('Update ID already has an unfinished import with different content');
+  if (!documents.length) return { path: join(root, 'posts'), files: [] };
+  checkJournal(journal);
+  await writeOnce(root, PENDING_PATH, JSON.stringify(journal, null, 2) + '\n');
   for (const document of documents) await writeOnce(root, document.path, document.text);
-  await writeOnce(root, manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-  await rm(join(root, journalPath));
-  return { path: join(root, manifestPath) };
+  await rm(join(root, PENDING_PATH));
+  return { path: join(root, 'posts'), files: documents.map(document => join(root, document.path)) };
 }

@@ -1,215 +1,247 @@
-import { readFile, writeFile, mkdir, rename, rm, lstat } from 'node:fs/promises';
-import { resolve, dirname, basename, join } from 'node:path';
-import { createHash, randomUUID, randomBytes } from 'node:crypto';
+import { readFile, writeFile, mkdir, rename, rm, lstat, realpath } from 'node:fs/promises';
+import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
+import { homedir } from 'node:os';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
-import { defaultPrivateDirectory, privateFolder, outsideRepository, isInside, readProfiles, selectCandidates } from './private-profiles.js';
+import { defaultPrivateDirectory, privateFolder, readProfiles } from './private-profiles.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
-const kinds = ['character', 'visitor'];
 const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md'];
-const fail = message => { throw new Error(message); };
+const controlPaths = ['docs/README.md', 'docs/writing.md', 'docs/publishing.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
+const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;
+const fail = message => { throw new Error(message); };
+const onlyKeys = (value, allowed, label) => { if (!plain(value) || Object.keys(value).some(key => !allowed.includes(key))) fail('Invalid ' + label); };
 const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : plain(value) ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
 const digest = value => createHash('sha256').update(canonical(value)).digest('hex');
-const bounded = (value, maximum = 1600) => typeof value === 'string' && value.trim() && value.length <= maximum;
 const validDate = value => typeof value === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(value) && Number.isFinite(Date.parse(value));
-const onlyKeys = (value, allowed, label) => { if (!plain(value) || Object.keys(value).some(key => !allowed.includes(key))) fail(`Invalid ${label}`); };
 const randomFor = seed => {
   let state = createHash('sha256').update(seed).digest().readUInt32LE(0) || 1;
   return () => { state ^= state << 13; state ^= state >>> 17; state ^= state << 5; return (state >>> 0) / 4294967296; };
 };
+const inside = (root, path) => { const rel = relative(root, path); return !rel || (!rel.startsWith('../') && rel !== '..' && !isAbsolute(rel)); };
+export const defaultWorkDirectory = () => resolve(process.env.Y29_SOCIAL_WORK_DIR || join(homedir(), '.local/state/y29/lucifer0/current'));
+export const hasCanon = profile => Boolean(profile?.facts?.some(fact => fact.status === 'canon' && bounded(fact.text) && bounded(fact.source, 2000)));
 
-// These records make browsing auditable; a JSON file cannot prove a page was read.
-export function validateResearch(research, now = Date.now()) {
-  onlyKeys(research, ['version', 'visitedAt', 'observations'], 'research record');
-  const freshVisit = value => validDate(value) && Date.parse(value) <= now + 300000 && now - Date.parse(value) <= 2 * DAY;
-  if (research.version !== 1 || !freshVisit(research.visitedAt) || !Array.isArray(research.observations) || research.observations.length < 3 || research.observations.length > 20) fail('Research needs 3–20 recently visited social pages');
-  const urls = new Set(), communities = new Set();
-  let discussion = false, recentPost = false;
-  for (const entry of research.observations) {
-    onlyKeys(entry, ['url', 'community', 'visitedAt', 'publishedAt', 'kind', 'summary'], 'research observation');
-    let url;
-    try { url = new URL(entry.url); } catch { fail('Research needs valid page URLs'); }
-    if (url.protocol !== 'https:' || url.username || url.password || !url.hostname.includes('.') || url.hostname === 'localhost' || !bounded(entry.url, 2000) || !bounded(entry.community, 160) || !bounded(entry.summary) || !freshVisit(entry.visitedAt) || !['feed', 'thread'].includes(entry.kind)) fail('Invalid social page observation');
-    url.hash = '';
-    if (urls.has(url.href)) fail('Research page URLs must be distinct');
-    urls.add(url.href);
-    communities.add(url.hostname.replace(/^www\./, '') + '/' + entry.community.trim().toLocaleLowerCase());
-    discussion ||= entry.kind === 'thread';
-    if (entry.publishedAt !== null && entry.publishedAt !== undefined) {
-      if (!validDate(entry.publishedAt) || Date.parse(entry.publishedAt) > now + 300000) fail('Invalid source publication date');
-      recentPost ||= now - Date.parse(entry.publishedAt) <= 7 * DAY;
-    }
+function ready(user, material) {
+  return user.enabled && user.aiScope === 'daily' && user.profileStatus === 'approved' &&
+    (user.allowPosts !== false || user.allowReplies !== false) && material.profiles[user.id]?.activityWeight > 0 &&
+    (user.kind !== 'character' || hasCanon(material.overrides[user.id]));
+}
+
+// The saved seed fixes the one budget draw and a single weighted candidate draw.
+export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], seed }) {
+  if (!bounded(seed, 200)) fail('Invalid update seed');
+  const random = randomFor(seed), budget = 1 + Math.floor(random() * 10);
+  const recent = new Set([...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 7).map(post => post.author));
+  const pool = users.filter(user => ready(user, { profiles, overrides })).sort((a, b) => a.id.localeCompare(b.id, 'en'));
+  const selectedIds = [];
+  while (pool.length && selectedIds.length < 3) {
+    const weights = pool.map(user => profiles[user.id].activityWeight * (recent.has(user.id) ? 0.5 : 1));
+    let ticket = random() * weights.reduce((sum, weight) => sum + weight, 0), index = pool.length - 1;
+    for (let i = 0; i < pool.length; i++) { ticket -= weights[i]; if (ticket < 0) { index = i; break; } }
+    selectedIds.push(pool.splice(index, 1)[0].id);
   }
-  if (communities.size < 2 || !discussion || !recentPost) fail('Research needs two communities, one discussion and one post from the last seven days');
-  return research;
+  return { seed, budget, selectedIds };
 }
 
-async function externalJSON(path, root) {
-  if (!path) fail('An external JSON path is required');
-  await outsideRepository(path, root);
+function planSeal(id, root, plan) {
+  return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds });
+}
+function checkOperation(value, root) {
+  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status'], 'operation');
+  if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
+  const plan = value.plan;
+  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal'], 'saved plan');
+  if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 10 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
+  if (plan.budget !== 1 + Math.floor(randomFor(plan.seed)() * 10) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
+  return value;
+}
+
+async function checkedRoot(root) {
+  const selected = resolve(root), stat = await lstat(selected);
+  if (!stat.isDirectory() || stat.isSymbolicLink()) fail('The project root must be a regular directory');
+  return realpath(selected);
+}
+async function regularText(path) {
   const stat = await lstat(path);
-  if (!stat.isFile() || stat.isSymbolicLink()) fail('Working JSON must be a regular external file');
-  return JSON.parse(await readFile(path, 'utf8'));
+  if (!stat.isFile() || stat.isSymbolicLink()) fail('Read only regular source files: ' + path);
+  return readFile(path, 'utf8');
+}
+async function sourceText(root, path) {
+  const absolute = resolve(root, path);
+  if (!inside(root, absolute)) fail('Source path leaves the project');
+  let directory = root;
+  for (const part of relative(root, absolute).split('/').slice(0, -1)) {
+    directory = join(directory, part);
+    const stat = await lstat(directory);
+    if (!stat.isDirectory() || stat.isSymbolicLink()) fail('Source directories must be regular: ' + path);
+  }
+  return { path, text: await regularText(absolute) };
+}
+async function source(root, privateDirectory) {
+  const { registry, policy, feed, files, pending } = await loadContent(root);
+  const material = await readProfiles({ users: registry.users, root, privateDirectory });
+  const documents = await Promise.all([...controlPaths, ...environmentPaths].map(path => sourceText(root, path)));
+  for (const user of registry.users) {
+    documents.push(await sourceText(root, 'users/' + user.id + '/profile.md'));
+    for (const supplement of material.supplementalDocuments[user.id] || []) documents.push(await sourceText(root, supplement.path));
+  }
+  for (const file of files) documents.push(await sourceText(root, relative(root, file).split('\\').join('/')));
+  for (const user of registry.users) if (material.overrides[user.id]) {
+    const path = join(material.directory, user.id + '.json');
+    documents.push({ path, text: await regularText(path) });
+  }
+  const sourceDigest = digest({ policy, users: registry.users, profiles: material.profiles, documents });
+  return { registry, policy, feed, material, documents, sourceDigest, pending };
 }
 
-async function atomicJSON(path, value) {
+async function workFolder(workDirectory, root, create = false) {
+  const selected = resolve(workDirectory || defaultWorkDirectory());
+  try { if ((await lstat(selected)).isSymbolicLink()) fail('The work directory cannot be a symlink'); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const path = await privateFolder(selected, root, create);
+  const stat = await lstat(path);
+  if (!stat.isDirectory() || stat.isSymbolicLink()) fail('The work directory must be a regular external directory');
+  return path;
+}
+async function readOperation(path, root) {
+  return checkOperation(JSON.parse(await regularText(path)), root);
+}
+async function atomicFile(path, text) {
+  try {
+    const stat = await lstat(path);
+    if (!stat.isFile() || stat.isSymbolicLink()) fail('Working files must be regular files');
+  } catch (error) { if (error.code !== 'ENOENT') throw error; }
   const temporary = path + '.' + randomUUID() + '.tmp';
   try {
-    await writeFile(temporary, JSON.stringify(value, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+    await writeFile(temporary, text, { flag: 'wx', mode: 0o600 });
     await rename(temporary, path);
   } finally { await rm(temporary, { force: true }); }
 }
-
-export async function readReview(root, batches, posts, now = Date.now()) {
-  let value;
-  try { value = JSON.parse(await readFile(join(root, 'review.json'), 'utf8')); }
-  catch (error) { if (error.code !== 'ENOENT') throw error; value = { version: 1, reviewedAt: null, coveredBatchIds: [], coveredPostIds: [] }; }
-  onlyKeys(value, ['version', 'reviewedAt', 'coveredBatchIds', 'coveredPostIds'], 'review checkpoint');
-  if (value.version !== 1 || value.reviewedAt !== null && (!validDate(value.reviewedAt) || Date.parse(value.reviewedAt) > now + 300000)) fail('Invalid review checkpoint date');
-  for (const [field, available] of [['coveredBatchIds', batches.map(item => item.id)], ['coveredPostIds', posts.map(item => item.id)]]) {
-    if (!Array.isArray(value[field]) || new Set(value[field]).size !== value[field].length || value[field].some(id => !available.includes(id))) fail('Review checkpoint references unknown or duplicate content');
-  }
-  if (value.reviewedAt === null && (value.coveredBatchIds.length || value.coveredPostIds.length)) fail('A covered review needs its completion time');
-  for (const batch of batches.filter(batch => value.coveredBatchIds.includes(batch.id))) {
-    if (batch.posts.some(post => !value.coveredPostIds.includes(post.id))) fail('A covered batch must include all of its posts');
-  }
-  if (posts.some(post => value.coveredPostIds.includes(post.id) && post.createdAt && Date.parse(post.createdAt) > Date.parse(value.reviewedAt))) fail('Review coverage cannot include later posts');
-  const uncoveredPostIds = posts.filter(post => !value.coveredPostIds.includes(post.id)).map(post => post.id);
-  const reasons = [];
-  if (value.reviewedAt === null) reasons.push('first-review');
-  else if (now - Date.parse(value.reviewedAt) >= 30 * DAY) reasons.push('thirty-days');
-  if (uncoveredPostIds.length >= 30) reasons.push('thirty-posts');
-  return { checkpoint: value, due: reasons.length > 0, reasons, uncoveredPostIds };
+const saveOperation = (path, operation) => atomicFile(path, JSON.stringify(operation, null, 2) + '\n');
+function reading(operation, data) {
+  return '# 本次更新阅读材料\n\n操作：' + operation.id + '；发言上限：' + operation.plan.budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
+    '。\n\n这是当前资料的完整快照，生成快照不代表执行者已经读完。按原文理解人物的底色、处境与知情范围，人物资料本身不构成本轮剧情。主帖和回复合计不超过上限，实际发言至少一半来自无需档案的 guest；一条时必须是 guest。候选可以沉默，其他合资格库人物可以自然回复。\n\n' +
+    '## 当前账号权限\n\n| 账号 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- |\n' +
+    data.registry.users.map(user => '| ' + user.id + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
+    '\n\n' + data.documents.map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
 }
 
-export const hasCanon = profile => Boolean(profile?.facts?.some(fact => fact.status === 'canon' && bounded(fact.text, 4000) && bounded(fact.source, 2000)));
-function eligibility(user, profiles, overrides) {
-  if (!user.enabled || user.aiScope !== 'daily' || user.profileStatus !== 'approved' || user.allowPosts === false && user.allowReplies === false || !(profiles[user.id]?.activityWeight > 0)) return 'account-not-ready';
-  if (user.kind === 'character' && !hasCanon(overrides[user.id])) return 'missing-canon';
-  return null;
-}
-
-// One random budget, then two independent weighted draws. Unfilled places stay empty.
-export function drawPlan({ seed, id = seed, users, profiles, overrides = {}, posts = [], nextSoloPool = 'character', now = Date.now() }) {
-  if (!ID.test(id) || !bounded(seed, 200)) fail('Invalid round ID or random seed');
-  const random = randomFor(seed), budget = 1 + Math.floor(random() * 10);
-  const poolBudgets = { character: 0, visitor: 0 };
-  if (budget === 1) poolBudgets[nextSoloPool] = 1;
-  else { poolBudgets.character = 1 + Math.floor(random() * (budget - 1)); poolBudgets.visitor = budget - poolBudgets.character; }
-  const selectedIds = { character: [], visitor: [] };
-  for (const kind of kinds) {
-    if (!poolBudgets[kind]) continue;
-    selectedIds[kind] = selectCandidates({ users: users.filter(user => user.kind === kind && !eligibility(user, profiles, overrides)), profiles, posts, count: poolBudgets[kind], seed: seed + ':' + kind }).users.map(user => user.id);
-  }
-  const old = [...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id)).slice(30);
-  const retrospectiveIds = [];
-  while (old.length && retrospectiveIds.length < 2) retrospectiveIds.push(old.splice(Math.floor(random() * old.length), 1)[0].id);
-  return { version: 1, id, randomSeed: seed, createdAt: new Date(now).toISOString(), budget, poolBudgets, selectedIds, retrospectiveIds, localReview: random() < 1 / 6 };
-}
-
-function checkPlan(plan) {
-  onlyKeys(plan, ['version', 'id', 'randomSeed', 'createdAt', 'budget', 'poolBudgets', 'selectedIds', 'retrospectiveIds', 'localReview'], 'round plan');
-  if (plan.version !== 1 || !ID.test(plan.id) || !bounded(plan.randomSeed, 200) || !validDate(plan.createdAt) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 10 || typeof plan.localReview !== 'boolean') fail('Invalid round plan');
-  onlyKeys(plan.poolBudgets, kinds, 'pool budgets'); onlyKeys(plan.selectedIds, kinds, 'selected users');
-  for (const kind of kinds) {
-    if (!Number.isInteger(plan.poolBudgets[kind]) || plan.poolBudgets[kind] < 0 || !Array.isArray(plan.selectedIds[kind]) || plan.selectedIds[kind].length > plan.poolBudgets[kind] || plan.selectedIds[kind].some(id => !ID.test(id))) fail('Invalid round pool');
-  }
-  const selected = kinds.flatMap(kind => plan.selectedIds[kind]);
-  if (new Set(selected).size !== selected.length || kinds.reduce((sum, kind) => sum + plan.poolBudgets[kind], 0) !== plan.budget || plan.budget > 1 && kinds.some(kind => plan.poolBudgets[kind] === 0) || !Array.isArray(plan.retrospectiveIds) || plan.retrospectiveIds.length > 2 || plan.retrospectiveIds.some(id => !ID.test(id))) fail('Invalid round allocation');
-  return plan;
-}
-
-async function stateLocation(privateDirectory, root) {
-  const directory = await privateFolder(privateDirectory, root);
-  const parent = await privateFolder(dirname(directory), root, true);
-  return join(parent, 'round-state.json');
-}
-async function readState(path, root) {
-  let state;
-  try { state = await externalJSON(path, root); }
-  catch (error) { if (error.code !== 'ENOENT') throw error; state = { version: 1, nextSoloPool: 'character', plans: {} }; }
-  onlyKeys(state, ['version', 'nextSoloPool', 'plans'], 'round state');
-  if (state.version !== 1 || !kinds.includes(state.nextSoloPool) || !plain(state.plans)) fail('Invalid round state');
-  for (const [id, plan] of Object.entries(state.plans)) if (checkPlan(plan).id !== id) fail('Round state key differs from plan ID');
-  return state;
-}
-
-async function source(root, privateDirectory, now) {
-  const [{ registry, policy, batches, feed }, environmentDocuments] = await Promise.all([
-    loadContent(root),
-    Promise.all(environmentPaths.map(async path => ({ path, text: await readFile(join(root, path), 'utf8') })))
-  ]);
-  const material = await readProfiles({ users: registry.users, root, privateDirectory });
-  const review = await readReview(root, batches, feed.posts, now);
-  return { registry, policy, batches, feed, material, review, environmentDocuments };
-}
-const sourceDigest = data => digest({ users: data.registry.users, policy: data.policy, batches: data.batches, profiles: data.material.profiles, overrides: data.material.overrides, supplements: data.material.supplementalDocuments, checkpoint: data.review.checkpoint, environmentDocuments: data.environmentDocuments });
-
-export async function prepareRound({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), outputPath, researchPath, seed, now = Date.now(), entropy = () => randomBytes(16).toString('hex') }) {
-  if (!outputPath || !seed || !researchPath) fail('Provide --out, --seed and --research');
-  if (!ID.test(seed)) fail('The round seed must be a stable batch ID');
-  const destination = join(await outsideRepository(dirname(resolve(outputPath)), root), basename(outputPath));
-  let previous;
-  try { previous = await externalJSON(destination, root); }
-  catch (error) { if (error.code !== 'ENOENT') throw error; }
-  if (previous && (previous.version !== 2 || previous.plan?.id !== seed)) fail('Use a new output file for a different round');
-  const research = validateResearch(await externalJSON(researchPath, root), now);
-  const data = await source(root, privateDirectory, now);
-  const statePath = await stateLocation(privateDirectory, root), lock = statePath + '.lock';
-  if (destination === statePath || isInside(data.material.directory, destination)) fail('Keep working context separate from profiles and the round ledger');
-  try { await mkdir(lock); }
-  catch (error) { if (error.code === 'EEXIST') fail('Another round preparation is active'); throw error; }
+export async function prepareUpdate({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), workDirectory, now = Date.now(), entropy = () => randomBytes(32).toString('hex') } = {}) {
+  root = await checkedRoot(root);
+  const directory = await workFolder(workDirectory, root, true), lock = join(directory, '.prepare.lock');
+  try { await mkdir(lock); } catch (error) { if (error.code === 'EEXIST') fail('An update is already being prepared'); throw error; }
   try {
-    const state = await readState(statePath, root);
-    let plan = Object.hasOwn(state.plans, seed) ? state.plans[seed] : undefined;
-    if (!plan) {
-      if (data.batches.some(batch => batch.id === seed)) fail('This batch is already archived; do not draw it again');
-      plan = drawPlan({ id: seed, seed: entropy(), users: data.registry.users, profiles: data.material.profiles, overrides: data.material.overrides, posts: data.feed.posts, nextSoloPool: state.nextSoloPool, now });
-      state.plans[seed] = plan;
-      if (plan.budget === 1) state.nextSoloPool = state.nextSoloPool === 'character' ? 'visitor' : 'character';
-      await atomicJSON(statePath, state);
+    const operationPath = join(directory, 'operation.json'), readingPath = join(directory, 'reading.md');
+    let operation;
+    try { operation = await readOperation(operationPath, root); } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    const data = await source(root, privateDirectory);
+    if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
+    const status = operation ? 'resumed' : 'prepared';
+    if (!operation) {
+      const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
+      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, overrides: data.material.overrides, posts: data.feed.posts, seed });
+      plan.seal = planSeal(id, root, plan);
+      operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: data.sourceDigest, research: [], posts: [], status: 'prepared' };
+    } else {
+      operation.preparedAt = new Date(now).toISOString();
+      operation.sourceDigest = data.sourceDigest;
     }
-    if (previous && canonical(previous.plan) !== canonical(plan)) fail('The saved round plan was changed');
-    const candidates = [], dropped = [];
-    for (const kind of kinds) for (const id of plan.selectedIds[kind]) {
-      const user = data.registry.users.find(user => user.id === id);
-      const reason = !user || user.kind !== kind ? 'account-changed' : eligibility(user, data.material.profiles, data.material.overrides);
-      if (reason) { dropped.push({ id, reason }); continue; }
-      candidates.push({ ...user, profile: data.material.profiles[id], supplementalDocuments: data.material.supplementalDocuments[id] || [], ...(data.material.overrides[id] ? { privateProfile: data.material.overrides[id] } : {}), allowedActions: [user.allowPosts !== false ? 'post' : null, user.allowReplies !== false ? 'reply' : null].filter(Boolean) });
-    }
-    const snapshot = {
-      version: 2, preparedAt: new Date(now).toISOString(), plan, research, sourceDigest: sourceDigest(data), policy: data.policy,
-      selection: { users: candidates, dropped, blocked: data.registry.users.filter(user => user.kind === 'character' && !hasCanon(data.material.overrides[user.id])).map(user => ({ id: user.id, reason: 'missing-canon' })) },
-      users: data.registry.users, posts: data.feed.posts, processedBatchIds: data.batches.map(batch => batch.id), review: data.review,
-      environmentDocuments: data.environmentDocuments,
-      retrospective: plan.retrospectiveIds.map(id => data.feed.posts.find(post => post.id === id)).filter(Boolean),
-      status: data.batches.some(batch => batch.id === seed) ? 'already-archived' : 'prepared'
-    };
-    await atomicJSON(destination, snapshot);
-    return { path: destination, id: seed, budget: plan.budget, candidateIds: candidates.map(user => user.id), globalReviewDue: data.review.due, status: snapshot.status };
+    await atomicFile(readingPath, reading(operation, data));
+    await saveOperation(operationPath, operation);
+    return { status, id: operation.id, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds, operationPath, readingPath };
   } finally { await rm(lock, { recursive: true, force: true }); }
 }
 
-export async function validateRoundForBatch(batch, { root = socialRoot, contextPath, privateDirectory = defaultPrivateDirectory(), now = Date.now() }) {
-  if (!contextPath) fail('AI daily publication requires --context');
-  const context = await externalJSON(contextPath, root);
-  if (context.version !== 2 || checkPlan(context.plan).id !== batch.id || batch.mode !== 'daily') fail('Context must match this daily batch ID');
-  validateResearch(context.research, now);
-  if (!validDate(context.preparedAt) || now - Date.parse(context.preparedAt) > 2 * DAY || Date.parse(context.preparedAt) > now + 300000) fail('Context is stale; refresh the same round');
-  const ledger = await readState(await stateLocation(privateDirectory, root), root);
-  if (!Object.hasOwn(ledger.plans, batch.id) || canonical(ledger.plans[batch.id]) !== canonical(context.plan)) fail('The saved round plan was changed or is missing');
-  const data = await source(root, privateDirectory, now);
-  if (context.sourceDigest !== sourceDigest(data)) fail('Context is stale; refresh the same round with the latest profiles, environment and history');
-  if (data.review.due) fail('Global review is due; update review.json and refresh this round');
-  if (batch.posts.length > context.plan.budget) fail('Batch exceeds its random budget');
-  const totals = { character: 0, visitor: 0 };
-  for (const post of batch.posts) {
-    const user = data.registry.users.find(user => user.id === post.author);
-    if (!user || eligibility(user, data.material.profiles, data.material.overrides)) fail(`Account is not ready for daily publication: ${post.author}`);
-    if (!context.plan.selectedIds[user.kind].includes(user.id)) fail(`Author was not selected in this round: ${user.id}`);
-    if (++totals[user.kind] > context.plan.poolBudgets[user.kind]) fail(`Batch exceeds its ${user.kind} pool budget`);
+function siteDomain(hostname) {
+  const parts = hostname.toLowerCase().split('.');
+  const publicSuffix = /^(co\.uk|org\.uk|ac\.uk|com\.cn|net\.cn|org\.cn|gov\.cn|co\.jp|co\.kr|com\.au|com\.hk)$/;
+  return parts.slice(publicSuffix.test(parts.slice(-2).join('.')) ? -3 : -2).join('.');
+}
+// Records make the reading auditable; field validation cannot prove actual browsing.
+export function validateResearch(research, now = Date.now(), postIds) {
+  if (!Array.isArray(research) || research.length < 3 || research.length > 50) fail('Research needs at least three actually read pages');
+  const categories = new Set(), domains = new Set(), urls = new Set();
+  let thread = false, recent = false;
+  for (const entry of research) {
+    onlyKeys(entry, ['category', 'kind', 'url', 'visitedAt', 'publishedAt', 'summary', 'adaptedPostIds'], 'research page');
+    let url;
+    try { url = new URL(entry.url); } catch { fail('Research needs a valid source URL'); }
+    if (url.protocol !== 'https:' || url.username || url.password || !url.hostname.includes('.') || !bounded(entry.url, 2000) || !['news', 'trend', 'daily'].includes(entry.category) || !['feed', 'thread'].includes(entry.kind) || !bounded(entry.summary) || !validDate(entry.visitedAt) || Date.parse(entry.visitedAt) > now + 300000 || now - Date.parse(entry.visitedAt) > 2 * DAY) fail('Invalid or stale research page');
+    url.hash = '';
+    if (urls.has(url.href)) fail('Research pages must be distinct');
+    urls.add(url.href); domains.add(siteDomain(url.hostname)); categories.add(entry.category); thread ||= entry.kind === 'thread';
+    if (entry.publishedAt !== null) {
+      if (!validDate(entry.publishedAt) || Date.parse(entry.publishedAt) > now + 300000) fail('Invalid source publication date; use null when unknown');
+      recent ||= now - Date.parse(entry.publishedAt) <= 7 * DAY;
+    }
+    if (entry.adaptedPostIds !== undefined && (!Array.isArray(entry.adaptedPostIds) || new Set(entry.adaptedPostIds).size !== entry.adaptedPostIds.length || entry.adaptedPostIds.some(id => !ID.test(id) || postIds && !postIds.includes(id)))) fail('Adapted post references must name this update');
   }
-  return context.plan;
+  if (categories.size !== 3 || domains.size < 2 || !thread || !recent) fail('Research needs news, trend and daily pages, two source domains, one thread and one item from the last seven days');
+  return research;
+}
+
+export async function validateUpdateForBatch(batch, { root = socialRoot, contextPath, privateDirectory = defaultPrivateDirectory(), backfill = false, now = Date.now() } = {}) {
+  root = await checkedRoot(root);
+  if (typeof backfill !== 'boolean') fail('Historical updates need an explicit boolean backfill option');
+  if (!contextPath) fail('AI publication requires its operation.json');
+  const work = await workFolder(dirname(resolve(contextPath)), root);
+  if (resolve(contextPath) !== join(work, 'operation.json')) fail('Use the saved operation.json as the update context');
+  const operation = await readOperation(contextPath, root);
+  if (batch.version !== 1 || batch.id !== operation.id || batch.mode !== 'daily' || !Array.isArray(batch.posts) || !batch.posts.length) fail('The batch must match this operation');
+  if (canonical(batch.posts) !== canonical(operation.posts)) fail('The batch does not match the saved operation posts');
+  if (now - Date.parse(operation.preparedAt) > 2 * DAY || Date.parse(operation.preparedAt) > now + 300000) fail('The operation is stale; prepare again to refresh its reading');
+  validateResearch(operation.research, now, batch.posts.map(post => post.id));
+  const data = await source(root, privateDirectory);
+  if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
+  if (operation.sourceDigest !== data.sourceDigest) fail('Source material changed; prepare again without redrawing');
+  const resumingPartialWrite = data.pending?.id === batch.id && data.pending.batchDigest === digest(batch);
+  if (batch.posts.length > operation.plan.budget || batch.posts.length > data.policy.maxBatchPosts) fail('The update exceeds its saved budget');
+  const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));
+  if (guests.length < Math.ceil(batch.posts.length / 2)) fail('At least half of the actual posts must be guests');
+  const users = new Map(data.registry.users.map(user => [user.id, user]));
+  const posts = new Map([...data.feed.posts, ...batch.posts].map(post => [post.id, post]));
+  for (const post of batch.posts) {
+    if (!validDate(post.createdAt) || Date.parse(post.createdAt) > now || !backfill && !resumingPartialWrite && now - Date.parse(post.createdAt) > 2 * DAY) fail('Update posts need current real timestamps unless resuming the exact unfinished update or explicitly backfilling history');
+    if (post.replyTo !== null) {
+      const parent = posts.get(post.replyTo);
+      if (!parent || parent.id === post.id || Date.parse(parent.createdAt) > Date.parse(post.createdAt)) fail('A reply needs its actual earlier parent');
+    }
+    if (guests.includes(post)) continue;
+    const user = users.get(post.author);
+    if (!user || !ready(user, data.material)) fail('Account is not ready for AI publication: ' + post.author);
+    if (post.replyTo === null && !operation.plan.selectedIds.includes(user.id)) fail('Only selected library users may open new threads');
+    if (post.replyTo === null ? user.allowPosts === false : user.allowReplies === false) fail('This account action is disabled: ' + user.id);
+  }
+  return operation.plan;
+}
+
+function samePublicPost(expected, actual, users) {
+  const fields = ['id', 'author', 'createdAt', 'replyTo', 'text', 'likes', 'canon', 'media'];
+  return actual && fields.every(key => canonical(expected[key]) === canonical(actual[key])) &&
+    (!expected.guest || users.some(user => user.id === expected.author && user.name === expected.guest.name));
+}
+export async function finishUpdate({ root = socialRoot, workDirectory, fetchImpl = globalThis.fetch, now = Date.now() } = {}) {
+  root = await checkedRoot(root);
+  const directory = await workFolder(workDirectory, root), operationPath = join(directory, 'operation.json');
+  const operation = await readOperation(operationPath, root);
+  if (operation.posts.length) {
+    const { feed } = await loadContent(root);
+    if (!operation.posts.every(post => samePublicPost(post, feed.posts.find(actual => actual.id === post.id), feed.users))) fail('Local posts do not yet match this operation; keep the working record');
+    operation.status = 'awaiting-online';
+    await saveOperation(operationPath, operation);
+    const url = new URL('https://y29.fivsevn.com/lucifer0/data/feed.json');
+    url.searchParams.set('verify', operation.id + '-' + now);
+    const response = await fetchImpl(url.href, { cache: 'no-store', signal: AbortSignal.timeout(15000) });
+    if (!response.ok) fail('Online verification failed; keep the working record');
+    const online = await response.json();
+    if (online.version !== 1 || !Array.isArray(online.posts) || !Array.isArray(online.users) || !operation.posts.every(post => samePublicPost(post, online.posts.find(actual => actual.id === post.id), online.users))) fail('Online posts do not yet match; keep the working record and retry finish');
+    operation.status = 'published';
+    await saveOperation(operationPath, operation);
+  }
+  await rm(join(directory, 'reading.md'), { force: true });
+  await rm(operationPath);
+  return { id: operation.id, status: operation.posts.length ? 'published' : 'no-posts', count: operation.posts.length };
 }
