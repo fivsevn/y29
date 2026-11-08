@@ -8,7 +8,7 @@ import { prepareRound } from '../lucifer0/tools/operations.js';
 test('ingest the original L0 draw, validate, build in a disposable checkout', async () => {
   const root = await mkdtemp(join(tmpdir(), 'l0-publish-'));
   const repo = join(root,'repo');
-  await cp(resolve('.'),repo,{recursive:true,filter:source=>!/(?:^|\\/)(?:\\.git|node_modules|dist)(?:\\/|$)/.test(source)});
+  await cp(resolve('.'),repo,{recursive:true,filter:source=>!['.git','node_modules','dist'].includes(source.split('/').at(-1))});
   const profileDir=join(root,'private','profiles'); await mkdir(profileDir,{recursive:true});
   const plan={"version":1,"id":"l0-20261108-2055","randomSeed":"e70ffc9ad935cdad74294743ffc9f274","createdAt":"2026-11-08T13:00:26.242Z","budget":5,"poolBudgets":{"character":3,"visitor":2},"selectedIds":{"character":[],"visitor":["visitor-psi","visitor-sigma-upper"]},"retrospectiveIds":["l0-history-20261108-03-01","l0-history-20261108-02-04"],"localReview":false};
   await writeFile(join(root,'private','round-state.json'),JSON.stringify({version:1,nextSoloPool:'character',plans:{[plan.id]:plan}}));
