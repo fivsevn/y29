@@ -1,21 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, cp, readFile, writeFile, rm, mkdir, symlink } from 'node:fs/promises';
+import { mkdtemp, cp, readFile, writeFile, rm, symlink, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import http from 'node:http';
 import { socialRoot, loadContent, buildFeed } from '../lucifer0/tools/content.js';
-import { emptyProfile, readProfiles, selectCandidates, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { emptyProfile, readProfiles, selectCandidates, validateProfile, externalFolder } from '../lucifer0/tools/profiles.js';
 import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { createPreviewServer } from '../serve.js';
 
 async function fixture(t) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-profile-selection-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
-  const project = join(directory, 'project'), root = join(project, 'lucifer0'), privateDirectory = join(directory, 'profiles');
+  const project = join(directory, 'project'), root = join(project, 'lucifer0');
   await cp(socialRoot, root, { recursive: true });
-  await mkdir(privateDirectory);
-  return { directory, project, root, privateDirectory };
+  return { directory, project, root };
 }
 
 const newUser = () => ({ id: 'test-new-user', handle: 'test_new_user', name: '测试网名', bio: '测试公开简介', avatar: '', enabled: true, aiScope: 'sample', profileStatus: 'sample', kind: 'visitor', sourceWork: '', inFollowing: false, allowPosts: true, allowReplies: true });
@@ -40,7 +39,7 @@ test('sampling is weighted without replacement, reproducible, fresh and respects
 });
 
 test('editing the account Markdown changes the next profile read and feed without creating posts', async t => {
-  const { root, privateDirectory } = await fixture(t);
+  const { root } = await fixture(t);
   const before = await loadContent(root);
   const documents = await readUserDocuments(root);
   const user = documents.registry.users.find(user => user.id === 'alan');
@@ -51,28 +50,31 @@ test('editing the account Markdown changes the next profile read and feed withou
   user.allowReplies = true;
   user.aiScope = 'sample';
   profile.notes = 'UPDATED_PUBLIC_TEST_SETTING';
-  profile.topics = ['新填写的测试话题'];
+  profile.basics.interests = ['新填写的测试兴趣'];
   profile.activityWeight = 1;
   for (const account of documents.registry.users) {
     account.enabled = account.id === user.id;
-    if (account.kind === 'character') await writeFile(join(root, 'users', account.id, 'profile.md'), renderUserDocument(account, documents.profiles[account.id]));
+    if (account.id === user.id) await writeFile(join(root, 'users', account.id, 'profile.md'), renderUserDocument(account, profile));
   }
   const accountSettings = JSON.parse(await readFile(join(root, 'accounts.json'), 'utf8'));
-  for (const configured of accountSettings.users) configured.enabled = configured.id === user.id;
+  for (const configured of accountSettings.users) {
+    configured.enabled = configured.id === user.id;
+    if (configured.id === user.id) Object.assign(configured, { inFollowing: false, allowPosts: false, allowReplies: true, aiScope: 'sample', activityWeight: 1 });
+  }
   await writeFile(join(root, 'accounts.json'), JSON.stringify(accountSettings));
   const supplementPath = join(root, 'users', user.id, '关系.md');
   await writeFile(supplementPath, '# 关系\n\nINITIAL_RELATION_SETTING\n');
-  const firstRead = await readProfiles({ root, users: documents.registry.users, privateDirectory });
+  const firstRead = await readProfiles({ root });
   assert.ok(firstRead.supplementalDocuments[user.id].some(document => document.path.endsWith('/关系.md') && document.text.includes('INITIAL_RELATION_SETTING')));
   await writeFile(supplementPath, '# 关系\n\nUPDATED_RELATION_SETTING\n');
   const latest = await loadContent(root);
-  const context = await readProfiles({ root, users: latest.registry.users, privateDirectory });
+  const context = await readProfiles({ root });
   const fresh = latest.registry.users.find(account => account.id === user.id);
   assert.equal(fresh.name, user.name);
   assert.equal(fresh.inFollowing, false);
   assert.equal(fresh.allowPosts, false);
-  assert.equal(context.profiles[user.id].notes, 'UPDATED_PUBLIC_TEST_SETTING');
-  assert.deepEqual(context.profiles[user.id].topics, ['新填写的测试话题']);
+  assert.match(context.profiles[user.id].notes, /UPDATED_PUBLIC_TEST_SETTING/);
+  assert.deepEqual(context.profiles[user.id].basics.interests, ['新填写的测试兴趣']);
   assert.ok(context.supplementalDocuments[user.id].some(document => document.path.endsWith('/关系.md') && document.text.includes('UPDATED_RELATION_SETTING')));
   const selection = selectCandidates({ users: latest.registry.users, profiles: context.profiles, count: 5, seed: 'fresh' });
   assert.deepEqual(selection.users.map(candidate => candidate.id), [user.id]);
@@ -81,46 +83,45 @@ test('editing the account Markdown changes the next profile read and feed withou
   const feed = await buildFeed(root);
   assert.equal(feed.users.find(account => account.id === user.id).name, user.name);
   assert.deepEqual(feed.posts, before.feed.posts);
-  assert.doesNotMatch(JSON.stringify(feed), /UPDATED_PUBLIC_TEST_SETTING|UPDATED_RELATION_SETTING|新填写的测试话题|allowPosts/);
+  assert.doesNotMatch(JSON.stringify(feed), /UPDATED_PUBLIC_TEST_SETTING|UPDATED_RELATION_SETTING|新填写的测试兴趣|allowPosts/);
 });
 
-test('private supplements stay external and are reread for each profile read', async t => {
-  const { root, privateDirectory } = await fixture(t);
-  const { registry } = await readUserDocuments(root);
-  const privateProfile = { ...emptyProfile('alan'), notes: 'SYNTHETIC_PRIVATE_NOTE' };
-  const file = join(privateDirectory, 'alan.json');
-  await writeFile(file, JSON.stringify(privateProfile));
-  assert.equal((await readProfiles({ root, users: registry.users, privateDirectory })).overrides.alan.notes, 'SYNTHETIC_PRIVATE_NOTE');
-  privateProfile.notes = 'UPDATED_PRIVATE_SETTING';
-  await writeFile(file, JSON.stringify(privateProfile));
-  assert.equal((await readProfiles({ root, users: registry.users, privateDirectory })).overrides.alan.notes, 'UPDATED_PRIVATE_SETTING');
+test('profile reads include current repository worldviews and each person keeps their own membership', async t => {
+  const { root } = await fixture(t);
+  const initial = await readProfiles({ root });
+  assert.deepEqual(Object.keys(initial).sort(), ['profiles', 'registry', 'supplementalDocuments', 'worldviewDocuments']);
+  assert.equal(initial.profiles.alan.basics.worldview, 'trueheart-hunter');
+  assert.equal(initial.profiles['visitor-lambda'].basics.worldview, '');
+  const worldview = initial.worldviewDocuments.find(document => document.id === 'trueheart-hunter');
+  assert.ok(worldview && worldview.path.endsWith('environment/worldviews/trueheart-hunter.md'));
+  const path = join(root, worldview.path);
+  await writeFile(path, worldview.text + '\nUPDATED_WORLDVIEW_SETTING\n');
+  const updated = await readProfiles({ root });
+  assert.match(updated.worldviewDocuments.find(document => document.id === worldview.id).text, /UPDATED_WORLDVIEW_SETTING/);
   await buildFeed(root);
-  assert.doesNotMatch(await readFile(join(root, 'data/feed.json'), 'utf8'), /SYNTHETIC_PRIVATE_NOTE|UPDATED_PRIVATE_SETTING/);
-  assert.doesNotMatch(await readFile(join(root, 'users/alan/profile.md'), 'utf8'), /SYNTHETIC_PRIVATE_NOTE|UPDATED_PRIVATE_SETTING/);
+  assert.doesNotMatch(await readFile(join(root, 'data/feed.json'), 'utf8'), /UPDATED_WORLDVIEW_SETTING|worldviewDocuments/);
 });
 
-test('private paths inside the repository or symlinked there cannot be used', async t => {
+test('working folders inside the repository or symlinked there cannot be used', async t => {
   const { root, directory } = await fixture(t);
-  const { registry } = await readUserDocuments(root);
-  await assert.rejects(readProfiles({ users: registry.users, root, privateDirectory: join(root, 'private') }), /outside/);
+  await assert.rejects(externalFolder(join(root, 'work'), root, true), /outside/);
   const alias = join(directory, 'alias'); await symlink(root, alias);
-  await assert.rejects(readProfiles({ users: registry.users, root, privateDirectory: alias }), /outside/);
+  await assert.rejects(externalFolder(join(alias, 'nested/work'), root, true), /outside/);
 });
 
-test('a private profile symlink cannot read a different external directory', async t => {
-  const { root, directory, privateDirectory } = await fixture(t);
-  const { registry } = await readUserDocuments(root);
-  const outside = join(directory, 'outside.json');
-  await writeFile(outside, JSON.stringify(emptyProfile('alan')));
-  await symlink(outside, join(privateDirectory, 'alan.json'));
-  await assert.rejects(readProfiles({ users: registry.users, root, privateDirectory }), /leaves the selected directory/);
+test('working folders can be created outside the repository without affecting profile material', async t => {
+  const { root, directory } = await fixture(t), path = join(directory, 'working/nested');
+  const before = await readProfiles({ root });
+  assert.equal(await externalFolder(path, root, true), await realpath(path));
+  await writeFile(join(path, 'operation.json'), '{"posts":[]}');
+  assert.deepEqual(await readProfiles({ root }), before);
 });
 
-test('profile fields reject malformed tags, facts, weights and unknown settings', () => {
+test('profile fields reject malformed tags, weights and unknown settings', () => {
   const profile = emptyProfile('test-user');
-  assert.equal(validatePrivateProfile(profile, 'test-user'), profile);
-  for (const patch of [{ activityWeight: -1 }, { activityWeight: Infinity }, { tags: 'single tag' }, { topics: [42] }, { currentStatus: {} }, { runCommand: 'ignored' }, { facts: [{ text: 'x', status: 'confirmed', visibility: 'public', source: 'none' }] }]) {
-    assert.throws(() => validatePrivateProfile({ ...profile, ...patch }, 'test-user'));
+  assert.equal(validateProfile(profile, 'test-user'), profile);
+  for (const patch of [{ activityWeight: -1 }, { activityWeight: Infinity }, { tags: 'single tag' }, { topics: [42] }, { currentStatus: {} }, { runCommand: 'ignored' }, { facts: [] }]) {
+    assert.throws(() => validateProfile({ ...profile, ...patch }, 'test-user'));
   }
 });
 

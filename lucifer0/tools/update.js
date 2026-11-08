@@ -4,7 +4,7 @@ try {
   const [command, ...args] = process.argv.slice(2);
   const usage = 'Usage: node lucifer0/tools/update.js prepare [--count 1-20] [--work /outside/work] | finish|cancel|suggest [--work /outside/work] | replies [--thread post-id ...] [--work /outside/work]';
   if (!['prepare', 'finish', 'cancel', 'suggest', 'replies'].includes(command) || args.length % 2) throw new Error(usage);
-  const options = { privateDirectory: process.env.Y29_SOCIAL_PRIVATE_DIR }, seen = new Set();
+  const options = {}, seen = new Set();
   for (let index = 0; index < args.length; index += 2) {
     const key = args[index], value = args[index + 1];
     if (!['--work', '--count', '--thread'].includes(key) || seen.has(key) && key !== '--thread' || !value || key === '--count' && command !== 'prepare' || key === '--thread' && command !== 'replies') throw new Error(usage);

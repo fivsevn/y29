@@ -1,13 +1,10 @@
-import { realpath, readFile, mkdir } from 'node:fs/promises';
-import { resolve, relative, isAbsolute, dirname, join } from 'node:path';
-import { homedir } from 'node:os';
+import { realpath, mkdir } from 'node:fs/promises';
+import { resolve, relative, isAbsolute, dirname } from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
 import { socialRoot } from './content.js';
 import { readUserDocuments } from './user-documents.js';
-import { validatePrivateProfile, emptyProfile } from './profile-schema.js';
-export { validatePrivateProfile, emptyProfile } from './profile-schema.js';
+export { validateProfile, emptyProfile } from './profile-schema.js';
 
-export const defaultPrivateDirectory = () => resolve(process.env.Y29_SOCIAL_PRIVATE_DIR || join(homedir(), '.local/share/y29/lucifer0/profiles'));
 export const isInside = (parent, path) => {
   const rel = relative(parent, path);
   return !rel || (!rel.startsWith('../') && rel !== '..' && !isAbsolute(rel));
@@ -15,11 +12,11 @@ export const isInside = (parent, path) => {
 
 export async function outsideRepository(path, root = socialRoot) {
   const [repository, actual] = await Promise.all([realpath(resolve(root, '..')), realpath(path)]);
-  if (isInside(repository, actual)) throw new Error('Private material must stay outside the repository, including through symlinks');
+  if (isInside(repository, actual)) throw new Error('Working records must stay outside the repository, including through symlinks');
   return actual;
 }
 
-export async function privateFolder(path = defaultPrivateDirectory(), root = socialRoot, create = false) {
+export async function externalFolder(path, root = socialRoot, create = false) {
   const selected = resolve(path);
   // Check the nearest existing ancestor before creating missing directories.
   let ancestor = selected;
@@ -32,23 +29,8 @@ export async function privateFolder(path = defaultPrivateDirectory(), root = soc
   catch (error) { if (!create && error.code === 'ENOENT') return selected; throw error; }
 }
 
-export async function readProfiles({ users, root = socialRoot, privateDirectory = defaultPrivateDirectory() }) {
-  const directory = await privateFolder(privateDirectory, root);
-  const documents = await readUserDocuments(root);
-  const profiles = Object.create(null), overrides = Object.create(null), profileSources = Object.create(null);
-  for (const user of users) {
-    profiles[user.id] = structuredClone(documents.profiles[user.id] || emptyProfile(user.id));
-    profileSources[user.id] = 'markdown';
-    const file = join(directory, `${user.id}.json`);
-    try {
-      const actual = await outsideRepository(file, root);
-      if (!isInside(directory, actual)) throw new Error('Private profile symlink leaves the selected directory');
-      overrides[user.id] = validatePrivateProfile(JSON.parse(await readFile(actual, 'utf8')), user.id);
-      // Private material supplements the editable Markdown; it never silently replaces it.
-      profileSources[user.id] = 'markdown+private';
-    } catch (error) { if (error.code !== 'ENOENT') throw error; }
-  }
-  return { directory, profiles, overrides, profileSources, supplementalDocuments: documents.supplementalDocuments };
+export async function readProfiles({ root = socialRoot } = {}) {
+  return readUserDocuments(root);
 }
 
 // Weighted random sampling without replacement. History discourages recently active authors;

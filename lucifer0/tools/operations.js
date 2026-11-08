@@ -3,7 +3,7 @@ import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent, validateReplyLottery } from './content.js';
-import { defaultPrivateDirectory, privateFolder, readProfiles } from './private-profiles.js';
+import { externalFolder, readProfiles } from './profiles.js';
 import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
@@ -23,12 +23,9 @@ const randomFor = seed => {
 };
 const inside = (root, path) => { const rel = relative(root, path); return !rel || (!rel.startsWith('../') && rel !== '..' && !isAbsolute(rel)); };
 export const defaultWorkDirectory = () => resolve(process.env.Y29_SOCIAL_WORK_DIR || join(homedir(), '.local/state/y29/lucifer0/current'));
-export const hasCanon = profile => Boolean(profile?.facts?.some(fact => fact.status === 'canon' && bounded(fact.text) && bounded(fact.source, 2000)));
-
 function ready(user, material) {
   return user.enabled && user.aiScope === 'daily' && user.profileStatus === 'approved' &&
-    (user.allowPosts !== false || user.allowReplies !== false) && material.profiles[user.id]?.activityWeight > 0 &&
-    (user.kind !== 'character' || hasCanon(material.overrides[user.id]));
+    (user.allowPosts !== false || user.allowReplies !== false) && material.profiles[user.id]?.activityWeight > 0;
 }
 
 function checkRequestedCount(count) {
@@ -36,7 +33,7 @@ function checkRequestedCount(count) {
 }
 
 // The saved seed fixes the default budget draw and a single weighted candidate draw.
-export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], seed, requestedCount, replyLottery, maxBatchPosts = 120 }) {
+export function drawUpdatePlan({ users, profiles, posts = [], seed, requestedCount, replyLottery, maxBatchPosts = 120 }) {
   if (!bounded(seed, 200)) fail('Invalid update seed');
   checkRequestedCount(requestedCount);
   if (replyLottery !== undefined) {
@@ -45,7 +42,7 @@ export function drawUpdatePlan({ users, profiles, overrides = {}, posts = [], se
   }
   const random = randomFor(seed), drawnBudget = 1 + Math.floor(random() * 10), budget = replyLottery === undefined ? requestedCount ?? drawnBudget : drawnBudget;
   const recent = new Set([...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 7).map(post => post.author));
-  const pool = users.filter(user => ready(user, { profiles, overrides })).sort((a, b) => a.id.localeCompare(b.id, 'en'));
+  const pool = users.filter(user => ready(user, { profiles })).sort((a, b) => a.id.localeCompare(b.id, 'en'));
   const selectedIds = [];
   while (pool.length && selectedIds.length < 3) {
     const weights = pool.map(user => profiles[user.id].activityWeight * (recent.has(user.id) ? 0.5 : 1));
@@ -197,19 +194,16 @@ async function sourceText(root, path) {
   }
   return { path, text: await regularText(absolute) };
 }
-async function source(root, privateDirectory) {
+async function source(root) {
   const { registry, policy, feed, files, pending } = await loadContent(root, { allowPending: true });
-  const material = await readProfiles({ users: registry.users, root, privateDirectory });
+  const material = await readProfiles({ root });
   const documents = await Promise.all([...controlPaths, ...environmentPaths].map(path => sourceText(root, path)));
   for (const user of registry.users) {
     documents.push(await sourceText(root, 'users/' + user.id + '/profile.md'));
     for (const supplement of material.supplementalDocuments[user.id] || []) documents.push(await sourceText(root, supplement.path));
   }
+  for (const worldview of material.worldviewDocuments) documents.push({ path: worldview.path, text: worldview.text });
   for (const file of files) documents.push(await sourceText(root, relative(root, file).split('\\').join('/')));
-  for (const user of registry.users) if (material.overrides[user.id]) {
-    const path = join(material.directory, user.id + '.json');
-    documents.push({ path, text: await regularText(path) });
-  }
   const sourceDigest = digest({ policy, users: registry.users, profiles: material.profiles, documents });
   return { registry, policy, feed, material, documents, sourceDigest, pending };
 }
@@ -218,7 +212,7 @@ async function workFolder(workDirectory, root, create = false) {
   const selected = resolve(workDirectory || defaultWorkDirectory());
   try { if ((await lstat(selected)).isSymbolicLink()) fail('The work directory cannot be a symlink'); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
-  const path = await privateFolder(selected, root, create);
+  const path = await externalFolder(selected, root, create);
   const stat = await lstat(path);
   if (!stat.isDirectory() || stat.isSymbolicLink()) fail('The work directory must be a regular external directory');
   return path;
@@ -248,13 +242,13 @@ function reading(operation, data) {
   const budget = operation.plan.replyLottery === undefined ? '发言上限：' + operation.plan.budget : '新主帖上限：' + operation.plan.budget + '；发言总上限：' + replyLimits(operation.plan, data.policy).totalBudget + '；回复合计上限：' + replyLimits(operation.plan, data.policy).maxReplies;
   const explanation = operation.plan.replyLottery === undefined ? '主帖和回复合计不超过上限。' : '先确定新主帖和要接续的旧串，再用 replies 命令逐串抽回复上限；所有楼中楼都计入原根串，实际回复可以少于抽取数。';
   return '# 本次更新阅读材料\n\n操作：' + operation.id + '；' + budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
-    '。\n\n这是当前资料的完整快照，生成快照不代表执行者已经读完。按原文理解人物的底色、处境与知情范围，人物资料本身不构成本轮剧情。' + explanation + '实际发言至少一半来自无需档案的 guest；一条时必须是 guest。候选可以沉默，其他合资格库人物可以自然回复。\n\n' +
-    '## 当前账号权限\n\n| 账号 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- |\n' +
-    data.registry.users.map(user => '| ' + user.id + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
+    '。\n\n这是当前资料的完整快照，生成快照不代表执行者已经读完。按原文理解人物的底色、处境与知情范围，人物资料本身不构成本轮剧情。世界观按下表登记的归属理解，各人物只采用本人所属的世界观设定。' + explanation + '实际发言至少一半来自无需档案的 guest；一条时必须是 guest。候选可以沉默，其他合资格库人物可以自然回复。\n\n' +
+    '## 当前账号权限与世界观\n\n| 账号 | 所属世界观 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- | --- |\n' +
+    data.registry.users.map(user => '| ' + user.id + ' | ' + (data.material.profiles[user.id].basics.worldview || '未指定') + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
     '\n\n' + data.documents.map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
 }
 
-export async function prepareUpdate({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), workDirectory, requestedCount, now = Date.now(), entropy = () => randomBytes(32).toString('hex') } = {}) {
+export async function prepareUpdate({ root = socialRoot, workDirectory, requestedCount, now = Date.now(), entropy = () => randomBytes(32).toString('hex') } = {}) {
   checkRequestedCount(requestedCount);
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root, true), release = await lockWork(directory);
@@ -263,13 +257,13 @@ export async function prepareUpdate({ root = socialRoot, privateDirectory = defa
     let operation;
     try { operation = await readOperation(operationPath, root); } catch (error) { if (error.code !== 'ENOENT') throw error; }
     if (operation && requestedCount !== undefined && operation.plan.requestedCount !== requestedCount) fail('The requested count cannot change an existing update; resume its original plan');
-    const data = await source(root, privateDirectory);
+    const data = await source(root);
     if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
     if (requestedCount > data.policy.maxBatchPosts) fail('The requested count exceeds the publication hard limit');
     const status = operation ? 'resumed' : 'prepared';
     if (!operation) {
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
-      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, overrides: data.material.overrides, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, maxBatchPosts: data.policy.maxBatchPosts });
+      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, maxBatchPosts: data.policy.maxBatchPosts });
       plan.seal = planSeal(id, root, plan);
       operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared' };
     } else {
@@ -326,7 +320,7 @@ export function validateResearch(research, now = Date.now(), postIds) {
   return research;
 }
 
-export async function validateUpdateForBatch(batch, { root = socialRoot, contextPath, privateDirectory = defaultPrivateDirectory(), backfill = false, now = Date.now() } = {}) {
+export async function validateUpdateForBatch(batch, { root = socialRoot, contextPath, backfill = false, now = Date.now() } = {}) {
   root = await checkedRoot(root);
   if (typeof backfill !== 'boolean') fail('Historical updates need an explicit boolean backfill option');
   if (!contextPath) fail('AI publication requires its operation.json');
@@ -337,7 +331,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   if (canonical(batch.posts) !== canonical(operation.posts)) fail('The batch does not match the saved operation posts');
   if (now - Date.parse(operation.preparedAt) > 2 * DAY || Date.parse(operation.preparedAt) > now + 300000) fail('The operation is stale; prepare again to refresh its reading');
   validateResearch(operation.research, now, batch.posts.map(post => post.id));
-  const data = await source(root, privateDirectory);
+  const data = await source(root);
   if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
   if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
   const resumingPartialWrite = data.pending?.id === batch.id && data.pending.batchDigest === digest(batch);
@@ -406,7 +400,7 @@ async function optionalText(path) {
   try { return await regularText(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
 }
 
-export async function cancelUpdate({ root = socialRoot, privateDirectory = defaultPrivateDirectory(), workDirectory, now = Date.now() } = {}) {
+export async function cancelUpdate({ root = socialRoot, workDirectory, now = Date.now() } = {}) {
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root), operationPath = join(directory, 'operation.json'), readingPath = join(directory, 'reading.md');
   const releaseWork = await lockWork(directory);
@@ -417,7 +411,7 @@ export async function cancelUpdate({ root = socialRoot, privateDirectory = defau
       const { feed, pending } = await loadContent(root, { allowPending: true });
       if (!pending && operation.posts.some(post => feed.posts.some(archived => archived.id === post.id))) fail('This operation already has archived posts; finish publishing or correct the original posts instead of cancelling');
       const result = pending ? await cancelPendingBatch(root, { id: operation.id }) : { status: 'no-pending', count: 0 };
-      const data = await source(root, privateDirectory);
+      const data = await source(root);
       operation.posts = [];
       operation.preparedAt = new Date(now).toISOString();
       operation.sourceDigest = operationSourceDigest(data, operation.plan);

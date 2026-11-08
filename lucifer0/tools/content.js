@@ -171,7 +171,7 @@ function stableJSON(value) {
   return JSON.stringify(value);
 }
 
-export async function ingestBatch(input, { root = socialRoot, reviewed = false, ai = false, contextPath, privateDirectory, backfill = false } = {}) {
+export async function ingestBatch(input, { root = socialRoot, reviewed = false, ai = false, contextPath, backfill = false } = {}) {
   if (!reviewed) fail('Review the entire public batch first, then pass --reviewed. No files were written.');
   if (typeof backfill !== 'boolean') fail('Backfill must be an explicit boolean option');
   const lock = join(root, '.publish.lock');
@@ -180,11 +180,11 @@ export async function ingestBatch(input, { root = socialRoot, reviewed = false, 
     if (error.code === 'EEXIST') fail('Another import is active; check it before retrying');
     throw error;
   }
-  try { return await ingestLocked(input, { root, ai, contextPath, privateDirectory, backfill }); }
+  try { return await ingestLocked(input, { root, ai, contextPath, backfill }); }
   finally { await rm(lock, { recursive: true, force: true }); }
 }
 
-async function ingestLocked(input, { root, ai, contextPath, privateDirectory, backfill }) {
+async function ingestLocked(input, { root, ai, contextPath, backfill }) {
   const { registry, policy, batches, feed: existingFeed, pending } = await loadContent(root, { allowPending: true });
   const value = await json(resolve(input));
   const isUpdate = value?.version === 1 && Object.hasOwn(value, 'plan');
@@ -212,7 +212,7 @@ async function ingestLocked(input, { root, ai, contextPath, privateDirectory, ba
   if (ai && !policy.automaticPosting) fail('Automatic posting is disabled');
   if (ai && batch.mode === 'daily') {
     const { validateUpdateForBatch } = await import('./operations.js');
-    await validateUpdateForBatch(batch, { root, contextPath, privateDirectory, backfill });
+    await validateUpdateForBatch(batch, { root, contextPath, backfill });
   }
   for (const post of fresh) {
     if (post.guest) continue;

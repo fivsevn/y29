@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from '../lucifer0/tools/content.js';
-import { emptyProfile, readProfiles, validatePrivateProfile } from '../lucifer0/tools/private-profiles.js';
+import { emptyProfile, readProfiles, validateProfile } from '../lucifer0/tools/profiles.js';
 import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { writeThreadBatch, parsePostDocument, renderPostDocument } from '../lucifer0/tools/thread-packages.js';
 import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
@@ -28,6 +28,7 @@ async function repositoryCopy(t) {
   await mkdir(join(root, 'assets'), { recursive: true });
   await mkdir(join(root, 'posts'), { recursive: true });
   await writeFile(join(root, 'publication.json'), JSON.stringify(source.policy));
+  await writeFile(join(root, 'accounts.json'), JSON.stringify({ version: 1, users: source.registry.users.map(user => ({ id: user.id, avatar: user.avatar, kind: user.kind, sourceWork: user.sourceWork || '', enabled: user.enabled, aiScope: user.aiScope, profileStatus: user.profileStatus, inFollowing: user.inFollowing ?? false, allowPosts: user.allowPosts ?? true, allowReplies: user.allowReplies ?? true, activityWeight: 1, timezone: 'Asia/Shanghai', activeHours: '' })) }));
   const image = '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>';
   await writeFile(join(root, 'assets/icon.svg'), image);
   for (const user of source.registry.users) {
@@ -46,6 +47,10 @@ async function repositoryCopy(t) {
 async function saveUser(root, user) {
   const { profiles } = await readUserDocuments(root);
   await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profiles[user.id]));
+  const settings = JSON.parse(await readFile(join(root, 'accounts.json'), 'utf8'));
+  const configured = settings.users.find(item => item.id === user.id);
+  for (const key of ['avatar', 'kind', 'sourceWork', 'enabled', 'aiScope', 'profileStatus', 'inFollowing', 'allowPosts', 'allowReplies']) if (Object.hasOwn(user, key)) configured[key] = user[key];
+  await writeFile(join(root, 'accounts.json'), JSON.stringify(settings));
 }
 const newBatch = () => ({ version: 1, id: 'test-new-batch', mode: 'sample', posts: [{
   id: 'test-new-post', author: 'alan', createdAt: '2026-11-07T22:00:00+08:00', replyTo: null,
@@ -468,21 +473,15 @@ test('concurrent imports are serialized without overwriting history', async t =>
   assert.equal((await loadContent(root)).feed.posts.length, 15);
 });
 
-const privateProfile = () => ({ version: 1, userId: 'alan', voice: ['test voice'], postingHabits: [], relationships: [], knowledgeScope: [], boundaries: [], facts: [{ text: 'test fact', status: 'pending', visibility: 'private', source: 'synthetic test fixture' }] });
-
-test('private profile reads stay external; pending and private are separate from canon', async t => {
-  const { directory, root } = await repositoryCopy(t); const profile = privateProfile();
-  await writeFile(join(directory, 'alan.json'), JSON.stringify(profile));
-  const snapshot = await readProfiles({ root, users: source.registry.users, privateDirectory: directory });
-  assert.equal(Object.keys(snapshot.overrides).length, 1);
-  assert.equal(snapshot.overrides.alan.facts[0].status, 'pending');
-  assert.equal(snapshot.overrides.alan.facts[0].visibility, 'private');
+test('profile reads use the repository dossier and preserve its full setting', async t => {
+  const { root } = await repositoryCopy(t);
+  const profile = emptyProfile('alan'); profile.notes = 'SYNTHETIC_PERSON_DESCRIPTION';
+  const user = source.registry.users.find(item => item.id === 'alan');
+  await writeFile(join(root, 'users/alan/profile.md'), renderUserDocument(user, profile));
+  const snapshot = await readProfiles({ root });
+  assert.match(snapshot.profiles.alan.notes, /SYNTHETIC_PERSON_DESCRIPTION/);
   assert.equal(Object.keys(snapshot.profiles).length, source.registry.users.length);
-  await assert.rejects(readProfiles({ root, users: source.registry.users, privateDirectory: root }), /outside/);
-  const symlinkPath = join(directory, 'linked-repository'); await symlink(root, symlinkPath);
-  await assert.rejects(readProfiles({ root, users: source.registry.users, privateDirectory: symlinkPath }), /outside/);
-  profile.facts[0].status = 'confirmed-by-ai';
-  assert.throws(() => validatePrivateProfile(profile, 'alan'), /canon status/);
+  assert.throws(() => validateProfile({ ...profile, runCommand: 'extra' }, 'alan'), /Invalid profile/);
 });
 
 test('public generated data and tracked content expose no private profile keys', async () => {

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { socialRoot, loadContent } from '../lucifer0/tools/content.js';
 import { readUserDocuments, parseUserDocument } from '../lucifer0/tools/user-documents.js';
-import { readProfiles, selectCandidates } from '../lucifer0/tools/private-profiles.js';
+import { readProfiles, selectCandidates } from '../lucifer0/tools/profiles.js';
 
 const headings = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算'];
 const settings = (id = 'sample-person') => ({ id, avatar: '', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'daily', profileStatus: 'approved', inFollowing: false, allowPosts: true, allowReplies: true, activityWeight: 0.5, timezone: 'Asia/Shanghai', activeHours: '轮休下午' });
@@ -19,6 +19,7 @@ const person = (id = 'sample-person') => `# 窗边的人
 | 网名 | 窗边的人 |
 | 用户名 | ${id.replaceAll('-', '_')} |
 | 个人简介 | 偶尔来坐一会儿。 |
+| 所属世界观 |  |
 | 年龄 | 32 |
 | 性别 | 女 |
 | 职业 | 店员 |
@@ -45,9 +46,8 @@ async function fixture(t, ids = ['sample-person']) {
 test('each original person has one complete human dossier, with operating controls kept elsewhere', async () => {
   const documents = await readUserDocuments(socialRoot);
   const configuration = JSON.parse(await readFile(join(socialRoot, 'accounts.json'), 'utf8'));
-  const visitors = documents.registry.users.filter(user => user.kind === 'visitor');
-  assert.deepEqual(configuration.users.map(user => user.id).sort(), visitors.map(user => user.id).sort());
-  for (const user of visitors) {
+  assert.deepEqual(configuration.users.map(user => user.id).sort(), documents.registry.users.map(user => user.id).sort());
+  for (const user of documents.registry.users) {
     const folder = join(socialRoot, 'users', user.id);
     assert.deepEqual((await readdir(folder)).filter(name => name.endsWith('.md')), ['profile.md'], user.id);
     const text = await readFile(join(folder, 'profile.md'), 'utf8');
@@ -57,7 +57,6 @@ test('each original person has one complete human dossier, with operating contro
     const configured = configuration.users.find(account => account.id === user.id);
     assert.deepEqual(parseUserDocument(text, user.id, configured), { user, profile: documents.profiles[user.id] });
     assert.equal(documents.profiles[user.id].notes.trim(), text.trim(), `${user.id}: the complete dossier must reach the reader`);
-    assert.deepEqual(documents.profiles[user.id].facts, [], user.id);
   }
   const topLevel = (await readdir(join(socialRoot, 'users'), { withFileTypes: true })).filter(entry => entry.isFile()).map(entry => entry.name).sort();
   assert.deepEqual(topLevel, ['README.md', 'TEMPLATE.md']);
@@ -68,7 +67,7 @@ test('individual references stay with users and the environment includes interac
   const individualNotes = await readFile(join(socialRoot, 'users/README.md'), 'utf8');
   const environmentPath = join(socialRoot, 'environment');
   const environmentFiles = ['README.md', 'world-trends.md', 'everyday-life.md', 'comments.md', 'meme.md', 'forum.md'];
-  assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles].sort());
+  assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles, 'worldviews'].sort());
   const environmentIndex = await readFile(join(environmentPath, 'README.md'), 'utf8');
   for (const name of environmentFiles) {
     assert.ok((await readFile(join(environmentPath, name), 'utf8')).trim(), `${name}: empty environment document`);
@@ -98,8 +97,7 @@ test('complete biographies reach the operator without external files and do not 
   const documents = await readUserDocuments(socialRoot);
   const directory = await mkdtemp(join(tmpdir(), 'y29-person-context-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
-  const context = await readProfiles({ root: socialRoot, users: documents.registry.users, privateDirectory: directory });
-  assert.equal(Object.keys(context.overrides).length, 0);
+  const context = await readProfiles({ root: socialRoot });
   for (const user of documents.registry.users.filter(user => user.kind === 'visitor')) {
     assert.equal(context.profiles[user.id].notes.trim(), (await readFile(join(socialRoot, 'users', user.id, 'profile.md'), 'utf8')).trim());
     assert.deepEqual(context.supplementalDocuments[user.id], []);
