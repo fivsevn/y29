@@ -3,7 +3,7 @@ export function normalizeState(s) {
   if (!s || s.version !== 1 || !['ONLINE','WAITING','OFFLINE'].includes(s.status) ||
       typeof s.source !== 'string' || typeof s.message !== 'string' ||
       !Number.isSafeInteger(s.sequence) || s.sequence < 0 ||
-      !Number.isFinite(Date.parse(s.startedAt)) ||
+      typeof s.startedAt !== 'string' || !Number.isFinite(Date.parse(s.startedAt)) ||
       !(s.expiresAt === null || (typeof s.expiresAt === 'string' && Number.isFinite(Date.parse(s.expiresAt))))) {
     throw new Error('Invalid current-state');
   }
@@ -19,7 +19,14 @@ export function wrapMessage(text, columns = 46, rows = 6) {
   for (const ch of text.replace(/\r/g,'').replace(/\t/g,'  ')) {
     const cells = ch.codePointAt(0) < 128 ? 1 : 2;
     if (ch === '\n' || width + cells > columns) {lines.push('');width=0;}
-    if (lines.length > rows) {lines.length=rows;lines[rows-1]=lines[rows-1].slice(0,-3)+'...';break;}
+    if (lines.length > rows) {
+      lines.length=rows;
+      const tail=Array.from(lines[rows-1]), ellipsis='...'.slice(0,columns);
+      let cells=tail.reduce((sum,ch)=>sum+(ch.codePointAt(0)<128?1:2),0);
+      while(cells+ellipsis.length>columns && tail.length) cells-=tail.pop().codePointAt(0)<128?1:2;
+      lines[rows-1]=tail.join('')+ellipsis;
+      break;
+    }
     if (ch !== '\n') {lines[lines.length-1]+=ch;width+=cells;}
   }
   return lines.join('\n');

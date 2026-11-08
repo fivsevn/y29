@@ -15,7 +15,7 @@ function harness(initial={},blocked=false){
 test('controller plays, previews, undoes, reloads pending plans and protects restart',async()=>{
  const h=harness();await import('../mobileutopia/app.js?ui1');assert.match(h.elements.get('game').innerHTML,/进群/);
  h.elements.get('place').value='bridge';h.click('begin');h.click('choose:invite');h.click('plan:man:food');
- assert.match(h.elements.get('game').innerHTML,/→ 5/);h.click('undo');assert.equal(JSON.parse(h.memory.get('y29.mobileutopia.session.v1')).actions.at(-1),'undo');
+ assert.match(h.elements.get('game').innerHTML,/→ 5/);h.click('undo');assert.deepEqual(JSON.parse(h.memory.get('y29.mobileutopia.session.v1')).actions,['choose:invite']);
  h.click('plan:man:food');h.click('plan:zhou:shelter');const saved=h.memory.get('y29.mobileutopia.session.v1');
  const restored=harness({'y29.mobileutopia.session.v1':saved});await import('../mobileutopia/app.js?ui2');assert.match(restored.elements.get('game').innerHTML,/待执行/);
  restored.click('resolve');assert.match(restored.elements.get('game').innerHTML,/防水布/);
@@ -25,6 +25,16 @@ test('controller plays, previews, undoes, reloads pending plans and protects res
 test('unavailable storage and corrupt data do not prevent playing or render injected archive text',async()=>{
  const h=harness({},true);await import('../mobileutopia/app.js?blocked');h.elements.get('place').value='bridge';h.click('begin');assert.match(h.elements.get('saveStatus').textContent,/存储不可用/);h.click('choose:invite');assert.match(h.elements.get('game').innerHTML,/两件事/);
  const bad=harness({'y29.mobileutopia.session.v1':'{broken','y29.mobileutopia.archive.v1':'["<script>alert(1)</script>",null]'});await import('../mobileutopia/app.js?bad');bad.click('archive');assert.doesNotMatch(bad.elements.get('dialogBody').innerHTML,/<script>/);
+ assert.match(bad.elements.get('saveStatus').textContent,/本机存档/);
+});
+test('starting another evening clears the completed session while retaining its archive',async()=>{
+ const route=[['invite','man:food','zhou:shelter'],['cover','you:fuel','arashi:talk'],['fish','arashi:fish','you:water'],['space','zhou:talk','man:food'],['move','you:fuel','arashi:noodles'],['pack','zhou:talk','you:talk']];
+ const h=harness();await import('../mobileutopia/app.js?restart-ended');h.click('begin');
+ for(const [choice,...tasks] of route){h.click('choose:'+choice);for(const task of tasks)h.click('plan:'+task);h.click('resolve');}
+ assert.match(h.elements.get('game').innerHTML,/今晚的小记/);const archived=h.memory.get('y29.mobileutopia.archive.v1');
+ h.click('restart');assert.equal(JSON.parse(h.memory.get('y29.mobileutopia.session.v1')),null);assert.equal(h.memory.get('y29.mobileutopia.archive.v1'),archived);
+ const reloaded=harness(Object.fromEntries(h.memory));await import('../mobileutopia/app.js?restart-reloaded');assert.match(reloaded.elements.get('game').innerHTML,/进群/);
+ reloaded.click('archive');assert.doesNotMatch(reloaded.elements.get('dialogBody').innerHTML,/还没有吃完/);
 });
 test('all routes have local assets; signal route loads its own controller',async()=>{
  for(const file of ['index.html','signallock/index.html','mobileutopia/index.html']){

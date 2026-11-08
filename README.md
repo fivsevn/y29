@@ -91,7 +91,9 @@ npm start
 npm run build
 ```
 
-具体项目的实现说明见各自目录。
+使用 Node.js 22 或更新版本，无需安装第三方运行依赖。`npm run test:games` 只检查游戏；`npm run check` 依次运行全部测试、社交内容校验和构建。
+
+具体项目的修改入口：[阿岚](signallock/README.md)、[移动乌托邦](mobileutopia/README.md)、[飙肌野郎](training/EDITING.md)、[STORYTELLER](storyteller/README.md)、[路西法零](lucifer0/README.md)。
 
 ## Original Work
 

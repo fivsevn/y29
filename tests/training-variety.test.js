@@ -39,3 +39,18 @@ test('all daily event prompts stay unique within a week across 500 seeds',()=>{
  s={...s,step:'afterEvent'};e=g.afterEventFor(seed,day,s);assert.ok(!seen.has(e.text),e.text);seen.add(e.text);s=g.chooseAfterEvent(s,e.choices[0].id);
  }}
 });
+
+test('ordinary authored events have identities and do not exclude unrelated scenes',()=>{
+ for(let seed=0;seed<100;seed++)for(let day=1;day<=7;day++){
+  for(const event of [g.eventFor(seed,day),g.gymEventFor(seed,day),g.afterEventFor(seed,day)]){
+   assert.equal(typeof event.id,'string');
+   assert.ok(event.id.length>0);
+  }
+ }
+ const seed=42,daily=g.eventFor(seed,1),expectedGym=g.gymEventFor(seed,1);
+ assert.notEqual(daily.text,expectedGym.text);
+ const state={...g.createGame(seed,[{name:'我'}]),step:'event'};
+ const afterChoice=g.chooseEvent(state,daily.choices[0].id);
+ assert.equal(g.gymEventFor(seed,1,afterChoice).text,expectedGym.text);
+ assert.equal(afterChoice.interactions[0].eventId,daily.id);
+});

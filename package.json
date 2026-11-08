@@ -1,1 +1,16 @@
-{"name":"y29","private":true,"type":"module","scripts":{"test":"node --test tests/*.test.js","start":"node serve.js","build":"node build.js","social:validate":"node lucifer0/tools/publish.js validate","social:build":"node lucifer0/tools/publish.js build","social:context":"node lucifer0/tools/context.js"}}
+{
+  "name": "y29",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node serve.js",
+    "test": "node --test tests/*.test.js",
+    "test:games": "node --test tests/engine.test.js tests/controller.test.js tests/mobileutopia*.test.js tests/training*.test.js",
+    "build": "node build.js",
+    "check": "node --test tests/*.test.js && node lucifer0/tools/publish.js validate && node build.js",
+    "social:validate": "node lucifer0/tools/publish.js validate",
+    "social:build": "node lucifer0/tools/publish.js build",
+    "social:context": "node lucifer0/tools/context.js"
+  }
+}

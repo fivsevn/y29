@@ -24,7 +24,7 @@ export const TASKS=[
  {id:'talk',name:'坐下来聊一会',detail:'不取资源。留下一段日常；这位伙伴恢复 1 格精力。'}
 ];
 const clone=s=>JSON.parse(JSON.stringify(s));
-const log=(s,speaker,text)=>s.logs.push({round:s.round,time:TIMES[s.round-1]||'20:10',speaker,text});
+const log=(s,speaker,text,time=TIMES[s.round-1]||'20:10')=>s.logs.push({round:s.round,time,speaker,text});
 export function fresh(seed=Date.now(),place='bridge'){
  const s={version:VERSION,seed:seed>>>0,place:place==='road'?'road':'bridge',night:(seed>>>0)%3,round:1,phase:'choice',raw:2,water:2,fuel:1,meals:0,heat:0,seats:2,people:4,cover:false,invited:false,fish:false,fishCooked:false,tomorrow:false,packed:0,talks:[],fatigue:{you:0,arashi:0,zhou:0,man:0},trips:{food:0,water:0,fuel:0},plans:[],choices:[],actions:[],logs:[],ending:null};
  if(s.place==='road'){s.seats=1;s.raw=3;}
@@ -120,12 +120,14 @@ export function step(state,action){
   s.phase='plan';return s;
  }
  if(action.startsWith('plan:')){const [,actor,task]=action.split(':');s.plans.push({actor,task});return s;}
- if(action==='undo'){s.plans.pop();return s;}
+ // An undone plan has no effect on the evening. Keep only effective actions
+ // instead of growing the save forever when a player tries different options.
+ if(action==='undo'){s.plans.pop();s.actions.splice(-2);return s;}
  for(const a of s.plans)work(s,a.actor,a.task);
  const loss=cooling(s);if(loss&&s.meals){s.heat=Math.max(0,s.heat-loss);log(s,'现场',loss===2?'湿冷和风一道进来，饭菜热度下降了 2 格。':'这一阵忙完，饭菜热度下降了 1 格。');}
  for(const c of CREW){const a=s.plans.find(p=>p.actor===c.id);s.fatigue[c.id]=a&&a.task!=='talk'?Math.min(2,s.fatigue[c.id]+1):Math.max(0,s.fatigue[c.id]-1);}
  s.plans=[];
- if(s.round===6){s.phase='ended';s.ending=ending(s);log(s,'20:10 / 开饭',s.ending.text);return s;}
+ if(s.round===6){s.phase='ended';s.ending=ending(s);log(s,'开饭',s.ending.text,'20:10');return s;}
  s.round++;s.phase='choice';
  if(s.round===4&&s.invited){s.people++;s.raw++;log(s,'阿诚','刚收工。路上带了一点菜，算我的。');}
  const ambiance=['','桥上的车轮压过接缝，响了两声。','小满把洗过的碗叠在一起。','街灯亮了，锅边的人影往外拉长。','远处有人喊了一声，不是在喊这里的人。','夜已经暗下来。有人开始数碗。'];

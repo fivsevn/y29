@@ -35,9 +35,23 @@ git pull --ff-only && sh storyteller/pi/start.sh
 ## 本地验证
 
 ```sh
-node --test tests/*.test.js
-node build.js
-python3 -m http.server 8000
+npm test
+npm start
 ```
 
-打开 http://localhost:8000/storyteller/ 。画布固定 320×240，其他尺寸整体缩放；长文在 46 半角格×6行范围内换行/省略。后台 JSON 的 120 字符限制和画布可见行数是两层独立限制。
+打开 http://127.0.0.1:4173/storyteller/ 。画布固定 320×240，其他尺寸整体缩放；长文在 46 半角格×6行范围内换行/省略。后台 JSON 的 120 字符限制和画布可见行数是两层独立限制，省略时保留完整 Unicode 字符。
+
+## 修改入口与文件边界
+
+| 修改内容 | 文件 |
+| --- | --- |
+| 终端排版、缩放与启动提示 | `index.html`、`style.css`、`app.js` |
+| 轮询间隔、状态格式校验、过期表现与换行 | `state.js`；请求超时在 `app.js` |
+| 评论转消息、管理员状态命令与去重 | `transmission.js` |
+| Discussion 分页读取、冲突重试与状态提交 | `../.github/scripts/storyteller-sync.mjs` |
+| 触发条件、授权范围与 Pages 刷新 | `../.github/workflows/storyteller.yml` |
+| Pi 打开地址与 Chromium 启动参数 | `pi/start.sh` |
+
+`current.json` 是工作流维护的当前状态，不是剧情素材库。修改同步规则时，先用 `tests/storyteller-sync.test.js` 的评论夹具验证；直接编辑状态可能在下一次同步时被覆盖。`state.js` 的格式、过期和换行回归在 `tests/storyteller.test.js`。
+
+`npm run build` 会将终端的网页运行文件与当前 JSON 放入 `dist/storyteller/`，不会复制评论处理脚本、Pi 启动脚本或此文档。修改源码后重新构建，不直接修改 `dist/`；若改变状态字段，须同时检查写入端 `transmission.js` 和读取端 `state.js`，保持旧状态可读或安排迁移。
