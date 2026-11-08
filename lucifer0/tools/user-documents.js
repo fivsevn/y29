@@ -263,15 +263,14 @@ export async function readUserDocuments(root) {
 export async function buildUserDirectory(root) {
   const { registry } = await readUserDocuments(root);
   const users = [...registry.users].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN') || a.id.localeCompare(b.id, 'en'));
-  const lines = ['<!-- users:start -->', '', '## 用户总目录', '', `共 **${users.length} 个用户**。`];
+  const lines = ['<!-- users:start -->', '', '## 用户总目录', '', `合计：${users.length}人。`];
   for (const [kind, heading] of [['visitor', '本库人物'], ['character', '其他作品人物']]) {
     const group = users.filter(user => user.kind === kind);
-    if (!group.length) continue;
     const links = group.map(user => {
       const nickname = cell(user.name).replace(/\[/g, '&#91;').replace(/\]/g, '&#93;');
       return `[${nickname}](./${user.id}/profile.md)`;
     });
-    lines.push('', `### ${heading}`, '', links.join('，'));
+    lines.push('', `### ${heading}：${group.length}人`, '', links.join('，'));
   }
   lines.push('', '<!-- users:end -->');
   const path = join(root, 'users/README.md');
