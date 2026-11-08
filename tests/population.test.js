@@ -68,10 +68,17 @@ test('person and environment references resolve within their own research folder
   const { registry } = await readUserDocuments(socialRoot);
   const individualNotes = await readFile(join(socialRoot, 'users/README.md'), 'utf8');
   const environmentNotes = await readFile(join(socialRoot, 'environment/social-reference.md'), 'utf8');
-  const sourceIds = text => new Set([...text.matchAll(/^### ([SOLIM]\d{2})$/gm)].map(match => match[1]));
+  const sourceIds = (text, expectedCount, label) => {
+    const headings = [...text.matchAll(/^### ([SOLIM]\d{2})$/gm)].map(match => match[1]);
+    const anchors = [...text.matchAll(/<a\s+(?:name|id)=["']([solim]\d{2})["']\s*><\/a>/gi)].map(match => match[1].toUpperCase());
+    const ids = [...headings, ...anchors], unique = new Set(ids);
+    assert.equal(ids.length, unique.size, `${label}: duplicate source anchors`);
+    assert.equal(unique.size, expectedCount, `${label}: missing or unexpected source entries`);
+    return unique;
+  };
   const references = new Map([
-    ['../README.md', sourceIds(individualNotes)],
-    ['../../environment/social-reference.md', sourceIds(environmentNotes)]
+    ['../README.md', sourceIds(individualNotes, 27, 'individual references')],
+    ['../../environment/social-reference.md', sourceIds(environmentNotes, 5, 'environment references')]
   ]);
   assert.match(await readFile(join(socialRoot, 'environment/community.md'), 'utf8'), /社区/);
   for (const oldFile of ['docs/community.md', 'docs/social-reference.md']) {

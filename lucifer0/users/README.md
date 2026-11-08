@@ -18,140 +18,55 @@
 
 <!-- users:end -->
 
-## 人物怎样组成
+## 人物组成简述
 
-写一个人，从他怎样长大、怎样谋生、和谁一起生活、手里有哪些资源与限制开始。教育、工作、住处、家庭责任和闲暇相互影响；一个人的说法与实际做法也可能不一致。保留普通、无聊、犹豫、自利和前后矛盾的部分，不要求每个人都有精彩经历或明确的成长结局。
+人物资料写清楚成长经历、教育与工作、经济和居住状况、家庭与社会关系，再补充兴趣、观念、顾虑、情绪和表达习惯。这些经历、资源和关系共同影响他的日常安排、选择，以及他理解自己和回应他人的方式。
 
-组织经历时参考 McAdams 的[生命故事访谈](#m04)；区分发生过的生活与当事人怎样讲述，参考 Rosenthal 的[生命史重构](#m05)；看年龄阶段、社会环境、机会与亲友牵连，参考 Alwin 的[生命历程讨论](#m06)。这些是编写虚构人物的思考工具，不是对真人实施过的访谈或测量。
+档案结构参考 McAdams 的[生命故事访谈](#m04)，梳理人生经历与重要关系；参考 Rosenthal 的[生命史重构](#m05)，理解经历与自我讲述之间的联系；参考 Alwin 的[生命历程讨论](#m06)，考察年龄阶段、社会环境和亲友关系怎样影响人生。
 
-职业调查与口述访谈提供生活限制和经历线索，具体人物的身份、家庭、性格和经历均重新组合，不对应现实中的某个人，不复制私人资料或原句。个体研究的来源及实际阅读范围见本页[个体研究参考](#个体研究参考)；论坛互动另见 [环境研究](../environment/social-reference.md)。
+本库人物是依据社会资料创作的虚构人物。职业调查提供工作与生计背景，口述访谈提供生活经历和自我解释的线索，人物的身份、家庭、性格与具体经历结合这些线索重新创作。来源及阅读范围见本页[个体研究参考](#个体研究参考)，论坛互动见[环境研究](../environment/social-reference.md)。
 
-[空白模板](TEMPLATE.md)沿用普通生活史的结构，每人全部资料都在本人文件夹的 `profile.md`。编号与文件夹名一致，是持续识别这个人的标记。近期生活保留已经发生的处境与尚未完成的打算，年龄对应具体资料日期。
+按[空白模板](TEMPLATE.md)整理资料，每个人的完整档案保存在本人文件夹的 `profile.md`，编号与文件夹名一致。近期生活记录当前处境、实际进展和正在考虑的事，年龄以资料更新日期为准。
 
 ## 个体研究参考
 
-以下资料用于理解人的成长、劳动、家庭、时间与观念，记录于2026-11-09。每个人采用的约束另写在本人 `profile.md` 的「资料参考」。这是一份有意识覆盖不同处境的虚构人物组合，没有针对真人开展访谈、人格测量或相似度实验。
-
-社会统计用来检查缺少哪些生活类型，不把群体均值填成人物工资。职业资料只借任务、精力与能力边界，O*NET 的美国背景不能直接证明中国的工资、门槛或资格。访谈也有时代、受访者与讲述视角，不把某个人的身份、家庭、罕见经历和语句组合移给一个角色。公开可读不等于获得整篇复制或训练许可；这里只保留书目、链接与改写的观察，不存真人私密资料、照片、音频、语料包或调查微观数据。
-
 **社会调查**
 
-### S01
+- <a name="s01"></a>文献：[国家统计局：第七次全国人口普查公报（第五号）](https://www.stats.gov.cn/sj/tjgb/rkpcgb/qgrkpcgb/202302/t20230206_1902005.html)（2021）；可参考：2020年人口年龄分组，用于补齐青年、中年与老年等人生阶段。
+- <a name="s02"></a>文献：[国家统计局：2025年农民工监测调查报告](https://www.stats.gov.cn/sj/zxfb/202604/t20260430_1963472.html)（2026）；可参考：就业流向、教育、行业与收入资料，用于组合人物的迁居、谋生方式和跨地家庭支持。
+- <a name="s03"></a>文献：[国家统计局：第三次全国时间利用调查公报（第三号）](https://www.stats.gov.cn/zt_18555/zthd/lhfw/2025/2025_qgsjlydc/202501/t20250127_1958534.html)（2024）；可参考：有酬劳动、家务照护、学习与交通的时间分配，用于安排人物的作息、休息和社交精力。
+- <a name="s04"></a>文献：[国家统计局：第七次全国人口普查公报（第七号）](https://www.stats.gov.cn/sj/tjgb/rkpcgb/qgrkpcgb/202302/t20230206_1902007.html)（2021）；可参考：城乡居住与流动人口资料，用于同时描写现居地、迁移经历和异地亲属。
 
-[国家统计局：第七次全国人口普查公报（第五号）](https://www.stats.gov.cn/sj/tjgb/rkpcgb/qgrkpcgb/202302/t20230206_1902005.html)，2021-05-11发布，2020年人口年龄快照。已读正文年龄分组。用于检查原有21–57岁账号之外的年龄缺口；不能据此说2026年人口比例不变，也不机械配额。
+**职业资料**
 
-### S02
+职业说明与工作任务来自美国劳工部就业与培训管理局（USDOL/ETA）的 [O*NET® OnLine](https://www.onetonline.org/)（访问2026-11-09）。本项目负责中文概括与人物应用，依据[网站许可](https://www.onetonline.org/help/license)所列 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 改写；O*NET® 为 USDOL/ETA 的商标。
 
-[国家统计局：2025年农民工监测调查报告](https://www.stats.gov.cn/sj/zxfb/202604/t20260430_1963472.html)，2026-04-30。已读流向、年龄、教育、行业和收入段。用于拆开居住、迁移、就业和家庭支持；制造业、交通仓储、零售等生活不只由职业名称决定。均值不代表个人，样本也不能替代全部劳动者。仅保存综合观察与引用。
+- <a name="o01"></a>文献：[O*NET：Motion Picture Projectionists](https://www.onetonline.org/link/details/39-3021.00)；可参考：音画检查、设备准备、排期与内容载入，用于描写影院工作的任务节奏与观影体验。
+- <a name="o02"></a>文献：[O*NET：Customer Service Representatives](https://www.onetonline.org/link/summary/43-4051.00)；可参考：询问、记录、核对与转交的工作流程，用于描写客服、接线及窗口人员的职责与协作关系。
+- <a name="o03"></a>文献：[O*NET：Bakers](https://www.onetonline.org/link/summary/51-3011.00)；可参考：计量、观察状态、批量准备与清洁，用于写面点劳动的时间压力、重复练习和体力消耗。
+- <a name="o04"></a>文献：[O*NET：Maintenance and Repair Workers, General](https://www.onetonline.org/link/summary/49-9071.00)；可参考：检查、估工、找零件和交接，用于写维修工作的等待、判断过程与工期安排。
+- <a name="o05"></a>文献：[O*NET：Shipping, Receiving, and Inventory Clerks](https://www.onetonline.org/link/summary/43-5071.00)；可参考：货物、数量、记录、空间与异常交接，用于描写仓储配送、采购及文书工作中的核对习惯。
+- <a name="o06"></a>文献：[O*NET：Librarians and Media Collections Specialists](https://www.onetonline.org/link/summary/25-4022.00)；可参考：读者需求、检索、分类与公共服务，用于写馆员的知识范围及面对提问时的注意顺序。
+- <a name="o07"></a>文献：[O*NET：Retail Salespersons](https://www.onetonline.org/link/summary/41-2031.00)；可参考：接待、找货、展示、盘点与退换，用于描写兴趣店铺人员在商品爱好、服务劳动与个人时间之间的安排。
+- <a name="o08"></a>文献：[O*NET：Tailors, Dressmakers, and Custom Sewers](https://www.onetonline.org/link/summary/51-6052.00)；可参考：测量、拆线、版型、材料与成本的取舍，用于写改衣师及缝纫教师的经验层次和解释习惯。
+- <a name="o09"></a>文献：[O*NET：Landscaping and Groundskeeping Workers](https://www.onetonline.org/link/summary/37-3011.00)；可参考：浇灌、搬运、清理与工具维护，用于描写养护工作的体力需求和对环境变化的观察。
+- <a name="o10"></a>文献：[O*NET：Sound Engineering Technicians](https://www.onetonline.org/link/summary/27-4014.00)；可参考：设备准备、协调、记录、剪辑与拆收，用于写声音工作者的协作和版本习惯，以及反复听辨对精力的影响。
+- <a name="o11"></a>文献：[O*NET：Software Quality Assurance Analysts and Testers](https://www.onetonline.org/link/summary/15-1253.00)；可参考：条件记录、复现与复测，用于写测试人员组织信息的方式，以及这种习惯带来的聊天摩擦。
+- <a name="o12"></a>文献：[O*NET：Food Science Technicians](https://www.onetonline.org/link/summary/19-4013.00)；可参考：样品准备、清洁、记录与辅助判读，用于明确实验室助理的日常工作、经验来源和分工。
 
-### S03
+**口述访谈**
 
-[国家统计局：第三次全国时间利用调查公报（第三号）](https://www.stats.gov.cn/zt_18555/zthd/lhfw/2025/2025_qgsjlydc/202501/t20250127_1958534.html)，原发布2024-10-31。已读分城乡、性别、年龄的有酬、无酬劳动及学习、交通、互联网时间。启发：下班、无薪、在家、退休都不能等同可自由社交。参与者平均时间不是每个居民每天的定额，互联网也不是独立于其他活动的额外六小时。
+- <a name="l01"></a>文献：[许怡（一席）：技术的迷思](https://www.yixi.tv/h5/speech/1405/)（2026）；可参考：演讲文字中的工厂田野、招工与重复工序，用于描写节拍、返工和管理怎样影响劳动体验。
+- <a name="l02"></a>文献：[史秀莲（一席）：时间都去哪儿了，存起来了](https://yixi.tv/h5/speech/1290/)（2024）；可参考：养老走访与互助启动的讲述，用于写照护分工、受助者意愿与家庭成员之间的时间牵连。
+- <a name="l03"></a>文献：[Sixth Tone：丁燕访谈 Q&A on Factory Boys](https://www.sixthtone.com/news/984)（2016）；可参考：采访中生活圈、审美、语言与信任的线索，用于组合劳动者的休闲、消费和自我表达。
+- <a name="l04"></a>文献：[故事FM：杂货铺设计师](https://hosting.wavpub.cn/storyfm/2026/10/15/当城市不再疯狂生长，他愿意做一个「杂货铺设计/)（2026）；可参考：官方简介与时间轴提出的职业理想变化，用于构思人物怎样重新理解自己的工作选择。
+- <a name="l05"></a>文献：[赵玉顺（一席）：时代交接处的中国农民](https://www.yixi.tv/h5/speech/1395/)（2025）；可参考：走访中的农业兼业、季节零工和人工成本，用于组合务农家庭的收入来源、返乡与劳动安排。
+- <a name="l06"></a>文献：[纪寻（一席）：无障碍旅游](https://www.yixi.tv/h5/speech/734/)（访问2026-11-09）；可参考：演讲文字中的交通、住宿信息与休闲需求，用于写出行条件、自主选择和寻求帮助的具体情境。
+- <a name="l07"></a>文献：[故事FM：E911 万人工厂消失后](https://hosting.wavpub.cn/storyfm/2026/09/24/e911-万人工厂消失后，他的-200-万张照片成了时代档案/)（2026）；可参考：官方简介、短节选与时间轴中的日常影像记录，用于赋予人物工作之外的观察、收藏和记忆习惯。
 
-### S04
+**人物研究方法**
 
-[国家统计局：第七次全国人口普查公报（第七号）](https://www.stats.gov.cn/sj/tjgb/rkpcgb/qgrkpcgb/202302/t20230206_1902007.html)，2021-05-11。已读城乡与流动人口定义及正文。用于同时写居住地和跨地亲属，不将「农村出身」固定成一种语言或性格。2020年的快照只做维度参考。
-
-**职业工作结构**
-
-以下12页均已读职业说明及 Tasks 段，访问日2026-11-09；各页更新时间以原页为准。本节改写了美国劳工部就业与培训管理局（USDOL/ETA）的 [O*NET® OnLine](https://www.onetonline.org/) 职业资料，依据其[网站许可](https://www.onetonline.org/help/license)所列 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 使用；中文概括和与人物的关联为本项目的改写，USDOL/ETA 未审核、认可或测试这些改写。O*NET® 为 USDOL/ETA 的商标。网页附带的第三方材料不因此一并授权。
-
-### O01
-
-[O*NET：Motion Picture Projectionists，39-3021.00](https://www.onetonline.org/link/details/39-3021.00)。音画检查、设备准备、排期与内容载入把观影切成碎片。资料同时列有旧胶片工序，本库没有据此把现代影院写成每天倒卷；检票员仅借影院环境约束，不继承放映技能。
-
-### O02
-
-[O*NET：Customer Service Representatives，43-4051.00](https://www.onetonline.org/link/summary/43-4051.00)。询问、记录、核对、转交并不等于能控制最终解决结果。接线与窗口的共同参考；办公文员只借记录和权限分层，不被写成接线职业。
-
-### O03
-
-[O*NET：Bakers，51-3011.00](https://www.onetonline.org/link/summary/51-3011.00)。计量、观察状态、调整数量及清洁占据工作，不只享受成品。面点师只借批量与准备的约束，不搬西式面包工序或配方。
-
-### O04
-
-[O*NET：Maintenance and Repair Workers, General，49-9071.00](https://www.onetonline.org/link/summary/49-9071.00)。检查、估工、找零件和交接会影响工期。家具、车、楼宇和舞台不能互相继承资质；只借「未看实物不能保证结果」等共同约束，不编操作教程。
-
-### O05
-
-[O*NET：Shipping, Receiving, and Inventory Clerks，43-5071.00](https://www.onetonline.org/link/summary/43-5071.00)。货物、数量、记录、空间与异常交接需要同时核对。用于仓储配送和采购的有限工作结构；公交文书只借记录与现实执行分离，不把物流任务当调度岗位描述。
-
-### O06
-
-[O*NET：Librarians and Media Collections Specialists，25-4022.00](https://www.onetonline.org/link/summary/25-4022.00)。读者需求、检索、分类与公共服务有差异；不把馆员当所有知识的专家。讲解助理只借先辨认提问需求，不以此证明考古知识。
-
-### O07
-
-[O*NET：Retail Salespersons，41-2031.00](https://www.onetonline.org/link/summary/41-2031.00)。接待、找货、展示、盘点、退换及清洁会侵占原以为用于爱好的时间。书、唱片、文具、滑板等门店不因商品不同就免于服务劳动。摄影助理等相邻引用只参考服务交接，不当该职业专门资料。
-
-### O08
-
-[O*NET：Tailors, Dressmakers, and Custom Sewers，51-6052.00](https://www.onetonline.org/link/summary/51-6052.00)。测量、拆线、版型比例、材料和成本存在取舍。改衣师与基础缝纫教师的能力层级不同，能做不等于能保证陌生人的结果。
-
-### O09
-
-[O*NET：Landscaping and Groundskeeping Workers，37-3011.00](https://www.onetonline.org/link/summary/37-3011.00)。浇灌、搬运、清理和工具维护是劳动。花摊及水族养护只借环境观察与体力约束，不推导物种知识、用药和养殖技术。
-
-### O10
-
-[O*NET：Sound Engineering Technicians，27-4014.00](https://www.onetonline.org/link/summary/27-4014.00)。准备设备、协调、记录、剪辑、拆收与声音创作并存；助理不等于全能工程师。字幕校对仅参考音轨、反复听与协作限制，不虚称字幕职业调查。
-
-### O11
-
-[O*NET：Software Quality Assurance Analysts and Testers，15-1253.00](https://www.onetonline.org/link/summary/15-1253.00)。条件、记录、复现与复测构成反馈；这种习惯可以带进聊天，也可能让别人感到被审问。职业方法不使个人消费判断永远理性。
-
-### O12
-
-[O*NET：Food Science Technicians，19-4013.00](https://www.onetonline.org/link/summary/19-4013.00)。辅助、样品准备、清洁、记录与判读有层级。仅用于工作范围，不拿实验室身份为家庭食品安全、营养和医疗判断背书。
-
-**口述、访谈与生活观察**
-
-### L01
-
-[一席：许怡《技术的迷思》](https://www.yixi.tv/h5/speech/1405/)，2026-03-22。已读演讲文字的工厂田野、招工、重复工序和技术变迁部分。观察：任务看起来简单也可能受强节拍、返工与管理影响；同一技术在管理者和劳动者眼里不同。不移植受访者事故、身份或具体工厂经历，不概括为所有工厂情况。
-
-### L02
-
-[一席：史秀莲《时间都去哪儿了，存起来了》](https://yixi.tv/h5/speech/1290/)，2024-08-17。已读养老走访与互助启动部分。观察：帮助必须考虑当事人意愿、谁付出时间、承诺能否兑现；不把有家庭理解成必定获得照护。演讲案例不是通用养老政策，本库不搬具体疾病、家庭或访谈话语。
-
-### L03
-
-[Sixth Tone：Q&A With Writer Ding Yan on China’s “Factory Boys”](https://www.sixthtone.com/news/984)，2016-06-21。已读采访正文。观察：生活圈、审美、语言与信任会影响一个人怎么讲自己；工人也有不同的消费和休闲。受访者明确有选材偏好，个别性别判断不作为本库规律；不复用书中个体经历，旧田野不当2026年行业现状。
-
-### L04
-
-[故事FM：当城市不再疯狂生长，他愿意做一个「杂货铺设计师」](https://hosting.wavpub.cn/storyfm/2026/10/15/当城市不再疯狂生长，他愿意做一个「杂货铺设计/)，2026-10-15。已读官方简介及时间轴，**未听完整音频**。仅借职业理想可能随工作条件改变这一提问方向，不声称听到了具体讲述或使用其原句。栏目含品牌合作背景，成功叙事不能代表多数人的转型。
-
-### L05
-
-[一席：赵玉顺《时代交接处的中国农民》](https://www.yixi.tv/h5/speech/1395/)，2025-09-21。已读走访、返乡、农业兼业与人工成本段。观察：自种、租地、季节零工和家庭收入可以叠加，地方条件差异很大。新增人物的作物安排和家庭均另创，不套用讲述中某位农民的年龄、地点、土地面积或收入。
-
-### L06
-
-[一席：纪寻《无障碍旅游》](https://www.yixi.tv/h5/speech/734/)，访问2026-11-09，所读正文未确认发布日。已读交通、住宿信息和休闲需求段。观察：需要具体可达条件，不能用「方便」「励志」代替人的实际问题。只参考可达性和自主选择，不继承讲者病种、国别经历、体重或职业履历；单人经验不是全部残障经验。
-
-### L07
-
-[故事FM：E911 万人工厂消失后，他的200万张照片成了时代档案](https://hosting.wavpub.cn/storyfm/2026/09/24/e911-万人工厂消失后，他的-200-万张照片成了时代档案/)，2026-09-24。已读官方简介、短节选和时间轴，**未听完整音频**。用于提醒劳动者也能记录日常，未作为人物生平证据；摄影数量、受访者身份及独特经历未转给角色。没有下载节目与照片。
-
-**个体差异与生活史方法**
-
-### M01
-
-[IPIP 官方网站](https://ipip.ori.org/)，访问2026-11-09。已读资源说明与公开领域声明。仅借「不同个体差异不必一起高或低」来检查认真、耐心、外向和冲动的交叉；未做心理测量，未编造人格分数，也未用量表决定命运。条目与量表为 public domain，不意味着可以把现实人的测量结果公开。
-
-### M04
-
-[Dan P. McAdams：The Life Story Interview（1995）](https://cpb-us-e1.wpmucdn.com/sites.northwestern.edu/dist/4/3901/files/2020/11/The-Life-Story-Interview-1995.pdf)，西北大学所存扫描版访谈提纲，共6页。本次通过检索读到开场与 Life Chapters 部分，未逐页读完。借生命故事的组织方法，关注成长阶段，以及当事人怎样理解这些经历。只用于编写虚构生活史，不声称对这些人物或现实受访者实施过访谈；没有复制提纲来替人物填答。
-
-### M05
-
-[Gabriele Rosenthal：Reconstruction of Life Stories: Principles of Selection in Generating Stories for Narrative Biographical Interviews（1993）](https://d-nb.info/1191579905/34)。已读原文PDF第1–3页的引言与方法讨论，未声称读完全文。借生活经历与当下自述之间的区别：人会选择、强调或回避不同部分，完整经历不能等同一次自我介绍，叙述选择也受当下视角和社会关系影响。这里用来允许人物前后矛盾和不愿说出口的顾虑，不声称完成了真实访谈的生命史重构。
-
-### M06
-
-[Duane F. Alwin：Integrating Varieties of Life Course Concepts（2012）](https://pmc.ncbi.nlm.nih.gov/articles/PMC3307990/)。原页此次显示验证码，只读到检索正文片段中的生命历程原则，未读完全文。借社会时间与地点、人生阶段和人与人的相互依赖来检查人物处境；工作、家庭和机会彼此牵动，不能只凭年龄或职业决定一个人的行为。用于虚构人物构成，不作为统计代表性或因果效果的证据。
-
-**未读到与仍缺的材料**
-
-[CFPS](https://www.isss.pku.edu.cn/cfps/) 及中心项目简介页请求超时，未导入问卷或数据；湖南统计局的普查转载只见标题，S01改读国家统计局正文。仍缺中国本土逐职业的深入采访，尤其字幕、数据标注、微缩制作等细分工作。相邻参考与原创部分已分别说明，资料条数不代表每种职业都已充分调查。
+- <a name="m01"></a>文献：[IPIP：International Personality Item Pool](https://ipip.ori.org/)（访问2026-11-09）；可参考：公开人格条目的个体差异维度，用于安排外向、谨慎、合作倾向与情绪反应之间的多种组合。
+- <a name="m04"></a>文献：[Dan P. McAdams：The Life Story Interview](https://cpb-us-e1.wpmucdn.com/sites.northwestern.edu/dist/4/3901/files/2020/11/The-Life-Story-Interview-1995.pdf)（1995）；可参考：检索读到的开场与 Life Chapters 部分，用于按成长阶段组织经历，并写出人物怎样理解重要往事。
+- <a name="m05"></a>文献：[Gabriele Rosenthal：Reconstruction of Life Stories](https://d-nb.info/1191579905/34)（1993）；可参考：原文第1–3页的引言与方法讨论，用于分别梳理生活经历和当下自述，描写叙述中的选择、强调与回避。
+- <a name="m06"></a>文献：[Duane F. Alwin：Integrating Varieties of Life Course Concepts](https://pmc.ncbi.nlm.nih.gov/articles/PMC3307990/)（2012）；可参考：检索正文片段中的社会时地、人生阶段与相互依赖，用于考察工作、家庭和机会怎样共同塑造人物处境。
