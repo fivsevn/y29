@@ -5,6 +5,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { writeThreadBatch } from '../lucifer0/tools/thread-packages.js';
+import { readSiteEmotes, siteEmoteManifestPath } from '../lucifer0/tools/site-emotes.js';
+import sharp from 'sharp';
 
 async function files(directory, prefix = '') {
   const result = [];
@@ -27,6 +29,20 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   await mkdir(join(directory, 'lucifer0/.private'), { recursive: true });
   await writeFile(join(directory, 'lucifer0/.private/test.json'), '{"syntheticPrivateMarker":true}');
   await writeFile(join(directory, 'lucifer0/assets/not-referenced.txt'), 'syntheticPrivateMarker');
+  const emoteCatalog = await readSiteEmotes(join(directory, 'lucifer0')) || { version: 1, name: 'L0', items: [] };
+  const emote = { id: 'build-emote-fixture', name: 'Synthetic name', src: 'assets/emotes/l0/build-emote-fixture.webp', alt: 'Synthetic flat blue square' };
+  emoteCatalog.items.push(emote);
+  await mkdir(join(directory, 'lucifer0/assets/emotes/l0'), { recursive: true });
+  const emoteBytes = await sharp({ create: { width: 2, height: 2, channels: 4, background: '#7788aaff' } }).webp().toBuffer();
+  await writeFile(join(directory, 'lucifer0', emote.src), emoteBytes);
+  await writeFile(join(directory, 'lucifer0', siteEmoteManifestPath), JSON.stringify(emoteCatalog));
+  await writeFile(join(directory, 'lucifer0/assets/emotes/l0/unused.png'), 'unused emote draft');
+  await writeThreadBatch(join(directory, 'lucifer0'), {
+    version: 1, id: 'build-shared-emotes', mode: 'sample', posts: ['build-emote-one', 'build-emote-two'].map(id => ({
+      id, author: 'alan', createdAt: '2026-01-01T13:00:00+08:00', replyTo: null, text: '', likes: 0, canon: 'sample',
+      media: [{ src: emote.src, alt: emote.alt, fit: 'contain' }]
+    }))
+  });
   const mediaDirectory = 'posts/2026/01/build-media-fixture/media';
   await mkdir(join(directory, 'lucifer0', mediaDirectory), { recursive: true });
   await writeFile(join(directory, 'lucifer0', mediaDirectory, 'study.svg'), '<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"/>');
@@ -51,7 +67,8 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   const published = await files(join(directory, 'dist/lucifer0'));
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
   const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.png', `${mediaDirectory}/LICENSE.txt`,
-    ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
+    ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src)),
+    siteEmoteManifestPath, ...emoteCatalog.items.map(item => item.src)]);
   const mediaLicenses = new Set(feed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')));
   for (const path of mediaLicenses) {
     let source;
@@ -63,6 +80,8 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   assert.deepEqual(published, [...expected].sort());
   assert.ok(!published.some(path => /private|not-referenced|unused|registry|profile-seeds|manage|tools|docs|\.md$/.test(path)));
   assert.equal(await readFile(join(directory, 'dist/lucifer0', mediaDirectory, 'LICENSE.txt'), 'utf8'), 'Google Noto Emoji license fixture');
+  assert.deepEqual(await readFile(join(directory, 'dist/lucifer0', emote.src)), emoteBytes, 'declared shared emotes are published without being copied into posts');
+  assert.deepEqual(JSON.parse(await readFile(join(directory, 'dist/lucifer0', siteEmoteManifestPath), 'utf8')), emoteCatalog);
   assert.ok(published.includes(avatar), 'an optional avatar from its owner package is published');
   assert.ok(published.includes(`${mediaDirectory}/study.webp`), 'referenced media is published from its thread package');
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {

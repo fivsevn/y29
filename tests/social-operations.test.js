@@ -1331,3 +1331,32 @@ test('automatic new arrivals exclude every existing thread identity and fall bac
   assert.equal(exhausted.editor.replyAuthor.used, 'new'); assert.equal(exhausted.writer.thread.role, 'new');
   assert.equal(exhausted.draft.replyTo, adopted.id);
 });
+
+test('writers read the exact shared emote catalog and catalog changes refresh material without redrawing', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
+  const path = 'assets/emotes/l0/manifest.json', image = 'assets/emotes/l0/synthetic-face.webp';
+  const catalog = { version: 1, name: 'L0', items: [{ id: 'synthetic-face', name: 'A lookup name', src: image, alt: 'A blue test square' }] };
+  await mkdir(join(f.root, 'assets/emotes/l0'), { recursive: true });
+  const { default: sharp } = await import('sharp');
+  await writeFile(join(f.root, image), await sharp({ create: { width: 2, height: 2, channels: 4, background: '#7788aaff' } }).webp().toBuffer());
+  await writeFile(join(f.root, path), JSON.stringify(catalog));
+  const postId = prepared.id + '-emote-reader';
+  await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
+  await prepareUpdate(f.options);
+  const refreshed = await readJSON(prepared.operationPath);
+  assert.deepEqual(refreshed.plan, original.plan);
+  assert.notEqual(refreshed.sourceDigest, original.sourceDigest);
+  const first = await briefUpdatePost({ ...f.options, postId });
+  assert.deepEqual(first.writer.siteEmotes, { sourcePath: path, ...catalog });
+  const reading = await readFile(prepared.readingPath, 'utf8');
+  assert.ok(reading.includes(path) && reading.includes(image) && reading.includes(catalog.items[0].name));
+  catalog.items[0].name = 'A renamed lookup';
+  await writeFile(join(f.root, path), JSON.stringify(catalog));
+  await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
+  await prepareUpdate(f.options);
+  const second = await briefUpdatePost({ ...f.options, postId });
+  assert.deepEqual(second.draft, first.draft, 'inventory refresh preserves the author, timing and original draw');
+  assert.deepEqual(second.writer.siteEmotes, { sourcePath: path, ...catalog });
+  assert.ok(!Object.hasOwn(second.writer.siteEmotes.items[0], 'meaning'));
+  assert.ok(!Object.hasOwn(second.writer.siteEmotes.items[0], 'negative'));
+});

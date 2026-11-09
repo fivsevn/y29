@@ -6,6 +6,7 @@ import { socialRoot, loadContent } from './content.js';
 import { defaultLottery, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows } from './lottery.js';
 export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
+import { siteEmoteManifestPath } from './site-emotes.js';
 import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
@@ -213,9 +214,10 @@ async function sourceText(root, path) {
   return { path, text: await regularText(absolute) };
 }
 async function source(root) {
-  const { registry, policy, feed, files, pending } = await loadContent(root, { allowPending: true });
+  const { registry, policy, feed, files, pending, siteEmotes } = await loadContent(root, { allowPending: true });
   const material = await readProfiles({ root });
   const documents = await Promise.all([...controlPaths, ...environmentPaths].map(path => sourceText(root, path)));
+  if (siteEmotes) documents.push(await sourceText(root, siteEmoteManifestPath));
   for (const user of registry.users) {
     documents.push(await sourceText(root, 'users/' + user.id + '/profile.md'));
     for (const supplement of material.supplementalDocuments[user.id] || []) documents.push(await sourceText(root, supplement.path));
@@ -223,7 +225,7 @@ async function source(root) {
   for (const worldview of material.worldviewDocuments) documents.push({ path: worldview.path, text: worldview.text });
   for (const file of files) documents.push(await sourceText(root, relative(root, file).split('\\').join('/')));
   const sourceDigest = digest({ policy, users: registry.users, profiles: material.profiles, documents });
-  return { registry, policy, feed, material, documents, sourceDigest, pending };
+  return { registry, policy, feed, material, documents, sourceDigest, pending, siteEmotes };
 }
 
 async function workFolder(workDirectory, root, create = false) {
@@ -447,6 +449,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
     writer: {
       createdAt,
       writing: { sourcePath: writing.path, text: writing.text },
+      ...(data.siteEmotes ? { siteEmotes: { sourcePath: siteEmoteManifestPath, ...structuredClone(data.siteEmotes) } } : {}),
       self: { id: author, name: guest ? draft.guest.name : ownUser.name, documents: profiles.map(profile => profile.document),
         recentPosts: [...before.values()].filter(post => post.author === author && validDate(post.createdAt) && Date.parse(post.createdAt) <= Math.min(now, Date.parse(createdAt)))
           .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en')).slice(0, 5)
