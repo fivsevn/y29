@@ -244,27 +244,27 @@
       "replyStance": [
         {
           "value": "support",
-          "weight": 16
+          "weight": 15
         },
         {
           "value": "push-back",
-          "weight": 24
+          "weight": 28
         },
         {
           "value": "doubt",
-          "weight": 18
+          "weight": 10
         },
         {
           "value": "defend",
-          "weight": 14
+          "weight": 15
         },
         {
           "value": "provoke",
-          "weight": 10
+          "weight": 20
         },
         {
           "value": "ask-detail",
-          "weight": 10
+          "weight": 4
         },
         {
           "value": "sidetrack",
