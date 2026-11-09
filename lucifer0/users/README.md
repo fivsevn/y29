@@ -36,7 +36,7 @@
 
 资讯账号与管理员账号按[账号模板](ACCOUNT_TEMPLATE.md)整理，常读来源直接保存在各自 `profile.md` 的“取材与选题”中。资讯号参与日常更新，管理员由用户明确命令触发人工发布。
 
-“所属世界观”填写 `environment/worldviews/` 中对应文件的编号，例如 `trueheart-hunter` 对应[世界观A：真心猎手](../environment/worldviews/trueheart-hunter.md)。这项可以留空；填写后，该世界的共同背景与个人档案一起使用。新增世界观时，在该目录添加同名 Markdown 文件，再给人物登记编号。
+“所属世界观”填写[世界目录](../environment/worldviews/README.md)中的稳定编号：默认使用[世界观0](../environment/worldviews/worldview0/worldview0.md)的 `worldview0`，真心猎手人物使用[世界观A](../environment/worldviews/worldviewA/worldviewA.md)的 `worldviewA`。所属世界的设定和动态与本人档案一起使用。
 
 ## 参考资料
 

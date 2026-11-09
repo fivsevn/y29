@@ -48,17 +48,23 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
   await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md', 'negative.md']]]) {
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md', 'negative.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
   await writeFile(join(root, 'accounts.json'), JSON.stringify({ version: 1, users: users().map(accountSetting) }));
   await mkdir(join(root, 'environment/worldviews'));
-  await writeFile(join(root, 'environment/worldviews/synthetic-world.md'), '# Synthetic world\n\nSYNTHETIC_WORLDVIEW_SETTING\n');
+  await writeFile(join(root, 'environment/worldviews/README.md'), '# Synthetic world index\n\nSYNTHETIC_WORLDVIEW_INDEX\n');
+  for (const id of ['worldview0', 'worldviewA']) {
+    const folder = join(root, 'environment/worldviews', id);
+    await mkdir(folder);
+    await writeFile(join(folder, id + '.md'), `# Synthetic ${id}\n\nSYNTHETIC_${id}_SETTING\n`);
+    await writeFile(join(folder, 'events.md'), `# Synthetic ${id} events\n\nSYNTHETIC_${id}_EVENTS\n`);
+  }
   for (const user of users()) {
     await mkdir(join(root, 'users', user.id), { recursive: true });
     const profile = emptyProfile(user.id); profile.notes = 'SYNTHETIC_FULL_PERSON_' + user.id;
-    profile.basics.worldview = user.kind === 'character' ? 'synthetic-world' : '';
+    profile.basics.worldview = user.kind === 'character' ? 'worldviewA' : '';
     await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
   }
   await writeFile(join(root, 'users/speech.md'), '# Synthetic speech research\n');
@@ -389,10 +395,11 @@ test('prepare creates only one work record and a full raw-source reading, then r
     assert.ok(reading.includes('users/' + user.id + '/profile.md'));
     assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
-  for (const name of ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
+  for (const name of ['README.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
   assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY'));
-  assert.equal(reading.split('SYNTHETIC_WORLDVIEW_SETTING').length - 1, 1);
-  assert.ok(reading.includes('| person-0 | synthetic-world |') && reading.includes('| person-2 | 未指定 |'));
+  for (const marker of ['SYNTHETIC_WORLDVIEW_INDEX', 'SYNTHETIC_worldviewA_SETTING', 'SYNTHETIC_worldviewA_EVENTS', 'SYNTHETIC_worldview0_SETTING', 'SYNTHETIC_worldview0_EVENTS']) assert.equal(reading.split(marker).length - 1, 1);
+  assert.ok(!reading.includes('world-trends.md'));
+  assert.ok(reading.includes('| person-0 | worldviewA |') && reading.includes('| person-2 | worldview0 |'));
   assert.ok(reading.includes('docs/README.md') && reading.includes('docs/writing.md') && reading.includes('docs/publishing.md'));
   assert.ok(!JSON.stringify(original).includes('SYNTHETIC_FULL_PERSON_'));
   original.research = research(f.now); await writeFile(result.operationPath, JSON.stringify(original));
@@ -406,12 +413,12 @@ test('prepare creates only one work record and a full raw-source reading, then r
   assert.ok(!(await readdir(f.root)).includes('rounds'));
 });
 
-test('worldview revisions refresh the full reading and invalidate drafts without changing the saved draw', async t => {
+test('world-specific event revisions refresh reading and invalidate drafts without changing the saved draw', async t => {
   const f = await fixture(t), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
   const entries = [post('worldview-root', 'guest-worldview', f.now), post('worldview-second', 'guest-worldview-two', f.now), post('worldview-character', 'person-0', f.now, 'worldview-root')];
   const { batch } = await draft(prepared, f.now, entries);
   await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
-  const path = join(f.root, 'environment/worldviews/synthetic-world.md');
+  const path = join(f.root, 'environment/worldviews/worldviewA/events.md');
   await writeFile(path, '# Revised synthetic world\n\nSYNTHETIC_UPDATED_WORLDVIEW\n');
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
   const resumed = await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
@@ -421,7 +428,7 @@ test('worldview revisions refresh the full reading and invalidate drafts without
   assert.notEqual(current.sourceDigest, original.sourceDigest);
   assert.deepEqual(current.posts, entries);
   assert.equal(reading.split('SYNTHETIC_UPDATED_WORLDVIEW').length - 1, 1);
-  assert.ok(reading.includes('| person-0 | synthetic-world |') && reading.includes('| person-2 | 未指定 |'));
+  assert.ok(reading.includes('| person-0 | worldviewA |') && reading.includes('| person-2 | worldview0 |'));
   await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
 });
 
@@ -474,7 +481,7 @@ test('changed source, account controls and accidental draw edits block publicati
   const f = await fixture(t), result = await prepareUpdate(f.options);
   const entries = [post('guest-first', 'guest-one', f.now), post('guest-second', 'guest-two', f.now), post('character-reply', 'person-0', f.now, 'guest-first')];
   const { batch } = await draft(result, f.now, entries);
-  const environment = join(f.root, 'environment/world-trends.md');
+  const environment = join(f.root, 'environment/worldviews/worldview0/events.md');
   await writeFile(environment, '# New world source');
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /Source material changed/);
   await prepareUpdate(f.options); await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath });
@@ -748,9 +755,12 @@ test('writer brief has only own dossier and the actually visible target fragment
   const writer = JSON.stringify(brief.writer);
   assert.ok(writer.includes('SYNTHETIC_FULL_PERSON_' + ownAuthor));
   for (const user of users().filter(user => user.id !== ownAuthor)) assert.ok(!writer.includes('SYNTHETIC_FULL_PERSON_' + user.id));
-  assert.ok(!writer.includes('SYNTHETIC_UNREAD_END') && !writer.includes('SYNTHETIC_FUTURE_FLOOR') && !writer.includes('SYNTHETIC_WORLDVIEW_SETTING'));
+  assert.ok(!writer.includes('SYNTHETIC_UNREAD_END') && !writer.includes('SYNTHETIC_FUTURE_FLOOR') && !writer.includes('SYNTHETIC_worldviewA_SETTING') && !writer.includes('SYNTHETIC_worldviewA_EVENTS') && !writer.includes('SYNTHETIC_worldview0_EVENTS'));
   assert.ok(brief.writer.conditions.length <= 2);
-  assert.equal(brief.editor.worldviewPath, ['person-0', 'person-1'].includes(ownAuthor) ? 'environment/worldviews/synthetic-world.md' : null);
+  const ownWorld = ['person-0', 'person-1'].includes(ownAuthor) ? 'worldviewA' : 'worldview0';
+  assert.equal(brief.editor.worldviewId, ownWorld);
+  assert.equal(brief.editor.worldviewPath, `environment/worldviews/${ownWorld}/${ownWorld}.md`);
+  assert.equal(brief.editor.worldviewEventsPath, `environment/worldviews/${ownWorld}/events.md`);
   const snapshot = await readFile(prepared.operationPath, 'utf8');
   assert.deepEqual(await briefUpdatePost({ ...f.options, postId: replyId }), brief);
   assert.equal(await readFile(prepared.operationPath, 'utf8'), snapshot);
@@ -780,7 +790,9 @@ test('new brief replies reject unavailable parents and do not expose later or de
   await draft(prepared, f.now, [root, deleted, futureTime, self, future]);
   const brief = await briefUpdatePost({ ...f.options, postId: id });
   assert.equal(brief.writer.self.documents.length, 0);
-  assert.equal(brief.editor.worldviewPath, null);
+  assert.equal(brief.editor.worldviewId, 'worldview0');
+  assert.equal(brief.editor.worldviewPath, 'environment/worldviews/worldview0/worldview0.md');
+  assert.equal(brief.editor.worldviewEventsPath, 'environment/worldviews/worldview0/events.md');
   assert.ok(brief.writer.visiblePosts.some(item => item.id === deleted.id && item.text === '该回复已被删除。'));
   assert.ok(!JSON.stringify(brief.writer).includes('PRIVATE_DELETED_BODY'));
   assert.ok(!JSON.stringify(brief.writer).includes('LATER_DRAFT_BODY'));

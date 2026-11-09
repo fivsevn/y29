@@ -11,7 +11,7 @@ import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
-const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md', 'environment/meme.md', 'environment/negative.md'];
+const environmentPaths = ['environment/README.md', 'environment/worldviews/README.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md', 'environment/meme.md', 'environment/negative.md'];
 const controlPaths = ['README.md', 'docs/README.md', 'docs/writing.md', 'docs/publishing.md', 'docs/lottery.md', 'users/speech.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;
@@ -444,6 +444,9 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const profiles = data.documents.filter(document => profilePaths.has(document.path)).map(writerProfile);
   const writing = data.documents.find(document => document.path === 'docs/writing.md');
   const writerSource = path => { const document = data.documents.find(document => document.path === path); return { sourcePath: document.path, text: document.text }; };
+  const worldviewId = (guest ? '' : data.material.profiles[author].basics.worldview) ||
+    (data.material.worldviewDocuments.some(document => document.id === 'worldview0' && document.kind === 'setting') ? 'worldview0' : null);
+  const worldviewDocument = kind => data.material.worldviewDocuments.find(document => document.id === worldviewId && document.kind === kind)?.path ?? null;
   return {
     id: operation.id, postId, draft: timing.status === 'ready' ? draft : null,
     writer: {
@@ -468,7 +471,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
     },
     editor: {
       authorKind: guest ? 'guest' : 'library', drawnAuthorKind: choices.authorKind,
-      worldviewPath: guest ? null : data.material.worldviewDocuments.find(document => document.id === data.material.profiles[author].basics.worldview)?.path ?? null,
+      worldviewId, worldviewPath: worldviewDocument('setting'), worldviewEventsPath: worldviewDocument('events'),
       waitSeconds: choices.waitSeconds,
       ...(target && choices.discussion?.replyAuthor ? { replyAuthor: { drawn: choices.discussion.replyAuthor, used: existing ? 'saved' : returning ? choices.discussion.replyAuthor : 'new' } } : {}),
       ...(target && (requestedRoot || config.discussion?.replyAuthor) ? { replyTarget: { mode: existing ? 'saved' : requestedRoot ? 'thread' : 'explicit', rootId: rootPost.id, postId: target.id } } : {}),

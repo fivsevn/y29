@@ -4,8 +4,7 @@
 
 | 文档 | 内容 |
 | --- | --- |
-| [世界观](worldviews/) | 按作品或地区保存共同背景与生活条件；现有[世界观A：真心猎手](worldviews/trueheart-hunter.md) |
-| [世界趋势](world-trends.md) | 正式资讯、社会热点与历史事件，以及采用的背景变化 |
+| [世界观](worldviews/) | [世界观0](worldviews/worldview0/worldview0.md)为默认的现实改编；[世界观A：真心猎手](worldviews/worldviewA/worldviewA.md)保存作品背景，各世界目录附有动态记录 |
 | [日常生活](everyday-life.md) | 学习、工作、家庭、消费和闲暇中的具体经历 |
 | [负面与争议研究](negative.md) | 八卦、抱怨、爆点与冲突讨论的实际样本和话头结构 |
 | [Meme 研究](meme.md) | 表情包、反应图、网络句式的资源与用法 |
