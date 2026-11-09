@@ -22,7 +22,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 ## 填写当前更新
 
-在 `operation.json` 中填写 `research` 与 `posts`。其余自动字段由工具管理。工具汇集材料后，执行者实际读完 `reading.md`，再开展观察与写作。
+在 `operation.json` 中填写 `research`、`posts` 与适用的 `reviews`。其余自动字段由工具管理。工具汇集材料后，执行者实际读完 `reading.md`，再开展观察与写作。
 
 `research` 每项记录一个实际读到的公开页面：
 
@@ -57,6 +57,14 @@ node lucifer0/tools/update.js prepare --work /outside/work
 随机路人的 `author` 使用唯一的 `guest-` 编号，`guest.name` 保存公开网名。署名随帖子归档，网页自动汇集该账号的发言。库内人物使用原 `author` 编号，并省略 `guest` 字段。
 
 `text` 保存实际文字。纯图发言填空字符串，并在 `media` 登记实际图片。
+
+启用讨论配额的操作会带有私有 `reviews` 数组，每条实际发言对应一项审读结果：
+
+```json
+{ "postId": "update-example-01", "negative": true, "reason": "指责舍友擅自借走设备，要求对方归还。" }
+```
+
+`postId` 对应当前 `posts` 中的一条实际发言；`negative` 填本次审读的布尔判断，`reason` 写清依据。普通内容同样填写记录，例如 `negative: false`、`reason: "询问桌腿怎样固定，正文只在请求操作帮助。"`。字段只保存在操作文件，用于[讨论配额](lottery.md#负面与回复提示)核对。补写或修改正文后同步复核该项，发布页面沿用原帖子字段。
 
 `likes` 保存本条基础赞数，取值依据与建议数值的处理见[评论与点赞](../environment/comments.md#点赞怎样形成差异)。
 
@@ -96,9 +104,9 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 
 已有草稿也可以按它的 ID 读取材料。命令返回 `draft`、`writer` 和 `editor`。先查看 `editor.timing`：`ready` 时使用返回的草稿及时间；`deferred` 时跳过本轮候选，后续更新重新评估。将 `writer` 作为本次单人写作输入，策划者使用 `editor` 安排当前操作；把完成的文字、图片和身份补进 `draft`，再保存到 `operation.json.posts`。临时路人的公开网名填入 `guest.name`。
 
-`writer.createdAt` 是本条的时间。`writer.self.voiceExamples` 保存标记为 `practice` 的表达练习，本人正式背景保存在其余档案材料中。
+`writer.createdAt` 是本条的时间。`editor.discussion` 显示已审读条数、负面数及下一条的缺口；写作者按 `writer.discussion` 所带原文理解提示。回复材料同时携带评论方法原文。`writer.self.voiceExamples` 保存标记为 `practice` 的表达练习，本人正式背景保存在其余档案材料中。
 
-策划者从 `editor` 提示的本人背景资料选取当事人已知的片段，补入单条 `writer`；临时路人的当前处境也在这一步补齐。每写完一条，保存草稿再获取下一条材料。完整 `reading.md` 供策划者核对资料；操作文件保留全部草稿与研究记录。命令中的 ID 替换为实际当前操作编号，回复目标使用草稿或归档中已有的帖号。
+策划者从 `editor` 提示的本人背景资料选取当事人已知的片段，补入单条 `writer`；临时路人的当前处境也在这一步补齐。每写完一条，保存草稿及其 `reviews` 审读项，再获取下一条材料。完整 `reading.md` 供策划者核对资料；操作文件保留全部草稿与研究记录。命令中的 ID 替换为实际当前操作编号，回复目标使用草稿或归档中已有的帖号。
 
 ## 生成并归档配图
 

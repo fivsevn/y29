@@ -216,6 +216,75 @@
         "min": 3,
         "max": 6
       }
+    },
+    "discussion": {
+      "minimumNegativeShare": 0.5,
+      "negativeMotivation": [
+        {
+          "value": "complaint",
+          "weight": 22
+        },
+        {
+          "value": "gossip",
+          "weight": 24
+        },
+        {
+          "value": "dispute",
+          "weight": 24
+        },
+        {
+          "value": "grievance",
+          "weight": 16
+        },
+        {
+          "value": "suspicion",
+          "weight": 14
+        }
+      ],
+      "replyStance": [
+        {
+          "value": "support",
+          "weight": 16
+        },
+        {
+          "value": "push-back",
+          "weight": 24
+        },
+        {
+          "value": "doubt",
+          "weight": 18
+        },
+        {
+          "value": "defend",
+          "weight": 14
+        },
+        {
+          "value": "provoke",
+          "weight": 10
+        },
+        {
+          "value": "ask-detail",
+          "weight": 10
+        },
+        {
+          "value": "sidetrack",
+          "weight": 8
+        }
+      ],
+      "replyAuthor": [
+        {
+          "value": "new",
+          "weight": 55
+        },
+        {
+          "value": "root",
+          "weight": 25
+        },
+        {
+          "value": "participant",
+          "weight": 20
+        }
+      ]
     }
   }
 }

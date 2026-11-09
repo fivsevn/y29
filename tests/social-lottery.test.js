@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultLottery, drawPostChoices, drawThreadReplyCount, drawResearchWindows, validateLottery } from '../lucifer0/tools/lottery.js';
+import { defaultLottery, drawPostChoices, drawThreadReplyCount, drawResearchWindows, validateLottery, chooseReplyParticipant } from '../lucifer0/tools/lottery.js';
 
 test('independent post draws produce varied batches, substantial casual/help/negative intent and cold/hot threads', () => {
   // Fix the statistical scenario here so production tuning stays in publication.json.
@@ -61,4 +61,51 @@ test('independent dimensions replay stably and sampling produces a bounded conti
   assert.throws(() => validateLottery(invalid), /author kind/);
   invalid.authorKind[0].weight = 1; invalid.conditionCount.max = 3;
   assert.throws(() => validateLottery(invalid), /condition count/);
+});
+
+test('discussion draws use independent streams and old snapshots keep their original shape', () => {
+  const lottery = structuredClone(defaultLottery);
+  const input = { seed: 'discussion-independent', postId: 'discussion-post', replyTo: 'actual-parent', lottery };
+  const first = drawPostChoices(input);
+  assert.deepEqual(drawPostChoices(input), first);
+  assert.ok(lottery.discussion.negativeMotivation.some(item => item.value === first.discussion.negativeMotivation));
+  assert.ok(lottery.discussion.replyStance.some(item => item.value === first.discussion.replyStance));
+  const changed = structuredClone(lottery);
+  changed.discussion.replyStance = [{ value: first.discussion.replyStance === 'doubt' ? 'support' : 'doubt', weight: 1 }];
+  const second = drawPostChoices({ ...input, lottery: changed });
+  assert.notEqual(second.discussion.replyStance, first.discussion.replyStance);
+  assert.deepEqual({ ...second, discussion: first.discussion }, first);
+  const legacy = structuredClone(lottery); delete legacy.discussion;
+  const old = drawPostChoices({ ...input, lottery: legacy });
+  assert.ok(!Object.hasOwn(old, 'discussion'));
+  const { discussion, ...unchanged } = first;
+  assert.deepEqual(old, unchanged);
+  for (const minimumNegativeShare of [-0.1, 1.1, NaN, '0.5']) {
+    const invalid = structuredClone(lottery); invalid.discussion.minimumNegativeShare = minimumNegativeShare;
+    assert.throws(() => validateLottery(invalid), /negative share/);
+  }
+  const invalid = structuredClone(lottery); invalid.discussion.replyStance = [{ value: 'always-agree', weight: 1 }];
+  assert.throws(() => validateLottery(invalid), /reply stance/);
+});
+
+
+test('reply identity choice has its own stable stream and optional snapshots preserve all earlier draws', () => {
+  const lottery = structuredClone(defaultLottery), legacy = structuredClone(lottery);
+  delete legacy.discussion.replyAuthor;
+  const input = { seed: 'identity-stream', postId: 'identity-reply', replyTo: 'actual-target' };
+  const before = drawPostChoices({ ...input, lottery: legacy }), now = drawPostChoices({ ...input, lottery });
+  const { replyAuthor, ...sameDiscussion } = now.discussion;
+  assert.deepEqual({ ...now, discussion: sameDiscussion }, before);
+  assert.deepEqual(drawPostChoices({ ...input, lottery }), now);
+  for (const value of ['new', 'root', 'participant']) {
+    const changed = structuredClone(lottery); changed.discussion.replyAuthor = [{ value, weight: 1 }];
+    const actual = drawPostChoices({ ...input, lottery: changed });
+    assert.equal(actual.discussion.replyAuthor, value);
+    assert.deepEqual({ ...actual, discussion: sameDiscussion }, before);
+  }
+  const people = [{ author: 'guest-second', guest: { name: 'Second' } }, { author: 'guest-first', guest: { name: 'First' } }];
+  assert.deepEqual(chooseReplyParticipant({ ...input, participants: people }), chooseReplyParticipant({ ...input, participants: [...people].reverse() }));
+  assert.equal(chooseReplyParticipant({ ...input, participants: [] }), null);
+  const invalid = structuredClone(lottery); invalid.discussion.replyAuthor = [{ value: 'stranger-dossier', weight: 1 }];
+  assert.throws(() => validateLottery(invalid), /reply author/);
 });

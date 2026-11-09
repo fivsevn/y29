@@ -53,7 +53,7 @@ export function validateReplyLottery(lottery) {
   return lottery;
 }
 export function validateLottery(config) {
-  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'likes', 'sampling'], 'lottery');
+  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'likes', 'sampling', 'discussion'], 'lottery');
   if (config.version !== 1) fail('Invalid lottery version');
   range(config.rootBudget, 20, 'root budget', 1);
   keys(config.authors, ['candidates', 'recentPosts', 'recentMultiplier'], 'author lottery');
@@ -73,6 +73,14 @@ export function validateLottery(config) {
   keys(config.sampling, ['offset', 'count'], 'sampling');
   range(config.sampling.offset, 500, 'sampling offset');
   range(config.sampling.count, 30, 'sampling count', 1);
+  if (config.discussion !== undefined) {
+    keys(config.discussion, ['minimumNegativeShare', 'negativeMotivation', 'replyStance', 'replyAuthor'], 'discussion');
+    const share = config.discussion.minimumNegativeShare;
+    if (typeof share !== 'number' || !Number.isFinite(share) || share < 0 || share > 1) fail('Invalid minimum negative share');
+    options(config.discussion.negativeMotivation, ['complaint', 'gossip', 'dispute', 'grievance', 'suspicion'], 'negative motivation');
+    options(config.discussion.replyStance, ['support', 'push-back', 'doubt', 'defend', 'provoke', 'ask-detail', 'sidetrack'], 'reply stance');
+    if (config.discussion.replyAuthor !== undefined) options(config.discussion.replyAuthor, ['new', 'root', 'participant'], 'reply author');
+  }
   return config;
 }
 validateLottery(defaultLottery);
@@ -130,12 +138,21 @@ export function drawPostChoices({ seed, postId, replyTo = null, lottery = defaul
     textWindow: pick(stream('text-window'), lottery.textWindow).value,
     nearbyReplies: pickInteger(stream('nearby-replies'), lottery.nearbyReplies),
     image: pick(stream('image'), lottery.image).value,
-    likes: pickBand(stream('likes'), lottery.likes[replyTo === null ? 'root' : 'reply'])
+    likes: pickBand(stream('likes'), lottery.likes[replyTo === null ? 'root' : 'reply']),
+    ...(lottery.discussion ? { discussion: {
+      negativeMotivation: pick(stream('negative-motivation'), lottery.discussion.negativeMotivation).value,
+      ...(replyTo !== null ? { replyStance: pick(stream('reply-stance'), lottery.discussion.replyStance).value,
+        ...(lottery.discussion.replyAuthor ? { replyAuthor: pick(stream('reply-author'), lottery.discussion.replyAuthor).value } : {}) } : {})
+    } } : {})
   };
 }
 export function choosePostAuthor({ seed, postId, authorKind, users, profiles }) {
   if (authorKind === 'guest' || !users.length) return 'guest-' + createHash('sha256').update(seed + '\0guest\0' + postId).digest('hex').slice(0, 16);
   return sampleAuthors({ users, profiles, count: 1, random: randomFor(seed + '\0post-author\0' + postId) }).users[0].id;
+}
+export function chooseReplyParticipant({ seed, postId, participants }) {
+  const pool = [...participants].sort((a, b) => a.author.localeCompare(b.author, 'en'));
+  return pool.length ? pool[Math.floor(randomFor(seed + '\0reply-participant\0' + postId)() * pool.length)] : null;
 }
 export function visibleExcerpt({ seed, postId, visibleId, text, mode, characters }) {
   if (mode === 'full' || text.length <= characters) return { text, partial: false };
