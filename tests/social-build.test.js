@@ -48,7 +48,7 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   execFileSync(process.execPath, ['build.js'], { cwd: directory });
   const published = await files(join(directory, 'dist/lucifer0'));
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
-  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-street.png',
+  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.png',
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
   assert.deepEqual(published, [...expected].sort());
   assert.ok(!published.some(path => /private|not-referenced|unused|registry|profile-seeds|manage|tools|docs|\.md$/.test(path)));
