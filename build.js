@@ -21,7 +21,7 @@ const runtimeFiles = [
   'social/index.html', 'social/redirect.js'
 ];
 const socialAssets = new Set([
-  'assets/icon.svg', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
+  'assets/icon.svg', 'assets/verification-street.png', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
   ...socialFeed.posts.flatMap(post => post.media.map(image => image.src))
 ]);
 for (const path of [...runtimeFiles, ...[...socialAssets].map(path => 'lucifer0/' + path)]) {

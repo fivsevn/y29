@@ -8,8 +8,8 @@
   <title>/lucifer0</title>
   <link rel="canonical" href="https://y29.fivsevn.com/lucifer0/">
   <link rel="icon" type="image/svg+xml" href="./assets/icon.svg?v=20261108-black">
-  <link rel="stylesheet" href="./style.css?v=20261109-invite-check">
-  <script type="module" src="./app.js?v=20261109-invite-check"></script>
+  <link rel="stylesheet" href="./style.css?v=20261109-picture-check">
+  <script type="module" src="./app.js?v=20261109-picture-check"></script>
 </head>
 <body>
   <a class="skip-link" href="#content">跳到动态</a>
@@ -38,12 +38,36 @@
       <button type="submit" class="dialog-continue">继续</button>
     </form>
     <div id="login-verification" class="login-verification" hidden>
-      <button type="button" class="robot-check" id="robot-check" aria-describedby="login-error">
-        <span class="robot-checkbox" aria-hidden="true"></span>
-        <span>我不是机器人</span>
-      </button>
-      <p id="login-error" class="verification-error" role="status" aria-live="polite"></p>
+      <div class="verification-card">
+        <button type="button" class="robot-check" id="robot-check" aria-busy="false" aria-disabled="false">
+          <span class="robot-checkbox" aria-hidden="true"></span>
+          <span id="robot-label">我是机器人</span>
+        </button>
+        <div class="verification-brand" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M16 3 27 7v8c0 7-7 12-11 14C12 27 5 22 5 15V7Z" fill="#e2e7ef" stroke="#6d7f98" stroke-width="1.5"/><path d="m11 16 3.5 3.5L22 12" stroke="#5276a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>安全验证</span><small>LUCIFER ZERO</small>
+        </div>
+      </div>
     </div>
+    <div id="verification-challenge" class="verification-challenge" hidden>
+      <div id="verification-grid" class="verification-grid" role="group" aria-label="图片选择题，可用方向键移动，空格或回车选择">
+        <button type="button" class="verification-tile" data-tile="0" aria-label="第1行第1列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="1" aria-label="第1行第2列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="2" aria-label="第1行第3列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="3" aria-label="第2行第1列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="4" aria-label="第2行第2列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="5" aria-label="第2行第3列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="6" aria-label="第3行第1列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="7" aria-label="第3行第2列图片" aria-pressed="false"></button>
+        <button type="button" class="verification-tile" data-tile="8" aria-label="第3行第3列图片" aria-pressed="false"></button>
+      </div>
+      <div class="verification-controls">
+        <button type="button" class="verification-refresh" id="verification-refresh" aria-label="刷新图片" title="刷新图片"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.6-1L20 9M4 15l2.3 3A7 7 0 0 0 17.9 17"/></svg></button>
+        <button type="button" class="verification-submit" id="verification-submit" aria-describedby="login-error">验证</button>
+      </div>
+    </div>
+    <p id="login-error" class="verification-error" role="status" aria-live="polite" aria-atomic="true"></p>
+    <span id="verification-status" class="verification-status" role="status" aria-live="polite"></span>
     <button type="button" class="dialog-close" id="login-close">关闭</button>
   </dialog>
   <div id="toast" role="status" aria-live="polite"></div>

@@ -107,12 +107,25 @@ try {
   await page.getByRole('dialog', { name: '人机验证' }).waitFor(); checks++;
   check(await page.locator('#invite-form').isHidden() && await page.locator('#invite-code').inputValue() === '', 'submission leaves the code stage and clears the invitation');
   check(await page.locator('#robot-check').evaluate(element => document.activeElement === element), 'verification receives keyboard focus');
+  await page.locator('#robot-check').click();
+  check(await page.locator('#robot-check').getAttribute('aria-busy') === 'true', 'checkbox activation starts the timed local check');
+  await page.locator('#verification-challenge').waitFor({ state: 'visible' }); checks++;
+  check(await page.locator('#verification-grid [data-tile]').count() === 9, 'the photo challenge has nine selectable tiles');
+  check(await page.locator('#verification-grid [aria-pressed="true"]').count() === 0, 'the photo challenge starts with nothing selected');
   for (let attempt = 0; attempt < 3; attempt++) {
-    await page.locator('#robot-check').click();
-    check(await page.locator('#login-error').textContent() === '验证失败', 'every verification attempt fails');
+    await page.locator('#verification-submit').click();
+    check(await page.locator('#login-error').textContent() === '验证失败，请重试。', 'empty and repeated verification attempts fail');
   }
-  await page.locator('#robot-check').press('Space');
-  check(await page.locator('#login-error').textContent() === '验证失败', 'keyboard verification fails too');
+  await page.locator('#verification-grid [data-tile]').nth(0).click();
+  await page.locator('#verification-grid [data-tile]').nth(8).press('Space');
+  check(await page.locator('#verification-grid [aria-pressed="true"]').count() === 2, 'mouse and keyboard can select photo tiles');
+  await page.locator('#verification-submit').click();
+  check(await page.locator('#login-error').textContent() === '验证失败，请重试。', 'selected photos cannot make verification succeed');
+  await page.locator('#verification-refresh').click();
+  check(await page.locator('#verification-grid [aria-pressed="true"]').count() === 0 && await page.locator('#login-error').textContent() === '', 'refresh clears selections and the previous error');
+  for (const tile of await page.locator('#verification-grid [data-tile]').all()) await tile.click();
+  await page.locator('#verification-submit').click();
+  check(await page.locator('#login-error').textContent() === '验证失败，请重试。', 'selecting every photo still fails');
   check(await page.locator('#login-dialog input[type="password"]').count() === 0, 'the invitation dialog never asks for a password');
   await page.locator('#login-close').click();
   await loginDialog.waitFor({ state: 'hidden' });
@@ -348,7 +361,9 @@ try {
   await failed.getByRole('textbox', { name: '邀请码' }).fill('offline-invitation');
   await failed.getByRole('textbox', { name: '邀请码' }).press('Enter');
   await failed.locator('#robot-check').click();
-  check(await failed.locator('#login-error').textContent() === '验证失败', 'feed errors do not prevent the local invitation flow');
+  await failed.locator('#verification-challenge').waitFor({ state: 'visible' });
+  await failed.locator('#verification-submit').click();
+  check(await failed.locator('#login-error').textContent() === '验证失败，请重试。', 'feed errors do not prevent the local photo verification flow');
   await failed.locator('#login-close').click();
   await failed.unroute('**/data/feed.json');
   await failed.getByRole('button', { name: '重新载入' }).click();
