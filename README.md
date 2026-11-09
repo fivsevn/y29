@@ -5,50 +5,39 @@
 这里收录独立网页游戏、互动叙事与实验性终端项目。  
 项目主要以静态网页形式运行，并发布于 GitHub Pages。
 
+
 ## Games
 
 ### 01 / ARASHI: SIGNAL LOCK
-**阿岚：残响频率**
+[**阿岚：残响频率**](https://y29.fivsevn.com/signallock/)
 
-[`/signallock/`](signallock/)
-
-以信号扫描与信息判定为核心的终端式叙事游戏。
-
-玩家在有限轮次中扫描未知信号，并选择锁定、验证或丢弃。不同的判断、追踪状态与收集内容会导向不同结局。
-
-**Status:** ONLINE
+- 以信号扫描与信息判定为核心的终端式叙事游戏。
 
 ---
 
 ### 02 / MOBILE UTOPIA: OPEN TABLE
 **移动乌托邦：留个位置**
 
-`/mobileutopia/`
-
-尚未发布。
-
-**Status:** OFFLINE
+- 尚未发布。
 
 ---
 
-### 03 / STEEL MUSCLE RUN: 飙肌野郎
-**来都来了**
+### 03 / STEEL MUSCLE RUN
+[**飙肌野郎：来都来了**](https://y29.fivsevn.com/training/)
 
-[`/training/`](training/)
+- 单人七日训练叙事游戏。
 
-单人七日训练叙事游戏。
-
-从进入 **57training** 开始，在训练、对话、约饭与日常事件中度过一周。角色关系与各种隐藏状态由玩家的选择和实际经历逐步形成。
-
-**Status:** ONLINE
+---
 
 ## Other Projects
 
-### LUCIFER ZERO / 路西法零
+### LUCIFER ZERO
 
-[`/lucifer0/`](lucifer0/) · [打开网站](https://y29.fivsevn.com/lucifer0/)
+[**路西法零**](https://y29.fivsevn.com/lucifer0/)
 
-虚拟社交网站。
+- 虚拟社交网站。
+
+---
 
 ### STORYTELLER
 
@@ -56,42 +45,6 @@
 
 用于显示短消息与状态的独立终端项目。
 
-网页终端与 Raspberry Pi 可以读取同一份公开状态；消息来源由 GitHub Discussions 同步。它不是游戏，而是 Y.29 中用于实验实体终端、网络信息与叙事之间关系的项目。
-
-## Structure
-
-- `/` — Y.29 企划入口
-- `/signallock/` — ARASHI: SIGNAL LOCK
-- `/mobileutopia/` — MOBILE UTOPIA: OPEN TABLE
-- `/training/` — STEEL MUSCLE RUN: 飙肌野郎
-- `/storyteller/` — STORYTELLER terminal
-- `/lucifer0/` — 路西法零，小说人物的手机社交空间
-- `/social/` — 旧入口，保留查询参数及帖子链接并转向 `/lucifer0/`
-- `/assets/` — 共用资源
-- `/tests/` — 自动化测试
-
-## Technical
-
-项目以原生 HTML、CSS 与 JavaScript 为主。
-
-- GitHub Pages 部署
-- 无独立服务端
-- 无模型 API
-- 无登录系统
-- 不依赖 npm 第三方运行库
-- 玩家数据原则上保留在浏览器本地或当前运行状态中
-
-开发与测试入口：
-
-```bash
-npm test
-npm start
-npm run build
-```
-
-使用 Node.js 22 或更新版本，无需安装第三方运行依赖。`npm run test:games` 只检查游戏；`npm run check` 依次运行全部测试、社交内容校验和构建。
-
-具体项目的修改入口：[阿岚](signallock/README.md)、[移动乌托邦](mobileutopia/README.md)、[飙肌野郎](training/EDITING.md)、[STORYTELLER](storyteller/README.md)、[路西法零](lucifer0/README.md)。
 
 ## Original Work
 
