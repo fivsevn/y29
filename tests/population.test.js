@@ -63,14 +63,14 @@ test('each original person has one complete human dossier, with operating contro
     assert.equal(documents.profiles[user.id].notes.trim(), text.trim(), `${user.id}: the complete dossier must reach the reader`);
   }
   const topLevel = (await readdir(join(socialRoot, 'users'), { withFileTypes: true })).filter(entry => entry.isFile()).map(entry => entry.name).sort();
-  assert.deepEqual(topLevel, ['ACCOUNT_TEMPLATE.md', 'README.md', 'TEMPLATE.md', 'speech.md']);
+  assert.deepEqual(topLevel, ['ACCOUNT_TEMPLATE.md', 'README.md', 'TEMPLATE.md', 'character-research.md', 'speech-research.md']);
 });
 
 test('individual references stay with users and the environment includes interaction and meme research', async () => {
   const { registry } = await readUserDocuments(socialRoot);
-  const individualNotes = await readFile(join(socialRoot, 'users/README.md'), 'utf8');
+  const individualNotes = await readFile(join(socialRoot, 'users/character-research.md'), 'utf8');
   const environmentPath = join(socialRoot, 'environment');
-  const environmentFiles = ['README.md', 'everyday-life.md', 'comments.md', 'meme.md', 'forum.md', 'negative.md'];
+  const environmentFiles = ['README.md', 'everyday-life-research.md', 'comments-research.md', 'meme-research.md', 'forum.md', 'negative-research.md'];
   assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles, 'worldviews'].sort());
   const environmentIndex = await readFile(join(environmentPath, 'README.md'), 'utf8');
   for (const name of environmentFiles) {

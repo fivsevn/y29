@@ -29,7 +29,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 | 字段 | 内容 |
 | --- | --- |
 | `category` | `news` 正式资讯、`trend` 社交话题、`daily` 日常经历 |
-| `purpose` | Meme 采样页填 `"meme"`，其他观察可省略；发现入口与近期原用法分别记录，步骤见[Meme 研究](../environment/meme.md#每次更新读取近期-meme) |
+| `purpose` | Meme 采样页填 `"meme"`，其他观察可省略；发现入口与近期原用法分别记录，步骤见[Meme 研究](../environment/meme-research.md#每次更新读取近期-meme) |
 | `kind` | `feed` 资讯、榜单或单篇材料；`thread` 带回复的讨论 |
 | `url` | 原页 HTTPS 链接 |
 | `visitedAt` | 实际访问时间，带时区的 ISO 时间 |
@@ -66,7 +66,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 `postId` 对应当前 `posts` 中的一条实际发言；`negative` 填本次审读的布尔判断，`reason` 写清依据。普通内容同样填写记录，例如 `negative: false`、`reason: "询问桌腿怎样固定，正文只在请求操作帮助。"`。字段只保存在操作文件，用于[讨论配额](lottery.md#负面与回复提示)核对。补写或修改正文后同步复核该项，发布页面沿用原帖子字段。
 
-`likes` 保存本条基础赞数，取值依据与建议数值的处理见[评论与点赞](../environment/comments.md#点赞怎样形成差异)。
+`likes` 保存本条基础赞数，取值依据与建议数值的处理见[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)。
 
 主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用上海时区，处在已有时间线之后、实际当前时刻之前，回复时间晚于或等于父帖。新草稿的时间由 `brief` 安排，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
 
@@ -122,7 +122,7 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 node lucifer0/tools/update.js suggest --work /outside/work
 ```
 
-命令根据当前操作与实际发言返回配图和点赞建议。按[配图](writing.md#配图)判断每条的具体用途，采用合适的已有素材或生成画面；表情素材从[Meme 资源](../environment/meme.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞](../environment/comments.md#点赞怎样形成差异)审定后填写。
+命令根据当前操作与实际发言返回配图和点赞建议。按[配图](writing.md#配图)判断每条的具体用途，采用合适的已有素材或生成画面；表情素材从[Meme 资源](../environment/meme-research.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)审定后填写。
 
 采用外部素材时，在对应 `research.summary` 保存资源页、作者、使用依据和处理方式；需要署名的素材在帖文或图片说明中保留署名与来源。
 

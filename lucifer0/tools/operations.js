@@ -11,8 +11,8 @@ import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
-const environmentPaths = ['environment/README.md', 'environment/worldviews/README.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md', 'environment/meme.md', 'environment/negative.md'];
-const controlPaths = ['README.md', 'docs/README.md', 'docs/writing.md', 'docs/publishing.md', 'docs/lottery.md', 'users/speech.md'];
+const environmentPaths = ['environment/README.md', 'environment/worldviews/README.md', 'environment/everyday-life-research.md', 'environment/forum.md', 'environment/comments-research.md', 'environment/meme-research.md', 'environment/negative-research.md'];
+const controlPaths = ['README.md', 'docs/README.md', 'docs/writing.md', 'docs/publishing.md', 'docs/lottery.md', 'users/character-research.md', 'users/speech-research.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;
 const fail = message => { throw new Error(message); };
@@ -459,12 +459,12 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
           .map(post => ({ id: post.id, createdAt: post.createdAt, replyTo: post.replyTo, text: post.deleted ? '该回复已被删除。' : post.text, media: post.deleted ? [] : post.media })),
         voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
       conditions: choices.conditions.filter(condition => condition.dimension !== 'motivation' || !discussion || targetId === null && discussion.requiredTone !== 'negative').map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
-      ...(target ? { comments: writerSource('environment/comments.md') } : {}),
+      ...(target ? { comments: writerSource('environment/comments-research.md') } : {}),
       ...(requestedRoot || config.discussion?.replyAuthor ? { thread: { rootId: rootPost?.id ?? postId,
         role: !rootPost || author === rootPost.author ? 'root' : [...before.values()].some(post => post.author === author && validDate(post.createdAt) &&
           Date.parse(post.createdAt) <= until && threadRoot(post.id, before).id === rootPost.id) ? 'participant' : 'new' } } : {}),
       ...(discussion ? { discussion: { requiredTone: discussion.requiredTone,
-        ...(discussion.requiredTone === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: writerSource('environment/negative.md') } : {}),
+        ...(discussion.requiredTone === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: writerSource('environment/negative-research.md') } : {}),
         ...(target ? { replyStance: discussion.replyStance } : {}),
         rules: writerSource('docs/lottery.md') } } : {}),
       visiblePosts

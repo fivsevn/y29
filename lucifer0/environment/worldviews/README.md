@@ -68,6 +68,6 @@ worldview0/
 
 | 参考 | 本次读取范围与用途 |
 | --- | --- |
-| Patricia C. Wrede：[Fantasy Worldbuilding Questions](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-%20questions/)，以及[自然与历史](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-physical-and-historical-features/)、[社会组织](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-social-organization/)、[日常生活](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-daily-life/) | 已读作者说明及这些页面的相关栏目。参考环境、制度与日常相互影响的观察角度；本模板使用自行归纳的提示 |
+| Patricia C. Wrede：[Fantasy Worldbuilding Questions](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-%20questions/)，以及[自然与历史](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-physical-and-historical-features/)、[社会组织](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-social-organization/)、[日常生活研究](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-daily-life/) | 已读作者说明及这些页面的相关栏目。参考环境、制度与日常相互影响的观察角度；本模板使用自行归纳的提示 |
 | Mark J. P. Wolf：[Building Imaginary Worlds](https://www.routledge.com/Building-Imaginary-Worlds-The-Theory-and-History-of-Subcreation-1st-Edition/Wolf/p/book/9780203096994) | 读取出版社检索展示的介绍与目录，详情页直接访问返回403。阅读范围为这些公开信息。参考把世界视为可容纳多段生活与故事的关联整体 |
 | Michael D. McGinnis：[Building a Program for Institutional Analysis of Social-Ecological Systems](https://mcginnis.pages.iu.edu/buildingpiases.pdf)（2010年工作稿） | 已读摘要及IAD／SES概念框架部分，PDF第2–7页。论文讨论Ostrom的相关框架；本项目取用资源、参与者、规则、互动、结果及反馈之间的联系，用于检查设定的运行条件 |
