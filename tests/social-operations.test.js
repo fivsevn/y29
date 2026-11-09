@@ -48,7 +48,7 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
   await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md', 'negative-research.md']]]) {
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'worldview-research.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md', 'negative-research.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
@@ -396,7 +396,7 @@ test('prepare creates only one work record and a full raw-source reading, then r
     assert.ok(reading.includes('users/' + user.id + '/profile.md'));
     assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
-  for (const name of ['README.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
+  for (const name of ['README.md', 'worldview-research.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
   assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY'));
   assert.equal(reading.split('SYNTHETIC_CHARACTER_RESEARCH').length - 1, 1);
   for (const marker of ['SYNTHETIC_WORLDVIEW_INDEX', 'SYNTHETIC_worldviewA_SETTING', 'SYNTHETIC_worldviewA_EVENTS', 'SYNTHETIC_worldview0_SETTING', 'SYNTHETIC_worldview0_EVENTS']) assert.equal(reading.split(marker).length - 1, 1);
@@ -821,12 +821,13 @@ test('writer receives the current writing source and refreshes it without redraw
   assert.deepEqual({ ...refreshed.writer, writing: first.writer.writing }, first.writer);
 });
 
-test('lottery, character and speech research enter source digest, while config snapshots stay fixed on resume', async t => {
+test('lottery and common research enter source digest, while config snapshots stay fixed on resume', async t => {
   const f = await fixture(t, 4, { lottery: defaultLottery }), prepared = await prepareUpdate(f.options);
   const postId = prepared.id + '-entry', initial = await briefUpdatePost({ ...f.options, postId });
   const saved = await readJSON(prepared.operationPath);
   assert.ok(!(JSON.stringify(initial.writer)).includes('SYNTHETIC_CHARACTER_RESEARCH'));
-  for (const path of ['README.md', 'docs/lottery.md', 'users/character-research.md', 'users/speech-research.md']) {
+  assert.ok(!(JSON.stringify(initial.writer)).includes('SYNTHETIC_environment_worldview-research.md'));
+  for (const path of ['README.md', 'docs/lottery.md', 'environment/worldview-research.md', 'users/character-research.md', 'users/speech-research.md']) {
     await writeFile(join(f.root, path), '# changed ' + path);
     await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
     await prepareUpdate(f.options);
