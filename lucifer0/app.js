@@ -181,7 +181,7 @@ window.addEventListener('hashchange', () => {
 });
 async function load() {
   try {
-    const response = await fetch('./data/feed.json');
+    const response = await fetch('./data/feed.json', { cache: 'no-cache' });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     feed = await response.json();
     if (feed.version !== 1 || !Array.isArray(feed.users) || !Array.isArray(feed.posts)) throw new Error('Invalid feed');
