@@ -55,7 +55,10 @@ export function validateReplyLottery(lottery) {
 export function validateLottery(config) {
   keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'likes', 'sampling', 'discussion', 'researchMaintenance'], 'lottery');
   if (config.version !== 1) fail('Invalid lottery version');
-  range(config.rootBudget, 20, 'root budget', 1);
+  if (Object.hasOwn(config.rootBudget ?? {}, 'bands')) {
+    keys(config.rootBudget, ['bands'], 'root budget');
+    bands(config.rootBudget.bands, 20, 'root budget band');
+  } else range(config.rootBudget, 20, 'root budget', 1);
   keys(config.authors, ['candidates', 'recentPosts', 'recentMultiplier'], 'author lottery');
   if (!integer(config.authors.candidates, 1, 3) || !integer(config.authors.recentPosts, 0, 120) || !weight(config.authors.recentMultiplier) || config.authors.recentMultiplier > 1) fail('Invalid author lottery');
   options(config.authorKind, ['guest', 'library'], 'author kind');
@@ -103,7 +106,10 @@ const pick = (random, values) => {
 };
 const pickBand = (random, values) => pickInteger(random, pick(random, values));
 // These legacy defaults preserve already-saved budgets, seeds and candidate draws.
-export const drawRootBudget = (seed, config) => pickInteger(randomFor(seed), config?.rootBudget ?? { min: 1, max: 10 });
+export function drawRootBudget(seed, config) {
+  const budget = config?.rootBudget ?? { min: 1, max: 10 };
+  return budget.bands ? pickBand(randomFor(seed + '\0root-budget'), budget.bands) : pickInteger(randomFor(seed), budget);
+}
 export function sampleAuthors({ users, profiles, posts = [], count, random, recentPosts = 7, recentMultiplier = 0.5, preferFresh = false }) {
   const recent = new Set([...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, recentPosts).map(post => post.author));
   const pool = [...users], selected = [];

@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultLottery, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant } from '../lucifer0/tools/lottery.js';
+import { defaultLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant } from '../lucifer0/tools/lottery.js';
+import { drawUpdatePlan } from '../lucifer0/tools/operations.js';
+import { readFileSync } from 'node:fs';
 
 test('independent post draws produce varied batches, substantial casual/help/negative intent and cold/hot threads', () => {
   // Fix the statistical scenario here so production tuning stays in publication.json.
@@ -156,4 +158,43 @@ test('research maintenance handles new files, bounded unique selection and inval
   }
   assert.throws(() => drawResearchMaintenance({ ...input, documents: [documents[0], documents[0]] }), /research maintenance document/);
   assert.throws(() => drawResearchMaintenance({ ...input, documents: [{ ...documents[0], updatedAt: 'not-a-date' }] }), /research maintenance document/);
+});
+
+test('production quantity draws support an active community while keeping quiet threads and a continuous long tail', () => {
+  const policy = JSON.parse(readFileSync(new URL('../lucifer0/publication.json', import.meta.url), 'utf8'));
+  const roots = [], replies = [];
+  for (let index = 0; index < 20000; index++) {
+    roots.push(drawRootBudget('root-distribution-' + index, policy.lottery));
+    replies.push(drawThreadReplyCount({ seed: 'reply-distribution-' + index, rootId: 'current-thread', replyLottery: policy.replyLottery }));
+  }
+  const share = (values, min, max) => values.filter(value => value >= min && value <= max).length / values.length;
+  assert.ok(share(roots, 0, 1) > 0.035 && share(roots, 0, 1) < 0.065);
+  assert.ok(share(roots, 2, 4) > 0.32 && share(roots, 2, 4) < 0.38);
+  assert.ok(share(roots, 9, 12) > 0.13 && share(roots, 9, 12) < 0.17);
+  assert.ok(roots.includes(0) && roots.includes(12));
+  assert.ok(share(replies, 0, 0) > 0.28 && share(replies, 0, 0) < 0.32);
+  assert.ok(share(replies, 0, 4) > 0.68 && share(replies, 0, 4) < 0.72);
+  assert.ok(share(replies, 61, 100) > 0.015 && share(replies, 61, 100) < 0.025);
+  assert.ok(replies.every(value => value >= 0 && value <= 100));
+  for (let value = 13; value <= 20; value++) assert.ok(replies.includes(value));
+  const mean = values => values.reduce((sum, value) => sum + value, 0) / values.length;
+  assert.ok(mean(roots) > 5.4 && mean(roots) < 5.75);
+  assert.ok(mean(replies) > 7.2 && mean(replies) < 8.2);
+});
+
+test('weighted root budgets preserve old budget fingerprints, author selection and all other streams', () => {
+  const legacy = { ...structuredClone(defaultLottery), rootBudget: { min: 1, max: 10 } };
+  assert.deepEqual(Array.from({ length: 8 }, (_, index) => drawRootBudget('quantity-legacy-' + index, legacy)), [8, 10, 10, 9, 4, 6, 10, 3]);
+  assert.deepEqual(Array.from({ length: 8 }, (_, index) => drawRootBudget('quantity-legacy-' + index)), [8, 10, 10, 9, 4, 6, 10, 3]);
+  const users = Array.from({ length: 6 }, (_, index) => ({ id: 'quantity-user-' + index, kind: 'visitor', enabled: true, aiScope: 'daily', profileStatus: 'approved' }));
+  const profiles = Object.fromEntries(users.map(user => [user.id, { activityWeight: 1 }]));
+  for (let index = 0; index < 100; index++) {
+    const seed = 'quantity-independent-' + index, input = { users, profiles, seed };
+    assert.deepEqual(drawUpdatePlan({ ...input, lottery: defaultLottery }).selectedIds, drawUpdatePlan({ ...input, lottery: legacy }).selectedIds);
+    assert.deepEqual(drawPostChoices({ seed, postId: 'quantity-post', lottery: defaultLottery }), drawPostChoices({ seed, postId: 'quantity-post', lottery: legacy }));
+    assert.deepEqual(drawResearchWindows({ seed, lottery: defaultLottery }), drawResearchWindows({ seed, lottery: legacy }));
+  }
+  for (const rootBudget of [{ bands: [] }, { bands: [{ weight: 1, min: -1, max: 2 }] }, { bands: [{ weight: 1, min: 0, max: 21 }] }, { bands: [{ weight: 0, min: 0, max: 2 }] }, { bands: [{ weight: 1, min: 0, max: 2 }], min: 1, max: 10 }]) {
+    assert.throws(() => validateLottery({ ...structuredClone(defaultLottery), rootBudget }), /root budget/);
+  }
 });

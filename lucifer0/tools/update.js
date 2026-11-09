@@ -2,7 +2,7 @@ import { prepareUpdate, finishUpdate, cancelUpdate, suggestUpdatePresentation, s
 
 try {
   const [command, ...args] = process.argv.slice(2);
-  const usage = 'Usage: node lucifer0/tools/update.js prepare [--count 1-20] [--work /outside/work] | finish|cancel|suggest [--work /outside/work] | replies [--thread post-id ...] [--work /outside/work] | brief --post ID [--reply-to ID | --thread root-ID] [--work /outside/work]';
+  const usage = 'Usage: node lucifer0/tools/update.js prepare [--count 1-120] [--work /outside/work] | finish|cancel|suggest [--work /outside/work] | replies [--thread post-id ...] [--work /outside/work] | brief --post ID [--reply-to ID | --thread root-ID] [--work /outside/work]';
   if (!['prepare', 'finish', 'cancel', 'suggest', 'replies', 'brief'].includes(command) || args.length % 2) throw new Error(usage);
   const options = {}, seen = new Set();
   for (let index = 0; index < args.length; index += 2) {
@@ -14,7 +14,7 @@ try {
     else if (key === '--reply-to') options.replyTo = value;
     else if (key === '--thread') { if (command === 'brief') options.threadId = value; else (options.threadIds ||= []).push(value); }
     else {
-      if (!/^(?:[1-9]|1[0-9]|20)$/.test(value)) throw new Error('The requested count must be an integer from 1 to 20');
+      if (!/^[1-9]\d{0,2}$/.test(value) || Number(value) > 120) throw new Error('The requested count must be an integer from 1 to 120');
       options.requestedCount = Number(value);
     }
   }
