@@ -1,4 +1,4 @@
-import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID } from './core.js?v=20261109-access';
+import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText } from './core.js?v=20261109-invite';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -14,6 +14,8 @@ let storage;
 try { storage = window.localStorage; } catch { /* Browsing works without storage. */ }
 let state, feed, users, posts, toastTimer;
 const main = document.querySelector('main');
+const loginDialog = document.querySelector('#login-dialog'), loginCopy = document.querySelector('#login-access-copy');
+let loginReturnFocus;
 const userURL = id => `#/user/${encodeURIComponent(id)}`;
 const postURL = id => `#/post/${encodeURIComponent(id)}`;
 const numberLabel = id => `No.${postNumber(id)}`;
@@ -33,6 +35,17 @@ function notify(message) {
   clearTimeout(toastTimer); toast.textContent = message; toast.classList.add('visible');
   toastTimer = setTimeout(() => toast.classList.remove('visible'), 2800);
 }
+function refreshLoginCopy() {
+  loginCopy.textContent = parseSiteGuide(feed?.posts, feed?.users)?.access.text || '内测邀请信息尚未载入，请稍后再试。';
+}
+function openLogin(button) {
+  loginReturnFocus = button;
+  refreshLoginCopy();
+  if (!loginDialog.open) loginDialog.showModal();
+  document.querySelector('#login-close').focus();
+}
+loginDialog.addEventListener('cancel', event => { event.preventDefault(); loginDialog.close(); });
+loginDialog.addEventListener('close', () => { loginReturnFocus?.focus({ preventScroll: true }); loginReturnFocus = null; });
 function boardbar(title, meta = '', action = '') {
   return `<div class="boardbar"><h2>${title.startsWith('/') ? esc(title) : `<span aria-hidden="true">/</span> ${esc(title)}`}</h2>${meta ? `<span class="board-meta">${esc(meta)}</span>` : ''}${action}</div>`;
 }
@@ -46,18 +59,19 @@ function empty(title, copy, href = '#/', label = '返回 /world') {
 function replyPreview(post) {
   const { rootId, replies, total, collapsed } = threadReplyPreview(feed.posts, post.id);
   if (!total) return '';
-  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong${nameStyle(users.get(reply.author))}>${esc(users.get(reply.author).name)}</strong></div><p>${esc(reply.text)}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
+  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply${reply.deleted === true ? ' is-deleted' : ''}" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong${nameStyle(users.get(reply.author))}>${esc(users.get(reply.author).name)}</strong></div><p>${esc(postText(reply))}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
 }
 function postMarkup(post, { threaded = false, target, preview = false } = {}) {
   const user = users.get(post.author), parent = posts.get(post.replyTo);
+  const deleted = post.deleted === true, media = deleted ? [] : post.media;
   const replies = post.replyTo ? feed.posts.filter(item => item.replyTo === post.id).length : threadPosts(feed.posts, post.id).length - 1;
   const liked = state.likes.includes(post.id);
-  return `<article class="post${threaded && post.replyTo ? ' thread-reply' : ''}${target === post.id ? ' is-target' : ''}" id="post-${esc(post.id)}" aria-label="${esc(user.name)}的${post.replyTo ? '回复' : '动态'}">
+  return `<article class="post${threaded && post.replyTo ? ' thread-reply' : ''}${target === post.id ? ' is-target' : ''}${deleted ? ' deleted-reply' : ''}" id="post-${esc(post.id)}" aria-label="${esc(user.name)}的${post.replyTo ? '回复' : '动态'}">
     <div class="post-heading"><a class="author-name" href="${userURL(user.id)}"${nameStyle(user)}>${esc(user.name)}</a><a class="author-id" href="${userURL(user.id)}">ID:${boardID(user.id)}</a><a class="post-number" href="${postURL(post.id)}">${numberLabel(post.id)}</a></div>
     <div class="post-metadata"><time datetime="${esc(post.createdAt)}" title="${esc(dateLabel(post.createdAt, true))}">${esc(dateLabel(post.createdAt, true))}</time>${post.replyTo ? '<span>回应</span>' : ''}</div>
     ${parent ? `<a class="reply-context" href="${postURL(parent.id)}" aria-label="回复${esc(users.get(parent.author).name)}的${numberLabel(parent.id)}">&gt;&gt;${postNumber(parent.id)}</a>` : ''}
-    <div class="post-content${post.media.length ? ' with-media' : ''}">${post.media.map(image => `<a class="post-image" href="${postURL(post.id)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看附图 ↗</span></a>`).join('')}<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(post.text)}</p></a></div>
-    <div class="post-actions"><a class="action reply-action" href="${postURL(post.id)}" aria-label="查看${esc(user.name)}的讨论，${replies}条回复" title="查看回复">${icon('reply', 'action-icon')}<span class="reply-count">${replies}</span></a><button type="button" class="action like-action" data-action="likes" data-id="${esc(post.id)}" aria-pressed="${liked}" aria-label="${liked ? '取消点赞' : '点赞'}${esc(user.name)}的发言，${post.likes + Number(liked)}个赞" title="${liked ? '取消点赞' : '点赞'}">${icon('heart', 'action-icon')}<span class="like-count">${post.likes + Number(liked)}</span></button><button type="button" class="action share-action" data-action="share" data-id="${esc(post.id)}" aria-label="复制这条发言的链接" title="复制链接">${icon('link', 'action-icon')}</button></div>
+    <div class="post-content${media.length ? ' with-media' : ''}">${media.map(image => `<a class="post-image" href="${postURL(post.id)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看附图 ↗</span></a>`).join('')}<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(postText(post))}</p></a></div>
+    <div class="post-actions"><a class="action reply-action" href="${postURL(post.id)}" aria-label="查看${esc(user.name)}的讨论，${replies}条回复" title="查看回复">${icon('reply', 'action-icon')}<span class="reply-count">${replies}</span></a>${deleted ? '' : `<button type="button" class="action like-action" data-action="likes" data-id="${esc(post.id)}" aria-pressed="${liked}" aria-label="${liked ? '取消点赞' : '点赞'}${esc(user.name)}的发言，${post.likes + Number(liked)}个赞" title="${liked ? '取消点赞' : '点赞'}">${icon('heart', 'action-icon')}<span class="like-count">${post.likes + Number(liked)}</span></button>`}<button type="button" class="action share-action" data-action="share" data-id="${esc(post.id)}" aria-label="复制这条发言的链接" title="复制链接">${icon('link', 'action-icon')}</button></div>
     ${preview && !post.replyTo ? replyPreview(post) : ''}
   </article>`;
 }
@@ -82,7 +96,7 @@ function renderThread(id) {
 function renderSearch(query) {
   const needle = query.trim().toLocaleLowerCase();
   const foundUsers = needle ? feed.users.filter(user => [user.name, user.handle, boardID(user.id)].join(' ').toLocaleLowerCase().includes(needle)) : [];
-  const foundPosts = needle ? feed.posts.filter(post => post.text.toLocaleLowerCase().includes(needle)) : [];
+  const foundPosts = needle ? feed.posts.filter(post => postText(post).toLocaleLowerCase().includes(needle)) : [];
   return boardbar('搜索', '', backLink()) + `<form class="search-form" role="search"><input type="search" name="q" value="${esc(query)}" aria-label="搜索动态或名字" placeholder="关键词 / 用户名 / ID" autocomplete="off"><button type="submit">搜索</button></form>` +
     (!needle ? empty('想找什么？', '输入一个名字或帖子里的关键词。') : `<p class="search-count">${foundUsers.length} 个用户 · ${foundPosts.length} 条发言</p>${foundUsers.length ? `<div class="search-people">${foundUsers.map(personRow).join('')}</div>` : ''}${foundPosts.map(post => postMarkup(post)).join('')}${!foundUsers.length && !foundPosts.length ? empty('没有找到相关内容', '换个关键词试试。') : ''}`);
 }
@@ -93,6 +107,10 @@ function renderAbout() {
     <section class="board-guide" aria-labelledby="guide-heading">
       <div class="guide-heading"><span>/guide</span><h3 id="guide-heading">${esc(guide?.title || '站务公告')}</h3></div>
       ${guide ? `<p class="guide-copy">${esc(guide.intro)}</p><ol class="board-rules">${guide.rules.map(rule => `<li data-number="${esc(rule.number)}"><p>${esc(rule.text)}</p></li>`).join('')}</ol><p class="guide-copy guide-closing">${esc(guide.closing)}</p>` : ''}
+    </section>
+    <section class="board-access" aria-labelledby="access-heading">
+      <div class="guide-heading"><span>/access</span><h3 id="access-heading">${esc(guide?.access.title || '访问权限')}</h3></div>
+      ${guide ? `<p class="guide-copy access-copy">${esc(guide.access.text)}</p>` : ''}
       <a class="guide-post-link" href="${postURL(WELCOME_POST_ID)}">${guide ? '查看入站须知原帖' : '查看站务公告'} ↗</a>
     </section>
   </div>`;
@@ -119,7 +137,9 @@ document.addEventListener('submit', event => {
 });
 document.addEventListener('click', async event => {
   if (event.target.closest('.skip-link')) { event.preventDefault(); main.focus({ preventScroll: true }); return; }
-  if (event.target.closest('#login-button')) { notify('本站目前采用内测邀请制，发帖权限随邀请开放。'); return; }
+  const loginButton = event.target.closest('#login-button');
+  if (loginButton) { openLogin(loginButton); return; }
+  if (event.target.closest('#login-close')) { loginDialog.close(); return; }
   const button = event.target.closest('button[data-action]');
   if (!button || !feed) return;
   const { action, id } = button.dataset;
@@ -166,10 +186,12 @@ async function load() {
     feed = await response.json();
     if (feed.version !== 1 || !Array.isArray(feed.users) || !Array.isArray(feed.posts)) throw new Error('Invalid feed');
     users = new Map(feed.users.map(user => [user.id, user])); posts = new Map(feed.posts.map(post => [post.id, post]));
+    refreshLoginCopy();
     state ??= readState(storage);
     render(); renderedRoute = location.hash || '#/'; selectReply();
   } catch {
     feed = null;
+    refreshLoginCopy();
     main.innerHTML = '<div class="empty"><h3>帖子暂时没有载入</h3><p>请稍后重试。</p><button class="follow-button" id="retry">重新载入</button></div>';
     document.querySelector('#retry').addEventListener('click', load);
   }

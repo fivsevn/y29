@@ -94,8 +94,17 @@ try {
   check((await page.locator('.topbar .brand').innerText()).trim() === '/lucifer0', 'header keeps the app path');
   check(await page.locator('.topbar #login-button').textContent() === 'log in', 'header has the invitation-only log in button');
   await page.locator('#login-button').click();
-  await page.getByRole('status').filter({ hasText: '本站目前采用内测邀请制，发帖权限随邀请开放。' }).waitFor(); checks++;
-  check(await page.locator('input[type="password"],dialog,[role="dialog"]').count() === 0, 'log in opens no login form or modal');
+  const loginDialog = page.getByRole('dialog', { name: '内测邀请' });
+  await loginDialog.waitFor(); checks++;
+  check(await page.locator('#login-access-copy').textContent() === (parseSiteGuide(feed.posts, feed.users)?.access.text || '内测邀请信息尚未载入，请稍后再试。'), 'the dialog reads access copy from the administrator post');
+  check(await page.locator('input[type="password"],#login-dialog form').count() === 0, 'the invitation dialog contains no login form');
+  await page.locator('#login-close').click();
+  await loginDialog.waitFor({ state: 'hidden' });
+  check(await page.locator('#login-button').evaluate(element => document.activeElement === element), 'closing restores focus to log in');
+  await page.locator('#login-button').click();
+  await page.keyboard.press('Escape');
+  await loginDialog.waitFor({ state: 'hidden' });
+  check(await page.locator('#login-button').evaluate(element => document.activeElement === element), 'Escape closes the dialog and restores focus');
   check(await page.locator('.topbar').evaluate(element => element.getBoundingClientRect().height <= 56), 'compact header is at most 56px');
   check(await page.locator('main .topbar').count() === 0, 'header is outside the content scroller');
   const compactPage = await context.newPage(); trackErrors(compactPage);
@@ -229,6 +238,14 @@ try {
   await page.getByRole('heading', { name: '没有找到这条帖子' }).waitFor(); checks++;
   await visit('#/user/does-not-exist', '/user');
   await page.getByRole('heading', { name: '没有找到这个账号' }).waitFor(); checks++;
+  const deletedReply = feed.posts.find(post => post.deleted === true);
+  if (deletedReply) {
+    await visit(`#/post/${deletedReply.id}`, '讨论串');
+    const tombstone = page.locator(`#post-${deletedReply.id}`);
+    check(await tombstone.locator('.post-text').textContent() === '该回复已被删除', 'deleted reply shows its marker');
+    check(await tombstone.locator('.like-action,.post-image').count() === 0, 'deleted reply has neither likes nor media');
+    check(await tombstone.locator('.author-name,time,.reply-context,.share-action').count() === 4, 'deleted reply keeps author, time, parent and permalink');
+  }
 
   const legacy = new URL(`../social/?entry=legacy#/post/${nestedReply.id}`, base);
   await page.goto(legacy.href); await page.locator(`#post-${nestedReply.id}`).waitFor();
@@ -268,6 +285,8 @@ try {
   await visit('#/about', '/about');
   check(await page.locator('.about-brand').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
   check(await page.locator('.board-guide').innerText().then(text => text.includes('/guide')), 'about includes the entry guide');
+  check(await page.locator('.board-access .guide-heading').innerText().then(text => text.includes('/access') && text.includes('访问权限')), 'about has a separate access section');
+  check(await page.locator('.board-access').evaluate(element => element.getBoundingClientRect().top >= document.querySelector('.board-guide').getBoundingClientRect().bottom), 'access sits below the guide');
   const guide = parseSiteGuide(feed.posts, feed.users);
   check(await page.locator('.board-rules li').count() === (guide?.rules.length || 0), 'about gets its rule count from the administrator post');
   check(await page.locator('.board-rules li').evaluateAll(rules => rules.every(rule => !rule.querySelector('h4') && rule.querySelector('p')?.textContent.trim())), 'each rule has an explanation without a title');
@@ -275,6 +294,7 @@ try {
   if (guide) {
     check(JSON.stringify(await page.locator('.board-rules li').evaluateAll(rules => rules.map(rule => ({ number: rule.dataset.number, text: rule.querySelector('p').textContent })))) === JSON.stringify(guide.rules), 'about preserves each original rule number and its text');
     check(await page.locator('.guide-copy').first().textContent() === guide.intro && await page.locator('.guide-closing').textContent() === guide.closing, 'about shows the complete introduction and closing');
+    check(await page.locator('.access-copy').textContent() === guide.access.text, 'access copy comes from the same original post');
   } else check((await page.locator('.guide-post-link').textContent()).includes('查看站务公告'), 'unavailable guides direct readers to the announcement');
   check(await page.locator('.about-footer').count() === 0, 'about has no footer');
   check(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme) === 'dark', 'site is dark');
@@ -302,7 +322,9 @@ try {
   await failed.goto(base); await failed.getByRole('heading', { name: '帖子暂时没有载入' }).waitFor(); checks++;
   check(await failed.locator('.topbar').count() === 1, 'fixed header remains available on feed errors');
   await failed.locator('#login-button').click();
-  await failed.getByRole('status').filter({ hasText: '本站目前采用内测邀请制，发帖权限随邀请开放。' }).waitFor(); checks++;
+  await failed.getByRole('dialog', { name: '内测邀请' }).waitFor(); checks++;
+  check((await failed.locator('#login-access-copy').textContent()).includes('尚未载入'), 'feed errors still allow the invitation dialog to open');
+  await failed.locator('#login-close').click();
   await failed.unroute('**/data/feed.json');
   await failed.getByRole('button', { name: '重新载入' }).click();
   await failed.locator('article').first().waitFor(); checks++;

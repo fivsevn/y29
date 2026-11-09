@@ -358,6 +358,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
 function samePublicPost(expected, actual, users) {
   const fields = ['id', 'author', 'createdAt', 'replyTo', 'text', 'likes', 'canon', 'media'];
   return actual && fields.every(key => canonical(expected[key]) === canonical(actual[key])) &&
+    (expected.deleted ?? false) === (actual.deleted ?? false) &&
     (!expected.guest || users.some(user => user.id === expected.author && user.name === expected.guest.name));
 }
 export async function finishUpdate({ root = socialRoot, workDirectory, fetchImpl = globalThis.fetch, now = Date.now() } = {}) {

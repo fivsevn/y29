@@ -565,6 +565,30 @@ test('finish keeps an awaiting-online operation until exact online posts and gue
   assert.deepEqual(await readdir(f.workDirectory), []);
 });
 
+test('deleted replies remain explicit in source reading and must match the online deletion flag', async t => {
+  const f = await fixture(t), result = await prepareUpdate(f.options);
+  const entries = [post('verified-root', 'guest-verified-root', f.now), {
+    ...post('verified-deleted', 'guest-verified-deleted', f.now, 'verified-root'),
+    text: '该回复已被删除', deleted: true
+  }];
+  await draft(result, f.now, entries);
+  await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true });
+  await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  const reading = await readFile(result.readingPath, 'utf8');
+  assert.match(reading, /deleted: true/);
+  assert.match(reading, /该回复已被删除/);
+  assert.ok(!reading.includes('Synthetic current text verified-deleted'));
+  const { feed } = await loadContent(f.root);
+  for (const flag of [undefined, false]) {
+    const wrong = structuredClone(feed), reply = wrong.posts.find(post => post.id === 'verified-deleted');
+    if (flag === undefined) delete reply.deleted; else reply.deleted = flag;
+    await assert.rejects(finishUpdate({ ...f.options, fetchImpl: async () => ({ ok: true, json: async () => wrong }) }), /Online posts/);
+  }
+  const compatible = structuredClone(feed);
+  compatible.posts.find(post => post.id === 'verified-root').deleted = false;
+  assert.equal((await finishUpdate({ ...f.options, fetchImpl: async () => ({ ok: true, json: async () => compatible }) })).status, 'published');
+});
+
 test('finish retains direct draft or reading edits made while online verification is waiting', async t => {
   for (const target of ['operation', 'reading']) {
     const f = await fixture(t), result = await prepareUpdate(f.options);

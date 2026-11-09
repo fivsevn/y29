@@ -39,6 +39,27 @@ test('Markdown keeps exact multiline text, metadata and media; unknown or duplic
   assert.throws(() => parsePostDocument(source.replace('likes: 3', 'likes: !!js/function malicious')), /JSON literal/);
   const guest = { ...original, author: 'guest-testing', guest: { name: '路过看看' } };
   assert.deepEqual(parsePostDocument(renderPostDocument(guest)), guest);
+  for (const deleted of [false, true]) {
+    const reply = { ...guest, replyTo: 'test-thread', text: '该回复已被删除', media: [], deleted };
+    assert.deepEqual(parsePostDocument(renderPostDocument(reply)), reply);
+  }
+  assert.ok(!Object.hasOwn(parsePostDocument(source), 'deleted'));
+});
+
+test('deleted reply flags survive partial recovery and are part of the pending digest', async t => {
+  const root = await fixture(t), first = round('test-first', [post('test-thread')]);
+  await writeThreadBatch(root, first);
+  const deletedReply = id => ({ ...post(id, 'test-thread', '该回复已被删除'), deleted: true });
+  const later = round('test-deleted', [deletedReply('test-deleted-first'), deletedReply('test-deleted-last')]);
+  const blocked = join(root, 'posts/2026/11/test-thread/replies/test-deleted-last.md');
+  await mkdir(blocked, { recursive: true });
+  await assert.rejects(writeThreadBatch(root, later, [first]), /different content/);
+  const changed = structuredClone(later); changed.posts[0].deleted = false;
+  await assert.rejects(writeThreadBatch(root, changed, [first]), /different content/);
+  assert.deepEqual(archivedPosts(await readThreadPackages(root)), sortedPosts(first));
+  await rm(blocked, { recursive: true });
+  await writeThreadBatch(root, later, [first]);
+  assert.deepEqual(archivedPosts(await readThreadPackages(root)), sortedPosts(first, later));
 });
 
 test('new updates append replies to the original package across months without a permanent index', async t => {
