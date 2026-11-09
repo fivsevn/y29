@@ -78,10 +78,9 @@ test('individual references stay with users and the environment includes interac
     if (name !== 'README.md') assert.ok(environmentIndex.includes(`(${name})`), `${name}: missing from the environment entrypoint`);
   }
   const sourceIds = (text, expectedCount, label) => {
-    const headings = [...text.matchAll(/^### ([SOLIM]\d{2})$/gm)].map(match => match[1]);
-    const anchors = [...text.matchAll(/<a\s+(?:name|id)=["']([solim]\d{2})["']\s*><\/a>/gi)].map(match => match[1].toUpperCase());
-    const ids = [...headings, ...anchors], unique = new Set(ids);
-    assert.equal(ids.length, unique.size, `${label}: duplicate source anchors`);
+    const ids = [...text.matchAll(/^#### ([SOLIM]\d{2})｜\S.+$/gm)].map(match => match[1]);
+    const unique = new Set(ids);
+    assert.equal(ids.length, unique.size, `${label}: duplicate source identifiers`);
     assert.equal(unique.size, expectedCount, `${label}: missing or unexpected source entries`);
     return unique;
   };
