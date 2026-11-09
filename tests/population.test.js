@@ -63,7 +63,7 @@ test('each original person has one complete human dossier, with operating contro
     assert.equal(documents.profiles[user.id].notes.trim(), text.trim(), `${user.id}: the complete dossier must reach the reader`);
   }
   const topLevel = (await readdir(join(socialRoot, 'users'), { withFileTypes: true })).filter(entry => entry.isFile()).map(entry => entry.name).sort();
-  assert.deepEqual(topLevel, ['ACCOUNT_TEMPLATE.md', 'README.md', 'TEMPLATE.md']);
+  assert.deepEqual(topLevel, ['ACCOUNT_TEMPLATE.md', 'README.md', 'TEMPLATE.md', 'speech.md']);
 });
 
 test('individual references stay with users and the environment includes interaction and meme research', async () => {

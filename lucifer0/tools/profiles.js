@@ -1,6 +1,7 @@
 import { realpath, mkdir } from 'node:fs/promises';
 import { resolve, relative, isAbsolute, dirname } from 'node:path';
-import { createHash, randomBytes } from 'node:crypto';
+import { randomBytes } from 'node:crypto';
+import { randomFor, sampleAuthors } from './lottery.js';
 import { socialRoot } from './content.js';
 import { readUserDocuments } from './user-documents.js';
 export { validateProfile, emptyProfile } from './profile-schema.js';
@@ -38,20 +39,7 @@ export async function readProfiles({ root = socialRoot } = {}) {
 export function selectCandidates({ users, profiles, posts = [], count = 5, seed = randomBytes(16).toString('hex') }) {
   if (!Number.isInteger(count) || count < 1 || count > 20) throw new Error('Candidate count must be an integer from 1 to 20');
   if (typeof seed !== 'string' || seed.length > 200) throw new Error('Invalid candidate seed');
-  let state = createHash('sha256').update(seed).digest().readUInt32LE(0) || 1;
-  const random = () => { state ^= state << 13; state ^= state >>> 17; state ^= state << 5; return (state >>> 0) / 4294967296; };
-  const latest = [...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
-  const recent = new Set(latest.slice(0, 7).map(post => post.author));
   const eligible = users.filter(user => user.kind !== 'admin' && user.enabled && user.aiScope !== 'none' && (user.allowPosts !== false || user.allowReplies !== false) && Object.hasOwn(profiles, user.id) && (profiles[user.id].activityWeight ?? 1) > 0);
-  const fresh = eligible.filter(user => !recent.has(user.id)), active = eligible.filter(user => recent.has(user.id));
-  const picked = [];
-  for (const pool of [fresh, active]) {
-    while (pool.length && picked.length < count) {
-      const total = pool.reduce((sum, user) => sum + (profiles[user.id].activityWeight ?? 1), 0);
-      let ticket = random() * total, index = pool.length - 1;
-      for (let i = 0; i < pool.length; i++) { ticket -= profiles[pool[i].id].activityWeight ?? 1; if (ticket < 0) { index = i; break; } }
-      picked.push(pool.splice(index, 1)[0]);
-    }
-  }
-  return { seed, requestedCount: count, eligibleCount: eligible.length, users: picked.map(user => ({ ...user, profile: profiles[user.id], allowedActions: [user.allowPosts !== false ? 'post' : null, user.allowReplies !== false ? 'reply' : null].filter(Boolean) })), recentAuthorIds: [...recent] };
+  const selection = sampleAuthors({ users: eligible, profiles, posts, count, random: randomFor(seed), preferFresh: true, recentMultiplier: 1 });
+  return { seed, requestedCount: count, eligibleCount: eligible.length, users: selection.users.map(user => ({ ...user, profile: profiles[user.id], allowedActions: [user.allowPosts !== false ? 'post' : null, user.allowReplies !== false ? 'reply' : null].filter(Boolean) })), recentAuthorIds: selection.recentAuthorIds };
 }
