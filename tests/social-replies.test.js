@@ -49,30 +49,52 @@ test('nested replies count toward one thread and retain their immediate parents 
 async function renderer(feed, { pending = false } = {}) {
   const handlers = {}, main = { innerHTML: '', scrollTop: 0, focus() {}, querySelector() { return null; } };
   const toast = { textContent: '', classList: { add() {}, remove() {} } };
-  const dialogHandlers = {}, loginCopy = { textContent: '' };
-  Object.defineProperty(loginCopy, 'innerHTML', { set() { throw new Error('Invitation copy must use textContent'); } });
-  let fetches = 0, storageWrites = 0, resumeFetch;
-  const loginButton = { focus() { document.activeElement = loginButton; } }, closeButton = { focus() { document.activeElement = closeButton; } };
+  const dialogHandlers = {}, formHandlers = {}, checkHandlers = {}, requests = [];
+  const element = id => {
+    const classes = new Set();
+    const node = { id, hidden: false, textContent: '', value: '', focus() { document.activeElement = node; },
+      classList: { add: value => classes.add(value), remove: value => classes.delete(value), contains: value => classes.has(value) } };
+    Object.defineProperty(node, 'innerHTML', { set() { throw new Error('Login values must not become markup'); } });
+    return node;
+  };
+  let storageWrites = 0, resumeFetch;
+  const loginButton = element('login-button'), closeButton = element('login-close'), loginHeading = element('login-heading');
+  const inviteCode = element('invite-code'), verification = element('login-verification'), robotCheck = element('robot-check'), loginError = element('login-error');
+  const inviteForm = { ...element('invite-form'), reset() { inviteCode.value = ''; }, matches: () => false,
+    addEventListener: (type, handler) => { formHandlers[type] = handler; } };
+  robotCheck.addEventListener = (type, handler) => { checkHandlers[type] = handler; };
   const dialog = { open: false, showModal() { this.open = true; }, close() { this.open = false; dialogHandlers.close?.(); },
     addEventListener: (type, handler) => { dialogHandlers[type] = handler; } };
-  const elements = { main, '#toast': toast, '#login-dialog': dialog, '#login-access-copy': loginCopy, '#login-close': closeButton };
+  const elements = { main, '#toast': toast, '#login-dialog': dialog, '#login-heading': loginHeading, '#invite-form': inviteForm,
+    '#invite-code': inviteCode, '#login-verification': verification, '#robot-check': robotCheck, '#login-error': loginError, '#login-close': closeButton };
   const document = { title: '', activeElement: loginButton, querySelector: selector => elements[selector] || null,
     querySelectorAll: () => [], getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
   const location = { hash: '#/', href: 'https://fixture.invalid/lucifer0/#/' };
   const context = { ...core, esc: core.escapeHTML, URL, document, location, setTimeout: () => 1, clearTimeout() {},
     window: { localStorage: { getItem() { return null; }, setItem() { storageWrites++; } }, addEventListener: (type, handler) => { handlers[type] = handler; } },
-    fetch: async () => { fetches++; const response = { ok: true, json: async () => feed };
+    fetch: async (url, options = {}) => { requests.push({ url: String(url), method: options.method || 'GET' }); const response = { ok: true, json: async () => feed };
       return pending ? new Promise(resolve => { resumeFetch = () => resolve(response); }) : response; } };
   const source = await readFile(new URL('../lucifer0/app.js', import.meta.url), 'utf8');
   vm.runInNewContext(source.replace(/^import .*?;\n/, ''), context);
   await new Promise(resolve => setImmediate(resolve));
   if (!pending) assert.match(main.innerHTML, /empty-thread/);
   return { html: () => main.innerHTML, visit(hash) { location.hash = hash; handlers.hashchange(); return main.innerHTML; },
-    toast: () => toast.textContent, fetches: () => fetches, storageWrites: () => storageWrites,
-    dialogOpen: () => dialog.open, loginCopy: () => loginCopy.textContent, focusRestored: () => document.activeElement === loginButton,
+    toast: () => toast.textContent, fetches: () => requests.length, requests: () => requests, storageWrites: () => storageWrites,
+    dialogOpen: () => dialog.open, focusRestored: () => document.activeElement === loginButton,
+    login: () => ({ heading: loginHeading.textContent, formVisible: !inviteForm.hidden, verificationVisible: !verification.hidden,
+      code: inviteCode.value, error: loginError.textContent, focus: document.activeElement?.id, failed: robotCheck.classList.contains('has-failed') }),
+    url: () => location.href, hash: () => location.hash,
     completeLoad: async () => { resumeFetch?.(); await new Promise(resolve => setImmediate(resolve)); },
     clickLogin: () => handlers.click({ target: { closest: selector => selector === '#login-button' ? loginButton : null } }),
     closeLogin: () => handlers.click({ target: { closest: selector => selector === '#login-close' ? closeButton : null } }),
+    submitInvite: async code => {
+      inviteCode.value = code;
+      const event = { target: inviteForm, defaultPrevented: false, preventDefault() { this.defaultPrevented = true; } };
+      await formHandlers.submit(event);
+      await handlers.submit(event);
+      return event.defaultPrevented;
+    },
+    checkRobot: () => checkHandlers.click({ target: robotCheck }),
     escapeLogin: () => dialogHandlers.cancel({ preventDefault() {} }) };
 }
 const article = (html, id) => html.match(new RegExp(`<article\\b[^>]*id="post-${id}"[\\s\\S]*?<\\/article>`))?.[0] || '';
@@ -218,8 +240,6 @@ test('a guide can omit its closing paragraph without losing its rules or access 
   assert.doesNotMatch(about, /guide-closing|谢谢读到这里|第二段结尾/);
   assert.match(about, /data-number="06"/);
   assert.match(about, /这份邀请说明仅在首帖保存。/);
-  await page.clickLogin();
-  assert.equal(page.loginCopy(), guide.access.text);
 });
 
 test('welcome number one does not renumber existing post IDs or their quote links', async () => {
@@ -234,38 +254,63 @@ test('welcome number one does not renumber existing post IDs or their quote link
   assert.match(article(page.visit('#/post/welcome-reply'), 'welcome-reply'), /class="reply-context" href="#\/post\/site-welcome"[^>]*>&gt;&gt;0000000001/);
 });
 
-test('log in opens the invitation dialog from the source, restores focus, and sends no extra requests', async () => {
+test('invite submission advances to local verification, always fails and never creates a login request', async () => {
   const index = await readFile(new URL('../lucifer0/index.html', import.meta.url), 'utf8');
   assert.match(index, /<header class="topbar">[\s\S]*<button type="button" class="login-button" id="login-button">log in<\/button>[\s\S]*<\/header>/);
-  assert.match(index, /<dialog id="login-dialog"[^>]*aria-labelledby="login-heading"[^>]*aria-describedby="login-access-copy"/);
-  assert.match(index, /<h2 id="login-heading">内测邀请<\/h2>/);
-  assert.doesNotMatch(index, /type="password"|<form/);
+  assert.match(index, /<dialog id="login-dialog"[^>]*aria-labelledby="login-heading"/);
+  assert.match(index, /<input[^>]*type="text"[^>]*aria-label="邀请码"/);
+  assert.doesNotMatch(index, /type=["']password["']/i);
   for (const pending of [false, true]) {
     const page = await renderer(presentationFixture(), { pending }), before = page.html();
-    await page.clickLogin();
-    assert.equal(page.dialogOpen(), true);
-    assert.equal(page.focusRestored(), false);
-    assert.equal(page.toast(), '');
-    if (pending) {
-      assert.match(page.loginCopy(), /尚未载入/);
-      assert.equal(page.html(), before);
-      await page.completeLoad();
+    const originalURL = page.url(), originalHash = page.hash();
+    for (const code of ['', '普通邀请码', 'admin', '<img src=x onerror=alert(1)>']) {
+      await page.clickLogin();
       assert.equal(page.dialogOpen(), true);
+      assert.deepEqual(page.login(), { heading: '输入邀请码', formVisible: true, verificationVisible: false,
+        code: '', error: '', focus: 'invite-code', failed: false });
+      assert.equal(await page.submitInvite(code), true, 'the form prevents a real navigation');
+      assert.deepEqual(page.login(), { heading: '人机验证', formVisible: false, verificationVisible: true,
+        code: '', error: '', focus: 'robot-check', failed: false });
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await page.checkRobot();
+        assert.equal(page.dialogOpen(), true);
+        assert.equal(page.login().error, '验证失败');
+        assert.equal(page.login().failed, true);
+        assert.equal(page.login().focus, 'robot-check');
+        assert.equal(page.login().formVisible, false);
+      }
+      await page.closeLogin();
+      assert.equal(page.dialogOpen(), false);
+      assert.equal(page.focusRestored(), true);
+      assert.equal(page.login().error, '');
+      assert.equal(page.login().code, '');
     }
-    assert.equal(page.loginCopy(), '这份邀请说明仅在首帖保存。');
-    await page.closeLogin();
-    assert.equal(page.dialogOpen(), false);
-    assert.equal(page.focusRestored(), true);
     await page.clickLogin();
+    await page.submitInvite('retry-after-close');
+    await page.checkRobot();
+    if (pending) {
+      assert.equal(page.html(), before);
+      const verificationState = page.login();
+      await page.completeLoad();
+      assert.deepEqual(page.login(), verificationState, 'feed arrival does not reset an in-progress verification');
+    }
     page.escapeLogin();
     assert.equal(page.dialogOpen(), false);
     assert.equal(page.focusRestored(), true);
-    assert.equal(page.fetches(), 1);
+    await page.clickLogin();
+    assert.equal(page.login().heading, '输入邀请码');
+    assert.equal(page.login().verificationVisible, false);
+    assert.equal(page.login().error, '');
+    assert.equal(page.toast(), '');
+    assert.equal(page.url(), originalURL);
+    assert.equal(page.hash(), originalHash);
+    if (!pending) assert.equal(page.html(), before);
+    assert.deepEqual(page.requests(), [{ url: './data/feed.json', method: 'GET' }]);
     assert.equal(page.storageWrites(), 0);
   }
 });
 
-test('access changes update both about and the dialog as escaped text, never as markup', async () => {
+test('access changes remain escaped in about and cannot become executable login content', async () => {
   const feed = presentationFixture(), page = await renderer(feed);
   const welcome = feed.posts.find(post => post.id === core.WELCOME_POST_ID);
   const unsafe = '<img src=x onerror=alert(1)> & 新说明';
@@ -274,7 +319,11 @@ test('access changes update both about and the dialog as escaped text, never as 
   assert.ok(about.includes(core.escapeHTML(unsafe)));
   assert.doesNotMatch(about, /<img src=x/);
   await page.clickLogin();
-  assert.equal(page.loginCopy(), unsafe);
+  await page.submitInvite(unsafe);
+  await page.checkRobot();
+  assert.equal(page.login().heading, '人机验证');
+  assert.equal(page.login().error, '验证失败');
+  assert.equal(page.login().code, '');
   assert.equal(page.fetches(), 1);
 });
 
