@@ -1181,3 +1181,153 @@ test('discussion replies use their stance instead of root motivations while lega
     assert.ok(reply.writer.conditions.some(condition => condition.dimension === 'length'));
   }
 });
+
+test('automatic thread replies bring the root author back to a real incoming response and preserve adopted drafts', async t => {
+  const f = await replyIdentityFixture(t, 'root'), id = f.prepared.id;
+  const root = { ...post(id + '-root', 'guest-returning-root', f.now - 30000), guest: { name: 'Returning root' }, text: 'ROOT_OWN_BODY' };
+  const first = post(id + '-first', 'guest-first-critic', f.now - 25000, root.id);
+  const own = { ...post(id + '-own', root.author, f.now - 20000, first.id), guest: root.guest, text: 'ROOT_OWN_COUNTERCLAIM' };
+  const incoming = { ...post(id + '-incoming', first.author, f.now - 15000, own.id), text: 'VISIBLE_DIRECT_CHALLENGE' };
+  const side = { ...post(id + '-side', 'guest-side-reader', f.now - 10000, incoming.id), text: 'UNREAD_LATER_SIDE_BODY' };
+  await saveIdentityDraft(f, [root, first, own, incoming, side]);
+  const options = { ...f.options, postId: id + '-return', threadId: root.id }, brief = await briefUpdatePost(options);
+  assert.equal(brief.draft.author, root.author); assert.deepEqual(brief.draft.guest, root.guest);
+  assert.equal(brief.draft.replyTo, incoming.id);
+  assert.deepEqual(brief.writer.thread, { rootId: root.id, role: 'root' });
+  assert.deepEqual(brief.editor.replyTarget, { mode: 'thread', rootId: root.id, postId: incoming.id });
+  assert.deepEqual(brief.writer.visiblePosts.map(post => post.text), ['VISIBLE_DIRECT_CHALLENGE']);
+  assert.ok(!JSON.stringify(brief.writer).includes(side.text));
+  assert.deepEqual(await briefUpdatePost(options), brief);
+  const adopted = { ...brief.draft, text: 'ROOT_SAVED_REPLY' };
+  await saveIdentityDraft(f, [root, first, own, incoming, side, adopted]);
+  await prepareUpdate(f.options);
+  const resumed = await briefUpdatePost(options);
+  assert.deepEqual(resumed.draft, adopted);
+  assert.equal(resumed.editor.replyTarget.mode, 'saved');
+  assert.equal(resumed.editor.replyAuthor.used, 'saved');
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: adopted.id, threadId: 'history-entry' }), /different thread/);
+});
+
+test('automatic participant replies prefer responses to that participant and new arrivals take the latest other post', async t => {
+  for (const choice of ['participant', 'new']) {
+    const f = await replyIdentityFixture(t, choice), id = f.prepared.id;
+    const root = post(id + '-root', 'guest-thread-root', f.now - 30000);
+    const participant = post(id + '-participant', 'guest-thread-participant', f.now - 25000, root.id);
+    const incoming = post(id + '-incoming', root.author, f.now - 20000, participant.id);
+    const side = post(id + '-side', root.author, f.now - 15000, root.id);
+    await saveIdentityDraft(f, [root, participant, incoming, side]);
+    const brief = await briefUpdatePost({ ...f.options, postId: id + '-next', threadId: root.id });
+    assert.equal(brief.draft.replyTo, choice === 'participant' ? incoming.id : side.id);
+    assert.equal(brief.editor.replyAuthor.used, choice);
+    assert.equal(brief.writer.thread.role, choice === 'participant' ? 'participant' : 'new');
+    assert.notEqual(brief.draft.author, (choice === 'participant' ? incoming : side).author);
+    if (choice === 'participant') assert.equal(brief.draft.author, participant.author);
+  }
+});
+
+test('a thread with only its author falls back to a new speaker and never creates a self reply', async t => {
+  const f = await replyIdentityFixture(t, 'root'), id = f.prepared.id;
+  const root = post(id + '-root', 'guest-sole-author', f.now - 10000);
+  await saveIdentityDraft(f, [root]);
+  const brief = await briefUpdatePost({ ...f.options, postId: id + '-first-reply', threadId: root.id });
+  assert.equal(brief.editor.replyAuthor.drawn, 'root'); assert.equal(brief.editor.replyAuthor.used, 'new');
+  assert.equal(brief.draft.replyTo, root.id); assert.notEqual(brief.draft.author, root.author);
+  assert.deepEqual(brief.writer.thread, { rootId: root.id, role: 'new' });
+});
+
+test('explicit parents stay fixed while returning identities exclude the target author', async t => {
+  for (const choice of ['root', 'participant']) {
+    const f = await replyIdentityFixture(t, choice), id = f.prepared.id;
+    const root = post(id + '-root', 'guest-explicit-root', f.now - 20000);
+    const participant = post(id + '-participant', 'guest-explicit-participant', f.now - 15000, root.id);
+    await saveIdentityDraft(f, [root, participant]);
+    const target = choice === 'root' ? root : participant;
+    const brief = await briefUpdatePost({ ...f.options, postId: id + '-next', replyTo: target.id });
+    assert.equal(brief.draft.replyTo, target.id);
+    assert.equal(brief.editor.replyTarget.mode, 'explicit');
+    assert.equal(brief.editor.replyAuthor.used, 'new');
+    assert.notEqual(brief.draft.author, target.author);
+  }
+});
+
+test('automatic targets exclude future and deleted bodies without exposing unread replies', async t => {
+  const f = await replyIdentityFixture(t, 'new'), id = f.prepared.id;
+  const root = post(id + '-root', 'guest-time-root', f.now - 20000);
+  const earlier = { ...post(id + '-earlier', 'guest-earlier', f.now - 15000, root.id), text: 'ACTUAL_EARLIER_TARGET' };
+  const deleted = { ...post(id + '-deleted', 'guest-deleted', f.now - 10000, root.id), text: 'DELETED_PRIVATE_BODY', deleted: true };
+  const future = { ...post(id + '-future', 'guest-future', f.now + 5000, root.id), text: 'FUTURE_PRIVATE_BODY' };
+  await saveIdentityDraft(f, [root, earlier, deleted, future]);
+  const brief = await briefUpdatePost({ ...f.options, postId: id + '-next', threadId: root.id });
+  assert.equal(brief.editor.replyTarget.postId, earlier.id);
+  assert.deepEqual(brief.writer.visiblePosts.map(post => post.text), [earlier.text]);
+  assert.ok(!JSON.stringify(brief.writer).includes(future.text));
+  assert.ok(!JSON.stringify(brief.writer).includes(deleted.text));
+  assert.equal(brief.editor.timing.status, 'deferred');
+});
+
+test('the real brief CLI accepts one thread and rejects conflicting or non-root targets', async t => {
+  const f = await replyIdentityFixture(t, 'root'), id = f.prepared.id;
+  const root = post(id + '-root', 'guest-cli-thread-root', f.now - 20000);
+  const incoming = post(id + '-incoming', 'guest-cli-critic', f.now - 15000, root.id);
+  await saveIdentityDraft(f, [root, incoming]);
+  await cp(new URL('../lucifer0/tools', import.meta.url), join(f.root, 'tools'), { recursive: true });
+  await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
+  const command = [join(f.root, 'tools/update.js'), 'brief', '--post', id + '-next', '--work', f.workDirectory];
+  const run = args => execFileSync(process.execPath, [...command, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  const brief = JSON.parse(run(['--thread', root.id]));
+  assert.equal(brief.draft.author, root.author); assert.equal(brief.draft.replyTo, incoming.id);
+  assert.throws(() => run(['--thread', root.id, '--reply-to', incoming.id]), /either --reply-to or --thread/);
+  assert.throws(() => run(['--thread', root.id, '--thread', root.id]), /Usage/);
+  assert.throws(() => run(['--thread', incoming.id]), /existing root thread/);
+});
+
+test('consecutive root draws move to a fresh speaker after the root has answered all available targets', async t => {
+  const f = await replyIdentityFixture(t, 'root'), id = f.prepared.id;
+  const root = post(id + '-root', 'guest-freshness-root', f.now - 20000);
+  const critic = post(id + '-critic', 'guest-freshness-critic', f.now - 15000, root.id);
+  await saveIdentityDraft(f, [root, critic]);
+  const first = await briefUpdatePost({ ...f.options, postId: id + '-first-return', threadId: root.id });
+  assert.equal(first.draft.author, root.author); assert.equal(first.draft.replyTo, critic.id);
+  const answered = { ...first.draft, text: 'ROOT_ALREADY_ANSWERED_THIS_CRITIC' };
+  await saveIdentityDraft(f, [root, critic, answered]);
+  const next = await briefUpdatePost({ ...f.options, postId: id + '-second-return', threadId: root.id });
+  assert.equal(next.editor.replyAuthor.drawn, 'root'); assert.equal(next.editor.replyAuthor.used, 'new');
+  assert.notEqual(next.draft.author, root.author); assert.notEqual(next.draft.author, critic.author);
+  assert.equal(next.draft.replyTo, answered.id); assert.equal(next.writer.thread.role, 'new');
+});
+
+test('a new incoming reply makes the root eligible again while explicit parents remain available', async t => {
+  const f = await replyIdentityFixture(t, 'root'), id = f.prepared.id;
+  const root = post(id + '-root', 'guest-new-incoming-root', f.now - 30000);
+  const critic = post(id + '-critic', 'guest-new-incoming-critic', f.now - 25000, root.id);
+  const answered = post(id + '-answered', root.author, f.now - 20000, critic.id);
+  await saveIdentityDraft(f, [root, critic, answered]);
+  const explicit = await briefUpdatePost({ ...f.options, postId: id + '-explicit', replyTo: critic.id });
+  assert.equal(explicit.draft.author, root.author); assert.equal(explicit.draft.replyTo, critic.id);
+  const incoming = post(id + '-new-incoming', critic.author, f.now - 15000, answered.id);
+  await saveIdentityDraft(f, [root, critic, answered, incoming]);
+  const returned = await briefUpdatePost({ ...f.options, postId: id + '-return-again', threadId: root.id });
+  assert.equal(returned.editor.replyAuthor.used, 'root'); assert.equal(returned.draft.author, root.author);
+  assert.equal(returned.draft.replyTo, incoming.id); assert.equal(returned.writer.thread.role, 'root');
+});
+
+test('automatic new arrivals exclude every existing thread identity and fall back to a guest when the library is exhausted', async t => {
+  const lottery = structuredClone(productionLottery);
+  lottery.authorKind = [{ value: 'library', weight: 1 }]; lottery.waitSeconds = [{ weight: 1, min: 1, max: 1 }];
+  lottery.discussion.replyAuthor = [{ value: 'new', weight: 1 }];
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(10), maxBatchPosts: 120 }), prepared = await prepareUpdate(f.options);
+  f.prepared = prepared;
+  for (const user of users().slice(3)) await configureAccount(f.root, user.id, { enabled: false });
+  await prepareUpdate(f.options);
+  const root = post(prepared.id + '-root', 'person-0', f.now - 20000);
+  const participant = post(prepared.id + '-participant', 'person-1', f.now - 15000, root.id);
+  await saveIdentityDraft(f, [root, participant]);
+  const fresh = await briefUpdatePost({ ...f.options, postId: prepared.id + '-fresh-library', threadId: root.id });
+  assert.equal(fresh.draft.author, 'person-2'); assert.equal(fresh.writer.thread.role, 'new');
+  const adopted = { ...fresh.draft, text: 'NEW_LIBRARY_PARTICIPANT' };
+  await saveIdentityDraft(f, [root, participant, adopted]);
+  const exhausted = await briefUpdatePost({ ...f.options, postId: prepared.id + '-fresh-guest', threadId: root.id });
+  assert.ok(exhausted.draft.author.startsWith('guest-'));
+  assert.equal(exhausted.editor.replyAuthor.used, 'new'); assert.equal(exhausted.writer.thread.role, 'new');
+  assert.equal(exhausted.draft.replyTo, adopted.id);
+});
