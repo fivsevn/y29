@@ -174,8 +174,8 @@ try {
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.copiedPostURL = text; } } }));
   await page.locator(`#post-${likePost.id} button[data-action="share"]`).click();
   check(new URL(await page.evaluate(() => window.copiedPostURL)).hash === `#/post/${likePost.id}`, 'chain icon copies the post permalink');
-  await visit('#/bookmarks', '/world');
-  check(await page.locator('article').count() === roots.length, 'legacy bookmark route falls back to the world');
+  await visit('', '/world');
+  check(await page.locator('article').count() === roots.length, 'world includes its root posts');
 
   await page.locator('main').evaluate(element => { element.scrollTop = 0; });
   const framesBefore = await fixedFrames();
@@ -216,7 +216,11 @@ try {
   check(await page.locator(`#post-${visitorPost.id}`).count() === Number(followingIds.has(visitorPost.author)), 'visitor membership follows its independent switch');
   check(await page.locator('a[href="#/people"],.directory,.directory-person').count() === 0, 'following has no people directory entry');
   await checkFeedEnd('/following');
-  await checkNameColors('following');
+  if (followingCount) await checkNameColors('following');
+  else {
+    check(await page.getByRole('heading', { name: '这里还没有帖子', exact: true }).count() === 1, 'empty following shows its empty state');
+    check(await page.locator('.author-name,.preview-reply strong').count() === 0, 'empty following renders no account names');
+  }
   await screenshot('phone-following.png');
   await visit(`#/user/${characterUser.id}`, '/user');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'character channel does not expose optional follow controls');
@@ -246,9 +250,8 @@ try {
   await checkNameColors('profile');
   check(await page.locator('article').count() === feed.posts.filter(post => post.author === profileUser.id).length, 'profile keeps posts and replies');
   await checkPlatformDates('profile');
-  await visit('#/people', '/following');
-  check(await page.locator('article').count() === followingCount, 'legacy people route returns to following');
-  check(await page.locator('.directory,.directory-person,a[href="#/people"]').count() === 0, 'legacy people route does not render the directory');
+  await visit('#/following', '/following');
+  check(await page.locator('article').count() === followingCount, 'following includes channel posts');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'following has no per-reader follow controls');
   await visit('#/search', '搜索');
   await page.getByRole('searchbox').fill(searchTerm);
@@ -279,12 +282,6 @@ try {
     check(await tombstone.locator('.like-action,.post-image').count() === 0, 'deleted reply has neither likes nor media');
     check(await tombstone.locator('.author-name,time,.reply-context,.share-action').count() === 4, 'deleted reply keeps author, time, parent and permalink');
   }
-
-  const legacy = new URL(`../social/?entry=legacy#/post/${nestedReply.id}`, base);
-  await page.goto(legacy.href); await page.locator(`#post-${nestedReply.id}`).waitFor();
-  const redirected = new URL(page.url());
-  check(redirected.pathname === new URL(base).pathname, 'old entry redirects to canonical path');
-  check(redirected.search === '?entry=legacy' && redirected.hash === `#/post/${nestedReply.id}`, 'legacy redirect preserves query and thread permalink');
 
   await page.evaluate(() => localStorage.clear());
   await page.goto(pageURL()); await page.locator('article').first().waitFor();

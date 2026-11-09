@@ -21,7 +21,7 @@ test('build stays in its repository and supplies every static runtime dependency
   t.after(() => rm(directory, { recursive: true, force: true }));
   const project = join(directory, 'project'), caller = join(directory, 'caller');
   await Promise.all([mkdir(project), mkdir(caller)]);
-  for (const path of ['build.js', 'package.json', 'index.html', 'style.css', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0', 'social']) {
+  for (const path of ['build.js', 'package.json', 'index.html', 'style.css', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0']) {
     await cp(new URL('../' + path, import.meta.url), join(project, path), { recursive: true });
   }
   await symlink(new URL('../node_modules', import.meta.url), join(project, 'node_modules'), 'dir');

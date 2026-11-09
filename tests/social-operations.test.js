@@ -8,7 +8,9 @@ import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch
 import { emptyProfile } from '../lucifer0/tools/profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
-import { defaultLottery as productionLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
+import { defaultLottery as rawProductionLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
+const productionLottery = structuredClone(rawProductionLottery);
+delete productionLottery.researchMaintenance;
 const defaultLottery = structuredClone(productionLottery);
 delete defaultLottery.discussion;
 import { createHash } from 'node:crypto';
@@ -40,6 +42,7 @@ const research = now => [
   { category: 'trend', kind: 'thread', url: 'https://forum.example.net/topic', visitedAt: iso(now), publishedAt: iso(now), summary: 'Synthetic source: read the root and visible disagreement replies.' },
   { category: 'daily', kind: 'thread', url: 'https://forum.example.net/daily', visitedAt: iso(now), publishedAt: null, summary: 'Synthetic source: read a daily-life account and its follow-up.' }
 ];
+const maintenanceLottery = probability => ({ ...structuredClone(defaultLottery), researchMaintenance: { probability, maxDocuments: 1, ageWeightDays: 7, maxAgeWeight: 5 } });
 async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lottery } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-update-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
@@ -841,6 +844,109 @@ test('lottery and common research enter source digest, while config snapshots st
   assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
   assert.deepEqual(resumed.researchWindows, prepared.researchWindows);
   assert.deepEqual(await briefUpdatePost({ ...f.options, postId }), initial);
+});
+
+test('research maintenance discovers new files once and freezes the Git history draw across resume', async t => {
+  const f = await fixture(t, 4, { lottery: maintenanceLottery(1) });
+  const git = (args, date) => execFileSync('git', args, { cwd: f.root, encoding: 'utf8', stdio: 'pipe', env: { ...process.env, ...(date ? { GIT_AUTHOR_DATE: iso(date), GIT_COMMITTER_DATE: iso(date) } : {}) } });
+  git(['init']); git(['add', '.']);
+  git(['-c', 'user.name=Synthetic test', '-c', 'user.email=test@example.org', 'commit', '-m', 'Initial research'], f.now - 30 * DAY);
+  const changedPath = 'users/speech-research.md';
+  await writeFile(join(f.root, changedPath), '# Recently updated speech\n');
+  git(['add', changedPath]);
+  git(['-c', 'user.name=Synthetic test', '-c', 'user.email=test@example.org', 'commit', '-m', 'Recent research'], f.now - DAY);
+  const newPaths = ['docs/added-research.md', 'environment/added-research.md', 'users/person-0/added-research.md'];
+  for (const path of newPaths) await writeFile(join(f.root, path), '# NEW_DISCOVERED_' + path + '\n');
+  const prepared = await prepareUpdate(f.options), saved = await readJSON(prepared.operationPath);
+  const maintenance = saved.plan.researchMaintenance, reading = await readFile(prepared.readingPath, 'utf8');
+  assert.deepEqual(prepared.researchMaintenance, maintenance);
+  assert.equal(maintenance.candidates.length, 10);
+  assert.equal(maintenance.selectedPaths.length, 1);
+  assert.ok(Math.abs(Date.parse(maintenance.candidates.find(item => item.path === changedPath).updatedAt) - (f.now - DAY)) < 1000);
+  for (const path of newPaths) {
+    assert.equal(maintenance.candidates.find(item => item.path === path).updatedAt, null);
+    assert.equal(reading.split('NEW_DISCOVERED_' + path).length - 1, 1);
+  }
+  assert.equal(reading.split('SYNTHETIC_CHARACTER_RESEARCH').length - 1, 1);
+  assert.equal(reading.split('## 原文路径：users/person-0/added-research.md').length - 1, 1);
+  saved.posts = [post(prepared.id + '-paused', 'guest-paused-maintenance', f.now)];
+  await writeFile(prepared.operationPath, JSON.stringify(saved));
+  const policy = await readJSON(join(f.root, 'publication.json'));
+  policy.lottery.researchMaintenance.probability = 0;
+  await writeFile(join(f.root, 'publication.json'), JSON.stringify(policy));
+  await writeFile(join(f.root, 'docs/later-research.md'), '# LATER_DISCOVERED_RESEARCH\n');
+  await writeFile(join(f.root, changedPath), '# CHANGED_RESEARCH_AFTER_DRAW\n');
+  git(['add', '.']);
+  git(['-c', 'user.name=Synthetic test', '-c', 'user.email=test@example.org', 'commit', '-m', 'Later research and settings'], f.now + 2 * DAY);
+  const resumed = await prepareUpdate({ ...f.options, now: f.now + 4 * DAY, entropy: () => { throw new Error('Must not redraw'); } });
+  const current = await readJSON(prepared.operationPath);
+  assert.deepEqual(current.plan, saved.plan);
+  assert.deepEqual(current.posts, saved.posts);
+  assert.deepEqual(resumed.researchMaintenance, maintenance);
+  assert.notEqual(current.sourceDigest, saved.sourceDigest);
+  assert.match(await readFile(prepared.readingPath, 'utf8'), /LATER_DISCOVERED_RESEARCH/);
+  const brief = await briefUpdatePost({ ...f.options, now: f.now + 4 * DAY, postId: prepared.id + '-new' });
+  assert.doesNotMatch(JSON.stringify(brief.writer), /NEW_DISCOVERED_docs\/added-research.md|LATER_DISCOVERED_RESEARCH/);
+});
+
+test('selected research maintenance requires actual source records for batches and empty finishes', async t => {
+  const f = await fixture(t, 4, { lottery: maintenanceLottery(1) }), prepared = await prepareUpdate(f.options);
+  const entry = post(prepared.id + '-root', 'guest-maintenance', f.now), { batch } = await draft(prepared, f.now, [entry]);
+  const options = { ...f.options, contextPath: prepared.operationPath };
+  await assert.rejects(validateUpdateForBatch(batch, options), /Complete the selected research maintenance/);
+  const operation = await readJSON(prepared.operationPath), path = operation.plan.researchMaintenance.selectedPaths[0];
+  const record = { path, status: 'checked', summary: 'Read the source and compared its cases; the existing research already covers these patterns.', sources: [{ url: 'https://forum.example.net/research-sample', visitedAt: iso(f.now), summary: 'Read the complete root and its first five replies.' }] };
+  operation.researchMaintenance = [record];
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  await validateUpdateForBatch(batch, options);
+  record.status = 'updated';
+  record.summary = 'Added the new reference and its specific information order to the selected research.';
+  await writeFile(join(f.root, path), '# A new actual research reference\n');
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  await assert.rejects(validateUpdateForBatch(batch, options), /Source material changed/);
+  await prepareUpdate(f.options);
+  await validateUpdateForBatch(batch, options);
+  for (const change of [
+    value => { value.sources[0].visitedAt = iso(f.now - 3 * DAY); },
+    value => { value.sources[0].visitedAt = iso(f.now + DAY); },
+    value => { value.sources[0].url = 'http://forum.example.net/plain'; },
+    value => { value.path = 'environment/not-selected-research.md'; },
+    value => { value.sources = []; }
+  ]) {
+    const changed = structuredClone(record); change(changed);
+    const current = await readJSON(prepared.operationPath); current.researchMaintenance = [changed];
+    await writeFile(prepared.operationPath, JSON.stringify(current));
+    await assert.rejects(validateUpdateForBatch(batch, options), /research maintenance|Research maintenance/);
+  }
+  const empty = await fixture(t, 4, { lottery: maintenanceLottery(1) }), emptyPrepared = await prepareUpdate(empty.options);
+  await assert.rejects(finishUpdate(empty.options), /Complete the selected research maintenance/);
+  const noPosts = await readJSON(emptyPrepared.operationPath);
+  noPosts.researchMaintenance = [{ ...structuredClone(record), path: noPosts.plan.researchMaintenance.selectedPaths[0], status: 'checked' }];
+  await writeFile(emptyPrepared.operationPath, JSON.stringify(noPosts));
+  assert.equal((await finishUpdate(empty.options)).status, 'no-posts');
+});
+
+test('research maintenance skips and older saved operations finish without a new research task', async t => {
+  const skipped = await fixture(t, 4, { lottery: maintenanceLottery(0) }), prepared = await prepareUpdate(skipped.options);
+  assert.deepEqual(prepared.researchMaintenance.selectedPaths, []);
+  assert.equal((await finishUpdate(skipped.options)).status, 'no-posts');
+  const legacy = await fixture(t), original = await prepareUpdate(legacy.options), saved = await readJSON(original.operationPath);
+  const policy = await readJSON(join(legacy.root, 'publication.json')); policy.lottery = maintenanceLottery(1);
+  await writeFile(join(legacy.root, 'publication.json'), JSON.stringify(policy));
+  const resumed = await prepareUpdate({ ...legacy.options, entropy: () => { throw new Error('Must not redraw'); } });
+  assert.equal(resumed.researchMaintenance, undefined);
+  assert.deepEqual((await readJSON(original.operationPath)).plan, saved.plan);
+  assert.equal((await finishUpdate(legacy.options)).status, 'no-posts');
+});
+
+test('research discovery rejects linked files and linked source directories', async t => {
+  const f = await fixture(t, 4, { lottery: maintenanceLottery(1) });
+  const outside = join(f.directory, 'outside-research.md'); await writeFile(outside, '# External material\n');
+  const linked = join(f.root, 'docs/linked-research.md'); await symlink(outside, linked);
+  await assert.rejects(prepareUpdate(f.options), /regular project directories/);
+  await rm(linked);
+  await symlink(f.directory, join(f.root, 'docs/linked-folder'));
+  await assert.rejects(prepareUpdate(f.options), /regular project directories/);
 });
 
 test('an older unfinished operation gains one stable lottery snapshot without redrawing its saved plan', async t => {

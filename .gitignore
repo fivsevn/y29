@@ -1,11 +1,6 @@
 dist/
 .DS_Store
 node_modules/
-social/.publish.lock/
-social/.private/
-social/private/
-social/drafts/
-.social-private/
 test-results/
 
 lucifer0/.publish.lock/

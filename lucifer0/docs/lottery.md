@@ -17,6 +17,21 @@
 
 素材入口使用最新排序，从 `offset` 跳过的条目之后连续读取 `count` 条原帖，保留普通、低互动与重复话题。入口内容不足时继续翻页；页面访问受限时记录实际范围，再使用该专题的其他可读入口。
 
+## 研究补充
+
+准备时自动识别 `docs/`、`environment/`、`users/` 中以 `-research.md` 结尾的研究文档，新增文档随下一次新操作纳入候选。
+
+| 参数 | 用途 |
+| --- | --- |
+| `lottery.researchMaintenance.probability` | 每轮开展研究补充的概率 |
+| `lottery.researchMaintenance.maxDocuments` | 一轮最多选取的研究文档数 |
+| `lottery.researchMaintenance.ageWeightDays` | 每经过多少天，为文档增加一档抽中权重 |
+| `lottery.researchMaintenance.maxAgeWeight` | 文档抽中权重的上限 |
+
+先抽取本轮是否开展，再按权重选取文档。以最近一次文件提交的时间计算距本次准备时刻的天数，权重为 `min(maxAgeWeight, 1 + floor(天数 / ageWeightDays))`；尚无提交记录的文档采用最高权重。多份文档采用不放回抽取。
+
+`plan.researchMaintenance` 保存候选路径、提交日期与抽中路径；同一操作恢复时沿用这份结果。已有操作继续原任务，后续新操作采用新增配置。实际阅读、补充与结果记录见[研究补充步骤](publishing.md#研究补充)。
+
 ## 每条发言
 
 `brief` 根据帖号抽取条件，返回单人写作材料和策划信息。

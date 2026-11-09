@@ -22,6 +22,9 @@ async function fixture(t) {
   t.after(() => rm(dir, { recursive: true, force: true }));
   const root = join(dir, 'project/lucifer0'), work = join(dir, 'work');
   await cp(new URL('../lucifer0/', import.meta.url), root, { recursive: true, filter: path => !/\/(?:posts|data|\.publish-lock|\.publish-staging|\.publish\.lock)(?:\/|$)/.test(path) });
+  const policyPath = join(root, 'publication.json'), policy = await readJSON(policyPath);
+  delete policy.lottery.researchMaintenance;
+  await writeFile(policyPath, JSON.stringify(policy));
   await mkdir(join(root, `${threadPath}/media`), { recursive: true });
   await writeFile(join(root, imagePath), await png());
   await writeFile(join(root, `${threadPath}/media/unused.png`), 'unfinished draft');

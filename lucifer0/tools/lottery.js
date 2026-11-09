@@ -53,7 +53,7 @@ export function validateReplyLottery(lottery) {
   return lottery;
 }
 export function validateLottery(config) {
-  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'likes', 'sampling', 'discussion'], 'lottery');
+  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'likes', 'sampling', 'discussion', 'researchMaintenance'], 'lottery');
   if (config.version !== 1) fail('Invalid lottery version');
   range(config.rootBudget, 20, 'root budget', 1);
   keys(config.authors, ['candidates', 'recentPosts', 'recentMultiplier'], 'author lottery');
@@ -80,6 +80,12 @@ export function validateLottery(config) {
     options(config.discussion.negativeMotivation, ['complaint', 'gossip', 'dispute', 'grievance', 'suspicion'], 'negative motivation');
     options(config.discussion.replyStance, ['support', 'push-back', 'doubt', 'defend', 'provoke', 'ask-detail', 'sidetrack'], 'reply stance');
     if (config.discussion.replyAuthor !== undefined) options(config.discussion.replyAuthor, ['new', 'root', 'participant'], 'reply author');
+  }
+  if (config.researchMaintenance !== undefined) {
+    const maintenance = config.researchMaintenance;
+    keys(maintenance, ['probability', 'maxDocuments', 'ageWeightDays', 'maxAgeWeight'], 'research maintenance');
+    if (typeof maintenance.probability !== 'number' || !Number.isFinite(maintenance.probability) || maintenance.probability < 0 || maintenance.probability > 1 ||
+      !integer(maintenance.maxDocuments, 1, 10) || !integer(maintenance.ageWeightDays, 1, 3650) || !weight(maintenance.maxAgeWeight) || maintenance.maxAgeWeight < 1) fail('Invalid research maintenance');
   }
   return config;
 }
@@ -176,4 +182,29 @@ export function drawResearchWindows({ seed, lottery }) {
     offset: pickInteger(randomFor(seed + '\0research-offset\0' + category), lottery.sampling.offset),
     count: pickInteger(randomFor(seed + '\0research-count\0' + category), lottery.sampling.count)
   }]));
+}
+
+export function drawResearchMaintenance({ seed, lottery, documents, now }) {
+  validateLottery(lottery);
+  if (typeof seed !== 'string' || !seed.trim() || seed.length > 200 || !Number.isFinite(now) || !Array.isArray(documents) || documents.length > 10000) fail('Research maintenance needs a saved seed, time and documents');
+  const seen = new Set();
+  const pool = documents.map(document => {
+    keys(document, ['path', 'updatedAt'], 'research maintenance document');
+    const path = document.path, parts = typeof path === 'string' ? path.split('/') : [];
+    if (!['docs', 'environment', 'users'].includes(parts[0]) || !path.endsWith('-research.md') || path.length > 2000 || /[\\\x00-\x1f\x7f]/.test(path) ||
+      parts.some(part => !part || part === '.' || part === '..') || seen.has(path) ||
+      !(document.updatedAt === null || typeof document.updatedAt === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(document.updatedAt) && Number.isFinite(Date.parse(document.updatedAt)))) fail('Invalid research maintenance document');
+    seen.add(path);
+    return { ...document };
+  }).sort((a, b) => a.path.localeCompare(b.path, 'en'));
+  const config = lottery.researchMaintenance;
+  if (!config || !pool.length || randomFor(seed + '\0research-maintenance-trigger')() >= config.probability) return [];
+  const random = randomFor(seed + '\0research-maintenance-documents'), selected = [];
+  while (pool.length && selected.length < config.maxDocuments) {
+    const weighted = pool.map(document => ({ document, weight: document.updatedAt === null ? config.maxAgeWeight :
+      Math.min(config.maxAgeWeight, 1 + Math.floor(Math.max(0, now - Date.parse(document.updatedAt)) / (config.ageWeightDays * 86400000))) }));
+    const chosen = pick(random, weighted).document;
+    selected.push(chosen.path); pool.splice(pool.indexOf(chosen), 1);
+  }
+  return selected;
 }
