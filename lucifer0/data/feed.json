@@ -1064,6 +1064,54 @@
       "inFollowing": false
     },
     {
+      "id": "guest-l0-20261109020712-61980d24-hinge",
+      "handle": "guest_4d3a7cfd4f5f40894ac0",
+      "name": "铰链响两声",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109020712-61980d24-eggs",
+      "handle": "guest_a4479e20e1d792f23996",
+      "name": "散装十个",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109020712-61980d24-noodles",
+      "handle": "guest_629c28f90c2939ae6ef7",
+      "name": "面先上",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109020712-61980d24-percent",
+      "handle": "guest_4042b7cc6db49a242b6a",
+      "name": "再等一下_4",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "guest-site-welcome-removed-01",
       "handle": "guest_d8de83693e21f410d2c7",
       "name": "先让我说完",
@@ -1101,6 +1149,118 @@
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261109020712-61980d24-08",
+      "author": "guest-l0-20261109020712-61980d24-percent",
+      "createdAt": "2026-11-09T10:10:00+08:00",
+      "replyTo": "l0-20261109020712-61980d24-03",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "再等一下_4"
+      },
+      "text": "我们群里现在先报百分比。上次有人说99了，我去洗个杯子回来，还是99。"
+    },
+    {
+      "id": "l0-20261109020712-61980d24-03",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-09T10:03:00+08:00",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "昨晚室友一直发伸爪子的猫催上号。我进去了，他们三个全在下更新。刚想骂，自己也弹了。最后四个人看进度条"
+    },
+    {
+      "id": "l0-20261109020712-61980d24-06",
+      "author": "guest-l0-20261109020712-61980d24-eggs",
+      "createdAt": "2026-11-09T09:52:00+08:00",
+      "replyTo": "l0-20261109020712-61980d24-01",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "散装十个"
+      },
+      "text": "我爸也老这么找隔壁。他去送鸡蛋，俩人能站门口聊半天。我每次都怕又聊出个要修的。"
+    },
+    {
+      "id": "l0-20261109020712-61980d24-07",
+      "author": "guest-l0-20261109020712-61980d24-noodles",
+      "createdAt": "2026-11-09T09:48:00+08:00",
+      "replyTo": "l0-20261109020712-61980d24-02",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109020712-61980d24-02/media/l0-20261109020712-61980d24-07.png",
+          "alt": "小面馆的旧桌面上放着一碗青菜汤面，一双木筷横在碗沿。"
+        }
+      ],
+      "guest": {
+        "name": "面先上"
+      },
+      "text": "我等冲扫都去隔壁吃面。现在换了家冲扫，面还去老地方吃。"
+    },
+    {
+      "id": "l0-20261109020712-61980d24-02",
+      "author": "visitor-nu",
+      "createdAt": "2026-11-09T09:34:00+08:00",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109020712-61980d24-02/media/l0-20261109020712-61980d24-02.png",
+          "alt": "红雨棚下的旧店门口，一只白色塑料桶的长影横过泛红的水泥地面。"
+        }
+      ],
+      "text": "去问那卷夜片，还没好。等店员找单子的时候，出去拍了红雨棚投在地上的颜色。回来看手机，桶的影子比那块光还醒目。今天胶片没拿到，手机照片又多了十几张。"
+    },
+    {
+      "id": "l0-20261109020712-61980d24-05",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-09T09:22:00+08:00",
+      "replyTo": "l0-20261109020712-61980d24-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109020712-61980d24-01/media/l0-20261109020712-61980d24-05.png",
+          "alt": "修车店绿色零件柜的一格抽屉斜着拉开，里面放着螺母和垫圈，台边有螺丝刀。"
+        }
+      ],
+      "text": "门把手我没去。我自己的抽屉还卡着，先弄自己的吧。"
+    },
+    {
+      "id": "l0-20261109020712-61980d24-04",
+      "author": "guest-l0-20261109020712-61980d24-hinge",
+      "createdAt": "2026-11-09T09:15:00+08:00",
+      "replyTo": "l0-20261109020712-61980d24-01",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "铰链响两声"
+      },
+      "text": "我帮同事修过一回椅子，后来他抽屉打不开也来叫我。我自己那把椅子到现在还垫着纸。"
+    },
+    {
+      "id": "l0-20261109020712-61980d24-01",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-09T09:08:00+08:00",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109020712-61980d24-01/media/l0-20261109020712-61980d24-01.png",
+          "alt": "修车店的旧木工作台上放着一把黑色卷线车锁，旁边是空车筐和自行车前轮。"
+        }
+      ],
+      "text": "隔壁推车来说一路都响。我把车筐里的锁拿出来，安静了。没收钱，他临走又问能不能顺便看看店里的门把手。我这招牌写的是自行车。"
+    },
     {
       "id": "l0-20261109005357-b42d24e5-09",
       "author": "guest-l0-20261109005357-b42d24e5-three",
