@@ -38,6 +38,7 @@ test('built site preserves existing entrypoints and publishes only explicit soci
     }]
   });
   await writeFile(join(directory, 'lucifer0', mediaDirectory, 'unused.png'), 'unused draft image');
+  await writeFile(join(directory, 'lucifer0', mediaDirectory, 'LICENSE.txt'), 'Google Noto Emoji license fixture');
   const avatarDirectory = 'users/alan';
   const avatar = 'users/alan/avatar.svg';
   const settingsPath = join(directory, 'lucifer0/accounts.json');
@@ -49,10 +50,11 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   execFileSync(process.execPath, ['build.js'], { cwd: directory });
   const published = await files(join(directory, 'dist/lucifer0'));
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
-  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.png',
+  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.png', `${mediaDirectory}/LICENSE.txt`,
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
   assert.deepEqual(published, [...expected].sort());
   assert.ok(!published.some(path => /private|not-referenced|unused|registry|profile-seeds|manage|tools|docs|\.md$/.test(path)));
+  assert.equal(await readFile(join(directory, 'dist/lucifer0', mediaDirectory, 'LICENSE.txt'), 'utf8'), 'Google Noto Emoji license fixture');
   assert.ok(published.includes(avatar), 'an optional avatar from its owner package is published');
   assert.ok(published.includes(`${mediaDirectory}/study.webp`), 'referenced media is published from its thread package');
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {

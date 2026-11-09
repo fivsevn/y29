@@ -120,7 +120,7 @@ export async function readThreadPackages(root, attempt = 0) {
   for (const path of paths) {
     // Media may be prepared before a batch is imported. Only references from
     // validated post metadata are eligible for the published build.
-    if (isPostMediaPath(path)) continue;
+    if (isPostMediaPath(path) || /^posts\/\d{4}\/\d{2}\/[a-z0-9][a-z0-9-]{1,63}\/media\/LICENSE\.txt$/.test(path)) continue;
     if (!POST_PATH.test(path)) fail(`Unexpected archive file: ${path}`);
     const source = await readFile(join(root, path), 'utf8');
     const pathMatch = POST_PATH.exec(path), pathId = pathMatch[2] || pathMatch[1];

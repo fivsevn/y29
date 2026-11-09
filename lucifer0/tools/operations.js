@@ -359,10 +359,12 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   }));
   const profilePaths = new Set(guest ? [] : ['users/' + author + '/profile.md', ...(data.material.supplementalDocuments[author] || []).map(document => document.path)]);
   const profiles = data.documents.filter(document => profilePaths.has(document.path)).map(writerProfile);
+  const writing = data.documents.find(document => document.path === 'docs/writing.md');
   return {
     id: operation.id, postId, draft: timing.status === 'ready' ? draft : null,
     writer: {
       createdAt,
+      writing: { sourcePath: writing.path, text: writing.text },
       self: { id: author, name: guest ? draft.guest.name : ownUser.name, documents: profiles.map(profile => profile.document),
         voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
       conditions: choices.conditions.map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
