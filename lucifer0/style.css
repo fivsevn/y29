@@ -53,6 +53,7 @@ main::-webkit-scrollbar{display:none}
 .post-text-link{display:block}
 .post-image{position:relative;float:left;width:144px;max-width:44%;margin:2px 14px 5px 0;padding:0;overflow:hidden;border-radius:8px;background:var(--reply);box-shadow:0 4px 12px #0000002b}
 .post-image img{width:100%;height:auto;aspect-ratio:7 / 4;object-fit:cover}
+.post-image.is-contained img{object-fit:scale-down}
 .post-image>span{display:block;font-size:8px;color:var(--muted);line-height:1.4;padding:4px 6px;text-align:right}
 .thread>.post>.post-content>.post-image{float:none;width:100%;max-width:none;margin:0 0 12px}
 .post-actions{display:flex;align-items:center;gap:4px;margin-top:2px;min-height:36px}

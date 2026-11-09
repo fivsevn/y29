@@ -4,6 +4,7 @@ import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createPreviewServer } from '../serve.js';
+import sharp from 'sharp';
 
 const browsers = await import(process.env.Y29_PLAYWRIGHT_MODULE || 'playwright');
 const server = createPreviewServer();
@@ -56,6 +57,8 @@ try {
     check(bounds.fit === 'contain' && bounds.left >= 0 && bounds.right <= bounds.viewport, 'the full image fits without cropping or horizontal overflow');
   };
 
+  const defaultThumbnail = page.locator(`#post-${root.id} .post-image img`).first();
+  check(await defaultThumbnail.evaluate(image => getComputedStyle(image).objectFit) === 'cover', 'ordinary photos retain their existing cover crop');
   let link = await open(root);
   await assertWholeImage();
   await page.screenshot({ path: join(output, 'phone-original-image.png') });
@@ -99,11 +102,47 @@ try {
   const replyOnly = imageOnly.posts.find(post => post.id === reply.id);
   rootOnly.text = '';
   replyOnly.text = '   ';
+  const portraitPath = rootOnly.media[0].src.replace(/[^/]+$/, 'contained-portrait.webp');
+  const smallPath = replyOnly.media[0].src.replace(/[^/]+$/, 'contained-small.webp');
+  const portrait = await sharp(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="360" height="640"><rect width="360" height="640" fill="#eeeeee"/><rect width="360" height="24" fill="#d02020"/><rect y="616" width="360" height="24" fill="#28a050"/><text x="180" y="590" text-anchor="middle" font-family="sans-serif" font-size="32">BOTTOM CAPTION</text></svg>')).webp({ lossless: true }).toBuffer();
+  const small = await sharp({ create: { width: 128, height: 128, channels: 3, background: '#496fff' } }).webp({ lossless: true }).toBuffer();
+  rootOnly.media = [{ src: portraitPath, alt: 'Portrait with a top marker and a bottom caption', fit: 'contain' }];
+  replyOnly.media = [{ src: smallPath, alt: 'Small 128 pixel reaction image', fit: 'contain' }];
+  await page.route('**/contained-portrait.webp*', route => route.fulfill({ contentType: 'image/webp', body: portrait }));
+  await page.route('**/contained-small.webp*', route => route.fulfill({ contentType: 'image/webp', body: small }));
+  const containedImage = async (post, expectedWidth, expectedHeight) => {
+    const image = page.locator(`#post-${post.id} .post-image img`).first();
+    await image.evaluate(image => image.decode());
+    const box = await image.evaluate(image => {
+      const rect = image.getBoundingClientRect(), style = getComputedStyle(image);
+      return { width: rect.width, height: rect.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, fit: style.objectFit };
+    });
+    check(box.fit === 'scale-down' && box.naturalWidth === expectedWidth && box.naturalHeight === expectedHeight, 'reaction thumbnail uses the complete image at most at its native size');
+    check(Math.abs(box.width / box.height - 7 / 4) < .01, 'reaction images retain the existing thumbnail box');
+    const scale = Math.min(1, box.width / expectedWidth, box.height / expectedHeight);
+    const painted = { width: expectedWidth * scale, height: expectedHeight * scale };
+    check(painted.width <= expectedWidth && painted.height <= expectedHeight && painted.width <= box.width && painted.height <= box.height, 'the whole reaction fits without enlargement or crop');
+    const { data, info } = await sharp(await image.screenshot()).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const pixel = (x, y) => {
+      const offset = (Math.max(0, Math.min(info.height - 1, Math.round(y))) * info.width + Math.max(0, Math.min(info.width - 1, Math.round(x)))) * info.channels;
+      return [...data.subarray(offset, offset + 3)];
+    };
+    const near = (actual, expected) => actual.every((value, index) => Math.abs(value - expected[index]) < 12);
+    const left = (info.width - painted.width) / 2, top = (info.height - painted.height) / 2;
+    if (expectedHeight > expectedWidth) {
+      check(near(pixel(info.width / 2, top + 12 * scale), [208, 32, 32]), 'the portrait top edge survives thumbnail rendering');
+      check(near(pixel(info.width / 2, top + (expectedHeight - 12) * scale), [40, 160, 80]), 'the portrait bottom caption region survives thumbnail rendering');
+    } else {
+      check(near(pixel(info.width / 2, info.height / 2), [73, 111, 255]), 'the small reaction renders normally');
+      check(!near(pixel(left - 3, info.height / 2), [73, 111, 255]) && !near(pixel(left + painted.width + 3, info.height / 2), [73, 111, 255]), 'a 128 pixel reaction stays 128 pixels wide in a larger thread box');
+    }
+  };
   await page.route('**/data/feed.json*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(imageOnly) }));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base);
   await page.locator(`#post-${root.id}`).waitFor();
   check(await page.locator(`#post-${root.id} .post-text-link`).count() === 0, 'image-only root has no empty text link');
+  await containedImage(rootOnly, 360, 640);
   await open(rootOnly);
   await assertWholeImage();
   await page.keyboard.press('Escape');
@@ -111,11 +150,21 @@ try {
   await page.goto(`${base}#/post/${reply.id}`);
   await page.locator(`#post-${reply.id}`).waitFor();
   check(await page.locator(`#post-${reply.id} .post-text-link`).count() === 0, 'whitespace-only reply has no empty text link');
+  await containedImage(replyOnly, 128, 128);
   await page.screenshot({ path: join(output, 'phone-image-only.png') });
   await open(replyOnly);
   await assertWholeImage();
   await page.keyboard.press('Escape');
   await dialog.waitFor({ state: 'hidden' });
+  for (const [width, height] of [[320, 568], [1440, 900]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(`${base}#/post/${root.id}`);
+    await page.locator(`#post-${root.id}`).waitFor();
+    await containedImage(rootOnly, 360, 640);
+    await page.goto(`${base}#/post/${reply.id}`);
+    await page.locator(`#post-${reply.id}`).waitFor();
+    await containedImage(replyOnly, 128, 128);
+  }
   check(errors.length === 0, `no browser errors: ${errors.join(', ')}`);
   console.log(`Passed ${checks} original-image browser assertions. Screenshots: ${output}`);
 } finally {

@@ -96,9 +96,10 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
       if (!post.text.trim() && !post.media.length) fail('A post needs text or media');
       if (post.deleted === true && post.media.length) fail('Deleted replies cannot retain media');
       for (const image of post.media) {
-        keys(image, ['src', 'alt'], 'media');
+        keys(image, ['src', 'alt', 'fit'], 'media');
         if (!isPostMediaPath(image.src)) fail('Invalid media path: use the thread package media directory');
         text(image.alt, 240, 'image.alt');
+        if (Object.hasOwn(image, 'fit') && image.fit !== 'contain') fail('Invalid media fit: use contain or omit the field');
       }
       posts.set(post.id, post);
     }
