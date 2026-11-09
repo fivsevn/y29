@@ -71,6 +71,7 @@ async function renderer(feed, { pending = false, delayedClose = false } = {}) {
   const element = (id, { markup = false } = {}) => {
     const classes = new Set(), attributes = new Map();
     const node = { id, hidden: false, textContent: '', value: '', style: {}, dataset: {}, focus() { document.activeElement = node; },
+      addEventListener() {},
       setAttribute: (key, value) => attributes.set(key, String(value)), getAttribute: key => attributes.get(key) ?? null,
       append: child => { node.textContent += child.textContent; },
       classList: { add: value => classes.add(value), remove: value => classes.delete(value), contains: value => classes.has(value) } };
@@ -97,10 +98,15 @@ async function renderer(feed, { pending = false, delayedClose = false } = {}) {
     if (delayedClose) closeEvents.push(() => dialogHandlers.close?.()); else dialogHandlers.close?.();
   },
     addEventListener: (type, handler) => { dialogHandlers[type] = handler; } };
+  // The real image dialog is exercised by social-images.browser.mjs. Keep its
+  // static elements available to these renderer and login document doubles.
+  const imageElements = Object.fromEntries(['image-dialog', 'image-frame', 'image-caption', 'image-close', 'image-original', 'image-status']
+    .map(id => ['#' + id, element(id)]));
+  imageElements['#image-dialog'].open = false;
   const elements = { main, '#toast': toast, '#login-dialog': dialog, '#login-heading': loginHeading, '#invite-form': inviteForm,
     '#invite-code': inviteCode, '#login-verification': verification, '#robot-check': robotCheck, '#login-error': loginError, '#login-close': closeButton,
     '#robot-label': robotLabel, '#verification-challenge': challenge, '#verification-grid': grid, '#verification-refresh': refresh,
-    '#verification-submit': verify, '#verification-status': verificationStatus };
+    '#verification-submit': verify, '#verification-status': verificationStatus, ...imageElements };
   const document = { title: '', activeElement: loginButton, querySelector: selector => elements[selector] || null,
     querySelectorAll: selector => selector === '[data-tile]' ? tiles : [], createTextNode: textContent => ({ textContent }),
     getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
