@@ -38,6 +38,18 @@ test('sampling is weighted without replacement, reproducible, fresh and respects
   assert.throws(() => selectCandidates({ ...options, count: 100 }), /count/);
 });
 
+test('news joins the candidate pool while even a misconfigured admin never becomes a candidate', () => {
+  const users = [{ ...newUser(), id: 'candidate-news', kind: 'news', aiScope: 'daily' },
+    { ...newUser(), id: 'candidate-admin', kind: 'admin', aiScope: 'daily' }, { ...newUser(), id: 'candidate-person' }];
+  const profiles = Object.fromEntries(users.map(user => [user.id, emptyProfile(user.id)]));
+  profiles['candidate-admin'].activityWeight = 10;
+  const selected = selectCandidates({ users, profiles, count: 20, seed: 'account-kind-selection' });
+  assert.equal(selected.eligibleCount, 2);
+  assert.deepEqual(selected.users.map(user => user.id).sort(), ['candidate-news', 'candidate-person']);
+  users[1].aiScope = 'sample';
+  assert.ok(selectCandidates({ users, profiles, count: 20, seed: 'sample-admin' }).users.every(user => user.kind !== 'admin'));
+});
+
 test('editing the account Markdown changes the next profile read and feed without creating posts', async t => {
   const { root } = await fixture(t);
   const before = await loadContent(root);

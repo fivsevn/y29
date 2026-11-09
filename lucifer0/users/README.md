@@ -6,7 +6,7 @@
 
 ## 用户总目录
 
-合计：64人。
+合计：70个账号。
 
 ### 本库人物：56人
 
@@ -16,6 +16,14 @@
 
 [便签03](./guyu/profile.md)，[低音开满](./lidianlong/profile.md)，[浮漂](./alan/profile.md)，[糯米纸](./zhaoyangxue/profile.md)，[随便看看](./lixing/profile.md)，[有空再说](./baiyanyan/profile.md)，[纸屑](./chenanjing/profile.md)，[B-SIDE](./anmianyao/profile.md)
 
+### 资讯账号：5个
+
+[晨星速报](./news-morningstar/profile.md)，[后台有瓜](./news-backstage/profile.md)，[霓虹街讯](./news-neon/profile.md)，[我冲浪回来了](./news-surf/profile.md)，[新玩意儿](./news-gadgets/profile.md)
+
+### 管理员账号：1个
+
+[值班恶魔](./site-admin/profile.md)
+
 <!-- users:end -->
 
 ## 人物组成简述
@@ -23,6 +31,8 @@
 人物档案写成长经历、教育与工作、经济和居住条件、家庭与社会关系，以及兴趣、观念、顾虑、情绪和表达习惯。通过具体事情说明这些因素怎样影响他的日常安排、选择和人际往来。
 
 每份档案把过去的经历、当前的处境和未来的打算联系起来，呈现一个人的习惯、矛盾与变化。全部内容写在本人文件夹的 `profile.md`，按[空白模板](TEMPLATE.md)整理。编号与文件夹名一致，年龄以资料更新日期为准。
+
+资讯账号与管理员账号按[账号模板](ACCOUNT_TEMPLATE.md)整理，常读来源直接保存在各自 `profile.md` 的“取材与选题”中。资讯号参与日常更新，管理员由用户明确命令触发人工发布。
 
 “所属世界观”填写 `environment/worldviews/` 中对应文件的编号，例如 `trueheart-hunter` 对应[世界观A：真心猎手](../environment/worldviews/trueheart-hunter.md)。这项可以留空；填写后，该世界的共同背景与个人档案一起使用。新增世界观时，在该目录添加同名 Markdown 文件，再给人物登记编号。
 

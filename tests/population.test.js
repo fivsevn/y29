@@ -8,6 +8,7 @@ import { readUserDocuments, parseUserDocument } from '../lucifer0/tools/user-doc
 import { readProfiles, selectCandidates } from '../lucifer0/tools/profiles.js';
 
 const headings = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算'];
+const accountHeadings = ['基本情况', '账号定位与运营', '取材与选题', '表达与互动', '经验与局限', '当前安排'];
 const settings = (id = 'sample-person') => ({ id, avatar: '', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'daily', profileStatus: 'approved', inFollowing: false, allowPosts: true, allowReplies: true, activityWeight: 0.5, timezone: 'Asia/Shanghai', activeHours: '轮休下午' });
 const person = (id = 'sample-person') => `# 窗边的人
 
@@ -47,11 +48,14 @@ test('each original person has one complete human dossier, with operating contro
   const documents = await readUserDocuments(socialRoot);
   const configuration = JSON.parse(await readFile(join(socialRoot, 'accounts.json'), 'utf8'));
   assert.deepEqual(configuration.users.map(user => user.id).sort(), documents.registry.users.map(user => user.id).sort());
+  assert.equal(documents.registry.users.filter(user => user.kind === 'visitor').length, 56);
+  assert.equal(documents.registry.users.filter(user => user.kind === 'character').length, 8);
   for (const user of documents.registry.users) {
     const folder = join(socialRoot, 'users', user.id);
     assert.deepEqual((await readdir(folder)).filter(name => name.endsWith('.md')), ['profile.md'], user.id);
     const text = await readFile(join(folder, 'profile.md'), 'utf8');
-    for (const heading of headings) assert.ok(text.includes(`## ${heading}\n`), `${user.id}: missing ${heading}`);
+    const required = ['news', 'admin'].includes(user.kind) ? accountHeadings : headings;
+    for (const heading of required) assert.ok(text.includes(`## ${heading}\n`), `${user.id}: missing ${heading}`);
     assert.doesNotMatch(text, /^## (?:账号与开关|事实依据|自由备注|成长与状态转移|资料参考)/m);
     assert.doesNotMatch(text, /\| (?:AI 使用范围|资料状态|抽取权重|允许发主帖|允许回复|格式版本) \||（作者层）|（未发生分支）/);
     const configured = configuration.users.find(account => account.id === user.id);
@@ -59,7 +63,7 @@ test('each original person has one complete human dossier, with operating contro
     assert.equal(documents.profiles[user.id].notes.trim(), text.trim(), `${user.id}: the complete dossier must reach the reader`);
   }
   const topLevel = (await readdir(join(socialRoot, 'users'), { withFileTypes: true })).filter(entry => entry.isFile()).map(entry => entry.name).sort();
-  assert.deepEqual(topLevel, ['README.md', 'TEMPLATE.md']);
+  assert.deepEqual(topLevel, ['ACCOUNT_TEMPLATE.md', 'README.md', 'TEMPLATE.md']);
 });
 
 test('individual references stay with users and the environment includes interaction and meme research', async () => {
@@ -104,7 +108,10 @@ test('complete biographies reach the operator without external files and do not 
   }
   const { feed } = await loadContent(socialRoot);
   const displayFields = ['id', 'handle', 'name', 'bio', 'avatar', 'enabled', 'profileStatus', 'kind', 'sourceWork', 'inFollowing'].sort();
-  for (const user of feed.users) assert.deepEqual(Object.keys(user).sort(), displayFields);
+  for (const user of feed.users) {
+    assert.deepEqual(Object.keys(user).sort(), [...displayFields, ...(Object.hasOwn(user, 'nameColor') ? ['nameColor'] : [])].sort());
+    if (Object.hasOwn(user, 'nameColor')) assert.match(user.nameColor, /^#[0-9a-fA-F]{6}$/);
+  }
   assert.doesNotMatch(JSON.stringify(feed), /私下的顾虑|activityWeight|allowPosts|aiScope|supplementalDocuments/);
 });
 

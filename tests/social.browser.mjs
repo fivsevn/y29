@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { parseSiteGuide, userNameColor, WELCOME_POST_ID } from '../lucifer0/core.js';
 
 const browsers = await import(process.env.Y29_PLAYWRIGHT_MODULE || 'playwright');
 const browserName = process.env.Y29_BROWSER || 'chromium';
@@ -63,23 +64,45 @@ try {
   // Exercise content shapes rather than editorial IDs, so replacing a feed does
   // not turn previously published stories into permanent browser fixtures.
   const usersById = new Map(feed.users.map(user => [user.id, user]));
-  const compactPost = roots.filter(post => !post.media.length && !post.text.includes('\n') && !feed.posts.some(reply => reply.replyTo === post.id)).sort((a, b) => a.text.length - b.text.length)[0];
+  const checkNameColors = async view => {
+    const rendered = await page.locator('.author-name,.preview-reply strong,.person-identity strong').evaluateAll(elements => elements.map(element => {
+      const link = element.closest('a').getAttribute('href');
+      return { link, color: getComputedStyle(element).color, inline: element.style.color };
+    }));
+    const normal = await page.locator('html').evaluate(element => getComputedStyle(element).getPropertyValue('--red').trim());
+    const rgb = hex => `rgb(${[1, 3, 5].map(start => parseInt(hex.slice(start, start + 2), 16)).join(', ')})`;
+    check(rendered.length > 0, `${view} renders account names`);
+    for (const entry of rendered) {
+      const profile = entry.link.startsWith('#/user/');
+      const id = decodeURIComponent(entry.link.slice(profile ? '#/user/'.length : '#/post/'.length));
+      const account = usersById.get(profile ? id : byId.get(id).author), color = userNameColor(account);
+      check(entry.color === rgb(color || normal), `${view} keeps the expected name color for ${account.id}`);
+      if (!color) check(entry.inline === '', `${view} leaves ordinary names without an override`);
+    }
+  };
   const mediaPost = roots.find(post => post.media.length);
   const nestedReply = feed.posts.find(post => post.replyTo && byId.get(post.replyTo)?.replyTo);
   const visitorPost = roots.find(post => usersById.get(post.author)?.kind === 'visitor');
   const characterUser = feed.users.find(user => user.kind === 'character' && feed.posts.some(post => post.author === user.id));
   const profileUser = feed.users.find(user => roots.some(post => post.author === user.id) && feed.posts.some(post => post.author === user.id && post.replyTo));
-  assert.ok(compactPost && compactPost.text.length <= 20, 'feed needs a short plain-text root without reply previews for compact-layout checks');
   assert.ok(mediaPost && nestedReply && visitorPost && characterUser && profileUser, 'feed needs media, nested replies, both account kinds and an author with posts and replies');
   const nestedRoot = rootOf(nestedReply);
   const searchTerm = [...new Set(feed.posts.flatMap(post => post.text.match(/[\p{Script=Han}]/gu) || []))].find(term => roots.some(post => post.text.includes(term)) && feed.posts.some(post => post.replyTo && post.text.includes(term)));
   assert.ok(searchTerm, 'feed needs a searchable term shared by a root and a reply');
   check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '/following', '0/about']), 'exactly three bottom destinations');
   check(await page.locator('.tabs,.welcome-note,.edition-pill').count() === 0, 'redundant tabs and welcome card are removed');
-  check((await page.locator('.topbar').innerText()).trim() === '/lucifer0', 'header contains only the app path');
+  check((await page.locator('.topbar .brand').innerText()).trim() === '/lucifer0', 'header keeps the app path');
+  check(await page.locator('.topbar #login-button').textContent() === 'log in', 'header has the invitation-only log in button');
+  await page.locator('#login-button').click();
+  await page.getByRole('status').filter({ hasText: '本站目前采用内测邀请制，发帖权限随邀请开放。' }).waitFor(); checks++;
+  check(await page.locator('input[type="password"],dialog,[role="dialog"]').count() === 0, 'log in opens no login form or modal');
   check(await page.locator('.topbar').evaluate(element => element.getBoundingClientRect().height <= 56), 'compact header is at most 56px');
   check(await page.locator('main .topbar').count() === 0, 'header is outside the content scroller');
-  check(await page.locator(`#post-${compactPost.id}`).evaluate(element => element.getBoundingClientRect().height <= 145), 'single-line post stays compact at 390px');
+  const compactPage = await context.newPage(); trackErrors(compactPage);
+  await compactPage.route('**/data/feed.json', route => route.fulfill({ json: { ...feed, posts: [{ ...roots[0], id: 'compact-layout-fixture', text: '一条短发言。', replyTo: null, media: [] }] } }));
+  await compactPage.goto(base); await compactPage.locator('article').waitFor();
+  check(await compactPage.locator('article').evaluate(element => element.getBoundingClientRect().height <= 145), 'a synthetic single-line post stays compact at 390px');
+  await compactPage.close();
   check(await page.locator('.reply-preview').count() > 0, 'forum feed includes quoted reply previews');
   check(!(await page.locator('.post-metadata').allTextContents()).some(text => text.includes('样例')), 'editorial sample labels are absent from posts');
   check(await page.locator('[data-action="bookmarks"],a[href="#/bookmarks"]').count() === 0, 'bookmark controls and links are removed');
@@ -93,6 +116,7 @@ try {
   check(!page.url().endsWith('#content'), 'skip link preserves the app route');
   check(await page.locator('article.post').count() === roots.length, 'main timeline contains roots only');
   await checkPlatformDates('world');
+  await checkNameColors('world and reply previews');
   for (const image of await page.locator('.post-image img').all()) await image.scrollIntoViewIfNeeded();
   await page.waitForFunction(() => [...document.querySelectorAll('.post-image img')].every(image => image.complete && image.naturalWidth > 0));
   check(await page.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0)), 'all visible media load');
@@ -150,6 +174,7 @@ try {
   check(await page.locator(`#post-${visitorPost.id}`).count() === Number(followingIds.has(visitorPost.author)), 'visitor membership follows its independent switch');
   check(await page.locator('a[href="#/people"],.directory,.directory-person').count() === 0, 'following has no people directory entry');
   await checkFeedEnd('/following');
+  await checkNameColors('following');
   await screenshot('phone-following.png');
   await visit(`#/user/${characterUser.id}`, '/user');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'character channel does not expose optional follow controls');
@@ -176,6 +201,7 @@ try {
   check(await page.locator(`#post-${nestedReply.id}`).evaluate(element => element.classList.contains('is-target')), 'reply permalink selects the reply');
   check(await page.evaluate(() => window.scrollY === 0), 'reply anchors do not move the outer document');
   await visit(`#/user/${profileUser.id}`, '/user');
+  await checkNameColors('profile');
   check(await page.locator('article').count() === feed.posts.filter(post => post.author === profileUser.id).length, 'profile keeps posts and replies');
   await checkPlatformDates('profile');
   await visit('#/people', '/following');
@@ -187,6 +213,15 @@ try {
   await page.getByRole('button', { name: '搜索', exact: true }).click();
   await page.locator('.search-count').waitFor();
   check(await page.locator('article').count() === feed.posts.filter(post => post.text.includes(searchTerm)).length, 'search covers posts and replies');
+  await checkNameColors('post search');
+  const special = feed.users.find(user => userNameColor(user));
+  if (special) {
+    await visit(`#/search?q=${encodeURIComponent(special.name)}`, '搜索');
+    await checkNameColors('user search');
+    await visit(`#/user/${special.id}`, '/user');
+    await checkNameColors('special account profile');
+  }
+  await visit('#/search', '搜索');
   await page.getByRole('searchbox').fill('找不到的一个词');
   await page.getByRole('button', { name: '搜索', exact: true }).click();
   await page.getByRole('heading', { name: '没有找到相关内容' }).waitFor(); checks++;
@@ -226,14 +261,21 @@ try {
   await page.locator('main').evaluate(element => { element.scrollTop = 0; });
   await screenshot('phone-feed.png');
   await visit(`#/post/${nestedRoot.id}`, '讨论串');
+  await checkNameColors('thread');
   await screenshot('phone-thread.png');
   await visit(`#/user/${profileUser.id}`, '/user');
   await screenshot('phone-profile.png');
   await visit('#/about', '/about');
   check(await page.locator('.about-brand').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
   check(await page.locator('.board-guide').innerText().then(text => text.includes('/guide')), 'about includes the entry guide');
-  check(await page.locator('.board-rules li').count() === 5, 'about includes five community rules');
+  const guide = parseSiteGuide(feed.posts, feed.users);
+  check(await page.locator('.board-rules li').count() === (guide?.rules.length || 0), 'about gets its rule count from the administrator post');
   check(await page.locator('.board-rules li').evaluateAll(rules => rules.every(rule => !rule.querySelector('h4') && rule.querySelector('p')?.textContent.trim())), 'each rule has an explanation without a title');
+  check(await page.locator('.guide-post-link').getAttribute('href') === `#/post/${WELCOME_POST_ID}`, 'about links to the original announcement');
+  if (guide) {
+    check(JSON.stringify(await page.locator('.board-rules li').evaluateAll(rules => rules.map(rule => ({ number: rule.dataset.number, text: rule.querySelector('p').textContent })))) === JSON.stringify(guide.rules), 'about preserves each original rule number and its text');
+    check(await page.locator('.guide-copy').first().textContent() === guide.intro && await page.locator('.guide-closing').textContent() === guide.closing, 'about shows the complete introduction and closing');
+  } else check((await page.locator('.guide-post-link').textContent()).includes('查看站务公告'), 'unavailable guides direct readers to the announcement');
   check(await page.locator('.about-footer').count() === 0, 'about has no footer');
   check(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme) === 'dark', 'site is dark');
   await screenshot('phone-about.png');
@@ -259,6 +301,8 @@ try {
   await failed.route('**/data/feed.json', route => route.fulfill({ status: 503, body: 'unavailable' }));
   await failed.goto(base); await failed.getByRole('heading', { name: '帖子暂时没有载入' }).waitFor(); checks++;
   check(await failed.locator('.topbar').count() === 1, 'fixed header remains available on feed errors');
+  await failed.locator('#login-button').click();
+  await failed.getByRole('status').filter({ hasText: '本站目前采用内测邀请制，发帖权限随邀请开放。' }).waitFor(); checks++;
   await failed.unroute('**/data/feed.json');
   await failed.getByRole('button', { name: '重新载入' }).click();
   await failed.locator('article').first().waitFor(); checks++;

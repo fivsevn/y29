@@ -42,7 +42,7 @@ export function selectCandidates({ users, profiles, posts = [], count = 5, seed 
   const random = () => { state ^= state << 13; state ^= state >>> 17; state ^= state << 5; return (state >>> 0) / 4294967296; };
   const latest = [...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
   const recent = new Set(latest.slice(0, 7).map(post => post.author));
-  const eligible = users.filter(user => user.enabled && user.aiScope !== 'none' && (user.allowPosts !== false || user.allowReplies !== false) && Object.hasOwn(profiles, user.id) && (profiles[user.id].activityWeight ?? 1) > 0);
+  const eligible = users.filter(user => user.kind !== 'admin' && user.enabled && user.aiScope !== 'none' && (user.allowPosts !== false || user.allowReplies !== false) && Object.hasOwn(profiles, user.id) && (profiles[user.id].activityWeight ?? 1) > 0);
   const fresh = eligible.filter(user => !recent.has(user.id)), active = eligible.filter(user => recent.has(user.id));
   const picked = [];
   for (const pool of [fresh, active]) {

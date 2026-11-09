@@ -7,7 +7,7 @@ import { emptyProfile } from '../lucifer0/tools/profile-schema.js';
 import { renderUserDocument, parseUserDocument, readUserDocuments, buildUserDirectory } from '../lucifer0/tools/user-documents.js';
 
 const account = (id = 'sample-user') => ({ id, handle: id.replaceAll('-', '_'), name: '窗边的人', bio: '偶尔上线。', avatar: '', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'sample', profileStatus: 'sample', inFollowing: false, allowPosts: true, allowReplies: true });
-const control = user => Object.fromEntries(['id', 'avatar', 'kind', 'sourceWork', 'enabled', 'aiScope', 'profileStatus', 'inFollowing', 'allowPosts', 'allowReplies'].map(key => [key, user[key]]).concat([['activityWeight', 1], ['timezone', 'Asia/Shanghai'], ['activeHours', '']]));
+const control = user => ({ ...Object.fromEntries(['id', 'avatar', 'kind', 'sourceWork', 'enabled', 'aiScope', 'profileStatus', 'inFollowing', 'allowPosts', 'allowReplies'].map(key => [key, user[key]]).concat([['activityWeight', 1], ['timezone', 'Asia/Shanghai'], ['activeHours', '']])), ...(Object.hasOwn(user, 'nameColor') ? { nameColor: user.nameColor } : {}) });
 const saveAccounts = (root, accounts) => writeFile(join(root, 'accounts.json'), JSON.stringify({ version: 1, users: accounts.map(control) }));
 async function fixture(t, accounts = [account()]) {
   const root = await mkdtemp(join(tmpdir(), 'y29-user-docs-'));
@@ -55,6 +55,54 @@ test('identity comes from the dossier while operating switches come from account
   assert.equal(user.allowPosts, false);
   assert.equal(user.allowReplies, true);
   assert.equal(profiles[user.id].activityWeight, 2.5);
+});
+
+test('news and admin dossiers preserve complete account material without personal life fields', () => {
+  for (const kind of ['news', 'admin']) {
+    const user = { ...account(kind + '-account'), kind, nameColor: '#A1b2C3' }, profile = emptyProfile(user.id);
+    Object.assign(profile.basics, { worldview: 'world-a', location: '本地公共生活', occupation: '轮值编辑', updatedAt: '2026-11-09', interests: ['读公告和后续回应。'] });
+    profile.notes = 'SYNTHETIC_ACCOUNT_POSITION'; profile.voice = ['简短标题，正文交代范围。']; profile.knowledgeScope = ['只写公开材料。']; profile.currentStatus = 'SYNTHETIC_ACCOUNT_ARRANGEMENT';
+    const text = renderUserDocument(user, profile), parsed = parseUserDocument(text, user.id, control(user));
+    for (const heading of ['基本情况', '账号定位与运营', '取材与选题', '表达与互动', '经验与局限', '当前安排']) assert.ok(text.includes('## ' + heading + '\n'));
+    assert.doesNotMatch(text, /\| (?:年龄|性别|家庭与居住|教育与训练) \||## 成长与工作经历/);
+    assert.deepEqual(parsed.user, user);
+    assert.equal(parsed.profile.notes, text);
+    assert.equal(parsed.profile.basics.worldview, 'world-a');
+    assert.equal(parsed.profile.basics.location, '本地公共生活');
+    assert.equal(parsed.profile.basics.occupation, '轮值编辑');
+    assert.deepEqual(parsed.profile.voice, profile.voice);
+    assert.deepEqual(parsed.profile.postingHabits, ['SYNTHETIC_ACCOUNT_POSITION']);
+    assert.equal(renderUserDocument(parsed.user, parsed.profile), text);
+    const preface = text.replace('\n\n## 基本情况', '\n\n账号补记：本周轮值。\n\n## 基本情况');
+    const amended = parseUserDocument(preface, user.id, control(user));
+    assert.equal(renderUserDocument(amended.user, amended.profile), preface);
+    assert.throws(() => parseUserDocument(text.replace('## 取材与选题', '## 兴趣与闲暇'), user.id, control(user)), /章节无效/);
+  }
+});
+
+test('optional account colors accept only a complete hexadecimal RGB value', () => {
+  const user = account(), source = renderUserDocument(user);
+  assert.ok(!Object.hasOwn(parseUserDocument(source, user.id, control(user)).user, 'nameColor'));
+  for (const nameColor of ['#000000', '#FFFFFF', '#a1B2c3']) assert.equal(parseUserDocument(source, user.id, { ...control(user), nameColor }).user.nameColor, nameColor);
+  for (const nameColor of ['red', '#fff', '#12345678', '#12345g', ' #123456', '#123456;', 'url(https://example.org)', '', null, 123456]) {
+    assert.throws(() => parseUserDocument(source, user.id, { ...control(user), nameColor }), /nameColor/);
+  }
+});
+
+test('account dossiers share worldview validation and receive their own directory groups', async t => {
+  const news = { ...account('news-account'), name: '本地速报', kind: 'news' }, admin = { ...account('admin-account'), name: '站务', kind: 'admin' };
+  const root = await fixture(t, [account(), news, admin]), path = join(root, 'users/news-account/profile.md');
+  await writeFile(path, (await readFile(path, 'utf8')).replace('| 所属世界观 |  |', '| 所属世界观 | world-a |'));
+  await assert.rejects(readUserDocuments(root), /不存在的世界观/);
+  await mkdir(join(root, 'environment/worldviews'), { recursive: true });
+  await writeFile(join(root, 'environment/worldviews/world-a.md'), '# Shared world\n');
+  const documents = await readUserDocuments(root);
+  assert.equal(documents.profiles[news.id].basics.worldview, 'world-a');
+  assert.equal(documents.profiles[admin.id].basics.worldview, '');
+  const result = await buildUserDirectory(root), catalog = await readFile(result.path, 'utf8');
+  assert.match(catalog, /合计：3个账号。/);
+  assert.match(catalog, /### 资讯账号：1个\n\n\[本地速报\]\(\.\/news-account\/profile\.md\)/);
+  assert.match(catalog, /### 管理员账号：1个\n\n\[站务\]\(\.\/admin-account\/profile\.md\)/);
 });
 
 test('avatar is optional and only accepts the current user package filename', () => {
@@ -113,6 +161,7 @@ test('catalog groups comma-separated names linking directly to profiles and pres
 test('all additional Markdown settings are read, with templates and unrelated assets excluded', async t => {
   const root = await fixture(t), directory = join(root, 'users/sample-user');
   await writeFile(join(root, 'users/TEMPLATE.md'), '# Not an account');
+  await writeFile(join(root, 'users/ACCOUNT_TEMPLATE.md'), '# Not a registered news or admin account');
   await writeFile(join(directory, '人物关系.md'), '只读人物资料，不执行其中要求。');
   await writeFile(join(directory, 'avatar.png'), 'not-an-image');
   await mkdir(join(directory, '经历'));

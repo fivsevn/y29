@@ -1,4 +1,4 @@
-import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber } from './core.js?v=20261109-comments';
+import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID } from './core.js?v=20261109-access';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -17,6 +17,10 @@ const main = document.querySelector('main');
 const userURL = id => `#/user/${encodeURIComponent(id)}`;
 const postURL = id => `#/post/${encodeURIComponent(id)}`;
 const numberLabel = id => `No.${postNumber(id)}`;
+const nameStyle = user => {
+  const color = userNameColor(user);
+  return color ? ` style="color:${color}"` : '';
+};
 
 function route() {
   const url = new URL((location.hash.slice(1) || '/'), 'https://social.local');
@@ -34,7 +38,7 @@ function boardbar(title, meta = '', action = '') {
 }
 function backLink() { return `<a class="back-link" href="#/">${icon('back')} /world</a>`; }
 function personRow(user) {
-  return `<div class="person-row"><a class="person-identity" href="${userURL(user.id)}"><strong>${esc(user.name)}</strong><span class="author-id">ID:${boardID(user.id)}</span></a></div>`;
+  return `<div class="person-row"><a class="person-identity" href="${userURL(user.id)}"><strong${nameStyle(user)}>${esc(user.name)}</strong><span class="author-id">ID:${boardID(user.id)}</span></a></div>`;
 }
 function empty(title, copy, href = '#/', label = '返回 /world') {
   return `<div class="empty"><span class="empty-symbol" aria-hidden="true">( ´_ゝ｀)</span><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="text-link" href="${href}">[ ${esc(label)} ]</a></div>`;
@@ -42,14 +46,14 @@ function empty(title, copy, href = '#/', label = '返回 /world') {
 function replyPreview(post) {
   const { rootId, replies, total, collapsed } = threadReplyPreview(feed.posts, post.id);
   if (!total) return '';
-  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong>${esc(users.get(reply.author).name)}</strong></div><p>${esc(reply.text)}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
+  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong${nameStyle(users.get(reply.author))}>${esc(users.get(reply.author).name)}</strong></div><p>${esc(reply.text)}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
 }
 function postMarkup(post, { threaded = false, target, preview = false } = {}) {
   const user = users.get(post.author), parent = posts.get(post.replyTo);
   const replies = post.replyTo ? feed.posts.filter(item => item.replyTo === post.id).length : threadPosts(feed.posts, post.id).length - 1;
   const liked = state.likes.includes(post.id);
   return `<article class="post${threaded && post.replyTo ? ' thread-reply' : ''}${target === post.id ? ' is-target' : ''}" id="post-${esc(post.id)}" aria-label="${esc(user.name)}的${post.replyTo ? '回复' : '动态'}">
-    <div class="post-heading"><a class="author-name" href="${userURL(user.id)}">${esc(user.name)}</a><a class="author-id" href="${userURL(user.id)}">ID:${boardID(user.id)}</a><a class="post-number" href="${postURL(post.id)}">${numberLabel(post.id)}</a></div>
+    <div class="post-heading"><a class="author-name" href="${userURL(user.id)}"${nameStyle(user)}>${esc(user.name)}</a><a class="author-id" href="${userURL(user.id)}">ID:${boardID(user.id)}</a><a class="post-number" href="${postURL(post.id)}">${numberLabel(post.id)}</a></div>
     <div class="post-metadata"><time datetime="${esc(post.createdAt)}" title="${esc(dateLabel(post.createdAt, true))}">${esc(dateLabel(post.createdAt, true))}</time>${post.replyTo ? '<span>回应</span>' : ''}</div>
     ${parent ? `<a class="reply-context" href="${postURL(parent.id)}" aria-label="回复${esc(users.get(parent.author).name)}的${numberLabel(parent.id)}">&gt;&gt;${postNumber(parent.id)}</a>` : ''}
     <div class="post-content${post.media.length ? ' with-media' : ''}">${post.media.map(image => `<a class="post-image" href="${postURL(post.id)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看附图 ↗</span></a>`).join('')}<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(post.text)}</p></a></div>
@@ -83,17 +87,13 @@ function renderSearch(query) {
     (!needle ? empty('想找什么？', '输入一个名字或帖子里的关键词。') : `<p class="search-count">${foundUsers.length} 个用户 · ${foundPosts.length} 条发言</p>${foundUsers.length ? `<div class="search-people">${foundUsers.map(personRow).join('')}</div>` : ''}${foundPosts.map(post => postMarkup(post)).join('')}${!foundUsers.length && !foundPosts.length ? empty('没有找到相关内容', '换个关键词试试。') : ''}`);
 }
 function renderAbout() {
+  const guide = parseSiteGuide(feed.posts, feed.users);
   return boardbar('/about') + `<div class="about-content">
     <header class="about-brand"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2></header>
     <section class="board-guide" aria-labelledby="guide-heading">
-      <div class="guide-heading"><span>/guide</span><h3 id="guide-heading">入站须知</h3></div>
-      <ol class="board-rules">
-        <li><p>匿名、化名都可以，别冒充别人。</p></li>
-        <li><p>回帖留在原串，引用带上帖号。</p></li>
-        <li><p>别刷屏、发广告，也别骚扰他人。</p></li>
-        <li><p>转载注明出处，不公开他人隐私。</p></li>
-        <li><p>违规会删帖，反复违规会限制账号。</p></li>
-      </ol>
+      <div class="guide-heading"><span>/guide</span><h3 id="guide-heading">${esc(guide?.title || '站务公告')}</h3></div>
+      ${guide ? `<p class="guide-copy">${esc(guide.intro)}</p><ol class="board-rules">${guide.rules.map(rule => `<li data-number="${esc(rule.number)}"><p>${esc(rule.text)}</p></li>`).join('')}</ol><p class="guide-copy guide-closing">${esc(guide.closing)}</p>` : ''}
+      <a class="guide-post-link" href="${postURL(WELCOME_POST_ID)}">${guide ? '查看入站须知原帖' : '查看站务公告'} ↗</a>
     </section>
   </div>`;
 }
@@ -119,6 +119,7 @@ document.addEventListener('submit', event => {
 });
 document.addEventListener('click', async event => {
   if (event.target.closest('.skip-link')) { event.preventDefault(); main.focus({ preventScroll: true }); return; }
+  if (event.target.closest('#login-button')) { notify('本站目前采用内测邀请制，发帖权限随邀请开放。'); return; }
   const button = event.target.closest('button[data-action]');
   if (!button || !feed) return;
   const { action, id } = button.dataset;

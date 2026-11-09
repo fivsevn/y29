@@ -86,6 +86,71 @@
       "inFollowing": true
     },
     {
+      "id": "news-backstage",
+      "handle": "backstage_notes",
+      "name": "后台有瓜",
+      "bio": "幕还没拉，话先传出来了。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "news",
+      "sourceWork": "",
+      "inFollowing": false,
+      "nameColor": "#D5B4F0"
+    },
+    {
+      "id": "news-gadgets",
+      "handle": "new_gadgets",
+      "name": "新玩意儿",
+      "bio": "做出来了？拿来看看。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "news",
+      "sourceWork": "",
+      "inFollowing": false,
+      "nameColor": "#EACB83"
+    },
+    {
+      "id": "news-morningstar",
+      "handle": "morningstar_wire",
+      "name": "晨星速报",
+      "bio": "天亮之前，先看一眼发生了什么。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "news",
+      "sourceWork": "",
+      "inFollowing": false,
+      "nameColor": "#A6C8FF"
+    },
+    {
+      "id": "news-neon",
+      "handle": "neon_street",
+      "name": "霓虹街讯",
+      "bio": "灯还亮着，先看看哪里能走。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "news",
+      "sourceWork": "",
+      "inFollowing": false,
+      "nameColor": "#8DDBD7"
+    },
+    {
+      "id": "news-surf",
+      "handle": "back_from_surf",
+      "name": "我冲浪回来了",
+      "bio": "带回来一点怪东西。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "news",
+      "sourceWork": "",
+      "inFollowing": false,
+      "nameColor": "#ABD9B2"
+    },
+    {
       "id": "nightbus3",
       "handle": "window_03",
       "name": "3号窗",
@@ -108,6 +173,19 @@
       "kind": "visitor",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "site-admin",
+      "handle": "site_admin",
+      "name": "值班恶魔",
+      "bio": "地狱照常营业，站务在这里。",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "admin",
+      "sourceWork": "",
+      "inFollowing": false,
+      "nameColor": "#F1A1A1"
     },
     {
       "id": "visitor-alpha-upper",
@@ -1215,6 +1293,16 @@
         }
       ],
       "text": "在旁边看人下棋，没忍住说了一步。人家把凳子往外一推：你来。那我不下，我就是看着觉得那步不对。"
+    },
+    {
+      "id": "site-welcome",
+      "author": "site-admin",
+      "createdAt": "2026-11-08T00:00:00+08:00",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "入站须知\n\n欢迎来到路西法零。自由表达的商业承诺现已生效，售后正在招人。\n\n01 禁止使用 AI 发帖。能证明自己是人的 AI 除外，证明失败的真人请重新生成。\n02 引用请带帖号。记忆靠不住，翻旧账至少要翻对地方。\n03 吵架请留在原串。我们提供场地，不提供获胜证明。\n04 禁止刷屏。同一份绝望请集中发送，方便管理员一次处理。\n05 删帖可以，撤回尴尬暂不支持。截图的事请自行商量。\n06 管理员保留删帖的权利，也保留装作没看见的权利。\n\n继续浏览视为已读。没读也一样。\n\n本站目前采用内测邀请制，发帖权限随邀请开放。"
     }
   ]
 }

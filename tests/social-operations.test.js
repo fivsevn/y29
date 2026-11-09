@@ -102,6 +102,47 @@ test('one draw reaches all ten ceilings and samples one shared weighted pool wit
   assert.deepEqual([...charactersOnly.selectedIds].sort(), ['person-0', 'person-1']);
 });
 
+test('news uses the shared weighted draw and admins stay excluded despite daily permission and high weight', () => {
+  const input = drawInput();
+  input.users[0].kind = 'news'; input.users[1].kind = 'admin'; input.profiles['person-1'].activityWeight = 10;
+  let newsDraws = 0;
+  for (let index = 0; index < 100; index++) {
+    const plan = drawUpdatePlan({ ...input, seed: 'news-shared-' + index });
+    assert.equal(plan.selectedIds.length, 3);
+    assert.ok(!plan.selectedIds.includes('person-1'));
+    newsDraws += Number(plan.selectedIds.includes('person-0'));
+  }
+  assert.ok(newsDraws > 0 && newsDraws < 100);
+});
+
+test('news AI posts keep the guest majority while misconfigured admins cannot post or reply automatically', async t => {
+  const f = await fixture(t);
+  for (const user of users()) {
+    if (user.id === 'person-0' || user.id === 'person-1') {
+      const kind = user.id === 'person-0' ? 'news' : 'admin';
+      await configureAccount(f.root, user.id, { kind, sourceWork: '', aiScope: 'daily', activityWeight: 10 });
+      const profile = emptyProfile(user.id); profile.notes = 'SYNTHETIC_' + kind + '_OPERATIONS';
+      await writeFile(join(f.root, 'users', user.id, 'profile.md'), renderUserDocument({ ...user, kind }, profile));
+    } else await configureAccount(f.root, user.id, { enabled: false });
+  }
+  const prepared = await prepareUpdate(f.options);
+  assert.deepEqual(prepared.selectedIds, ['person-0']);
+  const entries = [post('news-root', 'person-0', f.now), post('news-guest-reply', 'guest-news-reader', f.now, 'news-root')];
+  const valid = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  const noGuests = await draft(prepared, f.now, entries.slice(0, 1));
+  await assert.rejects(validateUpdateForBatch(noGuests.batch, { ...f.options, contextPath: prepared.operationPath }), /half/);
+  for (const replyTo of [null, 'admin-guest-root']) {
+    const forbidden = [post('admin-guest-root', 'guest-admin-one', f.now), post('admin-guest-other', 'guest-admin-two', f.now), post('admin-ai-entry', 'person-1', f.now, replyTo)];
+    const saved = await draft(prepared, f.now, forbidden);
+    await assert.rejects(validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath }), /not ready/);
+    await assert.rejects(ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true }), /Administrator.*manual/);
+    assert.ok(!(await loadContent(f.root)).feed.posts.some(post => post.id === 'admin-ai-entry'));
+  }
+  await draft(prepared, f.now, entries);
+  assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).count, 2);
+});
+
 test('reply draws are independent per thread, usually span zero to ten, and sometimes exceed twenty', () => {
   const counts = Array.from({ length: 4000 }, (_, index) => drawThreadReplyCount({ seed: 'reply-distribution', rootId: 'thread-' + index, replyLottery }));
   assert.ok(counts.every(count => Number.isInteger(count) && (count >= 0 && count <= 10 || count >= 21 && count <= 60)));

@@ -24,7 +24,7 @@ const randomFor = seed => {
 const inside = (root, path) => { const rel = relative(root, path); return !rel || (!rel.startsWith('../') && rel !== '..' && !isAbsolute(rel)); };
 export const defaultWorkDirectory = () => resolve(process.env.Y29_SOCIAL_WORK_DIR || join(homedir(), '.local/state/y29/lucifer0/current'));
 function ready(user, material) {
-  return user.enabled && user.aiScope === 'daily' && user.profileStatus === 'approved' &&
+  return user.kind !== 'admin' && user.enabled && user.aiScope === 'daily' && user.profileStatus === 'approved' &&
     (user.allowPosts !== false || user.allowReplies !== false) && material.profiles[user.id]?.activityWeight > 0;
 }
 
