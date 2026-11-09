@@ -62,6 +62,7 @@ try {
   await page.keyboard.press('Escape');
   await dialog.waitFor({ state: 'hidden' });
   check(await link.evaluate(element => document.activeElement === element), 'Escape returns focus to the thumbnail');
+  await page.locator('#image-frame img').waitFor({ state: 'detached' });
   check(await page.locator('#image-frame img').count() === 0, 'closing removes the inactive full image');
   await link.focus();
   await page.keyboard.press('Enter');
@@ -93,6 +94,28 @@ try {
   await page.evaluate(() => { location.hash = '/'; });
   await dialog.waitFor({ state: 'hidden' });
   check(await page.locator('.boardbar h2').textContent() === '/world', 'changing route dismisses the image viewer');
+  const imageOnly = structuredClone(feed);
+  const rootOnly = imageOnly.posts.find(post => post.id === root.id);
+  const replyOnly = imageOnly.posts.find(post => post.id === reply.id);
+  rootOnly.text = '';
+  replyOnly.text = '   ';
+  await page.route('**/data/feed.json*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(imageOnly) }));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base);
+  await page.locator(`#post-${root.id}`).waitFor();
+  check(await page.locator(`#post-${root.id} .post-text-link`).count() === 0, 'image-only root has no empty text link');
+  await open(rootOnly);
+  await assertWholeImage();
+  await page.keyboard.press('Escape');
+  await dialog.waitFor({ state: 'hidden' });
+  await page.goto(`${base}#/post/${reply.id}`);
+  await page.locator(`#post-${reply.id}`).waitFor();
+  check(await page.locator(`#post-${reply.id} .post-text-link`).count() === 0, 'whitespace-only reply has no empty text link');
+  await page.screenshot({ path: join(output, 'phone-image-only.png') });
+  await open(replyOnly);
+  await assertWholeImage();
+  await page.keyboard.press('Escape');
+  await dialog.waitFor({ state: 'hidden' });
   check(errors.length === 0, `no browser errors: ${errors.join(', ')}`);
   console.log(`Passed ${checks} original-image browser assertions. Screenshots: ${output}`);
 } finally {

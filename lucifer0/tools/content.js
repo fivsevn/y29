@@ -60,7 +60,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
     users.set(user.id, user); handles.add(user.handle);
     names.set(normalizedName(user.name), user.id);
   }
-  const posts = new Map(), fingerprints = new Set();
+  const posts = new Map();
   for (const batch of batches) {
     validateBatch(batch, policy);
     for (const post of batch.posts) {
@@ -88,21 +88,17 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
       }
       if (!timestamp(post.createdAt) || Date.parse(post.createdAt) > now) fail(`Invalid or future timestamp: ${post.id}`);
       if (post.replyTo !== null) identifier(post.replyTo, 'replyTo');
-      text(post.text, 2000, 'post.text');
+      text(post.text, 2000, 'post.text', true);
       if (Object.hasOwn(post, 'deleted') && typeof post.deleted !== 'boolean') fail('Invalid deleted flag');
       if (post.deleted === true && (post.replyTo === null || post.text !== '该回复已被删除')) fail('Deleted replies must be replies containing only the deletion placeholder');
       if (!Number.isSafeInteger(post.likes) || post.likes < 0) fail('Invalid likes');
       if (!Array.isArray(post.media) || post.media.length > 4) fail('Invalid media');
+      if (!post.text.trim() && !post.media.length) fail('A post needs text or media');
       if (post.deleted === true && post.media.length) fail('Deleted replies cannot retain media');
       for (const image of post.media) {
         keys(image, ['src', 'alt'], 'media');
         if (!isPostMediaPath(image.src)) fail('Invalid media path: use the thread package media directory');
         text(image.alt, 240, 'image.alt');
-      }
-      if (post.deleted !== true) {
-        const fingerprint = JSON.stringify([post.author, post.replyTo, post.text.normalize('NFKC').replace(/\s+/g, ' ').trim()]);
-        if (fingerprints.has(fingerprint)) fail(`Duplicate content: ${post.id}`);
-        fingerprints.add(fingerprint);
       }
       posts.set(post.id, post);
     }
@@ -198,7 +194,7 @@ async function saveMediaDraft(path, expected, posts) {
 }
 
 
-const originalImage = /\.(?:png|jpe?g)$/;
+const originalImage = /\.(?:png|jpe?g|svg)$/;
 const webpVersion = post => ({ ...post, media: post.media?.map(image => ({ ...image, src: typeof image.src === 'string' ? image.src.replace(originalImage, '.webp') : image.src })) });
 
 // Accept only the exact mechanical path change, never a different body, alt,

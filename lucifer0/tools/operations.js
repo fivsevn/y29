@@ -110,7 +110,8 @@ function validatePostBudget(plan, posts, history, policy) {
 const planExtensions = plan => ({
   ...(plan.requestedCount !== undefined ? { requestedCount: plan.requestedCount } : {}),
   ...(plan.replyLottery !== undefined ? { totalBudget: plan.totalBudget, replyLottery: plan.replyLottery } : {}),
-  ...(plan.lottery !== undefined ? { lottery: plan.lottery } : {})
+  ...(plan.lottery !== undefined ? { lottery: plan.lottery } : {}),
+  ...(plan.timeWindow !== undefined ? { timeWindow: plan.timeWindow } : {})
 });
 function planSeal(id, root, plan) {
   return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...planExtensions(plan) });
@@ -120,7 +121,12 @@ function checkOperation(value, root) {
   onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
-  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery'], 'saved plan');
+  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow'], 'saved plan');
+  if (plan.timeWindow !== undefined) {
+    onlyKeys(plan.timeWindow, ['start', 'end'], 'saved time window');
+    const { start, end } = plan.timeWindow;
+    if (!validDate(start) || !validDate(end) || Date.parse(end) - Date.parse(start) !== DAY || Date.parse(end) > Date.parse(value.preparedAt)) fail('Invalid saved time window');
+  }
   checkRequestedCount(plan.requestedCount);
   if (plan.lottery !== undefined) validateLottery(plan.lottery);
   if (plan.replyLottery !== undefined || plan.totalBudget !== undefined) {
@@ -224,6 +230,7 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
     if (!operation) {
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
       const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, lottery: data.policy.lottery ?? defaultLottery, maxBatchPosts: data.policy.maxBatchPosts });
+      plan.timeWindow = { start: new Date(now - DAY).toISOString(), end: new Date(now).toISOString() };
       plan.seal = planSeal(id, root, plan);
       operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared' };
     } else {
@@ -231,8 +238,9 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
         // Upgrade only the new presentation rules; keep the original numeric budget draw.
         operation.plan.lottery = structuredClone(data.policy.lottery ?? defaultLottery);
         operation.plan.lottery.rootBudget = { min: 1, max: 10 };
-        operation.plan.seal = planSeal(operation.id, root, operation.plan);
       }
+      operation.plan.timeWindow ??= { start: new Date(Date.parse(operation.preparedAt) - DAY).toISOString(), end: operation.preparedAt };
+      operation.plan.seal = planSeal(operation.id, root, operation.plan);
       operation.preparedAt = new Date(now).toISOString();
       operation.sourceDigest = operationSourceDigest(data, operation.plan);
     }
@@ -264,6 +272,33 @@ const conditionText = {
   fragment: '一句或几个词', short: '短短几句', long: '想多说一些'
 };
 
+function writerProfile(document) {
+  const lines = document.text.split('\n'), kept = [], examples = [];
+  let expression = false, practice = false, quote = [];
+  const flush = () => {
+    if (quote.length) examples.push({ text: quote.join('\n'), sourcePath: document.path });
+    quote = [];
+  };
+  for (const line of lines) {
+    if (/^#{1,2} /.test(line)) {
+      flush(); practice = false;
+      expression = /^## (?:网络交往与表达|表达与互动)\s*$/.test(line);
+    }
+    if (expression && /^表达举例[：:]\s*$/.test(line)) {
+      flush(); practice = true;
+      continue;
+    }
+    if (practice && /^>/.test(line)) {
+      quote.push(line.replace(/^> ?/, ''));
+      continue;
+    }
+    flush();
+    kept.push(line);
+  }
+  flush();
+  return { document: { ...document, text: kept.join('\n') }, examples };
+}
+
 // This is the only writer-facing view. Full source reading remains an editor resource.
 export async function briefUpdatePost({ root = socialRoot, workDirectory, postId, replyTo, now = Date.now() } = {}) {
   if (typeof postId !== 'string' || !ID.test(postId) || replyTo !== undefined && (typeof replyTo !== 'string' || !ID.test(replyTo))) fail('Brief needs --post ID and an optional --reply-to target ID');
@@ -279,6 +314,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const targetId = existing?.replyTo ?? replyTo ?? null;
   if (targetId === postId) fail('A post cannot reply to itself');
   if (!operation.plan.lottery) fail('Prepare again to attach a stable lottery snapshot to this older operation');
+  if (!operation.plan.timeWindow) fail('Prepare again to attach a stable time window to this older operation');
   if (!existing && !postId.startsWith(operation.id + '-')) fail('A new brief ID must begin with this operation ID and a hyphen: ' + operation.id + '-');
   const config = operation.plan.lottery;
   const choices = drawPostChoices({ seed: operation.plan.seed, postId, replyTo: targetId, lottery: config });
@@ -292,8 +328,13 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const before = new Map([...data.feed.posts, ...priorDrafts].filter(post => post.id !== postId).map(post => [post.id, post]));
   const target = targetId === null ? null : before.get(targetId);
   if (targetId !== null && !target) fail('A brief needs its actual earlier target, archived or in an earlier draft slot');
-  const createdAt = existing?.createdAt ?? new Date(Math.max(Date.parse(operation.preparedAt), target ? Date.parse(target.createdAt) : 0)).toISOString();
-  if (!validDate(createdAt) || Date.parse(createdAt) > now || target && Date.parse(target.createdAt) > Date.parse(createdAt)) fail('Brief timestamps must be real and follow the visible target');
+  if (target && (!validDate(target.createdAt) || Date.parse(target.createdAt) > now)) fail('A brief needs its actual earlier target with a current real timestamp');
+  const window = operation.plan.timeWindow;
+  const base = [...before.values()].reduce((latest, post) => validDate(post.createdAt) ? Math.max(latest, Date.parse(post.createdAt)) : latest, Date.parse(window.start));
+  const createdAt = existing?.createdAt ?? new Date(base + choices.waitSeconds * 1000).toISOString();
+  if (existing && (!validDate(createdAt) || Date.parse(createdAt) > now || now - Date.parse(createdAt) > 2 * DAY || target && Date.parse(target.createdAt) > Date.parse(createdAt))) fail('Brief timestamps must be current, real and follow the visible target');
+  const timing = { status: existing || Date.parse(createdAt) <= Date.parse(window.end) && Date.parse(createdAt) <= now && now - Date.parse(createdAt) <= 2 * DAY ? 'ready' : 'deferred',
+    earliestAt: createdAt, availableUntil: window.end, source: existing ? 'saved-draft' : 'saved-window' };
   const draft = { id: postId, author, ...(guest ? { guest: existing?.guest ?? { name: '' } } : {}), createdAt, replyTo: targetId, text: existing?.text ?? '', likes: existing?.likes ?? choices.likes, canon: 'derivative', media: existing?.media ?? [] };
   validatePostBudget(operation.plan, existing ? operation.posts : [...operation.posts, draft], data.feed.posts, data.policy);
   const visible = new Map();
@@ -303,12 +344,13 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
     if (choices.reading !== 'target-only') visible.set(rootPost.id, rootPost);
     if (choices.reading === 'nearby' && choices.nearbyReplies) {
       const nearby = [...before.values()].filter(post => post.id !== target.id && post.id !== rootPost.id &&
-        Date.parse(post.createdAt) <= Date.parse(createdAt) && threadRoot(post.id, before).id === rootPost.id)
+        Date.parse(post.createdAt) <= Math.min(now, Date.parse(createdAt)) && threadRoot(post.id, before).id === rootPost.id)
         .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en')).slice(0, choices.nearbyReplies);
       for (const post of nearby) visible.set(post.id, post);
     }
   }
-  const visiblePosts = [...visible.values()].sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt) || a.id.localeCompare(b.id, 'en')).map(post => ({
+  const visiblePosts = [...visible.values()].filter(post => validDate(post.createdAt) && Date.parse(post.createdAt) <= Math.min(now, Date.parse(createdAt)))
+    .sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt) || a.id.localeCompare(b.id, 'en')).map(post => ({
     id: post.id, author: post.author, replyTo: post.replyTo, createdAt: post.createdAt,
     ...(post.deleted ? { text: '该回复已被删除。', partial: false, media: [] } : {
       ...visibleExcerpt({ seed: operation.plan.seed, postId, visibleId: post.id, text: typeof post.text === 'string' ? post.text : '', mode: choices.textWindow, characters: config.excerptCharacters }),
@@ -316,10 +358,13 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
     })
   }));
   const profilePaths = new Set(guest ? [] : ['users/' + author + '/profile.md', ...(data.material.supplementalDocuments[author] || []).map(document => document.path)]);
+  const profiles = data.documents.filter(document => profilePaths.has(document.path)).map(writerProfile);
   return {
-    id: operation.id, postId, draft,
+    id: operation.id, postId, draft: timing.status === 'ready' ? draft : null,
     writer: {
-      self: { id: author, name: guest ? draft.guest.name : ownUser.name, documents: data.documents.filter(document => profilePaths.has(document.path)) },
+      createdAt,
+      self: { id: author, name: guest ? draft.guest.name : ownUser.name, documents: profiles.map(profile => profile.document),
+        voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
       conditions: choices.conditions.map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
       visiblePosts
     },
@@ -327,9 +372,9 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
       authorKind: guest ? 'guest' : 'library', drawnAuthorKind: choices.authorKind,
       worldviewPath: guest ? null : data.material.worldviewDocuments.find(document => document.id === data.material.profiles[author].basics.worldview)?.path ?? null,
       waitSeconds: choices.waitSeconds,
-      suggestedNotBefore: new Date((target ? Date.parse(target.createdAt) : Date.parse(operation.preparedAt)) + choices.waitSeconds * 1000).toISOString(),
+      timing, suggestedNotBefore: createdAt,
       image: choices.image, likes: choices.likes, reading: choices.reading, textWindow: choices.textWindow,
-      instruction: '将 writer 单独交给写作者；partial 表示只读到片段。将实际采用的正文、时间、图片和 guest 名字填入 draft，再保存到 operation.json.posts。抽签使用见 docs/lottery.md，创作见 docs/writing.md。'
+      instruction: timing.status === 'deferred' ? '本轮跳过该候选，后续更新重新评估。' : '将 writer 单独交给写作者；partial 表示只读到片段。将实际采用的正文、时间、图片和 guest 名字填入 draft，再保存到 operation.json.posts。抽签使用见 docs/lottery.md，创作见 docs/writing.md。'
     }
   };
 }

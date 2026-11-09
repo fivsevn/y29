@@ -170,3 +170,23 @@ test('separate AI context and batch recover a media-only half-saved conversion',
   const feed = (await loadContent(f.root)).feed;
   assert.equal((await finishUpdate({ root: f.root, workDirectory: f.work, fetchImpl: async () => ({ ok: true, json: async () => feed }) })).status, 'published');
 });
+
+
+test('post SVG is stored as small WebP in its package while interface SVG stays unchanged', async t => {
+  const f = await fixture(t), entry = post(f.now);
+  const source = `${threadPath}/media/vector.svg`;
+  const original = '<svg xmlns="http://www.w3.org/2000/svg" width="41" height="31"><rect width="41" height="31" fill="red"/></svg>';
+  await writeFile(join(f.root, source), original);
+  entry.media[0].src = source;
+  await writeFile(join(f.root, `${threadPath}/index.md`), renderPostDocument(entry));
+  const icon = await readFile(join(f.root, 'assets/icon.svg'));
+  const feed = await buildFeed(f.root);
+  assert.equal(feed.posts[0].media[0].src, source.replace('.svg', '.webp'));
+  await assert.rejects(stat(join(f.root, source)), { code: 'ENOENT' });
+  const bytes = await readFile(join(f.root, feed.posts[0].media[0].src));
+  const actual = await sharp(bytes).metadata();
+  assert.equal(actual.format, 'webp');
+  assert.equal(actual.width, 41); assert.equal(actual.height, 31);
+  assert.deepEqual(await readFile(join(f.root, 'assets/icon.svg')), icon);
+  await assert.rejects(stat(join(f.root, '.publish-staging')), { code: 'ENOENT' });
+});
