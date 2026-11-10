@@ -4,46 +4,19 @@ on:
   push:
     branches: [main]
 permissions:
-  contents: write
+  contents: read
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Install image conversion dependencies
         run: npm ci
-      - name: Ingest reviewed L0 operation from isolated work record
-        if: github.event_name == 'pull_request'
-        run: |
-          mkdir -p "$RUNNER_TEMP/l0-work"
-          cp .l0-work/operation.json "$RUNNER_TEMP/l0-work/operation.json"
-          node lucifer0/tools/update.js prepare --work "$RUNNER_TEMP/l0-work"
-          node lucifer0/tools/update.js suggest --work "$RUNNER_TEMP/l0-work"
-          node lucifer0/tools/publish.js ingest "$RUNNER_TEMP/l0-work/operation.json" --reviewed --ai
-          cp "$RUNNER_TEMP/l0-work/operation.json" .l0-work/operation.json
-          node lucifer0/tools/publish.js validate
-          node build.js
-          git status --short
       - name: Check rules, public content and static build
         run: npm run check
-      - name: Commit reviewed L0 posts and generated data on the isolated branch
-        if: github.event_name == 'pull_request'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A lucifer0 .l0-work/operation.json
-          git diff --cached --stat
-          if ! git diff --cached --quiet; then
-            git commit -m "content(lucifer0): publish reviewed November 11 batch"
-            git fetch origin "$GITHUB_HEAD_REF"
-            git merge --no-edit -X ours FETCH_HEAD
-            git push origin HEAD:"refs/heads/$GITHUB_HEAD_REF"
-          fi
       - name: Keep reviewable static preview
         uses: actions/upload-artifact@v4
         with:
