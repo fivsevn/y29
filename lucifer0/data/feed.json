@@ -1300,7 +1300,13 @@
       "replyTo": "l0-20261110111419-7d66be80-03",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "跟着走走停停"
       },
@@ -1349,7 +1355,13 @@
       "replyTo": "l0-20261110111419-7d66be80-02",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "说两句就走"
       },
@@ -1362,7 +1374,13 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "凌晨才看见"
       },
@@ -1375,7 +1393,13 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "相册还没删"
       },
@@ -1421,7 +1445,13 @@
       "replyTo": "l0-20261110061018-47537328-04",
       "likes": 8,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "浇完就忘"
       },
@@ -1467,7 +1497,13 @@
       "replyTo": "l0-20261110061018-47537328-07",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "遥控器藏哪儿"
       },
@@ -1490,7 +1526,13 @@
       "replyTo": null,
       "likes": 15,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
       "text": "说好一人一半，结账他去接电话了！上回那二十块还没还呢。"
     },
     {
@@ -1500,7 +1542,13 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "遥控器放哪了"
       },
@@ -1513,7 +1561,13 @@
       "replyTo": null,
       "likes": 16,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "字卡先放着"
       },
@@ -1536,7 +1590,13 @@
       "replyTo": null,
       "likes": 45,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "先看一眼通知"
       },
@@ -1549,7 +1609,13 @@
       "replyTo": null,
       "likes": 10,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "fit": "contain"
+        }
+      ],
       "text": "视频里一句“每周浇三次”就敢教所有人养花。屋里屋外都不分，出了事又怪卖花的。"
     },
     {
@@ -1559,7 +1625,12 @@
       "replyTo": null,
       "likes": 10,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110061018-47537328-06/media/crowded-fridge.webp",
+          "alt": "打开的冰箱里，两层搁板摆满瓶装和罐装饮料，几乎没有空位。"
+        }
+      ],
       "guest": {
         "name": "冰箱二层"
       },
@@ -1664,7 +1735,13 @@
       "replyTo": "l0-20261110002939-55dccee1-11",
       "likes": 12,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "还有半杯"
       },
@@ -1820,7 +1897,12 @@
       "replyTo": null,
       "likes": 12,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-02/media/lid-gasket.webp",
+          "alt": "杯盖反面朝上放在台面上，透明胶圈嵌在边缘凹槽里，一小段被拉起。"
+        }
+      ],
       "guest": {
         "name": "还有半杯"
       },
@@ -1987,7 +2069,13 @@
       "replyTo": "l0-20261110001741-ab4f1398-09",
       "likes": 5,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
       "text": "我家这个都五百多个月了，袜子还得问我在哪儿。"
     },
     {
@@ -2056,7 +2144,13 @@
       "replyTo": null,
       "likes": 20,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
       "text": "一进鼓就嗡嗡嗡。还往大了拧！"
     },
     {
@@ -2136,7 +2230,13 @@
       "replyTo": "l0-20261110000207-6a257638-26",
       "likes": 5,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/leave.webp",
+          "alt": "L0向一旁迈步，回头看，身后有几条速度线。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "拐个弯"
       },
@@ -2253,7 +2353,13 @@
       "replyTo": "l0-20261110000207-6a257638-17",
       "likes": 9,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "fit": "contain"
+        }
+      ],
       "text": "你笑什么啊？"
     },
     {
@@ -2351,7 +2457,13 @@
       "replyTo": "l0-20261110000207-6a257638-09",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "小陶盆"
       },
@@ -2396,7 +2508,13 @@
       "replyTo": "l0-20261110000207-6a257638-02",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "fit": "contain"
+        }
+      ],
       "text": "手机还想过你脸这一关"
     },
     {
@@ -2406,7 +2524,13 @@
       "replyTo": null,
       "likes": 1,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
       "text": "有些少儿书的腰封比正文还吵，翻两页全是“你就是最棒的”。推荐的人只说孩子爱看，我也没法接。爱看和写得好，总不能是一回事吧。"
     },
     {
@@ -2455,7 +2579,13 @@
       "replyTo": null,
       "likes": 12,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
       "text": "过关了，手机差点掉在脸上。"
     },
     {
@@ -2465,7 +2595,12 @@
       "replyTo": null,
       "likes": 9,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-01/media/white-paper.webp",
+          "alt": "一张亮白色的纸铺在有划痕的棕色木桌上，纸角微微翘起。"
+        }
+      ],
       "text": "这纸的样图是不是加了灰。收到的白得刺眼，铺在桌上像一块灯。\n店家说是我屏幕的问题。"
     },
     {

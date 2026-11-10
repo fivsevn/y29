@@ -5,7 +5,7 @@ createdAt: "2026-11-10T01:02:37.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: []
+media: [{"src":"assets/emotes/l0/angry.webp","alt":"L0皱眉张嘴指向一旁。","fit":"contain"}]
 guest: {"name":"相册还没删"}
 ---
 

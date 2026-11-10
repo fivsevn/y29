@@ -5,7 +5,7 @@ createdAt: "2026-11-10T06:33:55.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: []
+media: [{"src":"assets/emotes/l0/speechless.webp","alt":"L0抬眼向上看，嘴边有一团呼气线。","fit":"contain"}]
 guest: {"name":"凌晨才看见"}
 ---
 

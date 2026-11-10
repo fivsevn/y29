@@ -5,7 +5,7 @@ createdAt: "2026-11-09T23:21:28.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: []
+media: [{"src":"assets/emotes/l0/sweat.webp","alt":"L0额头挂着一大滴汗，嘴角翘起。","fit":"contain"}]
 guest: {"name":"遥控器放哪了"}
 ---
 
