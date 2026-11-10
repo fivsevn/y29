@@ -1,0 +1,26 @@
+name: Lucifer Zero one-time preparation
+on:
+  push:
+    branches: [l0-update-20261110-evening]
+    paths: ['.github/workflows/l0-one-time.yml']
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Generate reproducible operation
+        run: |
+          node lucifer0/tools/update.js prepare --work /tmp/l0-work
+          echo 'BEGIN_OPERATION_JSON'
+          cat /tmp/l0-work/operation.json
+          echo 'END_OPERATION_JSON'
+          echo 'BEGIN_READING_HEAD'
+          head -c 24000 /tmp/l0-work/reading.md || true
+          echo ''
+          echo 'END_READING_HEAD'
