@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile, copyFile, cp, rm, lstat } from 'node:fs/pro
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildFeed } from './lucifer0/tools/content.js';
+import { readSiteEmotes, siteEmoteFiles } from './lucifer0/tools/site-emotes.js';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 const output = join(root, 'dist');
@@ -22,7 +23,8 @@ const runtimeFiles = [
 ];
 const socialAssets = new Set([
   'assets/icon.svg', 'assets/verification-lucifer.png', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
-  ...socialFeed.posts.flatMap(post => post.media.map(image => image.src))
+  ...socialFeed.posts.flatMap(post => post.media.map(image => image.src)),
+  ...siteEmoteFiles(await readSiteEmotes(join(root, 'lucifer0')))
 ]);
 for (const path of new Set(socialFeed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')))) {
   try {

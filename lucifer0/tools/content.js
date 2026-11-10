@@ -7,6 +7,7 @@ import { readThreadPackages, writeThreadBatch, isPostMediaPath, threadDirectory 
 import { validateReplyLottery, validateLottery } from './lottery.js';
 export { validateReplyLottery } from './lottery.js';
 import { preparePostImages, rewritePostImages, normalizeArchivedImages } from './media.js';
+import { readSiteEmotes, siteEmotePaths } from './site-emotes.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
 const fail = message => { throw new Error(message); };
@@ -35,7 +36,8 @@ function validateBatch(batch, policy) {
   }
 }
 
-export function validateContent(registry, batches, policy, { now = Date.now() } = {}) {
+export function validateContent(registry, batches, policy, { now = Date.now(), siteEmotes = null } = {}) {
+  const sharedMedia = siteEmotePaths(siteEmotes);
   keys(policy, ['version', 'automaticPosting', 'timezone', 'maxBatchPosts', 'replyLottery', 'lottery'], 'policy');
   if (policy.version !== 1 || typeof policy.automaticPosting !== 'boolean' || policy.timezone !== 'Asia/Shanghai' || !Number.isInteger(policy.maxBatchPosts) || policy.maxBatchPosts < 1 || policy.maxBatchPosts > 120) fail('Invalid publication policy');
   if (policy.replyLottery !== undefined) validateReplyLottery(policy.replyLottery);
@@ -97,7 +99,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
       if (post.deleted === true && post.media.length) fail('Deleted replies cannot retain media');
       for (const image of post.media) {
         keys(image, ['src', 'alt', 'fit'], 'media');
-        if (!isPostMediaPath(image.src)) fail('Invalid media path: use the thread package media directory');
+        if (!isPostMediaPath(image.src) && !sharedMedia.has(image.src)) fail('Invalid media path: use the thread package media directory or a registered site emote');
         text(image.alt, 240, 'image.alt');
         if (Object.hasOwn(image, 'fit') && image.fit !== 'contain') fail('Invalid media fit: use contain or omit the field');
       }
@@ -116,7 +118,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
       }
     }
     const mediaDirectory = `${threadDirectory(post, posts)}/media/`;
-    if (post.media.some(image => !image.src.startsWith(mediaDirectory))) fail(`Media must belong to its root thread: ${post.id}`);
+    if (post.media.some(image => !image.src.startsWith(mediaDirectory) && !sharedMedia.has(image.src))) fail(`Media must belong to its root thread: ${post.id}`);
   }
   // Explicit projection: operational permissions never become browser data.
   return {
@@ -128,13 +130,13 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
 
 async function json(path) { return JSON.parse(await readFile(path, 'utf8')); }
 export async function loadContent(root = socialRoot, { allowPending = false } = {}) {
-  const [{ registry }, policy, { batches, files, pending }] = await Promise.all([
-    readUserDocuments(root), json(join(root, 'publication.json')), readThreadPackages(root)
+  const [{ registry }, policy, { batches, files, pending }, siteEmotes] = await Promise.all([
+    readUserDocuments(root), json(join(root, 'publication.json')), readThreadPackages(root), readSiteEmotes(root)
   ]);
   if (pending && !allowPending) fail(`An unfinished update must be completed or cancelled before validation or build: ${pending.id}`);
-  const feed = validateContent(registry, batches, policy);
+  const feed = validateContent(registry, batches, policy, { siteEmotes });
   await validateAssets(root, feed);
-  return { registry, policy, batches, feed, files, pending };
+  return { registry, policy, batches, feed, files, pending, siteEmotes };
 }
 
 async function validateAssets(root, feed) {
@@ -239,7 +241,7 @@ export async function ingestBatch(input, { root = socialRoot, reviewed = false, 
 }
 
 async function ingestLocked(input, { root, ai, contextPath, backfill }) {
-  const { registry, policy, batches, feed: existingFeed, pending } = await loadContent(root, { allowPending: true });
+  const { registry, policy, batches, feed: existingFeed, pending, siteEmotes } = await loadContent(root, { allowPending: true });
   const value = await json(resolve(input));
   const isUpdate = value?.version === 1 && Object.hasOwn(value, 'plan');
   const batch = isUpdate ? { version: 1, id: value.id, mode: 'daily', posts: value.posts } : value;
@@ -297,7 +299,7 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
     await syncPublished(await buildFeed(root, { locked: true }));
     return { status: 'already-archived', id: batch.id, count: batch.posts.length };
   }
-  const feed = validateContent(registry, [...batches, { ...batch, posts: fresh }], policy);
+  const feed = validateContent(registry, [...batches, { ...batch, posts: fresh }], policy, { siteEmotes });
   await validateAssets(root, feed);
   if (ai && !policy.automaticPosting) fail('Automatic posting is disabled');
   if (ai && batch.mode === 'daily') {

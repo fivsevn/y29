@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "name": "L0",
+  "items": [
+    {
+      "id": "neutral",
+      "name": "默认",
+      "src": "assets/emotes/l0/neutral.webp",
+      "alt": "L0站着，双手插在黑色卫衣口袋里。"
+    },
+    {
+      "id": "huh",
+      "name": "啊？",
+      "src": "assets/emotes/l0/huh.webp",
+      "alt": "L0一手托下巴，斜眼看着旁边的问号。"
+    },
+    {
+      "id": "speechless",
+      "name": "无语",
+      "src": "assets/emotes/l0/speechless.webp",
+      "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+    },
+    {
+      "id": "angry",
+      "name": "气死",
+      "src": "assets/emotes/l0/angry.webp",
+      "alt": "L0皱眉张嘴指向一旁。"
+    },
+    {
+      "id": "cry",
+      "name": "呜呜",
+      "src": "assets/emotes/l0/cry.webp",
+      "alt": "L0双手捧在胸前，眼里流出两行泪。"
+    },
+    {
+      "id": "laugh",
+      "name": "笑死",
+      "src": "assets/emotes/l0/laugh.webp",
+      "alt": "L0仰躺着张嘴笑，双腿抬起。"
+    },
+    {
+      "id": "melon",
+      "name": "吃瓜",
+      "src": "assets/emotes/l0/melon.webp",
+      "alt": "L0扒着边沿，双手拿一片西瓜。"
+    },
+    {
+      "id": "flat",
+      "name": "摆烂",
+      "src": "assets/emotes/l0/flat.webp",
+      "alt": "L0趴下伸舌头，头上有一圈弯线。"
+    },
+    {
+      "id": "okay",
+      "name": "收到",
+      "src": "assets/emotes/l0/okay.webp",
+      "alt": "L0半睁眼竖起拇指。"
+    },
+    {
+      "id": "doubt",
+      "name": "不信",
+      "src": "assets/emotes/l0/doubt.webp",
+      "alt": "L0双臂交叉，眯眼看向一侧。"
+    },
+    {
+      "id": "disgust",
+      "name": "嫌弃",
+      "src": "assets/emotes/l0/disgust.webp",
+      "alt": "L0一手捏鼻子，一手向外推。"
+    },
+    {
+      "id": "heh",
+      "name": "呵呵",
+      "src": "assets/emotes/l0/heh.webp",
+      "alt": "L0半睁眼，嘴角轻微上扬。"
+    },
+    {
+      "id": "heated",
+      "name": "急了",
+      "src": "assets/emotes/l0/heated.webp",
+      "alt": "L0脸颊发红，双拳攥在胸前。"
+    },
+    {
+      "id": "clap",
+      "name": "鼓掌",
+      "src": "assets/emotes/l0/clap.webp",
+      "alt": "L0半睁眼拍着双手。"
+    },
+    {
+      "id": "tableflip",
+      "name": "掀桌",
+      "src": "assets/emotes/l0/tableflip.webp",
+      "alt": "L0张嘴举起双手，旁边一张桌子翻了起来。"
+    },
+    {
+      "id": "hold-it",
+      "name": "憋住",
+      "src": "assets/emotes/l0/hold-it.webp",
+      "alt": "L0闭眼抿嘴，攥紧双拳。"
+    },
+    {
+      "id": "ignore",
+      "name": "懒得回",
+      "src": "assets/emotes/l0/ignore.webp",
+      "alt": "L0托腮侧身看着手机。"
+    },
+    {
+      "id": "sweat",
+      "name": "流汗",
+      "src": "assets/emotes/l0/sweat.webp",
+      "alt": "L0额头挂着一大滴汗，嘴角翘起。"
+    },
+    {
+      "id": "guilty",
+      "name": "心虚",
+      "src": "assets/emotes/l0/guilty.webp",
+      "alt": "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。"
+    },
+    {
+      "id": "play-dead",
+      "name": "装死",
+      "src": "assets/emotes/l0/play-dead.webp",
+      "alt": "L0仰面躺着，头上有一个带叉号的小气泡。"
+    },
+    {
+      "id": "crash",
+      "name": "宕机",
+      "src": "assets/emotes/l0/crash.webp",
+      "alt": "L0张着小嘴，两眼呈螺旋状，头上冒着弯曲线。"
+    },
+    {
+      "id": "peek",
+      "name": "偷看",
+      "src": "assets/emotes/l0/peek.webp",
+      "alt": "L0从竖直边缘后露出半张脸和一只手。"
+    },
+    {
+      "id": "wait",
+      "name": "蹲后续",
+      "src": "assets/emotes/l0/wait.webp",
+      "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。"
+    },
+    {
+      "id": "plead",
+      "name": "求求",
+      "src": "assets/emotes/l0/plead.webp",
+      "alt": "L0双手合在一起，抬着大眼睛流泪。"
+    },
+    {
+      "id": "leave",
+      "name": "溜了",
+      "src": "assets/emotes/l0/leave.webp",
+      "alt": "L0向一旁迈步，回头看，身后有几条速度线。"
+    }
+  ]
+}

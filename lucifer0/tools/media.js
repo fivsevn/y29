@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, lstat, realpath, link, rename, rm, rmdir } 
 import { join, resolve, relative, isAbsolute } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { isPostMediaPath, parsePostDocument, readThreadPackages } from './thread-packages.js';
+import { readSiteEmotes, siteEmotePaths } from './site-emotes.js';
 
 const raster = /\.(?:png|jpe?g|svg)$/;
 let sharpModule;
@@ -64,9 +65,11 @@ async function encodeWebP(bytes, path) {
 /** Create verified files first. Callers update references before cleaning originals. */
 export async function preparePostImages(root, posts) {
   root = await checkedRoot(root);
+  const sharedMedia = siteEmotePaths(await readSiteEmotes(root));
   const replacements = new Map();
   const paths = new Set(posts.flatMap(post => (post.media || []).map(image => image.src)));
   for (const path of paths) {
+    if (sharedMedia.has(path)) continue;
     if (!isPostMediaPath(path)) throw new Error('Invalid post image path: ' + path);
     if (!raster.test(path)) continue;
     const input = await regularFile(root, path);
@@ -99,9 +102,11 @@ export function rewritePostImages(posts, replacements) {
 /** Resume-safe cleanup: unrelated drafts and still-referenced originals survive. */
 export async function cleanupPostImages(root, posts) {
   root = await checkedRoot(root);
+  const sharedMedia = siteEmotePaths(await readSiteEmotes(root));
   const referenced = new Set(posts.flatMap(post => (post.media || []).map(image => image.src)));
   let removed = 0;
   for (const target of referenced) {
+    if (sharedMedia.has(target)) continue;
     if (!isPostMediaPath(target)) throw new Error('Invalid post image path: ' + target);
     if (!target.endsWith('.webp')) continue;
     const destination = await regularFile(root, target);
