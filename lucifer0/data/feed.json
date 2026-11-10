@@ -1148,6 +1148,42 @@
       "inFollowing": false
     },
     {
+      "id": "guest-l0-20261109155735-6a919d7e-first",
+      "handle": "guest_d16b960ef30e8f8fd806",
+      "name": "下一首再说",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109155735-6a919d7e-sleeve",
+      "handle": "guest_f41e7fbf0462fc63a0ed",
+      "name": "不拆塑封",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109155735-6a919d7e-noodles",
+      "handle": "guest_035ba6cefb779e14300b",
+      "name": "两碗少辣",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "guest-site-welcome-removed-01",
       "handle": "guest_d8de83693e21f410d2c7",
       "name": "先让我说完",
@@ -1185,6 +1221,90 @@
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261109155735-6a919d7e-06",
+      "author": "guest-l0-20261109155735-6a919d7e-noodles",
+      "createdAt": "2026-11-09T23:04:00+08:00",
+      "replyTo": "l0-20261109155735-6a919d7e-05",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109155735-6a919d7e-02/media/l0-20261109155735-6a919d7e-06.png",
+          "alt": "旧餐桌上放着一碗青菜煎蛋汤面，旁边是一双木筷和透明塑料袋。"
+        }
+      ],
+      "guest": {
+        "name": "两碗少辣"
+      },
+      "text": "抽到不想听的就知道自己想听哪张了。我点外卖靠这个，折腾完常常还是吃面。"
+    },
+    {
+      "id": "l0-20261109155735-6a919d7e-05",
+      "author": "guest-l0-20261109155735-6a919d7e-sleeve",
+      "createdAt": "2026-11-09T22:51:00+08:00",
+      "replyTo": "l0-20261109155735-6a919d7e-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109155735-6a919d7e-02/media/l0-20261109155735-6a919d7e-05.png",
+          "alt": "浅色旧桌面上叠放着三张背面朝上的唱片封套，纸面有浅淡的曲目文字。"
+        }
+      ],
+      "guest": {
+        "name": "不拆塑封"
+      },
+      "text": "那把封套朝下抽一张，抽出来直接放，别再翻回去挑。"
+    },
+    {
+      "id": "l0-20261109155735-6a919d7e-04",
+      "author": "visitor-eta",
+      "createdAt": "2026-11-09T22:39:00+08:00",
+      "replyTo": "l0-20261109155735-6a919d7e-03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "你这至少已经听上了。我翻那半天，主要在看封套，歌还没响。"
+    },
+    {
+      "id": "l0-20261109155735-6a919d7e-03",
+      "author": "guest-l0-20261109155735-6a919d7e-first",
+      "createdAt": "2026-11-09T22:27:00+08:00",
+      "replyTo": "l0-20261109155735-6a919d7e-02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "下一首再说"
+      },
+      "text": "我点收藏列表都是从第一首开始。每次就那几首，后面的歌像白存了。"
+    },
+    {
+      "id": "l0-20261109155735-6a919d7e-02",
+      "author": "visitor-eta",
+      "createdAt": "2026-11-09T22:18:00+08:00",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109155735-6a919d7e-02/media/l0-20261109155735-6a919d7e-02.png",
+          "alt": "唱片店柜台上，一张黑胶唱片放在唱盘上，旁边斜靠着几张旧封套，后方木箱里排着唱片。"
+        }
+      ],
+      "text": "收店前想换张唱片，翻了半天，最后把早上那张翻了个面。以前一张能听好久，现在旁边一整排，总想着还有张更合适的。今天连选歌都嫌累。"
+    },
+    {
+      "id": "l0-20261109155735-6a919d7e-01",
+      "author": "news-morningstar",
+      "createdAt": "2026-11-09T22:06:00+08:00",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "澄湾食材行情站9日发布十月外埠采购价汇总：综合指标小幅回落，谷物、乳品和肉类走低，糖价却已连涨四个月。黄油、奶酪与奶粉的方向也不同。这份表看的是原料行情，街边面包和超市价签还得各看各的。"
+    },
     {
       "id": "l0-20261109105752-76fe0270-06",
       "author": "guest-l0-20261109105752-76fe0270-tab",
