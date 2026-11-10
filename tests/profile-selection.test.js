@@ -102,10 +102,12 @@ test('profile reads include current repository worldviews and each person keeps 
   const { root } = await fixture(t);
   const initial = await readProfiles({ root });
   assert.deepEqual(Object.keys(initial).sort(), ['profiles', 'registry', 'supplementalDocuments', 'worldviewDocuments']);
-  assert.equal(initial.profiles.alan.basics.worldview, 'trueheart-hunter');
-  assert.equal(initial.profiles['visitor-lambda'].basics.worldview, '');
-  const worldview = initial.worldviewDocuments.find(document => document.id === 'trueheart-hunter');
-  assert.ok(worldview && worldview.path.endsWith('environment/worldviews/trueheart-hunter.md'));
+  assert.equal(initial.profiles.alan.basics.worldview, 'worldviewA');
+  assert.equal(initial.profiles['visitor-lambda'].basics.worldview, 'worldview0');
+  const worldview = initial.worldviewDocuments.find(document => document.id === 'worldviewA' && document.kind === 'setting');
+  assert.ok(worldview && worldview.path.endsWith('environment/worldviews/worldviewA/worldviewA.md'));
+  assert.ok(initial.worldviewDocuments.some(document => document.id === 'worldviewA' && document.kind === 'events' && document.path.endsWith('/worldviewA/events.md')));
+  assert.ok(initial.worldviewDocuments.some(document => document.id === 'worldview0' && document.kind === 'events'));
   const path = join(root, worldview.path);
   await writeFile(path, worldview.text + '\nUPDATED_WORLDVIEW_SETTING\n');
   const updated = await readProfiles({ root });

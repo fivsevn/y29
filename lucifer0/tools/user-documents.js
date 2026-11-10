@@ -1,6 +1,6 @@
 import { readFile, readdir, lstat, realpath, writeFile } from 'node:fs/promises';
 import { join, resolve, sep } from 'node:path';
-import { emptyProfile, validateProfile } from './profile-schema.js';
+import { emptyProfile, validateProfile, isWorldviewId } from './profile-schema.js';
 
 const PERSON_FIELDS = ['编号', '网名', '用户名', '个人简介', '所属世界观', '年龄', '性别', '职业', '居住区域', '教育与训练', '家庭与居住', '资料更新'];
 const PERSON_HEADINGS = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算'];
@@ -147,17 +147,37 @@ async function readWorldviews(root) {
   const environment = join(root, 'environment'), directory = join(environment, 'worldviews');
   try { await regular(environment, root, true); await regular(directory, root, true); }
   catch (error) { if (error.code === 'ENOENT') return []; throw error; }
-  const documents = [];
+  const documents = [], ids = new Set();
+  const document = async (id, path, kind) => {
+    const stat = await regular(join(root, path), root);
+    if (stat.size > 500000) fail(`世界观资料超过 500000 字节：${path}`);
+    const text = await readFile(join(root, path), 'utf8');
+    if (!text.trim()) fail(`世界观资料为空：${path}`);
+    return { id, kind, path, text };
+  };
+  const supplementary = async (id, folder, excluded) => {
+    const found = [];
+    for (const entry of (await readdir(join(root, folder), { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name, 'en'))) {
+      const path = `${folder}/${entry.name}`;
+      if (entry.isSymbolicLink()) fail(`世界观目录不能包含符号链接：${path}`);
+      if (entry.isDirectory()) {
+        await regular(join(root, path), root, true);
+        found.push(...await supplementary(id, path, excluded));
+      } else if (entry.name.endsWith('.md') && !excluded.has(path)) found.push(await document(id, path, 'supplement'));
+    }
+    return found;
+  };
   for (const entry of (await readdir(directory, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name, 'en'))) {
     if (entry.isSymbolicLink()) fail(`世界观目录不能包含符号链接：${entry.name}`);
-    if (!entry.name.endsWith('.md') || ['README.md', 'TEMPLATE.md'].includes(entry.name)) continue;
-    const id = entry.name.slice(0, -3), path = `environment/worldviews/${entry.name}`;
-    if (!ID.test(id)) fail(`世界观文件名不是合法编号：${entry.name}`);
-    const stat = await regular(join(directory, entry.name), root);
-    if (stat.size > 500000) fail(`世界观资料超过 500000 字节：${path}`);
-    const text = await readFile(join(directory, entry.name), 'utf8');
-    if (!text.trim()) fail(`世界观资料为空：${path}`);
-    documents.push({ id, path, text });
+    if (!entry.isDirectory() && (!entry.name.endsWith('.md') || ['README.md', 'TEMPLATE.md'].includes(entry.name))) continue;
+    const id = entry.isDirectory() ? entry.name : entry.name.slice(0, -3), prefix = `environment/worldviews/${entry.name}`;
+    if (!isWorldviewId(id) || ids.has(id)) fail(`世界观文件或目录不是唯一合法编号：${entry.name}`);
+    ids.add(id);
+    if (!entry.isDirectory()) { documents.push(await document(id, prefix, 'setting')); continue; }
+    await regular(join(directory, entry.name), root, true);
+    const setting = `${prefix}/${id}.md`, events = `${prefix}/events.md`;
+    documents.push(await document(id, setting, 'setting'), await document(id, events, 'events'));
+    documents.push(...await supplementary(id, prefix, new Set([setting, events])));
   }
   return documents;
 }
@@ -194,7 +214,10 @@ export async function readUserDocuments(root) {
   if (!users.length) fail('至少需要一个用户档案');
   for (const id of controls.keys()) if (!profiles[id]) fail(`accounts.json 引用了不存在的人物：${id}`);
   const worldviewDocuments = await readWorldviews(root), worldviewIds = new Set(worldviewDocuments.map(document => document.id));
-  for (const [id, profile] of Object.entries(profiles)) if (profile.basics.worldview && !worldviewIds.has(profile.basics.worldview)) fail(`人物 ${id} 引用了不存在的世界观：${profile.basics.worldview}`);
+  for (const [id, profile] of Object.entries(profiles)) {
+    if (!profile.basics.worldview && worldviewIds.has('worldview0')) profile.basics.worldview = 'worldview0';
+    if (profile.basics.worldview && !worldviewIds.has(profile.basics.worldview)) fail(`人物 ${id} 引用了不存在的世界观：${profile.basics.worldview}`);
+  }
   return { registry: { version: 1, users }, profiles, supplementalDocuments, worldviewDocuments };
 }
 

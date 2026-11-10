@@ -1,5 +1,6 @@
 // Structured views of the complete Markdown person dossiers.
 const plainObject = value => value && typeof value === 'object' && !Array.isArray(value);
+export const isWorldviewId = value => typeof value === 'string' && /^[a-z0-9][a-zA-Z0-9-]{1,63}$/.test(value);
 const strings = (value, label) => {
   if (!Array.isArray(value) || value.length > 100 || value.some(item => typeof item !== 'string' || item.length > 2000)) throw new Error(`Profile ${label} must be an array of bounded strings`);
 };
@@ -12,7 +13,7 @@ export function validateProfile(profile, id) {
     for (const key of ['age', 'occupation', 'location']) if (typeof profile.basics[key] !== 'string' || profile.basics[key].length > 240) throw new Error(`Invalid profile basics.${key}`);
     for (const key of ['interests', 'personality']) strings(profile.basics[key], key);
     for (const key of ['gender', 'pronouns', 'timezone', 'activeHours', 'characterName', 'education', 'household', 'updatedAt']) if (profile.basics[key] !== undefined && (typeof profile.basics[key] !== 'string' || profile.basics[key].length > 240)) throw new Error(`Invalid profile basics.${key}`);
-    if (profile.basics.worldview !== undefined && (typeof profile.basics.worldview !== 'string' || profile.basics.worldview !== '' && !/^[a-z0-9][a-z0-9-]{1,63}$/.test(profile.basics.worldview))) throw new Error('Invalid profile worldview');
+    if (profile.basics.worldview !== undefined && profile.basics.worldview !== '' && !isWorldviewId(profile.basics.worldview)) throw new Error('Invalid profile worldview');
   }
   for (const key of ['tags', 'topics', 'voiceExamples']) if (profile[key] !== undefined) strings(profile[key], key);
   if (profile.currentStatus !== undefined && (typeof profile.currentStatus !== 'string' || profile.currentStatus.length > 4000)) throw new Error('Profile current status must be bounded text');

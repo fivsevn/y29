@@ -209,6 +209,56 @@ test('worldview membership resolves a real repository document and is reread aft
   await assert.rejects(readUserDocuments(root), /符号链接/);
 });
 
+test('world folders keep settings and events together, including the default and nested material', async t => {
+  const root = await fixture(t, [account(), account('second-user')]);
+  const profilePath = join(root, 'users/sample-user/profile.md');
+  await writeFile(profilePath, (await readFile(profilePath, 'utf8')).replace('| 所属世界观 |  |', '| 所属世界观 | worldviewA |'));
+  for (const id of ['worldview0', 'worldviewA']) {
+    const folder = join(root, 'environment/worldviews', id);
+    await mkdir(folder, { recursive: true });
+    await writeFile(join(folder, id + '.md'), '# ' + id + '\n\nSETTING_' + id);
+    await writeFile(join(folder, 'events.md'), '# Events\n\nEVENTS_' + id);
+  }
+  await mkdir(join(root, 'environment/worldviews/worldviewA/archive'));
+  await writeFile(join(root, 'environment/worldviews/worldviewA/archive/earlier.md'), '# Earlier adopted events');
+  const first = await readUserDocuments(root);
+  assert.equal(first.profiles['sample-user'].basics.worldview, 'worldviewA');
+  assert.equal(first.profiles['second-user'].basics.worldview, 'worldview0');
+  assert.deepEqual(first.worldviewDocuments.filter(document => document.id === 'worldviewA').map(({ kind, path }) => ({ kind, path })), [
+    { kind: 'setting', path: 'environment/worldviews/worldviewA/worldviewA.md' },
+    { kind: 'events', path: 'environment/worldviews/worldviewA/events.md' },
+    { kind: 'supplement', path: 'environment/worldviews/worldviewA/archive/earlier.md' }
+  ]);
+  await writeFile(join(root, 'environment/worldviews/worldviewA/events.md'), '# Updated events\n\nUPDATED_WORLD_A_EVENT');
+  const second = await readUserDocuments(root);
+  assert.match(second.worldviewDocuments.find(document => document.id === 'worldviewA' && document.kind === 'events').text, /UPDATED_WORLD_A_EVENT/);
+  assert.doesNotMatch(second.worldviewDocuments.find(document => document.id === 'worldview0' && document.kind === 'events').text, /UPDATED_WORLD_A_EVENT/);
+  await writeFile(profilePath, (await readFile(profilePath, 'utf8')).replace('| 所属世界观 | worldviewA |', '| 所属世界观 | worldviewB |'));
+  await assert.rejects(readUserDocuments(root), /不存在的世界观.*worldviewB/);
+});
+
+test('world folders require their matching setting and events and reject file or directory aliases', async t => {
+  const root = await fixture(t), base = join(root, 'environment/worldviews'), folder = join(base, 'worldviewA');
+  await mkdir(folder, { recursive: true });
+  const setting = join(folder, 'worldviewA.md'), events = join(folder, 'events.md');
+  await writeFile(join(folder, 'other-world.md'), '# Wrong filename');
+  await writeFile(events, '# Events');
+  await assert.rejects(readUserDocuments(root), error => error.code === 'ENOENT' && error.path.endsWith('/worldviewA/worldviewA.md'));
+  await writeFile(setting, '# Setting'); await rm(events);
+  await assert.rejects(readUserDocuments(root), error => error.code === 'ENOENT' && error.path.endsWith('/worldviewA/events.md'));
+  await writeFile(events, '# Events');
+  const external = join(root, 'outside.md'); await writeFile(external, '# Not a world document');
+  for (const path of [setting, events]) {
+    const source = await readFile(path); await rm(path); await symlink(external, path);
+    await assert.rejects(readUserDocuments(root), /符号链接/);
+    await rm(path); await writeFile(path, source);
+  }
+  const nested = join(folder, 'archive'); await symlink(root, nested, 'dir');
+  await assert.rejects(readUserDocuments(root), /符号链接/);
+  await rm(nested); await rm(folder, { recursive: true }); await symlink(root, folder, 'dir');
+  await assert.rejects(readUserDocuments(root), /符号链接/);
+});
+
 test('duplicate handles and symlinks to external profile or supplemental files are rejected', async t => {
   const user = account(), second = account('second-user'); second.handle = user.handle;
   const duplicate = await fixture(t, [user, second]);
