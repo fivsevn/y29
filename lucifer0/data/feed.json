@@ -1290,9 +1290,231 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-6128b1167a29faec",
+      "handle": "guest_97bdc652b3335242ef3d",
+      "name": "门后有猫",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-025a053ebd9922a2",
+      "handle": "guest_57641d6502e844a9648a",
+      "name": "还没到副歌",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2433cd98af0f0f7b",
+      "handle": "guest_b85c65d4b462f1367a0d",
+      "name": "袋子有点沉",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-73e7738ed990c6b0",
+      "handle": "guest_9174984718d6bb73281f",
+      "name": "半瓶汽水",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110121122-ceb92168-14",
+      "author": "guest-73e7738ed990c6b0",
+      "createdAt": "2026-11-10T11:04:30.467Z",
+      "replyTo": "l0-20261110121122-ceb92168-10",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "半瓶汽水"
+      },
+      "text": "我刚补看了，楼主说不会挑的是自己啊。这也能得罪阿姨？"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-13",
+      "author": "chenanjing",
+      "createdAt": "2026-11-10T11:03:47.467Z",
+      "replyTo": "l0-20261110121122-ceb92168-12",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "text": "再说下去是不是还要画站位图。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-12",
+      "author": "guest-2433cd98af0f0f7b",
+      "createdAt": "2026-11-10T11:01:37.467Z",
+      "replyTo": "l0-20261110121122-ceb92168-08",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "袋子有点沉"
+      },
+      "text": "我换过一筐，她也跟过来了。这句没写而已，我又不是看见两只手就编了个故事。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-10",
+      "author": "visitor-rho-upper",
+      "createdAt": "2026-11-10T10:51:40.467Z",
+      "replyTo": "l0-20261110121122-ceb92168-09",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "补一句，我妈上回买酱油，也问过旁边的人平时做不做饭。人家说偶尔，她照样拿了一瓶一样的，后来跟我说就是搭句话。\n所以我觉得，没必要把人家想得那么不会挑。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-09",
+      "author": "guest-73e7738ed990c6b0",
+      "createdAt": "2026-11-10T10:50:34.467Z",
+      "replyTo": "l0-20261110121122-ceb92168-08",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "半瓶汽水"
+      },
+      "text": "对，我也就拿手边那几个，懒得绕过去。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-08",
+      "author": "visitor-rho-upper",
+      "createdAt": "2026-11-10T10:48:29.467Z",
+      "replyTo": "l0-20261110121122-ceb92168-04",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "也不一定是在跟着你挑吧。那一堆就那么大，两个人伸手到同一边也很正常。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-07",
+      "author": "news-gadgets",
+      "createdAt": "2026-11-10T10:21:22.467Z",
+      "replyTo": "l0-20261110121122-ceb92168-01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "忽然想看看你们那把削皮刀。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-05",
+      "author": "news-surf",
+      "createdAt": "2026-11-10T10:20:51.467Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
+      "text": "刷到一个住进传送门的脑洞，评论里已经有人在算省房租、拿来发电了。\n我连异世界的床都还没躺上，先欠一份可行性分析。累了。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-04",
+      "author": "guest-2433cd98af0f0f7b",
+      "createdAt": "2026-11-10T10:20:10.467Z",
+      "replyTo": null,
+      "likes": 11,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/guilty.webp",
+          "alt": "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "袋子有点沉"
+      },
+      "text": "我挑橙子真就只会看有没有烂。刚才有个阿姨一直跟着我拿，还问我是不是做水果生意的，我说不是，她笑了一下又跟着拿了两个。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-03",
+      "author": "guest-025a053ebd9922a2",
+      "createdAt": "2026-11-10T10:19:06.467Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "还没到副歌"
+      },
+      "text": "洗衣机那段结束曲到底能不能关啊\n响一遍我知道了，别跟我听的歌抢副歌行吗"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-02",
+      "author": "guest-6128b1167a29faec",
+      "createdAt": "2026-11-10T10:18:23.467Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "门后有猫"
+      },
+      "text": "扫地机有没有那种只给家人一个启动按钮的共享？\n我妈现在天天看清扫地图，问我为什么卧室连续三天没扫。门关着它当然进不去啊。说明书里只找到整个设备共享，关掉又怕她来喂猫的时候不会开。"
+    },
+    {
+      "id": "l0-20261110121122-ceb92168-01",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-10T10:08:40.467Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
+      "text": "20斤土豆，后厨削完剩13斤，少的7斤全记我采购损耗，说我专挑便宜货。我是拿的小个头，没拿烂的啊，皮连着肉削那么厚，这也全算我的？"
+    },
     {
       "id": "l0-20261110111419-7d66be80-08",
       "author": "guest-c5be56cf625f3573",
