@@ -3,14 +3,14 @@ import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
-import { defaultLottery, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, drawPostChoices, choosePostAuthor, visibleExcerpt, drawResearchWindows } from './lottery.js';
+import { defaultLottery, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows } from './lottery.js';
 export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
 import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
-const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md', 'environment/meme.md'];
+const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md', 'environment/meme.md', 'environment/negative.md'];
 const controlPaths = ['README.md', 'docs/README.md', 'docs/writing.md', 'docs/publishing.md', 'docs/lottery.md', 'users/speech.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;
@@ -70,6 +70,26 @@ function threadRoot(id, byId) {
   return post;
 }
 
+function returningReplyAuthor({ seed, postId, choice, target, before, eligible, publicUsers, createdAt, now }) {
+  if (!target || !['root', 'participant'].includes(choice)) return null;
+  const rootPost = threadRoot(target.id, before), until = Math.min(now, Date.parse(createdAt));
+  const identity = post => {
+    if (!validDate(post.createdAt) || Date.parse(post.createdAt) > until) return null;
+    if (eligible.some(user => user.id === post.author)) return { author: post.author };
+    if (!/^guest-[a-z0-9-]+$/.test(post.author) || !ID.test(post.author)) return null;
+    const name = post.guest?.name ?? publicUsers.find(user => user.id === post.author)?.name;
+    return bounded(name, 40) ? { author: post.author, guest: { name } } : null;
+  };
+  if (choice === 'root') return identity(rootPost);
+  const participants = new Map();
+  for (const post of before.values()) {
+    if (post.author === rootPost.author || !validDate(post.createdAt) || Date.parse(post.createdAt) > until || threadRoot(post.id, before).id !== rootPost.id) continue;
+    const person = identity(post);
+    if (person && !participants.has(person.author)) participants.set(person.author, person);
+  }
+  return chooseReplyParticipant({ seed, postId, participants: [...participants.values()] });
+}
+
 export function planThreadReplies({ seed, posts, history = [], replyLottery, threadIds = [] }) {
   validateReplyLottery(replyLottery);
   if (!Array.isArray(threadIds) || threadIds.some(id => typeof id !== 'string' || !ID.test(id))) fail('Continuation targets must be valid post IDs');
@@ -118,7 +138,7 @@ function planSeal(id, root, plan) {
 }
 const operationSourceDigest = (data, plan) => Object.keys(planExtensions(plan)).length ? digest({ sourceDigest: data.sourceDigest, ...planExtensions(plan) }) : data.sourceDigest;
 function checkOperation(value, root) {
-  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status'], 'operation');
+  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
   onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow'], 'saved plan');
@@ -136,7 +156,29 @@ function checkOperation(value, root) {
   if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 20 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
   const drawnBudget = drawRootBudget(plan.seed, plan.lottery);
   if (plan.budget !== (plan.replyLottery === undefined ? plan.requestedCount ?? drawnBudget : drawnBudget) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
+  if (value.reviews !== undefined) reviewIndex(value);
   return value;
+}
+
+function reviewIndex(operation) {
+  const reviews = operation.reviews ?? [];
+  if (!Array.isArray(reviews)) fail('Invalid content reviews');
+  const posts = new Set(operation.posts.map(post => post.id)), indexed = new Map();
+  for (const review of reviews) {
+    onlyKeys(review, ['postId', 'negative', 'reason'], 'content review');
+    if (!ID.test(review.postId) || !posts.has(review.postId) || indexed.has(review.postId) || typeof review.negative !== 'boolean' || !bounded(review.reason, 240)) fail('Invalid content review: use one actual post ID, a boolean and a concrete reason');
+    indexed.set(review.postId, review);
+  }
+  return indexed;
+}
+
+function discussionProgress(operation, posts = operation.posts) {
+  const config = operation.plan.lottery?.discussion;
+  if (!config) return null;
+  const indexed = reviewIndex(operation);
+  for (const post of posts) if (!indexed.has(post.id)) fail('Review saved drafts before requesting the next brief or publishing: ' + post.id);
+  const negativePosts = posts.filter(post => indexed.get(post.id).negative).length;
+  return { minimumNegativeShare: config.minimumNegativeShare, reviewedPosts: posts.length, negativePosts };
 }
 
 async function checkedRoot(root) {
@@ -232,12 +274,13 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
       const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, lottery: data.policy.lottery ?? defaultLottery, maxBatchPosts: data.policy.maxBatchPosts });
       plan.timeWindow = { start: new Date(now - DAY).toISOString(), end: new Date(now).toISOString() };
       plan.seal = planSeal(id, root, plan);
-      operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared' };
+      operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared', ...(plan.lottery?.discussion ? { reviews: [] } : {}) };
     } else {
       if (operation.plan.lottery === undefined) {
         // Upgrade only the new presentation rules; keep the original numeric budget draw.
         operation.plan.lottery = structuredClone(data.policy.lottery ?? defaultLottery);
         operation.plan.lottery.rootBudget = { min: 1, max: 10 };
+        delete operation.plan.lottery.discussion;
       }
       operation.plan.timeWindow ??= { start: new Date(Date.parse(operation.preparedAt) - DAY).toISOString(), end: operation.preparedAt };
       operation.plan.seal = planSeal(operation.id, root, operation.plan);
@@ -320,11 +363,11 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const choices = drawPostChoices({ seed: operation.plan.seed, postId, replyTo: targetId, lottery: config });
   const eligible = data.registry.users.filter(user => ready(user, data.material) &&
     (targetId === null ? user.allowPosts !== false && operation.plan.selectedIds.includes(user.id) : user.allowReplies !== false));
-  const author = existing?.author ?? choosePostAuthor({ seed: operation.plan.seed, postId, authorKind: choices.authorKind, users: eligible, profiles: data.material.profiles });
-  const guest = typeof author === 'string' && /^guest-[a-z0-9-]+$/.test(author) && ID.test(author);
-  const ownUser = eligible.find(user => user.id === author);
-  if (!guest && !ownUser) fail('Account is not eligible for this draft: ' + author);
   const priorDrafts = operation.posts.slice(0, position < 0 ? operation.posts.length : position);
+  const progress = discussionProgress(operation, priorDrafts);
+  const requiredNegativePosts = progress ? Math.ceil((progress.reviewedPosts + 1) * progress.minimumNegativeShare) : 0;
+  const discussion = progress ? { ...progress, requiredNegativePosts, missingNegativePosts: Math.max(0, requiredNegativePosts - progress.negativePosts),
+    requiredTone: progress.negativePosts < requiredNegativePosts ? 'negative' : 'open', ...choices.discussion } : null;
   const before = new Map([...data.feed.posts, ...priorDrafts].filter(post => post.id !== postId).map(post => [post.id, post]));
   const target = targetId === null ? null : before.get(targetId);
   if (targetId !== null && !target) fail('A brief needs its actual earlier target, archived or in an earlier draft slot');
@@ -335,7 +378,13 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   if (existing && (!validDate(createdAt) || Date.parse(createdAt) > now || now - Date.parse(createdAt) > 2 * DAY || target && Date.parse(target.createdAt) > Date.parse(createdAt))) fail('Brief timestamps must be current, real and follow the visible target');
   const timing = { status: existing || Date.parse(createdAt) <= Date.parse(window.end) && Date.parse(createdAt) <= now && now - Date.parse(createdAt) <= 2 * DAY ? 'ready' : 'deferred',
     earliestAt: createdAt, availableUntil: window.end, source: existing ? 'saved-draft' : 'saved-window' };
-  const draft = { id: postId, author, ...(guest ? { guest: existing?.guest ?? { name: '' } } : {}), createdAt, replyTo: targetId, text: existing?.text ?? '', likes: existing?.likes ?? choices.likes, canon: 'derivative', media: existing?.media ?? [] };
+  const returning = existing ? null : returningReplyAuthor({ seed: operation.plan.seed, postId, choice: choices.discussion?.replyAuthor,
+    target, before, eligible, publicUsers: data.feed.users, createdAt, now });
+  const author = existing?.author ?? returning?.author ?? choosePostAuthor({ seed: operation.plan.seed, postId, authorKind: choices.authorKind, users: eligible, profiles: data.material.profiles });
+  const guest = typeof author === 'string' && /^guest-[a-z0-9-]+$/.test(author) && ID.test(author);
+  const ownUser = eligible.find(user => user.id === author);
+  if (!guest && !ownUser) fail('Account is not eligible for this draft: ' + author);
+  const draft = { id: postId, author, ...(guest ? { guest: existing?.guest ?? returning?.guest ?? { name: '' } } : {}), createdAt, replyTo: targetId, text: existing?.text ?? '', likes: existing?.likes ?? choices.likes, canon: 'derivative', media: existing?.media ?? [] };
   validatePostBudget(operation.plan, existing ? operation.posts : [...operation.posts, draft], data.feed.posts, data.policy);
   const visible = new Map();
   if (target) {
@@ -360,20 +409,31 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const profilePaths = new Set(guest ? [] : ['users/' + author + '/profile.md', ...(data.material.supplementalDocuments[author] || []).map(document => document.path)]);
   const profiles = data.documents.filter(document => profilePaths.has(document.path)).map(writerProfile);
   const writing = data.documents.find(document => document.path === 'docs/writing.md');
+  const writerSource = path => { const document = data.documents.find(document => document.path === path); return { sourcePath: document.path, text: document.text }; };
   return {
     id: operation.id, postId, draft: timing.status === 'ready' ? draft : null,
     writer: {
       createdAt,
       writing: { sourcePath: writing.path, text: writing.text },
       self: { id: author, name: guest ? draft.guest.name : ownUser.name, documents: profiles.map(profile => profile.document),
+        recentPosts: [...before.values()].filter(post => post.author === author && validDate(post.createdAt) && Date.parse(post.createdAt) <= Math.min(now, Date.parse(createdAt)))
+          .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en')).slice(0, 5)
+          .map(post => ({ id: post.id, createdAt: post.createdAt, replyTo: post.replyTo, text: post.deleted ? '该回复已被删除。' : post.text, media: post.deleted ? [] : post.media })),
         voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
-      conditions: choices.conditions.map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
+      conditions: choices.conditions.filter(condition => condition.dimension !== 'motivation' || !discussion || targetId === null && discussion.requiredTone !== 'negative').map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
+      ...(target ? { comments: writerSource('environment/comments.md') } : {}),
+      ...(discussion ? { discussion: { requiredTone: discussion.requiredTone,
+        ...(discussion.requiredTone === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: writerSource('environment/negative.md') } : {}),
+        ...(target ? { replyStance: discussion.replyStance } : {}),
+        rules: writerSource('docs/lottery.md') } } : {}),
       visiblePosts
     },
     editor: {
       authorKind: guest ? 'guest' : 'library', drawnAuthorKind: choices.authorKind,
       worldviewPath: guest ? null : data.material.worldviewDocuments.find(document => document.id === data.material.profiles[author].basics.worldview)?.path ?? null,
       waitSeconds: choices.waitSeconds,
+      ...(target && choices.discussion?.replyAuthor ? { replyAuthor: { drawn: choices.discussion.replyAuthor, used: existing ? 'saved' : returning ? choices.discussion.replyAuthor : 'new' } } : {}),
+      ...(discussion ? { discussion } : {}),
       timing, suggestedNotBefore: createdAt,
       image: choices.image, likes: choices.likes, reading: choices.reading, textWindow: choices.textWindow,
       instruction: timing.status === 'deferred' ? '本轮跳过该候选，后续更新重新评估。' : '将 writer 单独交给写作者；partial 表示只读到片段。将实际采用的正文、时间、图片和 guest 名字填入 draft，再保存到 operation.json.posts。抽签使用见 docs/lottery.md，创作见 docs/writing.md。'
@@ -426,6 +486,8 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
   const resumingPartialWrite = data.pending?.id === batch.id && data.pending.batchDigest === digest(batch);
   validatePostBudget(operation.plan, batch.posts, data.feed.posts, data.policy);
+  const discussion = discussionProgress(operation);
+  if (discussion && discussion.negativePosts < Math.ceil(batch.posts.length * discussion.minimumNegativeShare)) fail('The update has fewer reviewed negative posts than its saved minimum share');
   const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));
   const users = new Map(data.registry.users.map(user => [user.id, user]));
   const posts = new Map([...data.feed.posts, ...batch.posts].map(post => [post.id, post]));
@@ -503,6 +565,7 @@ export async function cancelUpdate({ root = socialRoot, workDirectory, now = Dat
       const result = pending ? await cancelPendingBatch(root, { id: operation.id }) : { status: 'no-pending', count: 0 };
       const data = await source(root);
       operation.posts = [];
+      if (operation.reviews !== undefined) operation.reviews = [];
       operation.preparedAt = new Date(now).toISOString();
       operation.sourceDigest = operationSourceDigest(data, operation.plan);
       operation.status = 'prepared';

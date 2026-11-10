@@ -70,7 +70,7 @@ test('individual references stay with users and the environment includes interac
   const { registry } = await readUserDocuments(socialRoot);
   const individualNotes = await readFile(join(socialRoot, 'users/README.md'), 'utf8');
   const environmentPath = join(socialRoot, 'environment');
-  const environmentFiles = ['README.md', 'world-trends.md', 'everyday-life.md', 'comments.md', 'meme.md', 'forum.md'];
+  const environmentFiles = ['README.md', 'world-trends.md', 'everyday-life.md', 'comments.md', 'meme.md', 'forum.md', 'negative.md'];
   assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles, 'worldviews'].sort());
   const environmentIndex = await readFile(join(environmentPath, 'README.md'), 'utf8');
   for (const name of environmentFiles) {

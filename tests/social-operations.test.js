@@ -8,7 +8,9 @@ import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch
 import { emptyProfile } from '../lucifer0/tools/profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
-import { defaultLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
+import { defaultLottery as productionLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
+const defaultLottery = structuredClone(productionLottery);
+delete defaultLottery.discussion;
 import { createHash } from 'node:crypto';
 import { loadContent, ingestBatch } from '../lucifer0/tools/content.js';
 
@@ -45,8 +47,8 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
   await mkdir(join(root, 'assets'), { recursive: true });
   await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
-  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), ...(lottery !== undefined ? { lottery } : {}) }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']]]) {
+  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery }));
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md', 'negative.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
@@ -734,7 +736,7 @@ test('writer brief has only own dossier and the actually visible target fragment
   assert.ok(first.writer.self.documents.some(doc => doc.text.includes('SYNTHETIC_FULL_PERSON_' + first.draft.author)));
   assert.equal(first.writer.visiblePosts.length, 0);
   const root = { ...first.draft, createdAt: post('timestamp-helper', 'guest-helper', f.now).createdAt, text: 'A'.repeat(90) + 'SYNTHETIC_UNREAD_END' };
-  const ownAuthor = prepared.selectedIds[0];
+  const ownAuthor = prepared.selectedIds.find(id => id !== root.author);
   const reply = post(replyId, ownAuthor, f.now, rootId);
   const future = post(prepared.id + '-future', 'person-7', f.now, rootId); future.text = 'SYNTHETIC_FUTURE_FLOOR';
   await draft(prepared, f.now, [root, reply, future]);
@@ -910,4 +912,272 @@ test('writer profile separates marked practice examples while preserving facts a
     { text: '练习句：困', sourcePath: 'users/' + first.draft.author + '/profile.md' }
   ] });
   assert.equal(await readFile(profilePath, 'utf8'), changed);
+});
+
+const reviewed = (posts, negatives) => posts.map((post, index) => ({ postId: post.id, negative: index < negatives, reason: index < negatives ? 'Synthetic reviewed conflict about a specific boundary.' : 'Synthetic ordinary information without a negative stance.' }));
+async function saveReviews(path, reviews) {
+  const operation = await readJSON(path); operation.reviews = reviews;
+  await writeFile(path, JSON.stringify(operation));
+  return operation;
+}
+
+test('negative share is enforced on all actually adopted roots and replies with odd totals rounded up', async t => {
+  const f = await fixture(t, 4, { lottery: productionLottery, replyLottery: fixedReplies(119, 120), maxBatchPosts: 120 });
+  const prepared = await prepareUpdate(f.options);
+  for (const count of [1, 2, 3, 4, 7, 20, 120]) {
+    const entries = Array.from({ length: count }, (_, index) => post('quota-' + count + '-' + index, 'guest-quota-' + count + '-' + index, f.now, index ? 'quota-' + count + '-0' : null));
+    const { batch } = await draft(prepared, f.now, entries), minimum = Math.ceil(count * productionLottery.discussion.minimumNegativeShare);
+    const reviews = reviewed(entries, minimum);
+    await saveReviews(prepared.operationPath, reviews);
+    await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
+    reviews[0].negative = false;
+    await saveReviews(prepared.operationPath, reviews);
+    await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /fewer reviewed negative/);
+  }
+});
+
+test('private reviews require one actual ID and a concrete boolean judgment per adopted post', async t => {
+  const f = await fixture(t, 4, { lottery: productionLottery }), prepared = await prepareUpdate(f.options);
+  const entries = [post('review-one', 'guest-review-one', f.now), post('review-two', 'guest-review-two', f.now)];
+  const { batch } = await draft(prepared, f.now, entries), valid = reviewed(entries, 1);
+  for (const invalid of [[], valid.slice(0, 1), [...valid, valid[0]], [{ ...valid[0], postId: 'not-adopted' }, valid[1]], [{ ...valid[0], negative: 'yes' }, valid[1]], [{ ...valid[0], reason: ' ' }, valid[1]]]) {
+    await saveReviews(prepared.operationPath, invalid);
+    await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /content review|Review saved drafts/);
+  }
+  await saveReviews(prepared.operationPath, valid);
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  const feed = (await loadContent(f.root)).feed;
+  assert.ok(feed.posts.every(post => !Object.hasOwn(post, 'negative') && !Object.hasOwn(post, 'reason')));
+});
+
+test('brief fills the actual reviewed gap and always carries negative guidance outside optional conditions', async t => {
+  const lottery = structuredClone(productionLottery);
+  lottery.conditionCount = { min: 1, max: 1 };
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(4) }), prepared = await prepareUpdate(f.options);
+  const first = await briefUpdatePost({ ...f.options, postId: prepared.id + '-first' });
+  assert.equal(first.writer.discussion.requiredTone, 'negative');
+  assert.equal(first.editor.discussion.missingNegativePosts, 1);
+  assert.ok(first.writer.discussion.negativeMotivation);
+  assert.deepEqual(first.writer.discussion.rules, { sourcePath: 'docs/lottery.md', text: await readFile(join(f.root, 'docs/lottery.md'), 'utf8') });
+  assert.deepEqual(first.writer.discussion.research, { sourcePath: 'environment/negative.md', text: await readFile(join(f.root, 'environment/negative.md'), 'utf8') });
+  assert.ok(first.writer.conditions.every(condition => condition.dimension !== 'motivation'));
+  const firstPost = { ...first.draft, guest: { name: 'Synthetic first' }, text: 'A concrete adopted request; reviewers decide its actual stance.' };
+  await draft(prepared, f.now, [firstPost]);
+  const next = { ...f.options, postId: prepared.id + '-reply', replyTo: firstPost.id };
+  await assert.rejects(briefUpdatePost(next), /Review saved drafts/);
+  await saveReviews(prepared.operationPath, [{ postId: firstPost.id, negative: false, reason: 'A request for instructions, with no negative stance.' }]);
+  const shortage = await briefUpdatePost(next);
+  assert.equal(shortage.writer.discussion.requiredTone, 'negative');
+  assert.equal(shortage.editor.discussion.negativePosts, 0);
+  assert.deepEqual(shortage.writer.comments, { sourcePath: 'environment/comments.md', text: await readFile(join(f.root, 'environment/comments.md'), 'utf8') });
+  assert.ok(shortage.writer.discussion.replyStance);
+  await saveReviews(prepared.operationPath, [{ postId: firstPost.id, negative: true, reason: 'Changed text explicitly accuses the other person of crossing a boundary.' }]);
+  const open = await briefUpdatePost(next);
+  assert.equal(open.writer.discussion.requiredTone, 'open');
+  assert.ok(!Object.hasOwn(open.writer.discussion, 'research'));
+  assert.equal(open.writer.discussion.replyStance, shortage.writer.discussion.replyStance);
+  assert.equal(open.editor.waitSeconds, shortage.editor.waitSeconds);
+});
+
+test('negative and comments source changes refresh actual writer input while keeping the saved plan and draws', async t => {
+  const f = await fixture(t, 4, { lottery: productionLottery, replyLottery: fixedReplies(4) }), prepared = await prepareUpdate(f.options);
+  const entry = post(prepared.id + '-root', 'guest-source-root', f.now - 1000);
+  await draft(prepared, f.now, [entry]);
+  await saveReviews(prepared.operationPath, [{ postId: entry.id, negative: false, reason: 'Ordinary setup for the synthetic reply.' }]);
+  const options = { ...f.options, postId: prepared.id + '-reply', replyTo: entry.id }, first = await briefUpdatePost(options);
+  const saved = await readJSON(prepared.operationPath);
+  for (const path of ['environment/comments.md', 'environment/negative.md']) {
+    const updated = '# Updated canonical source ' + path;
+    await writeFile(join(f.root, path), updated);
+    await assert.rejects(briefUpdatePost(options), /Source material changed/);
+    await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+    const refreshed = await briefUpdatePost(options);
+    assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
+    assert.equal(refreshed.editor.waitSeconds, first.editor.waitSeconds);
+    assert.equal(refreshed.writer.discussion.negativeMotivation, first.writer.discussion.negativeMotivation);
+    assert.equal(refreshed.writer.discussion.replyStance, first.writer.discussion.replyStance);
+    assert.equal((path.endsWith('comments.md') ? refreshed.writer.comments : refreshed.writer.discussion.research).text, updated);
+  }
+});
+
+test('legacy discussion-free snapshots keep working without reviews and empty new operations finish normally', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options), saved = await readJSON(prepared.operationPath);
+  const entries = [post('legacy-no-review', 'guest-legacy-no-review', f.now)];
+  const { batch } = await draft(prepared, f.now, entries);
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.lottery = structuredClone(productionLottery); await writeFile(policyPath, JSON.stringify(policy));
+  await prepareUpdate(f.options);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
+  const empty = await fixture(t, 4, { lottery: productionLottery }), emptyPrepared = await prepareUpdate(empty.options);
+  assert.deepEqual((await readJSON(emptyPrepared.operationPath)).reviews, []);
+  assert.equal((await finishUpdate(empty.options)).status, 'no-posts');
+});
+
+test('cancelling reviewed drafts clears their reviews and permits the same saved operation to resume', async t => {
+  const f = await fixture(t, 4, { lottery: productionLottery }), prepared = await prepareUpdate(f.options);
+  const entry = post(prepared.id + '-cancel-reviewed', 'guest-cancel-reviewed', f.now);
+  await draft(prepared, f.now, [entry]);
+  await saveReviews(prepared.operationPath, [{ postId: entry.id, negative: true, reason: 'The speaker accuses a roommate of taking their property.' }]);
+  const plan = (await readJSON(prepared.operationPath)).plan;
+  await cancelUpdate(f.options);
+  const cleared = await readJSON(prepared.operationPath);
+  assert.deepEqual(cleared.posts, []);
+  assert.deepEqual(cleared.reviews, []);
+  assert.deepEqual(cleared.plan, plan);
+  await prepareUpdate(f.options);
+  const next = await briefUpdatePost({ ...f.options, postId: prepared.id + '-resumed' });
+  assert.equal(next.writer.discussion.requiredTone, 'negative');
+  assert.equal(next.editor.discussion.reviewedPosts, 0);
+});
+
+test('own recent posts supply actual voice context without later, deleted or other authors bodies', async t => {
+  const lottery = structuredClone(defaultLottery); lottery.authorKind = [{ value: 'library', weight: 1 }];
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(20), maxBatchPosts: 120 }), prepared = await prepareUpdate(f.options);
+  const first = await briefUpdatePost({ ...f.options, postId: prepared.id + '-current' }), own = first.draft.author;
+  const prior = Array.from({ length: 7 }, (_, index) => ({ ...post(prepared.id + '-own-' + index, own, f.now - 10000 + index * 1000, 'history-entry'), text: 'OWN_' + index }));
+  prior[6].deleted = true; prior[6].text = 'PRIVATE_DELETED_BODY';
+  prior.push({ ...post(prepared.id + '-future', own, f.now + 1000, 'history-entry'), text: 'LATER_OWN_BODY' });
+  prior.push({ ...post(prepared.id + '-other', 'guest-other-voice', f.now - 10, 'history-entry'), text: 'OTHER_AUTHOR_BODY' });
+  await draft(prepared, f.now, [...prior, { ...first.draft, createdAt: iso(f.now), text: 'CURRENT_BODY' }]);
+  const brief = await briefUpdatePost({ ...f.options, postId: first.postId });
+  assert.equal(brief.writer.self.recentPosts.length, 5);
+  assert.equal(brief.writer.self.recentPosts[0].text, '该回复已被删除。');
+  assert.deepEqual(brief.writer.self.recentPosts.slice(1).map(post => post.text), ['OWN_5', 'OWN_4', 'OWN_3', 'OWN_2']);
+  for (const body of ['PRIVATE_DELETED_BODY', 'LATER_OWN_BODY', 'OTHER_AUTHOR_BODY', 'CURRENT_BODY']) assert.ok(!JSON.stringify(brief.writer.self.recentPosts).includes(body));
+});
+
+async function replyIdentityFixture(t, replyAuthor) {
+  const lottery = structuredClone(productionLottery);
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  lottery.waitSeconds = [{ weight: 1, min: 1, max: 1 }];
+  lottery.reading = [{ value: 'target-only', weight: 1 }];
+  lottery.discussion.replyAuthor = [{ value: replyAuthor, weight: 1 }];
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(10), maxBatchPosts: 120 }), prepared = await prepareUpdate(f.options);
+  return { ...f, prepared };
+}
+async function saveIdentityDraft(f, entries) {
+  await draft(f.prepared, f.now, entries);
+  await saveReviews(f.prepared.operationPath, reviewed(entries, entries.length));
+}
+
+test('guest thread author can return to a nested reply with the same identity and own voice history', async t => {
+  const f = await replyIdentityFixture(t, 'root'), id = f.prepared.id;
+  const root = { ...post(id + '-root', 'guest-original-author', f.now - 15000), guest: { name: 'Original name' }, text: 'ORIGINAL_ROOT_BODY' };
+  const reply = post(id + '-other', 'guest-other-reader', f.now - 10000, root.id);
+  const oldReturn = { ...post(id + '-old-return', root.author, f.now - 5000, reply.id), guest: root.guest, text: 'OWN_PREVIOUS_RESPONSE' };
+  await saveIdentityDraft(f, [root, reply, oldReturn]);
+  const options = { ...f.options, postId: id + '-return', replyTo: reply.id }, brief = await briefUpdatePost(options);
+  assert.equal(brief.editor.replyAuthor.drawn, 'root'); assert.equal(brief.editor.replyAuthor.used, 'root');
+  assert.equal(brief.draft.author, root.author); assert.deepEqual(brief.draft.guest, root.guest);
+  assert.equal(brief.writer.self.id, root.author); assert.equal(brief.writer.self.name, root.guest.name);
+  assert.deepEqual(brief.writer.self.documents, []);
+  assert.deepEqual(brief.writer.self.recentPosts.map(post => post.text), ['OWN_PREVIOUS_RESPONSE', 'ORIGINAL_ROOT_BODY']);
+  assert.deepEqual(brief.writer.visiblePosts.map(post => post.id), [reply.id]);
+  assert.deepEqual(await briefUpdatePost(options), brief);
+  const adopted = { ...brief.draft, text: 'The same guest returns with a concrete counterclaim.' };
+  await saveIdentityDraft(f, [root, reply, oldReturn, adopted]);
+  await ingestBatch(f.prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  const feed = (await loadContent(f.root)).feed;
+  assert.equal(feed.posts.filter(post => post.author === root.author).length, 3);
+  assert.equal(feed.users.filter(user => user.id === root.author).length, 1);
+  await prepareUpdate(f.options);
+  const saved = await briefUpdatePost(options);
+  assert.equal(saved.draft.author, root.author); assert.equal(saved.editor.replyAuthor.used, 'saved');
+});
+
+test('an earlier guest participant returns while root author and unrelated threads stay outside that pool', async t => {
+  const f = await replyIdentityFixture(t, 'participant'), id = f.prepared.id;
+  const root = post(id + '-root', 'guest-participant-root', f.now - 15000);
+  const participant = { ...post(id + '-participant', 'guest-known-reader', f.now - 10000, root.id), guest: { name: 'Known reader' }, text: 'KNOWN_PARTICIPANT_BODY' };
+  const unrelated = post(id + '-unrelated', 'guest-unrelated-author', f.now - 9000);
+  const outsider = post(id + '-outsider', 'guest-outsider-reader', f.now - 8000, unrelated.id);
+  await saveIdentityDraft(f, [root, participant, unrelated, outsider]);
+  const brief = await briefUpdatePost({ ...f.options, postId: id + '-return', replyTo: root.id });
+  assert.equal(brief.editor.replyAuthor.used, 'participant');
+  assert.equal(brief.draft.author, participant.author); assert.deepEqual(brief.draft.guest, participant.guest);
+  assert.deepEqual(brief.writer.self.recentPosts.map(post => post.text), ['KNOWN_PARTICIPANT_BODY']);
+  assert.ok(!JSON.stringify(brief.writer.self).includes(outsider.author));
+});
+
+test('returning library participants load their own dossier and current permissions govern the fallback', async t => {
+  for (const permission of ['allowed', 'disabled', 'no-replies', 'admin']) {
+    const f = await replyIdentityFixture(t, 'participant'), id = f.prepared.id;
+    const root = post(id + '-root', 'guest-library-root', f.now - 15000);
+    const participant = { ...post(id + '-participant', 'person-0', f.now - 10000, root.id), text: 'LIBRARY_OWN_PREVIOUS' };
+    if (permission === 'disabled') await configureAccount(f.root, 'person-0', { enabled: false });
+    if (permission === 'no-replies') await configureAccount(f.root, 'person-0', { allowReplies: false });
+    if (permission === 'admin') {
+      await configureAccount(f.root, 'person-0', { kind: 'admin', sourceWork: '' });
+      await writeFile(join(f.root, 'users/person-0/profile.md'), renderUserDocument({ ...users()[0], kind: 'admin', sourceWork: '' }, emptyProfile('person-0')));
+    }
+    await prepareUpdate(f.options);
+    await saveIdentityDraft(f, [root, participant]);
+    const brief = await briefUpdatePost({ ...f.options, postId: id + '-return', replyTo: root.id });
+    if (permission === 'allowed') {
+      assert.equal(brief.draft.author, participant.author); assert.equal(brief.editor.replyAuthor.used, 'participant');
+      assert.ok(brief.writer.self.documents.some(document => document.text.includes('SYNTHETIC_FULL_PERSON_person-0')));
+      assert.equal(brief.writer.self.recentPosts[0].text, 'LIBRARY_OWN_PREVIOUS');
+      for (const person of users().filter(user => user.id !== participant.author)) assert.ok(!JSON.stringify(brief.writer.self).includes('SYNTHETIC_FULL_PERSON_' + person.id));
+    } else {
+      assert.equal(brief.editor.replyAuthor.used, 'new'); assert.ok(brief.draft.author.startsWith('guest-'));
+      assert.notEqual(brief.draft.author, participant.author); assert.deepEqual(brief.writer.self.documents, []);
+    }
+  }
+});
+
+test('unavailable root and future-only participants use the original new-author fallback without timing changes', async t => {
+  const f = await replyIdentityFixture(t, 'root'), id = f.prepared.id;
+  await configureAccount(f.root, 'person-0', { allowReplies: false });
+  await prepareUpdate(f.options);
+  const root = post(id + '-root', 'person-0', f.now - 10000);
+  await saveIdentityDraft(f, [root]);
+  const brief = await briefUpdatePost({ ...f.options, postId: id + '-return', replyTo: root.id });
+  assert.equal(brief.editor.replyAuthor.used, 'new'); assert.ok(brief.draft.author.startsWith('guest-'));
+  assert.equal(brief.editor.waitSeconds, 1);
+  assert.equal(brief.draft.createdAt, iso(Date.parse(root.createdAt) + 1000));
+
+  const future = await replyIdentityFixture(t, 'participant'), futureId = future.prepared.id;
+  const pastRoot = post(futureId + '-root', 'guest-future-root', future.now - 10000);
+  const later = post(futureId + '-future-participant', 'guest-later-reader', future.now + 5000, pastRoot.id);
+  await saveIdentityDraft(future, [pastRoot, later]);
+  const deferred = await briefUpdatePost({ ...future.options, postId: futureId + '-return', replyTo: pastRoot.id });
+  assert.equal(deferred.editor.timing.status, 'deferred'); assert.equal(deferred.draft, null);
+  assert.equal(deferred.editor.replyAuthor.used, 'new'); assert.notEqual(deferred.writer.self.id, later.author);
+});
+
+test('saved snapshots without replyAuthor preserve the new-author result after the policy gains identity draws', async t => {
+  const lottery = structuredClone(productionLottery); delete lottery.discussion.replyAuthor;
+  lottery.authorKind = [{ value: 'guest', weight: 1 }]; lottery.waitSeconds = [{ weight: 1, min: 1, max: 1 }];
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(5) }), prepared = await prepareUpdate(f.options);
+  const root = post(prepared.id + '-root', 'guest-legacy-original', f.now - 5000);
+  await draft(prepared, f.now, [root]); await saveReviews(prepared.operationPath, reviewed([root], 1));
+  const options = { ...f.options, postId: prepared.id + '-reply', replyTo: root.id }, before = await briefUpdatePost(options);
+  assert.notEqual(before.draft.author, root.author); assert.ok(!Object.hasOwn(before.editor, 'replyAuthor'));
+  const originalPlan = (await readJSON(prepared.operationPath)).plan;
+  const policy = await readJSON(join(f.root, 'publication.json'));
+  policy.lottery.discussion.replyAuthor = [{ value: 'root', weight: 1 }];
+  await writeFile(join(f.root, 'publication.json'), JSON.stringify(policy)); await prepareUpdate(f.options);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, originalPlan);
+  assert.deepEqual(await briefUpdatePost(options), before);
+});
+
+test('discussion replies use their stance instead of root motivations while legacy replies retain the original conditions', async t => {
+  for (const discussion of [true, false]) {
+    const lottery = structuredClone(productionLottery);
+    lottery.authorKind = [{ value: 'guest', weight: 1 }]; lottery.motivation = [{ value: 'ask-help', weight: 1 }];
+    lottery.conditionCount = { min: 2, max: 2 }; lottery.waitSeconds = [{ weight: 1, min: 1, max: 1 }];
+    if (discussion) lottery.discussion.minimumNegativeShare = 0; else delete lottery.discussion;
+    const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(5) }), prepared = await prepareUpdate(f.options);
+    const rootBrief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-root' });
+    assert.ok(rootBrief.writer.conditions.some(condition => condition.dimension === 'motivation' && condition.value === 'ask-help'));
+    const root = { ...rootBrief.draft, guest: { name: 'Synthetic root' }, text: 'A neutral request for help.' };
+    await draft(prepared, f.now, [root]);
+    if (discussion) await saveReviews(prepared.operationPath, reviewed([root], 0));
+    const reply = await briefUpdatePost({ ...f.options, postId: prepared.id + '-reply', replyTo: root.id });
+    assert.equal(reply.writer.conditions.some(condition => condition.dimension === 'motivation'), !discussion);
+    if (discussion) assert.ok(reply.writer.discussion.replyStance);
+    assert.ok(reply.writer.conditions.some(condition => condition.dimension === 'length'));
+  }
 });

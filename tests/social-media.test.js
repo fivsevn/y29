@@ -15,7 +15,7 @@ const dateParts = Object.fromEntries(new Intl.DateTimeFormat('en', { timeZone: '
 const threadPath = `posts/${dateParts.year}/${dateParts.month}/media-test-root`;
 const imagePath = `${threadPath}/media/sample.png`;
 function post(now, id = 'media-test-root', replyTo = null) {
-  return { id, author: 'guest-media-test', guest: { name: 'Media fixture user' }, createdAt: new Date(now).toISOString(), replyTo, text: 'Original body.\nmedia: keep this literal body line.', likes: 0, canon: 'derivative', media: [{ src: imagePath, alt: 'Transparent image fixture' }] };
+  return { id, author: 'guest-media-test', guest: { name: 'Media fixture user' }, createdAt: new Date(now).toISOString(), replyTo, text: 'The delivered item is damaged.\nmedia: keep this literal body line.', likes: 0, canon: 'derivative', media: [{ src: imagePath, alt: 'Transparent image fixture' }] };
 }
 async function fixture(t) {
   const dir = await mkdtemp(join(tmpdir(), 'y29-media-'));
@@ -55,6 +55,7 @@ test('AI import saves WebP in operation, source and feed, shares reply image, an
   const prepared = await prepareUpdate({ root: f.root, workDirectory: f.work, requestedCount: 2, now: f.now });
   const operation = await readJSON(prepared.operationPath);
   operation.posts = [post(f.now), post(f.now + 1000, 'media-test-reply', 'media-test-root')];
+  operation.reviews = operation.posts.map(entry => ({ postId: entry.id, negative: true, reason: 'The author complains about the damaged delivered item.' }));
   operation.posts[0].media[0].fit = 'contain';
   operation.research = [
     { category: 'news', kind: 'feed', url: 'https://example.org/news', visitedAt: new Date(f.now).toISOString(), publishedAt: new Date(f.now).toISOString(), summary: 'Read the public announcement.' },
@@ -161,6 +162,7 @@ test('separate AI context and batch recover a media-only half-saved conversion',
   const operation = await readJSON(prepared.operationPath);
   const entry = post(f.now);
   operation.posts = [entry];
+  operation.reviews = [{ postId: entry.id, negative: true, reason: 'The author complains about the damaged delivered item.' }];
   operation.research = [
     { category: 'news', kind: 'feed', url: 'https://example.org/news', visitedAt: new Date(f.now).toISOString(), publishedAt: new Date(f.now).toISOString(), summary: 'Read the public announcement.' },
     { category: 'trend', kind: 'thread', url: 'https://example.net/thread', visitedAt: new Date(f.now).toISOString(), publishedAt: null, summary: 'Read the discussion and replies.' },
