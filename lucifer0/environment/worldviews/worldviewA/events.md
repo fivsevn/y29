@@ -10,4 +10,4 @@
 
 | 编号 | 现实来源、原始日期与读取范围 | 虚构事实、时间与适用范围 | 当前阶段与持续影响 | 更新日期与关联帖号（可空） |
 | --- | --- | --- | --- | --- |
-| WT-20261109-02 | [TfL 夜间生活研究公告](https://tfl.gov.uk/info-for/media/press-releases/2026/november/night-tube-at-10-new-report-shows-london-leads-european-capitals-for-combined-strength-of-nightlife-and-public-transport)，日级发布日期2026-11-05，具体时分未知；已读正文及编辑注释，研究报告未下载 | 真心猎手世界（`worldviewA`）城南的回声厅、旧船坞两家小型演出场馆于2026-11-09预告：11月13日起在入场提示中列出夜间上车点和散场步行出口，先试两个周末 | 预告阶段，仅影响这两家场馆的晚场观众；这是散场信息提示的调整，交通线路照常运行 | 2026-11-09 |
+| WT-20261109-02 | [TfL 夜间生活研究公告](https://tfl.gov.uk/info-for/media/press-releases/2026/november/night-tube-at-10-new-report-shows-london-leads-european-capitals-for-combined-strength-of-nightlife-and-public-transport)，日级发布日期2026-11-05，具体时分未知；已读正文及编辑注释，研究报告未下载 | 真心猎手世界（`worldviewA`）城南的回声厅、旧船坞两家小型演出场馆于2026-11-09预告：11月13日起在入场提示中列出夜间上车点和散场步行出口，先试两个周末 | 预告阶段，仅影响这两家场馆的晚场观众；这是散场信息提示的调整，交通线路照常运行 | 2026-11-10；l0-20261110111419-7d66be80-03 |
