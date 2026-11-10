@@ -1422,9 +1422,295 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-caa8ac8700b68044",
+      "handle": "guest_214a2810a206f748eb04",
+      "name": "叉子已就位",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d611e25f18218960",
+      "handle": "guest_c4cbca53b75624635cc2",
+      "name": "空碗先放这",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-56ad32b43d15e281",
+      "handle": "guest_4e23856b752c1e488762",
+      "name": "糖块32",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3b924a40ca216d18",
+      "handle": "guest_55da88733ad6218479ea",
+      "name": "饭点迟到",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ea5ebcdb826f466e",
+      "handle": "guest_23cedc23143268ace711",
+      "name": "nana_8",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110184824-39f6a5a6-23",
+      "author": "visitor-eta-upper",
+      "createdAt": "2026-11-10T18:48:16.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-22",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "裹了不就更粗了？"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-22",
+      "author": "guest-ea5ebcdb826f466e",
+      "createdAt": "2026-11-10T18:45:22.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-09",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "nana_8"
+      },
+      "text": "拿胶带裹住线头捻一下呢"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-21",
+      "author": "news-backstage",
+      "createdAt": "2026-11-10T18:44:41.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-08",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/melon.webp",
+          "alt": "L0扒着边沿，双手拿一片西瓜。",
+          "fit": "contain"
+        }
+      ],
+      "text": ""
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-20",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-10T18:43:15.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "多大一块？揣着不硌啊。"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-19",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-10T18:40:57.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-11",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
+      "text": "十分钟哪来的啊，我就拍了两张，第二张他手挡着了。我自己也还没动叉子，又不是光饿着他。你又没坐边上"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-18",
+      "author": "chenanjing",
+      "createdAt": "2026-11-10T18:21:04.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-17",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "她自己不能蹲？"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-17",
+      "author": "guest-56ad32b43d15e281",
+      "createdAt": "2026-11-10T18:19:16.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-16",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "糖块32"
+      },
+      "text": "我就给朋友举过一次杯子，拍的什么没记住，倒记得那天胳膊是真酸。。她还一直喊我低一点，再低一点，我都快蹲下去了"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-16",
+      "author": "guest-3b924a40ca216d18",
+      "createdAt": "2026-11-10T18:11:57.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-14",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "饭点迟到"
+      },
+      "text": "人也摆回去，吃个饭还得当道具。"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-14",
+      "author": "guest-56ad32b43d15e281",
+      "createdAt": "2026-11-10T17:44:35.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-13",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "糖块32"
+      },
+      "text": "杯子也得摆回去啊？"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-13",
+      "author": "visitor-omega",
+      "createdAt": "2026-11-10T17:15:44.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-12",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "我等拍照的时候也烦，还得把手拿开，杯子摆回去。"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-12",
+      "author": "guest-d611e25f18218960",
+      "createdAt": "2026-11-10T17:14:01.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-11",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "空碗先放这"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-11",
+      "author": "guest-caa8ac8700b68044",
+      "createdAt": "2026-11-10T17:11:41.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-01",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "叉子已就位"
+      },
+      "text": "不会是拍了十分钟，最后再等两分钟吧"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-09",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-10T17:04:00.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "毛线头散开了，怎么穿珠子啊 手边没有针"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-08",
+      "author": "visitor-epsilon-upper",
+      "createdAt": "2026-11-10T17:01:29.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/melon.webp",
+          "alt": "L0扒着边沿，双手拿一片西瓜。",
+          "fit": "contain"
+        }
+      ],
+      "text": "群里有个柜子，昨天还说接回来自己修。今天发的完工照，地砖怎么跟另一个师傅工作间一样。我越看越像。"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-03",
+      "author": "visitor-epsilon-upper",
+      "createdAt": "2026-11-10T16:58:32.467Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "听曲子听了半天，口袋里那块木头都让我摸热了。"
+    },
+    {
+      "id": "l0-20261110184824-39f6a5a6-01",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-10T16:57:18.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "fit": "contain"
+        }
+      ],
+      "text": "吃饭先拍一下有什么好烦的啊。今天那个小蛋糕还没拍完就被挖走一勺，留个坑在上面。我就让他等两分钟，又不是不让吃"
+    },
     {
       "id": "l0-20261110181010-bba72479-07",
       "author": "visitor-pi",
