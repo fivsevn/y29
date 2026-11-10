@@ -84,7 +84,7 @@ test('individual references stay with users and the environment includes interac
     assert.equal(unique.size, expectedCount, `${label}: missing or unexpected source entries`);
     return unique;
   };
-  sourceIds(individualNotes, 27, 'individual references');
+  sourceIds(individualNotes, 42, 'individual references');
   for (const oldFile of ['docs/community.md', 'docs/social-reference.md', 'environment/community.md', 'environment/social-reference.md']) {
     await assert.rejects(readFile(join(socialRoot, oldFile)), { code: 'ENOENT' });
   }
