@@ -530,6 +530,43 @@
           "kind": "image"
         }
       ]
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-09",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-10T19:30:04.467Z",
+      "replyTo": "l0-20261110210715-bd3468e0-02",
+      "text": "我店里陈列架也是。手机一开自动增强，浅紫的纸托全成了白的。\n我把相册两张截在一块儿了，左边自动，右边锁曝光。东西没换，颜色差得离谱。",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-02/media/exposure-compare.svg",
+          "alt": "手机相册对比截图，两列同样的甜品包装和纸托，左侧自动增强后泛白，右侧锁定曝光保留紫色和较暗的层次。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ]
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-10",
+      "author": "guest-1ae25a8504c9facc",
+      "guest": {
+        "name": "反着看也行"
+      },
+      "createdAt": "2026-11-10T19:20:01.467Z",
+      "replyTo": "l0-20261110210715-bd3468e0-07",
+      "text": "我懂了，意思是到墙边就该穿过去。管理员不如亲自演示",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ]
     }
   ],
   "status": "prepared",
@@ -558,6 +595,16 @@
       "postId": "l0-20261110210715-bd3468e0-07",
       "negative": true,
       "reason": "管理员坚持错误图示造成取物困扰，作者直接质问。"
+    },
+    {
+      "postId": "l0-20261110210715-bd3468e0-09",
+      "negative": false,
+      "reason": "作者用自身陈列截图印证自动增强导致色彩偏移，未攻击任何人。"
+    },
+    {
+      "postId": "l0-20261110210715-bd3468e0-10",
+      "negative": true,
+      "reason": "讽刺管理员明知图示错误仍要求照办，要求其亲自演示。"
     }
   ],
   "researchMaintenance": []
