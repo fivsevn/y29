@@ -46,31 +46,66 @@ test('nested replies count toward one thread and retain their immediate parents 
 
 // Execute the real renderer with a document double; browser layout is checked
 // separately using the same synthetic content, never by changing the live feed.
-async function renderer(feed, { pending = false } = {}) {
+async function renderer(feed, { pending = false, delayedClose = false } = {}) {
   const handlers = {}, main = { innerHTML: '', scrollTop: 0, focus() {}, querySelector() { return null; } };
   const toast = { textContent: '', classList: { add() {}, remove() {} } };
-  const dialogHandlers = {}, formHandlers = {}, checkHandlers = {}, requests = [];
-  const element = id => {
-    const classes = new Set();
-    const node = { id, hidden: false, textContent: '', value: '', focus() { document.activeElement = node; },
+  const dialogHandlers = {}, formHandlers = {}, checkHandlers = {}, gridHandlers = {}, refreshHandlers = {}, verifyHandlers = {}, requests = [], closeEvents = [];
+  const timerTasks = new Map();
+  let timerClock = 0, nextTimer = 1;
+  const setTimer = (callback, delay = 0, ...args) => {
+    const id = nextTimer++;
+    timerTasks.set(id, { at: timerClock + Math.max(0, Number(delay) || 0), callback: () => callback(...args) });
+    return id;
+  };
+  const advanceTimers = async milliseconds => {
+    const until = timerClock + milliseconds;
+    let steps = 0;
+    while (true) {
+      const next = [...timerTasks].filter(([, task]) => task.at <= until).sort((a, b) => a[1].at - b[1].at || a[0] - b[0])[0];
+      if (!next) break;
+      assert.ok(++steps < 1000, 'timer callbacks must settle');
+      timerClock = next[1].at; timerTasks.delete(next[0]); await next[1].callback();
+    }
+    timerClock = until;
+  };
+  const element = (id, { markup = false } = {}) => {
+    const classes = new Set(), attributes = new Map();
+    const node = { id, hidden: false, textContent: '', value: '', style: {}, dataset: {}, focus() { document.activeElement = node; },
+      setAttribute: (key, value) => attributes.set(key, String(value)), getAttribute: key => attributes.get(key) ?? null,
+      append: child => { node.textContent += child.textContent; },
       classList: { add: value => classes.add(value), remove: value => classes.delete(value), contains: value => classes.has(value) } };
-    Object.defineProperty(node, 'innerHTML', { set() { throw new Error('Login values must not become markup'); } });
+    Object.defineProperty(node, 'innerHTML', { set(value) {
+      if (!markup) throw new Error('Login values must not become markup');
+      node.textContent = value.replace(/<[^>]*>/g, '');
+    } });
     return node;
   };
   let storageWrites = 0, resumeFetch;
-  const loginButton = element('login-button'), closeButton = element('login-close'), loginHeading = element('login-heading');
+  const loginButton = element('login-button'), closeButton = element('login-close'), loginHeading = element('login-heading', { markup: true });
   const inviteCode = element('invite-code'), verification = element('login-verification'), robotCheck = element('robot-check'), loginError = element('login-error');
+  const robotLabel = element('robot-label'), challenge = element('verification-challenge'), grid = element('verification-grid'), verificationStatus = element('verification-status');
+  const refresh = element('verification-refresh'), verify = element('verification-submit');
+  const tiles = Array.from({ length: 9 }, (_, index) => Object.assign(element(`tile-${index}`), { dataset: { tile: String(index) } }));
   const inviteForm = { ...element('invite-form'), reset() { inviteCode.value = ''; }, matches: () => false,
     addEventListener: (type, handler) => { formHandlers[type] = handler; } };
   robotCheck.addEventListener = (type, handler) => { checkHandlers[type] = handler; };
-  const dialog = { open: false, showModal() { this.open = true; }, close() { this.open = false; dialogHandlers.close?.(); },
+  grid.addEventListener = (type, handler) => { gridHandlers[type] = handler; };
+  refresh.addEventListener = (type, handler) => { refreshHandlers[type] = handler; };
+  verify.addEventListener = (type, handler) => { verifyHandlers[type] = handler; };
+  const dialog = { ...element('login-dialog'), open: false, showModal() { this.open = true; }, close() {
+    this.open = false;
+    if (delayedClose) closeEvents.push(() => dialogHandlers.close?.()); else dialogHandlers.close?.();
+  },
     addEventListener: (type, handler) => { dialogHandlers[type] = handler; } };
   const elements = { main, '#toast': toast, '#login-dialog': dialog, '#login-heading': loginHeading, '#invite-form': inviteForm,
-    '#invite-code': inviteCode, '#login-verification': verification, '#robot-check': robotCheck, '#login-error': loginError, '#login-close': closeButton };
+    '#invite-code': inviteCode, '#login-verification': verification, '#robot-check': robotCheck, '#login-error': loginError, '#login-close': closeButton,
+    '#robot-label': robotLabel, '#verification-challenge': challenge, '#verification-grid': grid, '#verification-refresh': refresh,
+    '#verification-submit': verify, '#verification-status': verificationStatus };
   const document = { title: '', activeElement: loginButton, querySelector: selector => elements[selector] || null,
-    querySelectorAll: () => [], getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
+    querySelectorAll: selector => selector === '[data-tile]' ? tiles : [], createTextNode: textContent => ({ textContent }),
+    getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
   const location = { hash: '#/', href: 'https://fixture.invalid/lucifer0/#/' };
-  const context = { ...core, esc: core.escapeHTML, URL, document, location, setTimeout: () => 1, clearTimeout() {},
+  const context = { ...core, esc: core.escapeHTML, URL, document, location, setTimeout: setTimer, clearTimeout: id => timerTasks.delete(id),
     window: { localStorage: { getItem() { return null; }, setItem() { storageWrites++; } }, addEventListener: (type, handler) => { handlers[type] = handler; } },
     fetch: async (url, options = {}) => { requests.push({ url: String(url), method: options.method || 'GET' }); const response = { ok: true, json: async () => feed };
       return pending ? new Promise(resolve => { resumeFetch = () => resolve(response); }) : response; } };
@@ -82,8 +117,11 @@ async function renderer(feed, { pending = false } = {}) {
     toast: () => toast.textContent, fetches: () => requests.length, requests: () => requests, storageWrites: () => storageWrites,
     dialogOpen: () => dialog.open, focusRestored: () => document.activeElement === loginButton,
     login: () => ({ heading: loginHeading.textContent, formVisible: !inviteForm.hidden, verificationVisible: !verification.hidden,
-      code: inviteCode.value, error: loginError.textContent, focus: document.activeElement?.id, failed: robotCheck.classList.contains('has-failed') }),
+      challengeVisible: !challenge.hidden, code: inviteCode.value, error: loginError.textContent, focus: document.activeElement?.id,
+      busy: robotCheck.getAttribute('aria-busy') === 'true', disabled: robotCheck.getAttribute('aria-disabled') === 'true',
+      selected: tiles.flatMap((tile, index) => tile.getAttribute('aria-pressed') === 'true' ? [index] : []), status: verificationStatus.textContent }),
     url: () => location.href, hash: () => location.hash,
+    advanceTimers, pendingTimers: () => timerTasks.size, flushCloseEvents: () => { while (closeEvents.length) closeEvents.shift()(); },
     completeLoad: async () => { resumeFetch?.(); await new Promise(resolve => setImmediate(resolve)); },
     clickLogin: () => handlers.click({ target: { closest: selector => selector === '#login-button' ? loginButton : null } }),
     closeLogin: () => handlers.click({ target: { closest: selector => selector === '#login-close' ? closeButton : null } }),
@@ -95,6 +133,9 @@ async function renderer(feed, { pending = false } = {}) {
       return event.defaultPrevented;
     },
     checkRobot: () => checkHandlers.click({ target: robotCheck }),
+    toggleTile: index => gridHandlers.click({ target: { closest: selector => selector === '[data-tile]' ? tiles[index] : null } }),
+    refreshChallenge: () => refreshHandlers.click({ target: refresh }),
+    submitVerification: () => verifyHandlers.click({ target: verify }),
     escapeLogin: () => dialogHandlers.cancel({ preventDefault() {} }) };
 }
 const article = (html, id) => html.match(new RegExp(`<article\\b[^>]*id="post-${id}"[\\s\\S]*?<\\/article>`))?.[0] || '';
@@ -266,19 +307,67 @@ test('invite submission advances to local verification, always fails and never c
     for (const code of ['', '普通邀请码', 'admin', '<img src=x onerror=alert(1)>']) {
       await page.clickLogin();
       assert.equal(page.dialogOpen(), true);
-      assert.deepEqual(page.login(), { heading: '输入邀请码', formVisible: true, verificationVisible: false,
-        code: '', error: '', focus: 'invite-code', failed: false });
+      assert.equal(page.login().heading, '输入邀请码');
+      assert.equal(page.login().formVisible, true);
+      assert.equal(page.login().verificationVisible, false);
+      assert.equal(page.login().challengeVisible, false);
+      assert.equal(page.login().focus, 'invite-code');
+      assert.equal(page.login().code, '');
       assert.equal(await page.submitInvite(code), true, 'the form prevents a real navigation');
-      assert.deepEqual(page.login(), { heading: '人机验证', formVisible: false, verificationVisible: true,
-        code: '', error: '', focus: 'robot-check', failed: false });
+      const checkStage = page.login();
+      assert.equal(checkStage.heading, '人机验证');
+      assert.equal(checkStage.formVisible, false);
+      assert.equal(checkStage.verificationVisible, true);
+      assert.equal(checkStage.focus, 'robot-check');
+      assert.equal(checkStage.code, '');
+      await page.submitInvite('');
+      assert.deepEqual(page.login(), checkStage, 'duplicate form submission does not restart verification');
+      await page.checkRobot();
+      assert.equal(page.login().busy, true);
+      assert.equal(page.login().disabled, true);
+      assert.equal(page.login().challengeVisible, false);
+      assert.equal(page.pendingTimers(), 1);
+      const checkingStage = page.login();
+      await page.submitInvite('');
+      assert.deepEqual(page.login(), checkingStage, 'a queued submit cannot interrupt the timed check');
+      await page.checkRobot();
+      await page.checkRobot();
+      assert.equal(page.pendingTimers(), 1, 'repeated checkbox activation schedules only one check');
+      await page.advanceTimers(699);
+      assert.equal(page.login().challengeVisible, false);
+      await page.advanceTimers(1);
+      assert.equal(page.login().challengeVisible, true);
+      assert.equal(page.login().verificationVisible, false);
+      assert.equal(page.login().busy, false);
+      assert.equal(page.login().focus, 'tile-0');
+      assert.equal(page.pendingTimers(), 0);
+      assert.deepEqual(page.login().selected, []);
       for (let attempt = 0; attempt < 3; attempt++) {
-        await page.checkRobot();
+        await page.submitVerification();
         assert.equal(page.dialogOpen(), true);
-        assert.equal(page.login().error, '验证失败');
-        assert.equal(page.login().failed, true);
-        assert.equal(page.login().focus, 'robot-check');
+        assert.equal(page.login().error, '验证失败，请重试。');
+        assert.equal(page.login().challengeVisible, true);
         assert.equal(page.login().formVisible, false);
       }
+      await page.toggleTile(0);
+      await page.toggleTile(8);
+      assert.deepEqual(page.login().selected, [0, 8]);
+      assert.equal(page.login().error, '');
+      await page.submitVerification();
+      assert.equal(page.login().error, '验证失败，请重试。');
+      await page.toggleTile(0);
+      assert.deepEqual(page.login().selected, [8], 'selected tiles can be deselected');
+      await page.refreshChallenge();
+      assert.deepEqual(page.login().selected, []);
+      assert.equal(page.login().error, '');
+      assert.ok(page.login().status);
+      assert.equal(page.login().challengeVisible, true);
+      for (let index = 0; index < 9; index++) await page.toggleTile(index);
+      assert.equal(page.login().selected.length, 9);
+      await page.submitVerification();
+      await page.submitVerification();
+      assert.equal(page.login().error, '验证失败，请重试。', 'even selecting every image cannot succeed');
+      assert.equal(page.pendingTimers(), 0);
       await page.closeLogin();
       assert.equal(page.dialogOpen(), false);
       assert.equal(page.focusRestored(), true);
@@ -288,6 +377,9 @@ test('invite submission advances to local verification, always fails and never c
     await page.clickLogin();
     await page.submitInvite('retry-after-close');
     await page.checkRobot();
+    await page.advanceTimers(700);
+    await page.toggleTile(2);
+    await page.submitVerification();
     if (pending) {
       assert.equal(page.html(), before);
       const verificationState = page.login();
@@ -300,7 +392,10 @@ test('invite submission advances to local verification, always fails and never c
     await page.clickLogin();
     assert.equal(page.login().heading, '输入邀请码');
     assert.equal(page.login().verificationVisible, false);
+    assert.equal(page.login().challengeVisible, false);
     assert.equal(page.login().error, '');
+    assert.deepEqual(page.login().selected, []);
+    assert.equal(page.pendingTimers(), 0);
     assert.equal(page.toast(), '');
     assert.equal(page.url(), originalURL);
     assert.equal(page.hash(), originalHash);
@@ -308,6 +403,50 @@ test('invite submission advances to local verification, always fails and never c
     assert.deepEqual(page.requests(), [{ url: './data/feed.json', method: 'GET' }]);
     assert.equal(page.storageWrites(), 0);
   }
+});
+
+test('closing during the timed check cancels it, including after a new dialog has opened', async () => {
+  for (const close of ['closeLogin', 'escapeLogin']) {
+    const page = await renderer(presentationFixture());
+    await page.clickLogin();
+    await page.submitInvite('timed-close');
+    await page.checkRobot();
+    await page.advanceTimers(350);
+    assert.equal(page.pendingTimers(), 1);
+    await page[close]();
+    assert.equal(page.pendingTimers(), 0);
+    assert.equal(page.dialogOpen(), false);
+    assert.equal(page.focusRestored(), true);
+    await page.advanceTimers(1000);
+    assert.equal(page.dialogOpen(), false);
+    assert.equal(page.login().challengeVisible, false);
+    await page.clickLogin();
+    await page.advanceTimers(1000);
+    assert.equal(page.login().formVisible, true);
+    assert.equal(page.login().challengeVisible, false);
+    assert.equal(page.login().focus, 'invite-code');
+    assert.deepEqual(page.requests(), [{ url: './data/feed.json', method: 'GET' }]);
+  }
+});
+
+test('a queued old close event cannot reset a quickly reopened verification', async () => {
+  const page = await renderer(presentationFixture(), { delayedClose: true });
+  await page.clickLogin();
+  await page.submitInvite('old-attempt');
+  await page.checkRobot();
+  await page.closeLogin();
+  assert.equal(page.pendingTimers(), 0);
+  await page.clickLogin();
+  await page.submitInvite('new-attempt');
+  await page.checkRobot();
+  page.flushCloseEvents();
+  assert.equal(page.dialogOpen(), true);
+  assert.equal(page.login().busy, true);
+  assert.equal(page.pendingTimers(), 1);
+  await page.advanceTimers(700);
+  assert.equal(page.login().challengeVisible, true);
+  await page.submitVerification();
+  assert.equal(page.login().error, '验证失败，请重试。');
 });
 
 test('access changes remain escaped in about and cannot become executable login content', async () => {
@@ -321,8 +460,11 @@ test('access changes remain escaped in about and cannot become executable login 
   await page.clickLogin();
   await page.submitInvite(unsafe);
   await page.checkRobot();
-  assert.equal(page.login().heading, '人机验证');
-  assert.equal(page.login().error, '验证失败');
+  await page.advanceTimers(700);
+  await page.submitVerification();
+  assert.equal(page.login().challengeVisible, true);
+  assert.equal(page.login().heading.includes(unsafe), false);
+  assert.equal(page.login().error, '验证失败，请重试。');
   assert.equal(page.login().code, '');
   assert.equal(page.fetches(), 1);
 });

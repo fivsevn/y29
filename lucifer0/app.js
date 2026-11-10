@@ -17,8 +17,12 @@ const main = document.querySelector('main');
 const loginDialog = document.querySelector('#login-dialog'), loginHeading = document.querySelector('#login-heading');
 const inviteForm = document.querySelector('#invite-form'), inviteCode = document.querySelector('#invite-code');
 const loginVerification = document.querySelector('#login-verification'), robotCheck = document.querySelector('#robot-check');
-const loginError = document.querySelector('#login-error');
-let loginReturnFocus;
+const robotLabel = document.querySelector('#robot-label'), verificationChallenge = document.querySelector('#verification-challenge');
+const verificationGrid = document.querySelector('#verification-grid'), verificationTiles = [...document.querySelectorAll('[data-tile]')];
+const verificationRefresh = document.querySelector('#verification-refresh'), verificationSubmit = document.querySelector('#verification-submit');
+const loginError = document.querySelector('#login-error'), verificationStatus = document.querySelector('#verification-status');
+let loginReturnFocus, verificationTimer, loginStage = 'invite';
+let verificationOrder = Array.from({ length: 9 }, (_, index) => index);
 const userURL = id => `#/user/${encodeURIComponent(id)}`;
 const postURL = id => `#/post/${encodeURIComponent(id)}`;
 const numberLabel = id => `No.${postNumber(id)}`;
@@ -38,13 +42,38 @@ function notify(message) {
   clearTimeout(toastTimer); toast.textContent = message; toast.classList.add('visible');
   toastTimer = setTimeout(() => toast.classList.remove('visible'), 2800);
 }
+function cancelVerificationTimer() {
+  clearTimeout(verificationTimer);
+  verificationTimer = undefined;
+}
+function resetVerificationTiles() {
+  verificationTiles.forEach((tile, index) => {
+    const image = verificationOrder[index];
+    tile.style.backgroundPosition = `${image % 3 * 50}% ${Math.floor(image / 3) * 50}%`;
+    tile.setAttribute('aria-pressed', 'false');
+  });
+  loginError.textContent = '';
+}
 function resetLogin() {
+  cancelVerificationTimer();
+  loginStage = 'invite';
+  loginDialog.classList.remove('is-challenge');
   loginHeading.textContent = '输入邀请码';
   inviteForm.reset();
   inviteForm.hidden = false;
   loginVerification.hidden = true;
-  loginError.textContent = '';
-  robotCheck.classList.remove('has-failed');
+  verificationChallenge.hidden = true;
+  robotCheck.classList.remove('is-checking');
+  robotCheck.setAttribute('aria-busy', 'false');
+  robotCheck.setAttribute('aria-disabled', 'false');
+  robotLabel.textContent = '我是机器人';
+  verificationStatus.textContent = '';
+  verificationOrder = Array.from({ length: 9 }, (_, index) => index);
+  resetVerificationTiles();
+}
+function closeLogin() {
+  cancelVerificationTimer();
+  loginDialog.close();
 }
 function openLogin(button) {
   loginReturnFocus = button;
@@ -54,6 +83,8 @@ function openLogin(button) {
 }
 inviteForm.addEventListener('submit', event => {
   event.preventDefault();
+  if (!loginDialog.open || loginStage !== 'invite') return;
+  loginStage = 'check';
   inviteForm.reset();
   inviteForm.hidden = true;
   loginHeading.textContent = '人机验证';
@@ -61,11 +92,65 @@ inviteForm.addEventListener('submit', event => {
   robotCheck.focus({ preventScroll: true });
 });
 robotCheck.addEventListener('click', () => {
-  loginError.textContent = '验证失败';
-  robotCheck.classList.add('has-failed');
+  if (!loginDialog.open || loginStage !== 'check') return;
+  loginStage = 'checking';
+  robotCheck.classList.add('is-checking');
+  robotCheck.setAttribute('aria-busy', 'true');
+  robotCheck.setAttribute('aria-disabled', 'true');
+  robotLabel.textContent = '正在检测…';
+  verificationStatus.textContent = '正在检测，请稍候。';
+  verificationTimer = setTimeout(() => {
+    verificationTimer = undefined;
+    if (!loginDialog.open || loginStage !== 'checking') return;
+    loginStage = 'challenge';
+    robotCheck.classList.remove('is-checking');
+    robotCheck.setAttribute('aria-busy', 'false');
+    robotCheck.setAttribute('aria-disabled', 'false');
+    loginVerification.hidden = true;
+    loginDialog.classList.add('is-challenge');
+    loginHeading.innerHTML = '<span>请选择所有包含</span><strong>路西法</strong><span>的图片</span>';
+    verificationChallenge.hidden = false;
+    verificationStatus.textContent = '请选择图片，然后点击验证。';
+    verificationTiles[0].focus({ preventScroll: true });
+  }, 700);
 });
-loginDialog.addEventListener('cancel', event => { event.preventDefault(); loginDialog.close(); });
-loginDialog.addEventListener('close', () => { resetLogin(); loginReturnFocus?.focus({ preventScroll: true }); loginReturnFocus = null; });
+verificationGrid.addEventListener('click', event => {
+  const tile = event.target.closest('[data-tile]');
+  if (!tile || loginStage !== 'challenge' || !loginDialog.open) return;
+  tile.setAttribute('aria-pressed', String(tile.getAttribute('aria-pressed') !== 'true'));
+  loginError.textContent = '';
+});
+verificationGrid.addEventListener('keydown', event => {
+  const tile = event.target.closest('[data-tile]');
+  if (!tile || loginStage !== 'challenge') return;
+  const index = Number(tile.dataset.tile);
+  const moves = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -3, ArrowDown: 3 };
+  if (!(event.key in moves) && !['Home', 'End'].includes(event.key)) return;
+  event.preventDefault();
+  const target = event.key === 'Home' ? 0 : event.key === 'End' ? 8 : (index + moves[event.key] + 9) % 9;
+  verificationTiles[target].focus({ preventScroll: true });
+});
+verificationRefresh.addEventListener('click', () => {
+  if (!loginDialog.open || loginStage !== 'challenge') return;
+  for (let index = verificationOrder.length - 1; index > 0; index--) {
+    const swap = Math.floor(Math.random() * (index + 1));
+    [verificationOrder[index], verificationOrder[swap]] = [verificationOrder[swap], verificationOrder[index]];
+  }
+  resetVerificationTiles();
+  verificationStatus.textContent = '图片已刷新，请重新选择。';
+});
+verificationSubmit.addEventListener('click', () => {
+  if (!loginDialog.open || loginStage !== 'challenge') return;
+  loginError.textContent = '';
+  loginError.append(document.createTextNode('验证失败，请重试。'));
+});
+loginDialog.addEventListener('cancel', event => { event.preventDefault(); closeLogin(); });
+loginDialog.addEventListener('close', () => {
+  if (loginDialog.open) return;
+  resetLogin();
+  loginReturnFocus?.focus({ preventScroll: true });
+  loginReturnFocus = null;
+});
 function boardbar(title, meta = '', action = '') {
   return `<div class="boardbar"><h2>${title.startsWith('/') ? esc(title) : `<span aria-hidden="true">/</span> ${esc(title)}`}</h2>${meta ? `<span class="board-meta">${esc(meta)}</span>` : ''}${action}</div>`;
 }
@@ -159,7 +244,7 @@ document.addEventListener('click', async event => {
   if (event.target.closest('.skip-link')) { event.preventDefault(); main.focus({ preventScroll: true }); return; }
   const loginButton = event.target.closest('#login-button');
   if (loginButton) { openLogin(loginButton); return; }
-  if (event.target.closest('#login-close')) { loginDialog.close(); return; }
+  if (event.target.closest('#login-close')) { closeLogin(); return; }
   const button = event.target.closest('button[data-action]');
   if (!button || !feed) return;
   const { action, id } = button.dataset;
