@@ -1,4 +1,4 @@
-name: Lucifer Zero one-time reply quota preparation
+name: Lucifer Zero additional reply briefs
 on:
   push:
     branches: [l0-update-20261110-evening]
@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
-      - name: Resume frozen lottery and inspect reply quotas
+      - name: Resume and inspect contextual replies
         run: |
           mkdir -p /tmp/l0-work
           cat > /tmp/l0-work/operation.json <<'L0_OPERATION_JSON'
@@ -404,7 +404,7 @@ jobs:
                 "url": "https://www.fnn.jp/articles/-/1148894",
                 "visitedAt": "2026-11-10T19:15:00+08:00",
                 "publishedAt": "2026-11-09T17:26:00+09:00",
-                "summary": "已读11月9日FNN报道：长崎和平公园雨中静坐的现场诉求、受访声音和活动情况；取材价值在于公开活动告示的写法与报道边界，本轮未据此虚构具体政治新闻。"
+                "summary": "已读11月9日FNN报道：长崎和平公园雨中静坐的现场诉求、受访声音和活动情况；留意事实和观点分界，未据此虚构具体政治新闻。"
               },
               {
                 "category": "trend",
@@ -412,7 +412,7 @@ jobs:
                 "url": "https://www.v2ex.com/t/1255444",
                 "visitedAt": "2026-11-10T19:17:00+08:00",
                 "publishedAt": null,
-                "summary": "实际阅读楼层上下投诉问题的完整主帖及可见多条回复，包含楼上楼下噪音、物业与业主群协调、住户自述及不同归责；借鉴日常分歧如何在回复中变换责任边界，改编为本次-01物业物件安置与-02公开共享权限争议，并非搬用其事件。"
+                "summary": "阅读楼层上下投诉问题的主帖及多条可见回复，讨论包含楼上楼下噪音、物业协调、住户归责；抽取日常争议由当事人各自划分责任的结构，改编为-01物业取件架通知与-02照片共享权限之争。"
               },
               {
                 "category": "daily",
@@ -420,7 +420,7 @@ jobs:
                 "url": "https://www.reddit.com/r/CasualConversation/comments/1xrqjpg/showed_my_dad_how_to_check_my_dashcam_app_and_now/",
                 "visitedAt": "2026-11-10T19:17:30+08:00",
                 "publishedAt": null,
-                "summary": "阅读原作者向父亲共享行车记录仪App权限后被反复点评驾驶习惯的正文与十余条可见回复；有人建议更改密码、轻松设限，也有人认为关切有温情。抽取最初共享授权与后续用途分歧的发言结构，改编为-02活动照片从群内留念被拿作店铺宣传的争议。"
+                "summary": "阅读作者原先向父亲分享行车记录仪App访问权限后反受指导的正文与十余条文字回复；有人建议设限、更换密码，也有人认为是父母关心。抽取最初授权和后来用途不同的关系，改编为-02活动相册被取作店铺宣传的争议。"
               }
             ],
             "posts": [
@@ -459,6 +459,19 @@ jobs:
                 "likes": 4,
                 "canon": "derivative",
                 "media": []
+              },
+              {
+                "id": "l0-20261110111419-7d66be80-04",
+                "author": "guest-800cbc878b691e1d",
+                "guest": {
+                  "name": "说两句就走"
+                },
+                "createdAt": "2026-11-10T06:35:44.467Z",
+                "replyTo": "l0-20261110111419-7d66be80-02",
+                "text": "发群里了还要挨个问许可？",
+                "likes": 0,
+                "canon": "derivative",
+                "media": []
               }
             ],
             "status": "prepared",
@@ -477,15 +490,26 @@ jobs:
                 "postId": "l0-20261110111419-7d66be80-03",
                 "negative": true,
                 "reason": "报道演出场馆散场路线告示更新，并对先前散场问路不便表示不满。"
+              },
+              {
+                "postId": "l0-20261110111419-7d66be80-04",
+                "negative": true,
+                "reason": "将群内相册共享视为任意商业使用，质疑发帖者的许可顾虑。"
               }
             ],
             "researchMaintenance": []
           }
           L0_OPERATION_JSON
           node lucifer0/tools/update.js prepare --work /tmp/l0-work
-          echo 'BEGIN_QUOTAS'
-          node lucifer0/tools/update.js replies --work /tmp/l0-work
-          echo 'END_QUOTAS'
-          echo 'BEGIN_REPLY_BRIEF'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-04 --thread l0-20261110111419-7d66be80-02 --work /tmp/l0-work
-          echo 'END_REPLY_BRIEF'
+          echo 'BEGIN_BRIEF_5'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-05 --thread l0-20261110111419-7d66be80-01 --work /tmp/l0-work
+          echo 'END_BRIEF_5'
+          echo 'BEGIN_BRIEF_6'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-06 --thread l0-20261110111419-7d66be80-03 --work /tmp/l0-work
+          echo 'END_BRIEF_6'
+          echo 'BEGIN_BRIEF_7'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-07 --thread l0-20261110111419-7d66be80-02 --work /tmp/l0-work
+          echo 'END_BRIEF_7'
+          echo 'BEGIN_BRIEF_8'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-08 --thread l0-20261110111419-7d66be80-03 --work /tmp/l0-work
+          echo 'END_BRIEF_8'
