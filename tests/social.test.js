@@ -137,6 +137,19 @@ test('image-only posts require actual media and retain media validation', () => 
   }
 });
 
+test('media accepts explicit contain sizing while omitted sizing stays unchanged', () => {
+  const f = fixture(), original = f.batches[0].posts.find(post => post.replyTo === null);
+  const image = { src: `posts/${original.createdAt.slice(0, 4)}/${original.createdAt.slice(5, 7)}/${original.id}/media/reaction.webp`, alt: '完整反应图' };
+  original.media = [image];
+  assert.deepEqual(validate(f).posts.find(post => post.id === original.id).media[0], image);
+  image.fit = 'contain';
+  assert.equal(validate(f).posts.find(post => post.id === original.id).media[0].fit, 'contain');
+  for (const fit of ['cover', 'fill', 'contain;display:none', '', null, false, 1, {}, undefined]) {
+    image.fit = fit;
+    assert.throws(() => validate(f), /Invalid media fit/);
+  }
+});
+
 test('deleted flags accept only empty-media reply placeholders and preserve unique IDs', () => {
   const f = fixture(), root = f.batches.flatMap(batch => batch.posts).find(post => post.replyTo === null);
   const reply = { ...root, id: 'deleted-reply-one', replyTo: root.id, text: '该回复已被删除', media: [], deleted: true };

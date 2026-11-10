@@ -30,10 +30,12 @@ async function fixture(t) {
 
 test('build converts directly uploaded raster and updates only media metadata; repeat keeps bytes', async t => {
   const f = await fixture(t), entry = post(f.now);
+  entry.media[0].fit = 'contain';
   const document = join(f.root, `${threadPath}/index.md`);
   await writeFile(document, renderPostDocument(entry));
   const feed = await buildFeed(f.root), converted = feed.posts[0];
   assert.equal(converted.media[0].src, imagePath.replace('.png', '.webp'));
+  assert.equal(converted.media[0].fit, 'contain');
   assert.deepEqual({ ...converted, media: entry.media }, entry);
   assert.deepEqual(parsePostDocument(await readFile(document, 'utf8')), converted);
   const bytes = await readFile(join(f.root, converted.media[0].src)), meta = await sharp(bytes).metadata();
@@ -53,6 +55,7 @@ test('AI import saves WebP in operation, source and feed, shares reply image, an
   const prepared = await prepareUpdate({ root: f.root, workDirectory: f.work, requestedCount: 2, now: f.now });
   const operation = await readJSON(prepared.operationPath);
   operation.posts = [post(f.now), post(f.now + 1000, 'media-test-reply', 'media-test-root')];
+  operation.posts[0].media[0].fit = 'contain';
   operation.research = [
     { category: 'news', kind: 'feed', url: 'https://example.org/news', visitedAt: new Date(f.now).toISOString(), publishedAt: new Date(f.now).toISOString(), summary: 'Read the public announcement.' },
     { category: 'trend', kind: 'thread', url: 'https://example.net/thread', visitedAt: new Date(f.now).toISOString(), publishedAt: null, summary: 'Read the discussion and replies.' },
@@ -62,6 +65,8 @@ test('AI import saves WebP in operation, source and feed, shares reply image, an
   await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
   const saved = await readJSON(prepared.operationPath), feed = (await loadContent(f.root)).feed;
   assert.ok(saved.posts.every(p => p.media[0].src.endsWith('.webp')));
+  assert.equal(saved.posts[0].media[0].fit, 'contain');
+  assert.ok(!Object.hasOwn(saved.posts[1].media[0], 'fit'));
   assert.equal(new Set(saved.posts.map(p => p.media[0].src)).size, 1);
   assert.deepEqual(saved.posts, [...feed.posts].reverse());
   assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).status, 'already-archived');
