@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "id": "sample-8d2a8f6dd590",
+  "addedAt": "2026-11-10T21:12:37.348Z",
+  "title": "有人一起吃饭，还是没有人说心事",
+  "topics": [
+    "孤独",
+    "关系距离",
+    "冷淡回应"
+  ],
+  "context": "一名发帖者谈身边有人来往，却缺少能谈心的关系。",
+  "coverage": {
+    "kind": "excerpt",
+    "description": "已读页面中选取首帖及三条独立回复，未收录整串。以下均为脱敏转述；删去家庭、具体年限和其他独特经历，不保留原句及原标点，不作为逐字表达或比例样本。"
+  },
+  "messages": [
+    {
+      "id": "m1",
+      "speaker": "p01",
+      "replyTo": null,
+      "text": "又是自己吃饭。工作上有人说话，也能约饭，真有心事却不知道找谁。网上认识人不难，可没有共同生活的话题。",
+      "offsetMinutes": null,
+      "likes": null
+    },
+    {
+      "id": "m2",
+      "speaker": "p02",
+      "replyTo": "m1",
+      "text": "我也差不多，工作完就自己看东西，没什么会认识新人的活动。",
+      "offsetMinutes": null,
+      "likes": null
+    },
+    {
+      "id": "m3",
+      "speaker": "p03",
+      "replyTo": "m1",
+      "text": "成年人总要找人倾诉吗。反复倒情绪，别人躲远点也正常。",
+      "offsetMinutes": null,
+      "likes": null
+    },
+    {
+      "id": "m4",
+      "speaker": "p04",
+      "replyTo": "m1",
+      "text": "以前熟的几个都有自己的家庭了，想联系又怕打扰，慢慢就不找了。",
+      "offsetMinutes": null,
+      "likes": null
+    }
+  ],
+  "review": {
+    "deidentified": true,
+    "checkedAt": "2026-11-10T21:12:37.348Z"
+  }
+}

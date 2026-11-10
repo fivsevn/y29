@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "id": "sample-9a4c3b9d9865",
+  "addedAt": "2026-11-10T21:12:37.355Z",
+  "title": "事情都在聊天里说，回头找不到要求",
+  "topics": [
+    "工作沟通",
+    "信息遗漏",
+    "附和"
+  ],
+  "context": "一名发帖者抱怨工作要求零散地散在聊天消息里，后续难以核对。",
+  "coverage": {
+    "kind": "excerpt",
+    "description": "已读页面中选取首帖与两条可见回复，未收录补充帖和其他回复。以下为脱敏转述；去掉地区、组织、产品名及职业细节，不保留逐字表达，无法确认的时间和点赞留空。"
+  },
+  "messages": [
+    {
+      "id": "m1",
+      "speaker": "p01",
+      "replyTo": null,
+      "text": "以前需求会写在一起，现在聊几句就算交代了，有的任务只剩一个标题。做完说不对，还得翻消息猜当时要什么。下班也一直有消息。",
+      "offsetMinutes": null,
+      "likes": null
+    },
+    {
+      "id": "m2",
+      "speaker": "p02",
+      "replyTo": "m1",
+      "text": "对方发一句，你要来回问半天。省的是他整理要求的时间，整理这件事就转给你了。",
+      "offsetMinutes": null,
+      "likes": null
+    },
+    {
+      "id": "m3",
+      "speaker": "p03",
+      "replyTo": "m1",
+      "text": "我们也这样，小事直接聊，大事写个东西。过一阵再问，还是谁都记不清。",
+      "offsetMinutes": null,
+      "likes": null
+    }
+  ],
+  "review": {
+    "deidentified": true,
+    "checkedAt": "2026-11-10T21:12:37.355Z"
+  }
+}
