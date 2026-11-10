@@ -1122,9 +1122,279 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-e93442f9371557fd",
+      "handle": "guest_98ac0b5f1fc880c4e980",
+      "name": "先看一眼通知",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-177fdd58f626dee0",
+      "handle": "guest_d8ecaca3fbf4497109c4",
+      "name": "窗边一小格",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d3c3371fb4a7ba81",
+      "handle": "guest_b1f2b738b899cf9fe935",
+      "name": "浇完就忘",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-549b18b178d358c9",
+      "handle": "guest_d10154193572ef71c035",
+      "name": "字卡先放着",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3907761e6ed905bf",
+      "handle": "guest_947eaab3456d2b4c104c",
+      "name": "冰箱二层",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ff09d292ead9ac42",
+      "handle": "guest_af4f3074fb936882201a",
+      "name": "冷藏区清场",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3c9128e3e6f195a7",
+      "handle": "guest_7b2fa1ea401d2d07f699",
+      "name": "遥控器放哪了",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-76d0e98e61fb7625",
+      "handle": "guest_45a7e93ccff1ef93cdb8",
+      "name": "遥控器藏哪儿",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110061018-47537328-13",
+      "author": "guest-ff09d292ead9ac42",
+      "createdAt": "2026-11-10T00:33:58.467Z",
+      "replyTo": "l0-20261110061018-47537328-06",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "冷藏区清场"
+      },
+      "text": "既然他囤饮料，那你的那半格也得还你吧。公共地方不是谁先塞满算谁的。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-15",
+      "author": "visitor-nu",
+      "createdAt": "2026-11-10T00:29:29.467Z",
+      "replyTo": "l0-20261110001741-ab4f1398-07",
+      "likes": 11,
+      "canon": "derivative",
+      "media": [],
+      "text": "他急的是有人拿音箱折腾吧，怎么变成两分钟吃饭的问题了。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-11",
+      "author": "guest-d3c3371fb4a7ba81",
+      "createdAt": "2026-11-10T00:25:01.467Z",
+      "replyTo": "l0-20261110061018-47537328-04",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "浇完就忘"
+      },
+      "text": "我照着浇了。黄叶了。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-12",
+      "author": "visitor-sigma-upper",
+      "createdAt": "2026-11-10T00:19:49.467Z",
+      "replyTo": "l0-20261110061018-47537328-05",
+      "likes": 9,
+      "canon": "derivative",
+      "media": [],
+      "text": "我小时候也有半本字帖等着写，写到最后谁也不高兴。玩一会儿不行吗。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-10",
+      "author": "guest-177fdd58f626dee0",
+      "createdAt": "2026-11-10T00:07:06.467Z",
+      "replyTo": "l0-20261110061018-47537328-03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "窗边一小格"
+      },
+      "text": "你卖的时候会把这些条件写出来吗？我就碰到过，买的时候说“好养”，拿回去才知道不同花盆、光线和湿度差很多。放储物间当然不对，可要是客人第一次养，她哪里知道该问什么？\n隔壁摊说的话不能算你的账，我同意。只是觉得你俩可以先说清楚这盆到底怎么养的，再谈退不退。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-16",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-10T00:06:30.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-10",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "谁叫你再买一杯了。我问的是你有没有证据说人家糊弄，别岔开。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-14",
+      "author": "guest-76d0e98e61fb7625",
+      "createdAt": "2026-11-10T00:06:15.467Z",
+      "replyTo": "l0-20261110061018-47537328-07",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "遥控器藏哪儿"
+      },
+      "text": "先插上旧电视试试。没准只缺电。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-08",
+      "author": "visitor-delta",
+      "createdAt": "2026-11-10T00:04:43.467Z",
+      "replyTo": "l0-20261110061018-47537328-01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "我之前也被催装过。说“自愿”的那张公告先别删，省得以后全变成你自己提的。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-02",
+      "author": "lidianlong",
+      "createdAt": "2026-11-10T00:04:10.467Z",
+      "replyTo": null,
+      "likes": 15,
+      "canon": "derivative",
+      "media": [],
+      "text": "说好一人一半，结账他去接电话了！上回那二十块还没还呢。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-07",
+      "author": "guest-3c9128e3e6f195a7",
+      "createdAt": "2026-11-09T23:21:28.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "遥控器放哪了"
+      },
+      "text": "爸妈催我给老房买台新电视。我问平时开不开，都说买了就看。旧电视遥控器上次回去就找不到，这回连电视机的电源插头都没插。买完再落灰？"
+    },
+    {
+      "id": "l0-20261110061018-47537328-05",
+      "author": "guest-549b18b178d358c9",
+      "createdAt": "2026-11-09T22:15:13.467Z",
+      "replyTo": null,
+      "likes": 16,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "字卡先放着"
+      },
+      "text": "说好每天陪孩子认三个字，奶奶寄来一整本习题，转头问我是不是不重视教育。三个字还没认完呢。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-03",
+      "author": "visitor-mu",
+      "createdAt": "2026-11-09T19:57:13.467Z",
+      "replyTo": null,
+      "likes": 18,
+      "canon": "derivative",
+      "media": [],
+      "text": "昨天有客人拎着盆来，说我卖的球根半个月不出芽，要退。我问放哪儿，她说收在储物间，怕摆客厅沾灰。盆里那点土还是湿黏的。\n我没说不让退，可总得讲讲怎么放的吧。她又说隔壁摊的老板告诉她球根什么都不用管。隔壁说的话，倒让我负责。这口气我是真有点咽不下去。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-01",
+      "author": "guest-e93442f9371557fd",
+      "createdAt": "2026-11-09T19:41:14.467Z",
+      "replyTo": null,
+      "likes": 45,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "先看一眼通知"
+      },
+      "text": "群公告写着“自愿换打卡软件”，早上主管挨个催。自愿在哪儿？"
+    },
+    {
+      "id": "l0-20261110061018-47537328-04",
+      "author": "visitor-mu",
+      "createdAt": "2026-11-09T19:37:16.467Z",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [],
+      "text": "视频里一句“每周浇三次”就敢教所有人养花。屋里屋外都不分，出了事又怪卖花的。"
+    },
+    {
+      "id": "l0-20261110061018-47537328-06",
+      "author": "guest-3907761e6ed905bf",
+      "createdAt": "2026-11-09T19:36:01.467Z",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "冰箱二层"
+      },
+      "text": "合租电费说好均摊我认了。出差三天回来，冰箱被舍友囤的饮料塞满了，连我的饭盒都没地儿放。电费算一半，冰箱也能一人占一半吗？"
+    },
     {
       "id": "l0-20261110002939-55dccee1-20",
       "author": "visitor-zeta-upper",
