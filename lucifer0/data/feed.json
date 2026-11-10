@@ -1026,9 +1026,379 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-65054d5fd1ee9eca",
+      "handle": "guest_749411ea0b913668bc4c",
+      "name": "晚点到",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-24fc0b07dc38e13b",
+      "handle": "guest_da3b4ef1bd0ef7132e4d",
+      "name": "还有半杯",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b9ca657ddb3afceb",
+      "handle": "guest_df95a01323cd6ebebbfc",
+      "name": "不想起名",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bbe923e2bf2fb67e",
+      "handle": "guest_50a3a5ec5c16a987d46f",
+      "name": "r7",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-6b5363d91d48753a",
+      "handle": "guest_b576b3a3750d86784149",
+      "name": "星期八",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5288825017068328",
+      "handle": "guest_6b2e0b7182920ddcae98",
+      "name": "KK_3",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4db099a00bc4d050",
+      "handle": "guest_7e4a95cea2e6b94698c7",
+      "name": "207",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-43fd01ee73a48b7e",
+      "handle": "guest_fa315b32d6a68cd43ae3",
+      "name": "少点冰",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110002939-55dccee1-20",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-09T19:34:22.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-19",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/okay.webp",
+          "alt": "L0半睁眼竖起拇指。",
+          "fit": "contain"
+        }
+      ],
+      "text": ""
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-19",
+      "author": "guest-6b5363d91d48753a",
+      "createdAt": "2026-11-09T19:32:23.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-18",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/play-dead.webp",
+          "alt": "L0仰面躺着，头上有一个带叉号的小气泡。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "星期八"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-18",
+      "author": "guest-4db099a00bc4d050",
+      "createdAt": "2026-11-09T19:28:44.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-17",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "207"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-17",
+      "author": "guest-6b5363d91d48753a",
+      "createdAt": "2026-11-09T19:25:53.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-16",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "星期八"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-16",
+      "author": "guest-5288825017068328",
+      "createdAt": "2026-11-09T19:23:29.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-04",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "KK_3"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-15",
+      "author": "guest-24fc0b07dc38e13b",
+      "createdAt": "2026-11-09T19:17:46.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-11",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "还有半杯"
+      },
+      "text": "不是，你抽屉跟我杯盖有啥关系。"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-14",
+      "author": "guest-bbe923e2bf2fb67e",
+      "createdAt": "2026-11-09T19:13:07.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-13",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "r7"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-13",
+      "author": "guest-b9ca657ddb3afceb",
+      "createdAt": "2026-11-09T19:12:12.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-12",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "不想起名"
+      },
+      "text": "你除了吃还会啥。"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-12",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-09T18:47:13.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-11",
+      "likes": 11,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
+      "text": "饿了"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-11",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-09T18:44:16.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-02",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "text": "想起我那抽屉也还卡着，算了明天再弄。"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-10",
+      "author": "guest-43fd01ee73a48b7e",
+      "createdAt": "2026-11-09T18:42:34.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-07",
+      "likes": 9,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "少点冰"
+      },
+      "text": "没中杯。还得再花钱买一杯回来，才配问这一句了？"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-09",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-09T18:26:00.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-08",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "哪句摆脸了，你指出来。我问比没比过中杯，你答一句啊。"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-08",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-09T18:23:32.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-07",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "又没说你\n你怎么先摆上脸了"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-07",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-09T18:08:49.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-05",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "你跟中杯摆一块比过没有？我上回点炸物，跟朋友一样大的盒子，掀开才知道里面份数不同，盒底那串字母谁也没看明白。M到底指什么我不知道，你直接说人家糊弄也太快了吧。我要在柜台碰上来一句“你糊弄我吧”的，也不乐意跟你好好说。"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-05",
+      "author": "guest-43fd01ee73a48b7e",
+      "createdAt": "2026-11-09T18:05:32.467Z",
+      "replyTo": null,
+      "likes": 9,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "少点冰"
+      },
+      "text": "贴纸是大杯，杯底一个M，店员在糊弄我吧。"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-04",
+      "author": "guest-6b5363d91d48753a",
+      "createdAt": "2026-11-09T17:40:29.467Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "星期八"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-03",
+      "author": "visitor-iota",
+      "createdAt": "2026-11-09T17:38:27.467Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "拼图没拼完就得立刻拆吗？？边框都拼上了，天空那块分了几堆，现在全扫回盒子不等于重来。舍友说桌面共用，我也没说不能用啊，另外半张是空的。最烦她那句“反正你也拼不完”，借桌子就借桌子，别顺便踩我一下好吧"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-02",
+      "author": "guest-24fc0b07dc38e13b",
+      "createdAt": "2026-11-09T17:08:59.467Z",
+      "replyTo": null,
+      "likes": 12,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "还有半杯"
+      },
+      "text": "杯盖那圈胶圈怎么拿出来洗？抠起一边就滑回去了。"
+    },
+    {
+      "id": "l0-20261110002939-55dccee1-01",
+      "author": "guest-65054d5fd1ee9eca",
+      "createdAt": "2026-11-09T17:03:19.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "晚点到"
+      },
+      "text": "伞是你借的，凭什么还得我上门取啊。"
+    },
     {
       "id": "l0-20261110001741-ab4f1398-19",
       "author": "visitor-sigma",
