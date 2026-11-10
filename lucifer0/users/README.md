@@ -47,10 +47,10 @@
 | 文档或入口 | 负责内容 |
 | --- | --- |
 | 本人文件夹的 `profile.md` | 保存本人的全部内容 |
-| [空白模板](TEMPLATE.md) | 人物档案的整理格式 |
-| [账号模板](ACCOUNT_TEMPLATE.md) | 资讯账号与管理员账号的整理格式 |
-| [人物研究](character-research.md) | 人物背景与描写方法 |
-| [说话方式研究](speech-research.md) | 表达样本 |
+| [模版-一般人物](TEMPLATE.md) | 人物档案的整理格式 |
+| [模版-特殊账号](ACCOUNT_TEMPLATE.md) | 资讯账号与管理员账号的整理格式 |
+| [研究-人物](character-research.md) | 人物背景与描写方法 |
+| [研究-说话方式](speech-research.md) | 表达样本 |
 
 ## 使用说明
 
