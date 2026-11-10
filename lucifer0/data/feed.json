@@ -1566,9 +1566,96 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-929caae32215f559",
+      "handle": "guest_646f07a5cb5d692917a5",
+      "name": "锁还在转",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5bb935a937a547ef",
+      "handle": "guest_e298a72a68f25acbd3b5",
+      "name": "再点一次",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-09ad6f87eff9171c",
+      "handle": "guest_d036bbba89740b490bca",
+      "name": "收据折三折",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110213237-acd234d4-03",
+      "author": "guest-5bb935a937a547ef",
+      "createdAt": "2026-11-10T19:54:58.467Z",
+      "replyTo": "l0-20261110213237-acd234d4-01",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110213237-acd234d4-01/media/trip.webp",
+          "alt": "模拟行程详情截图：当前状态写着计费中，下方操作记录写结束请求已提交。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "再点一次"
+      },
+      "text": "我那次截到的是这两行，一个说结束请求提交了，时长还在往上跳。后来客服要我给订单号，不是车牌，你看看操作记录那里有没有？"
+    },
+    {
+      "id": "l0-20261110213237-acd234d4-02",
+      "author": "guest-09ad6f87eff9171c",
+      "createdAt": "2026-11-10T19:52:28.467Z",
+      "replyTo": null,
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110213237-acd234d4-02/media/bill.webp",
+          "alt": "纸质维修费用清单列着检测费30、拆机费80、材料费160，拆机费一行被圈出。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "收据折三折"
+      },
+      "text": "约了个热水器检修，预约页明明写“上门检测30元，维修前报价”。人来了看了一眼，说得拆开才能知道是哪儿坏。我想着都上门了，就让拆了。\n\n拆完说电路板要换，给我开的是检测30、拆机80、材料160。我说先别修，那个80是什么时候说的？他说订单下面有服务条款。我翻到最底下才看见一整段字。你写在报价那一行，人不就知道了么。"
+    },
+    {
+      "id": "l0-20261110213237-acd234d4-01",
+      "author": "guest-929caae32215f559",
+      "createdAt": "2026-11-10T19:31:47.467Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "锁还在转"
+      },
+      "text": "骑到小区门口，车锁卡了，我在软件里点了三次结束，都弹出“已提交”。回家一看还在计费。客服让我补拍车牌和锁头，可车已经不在那儿了。现在说没现场照片就不退，多扣的钱算谁的？"
+    },
     {
       "id": "l0-20261110210715-bd3468e0-09",
       "author": "visitor-chi-upper",
