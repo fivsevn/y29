@@ -26,6 +26,8 @@ jobs:
         run: |
           if [[ -f .github/lucifer0-once/publish.mjs ]]; then
             node .github/lucifer0-once/publish.mjs
+          elif [[ -f .github/lucifer0-once/stage1.mjs ]]; then
+            node .github/lucifer0-once/stage1.mjs
           else
             node lucifer0/tools/update.js brief --post l0-20261110213237-acd234d4-01 --work /tmp/lucifer0-once > /tmp/brief1.json
             node lucifer0/tools/update.js brief --post l0-20261110213237-acd234d4-02 --work /tmp/lucifer0-once > /tmp/brief2.json
