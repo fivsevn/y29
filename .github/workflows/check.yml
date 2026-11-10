@@ -15,6 +15,15 @@ jobs:
           node-version: '22'
       - name: Install image conversion dependencies
         run: npm ci
+      - name: Prepare L0 operation and reading for this run
+        run: |
+          node lucifer0/tools/update.js prepare --work "$RUNNER_TEMP/l0-work"
+          echo '===L0_OPERATION_BEGIN==='
+          cat "$RUNNER_TEMP/l0-work/operation.json"
+          echo '===L0_OPERATION_END==='
+          echo '===L0_READING_BEGIN==='
+          cat "$RUNNER_TEMP/l0-work/reading.md"
+          echo '===L0_READING_END==='
       - name: Check rules, public content and static build
         run: npm run check
       - name: Keep reviewable static preview
