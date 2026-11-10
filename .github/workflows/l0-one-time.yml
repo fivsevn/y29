@@ -1,20 +1,22 @@
-name: Lucifer Zero additional reply briefs
+name: Lucifer Zero one-time archive and validation
 on:
   push:
     branches: [l0-update-20261110-evening]
     paths: ['.github/workflows/l0-one-time.yml']
 permissions:
-  contents: read
+  contents: write
 jobs:
-  draw:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: l0-update-20261110-evening
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm ci
-      - name: Resume and inspect contextual replies
+      - name: Ingest reviewed posts using official tools and validate
         run: |
           mkdir -p /tmp/l0-work
           cat > /tmp/l0-work/operation.json <<'L0_OPERATION_JSON'
@@ -404,7 +406,7 @@ jobs:
                 "url": "https://www.fnn.jp/articles/-/1148894",
                 "visitedAt": "2026-11-10T19:15:00+08:00",
                 "publishedAt": "2026-11-09T17:26:00+09:00",
-                "summary": "已读11月9日FNN报道：长崎和平公园雨中静坐的现场诉求、受访声音和活动情况；留意事实和观点分界，未据此虚构具体政治新闻。"
+                "summary": "已读11月9日FNN报道：长崎和平公园雨中静坐的现场诉求、受访声音及活动情况；注意事实与观点的区别。本轮未据此虚构具体政治事件。"
               },
               {
                 "category": "trend",
@@ -412,7 +414,7 @@ jobs:
                 "url": "https://www.v2ex.com/t/1255444",
                 "visitedAt": "2026-11-10T19:17:00+08:00",
                 "publishedAt": null,
-                "summary": "阅读楼层上下投诉问题的主帖及多条可见回复，讨论包含楼上楼下噪音、物业协调、住户归责；抽取日常争议由当事人各自划分责任的结构，改编为-01物业取件架通知与-02照片共享权限之争。"
+                "summary": "已读楼层上下投诉问题主帖及多条可见回复，涉及噪音、物业协调、业主群与归责分歧。借鉴不同当事人划分责任与信息缺口的方式，改编-01物业通知与-02相册许可争议。"
               },
               {
                 "category": "daily",
@@ -420,7 +422,7 @@ jobs:
                 "url": "https://www.reddit.com/r/CasualConversation/comments/1xrqjpg/showed_my_dad_how_to_check_my_dashcam_app_and_now/",
                 "visitedAt": "2026-11-10T19:17:30+08:00",
                 "publishedAt": null,
-                "summary": "阅读作者原先向父亲分享行车记录仪App访问权限后反受指导的正文与十余条文字回复；有人建议设限、更换密码，也有人认为是父母关心。抽取最初授权和后来用途不同的关系，改编为-02活动相册被取作店铺宣传的争议。"
+                "summary": "已读作者分享行车记录仪访问权限后反受指导的正文及十余条可见回复；观点包括更改密码、设限和理解家人。改编-02共享相册原本有限用途被扩大到商业宣传的争议。"
               }
             ],
             "posts": [
@@ -472,6 +474,55 @@ jobs:
                 "likes": 0,
                 "canon": "derivative",
                 "media": []
+              },
+              {
+                "id": "l0-20261110111419-7d66be80-05",
+                "author": "guest-d24bf8dc8c16ffe7",
+                "guest": {
+                  "name": "贴纸看不见"
+                },
+                "createdAt": "2026-11-10T06:44:39.467Z",
+                "replyTo": "l0-20261110111419-7d66be80-01",
+                "text": "架子旁边没贴新位置吗？",
+                "likes": 4,
+                "canon": "derivative",
+                "media": []
+              },
+              {
+                "id": "l0-20261110111419-7d66be80-06",
+                "author": "guest-ccc9022e765c7fb2",
+                "guest": {
+                  "name": "散场别堵门"
+                },
+                "createdAt": "2026-11-10T07:03:47.467Z",
+                "replyTo": "l0-20261110111419-7d66be80-03",
+                "text": "总比散场站门口听人喊方向强。",
+                "likes": 0,
+                "canon": "derivative",
+                "media": []
+              },
+              {
+                "id": "l0-20261110111419-7d66be80-07",
+                "author": "visitor-eta",
+                "createdAt": "2026-11-10T06:40:18.467Z",
+                "replyTo": "l0-20261110111419-7d66be80-04",
+                "text": "群里给朋友看，和拿来替店里招客人是两回事吧。合照里其他人知道吗？",
+                "likes": 8,
+                "canon": "derivative",
+                "media": []
+              },
+              {
+                "id": "l0-20261110111419-7d66be80-08",
+                "author": "guest-c5be56cf625f3573",
+                "guest": {
+                  "name": "跟着走走停停"
+                },
+                "createdAt": "2026-11-10T09:50:56.467Z",
+                "replyTo": "l0-20261110111419-7d66be80-03",
+                "text": "散场的时候就想早点坐上车，不想再四处找出口。",
+                "likes": 0,
+                "canon": "derivative",
+                "media": []
               }
             ],
             "status": "prepared",
@@ -479,37 +530,64 @@ jobs:
               {
                 "postId": "l0-20261110111419-7d66be80-01",
                 "negative": true,
-                "reason": "对物业深夜通知、次日即认定放错物品表达不满。"
+                "reason": "指责物业深夜通知、次日即认定放错物品，明显不满。"
               },
               {
                 "postId": "l0-20261110111419-7d66be80-02",
                 "negative": true,
-                "reason": "对共同照片未经合意被用于宣传及反指责产生明确争议。"
+                "reason": "明确反对群内共享合照未经同意转作商业宣传，且表达被反指责的不满。"
               },
               {
                 "postId": "l0-20261110111419-7d66be80-03",
                 "negative": true,
-                "reason": "报道演出场馆散场路线告示更新，并对先前散场问路不便表示不满。"
+                "reason": "报道场馆散场出口提示安排，同时抱怨此前散场问路麻烦。"
               },
               {
                 "postId": "l0-20261110111419-7d66be80-04",
                 "negative": true,
-                "reason": "将群内相册共享视为任意商业使用，质疑发帖者的许可顾虑。"
+                "reason": "质疑合照商业使用还需另行征求许可，否定楼主顾虑。"
+              },
+              {
+                "postId": "l0-20261110111419-7d66be80-05",
+                "negative": false,
+                "reason": "追问取件架是否贴有通知，没有直接指责或负面判断。"
+              },
+              {
+                "postId": "l0-20261110111419-7d66be80-06",
+                "negative": false,
+                "reason": "认可新散场信息有帮助，没有负面归责。"
+              },
+              {
+                "postId": "l0-20261110111419-7d66be80-07",
+                "negative": true,
+                "reason": "反驳群内共享等于商业使用的观点，质疑取得他人同意与否。"
+              },
+              {
+                "postId": "l0-20261110111419-7d66be80-08",
+                "negative": true,
+                "reason": "直接表达散场找出口折腾、不愿再次经历的烦躁。"
               }
             ],
             "researchMaintenance": []
           }
           L0_OPERATION_JSON
           node lucifer0/tools/update.js prepare --work /tmp/l0-work
-          echo 'BEGIN_BRIEF_5'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-05 --thread l0-20261110111419-7d66be80-01 --work /tmp/l0-work
-          echo 'END_BRIEF_5'
-          echo 'BEGIN_BRIEF_6'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-06 --thread l0-20261110111419-7d66be80-03 --work /tmp/l0-work
-          echo 'END_BRIEF_6'
-          echo 'BEGIN_BRIEF_7'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-07 --thread l0-20261110111419-7d66be80-02 --work /tmp/l0-work
-          echo 'END_BRIEF_7'
-          echo 'BEGIN_BRIEF_8'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-08 --thread l0-20261110111419-7d66be80-03 --work /tmp/l0-work
-          echo 'END_BRIEF_8'
+          echo 'BEGIN_PRESENTATION'
+          node lucifer0/tools/update.js suggest --work /tmp/l0-work
+          echo 'END_PRESENTATION'
+          echo 'BEGIN_INGEST'
+          node lucifer0/tools/publish.js ingest /tmp/l0-work/operation.json --reviewed --ai
+          echo 'END_INGEST'
+          node --input-type=module -e "import {readFileSync,writeFileSync} from 'node:fs';const p='lucifer0/environment/worldviews/worldviewA/events.md';const s=readFileSync(p,'utf8');if(!s.includes('| 2026-11-09 |'))throw Error('Expected event date not found');writeFileSync(p,s.replace('| 2026-11-09 |','| 2026-11-10；l0-20261110111419-7d66be80-03 |'))"
+          node lucifer0/tools/publish.js validate
+          npm test
+          node build.js
+          git status --short
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lucifer0/posts lucifer0/data/feed.json lucifer0/environment/worldviews/worldviewA/events.md
+          git diff --cached --check
+          git diff --cached --stat
+          git commit -m 'content(lucifer0): publish 8 reviewed posts and update event reference'
+          git push origin HEAD:l0-update-20261110-evening
+          echo 'PUSH_COMPLETED'
