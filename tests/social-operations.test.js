@@ -785,6 +785,26 @@ test('new brief replies reject unavailable parents and do not expose later or de
   assert.ok(!JSON.stringify(brief.writer).includes('FUTURE_TIMESTAMP_BODY'));
 });
 
+test('writer receives the current writing source and refreshes it without redrawing the saved plan', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options);
+  const postId = prepared.id + '-writing', sourcePath = 'docs/writing.md';
+  const original = await readFile(join(f.root, sourcePath), 'utf8');
+  const first = await briefUpdatePost({ ...f.options, postId });
+  const saved = await readJSON(prepared.operationPath);
+  assert.deepEqual(first.writer.writing, { sourcePath, text: original });
+
+  const updated = '# Changed synthetic writing source\n\nSYNTHETIC_UPDATED_WRITING\n';
+  await writeFile(join(f.root, sourcePath), updated);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
+  await prepareUpdate(f.options);
+  const refreshed = await briefUpdatePost({ ...f.options, postId });
+  assert.deepEqual(refreshed.writer.writing, { sourcePath, text: updated });
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
+  assert.deepEqual(refreshed.draft, first.draft);
+  assert.deepEqual(refreshed.editor, first.editor);
+  assert.deepEqual({ ...refreshed.writer, writing: first.writer.writing }, first.writer);
+});
+
 test('lottery and speech research enter source digest, while config snapshots stay fixed on resume', async t => {
   const f = await fixture(t, 4, { lottery: defaultLottery }), prepared = await prepareUpdate(f.options);
   const postId = prepared.id + '-entry', initial = await briefUpdatePost({ ...f.options, postId });

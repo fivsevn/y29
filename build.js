@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, copyFile, cp, rm } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, copyFile, cp, rm, lstat } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildFeed } from './lucifer0/tools/content.js';
@@ -24,6 +24,13 @@ const socialAssets = new Set([
   'assets/icon.svg', 'assets/verification-lucifer.png', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
   ...socialFeed.posts.flatMap(post => post.media.map(image => image.src))
 ]);
+for (const path of new Set(socialFeed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')))) {
+  try {
+    const stat = await lstat(join(root, 'lucifer0', path));
+    if (!stat.isFile() || stat.isSymbolicLink()) throw new Error('Post image license must be a regular file: ' + path);
+    socialAssets.add(path);
+  } catch (error) { if (error.code !== 'ENOENT') throw error; }
+}
 for (const path of [...runtimeFiles, ...[...socialAssets].map(path => 'lucifer0/' + path)]) {
   const destination = join(output, path);
   await mkdir(dirname(destination), { recursive: true });
