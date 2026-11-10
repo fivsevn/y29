@@ -1112,6 +1112,42 @@
       "inFollowing": false
     },
     {
+      "id": "guest-l0-20261109105752-76fe0270-nohint",
+      "handle": "guest_375ea81b999c2cf92e4f",
+      "name": "别告诉我",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109105752-76fe0270-tab",
+      "handle": "guest_7154ccee18ab85556358",
+      "name": "三个标签页",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109105752-76fe0270-calendar",
+      "handle": "guest_673f81cd6d4a5721d9e1",
+      "name": "盆底有洞",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "guest-site-welcome-removed-01",
       "handle": "guest_d8de83693e21f410d2c7",
       "name": "先让我说完",
@@ -1149,6 +1185,90 @@
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261109105752-76fe0270-06",
+      "author": "guest-l0-20261109105752-76fe0270-tab",
+      "createdAt": "2026-11-09T18:39:00+08:00",
+      "replyTo": "l0-20261109105752-76fe0270-01",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109105752-76fe0270-01/media/l0-20261109105752-76fe0270-06.png",
+          "alt": "电脑显示两张石门图案相似的游戏封面，分别标着I和II，第二张带有选中边框。"
+        }
+      ],
+      "guest": {
+        "name": "三个标签页"
+      },
+      "text": "这关先放两天吧。我有次照着答案走都没开，回头发现查的是第二作。"
+    },
+    {
+      "id": "l0-20261109105752-76fe0270-03",
+      "author": "guest-l0-20261109105752-76fe0270-calendar",
+      "createdAt": "2026-11-09T18:34:00+08:00",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "盆底有洞"
+      },
+      "text": "帮朋友看小盆栽摊，把旧台历翻过来写价签，数字描粗了三遍。隔着半条街都能看清。有人奔着牌子走过来，低头一看：原来盆这么小。"
+    },
+    {
+      "id": "l0-20261109105752-76fe0270-05",
+      "author": "visitor-lambda",
+      "createdAt": "2026-11-09T18:25:00+08:00",
+      "replyTo": "l0-20261109105752-76fe0270-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "我还在搜索词后面加了“无剧透”。没想到答案就是那几个字。"
+    },
+    {
+      "id": "l0-20261109105752-76fe0270-02",
+      "author": "baiyanyan",
+      "createdAt": "2026-11-09T18:21:00+08:00",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "今天穿那条好看的裙子出门，走到楼下就回去换了。站着挺好，一坐下腰上那截硬得像纸板。啧，店里的试衣镜旁边就该放把椅子。"
+    },
+    {
+      "id": "l0-20261109105752-76fe0270-04",
+      "author": "guest-l0-20261109105752-76fe0270-nohint",
+      "createdAt": "2026-11-09T18:15:00+08:00",
+      "replyTo": "l0-20261109105752-76fe0270-01",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109105752-76fe0270-01/media/l0-20261109105752-76fe0270-04.png",
+          "alt": "旧木桌上的手机显示两张游戏视频封面，一张是金色门口的人影，另一张是树林，旁边放着有线耳机。"
+        }
+      ],
+      "guest": {
+        "name": "别告诉我"
+      },
+      "text": "我现在连关卡名都不敢搜。上次只想找配乐，视频封面把结局画全了。"
+    },
+    {
+      "id": "l0-20261109105752-76fe0270-01",
+      "author": "visitor-lambda",
+      "createdAt": "2026-11-09T18:09:00+08:00",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109105752-76fe0270-01/media/l0-20261109105752-76fe0270-01.png",
+          "alt": "傍晚的桌上摆着笔记本电脑和半杯茶，游戏画面中的木门已经打开，通向石墙走廊。"
+        }
+      ],
+      "text": "给自己定了今晚不看提示。刚才搜那关的名字，本来只想确认是不是最后一关，搜索框下面直接写了门怎么开。现在门开了，也没觉得多高兴。"
+    },
     {
       "id": "l0-20261109020712-61980d24-08",
       "author": "guest-l0-20261109020712-61980d24-percent",
