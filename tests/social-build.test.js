@@ -52,6 +52,14 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
   const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.png', `${mediaDirectory}/LICENSE.txt`,
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src))]);
+  const mediaLicenses = new Set(feed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')));
+  for (const path of mediaLicenses) {
+    let source;
+    try { source = await readFile(join(directory, 'lucifer0', path), 'utf8'); }
+    catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+    expected.add(path);
+    assert.equal(await readFile(join(directory, 'dist/lucifer0', path), 'utf8'), source, 'published media retains its accompanying license');
+  }
   assert.deepEqual(published, [...expected].sort());
   assert.ok(!published.some(path => /private|not-referenced|unused|registry|profile-seeds|manage|tools|docs|\.md$/.test(path)));
   assert.equal(await readFile(join(directory, 'dist/lucifer0', mediaDirectory, 'LICENSE.txt'), 'utf8'), 'Google Noto Emoji license fixture');
