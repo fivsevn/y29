@@ -192,6 +192,12 @@ function personRow(user) {
 function empty(title, copy, href = '#/', label = '返回 /world') {
   return `<div class="empty"><span class="empty-symbol" aria-hidden="true">( ´_ゝ｀)</span><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="text-link" href="${href}">[ ${esc(label)} ]</a></div>`;
 }
+function mediaMarkup(image) {
+  if (image.src.startsWith('assets/emotes/l0/')) {
+    return `<img class="post-emote" src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="160" height="160">`;
+  }
+  return `<a class="post-image${image.fit === 'contain' ? ' is-contained' : ''}" href="./${esc(image.src)}" aria-haspopup="dialog" aria-label="查看原图：${esc(image.alt)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看原图 ↗</span></a>`;
+}
 function replyPreview(post) {
   const { rootId, replies, total, collapsed } = threadReplyPreview(feed.posts, post.id);
   if (!total) return '';
@@ -206,7 +212,7 @@ function postMarkup(post, { threaded = false, target, preview = false } = {}) {
     <div class="post-heading"><a class="author-name" href="${userURL(user.id)}"${nameStyle(user)}>${esc(user.name)}</a><a class="author-id" href="${userURL(user.id)}">ID:${boardID(user.id)}</a><a class="post-number" href="${postURL(post.id)}">${numberLabel(post.id)}</a></div>
     <div class="post-metadata"><time datetime="${esc(post.createdAt)}" title="${esc(dateLabel(post.createdAt, true))}">${esc(dateLabel(post.createdAt, true))}</time>${post.replyTo ? '<span>回应</span>' : ''}</div>
     ${parent ? `<a class="reply-context" href="${postURL(parent.id)}" aria-label="回复${esc(users.get(parent.author).name)}的${numberLabel(parent.id)}">&gt;&gt;${postNumber(parent.id)}</a>` : ''}
-    <div class="post-content${media.length ? ' with-media' : ''}">${media.map(image => `<a class="post-image${image.fit === 'contain' ? ' is-contained' : ''}" href="./${esc(image.src)}" aria-haspopup="dialog" aria-label="查看原图：${esc(image.alt)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看原图 ↗</span></a>`).join('')}${text.trim() ? `<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(text)}</p></a>` : ''}</div>
+    <div class="post-content${media.length ? ' with-media' : ''}">${media.map(mediaMarkup).join('')}${text.trim() ? `<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(text)}</p></a>` : ''}</div>
     <div class="post-actions"><a class="action reply-action" href="${postURL(post.id)}" aria-label="查看${esc(user.name)}的讨论，${replies}条回复" title="查看回复">${icon('reply', 'action-icon')}<span class="reply-count">${replies}</span></a>${deleted ? '' : `<button type="button" class="action like-action" data-action="likes" data-id="${esc(post.id)}" aria-pressed="${liked}" aria-label="${liked ? '取消点赞' : '点赞'}${esc(user.name)}的发言，${post.likes + Number(liked)}个赞" title="${liked ? '取消点赞' : '点赞'}">${icon('heart', 'action-icon')}<span class="like-count">${post.likes + Number(liked)}</span></button>`}<button type="button" class="action share-action" data-action="share" data-id="${esc(post.id)}" aria-label="复制这条发言的链接" title="复制链接">${icon('link', 'action-icon')}</button></div>
     ${preview && !post.replyTo ? replyPreview(post) : ''}
   </article>`;

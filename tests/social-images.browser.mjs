@@ -26,10 +26,46 @@ try {
   await page.goto(base);
   await page.locator('article.post').first().waitFor();
   const feed = await (await page.request.get(new URL('data/feed.json', base).href)).json();
-  const root = feed.posts.find(post => !post.replyTo && post.media.length);
-  const reply = feed.posts.find(post => post.replyTo && post.media.length);
-  assert.ok(root && reply, 'the feed contains a main post and a reply with media');
+  const isEmote = image => image.src.startsWith('assets/emotes/l0/');
+  const root = feed.posts.find(post => !post.replyTo && post.media.length && !isEmote(post.media[0]));
+  const emoteRoot = feed.posts.find(post => !post.replyTo && post.media.some(isEmote));
+  const emoteReply = feed.posts.find(post => post.replyTo && post.media.some(isEmote));
+  assert.ok(root && emoteRoot && emoteReply, 'the feed contains an ordinary photo and emotes in main posts and replies');
+  // The live archive may contain only emote replies. Keep photo-reply checks
+  // independent by adding a synthetic reply to the intercepted feed only.
+  const reply = { ...structuredClone(root), id: 'image-viewer-fixture-reply', replyTo: root.id,
+    createdAt: new Date(Date.parse(root.createdAt) + 1000).toISOString(), text: '普通图片回复测试。', media: [structuredClone(root.media[0])] };
+  feed.posts.push(reply);
+  let displayedFeed = feed;
+  await page.route('**/data/feed.json*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(displayedFeed) }));
+  await page.reload();
+  await page.locator(`#post-${root.id}`).waitFor();
   const dialog = page.getByRole('dialog', { name: '查看原图', exact: true });
+  const assertCompactEmote = async post => {
+    const image = page.locator(`#post-${post.id} .post-emote`).first();
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(image => image.decode());
+    const presentation = await image.evaluate(image => {
+      const box = image.getBoundingClientRect(), content = image.closest('.post-content').getBoundingClientRect();
+      return { width: box.width, height: box.height, left: box.left - content.left,
+        linked: Boolean(image.closest('a,button,[aria-haspopup="dialog"]')) };
+    });
+    check(presentation.width > 0 && presentation.width <= 80 && presentation.height > 0 && presentation.height <= 80,
+      'site emotes stay compact in both main posts and replies');
+    check(Math.abs(presentation.left) < 1, 'site emotes align with the left edge of the content');
+    check(!presentation.linked, 'site emotes have no image link or dialog trigger');
+    check(await image.getAttribute('alt') === post.media.find(isEmote).alt, 'site emotes retain their accessible description');
+    const url = page.url();
+    await image.click();
+    check(page.url() === url && !await dialog.isVisible(), 'clicking a site emote leaves the route and image viewer unchanged');
+  };
+  await assertCompactEmote(emoteRoot);
+  await page.goto(`${base}#/post/${emoteRoot.id}`);
+  await assertCompactEmote(emoteRoot);
+  await page.goto(`${base}#/post/${emoteReply.id}`);
+  await assertCompactEmote(emoteReply);
+  await page.goto(base);
+  await page.locator(`#post-${root.id}`).waitFor();
   const open = async post => {
     const link = page.locator(`#post-${post.id} .post-image`).first();
     await link.scrollIntoViewIfNeeded();
@@ -137,7 +173,7 @@ try {
       check(!near(pixel(left - 3, info.height / 2), [73, 111, 255]) && !near(pixel(left + painted.width + 3, info.height / 2), [73, 111, 255]), 'a 128 pixel reaction stays 128 pixels wide in a larger thread box');
     }
   };
-  await page.route('**/data/feed.json*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(imageOnly) }));
+  displayedFeed = imageOnly;
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base);
   await page.locator(`#post-${root.id}`).waitFor();
