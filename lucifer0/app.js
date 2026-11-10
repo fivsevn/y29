@@ -14,7 +14,10 @@ let storage;
 try { storage = window.localStorage; } catch { /* Browsing works without storage. */ }
 let state, feed, users, posts, toastTimer;
 const main = document.querySelector('main');
-const loginDialog = document.querySelector('#login-dialog'), loginCopy = document.querySelector('#login-access-copy');
+const loginDialog = document.querySelector('#login-dialog'), loginHeading = document.querySelector('#login-heading');
+const inviteForm = document.querySelector('#invite-form'), inviteCode = document.querySelector('#invite-code');
+const loginVerification = document.querySelector('#login-verification'), robotCheck = document.querySelector('#robot-check');
+const loginError = document.querySelector('#login-error');
 let loginReturnFocus;
 const userURL = id => `#/user/${encodeURIComponent(id)}`;
 const postURL = id => `#/post/${encodeURIComponent(id)}`;
@@ -35,17 +38,34 @@ function notify(message) {
   clearTimeout(toastTimer); toast.textContent = message; toast.classList.add('visible');
   toastTimer = setTimeout(() => toast.classList.remove('visible'), 2800);
 }
-function refreshLoginCopy() {
-  loginCopy.textContent = parseSiteGuide(feed?.posts, feed?.users)?.access.text || '内测邀请信息尚未载入，请稍后再试。';
+function resetLogin() {
+  loginHeading.textContent = '输入邀请码';
+  inviteForm.reset();
+  inviteForm.hidden = false;
+  loginVerification.hidden = true;
+  loginError.textContent = '';
+  robotCheck.classList.remove('has-failed');
 }
 function openLogin(button) {
   loginReturnFocus = button;
-  refreshLoginCopy();
+  resetLogin();
   if (!loginDialog.open) loginDialog.showModal();
-  document.querySelector('#login-close').focus();
+  inviteCode.focus({ preventScroll: true });
 }
+inviteForm.addEventListener('submit', event => {
+  event.preventDefault();
+  inviteForm.reset();
+  inviteForm.hidden = true;
+  loginHeading.textContent = '人机验证';
+  loginVerification.hidden = false;
+  robotCheck.focus({ preventScroll: true });
+});
+robotCheck.addEventListener('click', () => {
+  loginError.textContent = '验证失败';
+  robotCheck.classList.add('has-failed');
+});
 loginDialog.addEventListener('cancel', event => { event.preventDefault(); loginDialog.close(); });
-loginDialog.addEventListener('close', () => { loginReturnFocus?.focus({ preventScroll: true }); loginReturnFocus = null; });
+loginDialog.addEventListener('close', () => { resetLogin(); loginReturnFocus?.focus({ preventScroll: true }); loginReturnFocus = null; });
 function boardbar(title, meta = '', action = '') {
   return `<div class="boardbar"><h2>${title.startsWith('/') ? esc(title) : `<span aria-hidden="true">/</span> ${esc(title)}`}</h2>${meta ? `<span class="board-meta">${esc(meta)}</span>` : ''}${action}</div>`;
 }
@@ -186,12 +206,10 @@ async function load() {
     feed = await response.json();
     if (feed.version !== 1 || !Array.isArray(feed.users) || !Array.isArray(feed.posts)) throw new Error('Invalid feed');
     users = new Map(feed.users.map(user => [user.id, user])); posts = new Map(feed.posts.map(post => [post.id, post]));
-    refreshLoginCopy();
     state ??= readState(storage);
     render(); renderedRoute = location.hash || '#/'; selectReply();
   } catch {
     feed = null;
-    refreshLoginCopy();
     main.innerHTML = '<div class="empty"><h3>帖子暂时没有载入</h3><p>请稍后重试。</p><button class="follow-button" id="retry">重新载入</button></div>';
     document.querySelector('#retry').addEventListener('click', load);
   }
