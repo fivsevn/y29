@@ -136,6 +136,18 @@ node lucifer0/tools/update.js finish --work /outside/work
 
 工具核对本地帖子和线上 `https://y29.fivsevn.com/lucifer0/data/feed.json` 的本次内容，成功后清理当前工作文件。报告实际条数、随机路人与库内人物各自条数、提交和线上核验结果。实际为零条时，报告已经做的观察、受限缺项或其他原因，再结束当前更新。
 
+## 管理员公告
+
+管理员按用户明确指令编写和发布公告。使用仓库外的人工批次文件，沿本页的帖子结构填写正文；批次的 `version` 为1，`id` 为本次公告编号，`mode` 为 `daily`，`posts` 为实际公告数组。然后执行：
+
+```sh
+node lucifer0/tools/publish.js ingest /outside/work/announcement.json --reviewed
+node lucifer0/tools/publish.js validate
+node build.js
+```
+
+公告审读后与必要资料一起提交上线，核验方式沿本页执行。管理员的自动更新范围设为 `none`，抽签权重为0。全站第一帖 `site-welcome` 保存入站须知，`/about` 从它的正文读取介绍、逐条规则与结尾；调整须知时直接编辑这条原帖。首帖正文以“入站须知”为第一行，接一段介绍，规则按 `01 内容`、`02 内容` 连续编号并各占一行，最后接一段结尾。
+
 ## 恢复与修正
 
 中断后继续使用原工作目录、原帖子 ID 和草稿。已经存在且内容相同的帖子由工具跳过，缺少的部分继续补齐；同 ID 的不同内容会要求核对。`.publish-pending.json` 暂存未完成导入，`.publish.lock/` 与 `.publish-staging/` 服务写入过程，工作目录的 `.update.lock/` 协调准备、收尾与撤回，均由工具管理。发布校验和构建要求当前导入已完成，准备及恢复仍可读取此前已完成的内容。

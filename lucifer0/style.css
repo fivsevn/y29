@@ -31,6 +31,7 @@ main::-webkit-scrollbar{display:none}
 .topbar{position:relative;z-index:30;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;min-height:48px;height:calc(48px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 16px 0;background:var(--bar);box-shadow:0 5px 18px #00000022}
 .brand{display:flex;align-items:center;min-height:44px}
 .brand h1{font:600 19px/1 Plex,monospace;letter-spacing:-.8px;color:var(--red)}
+.login-button{min-width:44px;min-height:36px;padding:4px;font:11px/1.4 Plex,monospace;color:var(--muted)}
 .boardbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;min-height:32px;padding:5px 16px;background:var(--paper);box-shadow:0 5px 10px #00000018}
 .boardbar h2{font-family:Plex,"PingFang SC",monospace;font-size:11px;letter-spacing:.07em;font-weight:650}
 .boardbar h2>span{color:var(--red);margin-right:4px;font-family:Plex,monospace}
@@ -112,16 +113,20 @@ main::-webkit-scrollbar{display:none}
 .guide-heading{display:flex;align-items:baseline;gap:12px;margin-bottom:20px}
 .guide-heading>span{font:10px/1.6 Plex,monospace;letter-spacing:.04em;color:var(--red)}
 .guide-heading h3{font-size:13px;line-height:1.6;font-weight:650;color:var(--ink)}
-.board-rules{margin:0;padding:0;list-style:none;counter-reset:board-rule}
-.board-rules>li{position:relative;counter-increment:board-rule;padding:0 0 20px 32px}
-.board-rules>li::before{content:counter(board-rule,decimal-leading-zero);position:absolute;left:0;top:2px;font:10px/1.7 Plex,monospace;color:var(--red);opacity:.72}
-.board-rules p{font-size:12px;line-height:1.85;color:var(--muted);overflow-wrap:anywhere}
+.board-rules{margin:0;padding:0;list-style:none}
+.board-rules>li{position:relative;padding:0 0 20px 32px}
+.board-rules>li::before{content:attr(data-number);position:absolute;left:0;top:2px;font:10px/1.7 Plex,monospace;color:var(--red);opacity:.72}
+.board-rules p,.guide-copy{font-size:12px;line-height:1.85;color:var(--muted);overflow-wrap:anywhere}
+.guide-copy{white-space:pre-wrap;margin-bottom:20px}
+.guide-closing{margin-bottom:0}
+.guide-post-link{display:inline-block;margin-top:14px;color:var(--red);font-size:10px}
 .loading-state{padding:65px 20px;text-align:center;font-size:12px;color:var(--muted)}
 
 #toast{position:fixed;left:50%;bottom:calc(72px + env(safe-area-inset-bottom));transform:translate(-50%,10px);opacity:0;pointer-events:none;z-index:50;max-width:calc(min(100vw,480px) - 28px);width:max-content;padding:10px 16px;border-radius:12px;background:var(--raised);color:var(--ink);box-shadow:var(--panel-shadow);font-size:11px;transition:opacity .15s,transform .15s}
 #toast.visible{opacity:1;transform:translate(-50%,0)}
 
 @media(hover:hover){
+  .login-button:hover{color:var(--red)}
   .author-name:hover,.post-number:hover,.reply-context:hover{text-decoration:underline}
   .action:hover,.main-nav a:hover{color:var(--red);background:var(--raised)}
   .like-action[aria-pressed="true"]:hover{color:var(--heart)}

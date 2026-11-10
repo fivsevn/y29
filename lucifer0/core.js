@@ -1,4 +1,5 @@
 export const STATE_KEY = 'y29-social-v1';
+export const WELCOME_POST_ID = 'site-welcome';
 
 export const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -35,7 +36,41 @@ export function boardID(id) {
   for (const character of id) hash = Math.imul(hash ^ character.charCodeAt(0), 16777619);
   return (hash >>> 0).toString(36).toUpperCase().padStart(7, '0');
 }
-export const postNumber = id => String(parseInt(boardID(id), 36)).padStart(10, '0');
+export const postNumber = id => id === WELCOME_POST_ID ? '0000000001' : String(parseInt(boardID(id), 36)).padStart(10, '0');
+
+export function userNameColor(user) {
+  return ['news', 'admin'].includes(user?.kind) && typeof user.nameColor === 'string' && /^#[0-9a-fA-F]{6}$/.test(user.nameColor)
+    ? user.nameColor : null;
+}
+
+export function parseSiteGuide(posts, users) {
+  if (!Array.isArray(posts) || !Array.isArray(users)) return null;
+  const matches = posts.filter(post => post?.id === WELCOME_POST_ID);
+  if (matches.length !== 1) return null;
+  const post = matches[0], author = users.find(user => user?.id === post.author);
+  if (post.replyTo != null || author?.kind !== 'admin' || typeof post.text !== 'string') return null;
+  const lines = post.text.replace(/\r\n?/g, '\n').trim().split('\n');
+  const title = lines.shift()?.trim();
+  if (title !== '入站须知') return null;
+  const ruleLine = line => /^(\d{2})[ \t]+(\S.*)$/.exec(line.trim());
+  const firstRule = lines.findIndex(line => ruleLine(line));
+  if (firstRule < 0) return null;
+  const intro = lines.slice(0, firstRule).join('\n').trim(), rules = [], ending = [];
+  let closing = false;
+  for (const line of lines.slice(firstRule)) {
+    if (!line.trim() && !closing) continue;
+    const match = ruleLine(line);
+    if (match && !closing) {
+      if (match[1] !== String(rules.length + 1).padStart(2, '0')) return null;
+      rules.push({ number: match[1], text: match[2] });
+    } else {
+      if (match) return null;
+      closing = true; ending.push(line);
+    }
+  }
+  const outro = ending.join('\n').trim();
+  return intro && rules.length && outro ? { id: post.id, title, intro, rules, closing: outro } : null;
+}
 
 export function rootOf(posts, id) {
   const byId = new Map(posts.map(post => [post.id, post]));

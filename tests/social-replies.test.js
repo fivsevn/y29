@@ -46,19 +46,23 @@ test('nested replies count toward one thread and retain their immediate parents 
 
 // Execute the real renderer with a document double; browser layout is checked
 // separately using the same synthetic content, never by changing the live feed.
-async function renderer(feed) {
+async function renderer(feed, { pending = false } = {}) {
   const handlers = {}, main = { innerHTML: '', scrollTop: 0, focus() {}, querySelector() { return null; } };
-  const document = { title: '', querySelector: selector => selector === 'main' ? main : null,
+  const toast = { textContent: '', classList: { add() {}, remove() {} } };
+  let fetches = 0, storageWrites = 0;
+  const document = { title: '', querySelector: selector => selector === 'main' ? main : selector === '#toast' ? toast : null,
     querySelectorAll: () => [], getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
   const location = { hash: '#/', href: 'https://fixture.invalid/lucifer0/#/' };
-  const context = { ...core, esc: core.escapeHTML, URL, document, location, setTimeout, clearTimeout,
-    window: { localStorage: { getItem() { return null; } }, addEventListener: (type, handler) => { handlers[type] = handler; } },
-    fetch: async () => ({ ok: true, json: async () => feed }) };
+  const context = { ...core, esc: core.escapeHTML, URL, document, location, setTimeout: () => 1, clearTimeout() {},
+    window: { localStorage: { getItem() { return null; }, setItem() { storageWrites++; } }, addEventListener: (type, handler) => { handlers[type] = handler; } },
+    fetch: async () => { fetches++; return pending ? new Promise(() => {}) : { ok: true, json: async () => feed }; } };
   const source = await readFile(new URL('../lucifer0/app.js', import.meta.url), 'utf8');
   vm.runInNewContext(source.replace(/^import .*?;\n/, ''), context);
   await new Promise(resolve => setImmediate(resolve));
-  assert.match(main.innerHTML, /empty-thread/);
-  return { html: () => main.innerHTML, visit(hash) { location.hash = hash; handlers.hashchange(); return main.innerHTML; } };
+  if (!pending) assert.match(main.innerHTML, /empty-thread/);
+  return { html: () => main.innerHTML, visit(hash) { location.hash = hash; handlers.hashchange(); return main.innerHTML; },
+    toast: () => toast.textContent, fetches: () => fetches, storageWrites: () => storageWrites,
+    clickLogin: () => handlers.click({ target: { closest: selector => selector === '#login-button' ? {} : null } }) };
 }
 const article = (html, id) => html.match(new RegExp(`<article\\b[^>]*id="post-${id}"[\\s\\S]*?<\\/article>`))?.[0] || '';
 const previewIds = html => [...html.matchAll(/class="preview-reply" href="#\/post\/([^"]+)"/g)].map(match => match[1]);
@@ -87,4 +91,128 @@ test('thread details keep all eleven replies and their actual parent links; prof
   assert.equal((replyRoute.match(/<article\b/g) || []).length, 12);
   assert.match(replyRoute, /class="post thread-reply is-target" id="post-eleven-thread-reply-11"/);
   assert.doesNotMatch(page.visit('#/user/preview-owner'), /reply-preview|preview-more/);
+});
+
+const guideText = ['入站须知', '', '这里是这份公告的开头。', '',
+  '01 保留自己的声音。', '02 回应原来的话题。', '03 转述时留下来源。',
+  '04 不把别人的隐私当素材。', '05 不用重复发言占满页面。', '06 文案中的 <标签> 与 & 也照常显示。',
+  '', '谢谢读到这里。', '', '第二段结尾也来自公告。'].join('\n');
+
+function presentationFixture() {
+  const feed = fixture();
+  const account = (id, name, kind, nameColor) => ({ ...feed.users[0], id, name, handle: id.replaceAll('-', '_'), kind, nameColor });
+  feed.users.push(account('news-desk', '标识新闻', 'news', '#12aBcD'), account('site-admin', '标识站务', 'admin', '#FEc877'),
+    account('ordinary-color', '标识普通', 'visitor', '#ABCDEF'), account('unsafe-color', '标识坏色', 'news', '#123456;background:url(injected)'));
+  const post = (id, author, replyTo = null, text = '标识测试发言') => ({ id, author, replyTo, text,
+    createdAt: replyTo ? '2026-01-01T01:00:00Z' : '2026-01-01T00:00:00Z', likes: 0, canon: 'derivative', media: [] });
+  feed.posts.push({ ...post(core.WELCOME_POST_ID, 'site-admin', null, guideText), createdAt: '2025-01-01T00:00:00Z' },
+    post('news-thread', 'news-desk'), post('admin-reply', 'site-admin', 'news-thread'),
+    post('ordinary-reply', 'ordinary-color', 'news-thread'), post('unsafe-reply', 'unsafe-color', 'news-thread'));
+  return feed;
+}
+
+test('only news/admin names accept a complete hex color, including when feed validation was bypassed', () => {
+  for (const kind of ['news', 'admin']) {
+    assert.equal(core.userNameColor({ kind, nameColor: '#12aBcD' }), '#12aBcD');
+    for (const nameColor of ['red', '#fff', '#12345678', '#123456;display:none', '#123456\n', ' #123456', '#123456" onmouseover="x', null, 123456, undefined]) {
+      assert.equal(core.userNameColor({ kind, nameColor }), null);
+    }
+  }
+  for (const kind of ['visitor', 'character', 'guest', undefined]) assert.equal(core.userNameColor({ kind, nameColor: '#123456' }), null);
+  assert.equal(core.userNameColor(null), null);
+});
+
+test('special colors apply to names in roots, reply previews, full replies, profiles and user search only', async () => {
+  const page = await renderer(presentationFixture());
+  const world = page.html(), news = article(world, 'news-thread');
+  assert.match(news, /class="author-name" href="#\/user\/news-desk" style="color:#12aBcD">标识新闻<\/a>/);
+  assert.match(article(world, core.WELCOME_POST_ID), /class="author-name" href="#\/user\/site-admin" style="color:#FEc877">标识站务<\/a>/);
+  assert.match(news, /<strong style="color:#FEc877">标识站务<\/strong>/);
+  assert.match(news, /<strong>标识普通<\/strong>/);
+  assert.match(news, /<strong>标识坏色<\/strong>/);
+  assert.doesNotMatch(news, /injected|#ABCDEF|style="color:#123456/);
+  assert.doesNotMatch(article(world, 'empty-thread'), /style=/);
+  assert.doesNotMatch(world, /<(?:article|div|p|span)[^>]*style=/);
+  const detail = page.visit('#/post/news-thread');
+  assert.match(article(detail, 'admin-reply'), /class="author-name"[^>]*style="color:#FEc877"/);
+  assert.doesNotMatch(article(detail, 'ordinary-reply'), /style=/);
+  assert.doesNotMatch(article(detail, 'unsafe-reply'), /style=/);
+  for (const [id, name, color] of [['news-desk', '标识新闻', '#12aBcD'], ['site-admin', '标识站务', '#FEc877']]) {
+    assert.ok(page.visit(`#/user/${id}`).includes(`<strong style="color:${color}">${name}</strong>`));
+  }
+  assert.match(page.visit('#/user/ordinary-color'), /<strong>标识普通<\/strong>/);
+  const search = page.visit('#/search?q=标识');
+  assert.match(search, /<strong style="color:#12aBcD">标识新闻<\/strong>/);
+  assert.match(search, /<strong style="color:#FEc877">标识站务<\/strong>/);
+  assert.match(search, /<strong>标识普通<\/strong>/);
+  assert.match(search, /<strong>标识坏色<\/strong>/);
+  assert.doesNotMatch(search, /injected|#ABCDEF/);
+});
+
+test('the administrator welcome post provides the guide title, copy and original rule numbers', async () => {
+  const feed = presentationFixture(), guide = core.parseSiteGuide(feed.posts, feed.users);
+  assert.equal(guide.id, core.WELCOME_POST_ID);
+  assert.equal(guide.title, '入站须知');
+  assert.equal(guide.intro, '这里是这份公告的开头。');
+  assert.equal(guide.closing, '谢谢读到这里。\n\n第二段结尾也来自公告。');
+  assert.deepEqual(guide.rules.map(rule => rule.number), ['01', '02', '03', '04', '05', '06']);
+  const page = await renderer(feed), about = page.visit('#/about');
+  for (const rule of guide.rules) assert.ok(about.includes(`<li data-number="${rule.number}"><p>${core.escapeHTML(rule.text)}</p></li>`));
+  assert.ok(about.includes(core.escapeHTML(guide.intro)) && about.includes(core.escapeHTML(guide.closing)));
+  assert.match(about, /class="guide-post-link" href="#\/post\/site-welcome"/);
+  assert.doesNotMatch(about, /<标签>|别刷屏、发广告，也别骚扰他人/);
+  const detail = article(page.visit('#/post/site-welcome'), 'site-welcome');
+  assert.ok(detail.includes(core.escapeHTML(guideText)));
+  assert.match(detail, /No\.0000000001/);
+  feed.posts.find(post => post.id === core.WELCOME_POST_ID).text = guideText.replace('保留自己的声音。', '首帖改过的新规则。');
+  assert.match(page.visit('#/about'), /首帖改过的新规则。/);
+  assert.match(page.visit('#/post/site-welcome'), /01 首帖改过的新规则。/);
+  assert.doesNotMatch(page.visit('#/about'), /保留自己的声音。/);
+});
+
+test('missing, non-admin, reply and malformed welcome sources do not supply a fallback guide', async () => {
+  for (const change of [
+    feed => { feed.posts = feed.posts.filter(post => post.id !== core.WELCOME_POST_ID); },
+    feed => { feed.users.find(user => user.id === 'site-admin').kind = 'visitor'; },
+    feed => { feed.users = feed.users.filter(user => user.id !== 'site-admin'); },
+    feed => { feed.posts.find(post => post.id === core.WELCOME_POST_ID).replyTo = 'news-thread'; },
+    feed => { feed.posts.find(post => post.id === core.WELCOME_POST_ID).text = guideText.replace('02 回应', '03 回应'); },
+    feed => { feed.posts.find(post => post.id === core.WELCOME_POST_ID).text = '入站须知\n\n没有逐条公告。'; },
+    feed => { feed.posts.push({ ...feed.posts.find(post => post.id === core.WELCOME_POST_ID) }); }
+  ]) {
+    const feed = presentationFixture(); change(feed);
+    assert.equal(core.parseSiteGuide(feed.posts, feed.users), null);
+    // A missing author is invalid for the full renderer, but the parser still
+    // rejects that source without depending on feed schema validation.
+    if (!feed.users.some(user => user.id === 'site-admin')) continue;
+    const page = await renderer(feed), about = page.visit('#/about');
+    assert.match(about, /查看站务公告/);
+    assert.doesNotMatch(about, /board-rules|保留自己的声音|别刷屏、发广告，也别骚扰他人/);
+  }
+  assert.equal(core.parseSiteGuide(null, []), null);
+});
+
+test('welcome number one does not renumber existing post IDs or their quote links', async () => {
+  assert.equal(core.postNumber(core.WELCOME_POST_ID), '0000000001');
+  for (const [id, number] of [['empty-thread', '1939648781'], ['ten-thread', '4084163571'], ['existing-number-01', '3995546674']]) {
+    assert.equal(core.postNumber(id), number);
+  }
+  const feed = presentationFixture();
+  feed.posts.push({ ...feed.posts.find(post => post.id === 'admin-reply'), id: 'welcome-reply', replyTo: core.WELCOME_POST_ID });
+  const page = await renderer(feed);
+  assert.match(article(page.html(), core.WELCOME_POST_ID), /&gt;&gt;0000000001/);
+  assert.match(article(page.visit('#/post/welcome-reply'), 'welcome-reply'), /class="reply-context" href="#\/post\/site-welcome"[^>]*>&gt;&gt;0000000001/);
+});
+
+test('log in only shows the invitation toast, including before the feed has loaded', async () => {
+  const index = await readFile(new URL('../lucifer0/index.html', import.meta.url), 'utf8');
+  assert.match(index, /<header class="topbar">[\s\S]*<button type="button" class="login-button" id="login-button">log in<\/button>[\s\S]*<\/header>/);
+  for (const pending of [false, true]) {
+    const page = await renderer(fixture(), { pending }), before = page.html();
+    await page.clickLogin();
+    assert.equal(page.toast(), '本站目前采用内测邀请制，发帖权限随邀请开放。');
+    assert.equal(page.html(), before);
+    assert.equal(page.fetches(), 1);
+    assert.equal(page.storageWrites(), 0);
+  }
 });

@@ -2,7 +2,7 @@ import { readFile, mkdir, writeFile, realpath, lstat, rm } from 'node:fs/promise
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { readUserDocuments, buildUserDirectory, isUserAvatarPath } from './user-documents.js';
+import { readUserDocuments, buildUserDirectory, isUserAvatarPath, isUserNameColor } from './user-documents.js';
 import { readThreadPackages, writeThreadBatch, isPostMediaPath, threadDirectory } from './thread-packages.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
@@ -50,14 +50,15 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
   if (registry.version !== 1 || !Array.isArray(registry.users)) fail('Invalid registry');
   const users = new Map(), handles = new Set(), names = new Map();
   for (const user of registry.users) {
-    keys(user, ['id', 'handle', 'name', 'bio', 'avatar', 'enabled', 'aiScope', 'profileStatus', 'kind', 'sourceWork', 'inFollowing', 'allowPosts', 'allowReplies'], 'user');
+    keys(user, ['id', 'handle', 'name', 'bio', 'avatar', 'enabled', 'aiScope', 'profileStatus', 'kind', 'sourceWork', 'inFollowing', 'allowPosts', 'allowReplies', 'nameColor'], 'user');
     identifier(user.id, 'user.id');
     if (user.id.startsWith('guest-')) fail('The guest- ID prefix is reserved for unprofiled guests');
     if (users.has(user.id)) fail(`Duplicate user ID: ${user.id}`);
     if (!/^[a-z0-9_]{2,32}$/.test(user.handle) || handles.has(user.handle)) fail(`Invalid or duplicate handle: ${user.handle}`);
     text(user.name, 40, 'user.name'); text(user.bio, 240, 'user.bio', true);
     if (!isUserAvatarPath(user.avatar, user.id)) fail('Invalid avatar path: use this user folder or leave it empty');
-    if (typeof user.enabled !== 'boolean' || !['none', 'sample', 'daily'].includes(user.aiScope) || !['sample', 'approved'].includes(user.profileStatus) || !['character', 'visitor'].includes(user.kind)) fail('Invalid account controls');
+    if (typeof user.enabled !== 'boolean' || !['none', 'sample', 'daily'].includes(user.aiScope) || !['sample', 'approved'].includes(user.profileStatus) || !['character', 'visitor', 'news', 'admin'].includes(user.kind)) fail('Invalid account controls');
+    if (Object.hasOwn(user, 'nameColor') && !isUserNameColor(user.nameColor)) fail('Invalid nameColor: use #RRGGBB');
     if (user.sourceWork !== undefined) text(user.sourceWork, 80, 'user.sourceWork', true);
     for (const key of ['inFollowing', 'allowPosts', 'allowReplies']) {
       if (user[key] !== undefined && typeof user[key] !== 'boolean') fail(`Invalid account control: ${key}`);
@@ -123,7 +124,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
   // Explicit projection: operational permissions never become browser data.
   return {
     version: 1,
-    users: [...users.values()].map(({ id, handle, name, bio, avatar, enabled, profileStatus, kind, sourceWork = '', inFollowing = false }) => ({ id, handle, name, bio, avatar, enabled, profileStatus, kind, sourceWork, inFollowing })),
+    users: [...users.values()].map(({ id, handle, name, bio, avatar, enabled, profileStatus, kind, sourceWork = '', inFollowing = false, nameColor }) => ({ id, handle, name, bio, avatar, enabled, profileStatus, kind, sourceWork, inFollowing, ...(nameColor !== undefined ? { nameColor } : {}) })),
     posts: [...posts.values()].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id))
   };
 }
@@ -191,6 +192,7 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
   const batch = isUpdate ? { version: 1, id: value.id, mode: 'daily', posts: value.posts } : value;
   if (isUpdate) contextPath ||= resolve(input);
   validateBatch(batch, policy);
+  if (ai && batch.posts.some(post => registry.users.some(user => user.id === post.author && user.kind === 'admin'))) fail('Administrator accounts require manual publication');
   if (pending && pending.id !== batch.id) fail(`An unfinished update must be retried first: ${pending.id}`);
   if (pending && pending.batchDigest !== createHash('sha256').update(stableJSON(batch)).digest('hex')) fail('Update ID already has an unfinished import with different content');
   const resumingPartialWrite = Boolean(pending);

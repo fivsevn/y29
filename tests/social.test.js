@@ -67,6 +67,44 @@ test('public content is complete, stable and contains no private operational fie
   assert.equal(source.policy.automaticPosting, false);
 });
 
+test('news and admin project optional safe name colors without adding fields to ordinary accounts', () => {
+  const f = fixture(), news = f.registry.users[0], admin = f.registry.users[1];
+  Object.assign(news, { kind: 'news', nameColor: '#24aBcD' });
+  Object.assign(admin, { kind: 'admin', nameColor: '#FFFFFF' });
+  const feed = validate(f);
+  assert.equal(feed.users.find(user => user.id === news.id).nameColor, '#24aBcD');
+  assert.equal(feed.users.find(user => user.id === admin.id).kind, 'admin');
+  assert.ok(feed.users.filter(user => ![news.id, admin.id].includes(user.id)).every(user => !Object.hasOwn(user, 'nameColor')));
+  for (const nameColor of ['red', '#fff', '#12345678', '#123456;display:none', 'url(test)', null, 123456]) {
+    const invalid = fixture(); invalid.registry.users[0].nameColor = nameColor;
+    assert.throws(() => validate(invalid), /nameColor/);
+  }
+});
+
+test('a reviewed manual import can publish an admin while AI imports cannot even with mistaken permissions', async t => {
+  const { root, directory } = await repositoryCopy(t), id = 'alan';
+  const user = { ...source.registry.users.find(user => user.id === id), kind: 'admin' };
+  const settingsPath = join(root, 'accounts.json'), settings = JSON.parse(await readFile(settingsPath, 'utf8'));
+  Object.assign(settings.users.find(user => user.id === id), { kind: 'admin', aiScope: 'daily', activityWeight: 10 });
+  await writeFile(settingsPath, JSON.stringify(settings));
+  await writeFile(join(root, 'users', id, 'profile.md'), renderUserDocument(user, emptyProfile(id)));
+  const input = join(directory, 'manual-admin.json'), batch = newBatch();
+  for (const mode of ['sample', 'daily']) {
+    batch.mode = mode; batch.posts[0].canon = mode === 'sample' ? 'sample' : 'derivative';
+    await writeFile(input, JSON.stringify(batch));
+    await assert.rejects(ingestBatch(input, { root, reviewed: true, ai: true }), /Administrator.*manual/);
+  }
+  await assert.rejects(ingestBatch(input, { root }), /reviewed/);
+  Object.assign(settings.users.find(user => user.id === id), { aiScope: 'none', activityWeight: 0 });
+  await writeFile(settingsPath, JSON.stringify(settings));
+  batch.posts[0].createdAt = '2025-01-01T00:00:00Z';
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /timeline/);
+  assert.equal((await ingestBatch(input, { root, reviewed: true, backfill: true })).status, 'archived');
+  assert.ok((await loadContent(root)).feed.posts.some(post => post.id === batch.posts[0].id && post.author === id));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true, ai: true }), /Administrator.*manual/);
+});
+
 test('duplicate users, handles, batches, IDs and disguised repeat content are rejected', () => {
   const mutations = [
     f => f.registry.users.push(f.registry.users[0]),
