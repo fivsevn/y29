@@ -1530,9 +1530,144 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-f8069c78563058dc",
+      "handle": "guest_caa08d6db3380f0d2b89",
+      "name": "刘海还没长回来",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-eb1e1af156553c4e",
+      "handle": "guest_21310f15971d983df0e2",
+      "name": "墙在右边",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1ae25a8504c9facc",
+      "handle": "guest_c693b72e8adbf7b6862d",
+      "name": "反着看也行",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110210715-bd3468e0-09",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-10T19:30:04.467Z",
+      "replyTo": "l0-20261110210715-bd3468e0-02",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-02/media/exposure-compare.webp",
+          "alt": "手机相册对比截图，两列同样的甜品包装和纸托，左侧自动增强后泛白，右侧锁定曝光保留紫色和较暗的层次。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "我店里陈列架也是。手机一开自动增强，浅紫的纸托全成了白的。\n我把相册两张截在一块儿了，左边自动，右边锁曝光。东西没换，颜色差得离谱。"
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-10",
+      "author": "guest-1ae25a8504c9facc",
+      "createdAt": "2026-11-10T19:20:01.467Z",
+      "replyTo": "l0-20261110210715-bd3468e0-07",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "反着看也行"
+      },
+      "text": "我懂了，意思是到墙边就该穿过去。管理员不如亲自演示"
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-05",
+      "author": "news-surf",
+      "createdAt": "2026-11-10T19:17:26.467Z",
+      "replyTo": null,
+      "likes": 14,
+      "canon": "derivative",
+      "media": [],
+      "text": "刚刷到一张梗图，把“信息出错”画成一个拎花上门的人。底下有人接剧情，有人认真给他的名牌纠字，楼主又画了第二张，把勘误单也塞花束里。\n这下真的没法说他们不懂梗了，谁还没被改过病句啊。"
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-01",
+      "author": "guest-f8069c78563058dc",
+      "createdAt": "2026-11-10T19:13:27.467Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "刘海还没长回来"
+      },
+      "text": "刘海只想修到眉毛上面一点，结果一剪刀到眉毛中间。我看着镜子愣了半天，师傅说“显精神”。现在是真精神，走路都得抬着眉毛。回去问能不能补救，他说再剪就更短了。"
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-03",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-10T19:12:49.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "收货点门口那只猫今天居然没躲。我站着跟它看了半分钟，想起没掏手机，手刚动一下就跑了。行吧，允许我看，不允许我留证据。"
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-07",
+      "author": "guest-eb1e1af156553c4e",
+      "createdAt": "2026-11-10T19:12:09.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-07/media/door-diagram.webp",
+          "alt": "一张歪斜放着的手绘柜子平面示意图，格子和方向箭头被红色交叉线划过，右侧另画一根纠正方向的红箭头。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "墙在右边"
+      },
+      "text": "楼里公共柜子的取物示意图把门和墙的位置画反了，我按实际走向重画一张贴群里。管理员说别改，统一按墙上的旧图。我说那图的箭头直接指进墙里，他让我“按箭头理解就行”。你自己来理解一个？"
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-02",
+      "author": "chenanjing",
+      "createdAt": "2026-11-10T19:11:31.467Z",
+      "replyTo": null,
+      "likes": 14,
+      "canon": "derivative",
+      "media": [],
+      "text": "那张展板的右下角是故意留暗的，不是文件坏了。\n\n今天去看布展，屏幕开着自动增强，青灰全被拉成了亮蓝，画面上那层薄薄的影子彻底没有了。我问谁调的，对方说怕观众看不清，反正画的是同一张。\n\n那就别写我的名字。我要的是那张画，不是一张能被看清所有颜色的展示屏。已经发过一次色彩校准说明了，这回我直接把原稿和设置一起放过去。"
+    },
     {
       "id": "l0-20261110191228-b8ed4062-08",
       "author": "visitor-gamma-upper",
