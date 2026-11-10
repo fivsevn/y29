@@ -76,7 +76,13 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 准备结果中的 `researchMaintenance.selectedPaths` 给出本次研究对象，抽取方式见[抽签规则](lottery.md#研究补充)。读取选中文档和已有参考，再进入原始来源阅读材料。
 
-有新价值的样本沿原编号追加到文末的参考板块，保留来源、实际读取范围与访问日期；过时资料核实后修正。方法上的新发现写入本专题对应章节。完成检查后，将结果填入 `operation.json.researchMaintenance`，每份选中文档对应一项：
+围绕本专题尚未解释清楚的问题，连续读原帖及可见回复，再沿实际发生的来回追看后续。一起保留普通、低互动、重复和中断的交流；定向挑选的争执或纠错串用于理解机制，比例判断另需记录采样入口、排序、时间窗口与统计口径。搜索摘要和转述只作发现线索，有效案例以实际读到的原文为依据。
+
+新增前先核对已有案例：同一原串的深化阅读补回原条目，写清这次新增的读取范围与访问日期；有独立价值的新样本沿原编号追加。记录原始日期、实际读到的楼层或分支、影响理解的先后关系，以及未展开、缺失或只见链接的部分。方法上的新发现修订本专题对应章节，已有概括相同的地方合并；过时资料核实后修正。
+
+冲突的触发与转向归[负面与争议研究](../environment/negative-research.md)，回复怎样参与和接续归[评论研究](../environment/comments-research.md)，表达形式与疏漏归[说话方式研究](../users/speech-research.md)。同一来源在主要专题登记一次，其他专题用链接引用适用处。现有文档能容纳的研究继续在原处深化；确需新增文档时，先向用户说明名称、职责及与现有文档的边界。
+
+完成检查后，将结果填入 `operation.json.researchMaintenance`，每份选中文档对应一项：
 
 | 字段 | 内容 |
 | --- | --- |
@@ -131,13 +137,13 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 
 ## 生成并归档配图
 
-先完成本次条数抽取与实际 `posts`，再用当前工作目录执行：
+构思发言时按[配图](writing.md#配图)统筹图片用途；完成本次条数抽取与实际 `posts` 后，再用当前工作目录执行：
 
 ```sh
 node lucifer0/tools/update.js suggest --work /outside/work
 ```
 
-命令根据当前操作与实际发言返回配图和点赞建议。按[配图](writing.md#配图)判断每条的具体用途，采用合适的已有素材或生成画面；表情素材从[Meme 资源](../environment/meme-research.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)审定后填写。
+命令根据当前操作与实际发言返回配图和点赞建议。结合已规划的用途，按[配图规则](writing.md#配图)核对整轮实际采用量，选择已有素材或生成画面；表情素材从[Meme 资源](../environment/meme-research.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)审定后填写。
 
 采用外部素材时，在对应 `research.summary` 保存资源页、作者、使用依据和处理方式；需要署名的素材在帖文或图片说明中保留署名与来源。
 
