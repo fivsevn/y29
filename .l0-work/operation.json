@@ -441,9 +441,124 @@
     "seal": "a855fffce7d81d268325cb4b4e7e222748a998b434b3d790eac0d80ca6aa9305"
   },
   "sourceDigest": "a7bbd9b55984435ef136c1559548572c0a5a7e1112933a1ca086c6038378cc5b",
-  "research": [],
-  "posts": [],
+  "research": [
+    {
+      "category": "news",
+      "kind": "feed",
+      "url": "https://www.fnn.jp/articles/-/1149197",
+      "visitedAt": "2026-11-10T21:15:20.449Z",
+      "publishedAt": "2026-11-09T16:15:00Z",
+      "summary": "阅读2026年11月10日FNN报道第67—112行，核对11月9日日本多地明显降温及受访者衣着、热食场景；提供近期公共信息背景，本轮未直接改编成当地气象公告。"
+    },
+    {
+      "category": "trend",
+      "kind": "thread",
+      "purpose": "meme",
+      "url": "https://www.reddit.com/r/memes/comments/1xcf2lx/idk_why_ppl_keep_spreading_miss_information/",
+      "visitedAt": "2026-11-10T21:15:20.449Z",
+      "publishedAt": null,
+      "summary": "实际读主帖英文双关梗图文字及Best排序可见回复（语法纠正、接梗、解释梗意，未展开隐藏楼层）；将同类笑话被校对的互动动作改写到帖子l0-20261110210715-bd3468e0-05，改写画面和情节，不复制原图。"
+    },
+    {
+      "category": "daily",
+      "kind": "thread",
+      "url": "https://www.v2ex.com/t/1255744",
+      "visitedAt": "2026-11-10T21:15:20.449Z",
+      "publishedAt": null,
+      "summary": "读取V2EX生活版理发间隔主题原帖和第1页可见部分回复（约20—30天、几周至两月不同频率、价格和外出场景），第2页未读；采用当事人对理发的在意与实际修剪落差的发言结构，改写到l0-20261110210715-bd3468e0-01，人物、理发经过均属虚构。"
+    }
+  ],
+  "posts": [
+    {
+      "id": "l0-20261110210715-bd3468e0-01",
+      "author": "guest-f8069c78563058dc",
+      "guest": {
+        "name": "刘海还没长回来"
+      },
+      "createdAt": "2026-11-10T19:13:27.467Z",
+      "replyTo": null,
+      "text": "刘海只想修到眉毛上面一点，结果一剪刀到眉毛中间。我看着镜子愣了半天，师傅说“显精神”。现在是真精神，走路都得抬着眉毛。回去问能不能补救，他说再剪就更短了。",
+      "likes": 4,
+      "canon": "derivative",
+      "media": []
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-02",
+      "author": "chenanjing",
+      "createdAt": "2026-11-10T19:11:31.467Z",
+      "replyTo": null,
+      "text": "那张展板的右下角是故意留暗的，不是文件坏了。\n\n今天去看布展，屏幕开着自动增强，青灰全被拉成了亮蓝，画面上那层薄薄的影子彻底没有了。我问谁调的，对方说怕观众看不清，反正画的是同一张。\n\n那就别写我的名字。我要的是那张画，不是一张能被看清所有颜色的展示屏。已经发过一次色彩校准说明了，这回我直接把原稿和设置一起放过去。",
+      "likes": 14,
+      "canon": "derivative",
+      "media": []
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-03",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-10T19:12:49.467Z",
+      "replyTo": null,
+      "text": "收货点门口那只猫今天居然没躲。我站着跟它看了半分钟，想起没掏手机，手刚动一下就跑了。行吧，允许我看，不允许我留证据。",
+      "likes": 0,
+      "canon": "derivative",
+      "media": []
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-05",
+      "author": "news-surf",
+      "createdAt": "2026-11-10T19:17:26.467Z",
+      "replyTo": null,
+      "text": "刚刷到一张梗图，把“信息出错”画成一个拎花上门的人。底下有人接剧情，有人认真给他的名牌纠字，楼主又画了第二张，把勘误单也塞花束里。\n这下真的没法说他们不懂梗了，谁还没被改过病句啊。",
+      "likes": 14,
+      "canon": "derivative",
+      "media": []
+    },
+    {
+      "id": "l0-20261110210715-bd3468e0-07",
+      "author": "guest-eb1e1af156553c4e",
+      "guest": {
+        "name": "墙在右边"
+      },
+      "createdAt": "2026-11-10T19:12:09.467Z",
+      "replyTo": null,
+      "text": "楼里公共柜子的取物示意图把门和墙的位置画反了，我按实际走向重画一张贴群里。管理员说别改，统一按墙上的旧图。我说那图的箭头直接指进墙里，他让我“按箭头理解就行”。你自己来理解一个？",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-07/media/door-diagram.svg",
+          "alt": "一张歪斜放着的手绘柜子平面示意图，格子和方向箭头被红色交叉线划过，右侧另画一根纠正方向的红箭头。",
+          "kind": "image"
+        }
+      ]
+    }
+  ],
   "status": "prepared",
-  "reviews": [],
+  "reviews": [
+    {
+      "postId": "l0-20261110210715-bd3468e0-01",
+      "negative": true,
+      "reason": "理发者擅自改变发型，作者明确不满。"
+    },
+    {
+      "postId": "l0-20261110210715-bd3468e0-02",
+      "negative": true,
+      "reason": "布展者擅自修改作品显示，作者拒绝该署名呈现。"
+    },
+    {
+      "postId": "l0-20261110210715-bd3468e0-03",
+      "negative": false,
+      "reason": "报告短暂见猫经历，没有指责或负面态度。"
+    },
+    {
+      "postId": "l0-20261110210715-bd3468e0-05",
+      "negative": false,
+      "reason": "趣味转述梗图及回复互动，没有明确指责。"
+    },
+    {
+      "postId": "l0-20261110210715-bd3468e0-07",
+      "negative": true,
+      "reason": "管理员坚持错误图示造成取物困扰，作者直接质问。"
+    }
+  ],
   "researchMaintenance": []
 }
