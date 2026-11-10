@@ -1,4 +1,4 @@
-import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText } from './core.js?v=20261109-invite';
+import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText } from './core.js?v=20261109-invite-card';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -106,7 +106,7 @@ function renderAbout() {
     <header class="about-brand"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2></header>
     <section class="board-guide" aria-labelledby="guide-heading">
       <div class="guide-heading"><span>/guide</span><h3 id="guide-heading">${esc(guide?.title || '站务公告')}</h3></div>
-      ${guide ? `<p class="guide-copy">${esc(guide.intro)}</p><ol class="board-rules">${guide.rules.map(rule => `<li data-number="${esc(rule.number)}"><p>${esc(rule.text)}</p></li>`).join('')}</ol><p class="guide-copy guide-closing">${esc(guide.closing)}</p>` : ''}
+      ${guide ? `<p class="guide-copy">${esc(guide.intro)}</p><ol class="board-rules">${guide.rules.map(rule => `<li data-number="${esc(rule.number)}"><p>${esc(rule.text)}</p></li>`).join('')}</ol>${guide.closing ? `<p class="guide-copy guide-closing">${esc(guide.closing)}</p>` : ''}` : ''}
     </section>
     <section class="board-access" aria-labelledby="access-heading">
       <div class="guide-heading"><span>/access</span><h3 id="access-heading">${esc(guide?.access.title || '访问权限')}</h3></div>

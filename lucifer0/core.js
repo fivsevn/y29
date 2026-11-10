@@ -74,7 +74,7 @@ export function parseSiteGuide(posts, users) {
     }
   }
   const outro = ending.join('\n').trim();
-  return intro && rules.length && outro ? { id: post.id, title, intro, rules, closing: outro, access } : null;
+  return intro && rules.length ? { id: post.id, title, intro, rules, closing: outro, access } : null;
 }
 
 export function rootOf(posts, id) {

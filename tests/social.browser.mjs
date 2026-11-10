@@ -293,7 +293,9 @@ try {
   check(await page.locator('.guide-post-link').getAttribute('href') === `#/post/${WELCOME_POST_ID}`, 'about links to the original announcement');
   if (guide) {
     check(JSON.stringify(await page.locator('.board-rules li').evaluateAll(rules => rules.map(rule => ({ number: rule.dataset.number, text: rule.querySelector('p').textContent })))) === JSON.stringify(guide.rules), 'about preserves each original rule number and its text');
-    check(await page.locator('.guide-copy').first().textContent() === guide.intro && await page.locator('.guide-closing').textContent() === guide.closing, 'about shows the complete introduction and closing');
+    check(await page.locator('.guide-copy').first().textContent() === guide.intro, 'about shows the complete introduction');
+    if (guide.closing) check(await page.locator('.guide-closing').textContent() === guide.closing, 'about shows an existing closing paragraph');
+    else check(await page.locator('.guide-closing').count() === 0, 'about does not create an empty closing paragraph');
     check(await page.locator('.access-copy').textContent() === guide.access.text, 'access copy comes from the same original post');
   } else check((await page.locator('.guide-post-link').textContent()).includes('查看站务公告'), 'unavailable guides direct readers to the announcement');
   check(await page.locator('.about-footer').count() === 0, 'about has no footer');

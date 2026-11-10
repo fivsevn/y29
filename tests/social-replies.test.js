@@ -207,6 +207,21 @@ test('missing, non-admin, reply and malformed welcome sources do not supply a fa
   assert.equal(core.parseSiteGuide(null, []), null);
 });
 
+test('a guide can omit its closing paragraph without losing its rules or access copy', async () => {
+  const feed = presentationFixture(), welcome = feed.posts.find(post => post.id === core.WELCOME_POST_ID);
+  welcome.text = welcome.text.replace('谢谢读到这里。\n\n第二段结尾也来自公告。\n\n', '');
+  const guide = core.parseSiteGuide(feed.posts, feed.users);
+  assert.equal(guide.closing, '');
+  assert.equal(guide.rules.length, 6);
+  assert.equal(guide.access.text, '这份邀请说明仅在首帖保存。');
+  const page = await renderer(feed), about = page.visit('#/about');
+  assert.doesNotMatch(about, /guide-closing|谢谢读到这里|第二段结尾/);
+  assert.match(about, /data-number="06"/);
+  assert.match(about, /这份邀请说明仅在首帖保存。/);
+  await page.clickLogin();
+  assert.equal(page.loginCopy(), guide.access.text);
+});
+
 test('welcome number one does not renumber existing post IDs or their quote links', async () => {
   assert.equal(core.postNumber(core.WELCOME_POST_ID), '0000000001');
   for (const [id, number] of [['empty-thread', '1939648781'], ['ten-thread', '4084163571'], ['existing-number-01', '3995546674']]) {
