@@ -774,13 +774,15 @@ test('new brief replies reject unavailable parents and do not expose later or de
   const deleted = { ...post(prepared.id + '-deleted', 'guest-removed', f.now, root.id), deleted: true, text: 'PRIVATE_DELETED_BODY' };
   const self = post(id, 'guest-self', f.now, root.id);
   const future = { ...post(prepared.id + '-later', 'guest-later', f.now, root.id), text: 'LATER_DRAFT_BODY' };
-  await draft(prepared, f.now, [root, deleted, self, future]);
+  const futureTime = { ...post(prepared.id + '-future-time', 'guest-future-time', f.now + DAY, root.id), text: 'FUTURE_TIMESTAMP_BODY' };
+  await draft(prepared, f.now, [root, deleted, futureTime, self, future]);
   const brief = await briefUpdatePost({ ...f.options, postId: id });
   assert.equal(brief.writer.self.documents.length, 0);
   assert.equal(brief.editor.worldviewPath, null);
   assert.ok(brief.writer.visiblePosts.some(item => item.id === deleted.id && item.text === '该回复已被删除。'));
   assert.ok(!JSON.stringify(brief.writer).includes('PRIVATE_DELETED_BODY'));
   assert.ok(!JSON.stringify(brief.writer).includes('LATER_DRAFT_BODY'));
+  assert.ok(!JSON.stringify(brief.writer).includes('FUTURE_TIMESTAMP_BODY'));
 });
 
 test('lottery and speech research enter source digest, while config snapshots stay fixed on resume', async t => {
@@ -807,6 +809,7 @@ test('an older unfinished operation gains one stable lottery snapshot without re
   const f = await fixture(t), prepared = await prepareUpdate(f.options);
   const operation = await readJSON(prepared.operationPath);
   delete operation.plan.lottery;
+  delete operation.plan.timeWindow;
   const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : value && typeof value === 'object' ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
   operation.plan.seal = createHash('sha256').update(canonical({ id: operation.id, root: operation.root, seed: operation.plan.seed, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds })).digest('hex');
   await writeFile(prepared.operationPath, JSON.stringify(operation));
@@ -816,6 +819,75 @@ test('an older unfinished operation gains one stable lottery snapshot without re
   assert.equal(upgraded.plan.budget, operation.plan.budget);
   assert.deepEqual(upgraded.plan.selectedIds, operation.plan.selectedIds);
   assert.ok(upgraded.plan.lottery);
+  assert.deepEqual(upgraded.plan.timeWindow, { start: iso(f.now - DAY), end: iso(f.now) });
   await prepareUpdate(f.options);
   assert.deepEqual((await readJSON(prepared.operationPath)).plan, upgraded.plan);
+});
+
+test('brief schedules saved waits between drafts and defers candidates beyond its fixed window', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  lottery.waitSeconds = [{ weight: 1, min: 120, max: 120 }];
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(8) });
+  const prepared = await prepareUpdate(f.options), saved = await readJSON(prepared.operationPath);
+  assert.deepEqual(saved.plan.timeWindow, { start: iso(f.now - DAY), end: iso(f.now) });
+  const first = await briefUpdatePost({ ...f.options, postId: prepared.id + '-one' });
+  assert.equal(first.editor.timing.status, 'ready');
+  assert.equal(first.editor.timing.source, 'saved-window');
+  assert.equal(first.draft.createdAt, iso(f.now - DAY + 120000));
+  assert.equal(first.writer.createdAt, first.draft.createdAt);
+  assert.equal(first.editor.suggestedNotBefore, first.draft.createdAt);
+  const one = { ...first.draft, text: '先发一句', guest: { name: '甲' } };
+  await draft(prepared, f.now, [one]);
+  const second = await briefUpdatePost({ ...f.options, postId: prepared.id + '-two', replyTo: one.id });
+  assert.equal(second.draft.createdAt, iso(Date.parse(one.createdAt) + 120000));
+  assert.equal(second.writer.createdAt, second.draft.createdAt);
+  assert.equal(second.editor.timing.status, 'ready');
+  assert.deepEqual(await briefUpdatePost({ ...f.options, postId: prepared.id + '-two', replyTo: one.id }), second);
+  one.createdAt = iso(f.now - 30000);
+  await draft(prepared, f.now, [one]);
+  const deferred = await briefUpdatePost({ ...f.options, postId: prepared.id + '-two', replyTo: one.id });
+  assert.equal(deferred.draft, null);
+  assert.equal(deferred.editor.timing.status, 'deferred');
+  assert.equal(deferred.editor.timing.earliestAt, iso(f.now + 90000));
+  assert.equal(deferred.editor.timing.availableUntil, iso(f.now));
+  assert.equal(deferred.writer.createdAt, deferred.editor.timing.earliestAt);
+  assert.match(deferred.editor.instruction, /本轮跳过/);
+  await prepareUpdate({ ...f.options, now: f.now + 300000 });
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan.timeWindow, saved.plan.timeWindow);
+  assert.equal((await briefUpdatePost({ ...f.options, now: f.now + 300000, postId: prepared.id + '-two', replyTo: one.id })).editor.timing.status, 'deferred');
+  const edited = { ...one, createdAt: iso(f.now - 1000) };
+  await draft(prepared, f.now, [edited]);
+  const existing = await briefUpdatePost({ ...f.options, postId: one.id });
+  assert.equal(existing.draft.createdAt, edited.createdAt);
+  assert.equal(existing.editor.timing.source, 'saved-draft');
+  edited.createdAt = iso(f.now + 1000);
+  await draft(prepared, f.now, [edited]);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: one.id }), /timestamps/);
+  edited.createdAt = iso(f.now - 3 * DAY);
+  await draft(prepared, f.now, [edited]);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: one.id }), /timestamps/);
+});
+
+test('writer profile separates marked practice examples while preserving facts and unrelated quotations', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'library', weight: 1 }];
+  const f = await fixture(t, 4, { lottery }), prepared = await prepareUpdate(f.options);
+  const first = await briefUpdatePost({ ...f.options, postId: prepared.id + '-practice' });
+  const profilePath = join(f.root, 'users', first.draft.author, 'profile.md');
+  const original = await readFile(profilePath, 'utf8');
+  const changed = original.replace('## 网络交往与表达\n', '## 网络交往与表达\n\n事实：喜欢短句。\n\n> 本人旧帖里说过的一句话\n\n表达举例：\n\n> 练习句：锅又糊了\n> 接一句\n\n> 练习句：困\n').replace('## 近期生活与打算\n', '## 近期生活与打算\n\n> 这是后续章节的真实引用\n');
+  await writeFile(profilePath, changed);
+  await prepareUpdate(f.options);
+  const brief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-practice' });
+  const document = brief.writer.self.documents.find(document => document.path.endsWith('/profile.md'));
+  assert.match(document.text, /事实：喜欢短句/);
+  assert.match(document.text, /本人旧帖里说过的一句话/);
+  assert.match(document.text, /这是后续章节的真实引用/);
+  assert.doesNotMatch(document.text, /表达举例|练习句/);
+  assert.deepEqual(brief.writer.self.voiceExamples, { status: 'practice', items: [
+    { text: '练习句：锅又糊了\n接一句', sourcePath: 'users/' + first.draft.author + '/profile.md' },
+    { text: '练习句：困', sourcePath: 'users/' + first.draft.author + '/profile.md' }
+  ] });
+  assert.equal(await readFile(profilePath, 'utf8'), changed);
 });

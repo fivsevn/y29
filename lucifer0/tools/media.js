@@ -1,9 +1,9 @@
-import { readFile, writeFile, mkdir, lstat, realpath, link, rename, rm } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, lstat, realpath, link, rename, rm, rmdir } from 'node:fs/promises';
 import { join, resolve, relative, isAbsolute } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { isPostMediaPath, parsePostDocument, readThreadPackages } from './thread-packages.js';
 
-const raster = /\.(?:png|jpe?g)$/;
+const raster = /\.(?:png|jpe?g|svg)$/;
 let sharpModule;
 const sharp = async () => (sharpModule ??= import('sharp')).then(module => module.default);
 
@@ -40,10 +40,15 @@ async function stagingFile(root, bytes, mode = 0o644) {
   return path;
 }
 
+async function clearStaging(root) {
+  try { await rmdir(join(root, '.publish-staging')); }
+  catch (error) { if (!['ENOENT', 'ENOTEMPTY', 'EEXIST'].includes(error.code)) throw error; }
+}
+
 async function encodeWebP(bytes, path) {
   const convert = await sharp();
   const metadata = await convert(bytes, { animated: true }).metadata();
-  if (!['png', 'jpeg'].includes(metadata.format)) throw new Error('Expected a PNG or JPEG image: ' + path);
+  if (!['png', 'jpeg', 'svg'].includes(metadata.format)) throw new Error('Expected a PNG, JPEG or SVG image: ' + path);
   if ((metadata.pages || 1) > 1) throw new Error('Animated image conversion is not supported; retain the original: ' + path);
   const output = await convert(bytes).rotate().webp({ quality: 82, alphaQuality: 100, effort: 6 }).toBuffer();
   const checked = await convert(output).metadata();
@@ -80,7 +85,7 @@ export async function preparePostImages(root, posts) {
           const concurrent = await regularFile(root, target);
           if (!(await readFile(concurrent)).equals(output)) throw new Error('WebP target already exists with different content: ' + target);
         }
-      } finally { await rm(temporary, { force: true }); }
+      } finally { await rm(temporary, { force: true }); await clearStaging(root); }
     }
     replacements.set(path, target);
   }
@@ -101,7 +106,7 @@ export async function cleanupPostImages(root, posts) {
     if (!target.endsWith('.webp')) continue;
     const destination = await regularFile(root, target);
     const output = await readFile(destination);
-    for (const extension of ['png', 'jpg', 'jpeg']) {
+    for (const extension of ['png', 'jpg', 'jpeg', 'svg']) {
       const original = target.slice(0, -4) + extension;
       if (referenced.has(original)) continue;
       const path = await regularFile(root, original, true);
@@ -144,7 +149,7 @@ export async function normalizeArchivedImages(root) {
       await regularFile(root, path);
       if (await readFile(absolute, 'utf8') !== source) throw new Error('Post changed during image conversion: ' + path);
       await rename(temporary, absolute);
-    } finally { await rm(temporary, { force: true }); }
+    } finally { await rm(temporary, { force: true }); await clearStaging(root); }
     changed++;
   }
   // Re-read after rewriting so interrupted migrations and shared images are safe.

@@ -105,15 +105,36 @@ test('a reviewed manual import can publish an admin while AI imports cannot even
   await assert.rejects(ingestBatch(input, { root, reviewed: true, ai: true }), /Administrator.*manual/);
 });
 
-test('duplicate users, handles, batches, IDs and disguised repeat content are rejected', () => {
+test('duplicate users, handles, batches and post IDs are rejected', () => {
   const mutations = [
     f => f.registry.users.push(f.registry.users[0]),
     f => { f.registry.users[1].handle = f.registry.users[0].handle; },
     f => f.batches.push(f.batches[0]),
-    f => { f.batches[1].posts[0].id = f.batches[0].posts[0].id; },
-    f => { const a = f.batches[0].posts[0]; f.batches[1].posts[0] = { ...a, id: 'another-copy', text: '  ' + a.text + '\n' }; }
+    f => { f.batches[1].posts[0].id = f.batches[0].posts[0].id; }
   ];
   for (const mutate of mutations) { const f = fixture(); mutate(f); assert.throws(() => validate(f), /Duplicate|duplicate/); }
+});
+
+test('ordinary repetitions on different days keep distinct post IDs', () => {
+  const f = fixture(), original = f.batches[0].posts.find(post => post.replyTo === null);
+  original.text = '困';
+  f.batches.push({ version: 1, id: 'another-day-batch', mode: 'sample', posts: [
+    { ...original, id: 'another-day-post', createdAt: new Date(Date.parse(original.createdAt) + 86400000).toISOString(), text: '  困\n' }
+  ] });
+  assert.equal(validate(f).posts.filter(post => post.author === original.author && post.text.trim() === '困').length, 2);
+});
+
+test('image-only posts require actual media and retain media validation', () => {
+  for (const body of ['', ' \n\t']) {
+    const f = fixture(), original = f.batches[0].posts.find(post => post.replyTo === null);
+    original.text = body;
+    original.media = [{ src: `posts/${original.createdAt.slice(0, 4)}/${original.createdAt.slice(5, 7)}/${original.id}/media/reaction.webp`, alt: '反应表情' }];
+    assert.equal(validate(f).posts.find(post => post.id === original.id).text, body);
+    original.media = [];
+    assert.throws(() => validate(f), /text or media/);
+    original.media = [{ src: 'https://example.org/meme.webp', alt: '反应表情' }];
+    assert.throws(() => validate(f), /Invalid media path/);
+  }
 });
 
 test('deleted flags accept only empty-media reply placeholders and preserve unique IDs', () => {
@@ -139,7 +160,7 @@ test('deleted flags accept only empty-media reply placeholders and preserve uniq
   const duplicateId = structuredClone(f); duplicateId.batches.at(-1).posts[1].id = reply.id;
   assert.throws(() => validate(duplicateId), /Duplicate post ID/);
   for (const item of batch.posts) item.deleted = false;
-  assert.throws(() => validate(f), /Duplicate content/);
+  assert.equal(validate(f).posts.filter(post => post.text === '该回复已被删除').length, 2);
   const ordinary = fixture(); ordinary.batches[0].posts[0].deleted = false;
   assert.equal(validate(ordinary).posts.find(post => post.id === ordinary.batches[0].posts[0].id).deleted, false);
 });
@@ -509,7 +530,7 @@ test('new image posts import from prepared package media without publishing unus
   const { root, directory } = await repositoryCopy(t), batch = newBatch();
   const src = 'posts/2026/11/test-new-post/media/new.svg';
   await mkdir(join(root, 'posts/2026/11/test-new-post/media'), { recursive: true });
-  await writeFile(join(root, src), '<svg xmlns="http://www.w3.org/2000/svg"/>');
+  await writeFile(join(root, src), '<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"><rect width="2" height="2" fill="red"/></svg>');
   await writeFile(join(root, 'posts/2026/11/test-new-post/media/unused.png'), 'not referenced');
   batch.posts[0].media = [{ src, alt: '新帖配图' }];
   batch.posts.push({ ...batch.posts[0], id: 'test-new-reply', replyTo: 'test-new-post', createdAt: '2026-11-07T22:05:00+08:00', text: '回复附上同一串里的图。' });
@@ -517,7 +538,8 @@ test('new image posts import from prepared package media without publishing unus
   await writeFile(input, JSON.stringify(batch));
   assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'archived');
   const { feed } = await loadContent(root);
-  assert.ok(feed.posts.filter(post => post.id.startsWith('test-new-')).every(post => post.media[0].src === src));
+  assert.ok(feed.posts.filter(post => post.id.startsWith('test-new-')).every(post => post.media[0].src === src.replace('.svg', '.webp')));
+  assert.ok(!(await readdir(join(root, 'posts/2026/11/test-new-post/media'))).includes('new.svg'));
 });
 
 test('explicit historical import preserves chronology, existing posts and idempotent retries', async t => {

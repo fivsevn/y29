@@ -56,9 +56,11 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 随机路人的 `author` 使用唯一的 `guest-` 编号，`guest.name` 保存公开网名。署名随帖子归档，网页自动汇集该账号的发言。库内人物使用原 `author` 编号，并省略 `guest` 字段。
 
+`text` 保存实际文字。纯图发言填空字符串，并在 `media` 登记实际图片。
+
 `likes` 保存本条基础赞数，取值依据与建议数值的处理见[评论与点赞](../environment/comments.md#点赞怎样形成差异)。
 
-主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用上海时区，处在已有时间线之后、实际当前时刻之前，回复时间晚于或等于父帖。时间间隔按发言情境安排。示例时间与正文在使用时替换为本次实际内容。
+主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用上海时区，处在已有时间线之后、实际当前时刻之前，回复时间晚于或等于父帖。新草稿的时间由 `brief` 安排，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
 
 已删除的回复以 `deleted: true` 保存，正文固定为“该回复已被删除”。编号、署名、时间与父帖关系继续保留，网页显示占位并计入回复数。
 
@@ -92,7 +94,9 @@ node lucifer0/tools/update.js brief --post 本次操作ID-01 --work /outside/wor
 node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID --work /outside/work
 ```
 
-已有草稿也可以按它的 ID 读取材料。命令返回 `draft`、`writer` 和 `editor`：将 `writer` 作为本次单人写作输入，策划者使用 `editor` 安排当前操作；把完成的正文和身份补进 `draft`，再保存到 `operation.json.posts`。临时路人的公开网名填入 `guest.name`。
+已有草稿也可以按它的 ID 读取材料。命令返回 `draft`、`writer` 和 `editor`。先查看 `editor.timing`：`ready` 时使用返回的草稿及时间；`deferred` 时跳过本轮候选，后续更新重新评估。将 `writer` 作为本次单人写作输入，策划者使用 `editor` 安排当前操作；把完成的文字、图片和身份补进 `draft`，再保存到 `operation.json.posts`。临时路人的公开网名填入 `guest.name`。
+
+`writer.createdAt` 是本条的时间。`writer.self.voiceExamples` 保存标记为 `practice` 的表达练习，本人正式背景保存在其余档案材料中。
 
 策划者从 `editor` 提示的本人背景资料选取当事人已知的片段，补入单条 `writer`；临时路人的当前处境也在这一步补齐。每写完一条，保存草稿再获取下一条材料。完整 `reading.md` 供策划者核对资料；操作文件保留全部草稿与研究记录。命令中的 ID 替换为实际当前操作编号，回复目标使用草稿或归档中已有的帖号。
 
@@ -104,11 +108,11 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 node lucifer0/tools/update.js suggest --work /outside/work
 ```
 
-命令根据当前操作与实际发言返回配图和点赞建议。按[配图](writing.md#配图)判断每条的具体用途，采用合适的已有素材或生成画面；表情素材从[Meme 资源](../environment/meme.md)进入原页选用。打开实际文件核对正文和 `alt`，把采用结果填回操作文件。基础赞数结合[评论与点赞](../environment/comments.md#点赞怎样形成差异)审定后填写。
+命令根据当前操作与实际发言返回配图和点赞建议。按[配图](writing.md#配图)判断每条的具体用途，采用合适的已有素材或生成画面；表情素材从[Meme 资源](../environment/meme.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞](../environment/comments.md#点赞怎样形成差异)审定后填写。
 
 采用外部素材时，在对应 `research.summary` 保存资源页、作者、使用依据和处理方式；需要署名的素材在帖文或图片说明中保留署名与来源。
 
-将实际采用的文件放在所属根串的 `media/` 中，在操作文件登记实际文件路径及 `alt`。`ingest` 会自动把引用的 PNG、JPG、JPEG 配图转换为同名 WebP，保留原尺寸、比例与透明度，并把操作文件、帖子 Markdown 和信息流中的引用一起更新为 `.webp`；引用保存成功后删除对应旧文件。已是 WebP 的图片不会重复压缩。目标为回复时，图片仍归该回复所在根串。直接上传到仓库并由帖子引用的位图，也会在构建时自动转换，Actions 会提交新的 WebP、引用变化和旧文件删除；未引用草图不会被批量清理。SVG、头像与站点界面素材不在这项转换范围内。每帖最多四张；素材须可用于本次发布。
+将实际采用的文件放在所属根串的 `media/` 中，在操作文件登记实际文件路径及 `alt`。`ingest` 会自动把引用的 PNG、JPG、JPEG、SVG 配图转换为同名 WebP，保留原尺寸、比例与透明度，并把操作文件、帖子 Markdown 和信息流中的引用一起更新为 `.webp`；引用保存成功后删除对应旧文件。已是 WebP 的图片不会重复压缩。目标为回复时，图片仍归该回复所在根串。直接上传到仓库并由帖子引用的位图，也会在构建时自动转换，Actions 会提交新的 WebP、引用变化和旧文件删除；未引用草图不会被批量清理。头像与站点界面素材按各自用途保存。每帖最多四张；素材须可用于本次发布。
 
 素材获取或生成受限时，保留当前操作，记录实际完成状态和具体原因，后续沿原操作接续。`media` 按已取得、已检查的实际文件登记。
 
@@ -116,7 +120,7 @@ node lucifer0/tools/update.js suggest --work /outside/work
 
 `posts` 为空时，直接执行 `node lucifer0/tools/update.js finish --work /outside/work`，报告已经做的观察及未发帖原因，本次更新结束。工作目录使用工具输出的实际位置。
 
-有正文且审读完成后，用工具输出的实际路径执行：
+有待发布发言且审读完成后，用工具输出的实际路径执行：
 
 ```sh
 node lucifer0/tools/publish.js ingest /outside/work/operation.json --reviewed --ai
@@ -124,7 +128,7 @@ node lucifer0/tools/publish.js validate
 node build.js
 ```
 
-导入器核对当前更新、新主帖数、逐串回复额度、整体上限、账号权限、资料变化、观察记录、重复内容、回复关系、时间和媒体。资料在创作期间发生变化时，用原工作目录重新执行 `prepare`，读清变化并重新审读原草稿。
+导入器核对当前更新、新主帖数、逐串回复额度、整体上限、账号权限、资料变化、观察记录、帖子编号、回复关系、时间和媒体。资料在创作期间发生变化时，用原工作目录重新执行 `prepare`，读清变化并重新审读原草稿。
 
 帖子 Markdown 是正文来源：
 
@@ -135,7 +139,7 @@ posts/YYYY/MM/根帖ID/
   media/配图文件
 ```
 
-回复和图片归入原根串，即使回复发生在其他月份。工具直接读取这些帖子；每次导入的清单只用于当前工作记录。
+每个主帖作为一个发布包，正文、回复和配图集中在这个文件夹中；跨月回复也放回原包。帖子 Markdown 和包内 WebP 是保存原稿与配图的唯一位置。网页信息流由这些原稿生成。
 
 导入完成后，将有持续影响的变化回写到对应原始资料，运行仓库检查并查看手机页面。把帖子、配图、必要的资料回写和生成信息流一起提交，核对最新 `main` 后正常推送。远端有新内容时先合并、补读并检查。保留既有网页样式。
 
@@ -145,7 +149,7 @@ posts/YYYY/MM/根帖ID/
 node lucifer0/tools/update.js finish --work /outside/work
 ```
 
-工具核对本地帖子和线上 `https://y29.fivsevn.com/lucifer0/data/feed.json` 的本次内容，成功后清理当前工作文件。报告实际条数、随机路人与库内人物各自条数、提交和线上核验结果。实际为零条时，报告已经做的观察、受限缺项或其他原因，再结束当前更新。
+工具核对本地帖子和线上 `https://y29.fivsevn.com/lucifer0/data/feed.json` 的本次内容，成功后清理操作文件、阅读副本和本次临时文件，已替换的原格式图片随转换清除。报告实际条数、随机路人与库内人物各自条数、提交和线上核验结果。实际为零条时，报告已经做的观察、受限缺项或其他原因，再结束当前更新。
 
 ## 管理员公告
 

@@ -1,4 +1,4 @@
-import { readFile, readdir, mkdir, writeFile, lstat, realpath, rm, link } from 'node:fs/promises';
+import { readFile, readdir, mkdir, writeFile, lstat, realpath, rm, link, rmdir } from 'node:fs/promises';
 import { join, dirname, relative, resolve, sep } from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { execFile } from 'node:child_process';
@@ -233,6 +233,8 @@ async function writeOnce(root, path, text) {
     }
   } finally {
     await rm(temporary, { force: true });
+    try { await rmdir(staging); }
+    catch (error) { if (!['ENOENT', 'ENOTEMPTY', 'EEXIST'].includes(error.code)) throw error; }
   }
 }
 
