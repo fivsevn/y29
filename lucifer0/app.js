@@ -196,10 +196,16 @@ function mediaMarkup(image) {
   }
   return `<a class="post-image${image.fit === 'contain' ? ' is-contained' : ''}" href="./${esc(image.src)}" aria-haspopup="dialog" aria-label="查看原图：${esc(image.alt)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看原图 ↗</span></a>`;
 }
+function replyPreviewText(reply) {
+  const text = postText(reply).trim();
+  if (text) return text;
+  return [reply.media.some(image => !isEmoteMedia(image)) ? '[图片]' : '',
+    reply.media.some(isEmoteMedia) ? '[表情]' : ''].filter(Boolean).join(' ');
+}
 function replyPreview(post) {
   const { rootId, replies, total, collapsed } = threadReplyPreview(feed.posts, post.id);
   if (!total) return '';
-  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply${reply.deleted === true ? ' is-deleted' : ''}" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong${nameStyle(users.get(reply.author))}>${esc(users.get(reply.author).name)}</strong></div><p>${esc(postText(reply).trim() || (reply.media.length ? '[图片]' : ''))}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
+  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply${reply.deleted === true ? ' is-deleted' : ''}" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong${nameStyle(users.get(reply.author))}>${esc(users.get(reply.author).name)}</strong></div><p>${esc(replyPreviewText(reply))}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
 }
 function postMarkup(post, { threaded = false, target, preview = false } = {}) {
   const user = users.get(post.author), parent = posts.get(post.replyTo);

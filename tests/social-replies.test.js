@@ -161,6 +161,32 @@ test('world and following render the ten/eleven boundary and link the full count
   assert.doesNotMatch(page.html(), /id="post-outside-thread"/);
 });
 
+test('reply previews distinguish images and emotes without expanding media or replacing text and deletion notices', async () => {
+  const feed = fixture();
+  const image = { src: 'posts/2026/01/ten-thread/media/photo.webp', alt: '普通图片', kind: 'image' };
+  const emote = { src: 'posts/2026/01/ten-thread/media/reaction.webp', alt: '随帖表情', kind: 'emote' };
+  const cases = [
+    { media: [{ src: 'assets/emotes/l0/huh.webp', alt: '公共表情' }], expected: '[表情]' },
+    { media: [emote], expected: '[表情]' },
+    { media: [image], expected: '[图片]' },
+    { media: [emote, image], expected: '[图片] [表情]' },
+    { media: [image, emote], text: '保留原来的回复 <文字>', expected: '保留原来的回复 &lt;文字&gt;' },
+    { media: [image, emote], deleted: true, expected: '该回复已被删除' },
+    { media: [], expected: '' }
+  ];
+  cases.forEach(({ expected, ...fields }, index) => Object.assign(
+    feed.posts.find(post => post.id === `ten-thread-reply-${index + 1}`), { text: '', ...fields }));
+  const page = await renderer(feed);
+  for (const route of ['#/', '#/following']) {
+    const markup = article(page.visit(route), 'ten-thread');
+    cases.forEach(({ expected }, index) => {
+      const preview = markup.match(new RegExp(`href="#/post/ten-thread-reply-${index + 1}"><div>[\\s\\S]*?</div><p>(.*?)</p></a>`));
+      assert.equal(preview?.[1], expected);
+    });
+    assert.doesNotMatch(markup, /<img|class="post-image/);
+  }
+});
+
 test('thread details keep all eleven replies and their actual parent links; profiles do not add previews', async () => {
   const page = await renderer(fixture()), detail = page.visit('#/post/eleven-thread');
   assert.equal((detail.match(/<article\b/g) || []).length, 12);
