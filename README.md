@@ -41,7 +41,7 @@
 
 ### STORYTELLER
 
-[`/storyteller/`](storyteller/)
+[**临时终端**](https://y29.fivsevn.com/storyteller/)
 
 用于显示短消息与状态的独立终端项目。
 
