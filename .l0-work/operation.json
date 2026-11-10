@@ -466,6 +466,15 @@
       "visitedAt": "2026-11-10T21:15:20.449Z",
       "publishedAt": null,
       "summary": "读取V2EX生活版理发间隔主题原帖和第1页可见部分回复（约20—30天、几周至两月不同频率、价格和外出场景），第2页未读；采用当事人对理发的在意与实际修剪落差的发言结构，改写到l0-20261110210715-bd3468e0-01，人物、理发经过均属虚构。"
+    },
+    {
+      "category": "trend",
+      "purpose": "meme",
+      "kind": "feed",
+      "url": "https://www.reddit.com/r/memes/new/",
+      "visitedAt": "2026-11-10T21:20:13.382Z",
+      "publishedAt": null,
+      "summary": "读取r/memes按New排序的公开列表，可见从新近作品到数小时之前的条目，定位“miss information”标题及其图像入口；列表显示相对时间且返回存在缓存，不将相对时间当作精确发布时刻。随后实际进入对应讨论串阅读主帖和回复，作为本轮资讯号笑话改编的形式依据。"
     }
   ],
   "posts": [
