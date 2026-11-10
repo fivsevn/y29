@@ -2,7 +2,7 @@
   "version": 1,
   "id": "l0-20261110210715-bd3468e0",
   "root": "/home/runner/work/y29/y29/lucifer0",
-  "preparedAt": "2026-11-10T21:07:15.153Z",
+  "preparedAt": "2026-11-10T21:22:31.603Z",
   "plan": {
     "seed": "af718e7606b4b6b673f99f8823fe779fa5c1c0afe34b908f65cab7c182e6b428",
     "budget": 8,
@@ -440,7 +440,7 @@
     },
     "seal": "a855fffce7d81d268325cb4b4e7e222748a998b434b3d790eac0d80ca6aa9305"
   },
-  "sourceDigest": "a7bbd9b55984435ef136c1559548572c0a5a7e1112933a1ca086c6038378cc5b",
+  "sourceDigest": "43ad1455dafb07523bf5669f74a1b305220476f6957019ab4c90d2b3a2a783aa",
   "research": [
     {
       "category": "news",
@@ -534,7 +534,7 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261110210715-bd3468e0-07/media/door-diagram.svg",
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-07/media/door-diagram.webp",
           "alt": "一张歪斜放着的手绘柜子平面示意图，格子和方向箭头被红色交叉线划过，右侧另画一根纠正方向的红箭头。",
           "kind": "image"
         }
@@ -550,7 +550,7 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261110210715-bd3468e0-02/media/exposure-compare.svg",
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-02/media/exposure-compare.webp",
           "alt": "手机相册对比截图，两列同样的甜品包装和纸托，左侧自动增强后泛白，右侧锁定曝光保留紫色和较暗的层次。",
           "kind": "image",
           "fit": "contain"
