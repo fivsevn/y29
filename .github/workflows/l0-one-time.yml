@@ -1,4 +1,4 @@
-name: Lucifer Zero one-time preparation
+name: Lucifer Zero one-time draft briefs
 on:
   push:
     branches: [l0-update-20261110-evening]
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  prepare:
+  brief:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,13 +14,403 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
-      - name: Generate reproducible operation
+      - name: Resume same operation and draw three root briefs
         run: |
+          mkdir -p /tmp/l0-work
+          cat > /tmp/l0-work/operation.json <<'L0_OPERATION_JSON'
+          {
+            "version": 1,
+            "id": "l0-20261110111419-7d66be80",
+            "root": "/home/runner/work/y29/y29/lucifer0",
+            "preparedAt": "2026-11-10T11:14:19.480Z",
+            "plan": {
+              "seed": "744ce2be5077a43312536495ffb681a7a2c2b90c557a6e13d865d57abaf55133",
+              "budget": 3,
+              "selectedIds": [
+                "anmianyao",
+                "news-neon",
+                "visitor-delta-upper"
+              ],
+              "totalBudget": 120,
+              "replyLottery": {
+                "bands": [
+                  {
+                    "weight": 30,
+                    "min": 0,
+                    "max": 0
+                  },
+                  {
+                    "weight": 20,
+                    "min": 1,
+                    "max": 1
+                  },
+                  {
+                    "weight": 20,
+                    "min": 2,
+                    "max": 4
+                  },
+                  {
+                    "weight": 15,
+                    "min": 5,
+                    "max": 12
+                  },
+                  {
+                    "weight": 8,
+                    "min": 13,
+                    "max": 30
+                  },
+                  {
+                    "weight": 5,
+                    "min": 31,
+                    "max": 60
+                  },
+                  {
+                    "weight": 2,
+                    "min": 61,
+                    "max": 100
+                  }
+                ],
+                "maxReplies": 100
+              },
+              "lottery": {
+                "version": 1,
+                "rootBudget": {
+                  "bands": [
+                    {
+                      "weight": 5,
+                      "min": 0,
+                      "max": 1
+                    },
+                    {
+                      "weight": 35,
+                      "min": 2,
+                      "max": 4
+                    },
+                    {
+                      "weight": 45,
+                      "min": 5,
+                      "max": 8
+                    },
+                    {
+                      "weight": 15,
+                      "min": 9,
+                      "max": 12
+                    }
+                  ]
+                },
+                "authors": {
+                  "candidates": 3,
+                  "recentPosts": 7,
+                  "recentMultiplier": 0.5
+                },
+                "authorKind": [
+                  {
+                    "value": "guest",
+                    "weight": 55
+                  },
+                  {
+                    "value": "library",
+                    "weight": 45
+                  }
+                ],
+                "motivation": [
+                  {
+                    "value": "ask-help",
+                    "weight": 24
+                  },
+                  {
+                    "value": "vent",
+                    "weight": 22
+                  },
+                  {
+                    "value": "passing-thought",
+                    "weight": 24
+                  },
+                  {
+                    "value": "share",
+                    "weight": 18
+                  },
+                  {
+                    "value": "correct",
+                    "weight": 6
+                  },
+                  {
+                    "value": "celebrate",
+                    "weight": 6
+                  }
+                ],
+                "length": [
+                  {
+                    "value": "fragment",
+                    "weight": 45
+                  },
+                  {
+                    "value": "short",
+                    "weight": 40
+                  },
+                  {
+                    "value": "long",
+                    "weight": 15
+                  }
+                ],
+                "conditionCount": {
+                  "min": 1,
+                  "max": 2
+                },
+                "waitSeconds": [
+                  {
+                    "weight": 45,
+                    "min": 20,
+                    "max": 180
+                  },
+                  {
+                    "weight": 40,
+                    "min": 181,
+                    "max": 1800
+                  },
+                  {
+                    "weight": 15,
+                    "min": 1801,
+                    "max": 21600
+                  }
+                ],
+                "reading": [
+                  {
+                    "value": "target-only",
+                    "weight": 40
+                  },
+                  {
+                    "value": "root-and-target",
+                    "weight": 35
+                  },
+                  {
+                    "value": "nearby",
+                    "weight": 25
+                  }
+                ],
+                "textWindow": [
+                  {
+                    "value": "full",
+                    "weight": 45
+                  },
+                  {
+                    "value": "opening",
+                    "weight": 35
+                  },
+                  {
+                    "value": "fragment",
+                    "weight": 20
+                  }
+                ],
+                "excerptCharacters": 140,
+                "nearbyReplies": {
+                  "min": 0,
+                  "max": 3
+                },
+                "image": [
+                  {
+                    "value": "none",
+                    "weight": 72
+                  },
+                  {
+                    "value": "photo",
+                    "weight": 14
+                  },
+                  {
+                    "value": "screenshot",
+                    "weight": 8
+                  },
+                  {
+                    "value": "meme",
+                    "weight": 6
+                  }
+                ],
+                "likes": {
+                  "root": [
+                    {
+                      "weight": 20,
+                      "min": 0,
+                      "max": 0
+                    },
+                    {
+                      "weight": 73,
+                      "min": 1,
+                      "max": 20
+                    },
+                    {
+                      "weight": 6,
+                      "min": 21,
+                      "max": 60
+                    },
+                    {
+                      "weight": 1,
+                      "min": 61,
+                      "max": 160
+                    }
+                  ],
+                  "reply": [
+                    {
+                      "weight": 35,
+                      "min": 0,
+                      "max": 0
+                    },
+                    {
+                      "weight": 62,
+                      "min": 1,
+                      "max": 12
+                    },
+                    {
+                      "weight": 2,
+                      "min": 13,
+                      "max": 35
+                    },
+                    {
+                      "weight": 1,
+                      "min": 36,
+                      "max": 90
+                    }
+                  ]
+                },
+                "sampling": {
+                  "offset": {
+                    "min": 0,
+                    "max": 30
+                  },
+                  "count": {
+                    "min": 3,
+                    "max": 6
+                  }
+                },
+                "discussion": {
+                  "minimumNegativeShare": 0.5,
+                  "negativeMotivation": [
+                    {
+                      "value": "complaint",
+                      "weight": 22
+                    },
+                    {
+                      "value": "gossip",
+                      "weight": 24
+                    },
+                    {
+                      "value": "dispute",
+                      "weight": 24
+                    },
+                    {
+                      "value": "grievance",
+                      "weight": 16
+                    },
+                    {
+                      "value": "suspicion",
+                      "weight": 14
+                    }
+                  ],
+                  "replyStance": [
+                    {
+                      "value": "support",
+                      "weight": 15
+                    },
+                    {
+                      "value": "push-back",
+                      "weight": 28
+                    },
+                    {
+                      "value": "doubt",
+                      "weight": 10
+                    },
+                    {
+                      "value": "defend",
+                      "weight": 15
+                    },
+                    {
+                      "value": "provoke",
+                      "weight": 20
+                    },
+                    {
+                      "value": "ask-detail",
+                      "weight": 4
+                    },
+                    {
+                      "value": "sidetrack",
+                      "weight": 8
+                    }
+                  ],
+                  "replyAuthor": [
+                    {
+                      "value": "new",
+                      "weight": 55
+                    },
+                    {
+                      "value": "root",
+                      "weight": 25
+                    },
+                    {
+                      "value": "participant",
+                      "weight": 20
+                    }
+                  ]
+                },
+                "researchMaintenance": {
+                  "probability": 0.3,
+                  "maxDocuments": 1,
+                  "ageWeightDays": 7,
+                  "maxAgeWeight": 5
+                }
+              },
+              "timeWindow": {
+                "start": "2026-11-09T11:14:19.480Z",
+                "end": "2026-11-10T11:14:19.480Z"
+              },
+              "researchMaintenance": {
+                "candidates": [
+                  {
+                    "path": "environment/comments-research.md",
+                    "updatedAt": "2026-11-10T11:14:10.000Z"
+                  },
+                  {
+                    "path": "environment/everyday-life-research.md",
+                    "updatedAt": "2026-11-10T11:14:10.000Z"
+                  },
+                  {
+                    "path": "environment/meme-research.md",
+                    "updatedAt": "2026-11-10T11:14:10.000Z"
+                  },
+                  {
+                    "path": "environment/negative-research.md",
+                    "updatedAt": "2026-11-10T11:14:10.000Z"
+                  },
+                  {
+                    "path": "environment/worldview-research.md",
+                    "updatedAt": "2026-11-10T11:14:10.000Z"
+                  },
+                  {
+                    "path": "users/character-research.md",
+                    "updatedAt": "2026-11-10T11:14:10.000Z"
+                  },
+                  {
+                    "path": "users/speech-research.md",
+                    "updatedAt": "2026-11-10T11:14:10.000Z"
+                  }
+                ],
+                "selectedPaths": []
+              },
+              "seal": "ae00c101a6d058e3f43f658b06988e223d4c9d218d1ba5fdcee194864f96c111"
+            },
+            "sourceDigest": "723b4722e8d71cf5414095ab9deced065e07a49b409c435b391a3aa3560c74bf",
+            "research": [],
+            "posts": [],
+            "status": "prepared",
+            "reviews": [],
+            "researchMaintenance": []
+          }
+          L0_OPERATION_JSON
           node lucifer0/tools/update.js prepare --work /tmp/l0-work
-          echo 'BEGIN_OPERATION_JSON'
-          cat /tmp/l0-work/operation.json
-          echo 'END_OPERATION_JSON'
-          echo 'BEGIN_READING_HEAD'
-          head -c 24000 /tmp/l0-work/reading.md || true
-          echo ''
-          echo 'END_READING_HEAD'
+          echo 'BEGIN_BRIEF_1'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-01 --work /tmp/l0-work
+          echo 'END_BRIEF_1'
+          echo 'BEGIN_BRIEF_2'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-02 --work /tmp/l0-work
+          echo 'END_BRIEF_2'
+          echo 'BEGIN_BRIEF_3'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-03 --work /tmp/l0-work
+          echo 'END_BRIEF_3'
