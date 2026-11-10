@@ -178,7 +178,7 @@
       "id": "site-admin",
       "handle": "site_admin",
       "name": "值班恶魔",
-      "bio": "地狱照常营业，站务在这里。",
+      "bio": "",
       "avatar": "",
       "enabled": true,
       "profileStatus": "approved",
@@ -1004,6 +1004,66 @@
       "inFollowing": false
     },
     {
+      "id": "guest-l0-20261109005357-b42d24e5-album",
+      "handle": "guest_68358e908ddf29894cdf",
+      "name": "nana_17",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109005357-b42d24e5-seven",
+      "handle": "guest_8f4ed562783b1ab21b27",
+      "name": "七分困",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109005357-b42d24e5-lift",
+      "handle": "guest_04599dcd0cf1c138725f",
+      "name": "电梯向下",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109005357-b42d24e5-box",
+      "handle": "guest_d37bd907b9fd796dbb64",
+      "name": "纸盒_3",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-l0-20261109005357-b42d24e5-three",
+      "handle": "guest_4ed438e345645ed43603",
+      "name": "叁叁",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "guest-site-welcome-removed-01",
       "handle": "guest_d8de83693e21f410d2c7",
       "name": "先让我说完",
@@ -1041,6 +1101,139 @@
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261109005357-b42d24e5-09",
+      "author": "guest-l0-20261109005357-b42d24e5-three",
+      "createdAt": "2026-11-09T08:57:00+08:00",
+      "replyTo": "l0-20261109005357-b42d24e5-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109005357-b42d24e5-03/media/l0-20261109005357-b42d24e5-09.png",
+          "alt": "一只松鼠抱紧空车位的照片，头顶的想象框里也是同一个车位。"
+        }
+      ],
+      "guest": {
+        "name": "叁叁"
+      },
+      "text": "这个我倒留着，下次去还想停原来的地方。"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-08",
+      "author": "guest-l0-20261109005357-b42d24e5-box",
+      "createdAt": "2026-11-09T08:53:00+08:00",
+      "replyTo": "l0-20261109005357-b42d24e5-05",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "纸盒_3"
+      },
+      "text": "这么大字也能拍糊？"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-07",
+      "author": "guest-l0-20261109005357-b42d24e5-album",
+      "createdAt": "2026-11-09T08:49:00+08:00",
+      "replyTo": "l0-20261109005357-b42d24e5-06",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "nana_17"
+      },
+      "text": "也看不出，背景全是地砖。"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-06",
+      "author": "guest-l0-20261109005357-b42d24e5-lift",
+      "createdAt": "2026-11-09T08:46:00+08:00",
+      "replyTo": "l0-20261109005357-b42d24e5-03",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "电梯向下"
+      },
+      "text": "鞋那张别删，至少能看出你去过。"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-05",
+      "author": "visitor-chi",
+      "createdAt": "2026-11-09T08:44:00+08:00",
+      "replyTo": "l0-20261109005357-b42d24e5-03",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109005357-b42d24e5-03/media/l0-20261109005357-b42d24e5-05.png",
+          "alt": "隔着反光玻璃拍糊的展柜说明牌，字迹模糊，上方露出一小部分陶器。"
+        }
+      ],
+      "text": "说明牌我也拍。拍糊了还会重新排队拍一次，回去根本没点开。"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-04",
+      "author": "guest-l0-20261109005357-b42d24e5-seven",
+      "createdAt": "2026-11-09T08:42:00+08:00",
+      "replyTo": "l0-20261109005357-b42d24e5-03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109005357-b42d24e5-03/media/l0-20261109005357-b42d24e5-04.png",
+          "alt": "地下停车场的旧照片，橙色立柱上写着 B2，旁边露出半辆银色车和空车位。"
+        }
+      ],
+      "guest": {
+        "name": "七分困"
+      },
+      "text": "我有一张两年前的停车位置。车后来都换了，它还在。"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-03",
+      "author": "guest-l0-20261109005357-b42d24e5-album",
+      "createdAt": "2026-11-09T08:38:00+08:00",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109005357-b42d24e5-03/media/l0-20261109005357-b42d24e5-03.png",
+          "alt": "朝下误拍的照片，灰色地砖占满画面，底部露出白色旧球鞋和一截绿色裤脚。"
+        }
+      ],
+      "guest": {
+        "name": "nana_17"
+      },
+      "text": "本来想腾点空间，翻到一排展柜说明牌。拍了23张，一张没读。还翻出一张我的鞋，不记得什么时候拍的。"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-02",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-09T08:31:00+08:00",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261109005357-b42d24e5-02/media/l0-20261109005357-b42d24e5-02.png",
+          "alt": "模糊的旧球赛画面，守门员在球门里弯腰捡球，其他球员已向外走，底部有播放进度条。"
+        }
+      ],
+      "text": "车停好刷个旧集锦，明明知道后面那脚会进，还是看紧张了。结果快进过头，进球没了，只剩解说在喊。又拖回去。"
+    },
+    {
+      "id": "l0-20261109005357-b42d24e5-01",
+      "author": "news-neon",
+      "createdAt": "2026-11-09T08:25:00+08:00",
+      "replyTo": null,
+      "likes": 13,
+      "canon": "derivative",
+      "media": [],
+      "text": "城南晚场消息：回声厅、旧船坞本周五起，会在入场提示里附上夜间上车点和散场步行出口。两家场馆的回访里，有观众没等到加演就走，怕散场后找不到车。先试两个周末，进场时可以留意一下。"
+    },
     {
       "id": "l0-20261108232431-2cf51564-20",
       "author": "guest-l0-20261108232431-2cf51564-lamp",
