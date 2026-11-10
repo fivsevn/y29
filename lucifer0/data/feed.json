@@ -848,9 +848,9 @@
       "inFollowing": true
     },
     {
-      "id": "guest-10ed65fe11663cea",
-      "handle": "guest_8b4f3a607620c9496621",
-      "name": "窗台小票",
+      "id": "guest-4881a4db9a0a8f5a",
+      "handle": "guest_123b58042204f05086d4",
+      "name": "下午再说",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -860,9 +860,9 @@
       "inFollowing": false
     },
     {
-      "id": "guest-955f88e6ca199622",
-      "handle": "guest_a4cc92f4b1ca998341e3",
-      "name": "再眯两分钟",
+      "id": "guest-22ef89f6b2fe9221",
+      "handle": "guest_1a998102cd05b663b4cb",
+      "name": "小陶盆",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -872,9 +872,9 @@
       "inFollowing": false
     },
     {
-      "id": "guest-366d2a45f19d979a",
-      "handle": "guest_0df79abca1ce2891cfb4",
-      "name": "橡皮筋",
+      "id": "guest-fec6b3d78d0a2be0",
+      "handle": "guest_1854b952c50610b220e0",
+      "name": "小绿活着就行",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -884,9 +884,9 @@
       "inFollowing": false
     },
     {
-      "id": "guest-5d2643f375e528f0",
-      "handle": "guest_90f60c8980463e40d67d",
-      "name": "332",
+      "id": "guest-0e8dc9736409183c",
+      "handle": "guest_50057cd0736ec2f695ed",
+      "name": "番茄去皮",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -896,9 +896,9 @@
       "inFollowing": false
     },
     {
-      "id": "guest-6022ffba2330131e",
-      "handle": "guest_b1b5c0352706f77e818c",
-      "name": "q7_",
+      "id": "guest-c6990ce4e6399e47",
+      "handle": "guest_140ce416bc06378ce5b2",
+      "name": "断网十分钟",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -908,9 +908,9 @@
       "inFollowing": false
     },
     {
-      "id": "guest-f9b906be05220815",
-      "handle": "guest_a624ac5a38bf6b043c2b",
-      "name": "susu",
+      "id": "guest-543b2df0f966a0e4",
+      "handle": "guest_8f13567856222c3df5a5",
+      "name": "剪刀找不到",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -920,9 +920,21 @@
       "inFollowing": false
     },
     {
-      "id": "guest-acb05905d30605a4",
-      "handle": "guest_fb0fa7a439899e5c334e",
-      "name": "momo_23",
+      "id": "guest-6f9f9ffd47a5b90d",
+      "handle": "guest_4173498e82ef7ebcc216",
+      "name": "拐个弯",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b07e234e6d77b831",
+      "handle": "guest_0bdc973090ba53f17e54",
+      "name": "橘子汽水",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -934,193 +946,381 @@
   ],
   "posts": [
     {
-      "id": "l0-20261109212821-f9f00063-15",
-      "author": "guest-f9b906be05220815",
-      "createdAt": "2026-11-09T05:04:26.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-04",
-      "likes": 1,
+      "id": "l0-20261110000207-6a257638-29",
+      "author": "guest-b07e234e6d77b831",
+      "createdAt": "2026-11-09T14:08:38.467Z",
+      "replyTo": "l0-20261110000207-6a257638-28",
+      "likes": 3,
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261109212821-f9f00063-04/media/eye-roll.webp",
-          "alt": "黄色脸把眼珠翻向上方，嘴巴横着。",
+          "src": "assets/emotes/l0/wait.webp",
+          "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "susu"
+        "name": "橘子汽水"
       },
       "text": ""
     },
     {
-      "id": "l0-20261109212821-f9f00063-14",
-      "author": "visitor-omicron",
-      "createdAt": "2026-11-09T04:49:09.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-12",
-      "likes": 6,
+      "id": "l0-20261110000207-6a257638-28",
+      "author": "guest-c6990ce4e6399e47",
+      "createdAt": "2026-11-09T14:06:00.467Z",
+      "replyTo": "l0-20261110000207-6a257638-20",
+      "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "我回你几句就是训你？怎么，不顺着你说就算管你了。还说没让人闭嘴。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/wait.webp",
+          "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "断网十分钟"
+      },
+      "text": ""
     },
     {
-      "id": "l0-20261109212821-f9f00063-13",
-      "author": "visitor-chi-upper",
-      "createdAt": "2026-11-09T04:46:21.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-11",
+      "id": "l0-20261110000207-6a257638-27",
+      "author": "guest-6f9f9ffd47a5b90d",
+      "createdAt": "2026-11-09T14:04:54.467Z",
+      "replyTo": "l0-20261110000207-6a257638-26",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "拐个弯"
+      },
+      "text": "我小姨这会儿又在发相亲照片。介绍工作可以，这个真不用了。"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-26",
+      "author": "visitor-delta-upper",
+      "createdAt": "2026-11-09T14:03:38.467Z",
+      "replyTo": "l0-20261110000207-6a257638-25",
       "likes": 11,
       "canon": "derivative",
       "media": [],
-      "text": "对啊，我也能说我不爱听吧\n我就说我爱看，怎么就变成我不许别人说话了，烦死"
+      "text": "你到底说她什么了？光看这句我没懂。"
     },
     {
-      "id": "l0-20261109212821-f9f00063-12",
-      "author": "visitor-chi-upper",
-      "createdAt": "2026-11-09T00:09:42.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-09",
+      "id": "l0-20261110000207-6a257638-25",
+      "author": "visitor-theta-upper",
+      "createdAt": "2026-11-09T14:02:27.467Z",
+      "replyTo": "l0-20261110000207-6a257638-23",
       "likes": 1,
       "canon": "derivative",
       "media": [],
-      "text": "我让谁闭嘴了？？\n你自己给我加一堆话，再训我一顿是吧"
+      "text": "我说她没画了吗？你也挺会补的。"
     },
     {
-      "id": "l0-20261109212821-f9f00063-11",
-      "author": "lidianlong",
-      "createdAt": "2026-11-08T23:43:48.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-10",
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "字多就是急？人家不能多说两句啊。"
-    },
-    {
-      "id": "l0-20261109212821-f9f00063-10",
-      "author": "guest-5d2643f375e528f0",
-      "createdAt": "2026-11-08T23:43:12.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-09",
+      "id": "l0-20261110000207-6a257638-24",
+      "author": "guest-6f9f9ffd47a5b90d",
+      "createdAt": "2026-11-09T14:00:45.467Z",
+      "replyTo": "l0-20261110000207-6a257638-23",
       "likes": 0,
       "canon": "derivative",
       "media": [],
       "guest": {
-        "name": "332"
+        "name": "拐个弯"
       },
-      "text": "她就两行，你这急得写了一大段"
+      "text": "我现在的活就是亲戚介绍的，也没谁替我上班啊。"
     },
     {
-      "id": "l0-20261109212821-f9f00063-09",
-      "author": "visitor-omicron",
-      "createdAt": "2026-11-08T23:42:36.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-03",
-      "likes": 0,
+      "id": "l0-20261110000207-6a257638-23",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-09T13:44:13.467Z",
+      "replyTo": "l0-20261110000207-6a257638-22",
+      "likes": 5,
       "canon": "derivative",
       "media": [],
-      "text": "你爱看就看，怎么说得跟有人拦着你翻页一样。人家要是嫌这段写得没意思，也得先顾着你看得爽？我刷那些乱吃东西的视频也能刷半天，不至于有人说无聊我就觉得在给我布置作业。最烦这种，一句我就爱看，后面连嫌不好看的人都得闭嘴。"
+      "text": "接到什么项目，和图是不是自己做的，能算同一件事吗？有叔叔就一笔都不用自己画了？"
     },
     {
-      "id": "l0-20261109212821-f9f00063-08",
-      "author": "news-surf",
-      "createdAt": "2026-11-08T23:16:25.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-02",
-      "likes": 0,
+      "id": "l0-20261110000207-6a257638-22",
+      "author": "visitor-theta-upper",
+      "createdAt": "2026-11-09T13:34:06.467Z",
+      "replyTo": "l0-20261110000207-6a257638-21",
+      "likes": 5,
       "canon": "derivative",
       "media": [],
-      "text": "看着这一排六点几的，突然就困了。"
+      "text": "图我不贴了，有她名字。我都说了图是好看的，哪句说她画得不好了？问纸是因为那种浅紫印出来容易灰，问一句也不至于是什么机密吧。你刚还说想看作品，转头就跟着笑，到底想看图还是想看我急啊？"
     },
     {
-      "id": "l0-20261109212821-f9f00063-07",
-      "author": "news-surf",
-      "createdAt": "2026-11-08T23:15:41.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-06",
+      "id": "l0-20261110000207-6a257638-21",
+      "author": "guest-543b2df0f966a0e4",
+      "createdAt": "2026-11-09T13:28:52.467Z",
+      "replyTo": "l0-20261110000207-6a257638-18",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "剪刀找不到"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261110000207-6a257638-20",
+      "author": "guest-543b2df0f966a0e4",
+      "createdAt": "2026-11-09T13:28:25.467Z",
+      "replyTo": "l0-20261110000207-6a257638-19",
       "likes": 7,
       "canon": "derivative",
-      "media": [],
-      "text": "你这“万一”得留到哪年啊😂"
+      "media": [
+        {
+          "src": "assets/emotes/l0/wait.webp",
+          "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "剪刀找不到"
+      },
+      "text": "图呢，我想看那个作品"
     },
     {
-      "id": "l0-20261109212821-f9f00063-06",
-      "author": "guest-366d2a45f19d979a",
-      "createdAt": "2026-11-08T23:13:32.021Z",
-      "replyTo": "l0-20261109212821-f9f00063-02",
+      "id": "l0-20261110000207-6a257638-19",
+      "author": "guest-c6990ce4e6399e47",
+      "createdAt": "2026-11-09T13:27:52.467Z",
+      "replyTo": "l0-20261110000207-6a257638-18",
       "likes": 0,
       "canon": "derivative",
       "media": [],
       "guest": {
-        "name": "橡皮筋"
+        "name": "断网十分钟"
       },
-      "text": "我都关了留着，万一以后又换回早班呢，再一个个设好麻烦。"
+      "text": "那评论不能是发的人自己删的？你怎么知道谁动的手。"
     },
     {
-      "id": "l0-20261109212821-f9f00063-05",
-      "author": "guest-acb05905d30605a4",
-      "createdAt": "2026-11-08T23:02:55.021Z",
-      "replyTo": null,
+      "id": "l0-20261110000207-6a257638-18",
+      "author": "visitor-theta-upper",
+      "createdAt": "2026-11-09T13:26:35.467Z",
+      "replyTo": "l0-20261110000207-6a257638-17",
+      "likes": 9,
+      "canon": "derivative",
+      "media": [],
+      "text": "你笑什么啊？"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-17",
+      "author": "guest-0e8dc9736409183c",
+      "createdAt": "2026-11-09T13:24:13.467Z",
+      "replyTo": "l0-20261110000207-6a257638-16",
       "likes": 8,
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261109212821-f9f00063-05/media/crying-cat.webp",
-          "alt": "橙色猫头闭眼流下两行蓝色眼泪。",
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "momo_23"
+        "name": "番茄去皮"
       },
-      "text": "不想起床啊啊啊\n不想上班"
+      "text": ""
     },
     {
-      "id": "l0-20261109212821-f9f00063-04",
-      "author": "guest-6022ffba2330131e",
-      "createdAt": "2026-11-08T23:02:16.021Z",
-      "replyTo": null,
-      "likes": 18,
+      "id": "l0-20261110000207-6a257638-16",
+      "author": "visitor-theta-upper",
+      "createdAt": "2026-11-09T13:22:57.467Z",
+      "replyTo": "l0-20261110000207-6a257638-15",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "她那个浅紫色我还存了。我昨天问她用的什么纸，到现在没回，朋友圈倒是又更了两条。"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-15",
+      "author": "guest-0e8dc9736409183c",
+      "createdAt": "2026-11-09T13:11:50.467Z",
+      "replyTo": "l0-20261110000207-6a257638-05",
+      "likes": 8,
       "canon": "derivative",
       "media": [],
       "guest": {
-        "name": "q7_"
+        "name": "番茄去皮"
       },
-      "text": "公司小组下周聚餐，我连去不去都没答应，费用已经给我算上了。昨天休息没看手机，晚上点开群九十多条未读，有人说我没投票就替我选了最贵那档，还来一句默认少数服从多数。现在那九十多条我看完了，还是一句都不想回。"
+      "text": "终于靠自己喊了声叔叔。"
     },
     {
-      "id": "l0-20261109212821-f9f00063-03",
-      "author": "visitor-chi-upper",
-      "createdAt": "2026-11-08T22:39:28.021Z",
+      "id": "l0-20261110000207-6a257638-14",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-09T09:34:39.467Z",
+      "replyTo": "l0-20261110000207-6a257638-13",
+      "likes": 10,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/melon.webp",
+          "alt": "L0扒着边沿，双手拿一片西瓜。",
+          "fit": "contain"
+        }
+      ],
+      "text": ""
+    },
+    {
+      "id": "l0-20261110000207-6a257638-13",
+      "author": "guyu",
+      "createdAt": "2026-11-09T09:28:07.467Z",
+      "replyTo": "l0-20261110000207-6a257638-12",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "那你这句算不算也在管别人？"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-12",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-09T08:33:11.467Z",
+      "replyTo": "l0-20261110000207-6a257638-11",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "这都能管到口气上"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-11",
+      "author": "visitor-nu",
+      "createdAt": "2026-11-09T08:31:44.467Z",
+      "replyTo": "l0-20261110000207-6a257638-10",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "你自己都叫不上，还先凶别人。"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-10",
+      "author": "guest-22ef89f6b2fe9221",
+      "createdAt": "2026-11-09T06:06:29.467Z",
+      "replyTo": "l0-20261110000207-6a257638-09",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小陶盆"
+      },
+      "text": "我那盆倒是有名字，卖花的和识图软件各说一个。现在谁问我都只敢说是绿的。"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-09",
+      "author": "guest-fec6b3d78d0a2be0",
+      "createdAt": "2026-11-09T06:05:14.467Z",
+      "replyTo": "l0-20261110000207-6a257638-08",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/guilty.webp",
+          "alt": "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "小绿活着就行"
+      },
+      "text": "我连自己那盆叫什么都不知道"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-08",
+      "author": "guest-22ef89f6b2fe9221",
+      "createdAt": "2026-11-09T06:03:18.467Z",
+      "replyTo": "l0-20261110000207-6a257638-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小陶盆"
+      },
+      "text": "连是什么植物都不说，这谁敢答啊。"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-07",
+      "author": "visitor-omicron",
+      "createdAt": "2026-11-09T02:32:39.467Z",
+      "replyTo": "l0-20261110000207-6a257638-02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "手机还想过你脸这一关"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-06",
+      "author": "visitor-epsilon",
+      "createdAt": "2026-11-09T02:31:38.467Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "有些少儿书的腰封比正文还吵，翻两页全是“你就是最棒的”。推荐的人只说孩子爱看，我也没法接。爱看和写得好，总不能是一回事吧。"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-05",
+      "author": "visitor-theta-upper",
+      "createdAt": "2026-11-09T02:15:36.467Z",
+      "replyTo": null,
+      "likes": 19,
+      "canon": "derivative",
+      "media": [],
+      "text": "同学发了个“终于靠自己”的作品，下面有人问是不是她叔叔那边的项目，过一会儿那条评论就没了。\n是我想多了吗？（图确实漂亮，但也不用把自己写得那么惨吧）"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-04",
+      "author": "visitor-epsilon",
+      "createdAt": "2026-11-09T00:48:16.467Z",
       "replyTo": null,
       "likes": 17,
       "canon": "derivative",
       "media": [],
-      "text": "我就爱看坏人下一页被打飞\n看个漫画还要考我啊"
+      "text": "顺便问一句，花盆转了方向，原来歪掉的茎也会慢慢直回来吗？"
     },
     {
-      "id": "l0-20261109212821-f9f00063-02",
-      "author": "guest-955f88e6ca199622",
-      "createdAt": "2026-11-08T22:36:51.021Z",
+      "id": "l0-20261110000207-6a257638-03",
+      "author": "guest-4881a4db9a0a8f5a",
+      "createdAt": "2026-11-09T00:46:55.467Z",
       "replyTo": null,
-      "likes": 15,
+      "likes": 0,
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261109212821-f9f00063-02/media/old-alarms.webp",
-          "alt": "手机闹钟列表里六个关闭的旧闹钟。",
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "再眯两分钟"
+        "name": "下午再说"
       },
-      "text": "这堆以前上早班的闹钟有办法一次删光吗，只找到一个个编辑的……"
+      "text": "说帮忙改两行，发过来六页，真有你的。"
     },
     {
-      "id": "l0-20261109212821-f9f00063-01",
-      "author": "guest-10ed65fe11663cea",
-      "createdAt": "2026-11-08T22:21:17.021Z",
+      "id": "l0-20261110000207-6a257638-02",
+      "author": "visitor-epsilon",
+      "createdAt": "2026-11-09T00:28:57.467Z",
       "replyTo": null,
-      "likes": 11,
+      "likes": 12,
       "canon": "derivative",
       "media": [],
-      "guest": {
-        "name": "窗台小票"
-      },
-      "text": "楼下那家“每日手作”，早上看店员拆了一箱写着冷冻面团的，手作是指手动拆包装吗……"
+      "text": "过关了，手机差点掉在脸上。"
+    },
+    {
+      "id": "l0-20261110000207-6a257638-01",
+      "author": "chenanjing",
+      "createdAt": "2026-11-09T00:04:12.467Z",
+      "replyTo": null,
+      "likes": 9,
+      "canon": "derivative",
+      "media": [],
+      "text": "这纸的样图是不是加了灰。收到的白得刺眼，铺在桌上像一块灯。\n店家说是我屏幕的问题。"
     },
     {
       "id": "site-welcome",
