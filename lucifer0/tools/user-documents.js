@@ -1,120 +1,39 @@
 import { readFile, readdir, lstat, realpath, writeFile } from 'node:fs/promises';
 import { join, resolve, sep } from 'node:path';
-import { emptyProfile, validatePrivateProfile } from './profile-schema.js';
+import { emptyProfile, validateProfile } from './profile-schema.js';
 
-const ACCOUNT = [
-  ['稳定 ID', 'id'], ['用户名', 'handle'], ['网名', 'name'], ['公开简介', 'bio'],
-  ['头像路径', 'avatar'], ['账号类型', 'kind'], ['作品来源', 'sourceWork'],
-  ['启用账号', 'enabled'], ['AI 使用范围', 'aiScope'], ['资料状态', 'profileStatus'],
-  ['进入 following', 'inFollowing'], ['允许发主帖', 'allowPosts'], ['允许回复', 'allowReplies'],
-  ['抽取权重', 'activityWeight']
-];
-const BASIC = [['对应人物', 'characterName'], ['年龄', 'age'], ['职业', 'occupation'], ['所在区域', 'location'], ['性别', 'gender'], ['称呼代词', 'pronouns'], ['时区', 'timezone'], ['常在线时段', 'activeHours']];
-const LISTS = [
-  ['兴趣', 'basics.interests'], ['性格', 'basics.personality'], ['标签', 'tags'],
-  ['表达习惯', 'voice'], ['发言习惯', 'postingHabits'], ['常聊话题', 'topics'],
-  ['说话示例', 'voiceExamples'], ['人物关系', 'relationships'], ['知情范围', 'knowledgeScope'], ['表达边界', 'boundaries']
-];
-const ENUMS = {
-  kind: { character: '作品人物', visitor: '原创路人' },
-  aiScope: { none: '关闭', sample: '仅样例', daily: '日常' },
-  profileStatus: { sample: '样例', approved: '已审核' }
-};
-const BOOLS = new Set(['enabled', 'inFollowing', 'allowPosts', 'allowReplies']);
-const FACT_STATUS = { canon: '原典', inference: '推演', pending: '待定' };
-const HEADINGS = ['账号与开关', '基本资料', ...LISTS.map(([title]) => title), '近期状态', '事实依据', '自由备注'];
-const PERSON_FIELDS = ['编号', '网名', '用户名', '个人简介', '年龄', '性别', '职业', '居住区域', '教育与训练', '家庭与居住', '资料更新'];
+const PERSON_FIELDS = ['编号', '网名', '用户名', '个人简介', '所属世界观', '年龄', '性别', '职业', '居住区域', '教育与训练', '家庭与居住', '资料更新'];
 const PERSON_HEADINGS = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算'];
 const SETTING_FIELDS = ['id', 'avatar', 'kind', 'sourceWork', 'enabled', 'aiScope', 'profileStatus', 'inFollowing', 'allowPosts', 'allowReplies', 'activityWeight', 'timezone', 'activeHours'];
+const ENUMS = { kind: ['character', 'visitor'], aiScope: ['none', 'sample', 'daily'], profileStatus: ['sample', 'approved'] };
+const BOOLS = ['enabled', 'inFollowing', 'allowPosts', 'allowReplies'];
+const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
 const entities = { '&amp;': '&', '&#124;': '|', '&#10;': '\n', '&#13;': '\r', '&lt;': '<', '&gt;': '>' };
 const cell = value => String(value ?? '').replace(/&/g, '&amp;').replace(/\|/g, '&#124;').replace(/\r/g, '&#13;').replace(/\n/g, '&#10;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const uncell = value => value.replace(/&amp;|&#124;|&#10;|&#13;|&lt;|&gt;/g, entity => entities[entity]);
-const fail = message => { throw new Error(`用户档案：${message}`); };
-const get = (object, path) => path.split('.').reduce((value, key) => value?.[key], object);
-const set = (object, path, value) => { const parts = path.split('.'); if (parts.length === 2) object[parts[0]][parts[1]] = value; else object[path] = value; };
 const own = (value, key) => Object.hasOwn(value, key);
+const fail = message => { throw new Error(`用户档案：${message}`); };
 export const isUserAvatarPath = (path, id) => path === '' || typeof path === 'string' && /^users\/[a-z0-9][a-z0-9-]{1,63}\/avatar\.(svg|png|jpg|webp)$/.test(path) && path.split('/')[1] === id;
 
-function table(headers, rows) {
-  return ['| ' + headers.join(' | ') + ' |', '| ' + headers.map(() => '---').join(' | ') + ' |', ...rows.map(row => '| ' + row.map(cell).join(' | ') + ' |')].join('\n');
+function table(headers, values) {
+  return ['| ' + headers.join(' | ') + ' |', '| ' + headers.map(() => '---').join(' | ') + ' |', ...values.map(row => '| ' + row.map(cell).join(' | ') + ' |')].join('\n');
 }
-function rows(text, headers, section) {
+function rows(text) {
   const lines = text.split('\n').filter(line => line.trim());
   const parse = line => {
-    if (!/^\|.*\|$/.test(line.trim())) fail(`${section}应保留 Markdown 表格；包含 | 的内容请写成 &#124;`);
+    if (!/^\|.*\|$/.test(line.trim())) fail('基本情况应保留 Markdown 表格；包含 | 的内容请写成 &#124;');
     return line.trim().slice(1, -1).split('|').map(part => uncell(part.trim()));
   };
-  if (lines.length < 2 || JSON.stringify(parse(lines[0])) !== JSON.stringify(headers)) fail(`${section}的表头不完整`);
+  if (lines.length < 2 || JSON.stringify(parse(lines[0])) !== JSON.stringify(['项目', '内容'])) fail('基本情况的表头不完整');
   const separator = parse(lines[1]);
-  if (separator.length !== headers.length || separator.some(value => !/^:?-{3,}:?$/.test(value))) fail(`${section}缺少表格分隔行`);
+  if (separator.length !== 2 || separator.some(value => !/^:?-{3,}:?$/.test(value))) fail('基本情况缺少表格分隔行');
   return lines.slice(2).map(line => {
     const row = parse(line);
-    if (row.length !== headers.length) fail(`${section}表格列数不正确；内容中的 | 请写成 &#124;`);
+    if (row.length !== 2) fail('基本情况表格列数不正确；内容中的 | 请写成 &#124;');
     return row;
   });
 }
-function properties(text, spec, section, required = spec.map(([label]) => label)) {
-  const values = Object.create(null), names = new Map(spec);
-  for (const [label, value] of rows(text, ['属性', '内容'], section)) {
-    if (!names.has(label)) fail(`${section}存在未知属性“${label}”`);
-    const key = names.get(label);
-    if (own(values, key)) fail(`${section}重复填写了“${label}”`);
-    values[key] = value;
-  }
-  for (const label of required) if (!own(values, names.get(label))) fail(`${section}缺少“${label}”`);
-  return values;
-}
-function validateUser(user) {
-  if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(user.id)) fail('稳定 ID 格式不正确');
-  if (!/^[a-z0-9_]{2,32}$/.test(user.handle)) fail('用户名只能包含 2–32 位小写字母、数字和下划线');
-  if (!user.name.trim() || user.name.length > 40) fail('网名应为 1–40 个字符');
-  if (user.bio.length > 240 || user.sourceWork.length > 80) fail('公开简介或作品来源过长');
-  if (!isUserAvatarPath(user.avatar, user.id)) fail('头像路径留空，或填写 users/当前用户ID/avatar.svg（也支持 png、jpg、webp）');
-}
-
-export function renderUserDocument(user, suppliedProfile = emptyProfile(user.id)) {
-  const profile = validatePrivateProfile(suppliedProfile, user.id);
-  if (profile.facts.some(fact => fact.visibility !== 'public')) fail('私有事实不能写入公开仓库，请放在仓库外的私有资料源');
-  const accountRows = ACCOUNT.map(([label, key]) => {
-    const value = key === 'activityWeight' ? profile.activityWeight ?? 1 : user[key];
-    return [label, BOOLS.has(key) ? ((value ?? key !== 'inFollowing') ? '是' : '否') : ENUMS[key] ? ENUMS[key][value] : value ?? ''];
-  });
-  const sections = [
-    '# 用户档案\n\n[返回用户总目录](../README.md) · [填写说明](../README.md)',
-    '## 账号与开关\n\n' + table(['属性', '内容'], accountRows),
-    '## 基本资料\n\n' + table(['属性', '内容'], BASIC.filter(([, key]) => own(profile.basics || {}, key)).map(([label, key]) => [label, profile.basics[key]]))
-  ];
-  for (const [title, path] of LISTS) sections.push(`## ${title}\n\n` + (get(profile, path) || []).map(value => '- ' + cell(value)).join('\n'));
-  sections.push('## 近期状态\n\n' + cell(profile.currentStatus || ''));
-  sections.push('## 事实依据\n\n' + table(['依据', '内容', '来源'], profile.facts.map(fact => [FACT_STATUS[fact.status], fact.text, fact.source])));
-  sections.push('## 自由备注\n\n' + (profile.notes || ''));
-  return sections.join('\n\n').trimEnd() + '\n';
-}
-
-function validateSettings(setting) {
-  if (!setting || typeof setting !== 'object' || Array.isArray(setting) || Object.keys(setting).some(key => !SETTING_FIELDS.includes(key)) || SETTING_FIELDS.some(key => !own(setting, key))) fail('accounts.json 的账号配置字段不完整或含未知字段');
-  if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(setting.id)) fail('accounts.json 的稳定 ID 格式不正确');
-  if (!isUserAvatarPath(setting.avatar, setting.id)) fail('accounts.json 的头像路径无效');
-  for (const key of BOOLS) if (typeof setting[key] !== 'boolean') fail(`accounts.json 的 ${key} 必须为布尔值`);
-  for (const key of ['kind', 'aiScope', 'profileStatus']) if (!own(ENUMS[key], setting[key])) fail(`accounts.json 的 ${key} 无效`);
-  if (typeof setting.sourceWork !== 'string' || setting.sourceWork.length > 80 || typeof setting.timezone !== 'string' || setting.timezone.length > 240 || typeof setting.activeHours !== 'string' || setting.activeHours.length > 240) fail('accounts.json 的文字字段无效');
-  if (typeof setting.activityWeight !== 'number' || !Number.isFinite(setting.activityWeight) || setting.activityWeight < 0 || setting.activityWeight > 10) fail('accounts.json 的权重必须为 0–10');
-  return setting;
-}
-
-function applySettings(parsed, settings) {
-  if (!settings) return parsed;
-  validateSettings(settings);
-  if (settings.id !== parsed.user.id) fail('accounts.json 与人物编号不一致');
-  const { activityWeight, timezone, activeHours, ...controls } = settings;
-  Object.assign(parsed.user, controls);
-  Object.assign(parsed.profile.basics, { timezone, activeHours });
-  parsed.profile.activityWeight = activityWeight;
-  return parsed;
-}
-
-function parsePersonDocument(source, expectedId, settings) {
-  if (!settings) fail(`人物 ${expectedId || ''} 缺少 accounts.json 账号配置；请先登记，不能默认开放权限`);
+function sectionsOf(source) {
   const sections = Object.create(null);
   let current;
   for (const line of source.replace(/\r\n/g, '\n').split('\n')) {
@@ -124,89 +43,69 @@ function parsePersonDocument(source, expectedId, settings) {
       sections[current] = '';
     } else if (current) sections[current] += line + '\n';
   }
+  return sections;
+}
+
+export function renderUserDocument(user, suppliedProfile = emptyProfile(user.id)) {
+  const profile = validateProfile(suppliedProfile, user.id), basics = profile.basics;
+  const isComplete = /^# /m.test(profile.notes) && /^## 基本情况$/m.test(profile.notes);
+  const preserved = isComplete ? sectionsOf(profile.notes) : {};
+  const preface = isComplete ? profile.notes.slice(profile.notes.indexOf('\n') + 1, profile.notes.search(/^## /m)).trim() : '';
+  const values = [user.id, user.name, user.handle, user.bio, basics.worldview, basics.age, basics.gender, basics.occupation, basics.location, basics.education, basics.household, basics.updatedAt];
+  const body = {
+    '成长与工作经历': preserved['成长与工作经历'] ?? profile.notes,
+    '家庭与社会关系': profile.relationships.join('\n\n'),
+    '兴趣与闲暇': basics.interests.join('\n\n'),
+    '观念与处事方式': basics.personality.join('\n\n'),
+    '经验与局限': profile.knowledgeScope.join('\n\n'),
+    '网络交往与表达': profile.voice.join('\n\n'),
+    '近期生活与打算': profile.currentStatus
+  };
+  return ['# ' + cell(user.name) + (preface ? '\n\n' + preface : ''), '## 基本情况\n\n' + table(['项目', '内容'], PERSON_FIELDS.map((name, index) => [name, values[index]])),
+    ...PERSON_HEADINGS.slice(1).map(heading => `## ${heading}\n\n` + (body[heading] ?? preserved[heading] ?? '').trim())].join('\n\n').trimEnd() + '\n';
+}
+
+function validateSettings(setting) {
+  if (!setting || typeof setting !== 'object' || Array.isArray(setting) || Object.keys(setting).some(key => !SETTING_FIELDS.includes(key)) || SETTING_FIELDS.some(key => !own(setting, key))) fail('accounts.json 的账号配置字段不完整或含未知字段');
+  if (!ID.test(setting.id)) fail('accounts.json 的稳定 ID 格式不正确');
+  if (!isUserAvatarPath(setting.avatar, setting.id)) fail('accounts.json 的头像路径无效');
+  for (const key of BOOLS) if (typeof setting[key] !== 'boolean') fail(`accounts.json 的 ${key} 必须为布尔值`);
+  for (const [key, values] of Object.entries(ENUMS)) if (!values.includes(setting[key])) fail(`accounts.json 的 ${key} 无效`);
+  for (const [key, maximum] of [['sourceWork', 80], ['timezone', 240], ['activeHours', 240]]) if (typeof setting[key] !== 'string' || setting[key].length > maximum) fail(`accounts.json 的 ${key} 无效`);
+  if (typeof setting.activityWeight !== 'number' || !Number.isFinite(setting.activityWeight) || setting.activityWeight < 0 || setting.activityWeight > 10) fail('accounts.json 的权重必须为 0–10');
+  return setting;
+}
+
+export function parseUserDocument(source, expectedId, settings) {
+  if (typeof source !== 'string' || source.length > 20000) fail('文档不是文本或超过 20000 字符');
+  if (!source.trimStart().startsWith('# ')) fail('缺少文档标题');
+  if (!settings) fail(`人物 ${expectedId || ''} 缺少 accounts.json 账号配置；请先登记`);
+  validateSettings(settings);
+  const sections = sectionsOf(source), values = Object.create(null);
   for (const heading of PERSON_HEADINGS) if (!own(sections, heading)) fail(`人物资料缺少“${heading}”章节`);
-  const values = Object.create(null);
-  for (const [key, value] of rows(sections['基本情况'], ['项目', '内容'], '基本情况')) {
+  for (const [key, value] of rows(sections['基本情况'])) {
     if (!PERSON_FIELDS.includes(key) || own(values, key)) fail(`人物基本情况字段无效或重复：${key}`);
     values[key] = value;
   }
   for (const key of PERSON_FIELDS) if (!own(values, key)) fail(`人物基本情况缺少“${key}”`);
-  const user = { id: values['编号'], name: values['网名'], handle: values['用户名'], bio: values['个人简介'] };
-  if (expectedId !== undefined && user.id !== expectedId) fail(`文档稳定 ID ${user.id} 与文件夹 ${expectedId} 不一致`);
+  const { activityWeight, timezone, activeHours, ...controls } = settings;
+  const user = { ...controls, id: values['编号'], name: values['网名'], handle: values['用户名'], bio: values['个人简介'] };
+  if (!ID.test(user.id) || user.id !== settings.id || expectedId !== undefined && user.id !== expectedId) fail('文档稳定 ID 与文件夹或 accounts.json 不一致');
+  if (!/^[a-z0-9_]{2,32}$/.test(user.handle)) fail('用户名只能包含 2–32 位小写字母、数字和下划线');
+  if (!user.name.trim() || user.name.length > 40 || user.bio.length > 240) fail('网名或个人简介过长或为空');
   const items = heading => sections[heading].trim().split(/\n\s*\n/).filter(Boolean).map(text => text.replace(/^- /gm, ''));
   const profile = emptyProfile(user.id);
-  Object.assign(profile.basics, { age: values['年龄'], gender: values['性别'], occupation: values['职业'], location: values['居住区域'], interests: items('兴趣与闲暇'), personality: items('观念与处事方式') });
-  profile.voice = items('网络交往与表达');
-  profile.postingHabits = items('网络交往与表达');
-  profile.relationships = items('家庭与社会关系');
-  profile.knowledgeScope = items('经验与局限');
-  profile.currentStatus = sections['近期生活与打算'].trim();
-  profile.notes = source;
-  const parsed = applySettings({ user, profile }, settings);
-  validateUser(parsed.user);
-  validatePrivateProfile(parsed.profile, user.id);
-  return parsed;
-}
-
-export function parseUserDocument(source, expectedId, settings) {
-  if (typeof source !== 'string' || source.length > 200000) fail('文档不是文本或超过 200000 字符');
-  if (source.match(/^## (.+)$/m)?.[1].trim() === '基本情况') return parsePersonDocument(source, expectedId, settings);
-  const lines = source.replace(/\r\n/g, '\n').split('\n'), sections = Object.create(null);
-  let current, prefix = '';
-  for (const line of lines) {
-    // Notes are deliberately the last section and may contain arbitrary Markdown headings.
-    if (current === '自由备注') { sections[current] += line + '\n'; continue; }
-    if (line.startsWith('## ')) {
-      current = line.slice(3).trim();
-      if (!HEADINGS.includes(current)) fail(`未知章节“${current}”；新增自由设定请写在自由备注或同文件夹的另一个 .md 文件`);
-      if (own(sections, current)) fail(`重复章节“${current}”`);
-      sections[current] = '';
-    } else if (current) sections[current] += line + '\n';
-    else prefix += line + '\n';
-  }
-  if (!prefix.trim().startsWith('# ')) fail('缺少文档标题');
-  for (const title of HEADINGS) if (!own(sections, title)) fail(`缺少“${title}”章节`);
-  const raw = properties(sections['账号与开关'], ACCOUNT, '账号与开关');
-  const user = {};
-  for (const [, key] of ACCOUNT) {
-    if (key === 'activityWeight') continue;
-    const value = raw[key];
-    if (BOOLS.has(key)) {
-      if (!['是', '否'].includes(value)) fail(`${key}开关只填“是”或“否”`);
-      user[key] = value === '是';
-    } else if (ENUMS[key]) {
-      const entry = Object.entries(ENUMS[key]).find(([, label]) => label === value);
-      if (!entry) fail(`${key}只接受：${Object.values(ENUMS[key]).join('、')}`);
-      user[key] = entry[0];
-    } else user[key] = value;
-  }
-  validateUser(user);
-  if (expectedId !== undefined && user.id !== expectedId) fail(`文档稳定 ID ${user.id} 与文件夹 ${expectedId} 不一致`);
-  const profile = emptyProfile(user.id);
-  profile.basics = { ...properties(sections['基本资料'], BASIC, '基本资料', ['年龄', '职业', '所在区域']), interests: [], personality: [] };
-  for (const [title, path] of LISTS) {
-    const items = sections[title].split('\n').filter(line => line.trim());
-    if (items.some(line => !line.startsWith('- '))) fail(`${title}每项请以“- ”开头`);
-    set(profile, path, items.map(line => uncell(line.slice(2))));
-  }
-  profile.currentStatus = uncell(sections['近期状态'].trim());
-  profile.notes = sections['自由备注'].replace(/^\n/, '').trimEnd();
-  if (!/^\d+(\.\d+)?$/.test(raw.activityWeight)) fail('抽取权重请填 0–10 的数字');
-  profile.activityWeight = Number(raw.activityWeight);
-  profile.facts = rows(sections['事实依据'], ['依据', '内容', '来源'], '事实依据').map(([label, text, source]) => {
-    const entry = Object.entries(FACT_STATUS).find(([, value]) => value === label.replace(/^【|】$/g, ''));
-    if (!entry) fail('事实依据只接受“原典”“推演”“待定”');
-    return { text, status: entry[0], visibility: 'public', source };
-  });
-  validatePrivateProfile(profile, user.id);
-  return applySettings({ user, profile }, settings);
+  Object.assign(profile.basics, { age: values['年龄'], gender: values['性别'], occupation: values['职业'], location: values['居住区域'], education: values['教育与训练'], household: values['家庭与居住'], updatedAt: values['资料更新'], worldview: values['所属世界观'], interests: items('兴趣与闲暇'), personality: items('观念与处事方式'), timezone, activeHours });
+  Object.assign(profile, { activityWeight, voice: items('网络交往与表达'), postingHabits: items('网络交往与表达'), relationships: items('家庭与社会关系'), knowledgeScope: items('经验与局限'), currentStatus: sections['近期生活与打算'].trim(), notes: source });
+  validateProfile(profile, user.id);
+  return { user, profile };
 }
 
 async function regular(path, root, directory = false) {
   const stat = await lstat(path);
   if (stat.isSymbolicLink() || (directory ? !stat.isDirectory() : !stat.isFile())) fail(`不能读取符号链接或特殊文件：${path}`);
   const actual = await realpath(path);
-  if (actual !== root && !actual.startsWith(root + sep)) fail(`文件超出用户目录：${path}`);
+  if (actual !== root && !actual.startsWith(root + sep)) fail(`文件超出资料目录：${path}`);
   return stat;
 }
 async function supplements(directory, usersRoot, prefix) {
@@ -223,30 +122,46 @@ async function supplements(directory, usersRoot, prefix) {
   }
   return documents;
 }
+async function readWorldviews(root) {
+  const environment = join(root, 'environment'), directory = join(environment, 'worldviews');
+  try { await regular(environment, root, true); await regular(directory, root, true); }
+  catch (error) { if (error.code === 'ENOENT') return []; throw error; }
+  const documents = [];
+  for (const entry of (await readdir(directory, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name, 'en'))) {
+    if (entry.isSymbolicLink()) fail(`世界观目录不能包含符号链接：${entry.name}`);
+    if (!entry.name.endsWith('.md') || ['README.md', 'TEMPLATE.md'].includes(entry.name)) continue;
+    const id = entry.name.slice(0, -3), path = `environment/worldviews/${entry.name}`;
+    if (!ID.test(id)) fail(`世界观文件名不是合法编号：${entry.name}`);
+    const stat = await regular(join(directory, entry.name), root);
+    if (stat.size > 500000) fail(`世界观资料超过 500000 字节：${path}`);
+    const text = await readFile(join(directory, entry.name), 'utf8');
+    if (!text.trim()) fail(`世界观资料为空：${path}`);
+    documents.push({ id, path, text });
+  }
+  return documents;
+}
 
 export async function readUserDocuments(root) {
-  const usersPath = join(resolve(root), 'users');
-  const usersStat = await lstat(usersPath);
-  if (!usersStat.isDirectory() || usersStat.isSymbolicLink()) fail('users 必须是实际目录，不能是符号链接');
+  root = await realpath(resolve(root));
+  const usersPath = join(root, 'users');
+  await regular(usersPath, root, true);
   const usersRoot = await realpath(usersPath), users = [], profiles = Object.create(null), supplementalDocuments = Object.create(null), handles = new Set();
-  const controls = new Map(), settingsPath = join(resolve(root), 'accounts.json');
-  try {
-    await regular(settingsPath, await realpath(resolve(root)));
-    const settings = JSON.parse(await readFile(settingsPath, 'utf8'));
-    if (!settings || settings.version !== 1 || !Array.isArray(settings.users) || Object.keys(settings).some(key => !['version', 'users'].includes(key))) fail('accounts.json 格式不正确');
-    for (const setting of settings.users) {
-      validateSettings(setting);
-      if (controls.has(setting.id)) fail(`accounts.json 的编号重复：${setting.id}`);
-      controls.set(setting.id, setting);
-    }
-  } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const settingsPath = join(root, 'accounts.json');
+  try { await regular(settingsPath, root); }
+  catch (error) { if (error.code === 'ENOENT') fail('缺少 accounts.json 账号配置'); throw error; }
+  const settings = JSON.parse(await readFile(settingsPath, 'utf8')), controls = new Map();
+  if (!settings || settings.version !== 1 || !Array.isArray(settings.users) || Object.keys(settings).some(key => !['version', 'users'].includes(key))) fail('accounts.json 格式不正确');
+  for (const setting of settings.users) {
+    validateSettings(setting);
+    if (controls.has(setting.id)) fail(`accounts.json 的编号重复：${setting.id}`);
+    controls.set(setting.id, setting);
+  }
   for (const entry of (await readdir(usersPath, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name, 'en'))) {
     if (entry.isSymbolicLink()) fail(`用户目录不能包含符号链接：${entry.name}`);
     if (!entry.isDirectory()) continue;
-    if (!/^[a-z0-9][a-z0-9-]{1,63}$/.test(entry.name)) fail(`用户文件夹名不是合法稳定 ID：${entry.name}`);
+    if (!ID.test(entry.name)) fail(`用户文件夹名不是合法稳定 ID：${entry.name}`);
     const directory = join(usersPath, entry.name), path = join(directory, 'profile.md');
-    await regular(directory, usersRoot, true);
-    await regular(path, usersRoot);
+    await regular(directory, usersRoot, true); await regular(path, usersRoot);
     let parsed;
     try { parsed = parseUserDocument(await readFile(path, 'utf8'), entry.name, controls.get(entry.name)); }
     catch (error) { error.message = `users/${entry.name}/profile.md：${error.message}`; throw error; }
@@ -257,7 +172,9 @@ export async function readUserDocuments(root) {
   }
   if (!users.length) fail('至少需要一个用户档案');
   for (const id of controls.keys()) if (!profiles[id]) fail(`accounts.json 引用了不存在的人物：${id}`);
-  return { registry: { version: 1, users }, profiles, supplementalDocuments };
+  const worldviewDocuments = await readWorldviews(root), worldviewIds = new Set(worldviewDocuments.map(document => document.id));
+  for (const [id, profile] of Object.entries(profiles)) if (profile.basics.worldview && !worldviewIds.has(profile.basics.worldview)) fail(`人物 ${id} 引用了不存在的世界观：${profile.basics.worldview}`);
+  return { registry: { version: 1, users }, profiles, supplementalDocuments, worldviewDocuments };
 }
 
 export async function buildUserDirectory(root) {
@@ -266,10 +183,7 @@ export async function buildUserDirectory(root) {
   const lines = ['<!-- users:start -->', '', '## 用户总目录', '', `合计：${users.length}人。`];
   for (const [kind, heading] of [['visitor', '本库人物'], ['character', '其他作品人物']]) {
     const group = users.filter(user => user.kind === kind);
-    const links = group.map(user => {
-      const nickname = cell(user.name).replace(/\[/g, '&#91;').replace(/\]/g, '&#93;');
-      return `[${nickname}](./${user.id}/profile.md)`;
-    });
+    const links = group.map(user => `[${cell(user.name).replace(/\[/g, '&#91;').replace(/\]/g, '&#93;')}](./${user.id}/profile.md)`);
     lines.push('', `### ${heading}：${group.length}人`, '', links.join('，'));
   }
   lines.push('', '<!-- users:end -->');

@@ -9,7 +9,7 @@ try {
     const feed = await buildFeed();
     console.log(`Built lucifer0/data/feed.json (${feed.posts.length} entries).`);
   } else if (command === 'ingest' && input) {
-    const options = { privateDirectory: process.env.Y29_SOCIAL_PRIVATE_DIR };
+    const options = {};
     for (let index = 0; index < flags.length; index++) {
       const flag = flags[index];
       if (flag === '--reviewed' && !options.reviewed) options.reviewed = true;

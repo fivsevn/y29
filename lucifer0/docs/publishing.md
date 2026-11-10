@@ -10,7 +10,7 @@
 node lucifer0/tools/update.js prepare
 ```
 
-工具输出 `operation.json` 与 `reading.md` 的绝对路径。前者保存当前更新的抽签、观察和草稿，后者按来源路径汇集完整原文，包括评论区研究，供 AI 阅读。当前配置先均匀抽取1–10条新主帖上限，回复按每个串另抽。默认工作目录位于仓库外的 `~/.local/state/y29/lucifer0/current`。指定其他工作目录时使用：
+工具输出 `operation.json` 与 `reading.md` 的绝对路径。前者保存当前更新的抽签、观察和草稿，后者按来源路径汇集人物、世界观和其他环境资料的完整原文，供 AI 阅读。账号表同时列出每个人登记的世界观。当前配置先均匀抽取1–10条新主帖上限，回复按每个串另抽。默认工作目录位于仓库外的 `~/.local/state/y29/lucifer0/current`。指定其他工作目录时使用：
 
 ```sh
 node lucifer0/tools/update.js prepare --work /outside/work

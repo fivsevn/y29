@@ -7,10 +7,13 @@ import { emptyProfile } from '../lucifer0/tools/profile-schema.js';
 import { renderUserDocument, parseUserDocument, readUserDocuments, buildUserDirectory } from '../lucifer0/tools/user-documents.js';
 
 const account = (id = 'sample-user') => ({ id, handle: id.replaceAll('-', '_'), name: '窗边的人', bio: '偶尔上线。', avatar: '', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'sample', profileStatus: 'sample', inFollowing: false, allowPosts: true, allowReplies: true });
+const control = user => Object.fromEntries(['id', 'avatar', 'kind', 'sourceWork', 'enabled', 'aiScope', 'profileStatus', 'inFollowing', 'allowPosts', 'allowReplies'].map(key => [key, user[key]]).concat([['activityWeight', 1], ['timezone', 'Asia/Shanghai'], ['activeHours', '']]));
+const saveAccounts = (root, accounts) => writeFile(join(root, 'accounts.json'), JSON.stringify({ version: 1, users: accounts.map(control) }));
 async function fixture(t, accounts = [account()]) {
   const root = await mkdtemp(join(tmpdir(), 'y29-user-docs-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   await mkdir(join(root, 'users'));
+  await saveAccounts(root, accounts);
   for (const user of accounts) {
     await mkdir(join(root, 'users', user.id));
     await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, emptyProfile(user.id)));
@@ -18,29 +21,32 @@ async function fixture(t, accounts = [account()]) {
   return root;
 }
 
-test('editable Markdown keeps literal punctuation, multiline notes and separate evidence status', () => {
+test('the shared dossier keeps literal identity punctuation and complete person descriptions', () => {
   const user = account(); user.bio = 'A | B & <img> &#124;';
   const profile = emptyProfile(user.id);
   profile.voice = ['简单一点 | 也可以\n换行。'];
   profile.basics.age = '不详';
-  profile.basics.characterName = '测试作品人物';
-  profile.facts = [{ text: '文字中包含 | 和 &', source: '公开样例', status: 'inference', visibility: 'public' }];
-  profile.notes = '自由文本。\n\n## 基本情况\n\n旧格式备注里的同名标题，不是人物资料表格。\n\n## 自己的小标题\n\n- 不改变权限的角色备注。';
-  const parsed = parseUserDocument(renderUserDocument(user, profile), user.id);
-  assert.deepEqual(parsed, { user, profile });
-  const privateFact = structuredClone(profile); privateFact.facts[0].visibility = 'private';
-  assert.throws(() => renderUserDocument(user, privateFact), /私有事实/);
+  profile.basics.interests = ['看没有剧情的小视频。'];
+  profile.notes = '在不同城市做过零工。\n\n文字中包含 | 和 &。';
+  const text = renderUserDocument(user, profile), parsed = parseUserDocument(text, user.id, control(user));
+  assert.deepEqual(parsed.user, user);
+  assert.equal(parsed.profile.notes, text);
+  assert.deepEqual(parsed.profile.voice, profile.voice);
+  assert.deepEqual(parsed.profile.basics.interests, profile.basics.interests);
+  assert.equal(renderUserDocument(parsed.user, parsed.profile), text);
+  const withPreface = text.replace('\n\n## 基本情况', '\n\n人物补记：曾在外地生活。\n\n## 基本情况');
+  const amended = parseUserDocument(withPreface, user.id, control(user));
+  assert.equal(renderUserDocument(amended.user, amended.profile), withPreface);
 });
 
-test('editing table values in the actual file updates identity and independent switches', async t => {
+test('identity comes from the dossier while operating switches come from account settings', async t => {
   const root = await fixture(t), path = join(root, 'users/sample-user/profile.md');
   let text = await readFile(path, 'utf8');
-  text = text.replace('| 网名 | 窗边的人 |', '| 网名 | 换了一个网名 |')
-    .replace('| 作品来源 |  |', '| 作品来源 | 另一部作品 |')
-    .replace('| 进入 following | 否 |', '| 进入 following | 是 |')
-    .replace('| 允许发主帖 | 是 |', '| 允许发主帖 | 否 |')
-    .replace('| 抽取权重 | 1 |', '| 抽取权重 | 2.5 |');
+  text = text.replace('| 网名 | 窗边的人 |', '| 网名 | 换了一个网名 |');
   await writeFile(path, text);
+  const settings = JSON.parse(await readFile(join(root, 'accounts.json'), 'utf8'));
+  Object.assign(settings.users[0], { sourceWork: '另一部作品', inFollowing: true, allowPosts: false, activityWeight: 2.5 });
+  await writeFile(join(root, 'accounts.json'), JSON.stringify(settings));
   const { registry, profiles } = await readUserDocuments(root), user = registry.users[0];
   assert.equal(user.name, '换了一个网名');
   assert.equal(user.sourceWork, '另一部作品');
@@ -55,11 +61,11 @@ test('avatar is optional and only accepts the current user package filename', ()
   const user = account();
   for (const avatar of ['', 'users/sample-user/avatar.svg', 'users/sample-user/avatar.png', 'users/sample-user/avatar.jpg', 'users/sample-user/avatar.webp']) {
     user.avatar = avatar;
-    assert.equal(parseUserDocument(renderUserDocument(user), user.id).user.avatar, avatar);
+    assert.equal(parseUserDocument(renderUserDocument(user), user.id, control(user)).user.avatar, avatar);
   }
   for (const avatar of ['assets/avatars/visitor.svg', 'users/second-user/avatar.svg', 'users/sample-user/../second-user/avatar.svg', 'users/sample-user/avatar.svg?x=1']) {
     user.avatar = avatar;
-    assert.throws(() => parseUserDocument(renderUserDocument(user), user.id), /头像路径/);
+    assert.throws(() => parseUserDocument(renderUserDocument(user), user.id, control(user)), /头像路径/);
   }
 });
 
@@ -91,6 +97,7 @@ test('catalog groups comma-separated names linking directly to profiles and pres
   const addedDirectory = join(root, 'users', added.id);
   await mkdir(addedDirectory);
   await writeFile(join(addedDirectory, 'profile.md'), renderUserDocument(added, emptyProfile(added.id)));
+  await saveAccounts(root, [user, account('second-user'), character, added]);
   assert.equal((await buildUserDirectory(root)).count, 4);
   const expanded = await readFile(result.path, 'utf8');
   assert.match(expanded, /^合计：4人。$/m);
@@ -98,6 +105,7 @@ test('catalog groups comma-separated names linking directly to profiles and pres
   assert.match(expanded, /### 其他作品人物：1人\n/);
   assert.match(expanded, /\[窗边的人\]\(\.\/added-user\/profile\.md\)/);
   await rm(addedDirectory, { recursive: true });
+  await saveAccounts(root, [user, account('second-user'), character]);
   assert.equal((await buildUserDirectory(root)).count, 3);
   assert.equal(await readFile(result.path, 'utf8'), text, 'removing the added person must restore the original counts and README');
 });
@@ -115,20 +123,41 @@ test('all additional Markdown settings are read, with templates and unrelated as
   assert.ok(supplementalDocuments['sample-user'].every(item => typeof item.text === 'string'));
 });
 
-test('invalid switches, unknown fields, missing sections and mismatched IDs produce actionable errors', async t => {
+test('unknown fields, missing sections and mismatched IDs produce actionable errors', async t => {
   const user = account(), source = renderUserDocument(user, emptyProfile(user.id));
   for (const [text, message] of [
-    [source.replace('| 启用账号 | 是 |', '| 启用账号 | maybe |'), /开关只填/],
-    [source.replace('| 网名 |', '| 大概的名字 |'), /未知属性/],
-    [source.replace('## 知情范围', '## 不存在的章节'), /未知章节/],
-    [source.replace('| 抽取权重 | 1 |', '| 抽取权重 | 99 |'), /between 0 and 10/],
-    [source.replace('## 自由备注', '## 基本资料'), /重复章节/],
-    [source.replace('## 标签\n\n', ''), /缺少“标签”/]
-  ]) assert.throws(() => parseUserDocument(text, user.id), message);
-  assert.throws(() => parseUserDocument(source, 'other-user'), /不一致/);
+    [source.replace('| 网名 |', '| 大概的名字 |'), /字段无效/],
+    [source.replace('## 经验与局限', '## 不存在的章节'), /章节无效/],
+    [source.replace('## 近期生活与打算', '## 基本情况'), /重复/],
+    [source.replace('## 兴趣与闲暇\n\n', ''), /缺少“兴趣与闲暇”/],
+    [source.replace('| 所属世界观 |  |', '| 所属世界观 | ../outside |'), /worldview/]
+  ]) assert.throws(() => parseUserDocument(text, user.id, control(user)), message);
+  assert.throws(() => parseUserDocument(source, 'other-user', control(user)), /不一致/);
   const root = await fixture(t);
-  await writeFile(join(root, 'users/sample-user/profile.md'), source.replace('| 启用账号 | 是 |', '| 启用账号 | maybe |'));
-  await assert.rejects(readUserDocuments(root), /users\/sample-user\/profile.md.*开关只填/);
+  await writeFile(join(root, 'users/sample-user/profile.md'), source.replace('| 网名 |', '| 大概的名字 |'));
+  await assert.rejects(readUserDocuments(root), /users\/sample-user\/profile.md.*字段无效/);
+});
+
+test('worldview membership resolves a real repository document and is reread after edits', async t => {
+  const root = await fixture(t, [account(), account('second-user')]);
+  const path = join(root, 'users/sample-user/profile.md');
+  await writeFile(path, (await readFile(path, 'utf8')).replace('| 所属世界观 |  |', '| 所属世界观 | world-a |'));
+  await assert.rejects(readUserDocuments(root), /不存在的世界观/);
+  const directory = join(root, 'environment/worldviews');
+  await mkdir(directory, { recursive: true });
+  await writeFile(join(directory, 'world-a.md'), '# A\n\nFirst shared setting.\n');
+  await writeFile(join(directory, 'README.md'), '# 世界目录\n');
+  await writeFile(join(directory, 'TEMPLATE.md'), '# 世界观模板\n');
+  const first = await readUserDocuments(root);
+  assert.equal(first.profiles['sample-user'].basics.worldview, 'world-a');
+  assert.equal(first.profiles['second-user'].basics.worldview, '');
+  assert.deepEqual(first.worldviewDocuments.map(item => item.path), ['environment/worldviews/world-a.md']);
+  await writeFile(join(directory, 'world-a.md'), '# A\n\nChanged shared setting.\n');
+  assert.match((await readUserDocuments(root)).worldviewDocuments[0].text, /Changed/);
+  await rm(join(directory, 'world-a.md'));
+  await writeFile(join(root, 'outside.md'), 'UNRELATED_SETTING');
+  await symlink(join(root, 'outside.md'), join(directory, 'world-a.md'));
+  await assert.rejects(readUserDocuments(root), /符号链接/);
 });
 
 test('duplicate handles and symlinks to external profile or supplemental files are rejected', async t => {

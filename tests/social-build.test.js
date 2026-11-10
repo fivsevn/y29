@@ -39,9 +39,10 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   await writeFile(join(directory, 'lucifer0', mediaDirectory, 'unused.png'), 'unused draft image');
   const avatarDirectory = 'users/alan';
   const avatar = 'users/alan/avatar.svg';
-  const profilePath = join(directory, 'lucifer0', avatarDirectory, 'profile.md');
-  const profile = await readFile(profilePath, 'utf8');
-  await writeFile(profilePath, profile.replace('| 头像路径 |  |', `| 头像路径 | ${avatar} |`));
+  const settingsPath = join(directory, 'lucifer0/accounts.json');
+  const settings = JSON.parse(await readFile(settingsPath, 'utf8'));
+  settings.users.find(user => user.id === 'alan').avatar = avatar;
+  await writeFile(settingsPath, JSON.stringify(settings));
   await writeFile(join(directory, 'lucifer0', avatar), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(directory, 'lucifer0', avatarDirectory, 'unused.png'), 'unused avatar draft');
   execFileSync(process.execPath, ['build.js'], { cwd: directory });

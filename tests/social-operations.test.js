@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies } from '../lucifer0/tools/operations.js';
-import { emptyProfile } from '../lucifer0/tools/private-profiles.js';
+import { emptyProfile } from '../lucifer0/tools/profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
 import { loadContent, ingestBatch } from '../lucifer0/tools/content.js';
@@ -18,10 +18,15 @@ const readJSON = async path => JSON.parse(await readFile(path, 'utf8'));
 const users = () => Array.from({ length: 8 }, (_, index) => ({
   id: 'person-' + index, handle: 'person_' + index, name: 'Synthetic person ' + index, bio: '', avatar: '',
   kind: index < 2 ? 'character' : 'visitor', sourceWork: index < 2 ? 'Synthetic work' : '', enabled: true,
-  aiScope: 'daily', profileStatus: 'approved', inFollowing: index < 2, allowPosts: true, allowReplies: true
+  aiScope: 'daily', profileStatus: 'approved', inFollowing: index < 2, allowPosts: true, allowReplies: true, activityWeight: 1, timezone: 'Asia/Shanghai', activeHours: ''
 }));
-const canon = id => ({ ...emptyProfile(id), facts: [{ text: 'SYNTHETIC_PRIVATE_CANON', status: 'canon', visibility: 'private', source: 'Synthetic original paragraph' }] });
-const drawInput = () => ({ users: users(), profiles: Object.fromEntries(users().map(user => [user.id, emptyProfile(user.id)])), overrides: Object.fromEntries(users().filter(user => user.kind === 'character').map(user => [user.id, canon(user.id)])) });
+const drawInput = () => ({ users: users(), profiles: Object.fromEntries(users().map(user => [user.id, emptyProfile(user.id)])) });
+const accountSetting = user => Object.fromEntries(['id', 'avatar', 'kind', 'sourceWork', 'enabled', 'aiScope', 'profileStatus', 'inFollowing', 'allowPosts', 'allowReplies', 'activityWeight', 'timezone', 'activeHours'].map(key => [key, user[key]]));
+async function configureAccount(root, id, patch) {
+  const path = join(root, 'accounts.json'), config = await readJSON(path);
+  Object.assign(config.users.find(user => user.id === id), patch);
+  await writeFile(path, JSON.stringify(config));
+}
 function seedFor(budget) {
   for (let index = 0; index < 1000; index++) { const seed = 'synthetic-seed-' + index; if (drawUpdatePlan({ ...drawInput(), seed }).budget === budget) return seed; }
   throw new Error('No matching synthetic seed');
@@ -34,26 +39,28 @@ const research = now => [
 async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-update-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
-  const root = join(directory, 'project/lucifer0'), privateDirectory = join(directory, 'profiles'), workDirectory = join(directory, 'current'), now = Date.now() - 2000;
+  const root = join(directory, 'project/lucifer0'), workDirectory = join(directory, 'current'), now = Date.now() - 2000;
   await mkdir(join(root, 'assets'), { recursive: true });
-  await mkdir(privateDirectory);
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}) }));
   for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
+  await writeFile(join(root, 'accounts.json'), JSON.stringify({ version: 1, users: users().map(accountSetting) }));
+  await mkdir(join(root, 'environment/worldviews'));
+  await writeFile(join(root, 'environment/worldviews/synthetic-world.md'), '# Synthetic world\n\nSYNTHETIC_WORLDVIEW_SETTING\n');
   for (const user of users()) {
     await mkdir(join(root, 'users', user.id), { recursive: true });
     const profile = emptyProfile(user.id); profile.notes = 'SYNTHETIC_FULL_PERSON_' + user.id;
+    profile.basics.worldview = user.kind === 'character' ? 'synthetic-world' : '';
     await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
-    if (user.kind === 'character') await writeFile(join(privateDirectory, user.id + '.json'), JSON.stringify(canon(user.id)));
   }
   const historical = { id: 'history-entry', author: 'person-0', createdAt: '2025-04-01T00:00:00Z', replyTo: null, text: 'SYNTHETIC_HISTORY_BODY', likes: 1, canon: 'derivative', media: [] };
   await mkdir(join(root, 'posts/2025/04/history-entry'), { recursive: true });
   await writeFile(join(root, 'posts/2025/04/history-entry/index.md'), renderPostDocument(historical));
-  const options = { root, privateDirectory, workDirectory, now, entropy: () => seedFor(budget) };
-  return { directory, root, privateDirectory, workDirectory, now, options };
+  const options = { root, workDirectory, now, entropy: () => seedFor(budget) };
+  return { directory, root, workDirectory, now, options };
 }
 function post(id, author, now, replyTo = null) {
   return { id, author, createdAt: iso(now).replace(/\.\d{3}Z$/, 'Z'), replyTo, text: 'Synthetic current text ' + id, likes: 0, canon: 'derivative', media: [], ...(author.startsWith('guest-') ? { guest: { name: 'Guest ' + author.slice(6) } } : {}) };
@@ -91,8 +98,8 @@ test('one draw reaches all ten ceilings and samples one shared weighted pool wit
   assert.deepEqual([...budgets].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   assert.ok(pickedRecent > 0 && pickedRecent < 500);
   assert.ok(mixed > 0 && mixed < 500, 'the shared pool does not force two identities into every draw');
-  const withoutCanon = drawUpdatePlan({ ...input, overrides: {}, seed: 'no-canon' });
-  assert.ok(withoutCanon.selectedIds.every(id => input.users.find(user => user.id === id).kind === 'visitor'));
+  const charactersOnly = drawUpdatePlan({ ...input, users: input.users.filter(user => user.kind === 'character'), seed: 'characters-only' });
+  assert.deepEqual([...charactersOnly.selectedIds].sort(), ['person-0', 'person-1']);
 });
 
 test('reply draws are independent per thread, usually span zero to ten, and sometimes exceed twenty', () => {
@@ -123,7 +130,7 @@ test('new root budgets permit a sixty-reply thread and count nested descendants 
   const tooManyRoots = await draft(prepared, f.now, [entries[0], post('second-root', 'guest-second-root', f.now)]);
   await assert.rejects(validateUpdateForBatch(tooManyRoots.batch, { ...f.options, contextPath: prepared.operationPath }), /new-root budget/);
   await draft(prepared, f.now, entries);
-  assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory })).count, 61);
+  assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).count, 61);
 });
 
 test('root mode enforces overall replies, explicit total counts and stricter current limits', async t => {
@@ -287,7 +294,7 @@ test('an explicit count of seventeen imports nine guest posts and refuses only e
   const rejected = await draft(result, f.now, insufficientGuests);
   await assert.rejects(validateUpdateForBatch(rejected.batch, { ...f.options, contextPath: result.operationPath }), /half/);
   await draft(result, f.now, entries);
-  assert.equal((await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory })).count, 17);
+  assert.equal((await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true })).count, 17);
   assert.equal((await loadContent(f.root)).feed.posts.filter(entry => entries.some(post => post.id === entry.id)).length, 17);
 });
 
@@ -320,8 +327,7 @@ test('the prepare CLI accepts explicit counts and rejects changed, out-of-range 
   const f = await fixture(t, 4, { maxBatchPosts: 20 });
   await cp(new URL('../lucifer0/tools', import.meta.url), join(f.root, 'tools'), { recursive: true });
   await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
-  const env = { ...process.env, Y29_SOCIAL_PRIVATE_DIR: f.privateDirectory };
-  const run = args => execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', ...args], { env, encoding: 'utf8', stdio: 'pipe' });
+  const run = args => execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', ...args], { encoding: 'utf8', stdio: 'pipe' });
   const prepared = JSON.parse(run(['--count', '17', '--work', f.workDirectory]));
   assert.equal(prepared.budget, 17);
   assert.equal((await readJSON(prepared.operationPath)).plan.requestedCount, 17);
@@ -339,7 +345,9 @@ test('prepare creates only one work record and a full raw-source reading, then r
     assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
   for (const name of ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
-  assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY') && reading.includes('SYNTHETIC_PRIVATE_CANON'));
+  assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY'));
+  assert.equal(reading.split('SYNTHETIC_WORLDVIEW_SETTING').length - 1, 1);
+  assert.ok(reading.includes('| person-0 | synthetic-world |') && reading.includes('| person-2 | 未指定 |'));
   assert.ok(reading.includes('docs/README.md') && reading.includes('docs/writing.md') && reading.includes('docs/publishing.md'));
   assert.ok(!JSON.stringify(original).includes('SYNTHETIC_FULL_PERSON_'));
   original.research = research(f.now); await writeFile(result.operationPath, JSON.stringify(original));
@@ -351,6 +359,25 @@ test('prepare creates only one work record and a full raw-source reading, then r
   assert.deepEqual(current.research, original.research);
   assert.ok((await readFile(resumed.readingPath, 'utf8')).includes('SYNTHETIC_UPDATED_ENVIRONMENT'));
   assert.ok(!(await readdir(f.root)).includes('rounds'));
+});
+
+test('worldview revisions refresh the full reading and invalidate drafts without changing the saved draw', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
+  const entries = [post('worldview-root', 'guest-worldview', f.now), post('worldview-second', 'guest-worldview-two', f.now), post('worldview-character', 'person-0', f.now, 'worldview-root')];
+  const { batch } = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
+  const path = join(f.root, 'environment/worldviews/synthetic-world.md');
+  await writeFile(path, '# Revised synthetic world\n\nSYNTHETIC_UPDATED_WORLDVIEW\n');
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
+  const resumed = await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  const current = await readJSON(resumed.operationPath), reading = await readFile(resumed.readingPath, 'utf8');
+  assert.equal(current.id, original.id);
+  assert.deepEqual(current.plan, original.plan);
+  assert.notEqual(current.sourceDigest, original.sourceDigest);
+  assert.deepEqual(current.posts, entries);
+  assert.equal(reading.split('SYNTHETIC_UPDATED_WORLDVIEW').length - 1, 1);
+  assert.ok(reading.includes('| person-0 | synthetic-world |') && reading.includes('| person-2 | 未指定 |'));
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
 });
 
 test('research covers formal news, trends and daily life with real fresh page metadata', () => {
@@ -398,24 +425,18 @@ test('nonselected ready library users can reply to a real parent, while new root
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /parent/);
 });
 
-test('changed source, disabled accounts, missing canon and accidental draw edits block publication', async t => {
+test('changed source, account controls and accidental draw edits block publication', async t => {
   const f = await fixture(t), result = await prepareUpdate(f.options);
-  const entries = [post('guest-first', 'guest-one', f.now), post('guest-second', 'guest-two', f.now), post('canon-reply', 'person-0', f.now, 'guest-first')];
+  const entries = [post('guest-first', 'guest-one', f.now), post('guest-second', 'guest-two', f.now), post('character-reply', 'person-0', f.now, 'guest-first')];
   const { batch } = await draft(result, f.now, entries);
   const environment = join(f.root, 'environment/world-trends.md');
   await writeFile(environment, '# New world source');
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /Source material changed/);
   await prepareUpdate(f.options); await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath });
-  await rm(join(f.privateDirectory, 'person-0.json'));
+  await configureAccount(f.root, 'person-0', { enabled: false });
   await prepareUpdate(f.options);
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /not ready/);
-  await writeFile(join(f.privateDirectory, 'person-0.json'), JSON.stringify(canon('person-0')));
-  const disabled = { ...users()[0], enabled: false };
-  await writeFile(join(f.root, 'users/person-0/profile.md'), renderUserDocument(disabled, emptyProfile(disabled.id)));
-  await prepareUpdate(f.options);
-  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /not ready/);
-  disabled.enabled = true; disabled.allowReplies = false;
-  await writeFile(join(f.root, 'users/person-0/profile.md'), renderUserDocument(disabled, emptyProfile(disabled.id)));
+  await configureAccount(f.root, 'person-0', { enabled: true, allowReplies: false });
   await prepareUpdate(f.options);
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath }), /action is disabled/);
   const operation = await readJSON(result.operationPath);
@@ -465,7 +486,7 @@ test('an exact partial write resumes after three days with fresh reading and res
   await assert.rejects(validateUpdateForBatch(changedDraft.batch, { ...f.options, contextPath: result.operationPath }), /timestamps/);
   await draft(result, f.now, entries);
   await rm(blocked, { recursive: true });
-  const imported = await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  const imported = await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true });
   assert.equal(imported.status, 'archived');
   assert.equal((await loadContent(f.root)).feed.posts.filter(item => entries.some(entry => entry.id === item.id)).length, 2);
   await assert.rejects(readFile(join(f.root, '.publish-pending.json')), /ENOENT/);
@@ -490,7 +511,7 @@ test('finish keeps an awaiting-online operation until exact online posts and gue
   const f = await fixture(t), result = await prepareUpdate(f.options);
   await draft(result, f.now, [post('verified-guest', 'guest-verified', f.now)]);
   await assert.rejects(finishUpdate({ ...f.options, fetchImpl: () => { throw new Error('Must not fetch before local import'); } }), /Local posts/);
-  await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true });
   const { feed } = await loadContent(f.root), wrong = structuredClone(feed);
   wrong.users.find(user => user.id === 'guest-verified').name = 'Wrong signature';
   await assert.rejects(finishUpdate({ ...f.options, fetchImpl: async () => ({ ok: true, json: async () => wrong }) }), /Online posts/);
@@ -507,7 +528,7 @@ test('finish retains direct draft or reading edits made while online verificatio
   for (const target of ['operation', 'reading']) {
     const f = await fixture(t), result = await prepareUpdate(f.options);
     await draft(result, f.now, [post('concurrent-guest', 'guest-concurrent', f.now)]);
-    await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+    await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true });
     const { feed } = await loadContent(f.root), originalReading = await readFile(result.readingPath, 'utf8');
     let entered, release;
     const enteredNetwork = new Promise(resolve => { entered = resolve; }), network = new Promise(resolve => { release = resolve; });
@@ -531,7 +552,7 @@ test('finish retains direct draft or reading edits made while online verificatio
 test('prepare, finish and cancel share one work lock and never remove another command lock', async t => {
   const f = await fixture(t), result = await prepareUpdate(f.options);
   await draft(result, f.now, [post('locking-guest', 'guest-locking', f.now)]);
-  await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true });
   const { feed } = await loadContent(f.root);
   let entered, release;
   const enteredNetwork = new Promise(resolve => { entered = resolve; }), network = new Promise(resolve => { release = resolve; });
@@ -550,11 +571,11 @@ test('prepare, finish and cancel share one work lock and never remove another co
 test('cancel withdraws a disabled-author partial write even after draft edits and keeps the same draw', async t => {
   const f = await interruptedDraft(t), historyPath = join(f.root, 'posts/2025/04/history-entry/index.md');
   const history = await readFile(historyPath, 'utf8');
-  await writeFile(join(f.root, 'users', f.author.id, 'profile.md'), renderUserDocument({ ...f.author, enabled: false }, emptyProfile(f.author.id)));
+  await configureAccount(f.root, f.author.id, { enabled: false });
   await prepareUpdate(f.options);
-  await assert.rejects(ingestBatch(f.prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory }), /not ready/);
+  await assert.rejects(ingestBatch(f.prepared.operationPath, { root: f.root, reviewed: true, ai: true }), /not ready/);
   await draft(f.prepared, f.now, f.entries.filter(entry => entry.author !== f.author.id));
-  await assert.rejects(ingestBatch(f.prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory }), /different content/);
+  await assert.rejects(ingestBatch(f.prepared.operationPath, { root: f.root, reviewed: true, ai: true }), /different content/);
   const cancelled = await cancelUpdate(f.options), operation = await readJSON(cancelled.operationPath);
   assert.equal(operation.id, f.original.id); assert.deepEqual(operation.plan, f.original.plan);
   assert.deepEqual(operation.posts, []); assert.deepEqual(operation.research, research(f.now)); assert.equal(operation.status, 'prepared');
@@ -565,7 +586,7 @@ test('cancel withdraws a disabled-author partial write even after draft edits an
   const reading = await readFile(cancelled.readingPath, 'utf8');
   assert.ok(reading.includes(f.original.id) && reading.includes('SYNTHETIC_HISTORY_BODY'));
   await draft(cancelled, f.now, [post('replacement-guest', 'guest-replacement', f.now)]);
-  assert.equal((await ingestBatch(cancelled.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory })).status, 'archived');
+  assert.equal((await ingestBatch(cancelled.operationPath, { root: f.root, reviewed: true, ai: true })).status, 'archived');
 });
 
 test('cancel refuses modified partial files and already archived posts, preserving work and publisher locks', async t => {
@@ -580,7 +601,7 @@ test('cancel refuses modified partial files and already archived posts, preservi
 
   const f = await fixture(t), prepared = await prepareUpdate(f.options);
   await draft(prepared, f.now, [post('already-archived', 'guest-archived', f.now)]);
-  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true, privateDirectory: f.privateDirectory });
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
   await assert.rejects(cancelUpdate(f.options), /already has archived/);
   assert.equal((await readJSON(prepared.operationPath)).posts.length, 1);
   assert.ok((await loadContent(f.root)).feed.posts.some(item => item.id === 'already-archived'));
@@ -612,19 +633,18 @@ test('the real prepare and publish CLIs use operation.json directly and recover 
   const f = await fixture(t);
   await cp(new URL('../lucifer0/tools', import.meta.url), join(f.root, 'tools'), { recursive: true });
   await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
-  const env = { ...process.env, Y29_SOCIAL_PRIVATE_DIR: f.privateDirectory };
-  const prepared = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', '--work', f.workDirectory], { env, encoding: 'utf8' }));
+  const prepared = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', '--work', f.workDirectory], { encoding: 'utf8' }));
   const originalPlan = (await readJSON(prepared.operationPath)).plan;
   await draft(prepared, f.now, [post('cancelled-cli-draft', 'guest-cli-draft', f.now)]);
-  const cancelled = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'cancel', '--work', f.workDirectory], { env, encoding: 'utf8' }));
+  const cancelled = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'cancel', '--work', f.workDirectory], { encoding: 'utf8' }));
   assert.equal(cancelled.id, prepared.id);
   assert.deepEqual((await readJSON(prepared.operationPath)).plan, originalPlan);
   assert.deepEqual((await readJSON(prepared.operationPath)).posts, []);
   await draft(prepared, f.now, [post('cli-guest-post', 'guest-cli', f.now)]);
   const command = [join(f.root, 'tools/publish.js'), 'ingest', prepared.operationPath, '--reviewed', '--ai'];
-  const first = JSON.parse(execFileSync(process.execPath, command, { env, encoding: 'utf8' }));
+  const first = JSON.parse(execFileSync(process.execPath, command, { encoding: 'utf8' }));
   assert.equal(first.status, 'archived');
-  const retry = JSON.parse(execFileSync(process.execPath, command, { env, encoding: 'utf8' }));
+  const retry = JSON.parse(execFileSync(process.execPath, command, { encoding: 'utf8' }));
   assert.equal(retry.status, 'already-archived');
   assert.equal((await loadContent(f.root)).feed.posts.filter(item => item.id === 'cli-guest-post').length, 1);
   assert.ok(!(await readdir(f.root)).includes('rounds'));
