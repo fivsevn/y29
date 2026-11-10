@@ -1386,9 +1386,105 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-282447d2400fdee3",
+      "handle": "guest_ea9e2c26f1798eec021b",
+      "name": "旧电池",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ecc08d389c6d7179",
+      "handle": "guest_e3727aca09364b618fd5",
+      "name": "再划两下",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-06916adc985504e5",
+      "handle": "guest_f99ae0611e69e0ed035d",
+      "name": "生椰不加糖",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110181010-bba72479-07",
+      "author": "visitor-pi",
+      "createdAt": "2026-11-10T16:28:31.467Z",
+      "replyTo": "l0-20261110002939-55dccee1-15",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "我也没看明白。"
+    },
+    {
+      "id": "l0-20261110181010-bba72479-06",
+      "author": "guest-06916adc985504e5",
+      "createdAt": "2026-11-10T16:11:21.467Z",
+      "replyTo": "l0-20261110181010-bba72479-05",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "生椰不加糖"
+      },
+      "text": "我也，可能就是烦睡醒又得上班，才不想睡"
+    },
+    {
+      "id": "l0-20261110181010-bba72479-05",
+      "author": "guest-ecc08d389c6d7179",
+      "createdAt": "2026-11-10T16:08:55.467Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "再划两下"
+      },
+      "text": "好困啊，几个软件来回点也没啥想看的，还不肯睡"
+    },
+    {
+      "id": "l0-20261110181010-bba72479-02",
+      "author": "guest-282447d2400fdee3",
+      "createdAt": "2026-11-10T16:06:08.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110181010-bba72479-02/media/crossed-notes-v2.webp",
+          "alt": "暖灯下，皱白纸上抄着几行中文地址片段，几处被蓝笔划改，旁边斜放着圆珠笔。"
+        }
+      ],
+      "guest": {
+        "name": "旧电池"
+      },
+      "text": "抄几个地址也能抄串行。看一眼消息回来就忘了刚抄到哪，偏偏还一直点，纸上划了好几处了，烦死"
+    },
     {
       "id": "l0-20261110161717-6d582dbc-09",
       "author": "visitor-chi-upper",
