@@ -66,7 +66,7 @@ test('each original person has one complete human dossier, with operating contro
   assert.deepEqual(topLevel, ['ACCOUNT_TEMPLATE.md', 'README.md', 'TEMPLATE.md', 'character-research.md', 'speech-research.md']);
 });
 
-test('individual references stay with users and the environment includes interaction and meme research', async () => {
+test('individual methods and shared-life references have one owning research document', async () => {
   const { registry } = await readUserDocuments(socialRoot);
   const individualNotes = await readFile(join(socialRoot, 'users/character-research.md'), 'utf8');
   const environmentPath = join(socialRoot, 'environment');
@@ -77,14 +77,28 @@ test('individual references stay with users and the environment includes interac
     assert.ok((await readFile(join(environmentPath, name), 'utf8')).trim(), `${name}: empty environment document`);
     if (name !== 'README.md') assert.ok(environmentIndex.includes(`(${name})`), `${name}: missing from the environment entrypoint`);
   }
-  const sourceIds = (text, expectedCount, label) => {
-    const ids = [...text.matchAll(/^#### ([SOLIM]\d{2})｜\S.+$/gm)].map(match => match[1]);
+  const sourceIds = (text, label) => {
+    const ids = [...text.matchAll(/^#{3,4} ([SOLIMD]\d{2})｜\S.+$/gm)].map(match => match[1]);
     const unique = new Set(ids);
     assert.equal(ids.length, unique.size, `${label}: duplicate source identifiers`);
-    assert.equal(unique.size, expectedCount, `${label}: missing or unexpected source entries`);
     return unique;
   };
-  sourceIds(individualNotes, 42, 'individual references');
+  const lifeNotes = await readFile(join(environmentPath, 'everyday-life-research.md'), 'utf8');
+  const individualIds = sourceIds(individualNotes, 'individual references');
+  const lifeIds = sourceIds(lifeNotes, 'shared-life references');
+  assert.ok(individualIds.size && lifeIds.size);
+  assert.deepEqual([...individualIds].filter(id => lifeIds.has(id)), [], 'source entries should have one owning document');
+  const requireIds = (ids, prefix, numbers) => {
+    for (const number of numbers) assert.ok(ids.has(prefix + String(number).padStart(2, '0')), `missing ${prefix}${number} research entry`);
+  };
+  requireIds(individualIds, 'M', Array.from({ length: 22 }, (_, index) => index + 1));
+  requireIds(individualIds, 'L', [3, 4, 7, 8, 9]);
+  requireIds(lifeIds, 'S', [1, 2, 3, 4, 5]);
+  requireIds(lifeIds, 'O', Array.from({ length: 12 }, (_, index) => index + 1));
+  requireIds(lifeIds, 'L', [1, 2, 5, 6]);
+  requireIds(lifeIds, 'D', [1, 2, 3, 4]);
+  assert.ok([...individualIds].every(id => !/^[SO]/.test(id)), 'shared population and occupation references belong in environment research');
+  assert.ok([...lifeIds].every(id => !/^M/.test(id)), 'individual methods belong in character research');
   for (const oldFile of ['docs/community.md', 'docs/social-reference.md', 'environment/community.md', 'environment/social-reference.md']) {
     await assert.rejects(readFile(join(socialRoot, oldFile)), { code: 'ENOENT' });
   }
