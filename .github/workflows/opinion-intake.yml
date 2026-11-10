@@ -1,0 +1,67 @@
+name: Refresh daily opinion intake
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 00:00 UTC = 08:00 Asia/Shanghai; GitHub may start scheduled runs later.
+    - cron: '0 0 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/opinion-intake.yml'
+      - 'lucifer0/tools/collect-opinions.js'
+      - 'lucifer0/tools/samples.js'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lucifer0-opinion-intake
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Check collection and forum reading
+        run: node --test tests/opinion-collection.test.js tests/samples.test.js tests/social-operations.test.js tests/population.test.js
+      - name: Collect the current batch
+        id: collect
+        continue-on-error: true
+        run: node lucifer0/tools/collect-opinions.js
+      - name: Validate the refreshed material
+        run: node lucifer0/tools/samples.js validate
+      - name: Publish only the current material document
+        run: |
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
+            echo "::error::Main changed during collection; rerun from the latest version."
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- lucifer0/environment/source-sampling.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh current opinion material'
+            git push origin HEAD:main
+          fi
+      - name: Refresh the existing Pages source
+        uses: actions/github-script@v7
+        with:
+          script: await github.rest.repos.requestPagesBuild(context.repo);
+      - name: Report collection failure
+        if: steps.collect.outcome == 'failure'
+        run: |
+          echo "::error::Collection did not finish successfully. Check its summary and the material document timestamp."
+          exit 1

@@ -7,7 +7,8 @@
 | [世界观](worldviews/README.md) | 已登记世界的简介、设定与动态记录入口 |
 | [世界观研究](worldview-research.md) | 世界设定的组织方法与框架参考 |
 | [日常生活研究](everyday-life-research.md) | 人口、劳动、收支、职业任务与公共服务资料，以及日常生活场景 |
-| [素材采集与样本索引](source-sampling.md) | 采集及用户提供材料的脱敏、整理、索引与论坛读取入口 |
+| [每日舆论素材](source-sampling.md) | 每日自动刷新的当前材料，也可直接贴入用户来料 |
+| [精选案例](selected-cases.md) | 用户挑选后长期保留的材料 |
 | [负面与争议研究](negative-research.md) | 八卦、抱怨、爆点与冲突讨论的实际样本和话头结构 |
 | [Meme 研究](meme-research.md) | 表情包、反应图、网络句式的资源与用法 |
 | [评论与点赞研究](comments-research.md) | 回复行为、互动样本与点赞差异 |

@@ -38,7 +38,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 观察覆盖三个类别、至少三个不同页面和两个来源域名，其中有一段实际读到回复的讨论。访问发生在本次更新前 48 小时内，至少一项材料发表于最近七天。旧材料保留原日期，当前话题的热度按本次可读内容记录。
 
-采用脱敏素材时，按[素材取用](../environment/source-sampling.md#论坛怎样读取)在研究补充的 `summary` 或完成报告中写样本编号、有关消息与改编方向；不为补足页面字段恢复原平台、原账号或原链接。脱敏素材不单独冒充一项新鲜网页观察。
+采用当前素材或精选案例时，按[素材取用](../environment/source-sampling.md#论坛怎样读取)记录，不为补足页面字段恢复原身份或平台，也不单独算作一项新鲜网页观察。
 
 `posts` 使用以下结构；编号由本次更新编号加序号形成，署名在同一账号的后续回复中保持一致：
 
@@ -84,7 +84,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 冲突的触发与转向归[负面与争议研究](../environment/negative-research.md)，回复怎样参与和接续归[评论研究](../environment/comments-research.md)，表达形式与疏漏归[说话方式研究](../users/speech-research.md)。同一来源在主要专题登记一次，其他专题用链接引用适用处。现有文档能容纳的研究继续在原处深化；确需新增文档时，先向用户说明名称、职责及与现有文档的边界。
 
-已审脱敏材料沿[素材采集与样本索引](../environment/source-sampling.md)取用，专题只补分析并引用匿名样本编号，不另存原始身份或复制整串。每日素材维护与本轮研究补充各记实际完成的工作。
+当前素材与用户挑选的长期案例沿[每日舆论素材](../environment/source-sampling.md)取用，专题只补分析并引用材料日期与标题，不复制整串。自动刷新与本轮研究补充各记实际完成的工作。
 
 完成检查后，将结果填入 `operation.json.researchMaintenance`，每份选中文档对应一项：
 
