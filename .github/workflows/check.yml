@@ -17,13 +17,17 @@ jobs:
         run: npm ci
       - name: Prepare L0 operation and reading for this run
         run: |
+          mkdir -p "$RUNNER_TEMP/l0-work"
+          cp .l0-work/operation.json "$RUNNER_TEMP/l0-work/operation.json"
           node lucifer0/tools/update.js prepare --work "$RUNNER_TEMP/l0-work"
           echo '===L0_OPERATION_BEGIN==='
           cat "$RUNNER_TEMP/l0-work/operation.json"
           echo '===L0_OPERATION_END==='
-          echo '===L0_READING_BEGIN==='
-          cat "$RUNNER_TEMP/l0-work/reading.md"
-          echo '===L0_READING_END==='
+          for n in 01 02 03 04 05 06 07 08; do
+            echo "===L0_BRIEF_BEGIN_$n==="
+            node lucifer0/tools/update.js brief --post "l0-20261110210715-bd3468e0-$n" --work "$RUNNER_TEMP/l0-work"
+            echo "===L0_BRIEF_END_$n==="
+          done
       - name: Check rules, public content and static build
         run: npm run check
       - name: Keep reviewable static preview
