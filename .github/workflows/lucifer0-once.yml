@@ -1,25 +1,45 @@
-name: Lucifer0 one-off preparation
+name: Lucifer0 one-off publishing pipeline
 on:
   push:
     branches: [l0-update-20261111-2132]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  prepare:
+  work:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm ci
-      - name: Prepare actual lottery and reading
+      - name: Restore and refresh lottery
         shell: bash
         run: |
-          node lucifer0/tools/update.js prepare --work /tmp/lucifer0-once >/tmp/prepare-result.json
-          echo '=== PREPARE RESULT ==='
-          cat /tmp/prepare-result.json
-          echo '=== OPERATION ==='
-          cat /tmp/lucifer0-once/operation.json
-          echo '=== READING MANIFEST ==='
-          grep -E '^#{1,4} |^来源路径|^文件路径|^Source:|^Path:' /tmp/lucifer0-once/reading.md | head -160 || true
+          mkdir -p /tmp/lucifer0-once
+          cp .github/lucifer0-once/operation.json /tmp/lucifer0-once/operation.json
+          node lucifer0/tools/update.js prepare --work /tmp/lucifer0-once
+      - name: Probe writer briefs or publish
+        shell: bash
+        run: |
+          if [[ -f .github/lucifer0-once/publish.mjs ]]; then
+            node .github/lucifer0-once/publish.mjs
+          else
+            node lucifer0/tools/update.js brief --post l0-20261110213237-acd234d4-01 --work /tmp/lucifer0-once > /tmp/brief1.json
+            node lucifer0/tools/update.js brief --post l0-20261110213237-acd234d4-02 --work /tmp/lucifer0-once > /tmp/brief2.json
+            node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          for (let i=1;i<=2;i++){
+            const b=JSON.parse(fs.readFileSync('/tmp/brief'+i+'.json','utf8'));
+            console.log('=== BRIEF-'+i+' ===');
+            console.log(JSON.stringify({draft:b.draft,writer:{
+              createdAt:b.writer.createdAt, self:b.writer.self, situation:b.writer.situation,
+              motivation:b.writer.motivation,conditions:b.writer.conditions,
+              discussion:b.writer.discussion, media:b.writer.media,
+              target:b.writer.target
+            },editor:b.editor},null,2));
+          }
+          JS
+          fi
