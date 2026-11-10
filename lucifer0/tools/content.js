@@ -1,3 +1,5 @@
+import { recordCaseUsage } from './case-usage.js';
+import { validateCasePlan } from './case-adaptation.js';
 import { readFile, mkdir, writeFile, realpath, lstat, rm, rename } from 'node:fs/promises';
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -300,8 +302,16 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
     }
     await saveDrafts(normalized);
   };
+  const recordCases = async () => {
+    const operation = isUpdate ? value : context;
+    if (!operation?.plan?.caseAdaptation) return;
+    validateCasePlan(operation.plan.caseAdaptation, { operationId: operation.id, plan: operation.plan });
+    if (operation.plan.caseAdaptation.items.some(item => !batch.posts.some(post => post.id === item.postId))) fail('Missing archived case root');
+    await recordCaseUsage(root, operation.plan.caseAdaptation.items);
+  };
   if (!fresh.length) {
     await syncPublished(await buildFeed(root, { locked: true }));
+    await recordCases();
     return { status: 'already-archived', id: batch.id, count: batch.posts.length };
   }
   const feed = validateContent(registry, [...batches, { ...batch, posts: fresh }], policy, { siteEmotes });
@@ -330,5 +340,6 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
   }
   const { path } = await writeThreadBatch(root, batch, batches);
   await syncPublished(await buildFeed(root, { locked: true }));
+  await recordCases();
   return { status: 'archived', id: batch.id, count: batch.posts.length, path };
 }

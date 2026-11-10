@@ -1,11 +1,11 @@
-# 路西法Β
+# Rin93
 
 ## 基本情况
 
 | 项目 | 内容 |
 | --- | --- |
 | 编号 | visitor-beta-upper |
-| 网名 | 路西法Β |
+| 网名 | Rin93 |
 | 用户名 | lucifer_beta_upper |
 | 个人简介 | 今天也没剩下多余零件。 |
 | 所属世界观 | worldview0 |

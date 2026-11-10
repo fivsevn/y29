@@ -1845,6 +1845,14 @@ test('the three cases exceed the original total allowance only as complete mixed
   const { registry, policy } = await loadContent(f.root);
   assert.throws(() => validateContent(registry, [{ ...valid.batch, posts: valid.batch.posts.map((entry, index) => index ? entry : { ...entry, classification: 'case' }) }], policy), /private material is forbidden/);
   await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  const ledger = join(f.root, '../.github/state/lucifer0-case-usage.json');
+  const usage = await readJSON(ledger);
+  assert.equal(usage.length, 3);
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  assert.deepEqual(await readJSON(ledger), usage, 'repeated import does not consume again');
+  await rm(ledger);
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  assert.deepEqual((await readJSON(ledger)).map(item => item.fingerprint), usage.map(item => item.fingerprint), 'retry restores the ledger after an interrupted write');
   const feed = (await loadContent(f.root)).feed;
   assert.equal(feed.posts.filter(post => entries.some(entry => entry.id === post.id)).length, 7);
   assert.ok(feed.posts.every(post => !['caseAdaptation', 'classification', 'sourcePath', 'sample', 'intakeReceipt'].some(key => Object.hasOwn(post, key))));

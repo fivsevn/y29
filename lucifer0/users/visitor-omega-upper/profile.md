@@ -1,11 +1,11 @@
-# 按一下试试
+# qwerty6
 
 ## 基本情况
 
 | 项目 | 内容 |
 | --- | --- |
 | 编号 | visitor-omega-upper |
-| 网名 | 按一下试试 |
+| 网名 | qwerty6 |
 | 用户名 | try_one_press |
 | 个人简介 | 说明书翻到最后一页了吗？ |
 | 所属世界观 | worldview0 |

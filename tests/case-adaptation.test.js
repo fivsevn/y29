@@ -57,3 +57,35 @@ test('zero original roots still require all three cases, and original roots prev
   const cases = normal.adapted.items.map(item => ({ id: item.postId, replyTo: null, createdAt: new Date(now).toISOString() }));
   assert.throws(() => validateCasePosts(saved, [{ id: 'original-root', replyTo: null, createdAt: new Date(now).toISOString() }, ...cases], { complete: true }), /interleave/);
 });
+
+test('recent-use fingerprints exclude consumed cases before freezing the next selection', async () => {
+  const { caseFingerprint } = await import('../lucifer0/tools/case-usage.js');
+  const source = document(6), options = { operationId: 'l0-synthetic', plan: plan(), documents: [source], intakeReceipt: receipt(source.text), now };
+  const first = createCasePlan(options);
+  const used = first.items.map(item => ({ fingerprint: caseFingerprint(item.sample), usedAt: new Date(now).toISOString() }));
+  const next = createCasePlan({ ...options, used });
+  assert.ok(next.items.every(item => !used.some(old => old.fingerprint === caseFingerprint(item.sample))));
+  assert.throws(() => createCasePlan({ ...options, used: [...used, ...next.items.map(item => ({ fingerprint: caseFingerprint(item.sample) }))] }), /three distinct usable cases/);
+});
+
+test('usage retains only recent hashes and retries do not renew them; new replies do not change identity', async t => {
+  const { mkdtemp, mkdir, readFile, rm } = await import('node:fs/promises');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { caseFingerprint, readCaseUsage, recordCaseUsage } = await import('../lucifer0/tools/case-usage.js');
+  const dir = await mkdtemp(join(tmpdir(), 'case-usage-')), root = join(dir, 'lucifer0');
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  await mkdir(root);
+  const sample = text => ({ text });
+  const opening = '1. **发言者 1**：我的猫又把水弄洒了';
+  assert.equal(caseFingerprint(sample('### 讨论 1\n说明\n' + opening + '\n\n2. **发言者 2**：哦')),
+    caseFingerprint(sample('### 讨论 9\n另一个说明\n' + opening + '\n\n2. **发言者 2**：然后呢')));
+  const items = Array.from({ length: 305 }, (_, i) => ({ sample: sample(`### 标题\n不同开头${i}`) }));
+  await recordCaseUsage(root, items, now);
+  const before = await readCaseUsage(root, now);
+  assert.equal(before.length, 300);
+  await recordCaseUsage(root, items.slice(-1), now + 86400000);
+  assert.deepEqual(await readCaseUsage(root, now + 86400000), before);
+  assert.equal((await readCaseUsage(root, now + 31 * 86400000)).length, 0);
+  assert.doesNotMatch(await readFile(join(dir, '.github/state/lucifer0-case-usage.json'), 'utf8'), /不同开头|标题|发言者/);
+});

@@ -1,11 +1,11 @@
-# 路西法Υ
+# 小宇宙
 
 ## 基本情况
 
 | 项目 | 内容 |
 | --- | --- |
 | 编号 | visitor-upsilon-upper |
-| 网名 | 路西法Υ |
+| 网名 | 小宇宙 |
 | 用户名 | lucifer_upsilon_upper |
 | 个人简介 | 少一枚指示物，先别收。 |
 | 所属世界观 | worldview0 |

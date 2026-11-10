@@ -17,6 +17,7 @@ on:
       - '.github/workflows/opinion-intake.yml'
       - 'lucifer0/tools/collect-opinions.js'
       - 'lucifer0/tools/samples.js'
+      - 'lucifer0/tools/case-usage.js'
 
 permissions:
   contents: read

@@ -1,3 +1,4 @@
+import { caseFingerprint, readCaseUsage } from './case-usage.js';
 import { readFile, writeFile, rename, rm, appendFile, lstat, realpath } from 'node:fs/promises';
 import { dirname, basename, resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,10 +8,10 @@ import { parseSampleDocuments } from './samples.js';
 const DEFAULT_DOCUMENT = fileURLToPath(new URL('../environment/source-sampling.md', import.meta.url));
 const REPOSITORY = fileURLToPath(new URL('../../', import.meta.url));
 const START = '<!-- samples:start -->', END = '<!-- samples:end -->';
-const LIMITS = Object.freeze({ threadsPerSource: 2, detailRequests: 4, repliesPerThread: 5, rootCharacters: 160, replyCharacters: 80, threadCharacters: 320, responseBytes: 2_000_000, timeoutMs: 15_000 });
+const LIMITS = Object.freeze({ threadsPerSource: 8, detailRequests: 10, repliesPerThread: 10, rootCharacters: 1200, replyCharacters: 400, threadCharacters: 2200, responseBytes: 2_000_000, timeoutMs: 15_000 });
 const SOURCES = Object.freeze([
   { name: 'V2EX', key: 'v2ex', lists: ['https://www.v2ex.com/api/topics/latest.json', 'https://www.v2ex.com/api/topics/hot.json'], detail: id => `https://www.v2ex.com/api/replies/show.json?topic_id=${id}` },
-  { name: 'X岛匿名版', key: 'island', lists: ['https://api.nmb.best/api/showf?id=4&page=1'], detail: id => `https://api.nmb.best/api/thread?id=${id}&page=1` }
+  { name: 'X岛匿名版', key: 'island', lists: ['https://api.nmb.best/api/showf?id=4&page=1', 'https://api.nmb.best/api/showf?id=4&page=2'], detail: id => `https://api.nmb.best/api/thread?id=${id}&page=1` }
 ]);
 const PLATFORM = /哔哩哔哩|嗶哩嗶哩|b站|bilibili|小红书|小紅書|rednote|微博|weibo|抖音|douyin|知乎|zhihu|豆瓣|douban|telegram|電報|电报|twitter|推特|reddit|v2ex|v站|x岛|a岛|x島|a島|nmbxd|nmb\.best|匿名版|adnmb|\bnga\b|晴风村|小黑盒|linux\.do|快手|贴吧|貼吧|微信|wechat|discord|instagram|facebook|youtube|tiktok|\bx(?=\s*(?:上|里|看到|发了|刷到))/gi;
 const LINK = /(?:[a-z][a-z0-9+.-]{1,20}:\/\/|www\.|mailto:|data:)[^\s<>]+|\b(?:[a-z0-9-]+\.)+(?:com|org|net|cn|io|tv|me|dev|app|co|best|xyz)(?:\b|\/)[^\s<>]*/gi;
@@ -107,7 +108,7 @@ export function anonymizeDiscussion(discussion, limits = LIMITS) {
     if (total + chars(message.text) > limits.threadCharacters) continue;
     selected.push(message); total += chars(message.text);
   }
-  if (selected.length < 2) return null;
+
   const actors = new Map();
   for (const message of selected) if (!actors.has(message.actor)) actors.set(message.actor, `发言者 ${actors.size + 1}`);
   const identities = new Map();
@@ -150,15 +151,24 @@ async function jsonRequest(url, fetchImpl, stats, limits, accepts) {
   } finally { clearTimeout(timer); }
 }
 
-export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date.now(), limits = LIMITS } = {}) {
+export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date.now(), limits = LIMITS, seed = randomUUID(), used = [] } = {}) {
   if (!Number.isFinite(now)) fail('Invalid collection time');
-  const date = new Date(now), day = new Date(now + 8 * 3600000).toISOString().slice(0, 10), fragments = [], sources = [];
+  const date = new Date(now), fragments = [], sources = [], queues = [];
+  const deadline = Date.now() + 180000;
+  let requestCount = 0;
+  const seen = new Set(used.map(item => item.fingerprint));
+  const request = async (url, stats, accepts) => {
+    const remaining = deadline - Date.now();
+    if (requestCount >= 24 || remaining <= 0) return null;
+    requestCount++;
+    return jsonRequest(url, fetchImpl, stats, { ...limits, timeoutMs: Math.min(limits.timeoutMs, remaining) }, accepts);
+  };
   for (const source of SOURCES) {
     const stats = { name: source.name, requests: 0, succeeded: 0, failed: 0, topicsSeen: 0, discussionsRead: 0, fragments: 0, messages: 0 };
     sources.push(stats);
     const topics = new Map();
     for (const url of source.lists) {
-      const payload = await jsonRequest(url, fetchImpl, stats, limits, Array.isArray);
+      const payload = await request(url, stats, Array.isArray);
       if (!Array.isArray(payload)) continue;
       for (const raw of payload) {
         const topic = source.key === 'v2ex' ? v2Topic(raw) : islandTopic(raw);
@@ -166,22 +176,36 @@ export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date
       }
     }
     stats.topicsSeen = topics.size;
-    const rank = topic => createHash('sha256').update(`${day}:${source.key}:${topic.id}`).digest('hex');
-    const eligible = [...topics.values()].filter(topic => topic.replyCount > 0 && Number.isFinite(topic.created) && topic.created <= now && now - topic.created < 7 * 86400000 && topic.text && chars(topic.text) <= limits.rootCharacters && !PERSONAL.test(topic.text))
+    const rank = topic => createHash('sha256').update(`${seed}:${source.key}:${topic.id}`).digest('hex');
+    const eligible = [...topics.values()].filter(topic => Number.isFinite(topic.created) && topic.created <= now && now - topic.created < 7 * 86400000 && topic.text && chars(topic.text) <= limits.rootCharacters && !PERSONAL.test(topic.text))
       .sort((a, b) => rank(a).localeCompare(rank(b))).slice(0, limits.detailRequests);
-    for (const topic of eligible) {
-      if (stats.fragments >= limits.threadsPerSource) break;
-      const payload = await jsonRequest(source.detail(topic.id), fetchImpl, stats, limits, data => source.key === 'v2ex' ? Array.isArray(data) : data && String(data.id) === topic.id && Array.isArray(data.Replies));
+    queues.push({ source, stats, eligible });
+  }
+  // Alternate available sources; a healthy source can fill the surplus when another fails.
+  while (fragments.length < 12 && requestCount < 24 && Date.now() < deadline) {
+    let attempted = false;
+    for (const { source, stats, eligible } of queues) {
+      if (!eligible.length || stats.fragments >= limits.threadsPerSource || fragments.length >= 12 || requestCount >= 24 || Date.now() >= deadline) continue;
+      attempted = true;
+      const topic = eligible.shift();
+      const payload = await request(source.detail(topic.id), stats, data => source.key === 'v2ex' ? Array.isArray(data) : data && String(data.id) === topic.id && Array.isArray(data.Replies));
       if (payload === null) continue;
       let discussion;
       try { discussion = parseDiscussion(source.key, topic, payload); } catch { continue; }
       stats.discussionsRead++;
       const fragment = anonymizeDiscussion(discussion, limits);
       if (!fragment) continue;
-      try { parseSampleDocuments([{ path: 'environment/source-sampling.md', text: `${START}\n${renderFragment(fragment, fragments.length + 1)}\n${END}` }]); }
-      catch { continue; }
+      let entry;
+      try {
+        entry = parseSampleDocuments([{ path: 'environment/source-sampling.md', text: `${START}\n${renderFragment(fragment, 1)}\n${END}` }])[0];
+      } catch { continue; }
+      if (!entry) continue;
+      const fingerprint = caseFingerprint(entry.sample);
+      if (seen.has(fingerprint)) continue;
+      seen.add(fingerprint);
       fragments.push(fragment); stats.fragments++; stats.messages += fragment.messages.length;
     }
+    if (!attempted) break;
   }
   const allFailed = sources.every(source => source.succeeded === 0);
   const collectedAt = date.toISOString();
@@ -190,7 +214,7 @@ export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date
   for (const [index, fragment] of fragments.entries()) {
     parts.push(renderFragment(fragment, index + 1));
   }
-  return { markdown: parts.join('\n\n') + '\n', collectedAt, sources, fragments: fragments.length, messages: fragments.reduce((n, item) => n + item.messages.length, 0), allFailed, exitCode: allFailed ? 1 : 0 };
+  return { markdown: parts.join('\n\n') + '\n', collectedAt, sources, fragments: fragments.length, messages: fragments.reduce((n, item) => n + item.messages.length, 0), allFailed, ready: fragments.length >= 3, exitCode: allFailed ? 1 : 0 };
 }
 
 function renderFragment(fragment, number) {
@@ -225,7 +249,8 @@ export async function updateOpinionDocument({ documentPath = DEFAULT_DOCUMENT, o
   const target = await outputTarget(documentPath, outputPath);
   // Verify the target before spending requests, then reread to preserve manual edits outside the generated region.
   replaceCurrentSamples(await readFile(documentPath, 'utf8'), '');
-  const result = await collectOpinions(options);
+  const used = await readCaseUsage(resolve(dirname(documentPath), '..'));
+  const result = await collectOpinions({ ...options, used });
   const document = await readFile(documentPath, 'utf8'), updated = replaceCurrentSamples(document, result.markdown);
   const temporary = resolve(dirname(target), `.opinions-${randomUUID()}.tmp`);
   try { await writeFile(temporary, updated, { flag: 'wx', mode: 0o600 }); await rename(temporary, target); }
@@ -234,7 +259,7 @@ export async function updateOpinionDocument({ documentPath = DEFAULT_DOCUMENT, o
 }
 
 export function collectionSummary(result) {
-  return ['## 舆论素材采集', '', `采集时间：${result.collectedAt}`, `本批：${result.fragments} 段，${result.messages} 条发言。${result.allFailed ? '全部来源请求失败，当前材料已清空并标明本次未取得可用材料。' : !result.fragments ? '请求已完成，本次没有可采用的短节选。' : ''}`, '',
+  return ['## 舆论素材采集', '', `采集时间：${result.collectedAt}`, `本批：${result.fragments} 段，${result.messages} 条发言。${result.fragments >= 3 ? "可供本轮选择。" : "素材不足3条，需补采后再准备发帖。"}${result.allFailed ? '全部来源请求失败，当前材料已清空并标明本次未取得可用材料。' : !result.fragments ? '请求已完成，本次没有可采用的短节选。' : ''}`, '',
     '| 来源 | 请求成功 / 失败 | 收到话题 | 读取讨论 | 采用片段 |', '| --- | --- | --- | --- | --- |', ...result.sources.map(source => `| ${source.name} | ${source.succeeded} / ${source.failed} | ${source.topicsSeen} | ${source.discussionsRead} | ${source.fragments} |`), '', '这里只记录采集计数，不输出原账号、原帖链接或原始发言。', ''].join('\n');
 }
 
@@ -246,7 +271,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     const summary = collectionSummary(result);
     console.error(summary);
     if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, summary, 'utf8');
-    process.exitCode = result.exitCode;
+    process.exitCode = result.fragments < 3 ? 2 : result.exitCode;
   } catch {
     console.error('Opinion collection could not update the material document; check its path, markers and write permissions.');
     process.exitCode = 1;

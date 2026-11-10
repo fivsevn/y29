@@ -37,7 +37,7 @@ function fixtures(overrides = {}) {
 test('public API fixtures become neutral complete short fragments with stable reply relations', async () => {
   const f = fixtures(), result = await collectOpinions({ ...f, now: NOW });
   assert.equal(result.fragments, 2); assert.equal(result.messages, 8); assert.equal(result.exitCode, 0);
-  assert.equal(f.calls.length, 5, 'duplicate discovery from latest/hot does not refetch a thread');
+  assert.equal(f.calls.length, 6, 'duplicate discovery from latest/hot does not refetch a thread');
   assert.ok(f.calls.every(call => call.options.redirect === 'error' && call.options.signal && !call.options.headers.Authorization));
   assert.match(result.markdown, /2026-11-11 08:00:00/);
   assert.match(result.markdown, /回复第 2 条/);
@@ -68,10 +68,10 @@ test('HTML, source names, contact fields and mentions are treated as text and de
 
 test('long roots and precise personal clues are omitted; short replies are not invented or repaired', () => {
   const root = { id: '1', actor: 'A', names: ['A'], text: '普通事情' };
-  assert.equal(anonymizeDiscussion({ root: { ...root, text: '长'.repeat(161) }, replies: [] }), null);
+  assert.equal(anonymizeDiscussion({ root: { ...root, text: '长'.repeat(1201) }, replies: [] }), null);
   assert.equal(anonymizeDiscussion({ root: { ...root, text: '我叫张小明，在这里工作' }, replies: [] }), null);
   const value = anonymizeDiscussion({ root, replies: [
-    { id: '2', actor: 'B', names: ['B'], text: '长'.repeat(81) },
+    { id: '2', actor: 'B', names: ['B'], text: '长'.repeat(401) },
     { id: '3', actor: 'C', names: ['C'], text: '我住在测试路123号' },
     { id: '4', actor: 'D', names: ['D'], text: '不值到啊，，？？' }
   ] });
@@ -81,7 +81,7 @@ test('long roots and precise personal clues are omitted; short replies are not i
 test('all failed or malformed sources clear stale material with an honest dated empty state', async () => {
   const result = await collectOpinions({ now: NOW, fetchImpl: async () => { throw new Error('PRIVATE_ACCOUNT response failed'); } });
   assert.equal(result.exitCode, 1); assert.equal(result.allFailed, true);
-  assert.equal(result.sources.reduce((n, source) => n + source.requests, 0), 3);
+  assert.equal(result.sources.reduce((n, source) => n + source.requests, 0), 4);
   assert.match(result.markdown, /本次未取得可用材料。/);
   assert.doesNotMatch(result.markdown, /PRIVATE|V2EX|X岛|###/);
   assert.doesNotMatch(collectionSummary(result), /PRIVATE_ACCOUNT/);
@@ -95,7 +95,7 @@ test('all failed or malformed sources clear stale material with an honest dated 
 test('successful empty discovery stays empty without pretending to be a failure or using old threads', async () => {
   const f = fixtures({ '/api/topics/latest.json': [{ ...v2root(), created: NOW / 1000 - 8 * 86400 }], '/api/topics/hot.json': [], '/api/showf': [] });
   const result = await collectOpinions({ ...f, now: NOW });
-  assert.equal(result.fragments, 0); assert.equal(result.exitCode, 0); assert.equal(f.calls.length, 3);
+  assert.equal(result.fragments, 0); assert.equal(result.exitCode, 0); assert.equal(f.calls.length, 4);
   assert.match(collectionSummary(result), /没有可采用的短节选/);
 });
 
@@ -103,7 +103,7 @@ test('one unavailable source does not discard successful fragments and reported 
   const f = fixtures({ '/api/showf': new Error('PRIVATE_SOURCE') });
   const result = await collectOpinions({ ...f, now: NOW });
   assert.equal(result.fragments, 1); assert.equal(result.exitCode, 0);
-  assert.equal(result.sources[1].failed, 1);
+  assert.equal(result.sources[1].failed, 2);
   assert.doesNotMatch(collectionSummary(result), /PRIVATE_SOURCE/);
 });
 
@@ -143,4 +143,45 @@ test('replacement preserves manual material, external preview leaves the origina
   await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: repositoryPath }), /outside the repository/);
   assert.equal(requested, false, 'unsafe output is rejected before any external requests');
   assert.equal(await readFile(selected, 'utf8'), '用户精选\n');
+});
+
+test('longer and root-only discussions survive without invented replies', () => {
+  const root = { id: '1', actor: 'A', names: ['A'], text: '普通事情'.repeat(150) };
+  assert.equal(anonymizeDiscussion({ root, replies: [] }).messages.length, 1);
+});
+
+test('a healthy source supplies eight cases, seeds rotate candidates, and recent openings stay excluded', async () => {
+  const roots = Array.from({ length: 20 }, (_, index) => ({ ...v2root(), id: 1000 + index, content: `今天遇到的普通事情第${index}种`, replies: 0 }));
+  const fetchImpl = async url => {
+    const parsed = new URL(url);
+    if (parsed.hostname === 'api.nmb.best') throw new Error('unavailable');
+    return new Response(JSON.stringify(parsed.pathname.includes('topics') ? roots : []));
+  };
+  const first = await collectOpinions({ fetchImpl, now: NOW, seed: 'a' });
+  const second = await collectOpinions({ fetchImpl, now: NOW, seed: 'b' });
+  assert.equal(first.fragments, 8); assert.equal(first.ready, true);
+  assert.notEqual(first.markdown, second.markdown);
+  const { caseFingerprint } = await import('../lucifer0/tools/case-usage.js');
+  const samples = result => parseSampleDocuments([{ path: 'environment/source-sampling.md', text: replaceCurrentSamples(document, result.markdown) }]);
+  const used = samples(first).map(entry => ({ fingerprint: caseFingerprint(entry.sample), usedAt: new Date(NOW).toISOString() }));
+  const next = await collectOpinions({ fetchImpl, now: NOW, seed: 'b', used });
+  assert.ok(samples(next).every(entry => !used.some(item => item.fingerprint === caseFingerprint(entry.sample))));
+  assert.ok(next.sources.reduce((sum, source) => sum + source.requests, 0) <= 24);
+});
+
+test('two sources alternate with a twelve-case cap and explicitly report insufficient fresh cases', async () => {
+  let calls = 0;
+  const fetchImpl = async url => {
+    calls++;
+    const parsed = new URL(url), island = parsed.hostname === 'api.nmb.best';
+    if (parsed.pathname.includes('topics')) return new Response(JSON.stringify(Array.from({ length: 15 }, (_, i) => ({ ...v2root(), id: 1000 + i, content: `日常讨论甲${i}` }))));
+    if (parsed.pathname === '/api/showf') return new Response(JSON.stringify(Array.from({ length: 15 }, (_, i) => ({ ...islandRoot(), id: 2000 + i, content: `日常讨论乙${i}` }))));
+    return new Response(JSON.stringify(island ? { ...islandThread(), id: Number(parsed.searchParams.get('id')), content: `日常讨论乙${Number(parsed.searchParams.get('id')) - 2000}` } : []));
+  };
+  const result = await collectOpinions({ fetchImpl, now: NOW, seed: 'fixed' });
+  assert.equal(result.fragments, 12); assert.ok(calls <= 24);
+  assert.deepEqual(result.sources.map(source => source.fragments), [6, 6]);
+  const insufficient = await collectOpinions({ ...fixtures(), now: NOW });
+  assert.equal(insufficient.ready, false);
+  assert.match(collectionSummary(insufficient), /素材不足3条/);
 });

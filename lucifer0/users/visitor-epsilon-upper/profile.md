@@ -1,11 +1,11 @@
-# oldwood
+# wodoo
 
 ## 基本情况
 
 | 项目 | 内容 |
 | --- | --- |
 | 编号 | visitor-epsilon-upper |
-| 网名 | oldwood |
+| 网名 | wodoo |
 | 用户名 | oldwood48 |
 | 个人简介 | 擦完才知道是什么木头。 |
 | 所属世界观 | worldview0 |

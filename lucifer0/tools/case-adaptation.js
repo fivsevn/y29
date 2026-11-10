@@ -1,3 +1,4 @@
+import { caseFingerprint } from './case-usage.js';
 import { createHash } from 'node:crypto';
 import { parseSampleDocuments, selectSamples, sampleDocumentPaths } from './samples.js';
 
@@ -41,12 +42,19 @@ function mixedRootOrder(operationId, seed, originalCount, caseIds) {
     .sort((a, b) => a.position - b.position || a.id.localeCompare(b.id)).map(item => item.id);
 }
 
-export function createCasePlan({ operationId, plan, documents, intakeReceipt, now }) {
+export function createCasePlan({ operationId, plan, documents, intakeReceipt, now, used = [] }) {
   if (!intakeReceipt) fail('refresh materials through GitHub Actions before starting a new update');
   const document = documents.find(document => document.path === SOURCE);
   if (!document) fail('the refreshed daily material document is missing');
   validateIntakeReceipt(intakeReceipt, { documentText: document.text, now });
-  const selected = selectSamples(parseSampleDocuments([document]), { seed: plan.seed + ':case-adaptation', limit: COUNT });
+  const seen = new Set(used.map(item => item.fingerprint));
+  const available = parseSampleDocuments([document]).filter(entry => {
+    const fingerprint = caseFingerprint(entry.sample);
+    if (seen.has(fingerprint)) return false;
+    seen.add(fingerprint);
+    return true;
+  });
+  const selected = selectSamples(available, { seed: plan.seed + ':case-adaptation', limit: COUNT });
   if (selected.length !== COUNT) fail('the refreshed daily material needs three distinct usable cases; do not invent or substitute selected cases');
   const items = selected.map(({ path, sample }) => ({ postId: casePostId(operationId, plan.seed, sample.id), sourcePath: path, sample: structuredClone(sample) }));
   return { count: COUNT, intakeReceipt: structuredClone(intakeReceipt), items,

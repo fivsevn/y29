@@ -153,7 +153,7 @@
     {
       "id": "nightbus3",
       "handle": "window_03",
-      "name": "3号窗",
+      "name": "momo_7",
       "bio": "末班车上的临时乘客。",
       "avatar": "",
       "enabled": true,
@@ -165,7 +165,7 @@
     {
       "id": "passerby17",
       "handle": "passerby17",
-      "name": "路西法α",
+      "name": "阿北",
       "bio": "又按掉了一次闹钟。",
       "avatar": "",
       "enabled": true,
@@ -190,7 +190,7 @@
     {
       "id": "visitor-alpha-upper",
       "handle": "dogear_81",
-      "name": "折页",
+      "name": "一只茶杯",
       "bio": "书架最下面还有一排。",
       "avatar": "",
       "enabled": true,
@@ -202,7 +202,7 @@
     {
       "id": "visitor-beta-upper",
       "handle": "lucifer_beta_upper",
-      "name": "路西法Β",
+      "name": "Rin93",
       "bio": "今天也没剩下多余零件。",
       "avatar": "",
       "enabled": true,
@@ -214,7 +214,7 @@
     {
       "id": "visitor-chi",
       "handle": "lucifer_chi",
-      "name": "路西法χ",
+      "name": "蒜了",
       "bio": "今天又讲快了一点。",
       "avatar": "",
       "enabled": true,
@@ -226,7 +226,7 @@
     {
       "id": "visitor-chi-upper",
       "handle": "xiaoman_zzz",
-      "name": "小满困了",
+      "name": "小满不在线",
       "bio": "今天的最后一块卖掉了。",
       "avatar": "",
       "enabled": true,
@@ -238,7 +238,7 @@
     {
       "id": "visitor-clearcalendar",
       "handle": "clear_calendar",
-      "name": "空出周末",
+      "name": "coco啊",
       "bio": "日历留了一格。",
       "avatar": "",
       "enabled": true,
@@ -250,7 +250,7 @@
     {
       "id": "visitor-delta",
       "handle": "not_risen",
-      "name": "未发酵",
+      "name": "zzZ",
       "bio": "今天的面团也有自己的想法。",
       "avatar": "",
       "enabled": true,
@@ -262,7 +262,7 @@
     {
       "id": "visitor-delta-upper",
       "handle": "southbound",
-      "name": "南辕",
+      "name": "南瓜籽",
       "bio": "这条小路地图上没有。",
       "avatar": "",
       "enabled": true,
@@ -274,7 +274,7 @@
     {
       "id": "visitor-epsilon",
       "handle": "lucifer_epsilon",
-      "name": "路西法ε",
+      "name": "沈小树",
       "bio": "把书放回它愿意待的位置。",
       "avatar": "",
       "enabled": true,
@@ -286,7 +286,7 @@
     {
       "id": "visitor-epsilon-upper",
       "handle": "oldwood48",
-      "name": "oldwood",
+      "name": "wodoo",
       "bio": "擦完才知道是什么木头。",
       "avatar": "",
       "enabled": true,
@@ -298,7 +298,7 @@
     {
       "id": "visitor-eta",
       "handle": "halfbeat_late",
-      "name": "慢半拍",
+      "name": "慢慢",
       "bio": "封套比歌先吸引我。",
       "avatar": "",
       "enabled": true,
@@ -310,7 +310,7 @@
     {
       "id": "visitor-eta-upper",
       "handle": "lucifer_eta_upper",
-      "name": "路西法Η",
+      "name": "7_7",
       "bio": "毛巾又少带一条。",
       "avatar": "",
       "enabled": true,
@@ -322,7 +322,7 @@
     {
       "id": "visitor-gamma",
       "handle": "hex_key7",
-      "name": "小六角",
+      "name": "小陆",
       "bio": "这颗螺丝还有用。",
       "avatar": "",
       "enabled": true,
@@ -334,7 +334,7 @@
     {
       "id": "visitor-gamma-upper",
       "handle": "spring_early",
-      "name": "春来早",
+      "name": "春卷儿",
       "bio": "开门第一件事是烧水。",
       "avatar": "",
       "enabled": true,
@@ -346,7 +346,7 @@
     {
       "id": "visitor-halfkettle",
       "handle": "half_kettle",
-      "name": "水还没开",
+      "name": "咕噜鱼",
       "bio": "看完不一定能回完。",
       "avatar": "",
       "enabled": true,
@@ -358,7 +358,7 @@
     {
       "id": "visitor-iota",
       "handle": "uu_nosugar",
-      "name": "uu不加糖",
+      "name": "uU",
       "bio": "拉花像什么由客人决定。",
       "avatar": "",
       "enabled": true,
@@ -370,7 +370,7 @@
     {
       "id": "visitor-iota-upper",
       "handle": "smoothroad54",
-      "name": "一路顺风",
+      "name": "阿吉",
       "bio": "来得及，慢一点。",
       "avatar": "",
       "enabled": true,
@@ -382,7 +382,7 @@
     {
       "id": "visitor-kappa",
       "handle": "lucifer_kappa",
-      "name": "路西法κ",
+      "name": "juzi19",
       "bio": "裤脚量两遍。",
       "avatar": "",
       "enabled": true,
@@ -394,7 +394,7 @@
     {
       "id": "visitor-kappa-upper",
       "handle": "prop_melon",
-      "name": "这个瓜是假的",
+      "name": "nono",
       "bio": "假的水果也挺占地方。",
       "avatar": "",
       "enabled": true,
@@ -406,7 +406,7 @@
     {
       "id": "visitor-lambda",
       "handle": "lucifer_lambda",
-      "name": "路西法λ",
+      "name": "青苔",
       "bio": "这个按钮昨天还在。",
       "avatar": "",
       "enabled": true,
@@ -418,7 +418,7 @@
     {
       "id": "visitor-lambda-upper",
       "handle": "emptybox",
-      "name": "空箱",
+      "name": "空白格",
       "bio": "今天也在和纸箱谈判。",
       "avatar": "",
       "enabled": true,
@@ -430,7 +430,7 @@
     {
       "id": "visitor-latebell",
       "handle": "late_bell",
-      "name": "还有一节",
+      "name": "阿鹿呀",
       "bio": "下课再回。",
       "avatar": "",
       "enabled": true,
@@ -442,7 +442,7 @@
     {
       "id": "visitor-levelpath",
       "handle": "level_path",
-      "name": "平路优先",
+      "name": "L-09",
       "bio": "先把入口说清楚。",
       "avatar": "",
       "enabled": true,
@@ -454,7 +454,7 @@
     {
       "id": "visitor-mu",
       "handle": "sunward_5",
-      "name": "向阳",
+      "name": "向日葵籽",
       "bio": "今天这盆不是薄荷。",
       "avatar": "",
       "enabled": true,
@@ -466,7 +466,7 @@
     {
       "id": "visitor-mu-upper",
       "handle": "jiji_zip",
-      "name": "吉吉.zip",
+      "name": "Jiji_",
       "bio": "电影开始了，我还在门外。",
       "avatar": "",
       "enabled": true,
@@ -478,7 +478,7 @@
     {
       "id": "visitor-nu",
       "handle": "faded_blue",
-      "name": "褪色蓝",
+      "name": "蓝蓝路",
       "bio": "路过的招牌比我会说话。",
       "avatar": "",
       "enabled": true,
@@ -490,7 +490,7 @@
     {
       "id": "visitor-nu-upper",
       "handle": "lucifer_nu_upper",
-      "name": "路西法Ν",
+      "name": "某某某",
       "bio": "嫩一点还是老一点？",
       "avatar": "",
       "enabled": true,
@@ -502,7 +502,7 @@
     {
       "id": "visitor-omega",
       "handle": "lucifer_omega",
-      "name": "路西法ω",
+      "name": "白白",
       "bio": "请把空调先关十秒。",
       "avatar": "",
       "enabled": true,
@@ -514,7 +514,7 @@
     {
       "id": "visitor-omega-upper",
       "handle": "try_one_press",
-      "name": "按一下试试",
+      "name": "qwerty6",
       "bio": "说明书翻到最后一页了吗？",
       "avatar": "",
       "enabled": true,
@@ -526,7 +526,7 @@
     {
       "id": "visitor-omicron",
       "handle": "hiss_09",
-      "name": "滋——",
+      "name": "滋滋",
       "bio": "冰箱又在独奏。",
       "avatar": "",
       "enabled": true,
@@ -538,7 +538,7 @@
     {
       "id": "visitor-omicron-upper",
       "handle": "idleyun",
-      "name": "闲云",
+      "name": "闲着呢",
       "bio": "这站我还记得。",
       "avatar": "",
       "enabled": true,
@@ -550,7 +550,7 @@
     {
       "id": "visitor-phi",
       "handle": "oldbanyan",
-      "name": "老榕树",
+      "name": "榕",
       "bio": "先把电源断了再说。",
       "avatar": "",
       "enabled": true,
@@ -562,7 +562,7 @@
     {
       "id": "visitor-phi-upper",
       "handle": "lucifer_phi_upper",
-      "name": "路西法Φ",
+      "name": "小熊软糖",
       "bio": "电梯里又换了新海报。",
       "avatar": "",
       "enabled": true,
@@ -574,7 +574,7 @@
     {
       "id": "visitor-pi",
       "handle": "lucifer_pi",
-      "name": "路西法π",
+      "name": "pipi",
       "bio": "颜色要等干了再看。",
       "avatar": "",
       "enabled": true,
@@ -586,7 +586,7 @@
     {
       "id": "visitor-pi-upper",
       "handle": "eighttenths",
-      "name": "八分熟",
+      "name": "八八",
       "bio": "先闻一闻，再记下来。",
       "avatar": "",
       "enabled": true,
@@ -598,7 +598,7 @@
     {
       "id": "visitor-psi",
       "handle": "atuan43",
-      "name": "阿团",
+      "name": "团子酱",
       "bio": "这一笼可以了。",
       "avatar": "",
       "enabled": true,
@@ -610,7 +610,7 @@
     {
       "id": "visitor-psi-upper",
       "handle": "tea_leftcold",
-      "name": "热茶凉了",
+      "name": "夏天的风",
       "bio": "这段留三秒空白。",
       "avatar": "",
       "enabled": true,
@@ -622,7 +622,7 @@
     {
       "id": "visitor-rainledger",
       "handle": "rain_ledger",
-      "name": "雨前收好",
+      "name": "喵呜233",
       "bio": "先看天，再安排。",
       "avatar": "",
       "enabled": true,
@@ -634,7 +634,7 @@
     {
       "id": "visitor-rho",
       "handle": "lucifer_rho",
-      "name": "路西法ρ",
+      "name": "山竹",
       "bio": "雨后再去看看。",
       "avatar": "",
       "enabled": true,
@@ -646,7 +646,7 @@
     {
       "id": "visitor-rho-upper",
       "handle": "lowercase_r",
-      "name": "小写的r",
+      "name": "rrr",
       "bio": "信封也有自己的手感。",
       "avatar": "",
       "enabled": true,
@@ -658,7 +658,7 @@
     {
       "id": "visitor-secondpage",
       "handle": "second_page",
-      "name": "翻到背面",
+      "name": "翻车鱼",
       "bio": "先看完再说。",
       "avatar": "",
       "enabled": true,
@@ -670,7 +670,7 @@
     {
       "id": "visitor-shiftcard",
       "handle": "shift_card",
-      "name": "换班见",
+      "name": "阿禾",
       "bio": "忙起来就没看见。",
       "avatar": "",
       "enabled": true,
@@ -682,7 +682,7 @@
     {
       "id": "visitor-sigma",
       "handle": "eraserdust21",
-      "name": "橡皮屑",
+      "name": "橡皮鸭",
       "bio": "色号记住了，钥匙没记住。",
       "avatar": "",
       "enabled": true,
@@ -694,7 +694,7 @@
     {
       "id": "visitor-sigma-upper",
       "handle": "rollin_25",
-      "name": "rollin",
+      "name": "ro11in",
       "bio": "今天先把轮子擦干净。",
       "avatar": "",
       "enabled": true,
@@ -706,7 +706,7 @@
     {
       "id": "visitor-slowradio",
       "handle": "slow_radio",
-      "name": "慢慢放",
+      "name": "fm88",
       "bio": "这段还没听完。",
       "avatar": "",
       "enabled": true,
@@ -718,7 +718,7 @@
     {
       "id": "visitor-tau",
       "handle": "second_half",
-      "name": "下半场再说",
+      "name": "老周",
       "bio": "葱价今天很有想法。",
       "avatar": "",
       "enabled": true,
@@ -730,7 +730,7 @@
     {
       "id": "visitor-tau-upper",
       "handle": "patchwork44",
-      "name": "补丁",
+      "name": "布丁加盐",
       "bio": "缝歪的地方也可以留下。",
       "avatar": "",
       "enabled": true,
@@ -742,7 +742,7 @@
     {
       "id": "visitor-theta",
       "handle": "lucifer_theta",
-      "name": "路西法θ",
+      "name": "theta_",
       "bio": "水换了，灯也关了。",
       "avatar": "",
       "enabled": true,
@@ -754,7 +754,7 @@
     {
       "id": "visitor-theta-upper",
       "handle": "koukou26",
-      "name": "口口",
+      "name": "扣扣",
       "bio": "这个圆角还可以再圆一点。",
       "avatar": "",
       "enabled": true,
@@ -766,7 +766,7 @@
     {
       "id": "visitor-upsilon",
       "handle": "pause_comma",
-      "name": "一个顿号",
+      "name": "。_。",
       "bio": "这句再听一遍。",
       "avatar": "",
       "enabled": true,
@@ -778,7 +778,7 @@
     {
       "id": "visitor-upsilon-upper",
       "handle": "lucifer_upsilon_upper",
-      "name": "路西法Υ",
+      "name": "小宇宙",
       "bio": "少一枚指示物，先别收。",
       "avatar": "",
       "enabled": true,
@@ -790,7 +790,7 @@
     {
       "id": "visitor-xi",
       "handle": "lunch_ping",
-      "name": "饭点再叫我",
+      "name": "饭饭",
       "bio": "准点是一种愿望。",
       "avatar": "",
       "enabled": true,
@@ -802,7 +802,7 @@
     {
       "id": "visitor-xi-upper",
       "handle": "lowbattery33",
-      "name": "暂时没电",
+      "name": "电波系",
       "bio": "今天的耐心余额用完了。",
       "avatar": "",
       "enabled": true,
@@ -814,7 +814,7 @@
     {
       "id": "visitor-zeta",
       "handle": "field_out",
-      "name": "野地",
+      "name": "无名小卒",
       "bio": "箱子码好，脑子放空。",
       "avatar": "",
       "enabled": true,
@@ -826,7 +826,7 @@
     {
       "id": "visitor-zeta-upper",
       "handle": "miaomile",
-      "name": "喵了个咪",
+      "name": "Mile",
       "bio": "歌播完了，红灯还没完。",
       "avatar": "",
       "enabled": true,
@@ -1534,7 +1534,7 @@
     {
       "id": "guest-f8069c78563058dc",
       "handle": "guest_caa08d6db3380f0d2b89",
-      "name": "刘海还没长回来",
+      "name": "眠",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1546,7 +1546,7 @@
     {
       "id": "guest-eb1e1af156553c4e",
       "handle": "guest_21310f15971d983df0e2",
-      "name": "墙在右边",
+      "name": "lalala",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1558,7 +1558,7 @@
     {
       "id": "guest-1ae25a8504c9facc",
       "handle": "guest_c693b72e8adbf7b6862d",
-      "name": "反着看也行",
+      "name": "404zz",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1570,7 +1570,7 @@
     {
       "id": "guest-929caae32215f559",
       "handle": "guest_646f07a5cb5d692917a5",
-      "name": "锁还在转",
+      "name": "abao_2",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1582,7 +1582,7 @@
     {
       "id": "guest-5bb935a937a547ef",
       "handle": "guest_e298a72a68f25acbd3b5",
-      "name": "再点一次",
+      "name": "豆子",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1594,7 +1594,7 @@
     {
       "id": "guest-09ad6f87eff9171c",
       "handle": "guest_d036bbba89740b490bca",
-      "name": "收据折三折",
+      "name": "橘猫不胖",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1620,7 +1620,7 @@
         }
       ],
       "guest": {
-        "name": "再点一次"
+        "name": "豆子"
       },
       "text": "我那次截到的是这两行，一个说结束请求提交了，时长还在往上跳。后来客服要我给订单号，不是车牌，你看看操作记录那里有没有？"
     },
@@ -1639,9 +1639,9 @@
         }
       ],
       "guest": {
-        "name": "收据折三折"
+        "name": "橘猫不胖"
       },
-      "text": "约了个热水器检修，预约页明明写“上门检测30元，维修前报价”。人来了看了一眼，说得拆开才能知道是哪儿坏。我想着都上门了，就让拆了。\n\n拆完说电路板要换，给我开的是检测30、拆机80、材料160。我说先别修，那个80是什么时候说的？他说订单下面有服务条款。我翻到最底下才看见一整段字。你写在报价那一行，人不就知道了么。"
+      "text": "约了热水器检修，预约写上门检测30，维修前报价。来了说要拆开看，我就让拆了。\n拆完给我写检测30、拆机80、材料160。我没让修，先问80什么时候说过，他让我翻订单底下的条款\n真有，挤在最下面那一大段里。现在还问我到底换不换板子"
     },
     {
       "id": "l0-20261110213237-acd234d4-01",
@@ -1652,7 +1652,7 @@
       "canon": "derivative",
       "media": [],
       "guest": {
-        "name": "锁还在转"
+        "name": "abao_2"
       },
       "text": "骑到小区门口，车锁卡了，我在软件里点了三次结束，都弹出“已提交”。回家一看还在计费。客服让我补拍车牌和锁头，可车已经不在那儿了。现在说没现场照片就不退，多扣的钱算谁的？"
     },
@@ -1666,12 +1666,12 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261110210715-bd3468e0-02/media/exposure-compare.webp",
-          "alt": "手机相册对比截图，两列同样的甜品包装和纸托，左侧自动增强后泛白，右侧锁定曝光保留紫色和较暗的层次。",
+          "alt": "两张甜品包装照片并排拼接，左侧过曝发白，右侧保留紫色与纸托的明暗。",
           "kind": "image",
           "fit": "contain"
         }
       ],
-      "text": "我店里陈列架也是。手机一开自动增强，浅紫的纸托全成了白的。\n我把相册两张截在一块儿了，左边自动，右边锁曝光。东西没换，颜色差得离谱。"
+      "text": "我店里也这样，拍纸托一开自动增强就白了。\n左边自动，右边锁了曝光拍的，我把两张拼一起了。实际是浅紫色的"
     },
     {
       "id": "l0-20261110210715-bd3468e0-10",
@@ -1689,9 +1689,9 @@
         }
       ],
       "guest": {
-        "name": "反着看也行"
+        "name": "404zz"
       },
-      "text": "我懂了，意思是到墙边就该穿过去。管理员不如亲自演示"
+      "text": "到墙边然后呢 穿过去吗"
     },
     {
       "id": "l0-20261110210715-bd3468e0-05",
@@ -1701,7 +1701,7 @@
       "likes": 14,
       "canon": "derivative",
       "media": [],
-      "text": "刚刷到一张梗图，把“信息出错”画成一个拎花上门的人。底下有人接剧情，有人认真给他的名牌纠字，楼主又画了第二张，把勘误单也塞花束里。\n这下真的没法说他们不懂梗了，谁还没被改过病句啊。"
+      "text": "刚刷到有人把“信息出错”画成拎花上门的人，名牌还写错了。有人接剧情有人纠字，楼主后来又把勘误单画进花束里\n评论还在纠那个字"
     },
     {
       "id": "l0-20261110210715-bd3468e0-01",
@@ -1712,9 +1712,9 @@
       "canon": "derivative",
       "media": [],
       "guest": {
-        "name": "刘海还没长回来"
+        "name": "眠"
       },
-      "text": "刘海只想修到眉毛上面一点，结果一剪刀到眉毛中间。我看着镜子愣了半天，师傅说“显精神”。现在是真精神，走路都得抬着眉毛。回去问能不能补救，他说再剪就更短了。"
+      "text": "刘海让他修一点，剪完在眉毛中间了。。。他说显精神\n我问还有救吗，他说再剪更短。现在夹也夹不住"
     },
     {
       "id": "l0-20261110210715-bd3468e0-03",
@@ -1724,7 +1724,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "收货点门口那只猫今天居然没躲。我站着跟它看了半分钟，想起没掏手机，手刚动一下就跑了。行吧，允许我看，不允许我留证据。"
+      "text": "收货点门口那只猫今天没躲，站着看了半分钟。想拍一下，手机还没掏出来它就跑了\n又没拍到"
     },
     {
       "id": "l0-20261110210715-bd3468e0-07",
@@ -1736,14 +1736,14 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261110210715-bd3468e0-07/media/door-diagram.webp",
-          "alt": "一张歪斜放着的手绘柜子平面示意图，格子和方向箭头被红色交叉线划过，右侧另画一根纠正方向的红箭头。",
+          "alt": "纸上手绘柜子和右侧墙面，错误箭头被红笔划掉，旁边另画向下箭头。",
           "kind": "image"
         }
       ],
       "guest": {
-        "name": "墙在右边"
+        "name": "lalala"
       },
-      "text": "楼里公共柜子的取物示意图把门和墙的位置画反了，我按实际走向重画一张贴群里。管理员说别改，统一按墙上的旧图。我说那图的箭头直接指进墙里，他让我“按箭头理解就行”。你自己来理解一个？"
+      "text": "公共柜子那张取物图把门和墙画反了。我照现场重新画了一下，发群里，管理员让我别改，统一看墙上那张。\n旧图箭头是往墙里走的，我还给他圈了。他回我按箭头理解就行\n？？"
     },
     {
       "id": "l0-20261110210715-bd3468e0-02",
@@ -1753,7 +1753,7 @@
       "likes": 14,
       "canon": "derivative",
       "media": [],
-      "text": "那张展板的右下角是故意留暗的，不是文件坏了。\n\n今天去看布展，屏幕开着自动增强，青灰全被拉成了亮蓝，画面上那层薄薄的影子彻底没有了。我问谁调的，对方说怕观众看不清，反正画的是同一张。\n\n那就别写我的名字。我要的是那张画，不是一张能被看清所有颜色的展示屏。已经发过一次色彩校准说明了，这回我直接把原稿和设置一起放过去。"
+      "text": "展板右下角是我故意留暗的。今天过去一看，青灰变亮蓝了，影子也没了。\n问了一圈，说是屏幕开了自动增强，怕观众看不清。我已经发过设置了啊。\n刚又把原稿和设置发了一遍，让他们关掉。这样挂着我名字我不认"
     },
     {
       "id": "l0-20261110191228-b8ed4062-08",
@@ -2197,7 +2197,7 @@
           "fit": "contain"
         }
       ],
-      "text": "这名字起得也太好了，整理费。\n\n那我以后卖蛋糕是不是也能另收一笔“欣赏费”，反正顾客都看过柜台了嘛。\n\n你让他把合同里对应的哪一项圈出来，别跟着讨论地板擦得亮不亮。不然又变成你说不脏、他说得再整理一遍。"
+      "text": "整理费。。。那我店里是不是也能收欣赏费\n你问他合同哪一行写了，让他圈出来"
     },
     {
       "id": "l0-20261110161717-6d582dbc-08",
@@ -2207,7 +2207,7 @@
       "likes": 3,
       "canon": "derivative",
       "media": [],
-      "text": "你最后那句有点冲。他们来问，也可能只是怕下次白跑一趟。\n\n我们做节目时也见过这种视频，标题吓人，原始年份、地点全剪没了。你既然在窗口，倒可以请他把转发来源和日期翻出来看。那不是你的站，就不用替别人背这口锅。\n\n不过一群人围着窗口问，后面排着队，确实让人烦。"
+      "text": "那个视频有年份没有？我们做节目也碰到过，剪掉时间地点又传一轮。\n不过你最后那句确实有点冲，人家可能就是怕下回买不到票"
     },
     {
       "id": "l0-20261110161717-6d582dbc-07",
@@ -2361,7 +2361,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "补一句，我妈上回买酱油，也问过旁边的人平时做不做饭。人家说偶尔，她照样拿了一瓶一样的，后来跟我说就是搭句话。\n所以我觉得，没必要把人家想得那么不会挑。"
+      "text": "我妈买酱油也问旁边人做不做饭，买完跟我说就搭个话。\n你说阿姨跟着拿，也未必是不会挑啊"
     },
     {
       "id": "l0-20261110121122-ceb92168-09",
@@ -2410,7 +2410,7 @@
           "fit": "contain"
         }
       ],
-      "text": "刷到一个住进传送门的脑洞，评论里已经有人在算省房租、拿来发电了。\n我连异世界的床都还没躺上，先欠一份可行性分析。累了。"
+      "text": "刷到住进传送门那个脑洞了，底下在算省多少房租，还有人要拿来发电。\n床还没摆进去呢"
     },
     {
       "id": "l0-20261110121122-ceb92168-04",
@@ -2496,7 +2496,7 @@
       "guest": {
         "name": "跟着走走停停"
       },
-      "text": "散场的时候就想早点坐上车，不想再四处找出口。"
+      "text": "上回散场跟着人走，走到停车场了 我又没开车"
     },
     {
       "id": "l0-20261110111419-7d66be80-06",
@@ -2612,7 +2612,7 @@
       "guest": {
         "name": "冷藏区清场"
       },
-      "text": "既然他囤饮料，那你的那半格也得还你吧。公共地方不是谁先塞满算谁的。"
+      "text": "你饭盒现在放哪了"
     },
     {
       "id": "l0-20261110061018-47537328-15",
@@ -2664,7 +2664,7 @@
       "guest": {
         "name": "窗边一小格"
       },
-      "text": "你卖的时候会把这些条件写出来吗？我就碰到过，买的时候说“好养”，拿回去才知道不同花盆、光线和湿度差很多。放储物间当然不对，可要是客人第一次养，她哪里知道该问什么？\n隔壁摊说的话不能算你的账，我同意。只是觉得你俩可以先说清楚这盆到底怎么养的，再谈退不退。"
+      "text": "你卖的时候有没有写怎么养啊？我第一次买花，人家就说好养，拿回去才知道不能一直浇。\n储物间肯定不行，但新手真的不一定知道。隔壁那句你让她找隔壁去"
     },
     {
       "id": "l0-20261110061018-47537328-16",
@@ -3032,7 +3032,7 @@
       "likes": 4,
       "canon": "derivative",
       "media": [],
-      "text": "你跟中杯摆一块比过没有？我上回点炸物，跟朋友一样大的盒子，掀开才知道里面份数不同，盒底那串字母谁也没看明白。M到底指什么我不知道，你直接说人家糊弄也太快了吧。我要在柜台碰上来一句“你糊弄我吧”的，也不乐意跟你好好说。"
+      "text": "跟中杯比过没？我上次点炸物盒子一样大，里面份数不一样。杯底M是啥我也不懂，你上来就说人家糊弄，我在柜台听了也不乐意"
     },
     {
       "id": "l0-20261110002939-55dccee1-05",

@@ -1,3 +1,4 @@
+import { readCaseUsage } from './case-usage.js';
 import { readFile, writeFile, mkdir, rename, rm, lstat, realpath } from 'node:fs/promises';
 import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
@@ -354,7 +355,7 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
       const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, lottery: data.policy.lottery ?? defaultLottery, maxBatchPosts: data.policy.maxBatchPosts });
       plan.timeWindow = { start: new Date(now - DAY).toISOString(), end: new Date(now).toISOString() };
-      if (data.policy.caseAdaptation) plan.caseAdaptation = createCasePlan({ operationId: id, plan, documents: data.documents, intakeReceipt, now });
+      if (data.policy.caseAdaptation) plan.caseAdaptation = createCasePlan({ operationId: id, plan, documents: data.documents, intakeReceipt, now, used: await readCaseUsage(root, now) });
       if (plan.lottery?.researchMaintenance) {
         const candidates = await researchCandidates(root, data.discoveredResearch);
         plan.researchMaintenance = { candidates, selectedPaths: drawResearchMaintenance({ seed, lottery: plan.lottery, documents: candidates, now }) };
