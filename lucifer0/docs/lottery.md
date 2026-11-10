@@ -34,11 +34,11 @@
 | `reading`、`nearbyReplies` | 决定回复者读到目标帖、根帖加目标帖，或目标附近的部分发言。 |
 | `textWindow`、`excerptCharacters` | 决定读到完整正文、开头或局部片段，以及截取长度。输出保留来源帖号，并标明截取状态。 |
 | `image` | 按条抽取纯文字、现场照片、截图或表情图的表达机会。策划结合话头选择实际素材，使用方法见[配图](writing.md#配图)。 |
-| `likes.root`、`likes.reply` | 分别给主帖和回复抽取基础赞数建议，按权重选档后取该档内整数；结合[评论与点赞](../environment/comments.md#点赞怎样形成差异)审定。 |
+| `likes.root`、`likes.reply` | 分别给主帖和回复抽取基础赞数建议，按权重选档后取该档内整数；结合[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)审定。 |
 
 ### 负面与回复提示
 
-`writer.discussion.requiredTone` 为 `negative` 时，把这条写成有具体不满、质疑、八卦判断或立场冲突的发言；为 `open` 时，按当事人此刻想说的内容形成发言。负面研究与取材见[负面与冲突](../environment/negative.md)，正文和图片由审读者核对后登记结果。
+`writer.discussion.requiredTone` 为 `negative` 时，把这条写成有具体不满、质疑、八卦判断或立场冲突的发言；为 `open` 时，按当事人此刻想说的内容形成发言。负面研究与取材见[负面与冲突](../environment/negative-research.md)，正文和图片由审读者核对后登记结果。
 
 | 提示值 | 发言方向 |
 | --- | --- |

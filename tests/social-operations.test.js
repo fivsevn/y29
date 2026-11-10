@@ -48,7 +48,7 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
   await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md', 'negative.md']]]) {
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md', 'negative-research.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
@@ -67,7 +67,8 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
     profile.basics.worldview = user.kind === 'character' ? 'worldviewA' : '';
     await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
   }
-  await writeFile(join(root, 'users/speech.md'), '# Synthetic speech research\n');
+  await writeFile(join(root, 'users/speech-research.md'), '# Synthetic speech research\n');
+  await writeFile(join(root, 'users/character-research.md'), '# Synthetic character research\n\nSYNTHETIC_CHARACTER_RESEARCH\n');
   const historical = { id: 'history-entry', author: 'person-0', createdAt: '2025-04-01T00:00:00Z', replyTo: null, text: 'SYNTHETIC_HISTORY_BODY', likes: 1, canon: 'derivative', media: [] };
   await mkdir(join(root, 'posts/2025/04/history-entry'), { recursive: true });
   await writeFile(join(root, 'posts/2025/04/history-entry/index.md'), renderPostDocument(historical));
@@ -233,7 +234,7 @@ test('comment and meme research refresh keep saved reply draws; changed saved lo
   const original = await readJSON(prepared.operationPath);
   const entries = [post('frozen-root', 'guest-frozen', f.now), ...Array.from({ length: 3 }, (_, index) => post('frozen-reply-' + index, 'guest-frozen-' + index, f.now, 'frozen-root'))];
   const { batch } = await draft(prepared, f.now, entries);
-  await writeFile(join(f.root, 'environment/comments.md'), '# Updated comment research\n\nSYNTHETIC_NEW_COMMENT_RESEARCH');
+  await writeFile(join(f.root, 'environment/comments-research.md'), '# Updated comment research\n\nSYNTHETIC_NEW_COMMENT_RESEARCH');
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
   const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
   policy.replyLottery = fixedReplies(9); await writeFile(policyPath, JSON.stringify(policy));
@@ -243,7 +244,7 @@ test('comment and meme research refresh keep saved reply draws; changed saved lo
   assert.ok((await readFile(prepared.readingPath, 'utf8')).includes('SYNTHETIC_NEW_COMMENT_RESEARCH'));
   assert.equal((await suggestUpdateReplies(f.options)).threads[0].replyCount, 2);
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /saved reply limit/);
-  await writeFile(join(f.root, 'environment/meme.md'), '# Updated meme research\n\nSYNTHETIC_NEW_MEME_RESEARCH');
+  await writeFile(join(f.root, 'environment/meme-research.md'), '# Updated meme research\n\nSYNTHETIC_NEW_MEME_RESEARCH');
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
   await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
   const memeRefreshed = await readJSON(prepared.operationPath);
@@ -395,8 +396,9 @@ test('prepare creates only one work record and a full raw-source reading, then r
     assert.ok(reading.includes('users/' + user.id + '/profile.md'));
     assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
-  for (const name of ['README.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
+  for (const name of ['README.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
   assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY'));
+  assert.equal(reading.split('SYNTHETIC_CHARACTER_RESEARCH').length - 1, 1);
   for (const marker of ['SYNTHETIC_WORLDVIEW_INDEX', 'SYNTHETIC_worldviewA_SETTING', 'SYNTHETIC_worldviewA_EVENTS', 'SYNTHETIC_worldview0_SETTING', 'SYNTHETIC_worldview0_EVENTS']) assert.equal(reading.split(marker).length - 1, 1);
   assert.ok(!reading.includes('world-trends.md'));
   assert.ok(reading.includes('| person-0 | worldviewA |') && reading.includes('| person-2 | worldview0 |'));
@@ -819,11 +821,12 @@ test('writer receives the current writing source and refreshes it without redraw
   assert.deepEqual({ ...refreshed.writer, writing: first.writer.writing }, first.writer);
 });
 
-test('lottery and speech research enter source digest, while config snapshots stay fixed on resume', async t => {
+test('lottery, character and speech research enter source digest, while config snapshots stay fixed on resume', async t => {
   const f = await fixture(t, 4, { lottery: defaultLottery }), prepared = await prepareUpdate(f.options);
   const postId = prepared.id + '-entry', initial = await briefUpdatePost({ ...f.options, postId });
   const saved = await readJSON(prepared.operationPath);
-  for (const path of ['README.md', 'docs/lottery.md', 'users/speech.md']) {
+  assert.ok(!(JSON.stringify(initial.writer)).includes('SYNTHETIC_CHARACTER_RESEARCH'));
+  for (const path of ['README.md', 'docs/lottery.md', 'users/character-research.md', 'users/speech-research.md']) {
     await writeFile(join(f.root, path), '# changed ' + path);
     await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
     await prepareUpdate(f.options);
@@ -972,7 +975,7 @@ test('brief fills the actual reviewed gap and always carries negative guidance o
   assert.equal(first.editor.discussion.missingNegativePosts, 1);
   assert.ok(first.writer.discussion.negativeMotivation);
   assert.deepEqual(first.writer.discussion.rules, { sourcePath: 'docs/lottery.md', text: await readFile(join(f.root, 'docs/lottery.md'), 'utf8') });
-  assert.deepEqual(first.writer.discussion.research, { sourcePath: 'environment/negative.md', text: await readFile(join(f.root, 'environment/negative.md'), 'utf8') });
+  assert.deepEqual(first.writer.discussion.research, { sourcePath: 'environment/negative-research.md', text: await readFile(join(f.root, 'environment/negative-research.md'), 'utf8') });
   assert.ok(first.writer.conditions.every(condition => condition.dimension !== 'motivation'));
   const firstPost = { ...first.draft, guest: { name: 'Synthetic first' }, text: 'A concrete adopted request; reviewers decide its actual stance.' };
   await draft(prepared, f.now, [firstPost]);
@@ -982,7 +985,7 @@ test('brief fills the actual reviewed gap and always carries negative guidance o
   const shortage = await briefUpdatePost(next);
   assert.equal(shortage.writer.discussion.requiredTone, 'negative');
   assert.equal(shortage.editor.discussion.negativePosts, 0);
-  assert.deepEqual(shortage.writer.comments, { sourcePath: 'environment/comments.md', text: await readFile(join(f.root, 'environment/comments.md'), 'utf8') });
+  assert.deepEqual(shortage.writer.comments, { sourcePath: 'environment/comments-research.md', text: await readFile(join(f.root, 'environment/comments-research.md'), 'utf8') });
   assert.ok(shortage.writer.discussion.replyStance);
   await saveReviews(prepared.operationPath, [{ postId: firstPost.id, negative: true, reason: 'Changed text explicitly accuses the other person of crossing a boundary.' }]);
   const open = await briefUpdatePost(next);
@@ -999,7 +1002,7 @@ test('negative and comments source changes refresh actual writer input while kee
   await saveReviews(prepared.operationPath, [{ postId: entry.id, negative: false, reason: 'Ordinary setup for the synthetic reply.' }]);
   const options = { ...f.options, postId: prepared.id + '-reply', replyTo: entry.id }, first = await briefUpdatePost(options);
   const saved = await readJSON(prepared.operationPath);
-  for (const path of ['environment/comments.md', 'environment/negative.md']) {
+  for (const path of ['environment/comments-research.md', 'environment/negative-research.md']) {
     const updated = '# Updated canonical source ' + path;
     await writeFile(join(f.root, path), updated);
     await assert.rejects(briefUpdatePost(options), /Source material changed/);
@@ -1009,7 +1012,7 @@ test('negative and comments source changes refresh actual writer input while kee
     assert.equal(refreshed.editor.waitSeconds, first.editor.waitSeconds);
     assert.equal(refreshed.writer.discussion.negativeMotivation, first.writer.discussion.negativeMotivation);
     assert.equal(refreshed.writer.discussion.replyStance, first.writer.discussion.replyStance);
-    assert.equal((path.endsWith('comments.md') ? refreshed.writer.comments : refreshed.writer.discussion.research).text, updated);
+    assert.equal((path.endsWith('comments-research.md') ? refreshed.writer.comments : refreshed.writer.discussion.research).text, updated);
   }
 });
 
