@@ -1338,9 +1338,179 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-d04fbe6fde070501",
+      "handle": "guest_ab2c63f2def7948b8cfe",
+      "name": "楼下围观者",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-faa5a91d91f79e5b",
+      "handle": "guest_bb5030ae378cd16eafc1",
+      "name": "原味就行",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3c9462cf09873019",
+      "handle": "guest_cf9cb2ba1fdbae0da890",
+      "name": "退房单还没签",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c222d71a464a56d8",
+      "handle": "guest_69247bd2255ab4c79b38",
+      "name": "柜门打不开",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110161717-6d582dbc-09",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-10T16:04:09.467Z",
+      "replyTo": "l0-20261110161717-6d582dbc-03",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "fit": "contain"
+        }
+      ],
+      "text": "这名字起得也太好了，整理费。\n\n那我以后卖蛋糕是不是也能另收一笔“欣赏费”，反正顾客都看过柜台了嘛。\n\n你让他把合同里对应的哪一项圈出来，别跟着讨论地板擦得亮不亮。不然又变成你说不脏、他说得再整理一遍。"
+    },
+    {
+      "id": "l0-20261110161717-6d582dbc-08",
+      "author": "visitor-psi-upper",
+      "createdAt": "2026-11-10T15:44:10.467Z",
+      "replyTo": "l0-20261110161717-6d582dbc-02",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "你最后那句有点冲。他们来问，也可能只是怕下次白跑一趟。\n\n我们做节目时也见过这种视频，标题吓人，原始年份、地点全剪没了。你既然在窗口，倒可以请他把转发来源和日期翻出来看。那不是你的站，就不用替别人背这口锅。\n\n不过一群人围着窗口问，后面排着队，确实让人烦。"
+    },
+    {
+      "id": "l0-20261110161717-6d582dbc-07",
+      "author": "guest-faa5a91d91f79e5b",
+      "createdAt": "2026-11-10T15:41:43.467Z",
+      "replyTo": "l0-20261110161717-6d582dbc-01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "原味就行"
+      },
+      "text": "群主是老板，也不代表每条消息都是老板自己打的吧。涨一块可以不高兴，但你拿群主头像认定她撒谎，也挺会扣帽子。"
+    },
+    {
+      "id": "l0-20261110161717-6d582dbc-06",
+      "author": "guest-c222d71a464a56d8",
+      "createdAt": "2026-11-10T15:39:49.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "柜门打不开"
+      },
+      "text": "快递柜门不开，页面倒先提醒“超时将收费”。打电话问，客服说可能网络卡顿，让我过一会儿再试。你们的门卡住了，为什么是我超时？"
+    },
+    {
+      "id": "l0-20261110161717-6d582dbc-04",
+      "author": "visitor-kappa",
+      "createdAt": "2026-11-10T15:39:22.467Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
+      "text": "一条裤子，客人说左边短，右边长。我给她量两遍，是她自己站着一边膝盖弯着。现在要我白拆一遍重做，还说机器踩两脚的事。\n你先站直了让我量，好不好？"
+    },
+    {
+      "id": "l0-20261110161717-6d582dbc-03",
+      "author": "guest-3c9462cf09873019",
+      "createdAt": "2026-11-10T15:37:40.467Z",
+      "replyTo": null,
+      "likes": 18,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "退房单还没签"
+      },
+      "text": "退房清单里写着固定收二百块“整理费”，合同上只写损坏另算。我问擦过的地板还要整理什么，中介说所有租户都是这样。按他们这个说法，我昨天自己擦半天算什么？"
+    },
+    {
+      "id": "l0-20261110161717-6d582dbc-02",
+      "author": "visitor-iota-upper",
+      "createdAt": "2026-11-10T11:42:42.467Z",
+      "replyTo": null,
+      "likes": 18,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "fit": "contain"
+        }
+      ],
+      "text": "今天早班，一个人拿着转来的视频问我，我们车站是不是下个月就没有人工售票窗口了。视频上既没有站名，也没有日期，就是有人对着一排机器说以后都得自己弄。\n\n我说我没收到这种通知，他不信，还说网上都在传。后面排队的大姐跟着问，那我以后该去哪里买票。\n\n我天天就在窗口坐着，连这事还要先听路过的人告诉我？要是真有调整，总该把具体哪天、哪个窗口说明白呀。"
+    },
+    {
+      "id": "l0-20261110161717-6d582dbc-01",
+      "author": "guest-d04fbe6fde070501",
+      "createdAt": "2026-11-10T11:38:23.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/melon.webp",
+          "alt": "L0扒着边沿，双手拿一片西瓜。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "楼下围观者"
+      },
+      "text": "楼下蛋糕店的群里昨天还在说“这周不涨价”，今天柜台已经换了新签。有人问老板怎么回事，她说群里那句是店员发错的。可群主就是老板本人啊。现在群里有人发昨天的截图，没人回。"
+    },
     {
       "id": "l0-20261110121122-ceb92168-14",
       "author": "guest-73e7738ed990c6b0",
