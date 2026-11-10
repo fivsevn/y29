@@ -18,11 +18,10 @@ const runtimeFiles = [
   'training/index.html', 'training/style.css', 'training/game.js', 'training/content.js',
   'training/narrative.js', 'training/expansion.js', 'training/variety.js',
   'storyteller/index.html', 'storyteller/style.css', 'storyteller/app.js', 'storyteller/state.js', 'storyteller/current.json',
-  'lucifer0/index.html', 'lucifer0/style.css', 'lucifer0/app.js', 'lucifer0/core.js', 'lucifer0/data/feed.json',
-  'social/index.html', 'social/redirect.js'
+  'lucifer0/index.html', 'lucifer0/style.css', 'lucifer0/app.js', 'lucifer0/core.js', 'lucifer0/data/feed.json'
 ];
 const socialAssets = new Set([
-  'assets/icon.svg', 'assets/verification-lucifer.png', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
+  'assets/icon.svg', 'assets/verification-lucifer.webp', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
   ...socialFeed.posts.flatMap(post => post.media.map(image => image.src)),
   ...siteEmoteFiles(await readSiteEmotes(join(root, 'lucifer0')))
 ]);

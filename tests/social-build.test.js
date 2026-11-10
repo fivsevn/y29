@@ -18,11 +18,11 @@ async function files(directory, prefix = '') {
   return result.sort();
 }
 
-test('built site preserves existing entrypoints and publishes only explicit social assets', async t => {
+test('built site preserves current entrypoints and publishes only explicit social assets', async t => {
   const directory = await mkdtemp(join(tmpdir(), 'y29-build-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const project = new URL('../', import.meta.url);
-  for (const path of ['build.js', 'package.json', 'index.html', 'style.css', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0', 'social']) {
+  for (const path of ['build.js', 'package.json', 'index.html', 'style.css', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0']) {
     await cp(new URL(path, project), join(directory, path), { recursive: true });
   }
   await symlink(new URL('../node_modules', import.meta.url), join(directory, 'node_modules'), 'dir');
@@ -66,7 +66,7 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   execFileSync(process.execPath, ['build.js'], { cwd: directory });
   const published = await files(join(directory, 'dist/lucifer0'));
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
-  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.png', `${mediaDirectory}/LICENSE.txt`,
+  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.webp', `${mediaDirectory}/LICENSE.txt`,
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src)),
     siteEmoteManifestPath, ...emoteCatalog.items.map(item => item.src)]);
   const mediaLicenses = new Set(feed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')));
@@ -87,9 +87,7 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {
     assert.equal(await readFile(join(directory, 'dist', path), 'utf8'), await readFile(new URL(path, project), 'utf8'));
   }
-  assert.deepEqual(await files(join(directory, 'dist/social')), ['index.html', 'redirect.js']);
-  assert.equal(await readFile(join(directory, 'dist/social/redirect.js'), 'utf8'), await readFile(new URL('social/redirect.js', project), 'utf8'));
-  assert.match(await readFile(join(directory, 'dist/social/index.html'), 'utf8'), /https:\/\/y29\.fivsevn\.com\/lucifer0\//);
+  await assert.rejects(readdir(join(directory, 'dist/social')), { code: 'ENOENT' });
   assert.match(await readFile(join(directory, 'dist/index.html'), 'utf8'), /href="\.\/lucifer0\/"/);
   assert.equal(await readFile(join(directory, 'dist/style.css'), 'utf8'), await readFile(new URL('style.css', project), 'utf8'));
   assert.deepEqual(await files(join(directory, 'dist/storyteller')), ['app.js', 'current.json', 'index.html', 'state.js', 'style.css']);

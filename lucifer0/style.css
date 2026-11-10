@@ -165,7 +165,7 @@ main::-webkit-scrollbar{display:none}
 .is-challenge #login-heading span,.is-challenge #login-heading strong{display:block}
 .is-challenge #login-heading strong{font-size:26px;line-height:1.3;font-weight:700}
 .verification-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}
-.verification-tile{position:relative;display:block;min-width:0;aspect-ratio:1;padding:0;background-image:url('./assets/verification-lucifer.png');background-repeat:no-repeat;background-size:300% 300%;background-color:#d8dcdf;isolation:isolate}
+.verification-tile{position:relative;display:block;min-width:0;aspect-ratio:1;padding:0;background-image:url('./assets/verification-lucifer.webp');background-repeat:no-repeat;background-size:300% 300%;background-color:#d8dcdf;isolation:isolate}
 .verification-tile[aria-pressed="true"]{box-shadow:inset 0 0 0 4px #2869c7}
 .verification-tile[aria-pressed="true"]::before{content:"";position:absolute;inset:0;z-index:-1;background:#2869c72b}
 .verification-tile[aria-pressed="true"]::after{content:"✓";position:absolute;top:4px;left:4px;display:grid;place-items:center;width:24px;height:24px;border:2px solid #fff;border-radius:50%;background:#2869c7;color:#fff;font:700 16px/1 sans-serif;box-shadow:0 1px 3px #0005}

@@ -22,7 +22,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 ## 填写当前更新
 
-在 `operation.json` 中填写 `research`、`posts` 与适用的 `reviews`。其余自动字段由工具管理。工具汇集材料后，执行者实际读完 `reading.md`，再开展观察与写作。
+在 `operation.json` 中填写 `research`、`posts`、适用的 `reviews` 和[研究补充结果](#研究补充)。其余自动字段由工具管理。工具汇集材料后，执行者实际读完 `reading.md`，再开展观察与写作。
 
 `research` 每项记录一个实际读到的公开页面：
 
@@ -70,7 +70,22 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用上海时区，处在已有时间线之后、实际当前时刻之前，回复时间晚于或等于父帖。新草稿的时间由 `brief` 安排，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
 
-已删除的回复以 `deleted: true` 保存，正文固定为“该回复已被删除”。编号、署名、时间与父帖关系继续保留，网页显示占位并计入回复数。
+删除根帖时，移除整个根串发布包；删除回复时，移除其正文及下级回复，并清理这些发言独用的普通配图。随后重新生成信息流，核对剩余帖子及图片引用。
+
+## 研究补充
+
+准备结果中的 `researchMaintenance.selectedPaths` 给出本次研究对象，抽取方式见[抽签规则](lottery.md#研究补充)。读取选中文档和已有参考，再进入原始来源阅读材料。
+
+有新价值的样本沿原编号追加到文末的参考板块，保留来源、实际读取范围与访问日期；过时资料核实后修正。方法上的新发现写入本专题对应章节。完成检查后，将结果填入 `operation.json.researchMaintenance`，每份选中文档对应一项：
+
+| 字段 | 内容 |
+| --- | --- |
+| `path` | 抽中的研究文档路径 |
+| `status` | 实际补充或修正填 `updated`，检查后沿用现有内容填 `checked` |
+| `summary` | 本次新增、修正的要点，或检查后沿用原内容的依据 |
+| `sources` | 实际读取的来源数组；每项填写 `url`、`visitedAt`、`summary`，分别记录原页 HTTPS 链接、带时区的访问时间和实际读取范围 |
+
+修改研究原文后，用原工作目录再次执行 `prepare`，读取刷新的材料，再继续写作与审读。研究结果随本次更新核验；最终报告列出实际补充或检查的文档和所得结论。
 
 ## 逐串抽取回复
 
@@ -134,7 +149,7 @@ node lucifer0/tools/update.js suggest --work /outside/work
 
 ## 导入与上线
 
-`posts` 为空时，直接执行 `node lucifer0/tools/update.js finish --work /outside/work`，报告已经做的观察及未发帖原因，本次更新结束。工作目录使用工具输出的实际位置。
+`posts` 为空时，先核对本轮资料变更。有变更时完成本节的仓库检查、提交与线上核验，再执行 `node lucifer0/tools/update.js finish --work /outside/work`；资料沿用时直接执行该命令。报告本轮观察、研究结果及未发帖原因。工作目录使用工具输出的实际位置。
 
 有待发布发言且审读完成后，用工具输出的实际路径执行：
 

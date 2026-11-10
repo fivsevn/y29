@@ -39,7 +39,7 @@ function route() {
   const url = new URL((location.hash.slice(1) || '/'), 'https://social.local');
   const parts = url.pathname.split('/').filter(Boolean);
   const page = parts[0] || 'home';
-  return { page: page === 'bookmarks' ? 'home' : page === 'people' ? 'following' : page, id: parts[1], q: url.searchParams.get('q') || '' };
+  return { page, id: parts[1], q: url.searchParams.get('q') || '' };
 }
 function notify(message) {
   const toast = document.querySelector('#toast');

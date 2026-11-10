@@ -3,16 +3,17 @@ import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
-import { defaultLottery, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows } from './lottery.js';
+import { defaultLottery, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance } from './lottery.js';
 export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
 import { siteEmoteManifestPath } from './site-emotes.js';
 import { cancelPendingBatch } from './thread-packages.js';
+import { isResearchPath, researchPaths, researchCandidates } from './research-maintenance.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
-const environmentPaths = ['environment/README.md', 'environment/worldviews/README.md', 'environment/worldview-research.md', 'environment/everyday-life-research.md', 'environment/forum.md', 'environment/comments-research.md', 'environment/meme-research.md', 'environment/negative-research.md'];
-const controlPaths = ['README.md', 'docs/README.md', 'docs/writing.md', 'docs/publishing.md', 'docs/lottery.md', 'users/character-research.md', 'users/speech-research.md'];
+const environmentPaths = ['environment/README.md', 'environment/worldviews/README.md', 'environment/forum.md'];
+const controlPaths = ['README.md', 'docs/README.md', 'docs/writing.md', 'docs/publishing.md', 'docs/lottery.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;
 const fail = message => { throw new Error(message); };
@@ -142,17 +143,18 @@ const planExtensions = plan => ({
   ...(plan.requestedCount !== undefined ? { requestedCount: plan.requestedCount } : {}),
   ...(plan.replyLottery !== undefined ? { totalBudget: plan.totalBudget, replyLottery: plan.replyLottery } : {}),
   ...(plan.lottery !== undefined ? { lottery: plan.lottery } : {}),
-  ...(plan.timeWindow !== undefined ? { timeWindow: plan.timeWindow } : {})
+  ...(plan.timeWindow !== undefined ? { timeWindow: plan.timeWindow } : {}),
+  ...(plan.researchMaintenance !== undefined ? { researchMaintenance: plan.researchMaintenance } : {})
 });
 function planSeal(id, root, plan) {
   return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...planExtensions(plan) });
 }
 const operationSourceDigest = (data, plan) => Object.keys(planExtensions(plan)).length ? digest({ sourceDigest: data.sourceDigest, ...planExtensions(plan) }) : data.sourceDigest;
 function checkOperation(value, root) {
-  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews'], 'operation');
+  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews', 'researchMaintenance'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
-  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow'], 'saved plan');
+  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow', 'researchMaintenance'], 'saved plan');
   if (plan.timeWindow !== undefined) {
     onlyKeys(plan.timeWindow, ['start', 'end'], 'saved time window');
     const { start, end } = plan.timeWindow;
@@ -165,10 +167,59 @@ function checkOperation(value, root) {
     if (!Number.isInteger(plan.totalBudget) || plan.totalBudget < 1 || plan.totalBudget > 120 || plan.requestedCount !== undefined && plan.totalBudget !== plan.requestedCount) fail('Invalid saved total budget');
   }
   if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 20 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
+  checkMaintenancePlan(plan);
   const drawnBudget = drawRootBudget(plan.seed, plan.lottery);
   if (plan.budget !== (plan.replyLottery === undefined ? plan.requestedCount ?? drawnBudget : drawnBudget) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
   if (value.reviews !== undefined) reviewIndex(value);
+  maintenanceResults(value);
   return value;
+}
+
+function checkMaintenancePlan(plan) {
+  if (plan.researchMaintenance === undefined) return;
+  const maintenance = plan.researchMaintenance;
+  onlyKeys(maintenance, ['candidates', 'selectedPaths'], 'saved research maintenance');
+  if (!plan.timeWindow || !plan.lottery?.researchMaintenance || !Array.isArray(maintenance.candidates) || maintenance.candidates.length > 1000 ||
+    !Array.isArray(maintenance.selectedPaths) || maintenance.selectedPaths.some(path => !isResearchPath(path))) fail('Invalid saved research maintenance');
+  const paths = new Set();
+  for (const candidate of maintenance.candidates) {
+    onlyKeys(candidate, ['path', 'updatedAt'], 'saved research candidate');
+    if (!isResearchPath(candidate.path) || paths.has(candidate.path) || candidate.updatedAt !== null && !validDate(candidate.updatedAt)) fail('Invalid saved research candidate');
+    paths.add(candidate.path);
+  }
+  const selected = drawResearchMaintenance({ seed: plan.seed, lottery: plan.lottery, documents: maintenance.candidates, now: Date.parse(plan.timeWindow.end) });
+  if (canonical(selected) !== canonical(maintenance.selectedPaths)) fail('The saved research draw was changed; restore the original operation');
+}
+
+function maintenanceResults(operation) {
+  const records = operation.researchMaintenance ?? [], selected = operation.plan.researchMaintenance?.selectedPaths ?? [], indexed = new Map();
+  if (!Array.isArray(records) || records.length > selected.length) fail('Invalid research maintenance results');
+  for (const record of records) {
+    onlyKeys(record, ['path', 'status', 'summary', 'sources'], 'research maintenance result');
+    if (!selected.includes(record.path) || indexed.has(record.path) || !['updated', 'checked'].includes(record.status) || !bounded(record.summary) ||
+      !Array.isArray(record.sources) || !record.sources.length || record.sources.length > 20) fail('Research maintenance needs a selected path, result and actual sources');
+    const urls = new Set();
+    for (const source of record.sources) {
+      onlyKeys(source, ['url', 'visitedAt', 'summary'], 'research maintenance source');
+      let url;
+      try { url = new URL(source.url); } catch { fail('Research maintenance needs a valid source URL'); }
+      if (!bounded(source.url, 2000) || url.protocol !== 'https:' || url.username || url.password || !url.hostname.includes('.') || !validDate(source.visitedAt) || !bounded(source.summary)) fail('Invalid research maintenance source');
+      url.hash = '';
+      if (urls.has(url.href)) fail('Research maintenance sources must be distinct');
+      urls.add(url.href);
+    }
+    indexed.set(record.path, record);
+  }
+  return indexed;
+}
+
+function validateMaintenance(operation, now) {
+  const records = maintenanceResults(operation);
+  for (const path of operation.plan.researchMaintenance?.selectedPaths ?? []) {
+    const record = records.get(path);
+    if (!record) fail('Complete the selected research maintenance before finishing: ' + path);
+    if (record.sources.some(source => Date.parse(source.visitedAt) > now + 300000 || now - Date.parse(source.visitedAt) > 2 * DAY)) fail('Research maintenance needs current actual reading; refresh stale sources');
+  }
 }
 
 function reviewIndex(operation) {
@@ -216,7 +267,8 @@ async function sourceText(root, path) {
 async function source(root) {
   const { registry, policy, feed, files, pending, siteEmotes } = await loadContent(root, { allowPending: true });
   const material = await readProfiles({ root });
-  const documents = await Promise.all([...controlPaths, ...environmentPaths].map(path => sourceText(root, path)));
+  const discoveredResearch = await researchPaths(root);
+  const documents = await Promise.all([...new Set([...controlPaths, ...environmentPaths, ...discoveredResearch])].map(path => sourceText(root, path)));
   if (siteEmotes) documents.push(await sourceText(root, siteEmoteManifestPath));
   for (const user of registry.users) {
     documents.push(await sourceText(root, 'users/' + user.id + '/profile.md'));
@@ -224,8 +276,9 @@ async function source(root) {
   }
   for (const worldview of material.worldviewDocuments) documents.push({ path: worldview.path, text: worldview.text });
   for (const file of files) documents.push(await sourceText(root, relative(root, file).split('\\').join('/')));
-  const sourceDigest = digest({ policy, users: registry.users, profiles: material.profiles, documents });
-  return { registry, policy, feed, material, documents, sourceDigest, pending, siteEmotes };
+  const uniqueDocuments = [...new Map(documents.map(document => [document.path, document])).values()];
+  const sourceDigest = digest({ policy, users: registry.users, profiles: material.profiles, documents: uniqueDocuments });
+  return { registry, policy, feed, material, documents: uniqueDocuments, discoveredResearch, sourceDigest, pending, siteEmotes };
 }
 
 async function workFolder(workDirectory, root, create = false) {
@@ -263,6 +316,7 @@ function reading(operation, data) {
   const explanation = operation.plan.replyLottery === undefined ? '主帖和回复合计不超过上限。' : '先确定新主帖和要接续的旧串，再用 replies 命令逐串抽回复上限；所有楼中楼都计入原根串，实际回复可以少于抽取数。';
   return '# 本次更新阅读材料\n\n操作：' + operation.id + '；' + budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
     '。\n\n' + explanation + '完整材料供策划阅读；逐条写作用 brief --post ID 获取 writer。抽签含义见 docs/lottery.md，创作方法见 docs/writing.md。\n\n' +
+    (operation.plan.researchMaintenance ? '## 本次研究补充\n\n' + (operation.plan.researchMaintenance.selectedPaths.join('、') || '本轮略过。') + '\n\n' : '') +
     '## 当前账号权限与世界观\n\n| 账号 | 所属世界观 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- | --- |\n' +
     data.registry.users.map(user => '| ' + user.id + ' | ' + (data.material.profiles[user.id].basics.worldview || '未指定') + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
     '\n\n' + data.documents.map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
@@ -285,8 +339,12 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
       const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, lottery: data.policy.lottery ?? defaultLottery, maxBatchPosts: data.policy.maxBatchPosts });
       plan.timeWindow = { start: new Date(now - DAY).toISOString(), end: new Date(now).toISOString() };
+      if (plan.lottery?.researchMaintenance) {
+        const candidates = await researchCandidates(root, data.discoveredResearch);
+        plan.researchMaintenance = { candidates, selectedPaths: drawResearchMaintenance({ seed, lottery: plan.lottery, documents: candidates, now }) };
+      }
       plan.seal = planSeal(id, root, plan);
-      operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared', ...(plan.lottery?.discussion ? { reviews: [] } : {}) };
+      operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared', ...(plan.lottery?.discussion ? { reviews: [] } : {}), ...(plan.researchMaintenance ? { researchMaintenance: [] } : {}) };
     } else {
       if (operation.plan.lottery === undefined) {
         // Upgrade only the new presentation rules; keep the original numeric budget draw.
@@ -301,7 +359,7 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
     }
     await atomicFile(readingPath, reading(operation, data));
     await saveOperation(operationPath, operation);
-    return { status, id: operation.id, budget: operation.plan.budget, budgetScope: operation.plan.replyLottery === undefined ? 'posts' : 'roots', totalBudget: operation.plan.totalBudget ?? operation.plan.budget, selectedIds: operation.plan.selectedIds, researchWindows: drawResearchWindows({ seed: operation.plan.seed, lottery: operation.plan.lottery }), operationPath, readingPath };
+    return { status, id: operation.id, budget: operation.plan.budget, budgetScope: operation.plan.replyLottery === undefined ? 'posts' : 'roots', totalBudget: operation.plan.totalBudget ?? operation.plan.budget, selectedIds: operation.plan.selectedIds, researchWindows: drawResearchWindows({ seed: operation.plan.seed, lottery: operation.plan.lottery }), ...(operation.plan.researchMaintenance ? { researchMaintenance: operation.plan.researchMaintenance } : {}), operationPath, readingPath };
   } finally { await release(); }
 }
 
@@ -523,6 +581,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   if (canonical(batch.posts) !== canonical(operation.posts)) fail('The batch does not match the saved operation posts');
   if (now - Date.parse(operation.preparedAt) > 2 * DAY || Date.parse(operation.preparedAt) > now + 300000) fail('The operation is stale; prepare again to refresh its reading');
   validateResearch(operation.research, now, batch.posts.map(post => post.id));
+  validateMaintenance(operation, now);
   const data = await source(root);
   if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
   if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
@@ -560,6 +619,7 @@ export async function finishUpdate({ root = socialRoot, workDirectory, fetchImpl
   const release = await lockWork(directory);
   try {
     const operation = await readOperation(operationPath, root);
+    validateMaintenance(operation, now);
     const originalReading = await optionalText(readingPath);
     let savedOperation = canonical(operation);
     const unchanged = async () => {

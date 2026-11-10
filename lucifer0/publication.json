@@ -285,6 +285,12 @@
           "weight": 20
         }
       ]
+    },
+    "researchMaintenance": {
+      "probability": 0.3,
+      "maxDocuments": 1,
+      "ageWeightDays": 7,
+      "maxAgeWeight": 5
     }
   }
 }
