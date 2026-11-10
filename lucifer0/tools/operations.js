@@ -2,14 +2,16 @@ import { readFile, writeFile, mkdir, rename, rm, lstat, realpath } from 'node:fs
 import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { socialRoot, loadContent, validateReplyLottery } from './content.js';
+import { socialRoot, loadContent } from './content.js';
+import { defaultLottery, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, drawPostChoices, choosePostAuthor, visibleExcerpt, drawResearchWindows } from './lottery.js';
+export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
 import { cancelPendingBatch } from './thread-packages.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
 const environmentPaths = ['environment/README.md', 'environment/world-trends.md', 'environment/everyday-life.md', 'environment/forum.md', 'environment/comments.md', 'environment/meme.md'];
-const controlPaths = ['docs/README.md', 'docs/writing.md', 'docs/publishing.md'];
+const controlPaths = ['README.md', 'docs/README.md', 'docs/writing.md', 'docs/publishing.md', 'docs/lottery.md', 'users/speech.md'];
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
 const bounded = (value, maximum = 4000) => typeof value === 'string' && value.trim() && value.length <= maximum;
 const fail = message => { throw new Error(message); };
@@ -17,10 +19,6 @@ const onlyKeys = (value, allowed, label) => { if (!plain(value) || Object.keys(v
 const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : plain(value) ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
 const digest = value => createHash('sha256').update(canonical(value)).digest('hex');
 const validDate = value => typeof value === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(value) && Number.isFinite(Date.parse(value));
-const randomFor = seed => {
-  let state = createHash('sha256').update(seed).digest().readUInt32LE(0) || 1;
-  return () => { state ^= state << 13; state ^= state >>> 17; state ^= state << 5; return (state >>> 0) / 4294967296; };
-};
 const inside = (root, path) => { const rel = relative(root, path); return !rel || (!rel.startsWith('../') && rel !== '..' && !isAbsolute(rel)); };
 export const defaultWorkDirectory = () => resolve(process.env.Y29_SOCIAL_WORK_DIR || join(homedir(), '.local/state/y29/lucifer0/current'));
 function ready(user, material) {
@@ -33,60 +31,20 @@ function checkRequestedCount(count) {
 }
 
 // The saved seed fixes the default budget draw and a single weighted candidate draw.
-export function drawUpdatePlan({ users, profiles, posts = [], seed, requestedCount, replyLottery, maxBatchPosts = 120 }) {
+export function drawUpdatePlan({ users, profiles, posts = [], seed, requestedCount, replyLottery, lottery, maxBatchPosts = 120 }) {
   if (!bounded(seed, 200)) fail('Invalid update seed');
   checkRequestedCount(requestedCount);
+  if (lottery !== undefined) validateLottery(lottery);
   if (replyLottery !== undefined) {
     validateReplyLottery(replyLottery);
     if (!Number.isInteger(maxBatchPosts) || maxBatchPosts < 1 || maxBatchPosts > 120 || requestedCount > maxBatchPosts) fail('Invalid publication hard limit for the reply plan');
   }
-  const random = randomFor(seed), drawnBudget = 1 + Math.floor(random() * 10), budget = replyLottery === undefined ? requestedCount ?? drawnBudget : drawnBudget;
-  const recent = new Set([...posts].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)).slice(0, 7).map(post => post.author));
   const pool = users.filter(user => ready(user, { profiles })).sort((a, b) => a.id.localeCompare(b.id, 'en'));
-  const selectedIds = [];
-  while (pool.length && selectedIds.length < 3) {
-    const weights = pool.map(user => profiles[user.id].activityWeight * (recent.has(user.id) ? 0.5 : 1));
-    let ticket = random() * weights.reduce((sum, weight) => sum + weight, 0), index = pool.length - 1;
-    for (let i = 0; i < pool.length; i++) { ticket -= weights[i]; if (ticket < 0) { index = i; break; } }
-    selectedIds.push(pool.splice(index, 1)[0].id);
-  }
+  const { drawnBudget, selectedIds } = drawPlanSelection({ users: pool, profiles, posts, seed, lottery });
+  const budget = replyLottery === undefined ? requestedCount ?? drawnBudget : drawnBudget;
   return { seed, budget, selectedIds, ...(requestedCount !== undefined ? { requestedCount } : {}),
-    ...(replyLottery !== undefined ? { totalBudget: requestedCount ?? maxBatchPosts, replyLottery: structuredClone(replyLottery) } : {}) };
-}
-
-export function suggestPostPresentation({ seed, posts }) {
-  if (!bounded(seed, 200) || !Array.isArray(posts)) fail('Presentation suggestions need the saved seed and actual posts');
-  const seen = new Set();
-  for (const post of posts) {
-    if (!plain(post) || typeof post.id !== 'string' || !ID.test(post.id) || seen.has(post.id) || !(post.replyTo === null || typeof post.replyTo === 'string' && ID.test(post.replyTo))) fail('Presentation suggestions need distinct valid posts');
-    seen.add(post.id);
-  }
-  // Separate namespaces keep these choices independent of the budget and authors.
-  const imageRank = id => createHash('sha256').update(seed + '\0image\0' + id).digest('hex');
-  const imagePostIds = posts.map(post => ({ id: post.id, rank: imageRank(post.id) }))
-    .sort((a, b) => a.rank.localeCompare(b.rank, 'en') || a.id.localeCompare(b.id, 'en'))
-    .slice(0, Math.ceil(posts.length / 2)).map(post => post.id);
-  const likes = posts.map(post => {
-    const random = randomFor(seed + '\0likes\0' + post.id), tier = random(), root = post.replyTo === null;
-    const integer = (low, high) => low + Math.floor(random() * (high - low + 1));
-    let count;
-    if (tier < (root ? 0.2 : 0.35)) count = 0;
-    else if (tier < (root ? 0.93 : 0.97)) count = integer(1, root ? 20 : 12);
-    else if (tier < 0.99) count = root ? integer(21, 60) : integer(13, 35);
-    else count = root ? integer(61, 160) : integer(36, 90);
-    return { id: post.id, likes: count };
-  });
-  return { imagePostIds, likes };
-}
-
-export function drawThreadReplyCount({ seed, rootId, replyLottery }) {
-  if (!bounded(seed, 200) || typeof rootId !== 'string' || !ID.test(rootId)) fail('Reply planning needs the saved seed and a valid root ID');
-  validateReplyLottery(replyLottery);
-  const random = randomFor(seed + '\0replies\0' + rootId);
-  let ticket = random() * replyLottery.bands.reduce((sum, band) => sum + band.weight, 0);
-  let selected = replyLottery.bands[replyLottery.bands.length - 1];
-  for (const band of replyLottery.bands) { ticket -= band.weight; if (ticket < 0) { selected = band; break; } }
-  return selected.min + Math.floor(random() * (selected.max - selected.min + 1));
+    ...(replyLottery !== undefined ? { totalBudget: requestedCount ?? maxBatchPosts, replyLottery: structuredClone(replyLottery) } : {}),
+    ...(lottery !== undefined ? { lottery: structuredClone(lottery) } : {}) };
 }
 
 function postIndex(posts, history = []) {
@@ -151,7 +109,8 @@ function validatePostBudget(plan, posts, history, policy) {
 
 const planExtensions = plan => ({
   ...(plan.requestedCount !== undefined ? { requestedCount: plan.requestedCount } : {}),
-  ...(plan.replyLottery !== undefined ? { totalBudget: plan.totalBudget, replyLottery: plan.replyLottery } : {})
+  ...(plan.replyLottery !== undefined ? { totalBudget: plan.totalBudget, replyLottery: plan.replyLottery } : {}),
+  ...(plan.lottery !== undefined ? { lottery: plan.lottery } : {})
 });
 function planSeal(id, root, plan) {
   return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...planExtensions(plan) });
@@ -161,14 +120,15 @@ function checkOperation(value, root) {
   onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
-  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery'], 'saved plan');
+  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery'], 'saved plan');
   checkRequestedCount(plan.requestedCount);
+  if (plan.lottery !== undefined) validateLottery(plan.lottery);
   if (plan.replyLottery !== undefined || plan.totalBudget !== undefined) {
     validateReplyLottery(plan.replyLottery);
     if (!Number.isInteger(plan.totalBudget) || plan.totalBudget < 1 || plan.totalBudget > 120 || plan.requestedCount !== undefined && plan.totalBudget !== plan.requestedCount) fail('Invalid saved total budget');
   }
   if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 20 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
-  const drawnBudget = 1 + Math.floor(randomFor(plan.seed)() * 10);
+  const drawnBudget = drawRootBudget(plan.seed, plan.lottery);
   if (plan.budget !== (plan.replyLottery === undefined ? plan.requestedCount ?? drawnBudget : drawnBudget) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
   return value;
 }
@@ -242,7 +202,7 @@ function reading(operation, data) {
   const budget = operation.plan.replyLottery === undefined ? '发言上限：' + operation.plan.budget : '新主帖上限：' + operation.plan.budget + '；发言总上限：' + replyLimits(operation.plan, data.policy).totalBudget + '；回复合计上限：' + replyLimits(operation.plan, data.policy).maxReplies;
   const explanation = operation.plan.replyLottery === undefined ? '主帖和回复合计不超过上限。' : '先确定新主帖和要接续的旧串，再用 replies 命令逐串抽回复上限；所有楼中楼都计入原根串，实际回复可以少于抽取数。';
   return '# 本次更新阅读材料\n\n操作：' + operation.id + '；' + budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
-    '。\n\n这是当前资料的完整快照，生成快照不代表执行者已经读完。按原文理解人物的底色、处境与知情范围，人物资料本身不构成本轮剧情。世界观按下表登记的归属理解，各人物只采用本人所属的世界观设定。' + explanation + '实际发言至少一半来自无需档案的 guest；一条时必须是 guest。候选可以沉默，其他合资格库人物可以自然回复。\n\n' +
+    '。\n\n' + explanation + '完整材料供策划阅读；逐条写作用 brief --post ID 获取 writer。抽签含义见 docs/lottery.md，创作方法见 docs/writing.md。\n\n' +
     '## 当前账号权限与世界观\n\n| 账号 | 所属世界观 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- | --- |\n' +
     data.registry.users.map(user => '| ' + user.id + ' | ' + (data.material.profiles[user.id].basics.worldview || '未指定') + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
     '\n\n' + data.documents.map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
@@ -263,23 +223,30 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
     const status = operation ? 'resumed' : 'prepared';
     if (!operation) {
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
-      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, maxBatchPosts: data.policy.maxBatchPosts });
+      const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, lottery: data.policy.lottery ?? defaultLottery, maxBatchPosts: data.policy.maxBatchPosts });
       plan.seal = planSeal(id, root, plan);
       operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared' };
     } else {
+      if (operation.plan.lottery === undefined) {
+        // Upgrade only the new presentation rules; keep the original numeric budget draw.
+        operation.plan.lottery = structuredClone(data.policy.lottery ?? defaultLottery);
+        operation.plan.lottery.rootBudget = { min: 1, max: 10 };
+        operation.plan.seal = planSeal(operation.id, root, operation.plan);
+      }
       operation.preparedAt = new Date(now).toISOString();
       operation.sourceDigest = operationSourceDigest(data, operation.plan);
     }
     await atomicFile(readingPath, reading(operation, data));
     await saveOperation(operationPath, operation);
-    return { status, id: operation.id, budget: operation.plan.budget, budgetScope: operation.plan.replyLottery === undefined ? 'posts' : 'roots', totalBudget: operation.plan.totalBudget ?? operation.plan.budget, selectedIds: operation.plan.selectedIds, operationPath, readingPath };
+    return { status, id: operation.id, budget: operation.plan.budget, budgetScope: operation.plan.replyLottery === undefined ? 'posts' : 'roots', totalBudget: operation.plan.totalBudget ?? operation.plan.budget, selectedIds: operation.plan.selectedIds, researchWindows: drawResearchWindows({ seed: operation.plan.seed, lottery: operation.plan.lottery }), operationPath, readingPath };
   } finally { await release(); }
 }
 
 export async function suggestUpdatePresentation({ root = socialRoot, workDirectory } = {}) {
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
-  return { id: operation.id, count: operation.posts.length, ...suggestPostPresentation({ seed: operation.plan.seed, posts: operation.posts }) };
+  if (!operation.plan.lottery) fail('Prepare again to attach a stable lottery snapshot to this older operation');
+  return { id: operation.id, count: operation.posts.length, ...suggestPostPresentation({ seed: operation.plan.seed, posts: operation.posts, lottery: operation.plan.lottery }) };
 }
 
 export async function suggestUpdateReplies({ root = socialRoot, workDirectory, threadIds = [] } = {}) {
@@ -289,6 +256,82 @@ export async function suggestUpdateReplies({ root = socialRoot, workDirectory, t
   const { feed, policy } = await loadContent(root, { allowPending: true });
   return { id: operation.id, rootBudget: operation.plan.budget, ...replyLimits(operation.plan, policy),
     threads: planThreadReplies({ seed: operation.plan.seed, posts: operation.posts, history: feed.posts, replyLottery: operation.plan.replyLottery, threadIds }) };
+}
+
+const conditionText = {
+  'ask-help': '想问个问题或求助', vent: '有点烦或不满', 'passing-thought': '随口想到',
+  share: '分享近况', correct: '想纠正一点', celebrate: '有点开心',
+  fragment: '一句或几个词', short: '短短几句', long: '想多说一些'
+};
+
+// This is the only writer-facing view. Full source reading remains an editor resource.
+export async function briefUpdatePost({ root = socialRoot, workDirectory, postId, replyTo, now = Date.now() } = {}) {
+  if (typeof postId !== 'string' || !ID.test(postId) || replyTo !== undefined && (typeof replyTo !== 'string' || !ID.test(replyTo))) fail('Brief needs --post ID and an optional --reply-to target ID');
+  root = await checkedRoot(root);
+  const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
+  const data = await source(root);
+  if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
+  if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
+  const index = postIndex(operation.posts, data.feed.posts), position = operation.posts.findIndex(post => post.id === postId);
+  const existing = position >= 0 ? operation.posts[position] : undefined;
+  if (!existing && index.has(postId)) fail('Use a new post ID; the requested ID is already archived');
+  if (existing && replyTo !== undefined && existing.replyTo !== replyTo) fail('The reply target must match the saved draft');
+  const targetId = existing?.replyTo ?? replyTo ?? null;
+  if (targetId === postId) fail('A post cannot reply to itself');
+  if (!operation.plan.lottery) fail('Prepare again to attach a stable lottery snapshot to this older operation');
+  if (!existing && !postId.startsWith(operation.id + '-')) fail('A new brief ID must begin with this operation ID and a hyphen: ' + operation.id + '-');
+  const config = operation.plan.lottery;
+  const choices = drawPostChoices({ seed: operation.plan.seed, postId, replyTo: targetId, lottery: config });
+  const eligible = data.registry.users.filter(user => ready(user, data.material) &&
+    (targetId === null ? user.allowPosts !== false && operation.plan.selectedIds.includes(user.id) : user.allowReplies !== false));
+  const author = existing?.author ?? choosePostAuthor({ seed: operation.plan.seed, postId, authorKind: choices.authorKind, users: eligible, profiles: data.material.profiles });
+  const guest = typeof author === 'string' && /^guest-[a-z0-9-]+$/.test(author) && ID.test(author);
+  const ownUser = eligible.find(user => user.id === author);
+  if (!guest && !ownUser) fail('Account is not eligible for this draft: ' + author);
+  const priorDrafts = operation.posts.slice(0, position < 0 ? operation.posts.length : position);
+  const before = new Map([...data.feed.posts, ...priorDrafts].filter(post => post.id !== postId).map(post => [post.id, post]));
+  const target = targetId === null ? null : before.get(targetId);
+  if (targetId !== null && !target) fail('A brief needs its actual earlier target, archived or in an earlier draft slot');
+  const createdAt = existing?.createdAt ?? new Date(Math.max(Date.parse(operation.preparedAt), target ? Date.parse(target.createdAt) : 0)).toISOString();
+  if (!validDate(createdAt) || Date.parse(createdAt) > now || target && Date.parse(target.createdAt) > Date.parse(createdAt)) fail('Brief timestamps must be real and follow the visible target');
+  const draft = { id: postId, author, ...(guest ? { guest: existing?.guest ?? { name: '' } } : {}), createdAt, replyTo: targetId, text: existing?.text ?? '', likes: existing?.likes ?? choices.likes, canon: 'derivative', media: existing?.media ?? [] };
+  validatePostBudget(operation.plan, existing ? operation.posts : [...operation.posts, draft], data.feed.posts, data.policy);
+  const visible = new Map();
+  if (target) {
+    const rootPost = threadRoot(target.id, before);
+    visible.set(target.id, target);
+    if (choices.reading !== 'target-only') visible.set(rootPost.id, rootPost);
+    if (choices.reading === 'nearby' && choices.nearbyReplies) {
+      const nearby = [...before.values()].filter(post => post.id !== target.id && post.id !== rootPost.id &&
+        Date.parse(post.createdAt) <= Date.parse(createdAt) && threadRoot(post.id, before).id === rootPost.id)
+        .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en')).slice(0, choices.nearbyReplies);
+      for (const post of nearby) visible.set(post.id, post);
+    }
+  }
+  const visiblePosts = [...visible.values()].sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt) || a.id.localeCompare(b.id, 'en')).map(post => ({
+    id: post.id, author: post.author, replyTo: post.replyTo, createdAt: post.createdAt,
+    ...(post.deleted ? { text: '该回复已被删除。', partial: false, media: [] } : {
+      ...visibleExcerpt({ seed: operation.plan.seed, postId, visibleId: post.id, text: typeof post.text === 'string' ? post.text : '', mode: choices.textWindow, characters: config.excerptCharacters }),
+      media: Array.isArray(post.media) ? post.media : []
+    })
+  }));
+  const profilePaths = new Set(guest ? [] : ['users/' + author + '/profile.md', ...(data.material.supplementalDocuments[author] || []).map(document => document.path)]);
+  return {
+    id: operation.id, postId, draft,
+    writer: {
+      self: { id: author, name: guest ? draft.guest.name : ownUser.name, documents: data.documents.filter(document => profilePaths.has(document.path)) },
+      conditions: choices.conditions.map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
+      visiblePosts
+    },
+    editor: {
+      authorKind: guest ? 'guest' : 'library', drawnAuthorKind: choices.authorKind,
+      worldviewPath: guest ? null : data.material.worldviewDocuments.find(document => document.id === data.material.profiles[author].basics.worldview)?.path ?? null,
+      waitSeconds: choices.waitSeconds,
+      suggestedNotBefore: new Date((target ? Date.parse(target.createdAt) : Date.parse(operation.preparedAt)) + choices.waitSeconds * 1000).toISOString(),
+      image: choices.image, likes: choices.likes, reading: choices.reading, textWindow: choices.textWindow,
+      instruction: '将 writer 单独交给写作者；partial 表示只读到片段。将实际采用的正文、时间、图片和 guest 名字填入 draft，再保存到 operation.json.posts。抽签使用见 docs/lottery.md，创作见 docs/writing.md。'
+    }
+  };
 }
 
 function siteDomain(hostname) {
@@ -337,7 +380,6 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   const resumingPartialWrite = data.pending?.id === batch.id && data.pending.batchDigest === digest(batch);
   validatePostBudget(operation.plan, batch.posts, data.feed.posts, data.policy);
   const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));
-  if (guests.length < Math.ceil(batch.posts.length / 2)) fail('At least half of the actual posts must be guests');
   const users = new Map(data.registry.users.map(user => [user.id, user]));
   const posts = new Map([...data.feed.posts, ...batch.posts].map(post => [post.id, post]));
   for (const post of batch.posts) {

@@ -4,10 +4,12 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, readdir, cp, symlink } from 'n
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies } from '../lucifer0/tools/operations.js';
+import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies, briefUpdatePost } from '../lucifer0/tools/operations.js';
 import { emptyProfile } from '../lucifer0/tools/profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
+import { defaultLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
+import { createHash } from 'node:crypto';
 import { loadContent, ingestBatch } from '../lucifer0/tools/content.js';
 
 const DAY = 86400000;
@@ -36,14 +38,15 @@ const research = now => [
   { category: 'trend', kind: 'thread', url: 'https://forum.example.net/topic', visitedAt: iso(now), publishedAt: iso(now), summary: 'Synthetic source: read the root and visible disagreement replies.' },
   { category: 'daily', kind: 'thread', url: 'https://forum.example.net/daily', visitedAt: iso(now), publishedAt: null, summary: 'Synthetic source: read a daily-life account and its follow-up.' }
 ];
-async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery } = {}) {
+async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lottery } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-update-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = join(directory, 'project/lucifer0'), workDirectory = join(directory, 'current'), now = Date.now() - 2000;
   await mkdir(join(root, 'assets'), { recursive: true });
+  await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
-  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}) }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']]]) {
+  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), ...(lottery !== undefined ? { lottery } : {}) }));
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'world-trends.md', 'everyday-life.md', 'forum.md', 'comments.md', 'meme.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
@@ -56,6 +59,7 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery } = {})
     profile.basics.worldview = user.kind === 'character' ? 'synthetic-world' : '';
     await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
   }
+  await writeFile(join(root, 'users/speech.md'), '# Synthetic speech research\n');
   const historical = { id: 'history-entry', author: 'person-0', createdAt: '2025-04-01T00:00:00Z', replyTo: null, text: 'SYNTHETIC_HISTORY_BODY', likes: 1, canon: 'derivative', media: [] };
   await mkdir(join(root, 'posts/2025/04/history-entry'), { recursive: true });
   await writeFile(join(root, 'posts/2025/04/history-entry/index.md'), renderPostDocument(historical));
@@ -115,7 +119,7 @@ test('news uses the shared weighted draw and admins stay excluded despite daily 
   assert.ok(newsDraws > 0 && newsDraws < 100);
 });
 
-test('news AI posts keep the guest majority while misconfigured admins cannot post or reply automatically', async t => {
+test('news AI posts can stand alone while misconfigured admins cannot post or reply automatically', async t => {
   const f = await fixture(t);
   for (const user of users()) {
     if (user.id === 'person-0' || user.id === 'person-1') {
@@ -131,7 +135,7 @@ test('news AI posts keep the guest majority while misconfigured admins cannot po
   const valid = await draft(prepared, f.now, entries);
   await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
   const noGuests = await draft(prepared, f.now, entries.slice(0, 1));
-  await assert.rejects(validateUpdateForBatch(noGuests.batch, { ...f.options, contextPath: prepared.operationPath }), /half/);
+  await validateUpdateForBatch(noGuests.batch, { ...f.options, contextPath: prepared.operationPath });
   for (const replyTo of [null, 'admin-guest-root']) {
     const forbidden = [post('admin-guest-root', 'guest-admin-one', f.now), post('admin-guest-other', 'guest-admin-two', f.now), post('admin-ai-entry', 'person-1', f.now, replyTo)];
     const saved = await draft(prepared, f.now, forbidden);
@@ -164,7 +168,7 @@ test('new root budgets permit a sixty-reply thread and count nested descendants 
     ...Array.from({ length: 60 }, (_, index) => post('hot-reply-' + index, 'guest-hot-' + index, f.now, index ? 'hot-reply-' + (index - 1) : 'hot-root'))];
   const { batch } = await draft(prepared, f.now, entries);
   await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
-  assert.equal((await suggestUpdatePresentation(f.options)).imagePostIds.length, 31);
+  assert.deepEqual(await suggestUpdatePresentation(f.options), await suggestUpdatePresentation(f.options));
   const extra = [...entries, post('hot-over-quota', 'guest-hot-extra', f.now, 'hot-reply-59')];
   const over = await draft(prepared, f.now, extra);
   await assert.rejects(validateUpdateForBatch(over.batch, { ...f.options, contextPath: prepared.operationPath }), /saved reply limit/);
@@ -270,18 +274,17 @@ test('reply planning normalizes old reply targets, counts only new descendants a
   assert.equal(await readFile(prepared.operationPath, 'utf8'), before);
 });
 
-test('presentation suggestions select one actual post and keep each post stable across reordering', () => {
+test('presentation choices remain stable across reordering and unrelated additions', () => {
   const now = Date.now(), entries = [post('image-one', 'guest-one', now), post('image-two', 'guest-two', now, 'image-one'), post('image-three', 'guest-three', now)];
   const before = structuredClone(entries), first = suggestPostPresentation({ seed: 'presentation-seed', posts: entries });
   const reordered = suggestPostPresentation({ seed: 'presentation-seed', posts: [...entries].reverse() });
   assert.deepEqual(entries, before, 'suggestions must not edit posts, dates, media or authors');
-  assert.equal(first.imagePostIds.length, Math.ceil(entries.length / 2));
   assert.equal(new Set(first.imagePostIds).size, first.imagePostIds.length);
   assert.ok(first.imagePostIds.every(id => entries.some(entry => entry.id === id)));
   assert.deepEqual(reordered.imagePostIds, first.imagePostIds);
   assert.deepEqual([...reordered.likes].sort((a, b) => a.id.localeCompare(b.id)), [...first.likes].sort((a, b) => a.id.localeCompare(b.id)));
   assert.deepEqual(suggestPostPresentation({ seed: 'presentation-seed', posts: [] }), { imagePostIds: [], likes: [] });
-  assert.deepEqual(suggestPostPresentation({ seed: 'presentation-seed', posts: [entries[1]] }).imagePostIds, [entries[1].id]);
+  assert.deepEqual(suggestPostPresentation({ seed: 'presentation-seed', posts: [entries[1]] }).imagePostIds, first.imagePostIds.filter(id => id === entries[1].id));
   assert.throws(() => suggestPostPresentation({ seed: 'presentation-seed', posts: [{ replyTo: null }] }), /valid posts/);
   const chosen = new Set(Array.from({ length: 100 }, (_, index) => suggestPostPresentation({ seed: 'image-draw-' + index, posts: entries }).imagePostIds).flat());
   assert.equal(chosen.size, entries.length, 'image selection must not always choose the first or a root post');
@@ -312,14 +315,13 @@ test('the suggest API and CLI read the current actual posts without changing the
   await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
   const suggestion = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'suggest', '--work', f.workDirectory], { encoding: 'utf8' }));
   assert.equal(suggestion.count, entries.length);
-  assert.equal(suggestion.imagePostIds.length, Math.ceil(entries.length / 2));
   assert.ok(suggestion.imagePostIds.every(id => entries.some(entry => entry.id === id)));
   assert.deepEqual(suggestion, await suggestUpdatePresentation(f.options));
   assert.equal(await readFile(prepared.operationPath, 'utf8'), operationBefore);
   assert.equal(await readFile(prepared.readingPath, 'utf8'), readingBefore);
 });
 
-test('an explicit count of seventeen imports nine guest posts and refuses only eight', async t => {
+test('an explicit count of seventeen caps the batch without imposing author ratios', async t => {
   const f = await fixture(t, 4, { maxBatchPosts: 20 }), result = await prepareUpdate({ ...f.options, requestedCount: 17 });
   const operation = await readJSON(result.operationPath);
   assert.equal(operation.plan.budget, 17); assert.equal(operation.plan.requestedCount, 17);
@@ -333,7 +335,7 @@ test('an explicit count of seventeen imports nine guest posts and refuses only e
   const insufficientGuests = structuredClone(entries);
   insufficientGuests[8] = post(insufficientGuests[8].id, author.id, f.now, 'fixed-guest-0');
   const rejected = await draft(result, f.now, insufficientGuests);
-  await assert.rejects(validateUpdateForBatch(rejected.batch, { ...f.options, contextPath: result.operationPath }), /half/);
+  await validateUpdateForBatch(rejected.batch, { ...f.options, contextPath: result.operationPath });
   await draft(result, f.now, entries);
   assert.equal((await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true })).count, 17);
   assert.equal((await loadContent(f.root)).feed.posts.filter(entry => entries.some(post => post.id === entry.id)).length, 17);
@@ -442,14 +444,14 @@ test('research covers formal news, trends and daily life with real fresh page me
   assert.throws(() => validateResearch(adapted, now, ['actual-post']), /Adapted/);
 });
 
-test('actual guest majority includes a single guest post; a lone library post cannot publish', async t => {
+test('single guest and eligible library posts can publish within the same one-post cap', async t => {
   const f = await fixture(t, 1), result = await prepareUpdate(f.options);
   const { batch } = await draft(result, f.now, [post('single-guest', 'guest-one', f.now)]);
   assert.equal((await validateUpdateForBatch(batch, { ...f.options, contextPath: result.operationPath })).budget, 1);
   const operation = await readJSON(result.operationPath);
   const invalid = post('single-library', operation.plan.selectedIds[0], f.now);
   const second = await draft(result, f.now, [invalid]);
-  await assert.rejects(validateUpdateForBatch(second.batch, { ...f.options, contextPath: result.operationPath }), /half/);
+  await validateUpdateForBatch(second.batch, { ...f.options, contextPath: result.operationPath });
   const over = await draft(result, f.now, [post('first-guest', 'guest-one', f.now), post('second-guest', 'guest-two', f.now)]);
   await assert.rejects(validateUpdateForBatch(over.batch, { ...f.options, contextPath: result.operationPath }), /budget/);
 });
@@ -700,6 +702,9 @@ test('the real prepare and publish CLIs use operation.json directly and recover 
   await writeFile(join(f.root, '../package.json'), '{"type":"module"}');
   const prepared = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'prepare', '--work', f.workDirectory], { encoding: 'utf8' }));
   const originalPlan = (await readJSON(prepared.operationPath)).plan;
+  const brief = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'brief', '--post', prepared.id + '-new', '--work', f.workDirectory], { encoding: 'utf8' }));
+  assert.equal(brief.postId, prepared.id + '-new');
+  assert.ok(brief.writer.self && brief.writer.conditions.length <= 2);
   await draft(prepared, f.now, [post('cancelled-cli-draft', 'guest-cli-draft', f.now)]);
   const cancelled = JSON.parse(execFileSync(process.execPath, [join(f.root, 'tools/update.js'), 'cancel', '--work', f.workDirectory], { encoding: 'utf8' }));
   assert.equal(cancelled.id, prepared.id);
@@ -713,4 +718,104 @@ test('the real prepare and publish CLIs use operation.json directly and recover 
   assert.equal(retry.status, 'already-archived');
   assert.equal((await loadContent(f.root)).feed.posts.filter(item => item.id === 'cli-guest-post').length, 1);
   assert.ok(!(await readdir(f.root)).includes('rounds'));
+});
+
+test('writer brief has only own dossier and the actually visible target fragment; new slots honor ID and count controls', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'library', weight: 1 }];
+  lottery.reading = [{ value: 'target-only', weight: 1 }];
+  lottery.textWindow = [{ value: 'opening', weight: 1 }];
+  lottery.excerptCharacters = 40;
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(5) });
+  const prepared = await prepareUpdate({ ...f.options, requestedCount: 3 });
+  const rootId = prepared.id + '-root', replyId = prepared.id + '-reply';
+  const first = await briefUpdatePost({ ...f.options, postId: rootId });
+  assert.equal(first.draft.author, prepared.selectedIds.find(id => id === first.draft.author));
+  assert.ok(first.writer.self.documents.some(doc => doc.text.includes('SYNTHETIC_FULL_PERSON_' + first.draft.author)));
+  assert.equal(first.writer.visiblePosts.length, 0);
+  const root = { ...first.draft, createdAt: post('timestamp-helper', 'guest-helper', f.now).createdAt, text: 'A'.repeat(90) + 'SYNTHETIC_UNREAD_END' };
+  const ownAuthor = prepared.selectedIds[0];
+  const reply = post(replyId, ownAuthor, f.now, rootId);
+  const future = post(prepared.id + '-future', 'person-7', f.now, rootId); future.text = 'SYNTHETIC_FUTURE_FLOOR';
+  await draft(prepared, f.now, [root, reply, future]);
+  const brief = await briefUpdatePost({ ...f.options, postId: replyId });
+  assert.equal(brief.writer.visiblePosts.length, 1);
+  assert.equal(brief.writer.visiblePosts[0].id, rootId);
+  assert.equal(brief.writer.visiblePosts[0].text, 'A'.repeat(40));
+  assert.equal(brief.writer.visiblePosts[0].partial, true);
+  const writer = JSON.stringify(brief.writer);
+  assert.ok(writer.includes('SYNTHETIC_FULL_PERSON_' + ownAuthor));
+  for (const user of users().filter(user => user.id !== ownAuthor)) assert.ok(!writer.includes('SYNTHETIC_FULL_PERSON_' + user.id));
+  assert.ok(!writer.includes('SYNTHETIC_UNREAD_END') && !writer.includes('SYNTHETIC_FUTURE_FLOOR') && !writer.includes('SYNTHETIC_WORLDVIEW_SETTING'));
+  assert.ok(brief.writer.conditions.length <= 2);
+  assert.equal(brief.editor.worldviewPath, ['person-0', 'person-1'].includes(ownAuthor) ? 'environment/worldviews/synthetic-world.md' : null);
+  const snapshot = await readFile(prepared.operationPath, 'utf8');
+  assert.deepEqual(await briefUpdatePost({ ...f.options, postId: replyId }), brief);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), snapshot);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: 'unscoped-new-id' }), /operation ID/);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: 'history-entry' }), /already archived/);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: prepared.id + '-extra' }), /total budget/);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: replyId, replyTo: 'history-entry' }), /saved draft/);
+  await configureAccount(f.root, ownAuthor, { allowReplies: false });
+  await prepareUpdate(f.options);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: replyId }), /not eligible/);
+});
+
+test('new brief replies reject unavailable parents and do not expose later or deleted draft bodies', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  lottery.reading = [{ value: 'nearby', weight: 1 }];
+  lottery.nearbyReplies = { min: 3, max: 3 };
+  lottery.textWindow = [{ value: 'full', weight: 1 }];
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(8) }), prepared = await prepareUpdate(f.options);
+  const id = prepared.id + '-planned';
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: id, replyTo: 'missing-parent' }), /earlier target/);
+  const root = post(prepared.id + '-root', 'guest-reader', f.now);
+  const deleted = { ...post(prepared.id + '-deleted', 'guest-removed', f.now, root.id), deleted: true, text: 'PRIVATE_DELETED_BODY' };
+  const self = post(id, 'guest-self', f.now, root.id);
+  const future = { ...post(prepared.id + '-later', 'guest-later', f.now, root.id), text: 'LATER_DRAFT_BODY' };
+  await draft(prepared, f.now, [root, deleted, self, future]);
+  const brief = await briefUpdatePost({ ...f.options, postId: id });
+  assert.equal(brief.writer.self.documents.length, 0);
+  assert.equal(brief.editor.worldviewPath, null);
+  assert.ok(brief.writer.visiblePosts.some(item => item.id === deleted.id && item.text === '该回复已被删除。'));
+  assert.ok(!JSON.stringify(brief.writer).includes('PRIVATE_DELETED_BODY'));
+  assert.ok(!JSON.stringify(brief.writer).includes('LATER_DRAFT_BODY'));
+});
+
+test('lottery and speech research enter source digest, while config snapshots stay fixed on resume', async t => {
+  const f = await fixture(t, 4, { lottery: defaultLottery }), prepared = await prepareUpdate(f.options);
+  const postId = prepared.id + '-entry', initial = await briefUpdatePost({ ...f.options, postId });
+  const saved = await readJSON(prepared.operationPath);
+  for (const path of ['README.md', 'docs/lottery.md', 'users/speech.md']) {
+    await writeFile(join(f.root, path), '# changed ' + path);
+    await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
+    await prepareUpdate(f.options);
+  }
+  const policy = await readJSON(join(f.root, 'publication.json'));
+  policy.lottery.authorKind = [{ value: initial.editor.authorKind === 'guest' ? 'library' : 'guest', weight: 1 }];
+  policy.lottery.rootBudget = { min: 20, max: 20 };
+  policy.lottery.image = [{ value: 'meme', weight: 1 }];
+  await writeFile(join(f.root, 'publication.json'), JSON.stringify(policy));
+  const resumed = await prepareUpdate(f.options);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
+  assert.deepEqual(resumed.researchWindows, prepared.researchWindows);
+  assert.deepEqual(await briefUpdatePost({ ...f.options, postId }), initial);
+});
+
+test('an older unfinished operation gains one stable lottery snapshot without redrawing its saved plan', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options);
+  const operation = await readJSON(prepared.operationPath);
+  delete operation.plan.lottery;
+  const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : value && typeof value === 'object' ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
+  operation.plan.seal = createHash('sha256').update(canonical({ id: operation.id, root: operation.root, seed: operation.plan.seed, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds })).digest('hex');
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  await assert.rejects(suggestUpdatePresentation(f.options), /Prepare again/);
+  await prepareUpdate(f.options);
+  const upgraded = await readJSON(prepared.operationPath);
+  assert.equal(upgraded.plan.budget, operation.plan.budget);
+  assert.deepEqual(upgraded.plan.selectedIds, operation.plan.selectedIds);
+  assert.ok(upgraded.plan.lottery);
+  await prepareUpdate(f.options);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, upgraded.plan);
 });
