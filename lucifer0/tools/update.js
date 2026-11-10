@@ -1,4 +1,5 @@
 import { prepareUpdate, finishUpdate, cancelUpdate, suggestUpdatePresentation, suggestUpdateReplies, briefUpdatePost } from './operations.js';
+import { refreshIntake, bindIntakeRequest } from './intake-refresh.js';
 
 try {
   const [command, ...args] = process.argv.slice(2);
@@ -18,6 +19,16 @@ try {
       options.requestedCount = Number(value);
     }
   }
-  const result = await ({ prepare: prepareUpdate, finish: finishUpdate, cancel: cancelUpdate, suggest: suggestUpdatePresentation, replies: suggestUpdateReplies, brief: briefUpdatePost }[command])(options);
+  let result;
+  if (command === 'prepare') {
+    const intake = await refreshIntake(options);
+    if (['awaiting-intake', 'intake-failed'].includes(intake.status)) {
+      result = intake;
+      if (intake.status === 'intake-failed') process.exitCode = 1;
+    } else {
+      result = await prepareUpdate({ ...options, ...(intake.intakeReceipt ? { intakeReceipt: intake.intakeReceipt } : {}) });
+      if (intake.status === 'ready') await bindIntakeRequest({ ...options, requestId: intake.intakeReceipt.requestId, operationId: result.id });
+    }
+  } else result = await ({ finish: finishUpdate, cancel: cancelUpdate, suggest: suggestUpdatePresentation, replies: suggestUpdateReplies, brief: briefUpdatePost }[command])(options);
   console.log(JSON.stringify(result, null, 2));
 } catch (error) { console.error(error.message); process.exitCode = 1; }

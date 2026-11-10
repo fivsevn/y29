@@ -3,6 +3,9 @@
   "automaticPosting": true,
   "timezone": "Asia/Shanghai",
   "maxBatchPosts": 120,
+  "caseAdaptation": {
+    "count": 3
+  },
   "replyLottery": {
     "bands": [
       {

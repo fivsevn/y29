@@ -19,7 +19,7 @@ productionLottery.rootBudget = { min: 1, max: 10 };
 const defaultLottery = structuredClone(productionLottery);
 delete defaultLottery.discussion;
 import { createHash } from 'node:crypto';
-import { loadContent, ingestBatch } from '../lucifer0/tools/content.js';
+import { loadContent, ingestBatch, validateContent } from '../lucifer0/tools/content.js';
 
 const DAY = 86400000;
 const replyLottery = { bands: [{ weight: 90, min: 0, max: 10 }, { weight: 10, min: 21, max: 60 }], maxReplies: 100 };
@@ -48,14 +48,14 @@ const research = now => [
   { category: 'daily', kind: 'thread', url: 'https://forum.example.net/daily', visitedAt: iso(now), publishedAt: null, summary: 'Synthetic source: read a daily-life account and its follow-up.' }
 ];
 const maintenanceLottery = probability => ({ ...structuredClone(defaultLottery), researchMaintenance: { probability, maxDocuments: 1, ageWeightDays: 7, maxAgeWeight: 5 } });
-async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lottery } = {}) {
+async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lottery, caseAdaptation } = {}) {
   const directory = await mkdtemp(join(tmpdir(), 'y29-update-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = join(directory, 'project/lucifer0'), workDirectory = join(directory, 'current'), now = Date.now() - 2000;
   await mkdir(join(root, 'assets'), { recursive: true });
   await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
-  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery }));
+  await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery, ...(caseAdaptation ? { caseAdaptation } : {}) }));
   for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'worldview-research.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md', 'negative-research.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
@@ -1770,4 +1770,150 @@ test('obvious source leaks cannot enter either the reading pack or writer materi
   await writeFile(join(f.root, 'environment/selected-cases.md'), '# 精选案例\n\n联系 test@example.com');
   await assert.rejects(briefUpdatePost({ ...f.options, postId }), /identifying text requires review/);
   await assert.rejects(prepareUpdate(f.options), /identifying text requires review/);
+});
+
+async function caseFixture(t, budget = 4, settings = {}, count = 5) {
+  const f = await fixture(t, budget, { ...settings, caseAdaptation: { count: 3 } });
+  const blocks = await sampleDocuments(f, count), requestId = 'synthetic-intake-request';
+  const document = sampleMarkdown('<!-- intake-request:' + requestId + ' -->\n整理日期：' + iso(f.now).slice(0, 10) + '\n\n' + blocks.join('\n\n'));
+  await writeFile(join(f.root, 'environment/source-sampling.md'), document);
+  const intakeReceipt = { requestId, runId: '12345678', runUrl: 'https://github.com/fivsevn/y29/actions/runs/12345678',
+    startedAt: iso(f.now - 120000), completedAt: iso(f.now - 60000), headSha: 'a'.repeat(40),
+    documentSha: createHash('sha1').update('blob ' + Buffer.byteLength(document) + '\0' + document).digest('hex'), documentDigest: createHash('sha256').update(document).digest('hex') };
+  return { ...f, document, blocks, intakeReceipt };
+}
+const caseRoots = (f, prepared, originalCount = prepared.budget) => {
+  const ids = new Set(prepared.caseAdaptation.postIds), originals = prepared.caseAdaptation.rootOrder.filter(id => !ids.has(id)).slice(0, originalCount);
+  return prepared.caseAdaptation.rootOrder.filter(id => ids.has(id) || originals.includes(id)).map((id, index) => post(id, 'guest-adapted-' + index, f.now - 20000 + index * 1000));
+};
+async function recentCaseHistory(f) {
+  const historical = post('history-entry', 'person-0', f.now - 1000);
+  await rm(join(f.root, 'posts'), { recursive: true });
+  const folder = join(f.root, threadDirectory(historical, new Map([[historical.id, historical]])));
+  await mkdir(folder, { recursive: true });
+  await writeFile(join(folder, 'index.md'), renderPostDocument(historical));
+}
+
+test('a fresh intake adds three fixed cases without changing the original draw and resumes its exact private snapshots', async t => {
+  const base = await fixture(t), baseline = await prepareUpdate(base.options), basePlan = (await readJSON(baseline.operationPath)).plan;
+  const f = await caseFixture(t);
+  await assert.rejects(prepareUpdate(f.options), /GitHub Actions/);
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt }), original = await readJSON(prepared.operationPath);
+  for (const key of ['budget', 'selectedIds', 'lottery']) assert.deepEqual(original.plan[key], basePlan[key]);
+  assert.equal(prepared.budget, baseline.budget);
+  assert.equal(prepared.totalBudget, baseline.totalBudget);
+  assert.equal(prepared.effectiveTotalBudget, baseline.totalBudget + 3);
+  assert.equal(prepared.caseAdaptation.postIds.length, 3);
+  assert.deepEqual(prepared.caseAdaptation.intakeReceipt, f.intakeReceipt);
+  assert.ok(original.plan.caseAdaptation.items.every(item => f.blocks.some(block => block === item.sample.text)));
+  const caseId = prepared.caseAdaptation.postIds[0], first = await briefUpdatePost({ ...f.options, postId: caseId });
+  assert.equal(first.writer.sourceSamples.items.length, 1);
+  assert.deepEqual(first.writer.sourceSamples.items[0].sample, original.plan.caseAdaptation.items[0].sample);
+  assert.deepEqual(Object.keys(first.writer.caseAdaptation).sort(), ['instruction', 'rootPostId']);
+  assert.deepEqual(first.writer.conditions, []);
+  assert.equal(first.writer.discussion, undefined);
+  assert.ok(!Object.hasOwn(first.draft, 'caseAdaptation'));
+  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown('本次未取得可用材料。'));
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: caseId }), /Source material changed/);
+  const resumed = await prepareUpdate(f.options), saved = await readJSON(prepared.operationPath);
+  assert.equal(resumed.status, 'resumed');
+  assert.deepEqual(saved.plan, original.plan);
+  assert.deepEqual((await briefUpdatePost({ ...f.options, postId: caseId })).writer.sourceSamples.items, first.writer.sourceSamples.items);
+  await assert.rejects(prepareUpdate({ ...f.options, intakeReceipt: { ...f.intakeReceipt, runId: '999' } }), /saved intake receipt/);
+  saved.plan.caseAdaptation.items[0].postId = prepared.id + '-changed-mapping';
+  await writeFile(prepared.operationPath, JSON.stringify(saved));
+  await assert.rejects(prepareUpdate(f.options), /mapping was changed|saved draw was changed/);
+});
+
+test('the three cases exceed the original total allowance only as complete mixed roots and add no public metadata', async t => {
+  const f = await caseFixture(t, 4, { maxBatchPosts: 4 }), prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt });
+  const entries = caseRoots(f, prepared), options = { ...f.options, contextPath: prepared.operationPath };
+  assert.equal(entries.length, 7);
+  const missing = await draft(prepared, f.now, entries.filter(post => post.id !== prepared.caseAdaptation.postIds[0]));
+  await assert.rejects(validateUpdateForBatch(missing.batch, options), /all three fixed case/);
+  const ids = new Set(prepared.caseAdaptation.postIds);
+  const grouped = [...entries.filter(post => !ids.has(post.id)), ...entries.filter(post => ids.has(post.id))].map((entry, index) => ({ ...entry, createdAt: iso(f.now - 20000 + index * 1000) }));
+  const separate = await draft(prepared, f.now, grouped);
+  await assert.rejects(validateUpdateForBatch(separate.batch, options), /interleave/);
+  const over = await draft(prepared, f.now, [...entries, post(prepared.id + '-excess', 'guest-excess', f.now)]);
+  await assert.rejects(validateUpdateForBatch(over.batch, options), /saved budget/);
+  const disguised = entries.map(entry => ids.has(entry.id) ? { ...entry, replyTo: entries.find(other => !ids.has(other.id)).id } : entry);
+  const wrongRoots = await draft(prepared, f.now, disguised);
+  await assert.rejects(validateUpdateForBatch(wrongRoots.batch, options), /remain root/);
+  const valid = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(valid.batch, options);
+  const { registry, policy } = await loadContent(f.root);
+  assert.throws(() => validateContent(registry, [{ ...valid.batch, posts: valid.batch.posts.map((entry, index) => index ? entry : { ...entry, classification: 'case' }) }], policy), /private material is forbidden/);
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  const feed = (await loadContent(f.root)).feed;
+  assert.equal(feed.posts.filter(post => entries.some(entry => entry.id === post.id)).length, 7);
+  assert.ok(feed.posts.every(post => !['caseAdaptation', 'classification', 'sourcePath', 'sample', 'intakeReceipt'].some(key => Object.hasOwn(post, key))));
+});
+
+test('case threads preserve their source tone while their replies obey the original reply and total budgets', async t => {
+  const f = await caseFixture(t, 4, { maxBatchPosts: 4, lottery: productionLottery, replyLottery: fixedReplies(2, 2) });
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt }), ids = new Set(prepared.caseAdaptation.postIds);
+  const roots = caseRoots(f, prepared, 2), originalIds = roots.filter(post => !ids.has(post.id)).map(post => post.id);
+  const replies = [post(prepared.id + '-reply-one', 'guest-case-reply-one', f.now - 2000, prepared.caseAdaptation.postIds[0]), post(prepared.id + '-reply-two', 'guest-case-reply-two', f.now - 1000, prepared.id + '-reply-one')];
+  const entries = [...roots, ...replies], valid = await draft(prepared, f.now, entries);
+  const reviews = entries.map(entry => ({ postId: entry.id, negative: entry.id === originalIds[0], reason: 'The adopted wording was reviewed in its actual context.' }));
+  await saveReviews(prepared.operationPath, reviews);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  const reply = await briefUpdatePost({ ...f.options, postId: replies[1].id });
+  assert.equal(reply.writer.caseAdaptation.rootPostId, prepared.caseAdaptation.postIds[0]);
+  assert.deepEqual(reply.writer.conditions, []);
+  assert.equal(reply.writer.discussion, undefined);
+  const suggested = await suggestUpdateReplies(f.options);
+  assert.equal(suggested.maxReplies, 2);
+  assert.equal(suggested.totalBudget, 4);
+  assert.ok(suggested.threads.some(thread => thread.rootId === prepared.caseAdaptation.postIds[0] && thread.replyCount === 2));
+  await saveReviews(prepared.operationPath, reviews.map(review => ({ ...review, negative: !originalIds.includes(review.postId) })));
+  await assert.rejects(validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath }), /fewer reviewed negative/);
+  const tooMany = await draft(prepared, f.now, [...entries, post(prepared.id + '-reply-three', 'guest-case-reply-three', f.now, replies[1].id)]);
+  await saveReviews(prepared.operationPath, reviewed(tooMany.batch.posts, tooMany.batch.posts.length));
+  await assert.rejects(validateUpdateForBatch(tooMany.batch, { ...f.options, contextPath: prepared.operationPath }), /overall reply hard limit/);
+});
+
+test('a zero-original-root round still requires three cases and deferred briefs become ready at the saved wait time', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.rootBudget = { bands: [{ weight: 1, min: 0, max: 0 }] };
+  lottery.authorKind = [{ value: 'library', weight: 1 }];
+  lottery.waitSeconds = [{ weight: 1, min: 20, max: 20 }];
+  const f = await caseFixture(t, 4, { maxBatchPosts: 4, lottery, replyLottery: fixedReplies(2) });
+  await recentCaseHistory(f);
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt });
+  assert.equal(prepared.budget, 0);
+  assert.equal(prepared.caseAdaptation.rootOrder.length, 3);
+  await assert.rejects(finishUpdate(f.options), /all three fixed case/);
+  const postId = prepared.caseAdaptation.postIds[0], before = await briefUpdatePost({ ...f.options, postId });
+  assert.equal(before.draft, null);
+  assert.equal(before.editor.timing.status, 'deferred');
+  const later = Date.parse(before.editor.timing.earliestAt), ready = await briefUpdatePost({ ...f.options, postId, now: later });
+  assert.ok(ready.draft);
+  assert.equal(ready.editor.timing.status, 'ready');
+  assert.equal(ready.draft.createdAt, before.editor.timing.earliestAt);
+  assert.equal(ready.editor.waitSeconds, before.editor.waitSeconds);
+  assert.equal((await readJSON(prepared.operationPath)).plan.timeWindow.end, iso(f.now));
+  const entries = caseRoots(f, prepared, 0), valid = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+});
+
+test('ordinary briefs in case-enabled rounds can also resume after the original window end while old operations stay compatible', async t => {
+  const lottery = structuredClone(defaultLottery); lottery.waitSeconds = [{ weight: 1, min: 20, max: 20 }];
+  const f = await caseFixture(t, 4, { lottery, replyLottery: fixedReplies(2) });
+  await recentCaseHistory(f);
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt }), ids = new Set(prepared.caseAdaptation.postIds);
+  const postId = prepared.caseAdaptation.rootOrder.find(id => !ids.has(id));
+  const early = await briefUpdatePost({ ...f.options, postId });
+  assert.equal(early.editor.timing.status, 'deferred');
+  const later = await briefUpdatePost({ ...f.options, postId, now: Date.parse(early.editor.timing.earliestAt) });
+  assert.ok(later.draft);
+  assert.equal(later.writer.caseAdaptation, undefined);
+  const old = await fixture(t), oldPrepared = await prepareUpdate(old.options), saved = await readJSON(oldPrepared.operationPath);
+  const policy = await readJSON(join(old.root, 'publication.json')); policy.caseAdaptation = { count: 3 };
+  await writeFile(join(old.root, 'publication.json'), JSON.stringify(policy));
+  const resumed = await prepareUpdate(old.options);
+  assert.equal(resumed.caseAdaptation, undefined);
+  assert.deepEqual((await readJSON(oldPrepared.operationPath)).plan, saved.plan);
+  assert.equal((await finishUpdate(old.options)).status, 'no-posts');
 });

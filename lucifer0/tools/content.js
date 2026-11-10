@@ -8,6 +8,7 @@ import { validateReplyLottery, validateLottery } from './lottery.js';
 export { validateReplyLottery } from './lottery.js';
 import { preparePostImages, rewritePostImages, normalizeArchivedImages } from './media.js';
 import { readSiteEmotes, siteEmotePaths } from './site-emotes.js';
+import { validateCasePolicy } from './case-adaptation.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
 const fail = message => { throw new Error(message); };
@@ -30,7 +31,8 @@ const normalizedName = value => value.normalize('NFKC').trim().toLocaleLowerCase
 function validateBatch(batch, policy) {
   keys(batch, ['version', 'id', 'mode', 'posts'], 'batch');
   identifier(batch.id, 'batch.id');
-  if (batch.version !== 1 || !['sample', 'daily'].includes(batch.mode) || !Array.isArray(batch.posts) || !batch.posts.length || batch.posts.length > policy.maxBatchPosts) fail(`Invalid batch: ${batch.id}`);
+  const maximum = policy.maxBatchPosts + (batch.mode === 'daily' ? policy.caseAdaptation?.count ?? 0 : 0);
+  if (batch.version !== 1 || !['sample', 'daily'].includes(batch.mode) || !Array.isArray(batch.posts) || !batch.posts.length || batch.posts.length > maximum) fail(`Invalid batch: ${batch.id}`);
   for (const post of batch.posts) {
     if (!post || post.canon !== (batch.mode === 'sample' ? 'sample' : 'derivative')) fail('Sample and derivative labels must match batch mode');
   }
@@ -38,10 +40,11 @@ function validateBatch(batch, policy) {
 
 export function validateContent(registry, batches, policy, { now = Date.now(), siteEmotes = null } = {}) {
   const sharedMedia = siteEmotePaths(siteEmotes);
-  keys(policy, ['version', 'automaticPosting', 'timezone', 'maxBatchPosts', 'replyLottery', 'lottery'], 'policy');
+  keys(policy, ['version', 'automaticPosting', 'timezone', 'maxBatchPosts', 'replyLottery', 'lottery', 'caseAdaptation'], 'policy');
   if (policy.version !== 1 || typeof policy.automaticPosting !== 'boolean' || policy.timezone !== 'Asia/Shanghai' || !Number.isInteger(policy.maxBatchPosts) || policy.maxBatchPosts < 1 || policy.maxBatchPosts > 120) fail('Invalid publication policy');
   if (policy.replyLottery !== undefined) validateReplyLottery(policy.replyLottery);
   if (policy.lottery !== undefined) validateLottery(policy.lottery);
+  validateCasePolicy(policy.caseAdaptation);
   keys(registry, ['version', 'users'], 'registry');
   if (registry.version !== 1 || !Array.isArray(registry.users)) fail('Invalid registry');
   const users = new Map(), handles = new Set(), names = new Map();
