@@ -1518,9 +1518,76 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-1d9950efac733b8e",
+      "handle": "guest_88ecf8d57d68dbeddcdf",
+      "name": "海胆07",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110191228-b8ed4062-08",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-10T19:11:11.467Z",
+      "replyTo": "l0-20261110184824-39f6a5a6-20",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "我也想看，多大个呀。"
+    },
+    {
+      "id": "l0-20261110191228-b8ed4062-04",
+      "author": "guest-1d9950efac733b8e",
+      "createdAt": "2026-11-10T19:08:37.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "海胆07"
+      },
+      "text": "过场不能暂停，接个电话回来谁打谁都不知道了。就这还沉浸感呢"
+    },
+    {
+      "id": "l0-20261110191228-b8ed4062-03",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-10T19:06:54.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "衣服还剩两件，我先听完这段。"
+    },
+    {
+      "id": "l0-20261110191228-b8ed4062-02",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-10T19:03:38.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "fit": "contain"
+        }
+      ],
+      "text": "给她带饭都说随便，轮到给我带一个白馒头，就说怕买错。白馒头也能买错啊。"
+    },
     {
       "id": "l0-20261110190347-d31be36f-12",
       "author": "guest-8fce7ec3d2b87bf8",
