@@ -1,0 +1,25 @@
+name: Lucifer0 one-off preparation
+on:
+  push:
+    branches: [l0-update-20261111-2132]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Prepare actual lottery and reading
+        shell: bash
+        run: |
+          node lucifer0/tools/update.js prepare --work /tmp/lucifer0-once >/tmp/prepare-result.json
+          echo '=== PREPARE RESULT ==='
+          cat /tmp/prepare-result.json
+          echo '=== OPERATION ==='
+          cat /tmp/lucifer0-once/operation.json
+          echo '=== READING MANIFEST ==='
+          grep -E '^#{1,4} |^来源路径|^文件路径|^Source:|^Path:' /tmp/lucifer0-once/reading.md | head -160 || true
