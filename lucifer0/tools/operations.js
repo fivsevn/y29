@@ -70,11 +70,12 @@ function threadRoot(id, byId) {
   return post;
 }
 
-function returningReplyAuthor({ seed, postId, choice, target, before, eligible, publicUsers, createdAt, now }) {
+function returningReplyAuthor({ seed, postId, choice, target, before, eligible, publicUsers, createdAt, now, excludeAuthor, targetForAuthor }) {
   if (!target || !['root', 'participant'].includes(choice)) return null;
   const rootPost = threadRoot(target.id, before), until = Math.min(now, Date.parse(createdAt));
   const identity = post => {
     if (!validDate(post.createdAt) || Date.parse(post.createdAt) > until) return null;
+    if (post.author === excludeAuthor || targetForAuthor && !targetForAuthor(post.author)) return null;
     if (eligible.some(user => user.id === post.author)) return { author: post.author };
     if (!/^guest-[a-z0-9-]+$/.test(post.author) || !ID.test(post.author)) return null;
     const name = post.guest?.name ?? publicUsers.find(user => user.id === post.author)?.name;
@@ -88,6 +89,15 @@ function returningReplyAuthor({ seed, postId, choice, target, before, eligible, 
     if (person && !participants.has(person.author)) participants.set(person.author, person);
   }
   return chooseReplyParticipant({ seed, postId, participants: [...participants.values()] });
+}
+
+function threadReplyTarget({ before, rootId, author, until, preferIncoming = false, unansweredOnly = false }) {
+  const answered = new Set(unansweredOnly ? [...before.values()].filter(post => post.author === author && validDate(post.createdAt) &&
+    Date.parse(post.createdAt) <= until).map(post => post.replyTo) : []);
+  const candidates = [...before.values()].filter(post => post.author !== author && !post.deleted && !answered.has(post.id) && validDate(post.createdAt) &&
+    Date.parse(post.createdAt) <= until && threadRoot(post.id, before).id === rootId)
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en'));
+  return preferIncoming && candidates.find(post => before.get(post.replyTo)?.author === author) || candidates[0] || null;
 }
 
 export function planThreadReplies({ seed, posts, history = [], replyLottery, threadIds = [] }) {
@@ -343,8 +353,10 @@ function writerProfile(document) {
 }
 
 // This is the only writer-facing view. Full source reading remains an editor resource.
-export async function briefUpdatePost({ root = socialRoot, workDirectory, postId, replyTo, now = Date.now() } = {}) {
-  if (typeof postId !== 'string' || !ID.test(postId) || replyTo !== undefined && (typeof replyTo !== 'string' || !ID.test(replyTo))) fail('Brief needs --post ID and an optional --reply-to target ID');
+export async function briefUpdatePost({ root = socialRoot, workDirectory, postId, replyTo, threadId, now = Date.now() } = {}) {
+  if (typeof postId !== 'string' || !ID.test(postId) || replyTo !== undefined && (typeof replyTo !== 'string' || !ID.test(replyTo)) ||
+    threadId !== undefined && (typeof threadId !== 'string' || !ID.test(threadId))) fail('Brief needs --post ID and an optional --reply-to ID or --thread root ID');
+  if (replyTo !== undefined && threadId !== undefined) fail('Use either --reply-to or --thread for a brief');
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
   const data = await source(root);
@@ -354,7 +366,10 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const existing = position >= 0 ? operation.posts[position] : undefined;
   if (!existing && index.has(postId)) fail('Use a new post ID; the requested ID is already archived');
   if (existing && replyTo !== undefined && existing.replyTo !== replyTo) fail('The reply target must match the saved draft');
-  const targetId = existing?.replyTo ?? replyTo ?? null;
+  const requestedRoot = threadId === undefined ? null : index.get(threadId);
+  if (threadId !== undefined && (!requestedRoot || requestedRoot.replyTo !== null)) fail('Brief --thread needs an existing root thread ID');
+  if (existing && requestedRoot && threadRoot(existing.id, index).id !== threadId) fail('The saved draft belongs to a different thread');
+  let targetId = existing ? existing.replyTo : replyTo ?? threadId ?? null;
   if (targetId === postId) fail('A post cannot reply to itself');
   if (!operation.plan.lottery) fail('Prepare again to attach a stable lottery snapshot to this older operation');
   if (!operation.plan.timeWindow) fail('Prepare again to attach a stable time window to this older operation');
@@ -369,7 +384,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const discussion = progress ? { ...progress, requiredNegativePosts, missingNegativePosts: Math.max(0, requiredNegativePosts - progress.negativePosts),
     requiredTone: progress.negativePosts < requiredNegativePosts ? 'negative' : 'open', ...choices.discussion } : null;
   const before = new Map([...data.feed.posts, ...priorDrafts].filter(post => post.id !== postId).map(post => [post.id, post]));
-  const target = targetId === null ? null : before.get(targetId);
+  let target = targetId === null ? null : before.get(targetId);
   if (targetId !== null && !target) fail('A brief needs its actual earlier target, archived or in an earlier draft slot');
   if (target && (!validDate(target.createdAt) || Date.parse(target.createdAt) > now)) fail('A brief needs its actual earlier target with a current real timestamp');
   const window = operation.plan.timeWindow;
@@ -378,9 +393,26 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   if (existing && (!validDate(createdAt) || Date.parse(createdAt) > now || now - Date.parse(createdAt) > 2 * DAY || target && Date.parse(target.createdAt) > Date.parse(createdAt))) fail('Brief timestamps must be current, real and follow the visible target');
   const timing = { status: existing || Date.parse(createdAt) <= Date.parse(window.end) && Date.parse(createdAt) <= now && now - Date.parse(createdAt) <= 2 * DAY ? 'ready' : 'deferred',
     earliestAt: createdAt, availableUntil: window.end, source: existing ? 'saved-draft' : 'saved-window' };
+  const until = Math.min(now, Date.parse(createdAt)), rootPost = target ? threadRoot(target.id, before) : existing ?? null;
+  const freshThreadMode = Boolean(requestedRoot && config.discussion?.replyAuthor);
+  const threadAuthors = new Set(freshThreadMode ? [...before.values()].filter(post => validDate(post.createdAt) && Date.parse(post.createdAt) <= until &&
+    threadRoot(post.id, before).id === requestedRoot.id).map(post => post.author) : []);
+  const targetForAuthor = author => threadReplyTarget({ before, rootId: requestedRoot.id, author, until, preferIncoming: true, unansweredOnly: freshThreadMode });
   const returning = existing ? null : returningReplyAuthor({ seed: operation.plan.seed, postId, choice: choices.discussion?.replyAuthor,
-    target, before, eligible, publicUsers: data.feed.users, createdAt, now });
-  const author = existing?.author ?? returning?.author ?? choosePostAuthor({ seed: operation.plan.seed, postId, authorKind: choices.authorKind, users: eligible, profiles: data.material.profiles });
+    target, before, eligible, publicUsers: data.feed.users, createdAt, now,
+    ...(requestedRoot ? { targetForAuthor } : choices.discussion?.replyAuthor ? { excludeAuthor: target.author } : {}) });
+  const newAuthor = excluded => choosePostAuthor({ seed: operation.plan.seed, postId, authorKind: choices.authorKind,
+    users: eligible.filter(user => user.id !== excluded && !threadAuthors.has(user.id)), profiles: data.material.profiles });
+  let author = existing?.author ?? returning?.author ?? newAuthor(!requestedRoot && choices.discussion?.replyAuthor ? target?.author : undefined);
+  if (requestedRoot && !existing) {
+    let selectedTarget = threadReplyTarget({ before, rootId: requestedRoot.id, author, until, preferIncoming: Boolean(returning), unansweredOnly: freshThreadMode && Boolean(returning) });
+    if (!selectedTarget) {
+      author = newAuthor(author);
+      selectedTarget = threadReplyTarget({ before, rootId: requestedRoot.id, author, until });
+    }
+    if (!selectedTarget) fail('The thread has no earlier visible post available for this reply');
+    target = selectedTarget; targetId = target.id;
+  }
   const guest = typeof author === 'string' && /^guest-[a-z0-9-]+$/.test(author) && ID.test(author);
   const ownUser = eligible.find(user => user.id === author);
   if (!guest && !ownUser) fail('Account is not eligible for this draft: ' + author);
@@ -422,6 +454,9 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
         voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
       conditions: choices.conditions.filter(condition => condition.dimension !== 'motivation' || !discussion || targetId === null && discussion.requiredTone !== 'negative').map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
       ...(target ? { comments: writerSource('environment/comments.md') } : {}),
+      ...(requestedRoot || config.discussion?.replyAuthor ? { thread: { rootId: rootPost?.id ?? postId,
+        role: !rootPost || author === rootPost.author ? 'root' : [...before.values()].some(post => post.author === author && validDate(post.createdAt) &&
+          Date.parse(post.createdAt) <= until && threadRoot(post.id, before).id === rootPost.id) ? 'participant' : 'new' } } : {}),
       ...(discussion ? { discussion: { requiredTone: discussion.requiredTone,
         ...(discussion.requiredTone === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: writerSource('environment/negative.md') } : {}),
         ...(target ? { replyStance: discussion.replyStance } : {}),
@@ -433,6 +468,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
       worldviewPath: guest ? null : data.material.worldviewDocuments.find(document => document.id === data.material.profiles[author].basics.worldview)?.path ?? null,
       waitSeconds: choices.waitSeconds,
       ...(target && choices.discussion?.replyAuthor ? { replyAuthor: { drawn: choices.discussion.replyAuthor, used: existing ? 'saved' : returning ? choices.discussion.replyAuthor : 'new' } } : {}),
+      ...(target && (requestedRoot || config.discussion?.replyAuthor) ? { replyTarget: { mode: existing ? 'saved' : requestedRoot ? 'thread' : 'explicit', rootId: rootPost.id, postId: target.id } } : {}),
       ...(discussion ? { discussion } : {}),
       timing, suggestedNotBefore: createdAt,
       image: choices.image, likes: choices.likes, reading: choices.reading, textWindow: choices.textWindow,

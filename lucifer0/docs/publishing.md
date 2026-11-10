@@ -96,13 +96,19 @@ node lucifer0/tools/update.js replies --thread existing-root-id --work /outside/
 node lucifer0/tools/update.js brief --post 本次操作ID-01 --work /outside/work
 ```
 
-为一条新回复指定真正回应的父帖：
+为根串获取一条新回复：
+
+```sh
+node lucifer0/tools/update.js brief --post 本次操作ID-02 --thread 根帖ID --work /outside/work
+```
+
+需要指定一条发言作为父帖时使用：
 
 ```sh
 node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID --work /outside/work
 ```
 
-已有草稿也可以按它的 ID 读取材料。命令返回 `draft`、`writer` 和 `editor`。先查看 `editor.timing`：`ready` 时使用返回的草稿及时间；`deferred` 时跳过本轮候选，后续更新重新评估。将 `writer` 作为本次单人写作输入，策划者使用 `editor` 安排当前操作；把完成的文字、图片和身份补进 `draft`，再保存到 `operation.json.posts`。临时路人的公开网名填入 `guest.name`。
+`--thread` 与 `--reply-to` 每次选用一个；目标与身份的选择方式见[抽签规则](lottery.md#负面与回复提示)。已有草稿也可以按它的 ID 读取材料。命令返回 `draft`、`writer` 和 `editor`。先查看 `editor.timing`：`ready` 时使用返回的草稿及时间；`deferred` 时跳过本轮候选，后续更新重新评估。将 `writer` 作为本次单人写作输入，策划者使用 `editor` 安排当前操作；把完成的文字、图片和身份补进 `draft`，再保存到 `operation.json.posts`。临时路人的公开网名填入 `guest.name`。
 
 `writer.createdAt` 是本条的时间。`editor.discussion` 显示已审读条数、负面数及下一条的缺口；写作者按 `writer.discussion` 所带原文理解提示。回复材料同时携带评论方法原文。`writer.self.voiceExamples` 保存标记为 `practice` 的表达练习，本人正式背景保存在其余档案材料中。
 
