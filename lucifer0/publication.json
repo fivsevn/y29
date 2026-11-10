@@ -178,24 +178,88 @@
       "min": 0,
       "max": 3
     },
-    "image": [
-      {
-        "value": "none",
-        "weight": 72
+    "media": {
+      "images": {
+        "root": {
+          "probability": 0.4,
+          "minimumPosts": 1,
+          "types": [
+            {
+              "value": "photo",
+              "weight": 70
+            },
+            {
+              "value": "screenshot",
+              "weight": 20
+            },
+            {
+              "value": "illustration",
+              "weight": 10
+            }
+          ]
+        },
+        "reply": {
+          "probability": 0.25,
+          "minimumPosts": 1,
+          "types": [
+            {
+              "value": "photo",
+              "weight": 50
+            },
+            {
+              "value": "screenshot",
+              "weight": 40
+            },
+            {
+              "value": "illustration",
+              "weight": 10
+            }
+          ]
+        }
       },
-      {
-        "value": "photo",
-        "weight": 14
-      },
-      {
-        "value": "screenshot",
-        "weight": 8
-      },
-      {
-        "value": "meme",
-        "weight": 6
+      "emotes": {
+        "root": {
+          "probability": 0.4,
+          "counts": [
+            {
+              "weight": 75,
+              "min": 1,
+              "max": 1
+            },
+            {
+              "weight": 20,
+              "min": 2,
+              "max": 2
+            },
+            {
+              "weight": 5,
+              "min": 3,
+              "max": 3
+            }
+          ]
+        },
+        "reply": {
+          "probability": 0.65,
+          "counts": [
+            {
+              "weight": 75,
+              "min": 1,
+              "max": 1
+            },
+            {
+              "weight": 20,
+              "min": 2,
+              "max": 2
+            },
+            {
+              "weight": 5,
+              "min": 3,
+              "max": 3
+            }
+          ]
+        }
       }
-    ],
+    },
     "likes": {
       "root": [
         {

@@ -137,13 +137,22 @@ test('image-only posts require actual media and retain media validation', () => 
   }
 });
 
-test('media accepts explicit contain sizing while omitted sizing stays unchanged', () => {
+test('media retains explicit kinds and contain sizing while omitted fields stay unchanged', () => {
   const f = fixture(), original = f.batches[0].posts.find(post => post.replyTo === null);
   const image = { src: `posts/${original.createdAt.slice(0, 4)}/${original.createdAt.slice(5, 7)}/${original.id}/media/reaction.webp`, alt: '完整反应图' };
   original.media = [image];
   assert.deepEqual(validate(f).posts.find(post => post.id === original.id).media[0], image);
   image.fit = 'contain';
   assert.equal(validate(f).posts.find(post => post.id === original.id).media[0].fit, 'contain');
+  for (const kind of ['image', 'emote']) {
+    image.kind = kind;
+    assert.equal(validate(f).posts.find(post => post.id === original.id).media[0].kind, kind);
+  }
+  for (const kind of ['photo', 'meme', '', null, false, 1, {}, undefined]) {
+    image.kind = kind;
+    assert.throws(() => validate(f), /Invalid media kind/);
+  }
+  delete image.kind;
   for (const fit of ['cover', 'fill', 'contain;display:none', '', null, false, 1, {}, undefined]) {
     image.fit = fit;
     assert.throws(() => validate(f), /Invalid media fit/);

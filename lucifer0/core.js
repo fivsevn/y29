@@ -1,6 +1,9 @@
 export const STATE_KEY = 'y29-social-v1';
 export const WELCOME_POST_ID = 'site-welcome';
 
+export const isEmoteMedia = image => image?.kind === 'emote' ||
+  (typeof image?.src === 'string' && image.src.startsWith('assets/emotes/l0/'));
+
 export const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[char]));

@@ -173,6 +173,26 @@ test('thread details keep all eleven replies and their actual parent links; prof
   assert.doesNotMatch(page.visit('#/user/preview-owner'), /reply-preview|preview-more/);
 });
 
+test('explicit local emotes render without image links while ordinary contain images retain their viewer', async () => {
+  const feed = fixture(), post = feed.posts.find(post => post.id === 'empty-thread');
+  post.media = [
+    { src: 'assets/emotes/l0/huh.webp', alt: 'Legacy shared emote' },
+    { src: 'posts/2026/01/empty-thread/media/local-emote.webp', alt: 'Local emote', kind: 'emote' },
+    { src: 'posts/2026/01/empty-thread/media/diagram.webp', alt: 'Full diagram', kind: 'image', fit: 'contain' },
+    { src: 'posts/2026/01/empty-thread/media/legacy.webp', alt: 'Legacy local image', fit: 'contain' }
+  ];
+  const page = await renderer(feed);
+  for (const html of [page.html(), page.visit('#/post/empty-thread')]) {
+    const markup = article(html, 'empty-thread');
+    assert.match(markup, /<img class="post-emote" src="\.\/assets\/emotes\/l0\/huh\.webp"/);
+    assert.match(markup, /<img class="post-emote" src="\.\/posts\/2026\/01\/empty-thread\/media\/local-emote\.webp"/);
+    assert.doesNotMatch(markup, /<a[^>]*href="[^"]*(?:huh|local-emote)\.webp"/);
+    assert.match(markup, /<a class="post-image is-contained" href="\.\/posts\/2026\/01\/empty-thread\/media\/diagram\.webp" aria-haspopup="dialog"/);
+    assert.match(markup, /<a class="post-image is-contained" href="\.\/posts\/2026\/01\/empty-thread\/media\/legacy\.webp" aria-haspopup="dialog"/);
+    assert.equal((markup.match(/查看原图 ↗/g) || []).length, 2);
+  }
+});
+
 const guideText = ['入站须知', '', '这里是这份公告的开头。', '',
   '01 保留自己的声音。', '02 回应原来的话题。', '03 转述时留下来源。',
   '04 不把别人的隐私当素材。', '05 不用重复发言占满页面。', '06 文案中的 <标签> 与 & 也照常显示。',

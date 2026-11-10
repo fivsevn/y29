@@ -3,11 +3,11 @@ import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
-import { defaultLottery, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance } from './lottery.js';
+import { defaultLottery, compatibilityLotteryV1, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, imagePoolProgress, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance } from './lottery.js';
 export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
 import { siteEmoteManifestPath } from './site-emotes.js';
-import { cancelPendingBatch } from './thread-packages.js';
+import { cancelPendingBatch, isPostMediaPath } from './thread-packages.js';
 import { isResearchPath, researchPaths, researchCandidates } from './research-maintenance.js';
 
 const DAY = 86400000;
@@ -345,8 +345,12 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
       operation = { version: 1, id, root, preparedAt: new Date(now).toISOString(), plan, sourceDigest: operationSourceDigest(data, plan), research: [], posts: [], status: 'prepared', ...(plan.lottery?.discussion ? { reviews: [] } : {}), ...(plan.researchMaintenance ? { researchMaintenance: [] } : {}) };
     } else {
       if (operation.plan.lottery === undefined) {
-        // Upgrade only the new presentation rules; keep the original numeric budget draw.
+        // Attach the legacy presentation settings without adding new media obligations.
         operation.plan.lottery = structuredClone(data.policy.lottery ?? defaultLottery);
+        if (operation.plan.lottery.media) {
+          delete operation.plan.lottery.media;
+          operation.plan.lottery.image = structuredClone(compatibilityLotteryV1.image);
+        }
         operation.plan.lottery.rootBudget = { min: 1, max: 10 };
         delete operation.plan.lottery.discussion;
       }
@@ -523,6 +527,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
         ...(discussion.requiredTone === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: writerSource('environment/negative-research.md') } : {}),
         ...(target ? { replyStance: discussion.replyStance } : {}),
         rules: writerSource('docs/lottery.md') } } : {}),
+      ...(config.media ? { presentation: { image: choices.image, emoteCount: choices.emoteCount, maximumMedia: 4 } } : {}),
       visiblePosts
     },
     editor: {
@@ -533,6 +538,8 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
       ...(target && (requestedRoot || config.discussion?.replyAuthor) ? { replyTarget: { mode: existing ? 'saved' : requestedRoot ? 'thread' : 'explicit', rootId: rootPost.id, postId: target.id } } : {}),
       ...(discussion ? { discussion } : {}),
       timing, suggestedNotBefore: createdAt,
+      ...(config.media ? { emoteCount: choices.emoteCount, imagePools: imagePoolProgress({
+        posts: existing || timing.status === 'deferred' ? operation.posts : [...operation.posts, draft], lottery: config }) } : {}),
       image: choices.image, likes: choices.likes, reading: choices.reading, textWindow: choices.textWindow,
       instruction: timing.status === 'deferred' ? '本轮跳过该候选，后续更新重新评估。' : '将 writer 单独交给写作者；partial 表示只读到片段。将实际采用的正文、时间、图片和 guest 名字填入 draft，再保存到 operation.json.posts。抽签使用见 docs/lottery.md，创作见 docs/writing.md。'
     }
@@ -568,6 +575,42 @@ export function validateResearch(research, now = Date.now(), postIds) {
   return research;
 }
 
+async function validateImagePools(operation, data, root) {
+  const lottery = operation.plan.lottery;
+  if (!lottery?.media) return;
+  const archivedIds = new Set(data.feed.posts.map(post => post.id));
+  if (operation.posts.some(post => archivedIds.has(post.id))) fail('New media-pool updates cannot reuse archived posts; only this update counts');
+  const ordinaryFiles = new Set();
+  for (const post of operation.posts) {
+    if (!Array.isArray(post.media) || post.media.length > 4) fail('Each post supports at most four media items');
+    for (const image of post.media) {
+      if (!plain(image) || !['image', 'emote'].includes(image.kind)) fail('New media-pool updates require an explicit image or emote kind');
+      if (typeof image.src !== 'string') fail('Media needs a real source path');
+      if (image.src.startsWith('assets/emotes/l0/') && image.kind !== 'emote') fail('Site emotes cannot be classified as ordinary images');
+      if (image.kind === 'image') {
+        if (!isPostMediaPath(image.src)) fail('Ordinary images must use their thread media directory');
+        ordinaryFiles.add(image.src);
+      }
+    }
+  }
+  const pools = imagePoolProgress({ posts: operation.posts, lottery });
+  for (const role of ['root', 'reply']) {
+    if (pools[role].missingPosts) fail(`The ${role} ordinary-image pool needs at least ${pools[role].minimumPosts} image-bearing post(s); emotes do not count`);
+  }
+  const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+  const emoteHashes = new Set(await Promise.all((data.siteEmotes?.items ?? []).map(async item => hash(await readFile(join(root, item.src))))));
+  for (const path of ordinaryFiles) {
+    let current = root;
+    const parts = path.split('/');
+    for (let index = 0; index < parts.length; index++) {
+      current = join(current, parts[index]);
+      const stat = await lstat(current);
+      if (stat.isSymbolicLink() || (index === parts.length - 1 ? !stat.isFile() : !stat.isDirectory())) fail('Ordinary image sources must be regular files in their thread package');
+    }
+    if (emoteHashes.has(hash(await readFile(current)))) fail('A copied site emote cannot satisfy an ordinary-image pool');
+  }
+}
+
 export async function validateUpdateForBatch(batch, { root = socialRoot, contextPath, backfill = false, now = Date.now() } = {}) {
   root = await checkedRoot(root);
   if (typeof backfill !== 'boolean') fail('Historical updates need an explicit boolean backfill option');
@@ -585,6 +628,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
   const resumingPartialWrite = data.pending?.id === batch.id && data.pending.batchDigest === digest(batch);
   validatePostBudget(operation.plan, batch.posts, data.feed.posts, data.policy);
+  await validateImagePools(operation, data, root);
   const discussion = discussionProgress(operation);
   if (discussion && discussion.negativePosts < Math.ceil(batch.posts.length * discussion.minimumNegativeShare)) fail('The update has fewer reviewed negative posts than its saved minimum share');
   const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));

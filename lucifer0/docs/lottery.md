@@ -52,8 +52,23 @@
 | `waitSeconds` | 抽取从相关发言到本次发言的等待时长，工具据此安排草稿时间，并按[发布流程](publishing.md#逐条写作)返回本轮可写或延后的状态。 |
 | `reading`、`nearbyReplies` | 决定回复者读到目标帖、根帖加目标帖，或目标附近的部分发言。 |
 | `textWindow`、`excerptCharacters` | 决定读到完整正文、开头或局部片段，以及截取长度。输出保留来源帖号，并标明截取状态。 |
-| `image` | 按条抽取纯文字、现场照片、截图或表情图的表达机会。建议独立抽取，不保证满足整轮配图下限；策划按[配图](writing.md#配图)统筹实际采用量与用途。 |
+| `media.images.root`、`media.images.reply` | 分别为主帖和回复抽取普通图片机会、图片类型与非空池下限，见[图片与表情抽取](#图片与表情抽取)。 |
+| `media.emotes.root`、`media.emotes.reply` | 分别为主帖和回复抽取表情机会与数量；与普通图片独立。 |
 | `likes.root`、`likes.reply` | 分别给主帖和回复抽取基础赞数建议，按权重选档后取该档内整数；结合[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)审定。 |
+
+### 图片与表情抽取
+
+当前值集中在[媒体配置](../publication.json)的 `lottery.media` 中。主帖和回复使用各自的配置与独立种子流，一边的发言数量、图片抽取和表情抽取不占另一边的机会。
+
+| 参数 | 含义 |
+| --- | --- |
+| `media.images.root.probability`、`media.images.reply.probability` | 分别对每条主帖、回复独立抽取是否建议普通图片；这是出现概率，不是全轮固定比例。 |
+| `media.images.root.types`、`media.images.reply.types` | 各自按权重抽取 `photo`、`screenshot` 或 `illustration`，用于构思现场照片、截图、作品图或示意字图。 |
+| `media.images.root.minimumPosts`、`media.images.reply.minimumPosts` | 各非空池实际带普通图片的发言下限，执行方式见[配图](writing.md#配图)。 |
+| `media.emotes.root.probability`、`media.emotes.reply.probability` | 分别抽取主帖、回复的表情机会，与同条普通图片抽取互不替代。 |
+| `media.emotes.root.counts`、`media.emotes.reply.counts` | 抽中表情机会后，再按档位权重取本条建议张数；未抽中时为零。 |
+
+`brief` 返回本条的普通图片建议与独立表情数量，原始抽取随操作和帖号保持稳定。最终实际发言确定后，`suggest` 分别整理主帖与回复的普通图片候选；某池候选少于配置下限时，用该池的独立种子补选，不固定取首条。补选只形成承载图片的候选，不改本条原抽签，也不改作者、时间和正文。根据实际话头调整承载图片的草稿后，仍须核对该池的真实采用量。
 
 ### 负面与回复提示
 
@@ -90,6 +105,6 @@
 
 ## 保存与恢复
 
-新操作保存种子、配置、抽中的候选与本次时间窗口；时间窗口为准备时刻之前的24小时。主帖、逐串回复、逐条条件与配图建议使用各自独立的抽取标识，同一操作及帖号重复执行时沿用结果。配置调整用于后续新操作，已保存操作按原快照继续；资料更新后重新准备会刷新阅读内容。已有快照缺少 `discussion` 或 `replyAuthor` 的操作沿原结果完成，后续新操作使用新配置。
+新操作保存种子、配置、抽中的候选与本次时间窗口；时间窗口为准备时刻之前的24小时。主帖、逐串回复、逐条条件与配图建议使用各自独立的抽取标识，同一操作及帖号重复执行时沿用结果。配置调整用于后续新操作，已保存操作按原快照继续；资料更新后重新准备会刷新阅读内容。已有快照缺少 `discussion` 或 `replyAuthor` 的操作沿原结果完成。保留旧 `image` 配置的操作仍沿原先混合图片抽取，不补入新的 `media` 配置与下限；新操作采用分池配置，已归档帖子不迁移。
 
 实现集中在 `tools/lottery.js`；`tools/operations.js` 负责读取资料、保存操作与组织流程。当前工作文件和恢复命令见[执行与发布](publishing.md#恢复与修正)。

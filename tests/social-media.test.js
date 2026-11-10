@@ -59,6 +59,7 @@ test('AI import saves WebP in operation, source and feed, shares reply image, an
   const prepared = await prepareUpdate({ root: f.root, workDirectory: f.work, requestedCount: 2, now: f.now });
   const operation = await readJSON(prepared.operationPath);
   operation.posts = [post(f.now), post(f.now + 1000, 'media-test-reply', 'media-test-root')];
+  for (const entry of operation.posts) entry.media[0].kind = 'image';
   operation.reviews = operation.posts.map(entry => ({ postId: entry.id, negative: true, reason: 'The author complains about the damaged delivered item.' }));
   operation.posts[0].media[0].fit = 'contain';
   operation.research = [
@@ -70,6 +71,7 @@ test('AI import saves WebP in operation, source and feed, shares reply image, an
   await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
   const saved = await readJSON(prepared.operationPath), feed = (await loadContent(f.root)).feed;
   assert.ok(saved.posts.every(p => p.media[0].src.endsWith('.webp')));
+  assert.ok(saved.posts.every(p => p.media[0].kind === 'image'));
   assert.equal(saved.posts[0].media[0].fit, 'contain');
   assert.ok(!Object.hasOwn(saved.posts[1].media[0], 'fit'));
   assert.equal(new Set(saved.posts.map(p => p.media[0].src)).size, 1);
@@ -165,6 +167,7 @@ test('separate AI context and batch recover a media-only half-saved conversion',
   const prepared = await prepareUpdate({ root: f.root, workDirectory: f.work, requestedCount: 1, now: f.now });
   const operation = await readJSON(prepared.operationPath);
   const entry = post(f.now);
+  entry.media[0].kind = 'image';
   operation.posts = [entry];
   operation.reviews = [{ postId: entry.id, negative: true, reason: 'The author complains about the damaged delivered item.' }];
   operation.research = [
@@ -178,6 +181,7 @@ test('separate AI context and batch recover a media-only half-saved conversion',
   await writeFile(prepared.operationPath, JSON.stringify(operation));
   assert.equal((await ingestBatch(input, { root: f.root, reviewed: true, ai: true, contextPath: prepared.operationPath })).status, 'archived');
   assert.deepEqual((await readJSON(input)).posts, (await readJSON(prepared.operationPath)).posts);
+  assert.equal((await readJSON(input)).posts[0].media[0].kind, 'image');
   const feed = (await loadContent(f.root)).feed;
   assert.equal((await finishUpdate({ root: f.root, workDirectory: f.work, fetchImpl: async () => ({ ok: true, json: async () => feed }) })).status, 'published');
 });

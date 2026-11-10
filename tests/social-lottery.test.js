@@ -1,13 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant } from '../lucifer0/tools/lottery.js';
+import { defaultLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant, imagePoolProgress, suggestPostPresentation } from '../lucifer0/tools/lottery.js';
 import { drawUpdatePlan } from '../lucifer0/tools/operations.js';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+
+const legacyImages = [{ value: 'none', weight: 72 }, { value: 'photo', weight: 14 }, { value: 'screenshot', weight: 8 }, { value: 'meme', weight: 6 }];
+function legacyLottery() {
+  const lottery = structuredClone(defaultLottery);
+  delete lottery.media;
+  lottery.image = structuredClone(legacyImages);
+  return lottery;
+}
 
 test('independent post draws produce varied batches, substantial casual/help/negative intent and cold/hot threads', () => {
   // Fix the statistical scenario here so production tuning stays in publication.json.
   const lottery = {
-    ...structuredClone(defaultLottery),
+    ...legacyLottery(),
     authorKind: [{ value: 'guest', weight: 55 }, { value: 'library', weight: 45 }],
     image: [{ value: 'none', weight: 72 }, { value: 'photo', weight: 14 }, { value: 'screenshot', weight: 8 }, { value: 'meme', weight: 6 }],
     motivation: [{ value: 'ask-help', weight: 24 }, { value: 'vent', weight: 22 }, { value: 'passing-thought', weight: 24 }, { value: 'share', weight: 18 }, { value: 'correct', weight: 6 }, { value: 'celebrate', weight: 6 }],
@@ -48,8 +57,8 @@ test('independent post draws produce varied batches, substantial casual/help/neg
 });
 
 test('independent dimensions replay stably and sampling produces a bounded continuous window', () => {
-  const input = { seed: 'stable-post-seed', postId: 'stable-post' };
-  const before = drawPostChoices(input), changed = structuredClone(defaultLottery);
+  const input = { seed: 'stable-post-seed', postId: 'stable-post', lottery: legacyLottery() };
+  const before = drawPostChoices(input), changed = structuredClone(input.lottery);
   changed.image = [{ value: 'meme', weight: 1 }];
   assert.deepEqual({ ...drawPostChoices({ ...input, lottery: changed }), image: before.image }, before);
   assert.deepEqual(drawPostChoices(input), before);
@@ -63,6 +72,143 @@ test('independent dimensions replay stably and sampling produces a bounded conti
   assert.throws(() => validateLottery(invalid), /author kind/);
   invalid.authorKind[0].weight = 1; invalid.conditionCount.max = 3;
   assert.throws(() => validateLottery(invalid), /condition count/);
+});
+
+test('legacy image snapshots retain the exact earlier draws and presentation shape', () => {
+  const lottery = legacyLottery();
+  const choices = Array.from({ length: 12 }, (_, index) => drawPostChoices({ seed: 'media-legacy-' + index,
+    postId: 'legacy-post-' + index, replyTo: index % 2 ? 'parent-post' : null, lottery }));
+  assert.equal(createHash('sha256').update(JSON.stringify(choices)).digest('hex'), '699f99e1dbc6bd62db660a16a51550a46a6ad8a64fb968dbfc81e832dd138053');
+  assert.ok(choices.every(choice => !Object.hasOwn(choice, 'emoteCount')));
+  assert.deepEqual(suggestPostPresentation({ seed: 'legacy-media-suggestion', posts: [
+    { id: 'legacy-root', replyTo: null }, { id: 'legacy-reply', replyTo: 'legacy-root' }
+  ], lottery }), { imagePostIds: ['legacy-root'], likes: [{ id: 'legacy-root', likes: 2 }, { id: 'legacy-reply', likes: 0 }] });
+  assert.equal(imagePoolProgress({ posts: [], lottery }), null);
+});
+
+test('image and emote decisions are independent within separate root and reply pools', () => {
+  const lottery = structuredClone(defaultLottery);
+  for (const role of ['root', 'reply']) {
+    for (let index = 0; index < 40; index++) {
+      const input = { seed: 'media-independent-' + index, postId: 'independent-' + role,
+        replyTo: role === 'root' ? null : 'actual-parent', lottery };
+      const before = drawPostChoices(input);
+      const differentImage = structuredClone(lottery);
+      differentImage.media.images[role].probability = before.image === 'none' ? 1 : 0;
+      const imageChanged = drawPostChoices({ ...input, lottery: differentImage });
+      assert.notEqual(imageChanged.image, before.image);
+      assert.deepEqual({ ...imageChanged, image: before.image }, before);
+      const differentEmote = structuredClone(lottery);
+      differentEmote.media.emotes[role].probability = before.emoteCount ? 0 : 1;
+      const emoteChanged = drawPostChoices({ ...input, lottery: differentEmote });
+      assert.notEqual(emoteChanged.emoteCount, before.emoteCount);
+      assert.deepEqual({ ...emoteChanged, emoteCount: before.emoteCount }, before);
+      const otherRole = role === 'root' ? 'reply' : 'root', untouched = structuredClone(lottery);
+      untouched.media.images[otherRole].probability = 1;
+      untouched.media.emotes[otherRole].probability = 0;
+      assert.deepEqual(drawPostChoices({ ...input, lottery: untouched }), before);
+    }
+  }
+});
+
+test('production media frequencies allow either, both or neither and favor emotes in replies', () => {
+  assert.equal(defaultLottery.media.images.root.probability, .40);
+  assert.equal(defaultLottery.media.images.reply.probability, .25);
+  assert.equal(defaultLottery.media.emotes.root.probability, .40);
+  assert.equal(defaultLottery.media.emotes.reply.probability, .65);
+  for (const [role, imageRate, emoteRate] of [['root', .40, .40], ['reply', .25, .65]]) {
+    const states = new Set(); let images = 0, emotes = 0, both = 0;
+    for (let index = 0; index < 3000; index++) {
+      const choice = drawPostChoices({ seed: 'media-distribution-' + index, postId: 'media-' + role,
+        replyTo: role === 'root' ? null : 'actual-parent' });
+      const hasImage = choice.image !== 'none', hasEmote = choice.emoteCount > 0;
+      states.add(`${hasImage}/${hasEmote}`); images += hasImage; emotes += hasEmote; both += hasImage && hasEmote;
+      assert.ok(['none', 'photo', 'screenshot', 'illustration'].includes(choice.image));
+      assert.ok(Number.isInteger(choice.emoteCount) && choice.emoteCount >= 0 && choice.emoteCount <= 3);
+      assert.ok(choice.emoteCount + Number(hasImage) <= 4);
+    }
+    assert.equal(states.size, 4);
+    assert.ok(Math.abs(images / 3000 - imageRate) < .035);
+    assert.ok(Math.abs(emotes / 3000 - emoteRate) < .035);
+    assert.ok(Math.abs(both / 3000 - imageRate * emoteRate) < .025);
+  }
+});
+
+const mediaPosts = () => [
+  { id: 'pool-root-a', replyTo: null, media: [] }, { id: 'pool-root-b', replyTo: null, media: [] },
+  { id: 'pool-reply-a', replyTo: 'older-root', media: [] }, { id: 'pool-reply-b', replyTo: 'pool-root-a', media: [] }
+];
+
+test('suggestions fill each nonempty ordinary-image pool without replacing independent emote draws', () => {
+  const lottery = structuredClone(defaultLottery);
+  for (const role of ['root', 'reply']) {
+    lottery.media.images[role].probability = 0;
+    lottery.media.emotes[role] = { probability: 1, counts: [{ weight: 1, min: 3, max: 3 }] };
+  }
+  const posts = mediaPosts(), before = structuredClone(posts), input = { seed: 'media-pool-minimum', posts, lottery };
+  const first = suggestPostPresentation(input), reversed = suggestPostPresentation({ ...input, posts: [...posts].reverse() });
+  assert.deepEqual(posts, before);
+  assert.deepEqual({ ...reversed, likes: first.likes }, first);
+  assert.equal(first.rootImagePostIds.length, 1);
+  assert.equal(first.replyImagePostIds.length, 1);
+  assert.deepEqual(first.imagePostIds, [...first.rootImagePostIds, ...first.replyImagePostIds].sort());
+  assert.deepEqual(first.emotes, posts.map(post => ({ postId: post.id, count: 3 })).sort((a, b) => a.postId.localeCompare(b.postId, 'en')));
+  assert.deepEqual(first.imagePools.root, { postIds: ['pool-root-a', 'pool-root-b'], minimumPosts: 1, actualImagePostIds: [], missingPosts: 1 });
+  assert.deepEqual(first.imagePools.reply, { postIds: ['pool-reply-a', 'pool-reply-b'], minimumPosts: 1, actualImagePostIds: [], missingPosts: 1 });
+  const selectedRoots = new Set(), selectedReplies = new Set();
+  for (let index = 0; index < 80; index++) {
+    const actual = suggestPostPresentation({ ...input, seed: 'pool-fallback-' + index });
+    selectedRoots.add(actual.rootImagePostIds[0]); selectedReplies.add(actual.replyImagePostIds[0]);
+  }
+  assert.equal(selectedRoots.size, 2, 'ordinary-image fallback must not always pick the first root');
+  assert.equal(selectedReplies.size, 2, 'ordinary-image fallback must not always pick the first reply');
+  const replyOnly = suggestPostPresentation({ ...input, posts: posts.filter(post => post.replyTo !== null) });
+  assert.deepEqual(replyOnly.rootImagePostIds, []);
+  assert.deepEqual(replyOnly.replyImagePostIds, first.replyImagePostIds);
+  assert.equal(replyOnly.imagePools.root.minimumPosts, 0);
+  assert.equal(replyOnly.imagePools.root.missingPosts, 0);
+  assert.equal(replyOnly.imagePools.reply.minimumPosts, 1);
+  const empty = suggestPostPresentation({ ...input, posts: [] });
+  assert.deepEqual(empty.imagePostIds, []);
+  assert.deepEqual(empty.emotes, []);
+  assert.equal(empty.imagePools.root.minimumPosts + empty.imagePools.reply.minimumPosts, 0);
+});
+
+test('ordinary-image progress counts posts once and excludes all declared or shared emotes', () => {
+  const posts = mediaPosts();
+  posts[0].media = [{ src: 'assets/emotes/l0/huh.webp', kind: 'image' }];
+  posts[1].media = Array.from({ length: 4 }, (_, index) => ({ src: `posts/2026/11/pool-root-b/media/photo-${index}.webp`, kind: 'image' }));
+  posts[2].media = [{ src: 'posts/2026/11/older-root/media/reaction.webp', kind: 'emote' }];
+  posts[3].media = [{ src: 'posts/2026/11/pool-root-a/media/unclassified.webp' }];
+  const pools = imagePoolProgress({ posts });
+  assert.deepEqual(pools.root.actualImagePostIds, ['pool-root-b']);
+  assert.equal(pools.root.missingPosts, 0);
+  assert.deepEqual(pools.reply.actualImagePostIds, []);
+  assert.equal(pools.reply.missingPosts, 1);
+  const stricter = structuredClone(defaultLottery); stricter.media.images.root.minimumPosts = 3;
+  assert.equal(imagePoolProgress({ posts, lottery: stricter }).root.minimumPosts, 2, 'the minimum cannot exceed the actual pool size');
+});
+
+test('media configuration rejects mixed legacy settings and invalid pool probabilities, minima or types', () => {
+  assert.ok(!Object.hasOwn(defaultLottery, 'image'));
+  const both = { ...structuredClone(defaultLottery), image: structuredClone(legacyImages) };
+  assert.throws(() => validateLottery(both), /either image or media/);
+  for (const mutate of [
+    lottery => { lottery.media.images.root.probability = -1; },
+    lottery => { lottery.media.images.reply.probability = 1.01; },
+    lottery => { lottery.media.images.root.probability = NaN; },
+    lottery => { lottery.media.images.reply.minimumPosts = 0; },
+    lottery => { lottery.media.images.root.minimumPosts = 121; },
+    lottery => { lottery.media.images.root.types = [{ value: 'meme', weight: 1 }]; },
+    lottery => { lottery.media.emotes.root.probability = '0.4'; },
+    lottery => { lottery.media.emotes.reply.counts = [{ weight: 1, min: 0, max: 1 }]; },
+    lottery => { lottery.media.emotes.root.counts = [{ weight: 1, min: 1, max: 4 }]; },
+    lottery => { lottery.media.images.extra = {}; },
+    lottery => { delete lottery.media.emotes.reply; }
+  ]) {
+    const invalid = structuredClone(defaultLottery); mutate(invalid);
+    assert.throws(() => validateLottery(invalid), /image|emote/);
+  }
 });
 
 test('discussion draws use independent streams and old snapshots keep their original shape', () => {

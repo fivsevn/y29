@@ -4,12 +4,16 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, readdir, cp, symlink } from 'n
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies, briefUpdatePost } from '../lucifer0/tools/operations.js';
+import sharp from 'sharp';
+import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation as rawSuggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies, briefUpdatePost } from '../lucifer0/tools/operations.js';
 import { emptyProfile } from '../lucifer0/tools/profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
 import { defaultLottery as rawProductionLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
 const productionLottery = structuredClone(rawProductionLottery);
+// Existing operation scenarios replay the saved, pre-pool presentation contract.
+delete productionLottery.media;
+productionLottery.image = [{ value: 'none', weight: 72 }, { value: 'photo', weight: 14 }, { value: 'screenshot', weight: 8 }, { value: 'meme', weight: 6 }];
 delete productionLottery.researchMaintenance;
 productionLottery.rootBudget = { min: 1, max: 10 };
 const defaultLottery = structuredClone(productionLottery);
@@ -87,6 +91,29 @@ async function draft(prepared, now, posts) {
   operation.research = research(now); operation.posts = posts;
   await writeFile(prepared.operationPath, JSON.stringify(operation));
   return { operation, batch: { version: 1, id: operation.id, mode: 'daily', posts } };
+}
+function mediaLottery() {
+  const lottery = structuredClone(rawProductionLottery);
+  delete lottery.discussion;
+  delete lottery.researchMaintenance;
+  lottery.rootBudget = { min: 1, max: 10 };
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  return lottery;
+}
+async function mediaFiles(f, entries) {
+  const emote = { src: 'assets/emotes/l0/synthetic-face.webp', alt: 'Synthetic reaction', kind: 'emote' };
+  const faceBytes = await sharp({ create: { width: 3, height: 4, channels: 3, background: '#aabbcc' } }).webp().toBuffer();
+  const imageBytes = await sharp({ create: { width: 5, height: 6, channels: 3, background: '#234567' } }).webp().toBuffer();
+  await mkdir(join(f.root, 'assets/emotes/l0'), { recursive: true });
+  await writeFile(join(f.root, emote.src), faceBytes);
+  await writeFile(join(f.root, 'assets/emotes/l0/manifest.json'), JSON.stringify({ version: 1, name: 'L0', items: [{ id: 'synthetic-face', name: 'Synthetic face', src: emote.src, alt: emote.alt }] }));
+  const directory = threadDirectory(entries[0], new Map(entries.map(entry => [entry.id, entry]))) + '/media';
+  await mkdir(join(f.root, directory), { recursive: true });
+  const image = { src: directory + '/scene.webp', alt: 'Synthetic scene', kind: 'image', fit: 'contain' };
+  const localEmote = { src: directory + '/reaction.webp', alt: 'Synthetic local reaction', kind: 'emote' };
+  await writeFile(join(f.root, image.src), imageBytes);
+  await writeFile(join(f.root, localEmote.src), faceBytes);
+  return { image, emote, localEmote };
 }
 async function interruptedDraft(t) {
   const f = await fixture(t), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
@@ -331,6 +358,7 @@ test('reply planning normalizes old reply targets, counts only new descendants a
 });
 
 test('presentation choices remain stable across reordering and unrelated additions', () => {
+  const suggestPostPresentation = input => rawSuggestPostPresentation({ ...input, lottery: defaultLottery });
   const now = Date.now(), entries = [post('image-one', 'guest-one', now), post('image-two', 'guest-two', now, 'image-one'), post('image-three', 'guest-three', now)];
   const before = structuredClone(entries), first = suggestPostPresentation({ seed: 'presentation-seed', posts: entries });
   const reordered = suggestPostPresentation({ seed: 'presentation-seed', posts: [...entries].reverse() });
@@ -350,7 +378,7 @@ test('suggested likes retain zeros and rare high values while roots usually rece
   const now = Date.now();
   const roots = Array.from({ length: 800 }, (_, index) => post('likes-root-' + index, 'guest-root', now));
   const replies = Array.from({ length: 800 }, (_, index) => post('likes-reply-' + index, 'guest-reply', now, 'history-entry'));
-  const { likes } = suggestPostPresentation({ seed: 'likes-distribution', posts: [...roots, ...replies] });
+  const { likes } = rawSuggestPostPresentation({ seed: 'likes-distribution', posts: [...roots, ...replies] });
   const rootLikes = likes.slice(0, roots.length).map(item => item.likes), replyLikes = likes.slice(roots.length).map(item => item.likes);
   const mean = values => values.reduce((sum, count) => sum + count, 0) / values.length;
   assert.ok(likes.every(item => Number.isSafeInteger(item.likes) && item.likes >= 0 && item.likes <= 160));
@@ -1007,15 +1035,107 @@ test('an older unfinished operation gains one stable lottery snapshot without re
   const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : value && typeof value === 'object' ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
   operation.plan.seal = createHash('sha256').update(canonical({ id: operation.id, root: operation.root, seed: operation.plan.seed, budget: operation.plan.budget, selectedIds: operation.plan.selectedIds })).digest('hex');
   await writeFile(prepared.operationPath, JSON.stringify(operation));
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.lottery = mediaLottery();
+  await writeFile(policyPath, JSON.stringify(policy));
   await assert.rejects(suggestUpdatePresentation(f.options), /Prepare again/);
   await prepareUpdate(f.options);
   const upgraded = await readJSON(prepared.operationPath);
   assert.equal(upgraded.plan.budget, operation.plan.budget);
   assert.deepEqual(upgraded.plan.selectedIds, operation.plan.selectedIds);
   assert.ok(upgraded.plan.lottery);
+  assert.ok(!upgraded.plan.lottery.media, 'resuming a pre-snapshot operation must not introduce new image obligations');
+  assert.ok(upgraded.plan.lottery.image);
   assert.deepEqual(upgraded.plan.timeWindow, { start: iso(f.now - DAY), end: iso(f.now) });
   await prepareUpdate(f.options);
   assert.deepEqual((await readJSON(prepared.operationPath)).plan, upgraded.plan);
+  const saved = await draft(prepared, f.now, [post('legacy-text-only', 'guest-legacy-reader', f.now)]);
+  await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+});
+
+test('new media updates enforce ordinary images independently in each nonempty pool before import', async t => {
+  const f = await fixture(t, 4, { lottery: mediaLottery(), replyLottery: fixedReplies(8) });
+  const entries = [post('media-root', 'guest-media-root', f.now), post('media-reply', 'guest-media-reply', f.now, 'media-root')];
+  const media = await mediaFiles(f, entries), prepared = await prepareUpdate(f.options);
+  const check = async expected => {
+    const saved = await draft(prepared, f.now, entries);
+    if (expected) await assert.rejects(ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true }), expected);
+    else await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+  };
+  entries[0].media = [media.emote]; entries[1].media = [media.localEmote];
+  await check(/root ordinary-image pool/);
+  entries[0].media = [media.image];
+  await check(/reply ordinary-image pool/);
+  entries[0].media = [media.localEmote]; entries[1].media = [media.image];
+  await check(/root ordinary-image pool/);
+  entries[0].media = [media.image, media.emote, media.emote, media.localEmote];
+  await check();
+  entries[0].media.push(media.emote);
+  await check(/Invalid media|at most four/);
+  entries[0].media.pop();
+  await check();
+  const interrupted = await readJSON(prepared.operationPath), thread = join(f.root, threadDirectory(entries[0], new Map(entries.map(entry => [entry.id, entry]))));
+  const blocked = join(thread, 'replies/media-reply.md');
+  await mkdir(blocked, { recursive: true });
+  await assert.rejects(writeThreadBatch(f.root, { version: 1, id: interrupted.id, mode: 'daily', posts: entries }, (await loadContent(f.root)).batches), /different content/);
+  await rm(blocked, { recursive: true });
+  assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).count, 2);
+  assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).status, 'already-archived');
+  const imported = (await loadContent(f.root)).feed.posts;
+  assert.deepEqual(imported.find(entry => entry.id === 'media-root').media.map(item => item.kind), ['image', 'emote', 'emote', 'emote']);
+});
+
+test('new media updates reject missing kinds and copied catalog emotes classified as ordinary pictures', async t => {
+  const f = await fixture(t, 4, { lottery: mediaLottery() });
+  const entries = [post('kind-root', 'guest-kind-root', f.now)];
+  const media = await mediaFiles(f, entries), prepared = await prepareUpdate(f.options);
+  for (const [item, error] of [
+    [{ src: media.image.src, alt: media.image.alt }, /explicit image or emote kind/],
+    [{ ...media.emote, kind: 'image' }, /Site emotes cannot be classified/],
+    [{ ...media.localEmote, kind: 'image' }, /copied site emote/]
+  ]) {
+    entries[0].media = [item];
+    const saved = await draft(prepared, f.now, entries);
+    await assert.rejects(validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath }), error);
+  }
+  entries[0].media = [media.image];
+  const saved = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+});
+
+test('new media pools cannot count archived picture posts mixed into a fresh operation', async t => {
+  const f = await fixture(t, 4, { lottery: mediaLottery() });
+  const historical = (await loadContent(f.root)).feed.posts.find(entry => entry.id === 'history-entry');
+  historical.media = [(await mediaFiles(f, [historical])).image];
+  await writeFile(join(f.root, 'posts/2025/04/history-entry/index.md'), renderPostDocument(historical));
+  const prepared = await prepareUpdate(f.options);
+  const saved = await draft(prepared, f.now, [historical, post('new-text-root', 'guest-new-text', f.now)]);
+  await assert.rejects(validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath, backfill: true }), /cannot reuse archived posts/);
+});
+
+test('a replies-only media round needs only new reply images and preserves presentation suggestions on resume', async t => {
+  const lottery = mediaLottery();
+  lottery.rootBudget = { bands: [{ weight: 1, min: 0, max: 0 }] };
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(8) });
+  const historical = (await loadContent(f.root)).feed.posts.find(entry => entry.id === 'history-entry');
+  const entries = [post('only-reply', 'guest-only-reply', f.now, 'history-entry')];
+  const media = await mediaFiles(f, [historical, ...entries]);
+  historical.media = [media.image];
+  await writeFile(join(f.root, 'posts/2025/04/history-entry/index.md'), renderPostDocument(historical));
+  const prepared = await prepareUpdate(f.options);
+  const empty = await draft(prepared, f.now, entries);
+  await assert.rejects(validateUpdateForBatch(empty.batch, { ...f.options, contextPath: prepared.operationPath }), /reply ordinary-image pool/);
+  entries[0].media = [media.image, media.emote];
+  const saved = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+  const suggested = await suggestUpdatePresentation(f.options);
+  assert.deepEqual(suggested.imagePools.root, { postIds: [], minimumPosts: 0, actualImagePostIds: [], missingPosts: 0 });
+  assert.deepEqual(suggested.imagePools.reply.actualImagePostIds, ['only-reply']);
+  const brief = await briefUpdatePost({ ...f.options, postId: 'only-reply' });
+  assert.deepEqual(brief.writer.presentation, { image: brief.editor.image, emoteCount: brief.editor.emoteCount, maximumMedia: 4 });
+  await prepareUpdate(f.options);
+  assert.deepEqual(await suggestUpdatePresentation(f.options), suggested);
+  assert.deepEqual((await briefUpdatePost({ ...f.options, postId: 'only-reply' })).writer.presentation, brief.writer.presentation);
 });
 
 test('brief schedules saved waits between drafts and defers candidates beyond its fixed window', async t => {

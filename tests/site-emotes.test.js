@@ -65,17 +65,24 @@ test('shared emotes span root packages while local raster conversion and retries
   const make = (id, time, replyTo = null) => ({ id, author: 'guest-emote-fixture', guest: { name: 'Synthetic emote reader' },
     createdAt: new Date(time).toISOString(), replyTo, text: '', likes: 0, canon: 'derivative', media: [{ src: item().src, alt: item().alt, fit: 'contain' }] });
   const entries = [make('emote-root-one', now), make('emote-root-two', now + 1000), make('emote-reply', now + 2000, 'emote-root-one')];
+  entries[0].media[0].kind = 'emote';
   const localDirectory = threadDirectory(entries[0], new Map(entries.map(entry => [entry.id, entry]))) + '/media';
   await mkdir(join(f.root, localDirectory), { recursive: true });
   const localSource = localDirectory + '/photo.png';
   await writeFile(join(f.root, localSource), await sharp({ create: { width: 5, height: 6, channels: 4, background: '#abcdef80' } }).png().toBuffer());
-  entries[0].media.push({ src: localSource, alt: 'Synthetic local image' });
+  entries[0].media.push({ src: localSource, alt: 'Synthetic local image', kind: 'image' });
   const input = join(f.directory, 'batch.json'); await writeFile(input, JSON.stringify({ version: 1, id: 'emote-fixture-batch', mode: 'daily', posts: entries }));
   await ingestBatch(input, { root: f.root, reviewed: true });
   const result = await loadContent(f.root);
   assert.equal(result.feed.posts.length, 3);
   assert.ok(result.feed.posts.every(entry => entry.media[0].src === item().src && entry.text === ''));
+  const imported = result.feed.posts.find(entry => entry.id === 'emote-root-one');
+  assert.equal(imported.media[0].kind, 'emote');
+  assert.equal(imported.media[1].kind, 'image');
   assert.deepEqual(await readFile(join(f.root, item().src)), f.bytes);
+  const misclassified = structuredClone(result.batches);
+  misclassified[0].posts[0].media[0].kind = 'image';
+  assert.throws(() => validateContent(result.registry, misclassified, result.policy, { siteEmotes: result.siteEmotes }), /Site emotes cannot be classified/);
   await assert.rejects(stat(join(f.root, localSource)), { code: 'ENOENT' });
   assert.equal((await sharp(await readFile(join(f.root, localSource.replace('.png', '.webp')))).metadata()).format, 'webp');
   assert.equal((await ingestBatch(input, { root: f.root, reviewed: true })).status, 'already-archived');
