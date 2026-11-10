@@ -38,6 +38,8 @@ jobs:
           git diff --cached --stat
           if ! git diff --cached --quiet; then
             git commit -m "content(lucifer0): publish reviewed November 11 batch"
+            git fetch origin "$GITHUB_HEAD_REF"
+            git merge --no-edit -X ours FETCH_HEAD
             git push origin HEAD:"refs/heads/$GITHUB_HEAD_REF"
           fi
       - name: Keep reviewable static preview
