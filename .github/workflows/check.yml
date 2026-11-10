@@ -19,6 +19,17 @@ jobs:
           node lucifer0/tools/update.js finish --work "$RUNNER_TEMP/l0-work"
           echo '===L0_FINISH_END==='
           test ! -e "$RUNNER_TEMP/l0-work/operation.json"
+      - name: Verify both full-resolution WebP images are available
+        run: |
+          for path in \
+            "posts/2026/11/l0-20261110210715-bd3468e0-07/media/door-diagram.webp" \
+            "posts/2026/11/l0-20261110210715-bd3468e0-02/media/exposure-compare.webp"; do
+            url="https://y29.fivsevn.com/lucifer0/$path"
+            echo "Checking $url"
+            curl --fail --silent --show-error --location --max-time 20 "$url" -o /tmp/l0-image.webp
+            file --mime-type /tmp/l0-image.webp | grep -q 'image/webp'
+            test "$(wc -c </tmp/l0-image.webp)" -gt 1000
+          done
       - name: Remove temporary verification branch after successful finish
         env:
           GH_TOKEN: ${{ github.token }}
