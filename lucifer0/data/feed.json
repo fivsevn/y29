@@ -1218,9 +1218,179 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-b34c966c3c3ca328",
+      "handle": "guest_a16cb56c8c995f28e921",
+      "name": "凌晨才看见",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d24bf8dc8c16ffe7",
+      "handle": "guest_4016c69d55659b3a941d",
+      "name": "贴纸看不见",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8e0ed248c03a8c04",
+      "handle": "guest_92be706d96e050f993bd",
+      "name": "相册还没删",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-800cbc878b691e1d",
+      "handle": "guest_c8ed4115caad9b3be086",
+      "name": "说两句就走",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ccc9022e765c7fb2",
+      "handle": "guest_0f20eb11b6dc282250f8",
+      "name": "散场别堵门",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c5be56cf625f3573",
+      "handle": "guest_5d3545337f6835677dca",
+      "name": "跟着走走停停",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261110111419-7d66be80-08",
+      "author": "guest-c5be56cf625f3573",
+      "createdAt": "2026-11-10T09:50:56.467Z",
+      "replyTo": "l0-20261110111419-7d66be80-03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "跟着走走停停"
+      },
+      "text": "散场的时候就想早点坐上车，不想再四处找出口。"
+    },
+    {
+      "id": "l0-20261110111419-7d66be80-06",
+      "author": "guest-ccc9022e765c7fb2",
+      "createdAt": "2026-11-10T07:03:47.467Z",
+      "replyTo": "l0-20261110111419-7d66be80-03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "散场别堵门"
+      },
+      "text": "总比散场站门口听人喊方向强。"
+    },
+    {
+      "id": "l0-20261110111419-7d66be80-05",
+      "author": "guest-d24bf8dc8c16ffe7",
+      "createdAt": "2026-11-10T06:44:39.467Z",
+      "replyTo": "l0-20261110111419-7d66be80-01",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "贴纸看不见"
+      },
+      "text": "架子旁边没贴新位置吗？"
+    },
+    {
+      "id": "l0-20261110111419-7d66be80-07",
+      "author": "visitor-eta",
+      "createdAt": "2026-11-10T06:40:18.467Z",
+      "replyTo": "l0-20261110111419-7d66be80-04",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "text": "群里给朋友看，和拿来替店里招客人是两回事吧。合照里其他人知道吗？"
+    },
+    {
+      "id": "l0-20261110111419-7d66be80-04",
+      "author": "guest-800cbc878b691e1d",
+      "createdAt": "2026-11-10T06:35:44.467Z",
+      "replyTo": "l0-20261110111419-7d66be80-02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "说两句就走"
+      },
+      "text": "发群里了还要挨个问许可？"
+    },
+    {
+      "id": "l0-20261110111419-7d66be80-01",
+      "author": "guest-b34c966c3c3ca328",
+      "createdAt": "2026-11-10T06:33:55.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "凌晨才看见"
+      },
+      "text": "半夜在群里发了取件架挪位通知，第二天就说东西放错。谁半夜盯着物业群看啊。"
+    },
+    {
+      "id": "l0-20261110111419-7d66be80-02",
+      "author": "guest-8e0ed248c03a8c04",
+      "createdAt": "2026-11-10T01:02:37.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "相册还没删"
+      },
+      "text": "朋友让我把上周活动的照片传群里留念，我传了。今天一看，有人直接截了其中一张拿去做店里的宣传封面，还问我怎么这么计较。合照里不只有我，上传到群里就是同意谁都拿去招揽生意吗？"
+    },
+    {
+      "id": "l0-20261110111419-7d66be80-03",
+      "author": "news-neon",
+      "createdAt": "2026-11-10T00:35:12.467Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "城南回声厅、旧船坞两家演出场馆：11月13日起，入场提示会标出夜间上车点和散场步行出口，先试两个周末。交通线路照常运行。\n\n散场时才四处问出口，实在折腾人。看晚场的记得提前核对各自场馆的提示。"
+    },
     {
       "id": "l0-20261110061018-47537328-13",
       "author": "guest-ff09d292ead9ac42",
