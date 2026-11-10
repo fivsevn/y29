@@ -11,6 +11,7 @@ import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucife
 import { defaultLottery as rawProductionLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
 const productionLottery = structuredClone(rawProductionLottery);
 delete productionLottery.researchMaintenance;
+productionLottery.rootBudget = { min: 1, max: 10 };
 const defaultLottery = structuredClone(productionLottery);
 delete defaultLottery.discussion;
 import { createHash } from 'node:crypto';
@@ -215,6 +216,49 @@ test('root mode enforces overall replies, explicit total counts and stricter cur
   await assert.rejects(validateUpdateForBatch(fixedOver.batch, { ...fixed.options, contextPath: fixedPrepared.operationPath }), /total budget/);
 });
 
+test('a zero-root round can continue an old thread with one hundred nested replies and resume its saved plan', async t => {
+  const lottery = { ...structuredClone(defaultLottery), rootBudget: { bands: [{ weight: 1, min: 0, max: 0 }] } };
+  const f = await fixture(t, 4, { lottery, maxBatchPosts: 120, replyLottery: fixedReplies(100) });
+  const prepared = await prepareUpdate({ ...f.options, requestedCount: 120 }), original = await readJSON(prepared.operationPath);
+  assert.equal(prepared.budget, 0); assert.equal(prepared.totalBudget, 120);
+  const suggestion = await suggestUpdateReplies({ ...f.options, threadIds: ['history-entry'] });
+  assert.deepEqual(suggestion.threads, [{ rootId: 'history-entry', replyCount: 100 }]);
+  const entries = Array.from({ length: 100 }, (_, index) => post('hundred-reply-' + index, 'guest-hundred-' + index, f.now, index ? 'hundred-reply-' + (index - 1) : 'history-entry'));
+  const valid = await draft(prepared, f.now, entries);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  const over = await draft(prepared, f.now, [...entries, post('hundred-extra', 'guest-hundred-extra', f.now, 'hundred-reply-99')]);
+  await assert.rejects(validateUpdateForBatch(over.batch, { ...f.options, contextPath: prepared.operationPath }), /overall reply hard limit/);
+  const newRoot = await draft(prepared, f.now, [post('zero-forbidden-root', 'guest-zero-forbidden', f.now)]);
+  await assert.rejects(validateUpdateForBatch(newRoot.batch, { ...f.options, contextPath: prepared.operationPath }), /new-root budget/);
+  await draft(prepared, f.now, entries);
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.lottery.rootBudget = { bands: [{ weight: 1, min: 12, max: 12 }] };
+  policy.replyLottery = fixedReplies(1);
+  await writeFile(policyPath, JSON.stringify(policy));
+  await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
+  const resumed = await readJSON(prepared.operationPath);
+  assert.deepEqual(resumed.plan, original.plan); assert.deepEqual(resumed.posts, entries);
+  assert.deepEqual((await suggestUpdateReplies({ ...f.options, threadIds: ['history-entry'] })).threads, [{ rootId: 'history-entry', replyCount: 100 }]);
+});
+
+test('zero-root updates can finish with no posts and manual totals can reach one hundred twenty', async t => {
+  const lottery = { ...structuredClone(defaultLottery), rootBudget: { bands: [{ weight: 1, min: 0, max: 0 }] } };
+  const quiet = await fixture(t, 4, { lottery, maxBatchPosts: 120, replyLottery: fixedReplies(100) });
+  const zero = await prepareUpdate(quiet.options);
+  assert.equal(zero.budget, 0);
+  assert.equal((await finishUpdate(quiet.options)).status, 'no-posts');
+  const legacy = await fixture(t, 4, { maxBatchPosts: 120 });
+  const prepared = await prepareUpdate({ ...legacy.options, requestedCount: 120 });
+  assert.equal(prepared.budget, 120);
+  const operation = await readJSON(prepared.operationPath);
+  const resumed = await prepareUpdate({ ...legacy.options, requestedCount: 120 });
+  assert.deepEqual((await readJSON(resumed.operationPath)).plan, operation.plan);
+  const entries = Array.from({ length: 120 }, (_, index) => post('manual-total-' + index, 'guest-manual-' + index, legacy.now));
+  const valid = await draft(prepared, legacy.now, entries);
+  await validateUpdateForBatch(valid.batch, { ...legacy.options, contextPath: prepared.operationPath });
+  await assert.rejects(prepareUpdate({ ...legacy.options, requestedCount: 121 }), /integer from 1 to 120/);
+});
+
 test('old plans retain total-post semantics when policy enables reply lotteries', async t => {
   const f = await fixture(t, 2), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
   const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
@@ -363,7 +407,7 @@ test('explicit counts remain fixed on resume and respect integral range and the 
   }
   await assert.rejects(prepareUpdate({ ...f.options, requestedCount: 18 }), /cannot change/);
   assert.deepEqual((await readJSON(result.operationPath)).plan, original.plan);
-  for (const requestedCount of [0, 21, 17.5, '17', null, NaN, Infinity]) await assert.rejects(prepareUpdate({ ...f.options, requestedCount }), /integer from 1 to 20/);
+  for (const requestedCount of [0, 121, 17.5, '17', null, NaN, Infinity]) await assert.rejects(prepareUpdate({ ...f.options, requestedCount }), /integer from 1 to 120/);
   await writeFile(join(f.root, 'environment/forum.md'), '# Updated source for the fixed count');
   await prepareUpdate(f.options);
   const refreshed = await readJSON(result.operationPath);
@@ -389,6 +433,12 @@ test('the prepare CLI accepts explicit counts and rejects changed, out-of-range 
   const resumed = JSON.parse(run(['--work', f.workDirectory, '--count', '17']));
   assert.equal(resumed.id, prepared.id);
   for (const count of ['21', '17.5', '18']) assert.throws(() => run(['--work', f.workDirectory, '--count', count]));
+  const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.maxBatchPosts = 120;
+  await writeFile(policyPath, JSON.stringify(policy));
+  const maximum = JSON.parse(run(['--count', '120', '--work', join(f.directory, 'maximum')]));
+  assert.equal(maximum.budget, 120);
+  assert.throws(() => run(['--count', '121', '--work', join(f.directory, 'invalid')]));
 });
 
 test('prepare creates only one work record and a full raw-source reading, then resumes without redrawing', async t => {

@@ -29,7 +29,7 @@ function ready(user, material) {
 }
 
 function checkRequestedCount(count) {
-  if (count !== undefined && (!Number.isInteger(count) || count < 1 || count > 20)) fail('The requested count must be an integer from 1 to 20');
+  if (count !== undefined && (!Number.isInteger(count) || count < 1 || count > 120)) fail('The requested count must be an integer from 1 to 120');
 }
 
 // The saved seed fixes the default budget draw and a single weighted candidate draw.
@@ -37,10 +37,8 @@ export function drawUpdatePlan({ users, profiles, posts = [], seed, requestedCou
   if (!bounded(seed, 200)) fail('Invalid update seed');
   checkRequestedCount(requestedCount);
   if (lottery !== undefined) validateLottery(lottery);
-  if (replyLottery !== undefined) {
-    validateReplyLottery(replyLottery);
-    if (!Number.isInteger(maxBatchPosts) || maxBatchPosts < 1 || maxBatchPosts > 120 || requestedCount > maxBatchPosts) fail('Invalid publication hard limit for the reply plan');
-  }
+  if (!Number.isInteger(maxBatchPosts) || maxBatchPosts < 1 || maxBatchPosts > 120 || requestedCount > maxBatchPosts) fail('Invalid publication hard limit for the update plan');
+  if (replyLottery !== undefined) validateReplyLottery(replyLottery);
   const pool = users.filter(user => ready(user, { profiles })).sort((a, b) => a.id.localeCompare(b.id, 'en'));
   const { drawnBudget, selectedIds } = drawPlanSelection({ users: pool, profiles, posts, seed, lottery });
   const budget = replyLottery === undefined ? requestedCount ?? drawnBudget : drawnBudget;
@@ -166,7 +164,7 @@ function checkOperation(value, root) {
     validateReplyLottery(plan.replyLottery);
     if (!Number.isInteger(plan.totalBudget) || plan.totalBudget < 1 || plan.totalBudget > 120 || plan.requestedCount !== undefined && plan.totalBudget !== plan.requestedCount) fail('Invalid saved total budget');
   }
-  if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 1 || plan.budget > 20 || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
+  if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 0 || plan.budget > (plan.replyLottery === undefined ? 120 : 20) || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
   checkMaintenancePlan(plan);
   const drawnBudget = drawRootBudget(plan.seed, plan.lottery);
   if (plan.budget !== (plan.replyLottery === undefined ? plan.requestedCount ?? drawnBudget : drawnBudget) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
