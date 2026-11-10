@@ -14,6 +14,10 @@ let storage;
 try { storage = window.localStorage; } catch { /* Browsing works without storage. */ }
 let state, feed, users, posts, toastTimer;
 const main = document.querySelector('main');
+const imageDialog = document.querySelector('#image-dialog'), imageFrame = document.querySelector('#image-frame');
+const imageCaption = document.querySelector('#image-caption'), imageClose = document.querySelector('#image-close');
+const imageOriginal = document.querySelector('#image-original'), imageStatus = document.querySelector('#image-status');
+let imageReturnFocus;
 const loginDialog = document.querySelector('#login-dialog'), loginHeading = document.querySelector('#login-heading');
 const inviteForm = document.querySelector('#invite-form'), inviteCode = document.querySelector('#invite-code');
 const loginVerification = document.querySelector('#login-verification'), robotCheck = document.querySelector('#robot-check');
@@ -42,6 +46,33 @@ function notify(message) {
   clearTimeout(toastTimer); toast.textContent = message; toast.classList.add('visible');
   toastTimer = setTimeout(() => toast.classList.remove('visible'), 2800);
 }
+function openImage(link) {
+  const image = document.createElement('img');
+  image.alt = link.querySelector('img').alt;
+  image.addEventListener('error', () => {
+    if (imageDialog.open && imageFrame.contains(image)) imageStatus.textContent = '图片暂时无法载入，请稍后重试。';
+  });
+  image.src = link.href;
+  imageReturnFocus = link;
+  imageFrame.replaceChildren(image);
+  imageCaption.textContent = image.alt;
+  imageOriginal.href = link.href;
+  imageStatus.textContent = '';
+  if (!imageDialog.open) imageDialog.showModal();
+  imageClose.focus({ preventScroll: true });
+}
+function closeImage() { imageDialog.close(); }
+imageClose.addEventListener('click', closeImage);
+imageDialog.addEventListener('cancel', event => { event.preventDefault(); closeImage(); });
+imageDialog.addEventListener('click', event => { if (event.target === imageDialog) closeImage(); });
+imageDialog.addEventListener('close', () => {
+  if (imageDialog.open) return;
+  imageFrame.replaceChildren();
+  imageCaption.textContent = '';
+  imageStatus.textContent = '';
+  if (imageReturnFocus?.isConnected) imageReturnFocus.focus({ preventScroll: true });
+  imageReturnFocus = null;
+});
 function cancelVerificationTimer() {
   clearTimeout(verificationTimer);
   verificationTimer = undefined;
@@ -175,7 +206,7 @@ function postMarkup(post, { threaded = false, target, preview = false } = {}) {
     <div class="post-heading"><a class="author-name" href="${userURL(user.id)}"${nameStyle(user)}>${esc(user.name)}</a><a class="author-id" href="${userURL(user.id)}">ID:${boardID(user.id)}</a><a class="post-number" href="${postURL(post.id)}">${numberLabel(post.id)}</a></div>
     <div class="post-metadata"><time datetime="${esc(post.createdAt)}" title="${esc(dateLabel(post.createdAt, true))}">${esc(dateLabel(post.createdAt, true))}</time>${post.replyTo ? '<span>回应</span>' : ''}</div>
     ${parent ? `<a class="reply-context" href="${postURL(parent.id)}" aria-label="回复${esc(users.get(parent.author).name)}的${numberLabel(parent.id)}">&gt;&gt;${postNumber(parent.id)}</a>` : ''}
-    <div class="post-content${media.length ? ' with-media' : ''}">${media.map(image => `<a class="post-image" href="${postURL(post.id)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看附图 ↗</span></a>`).join('')}<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(postText(post))}</p></a></div>
+    <div class="post-content${media.length ? ' with-media' : ''}">${media.map(image => `<a class="post-image" href="./${esc(image.src)}" aria-haspopup="dialog" aria-label="查看原图：${esc(image.alt)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看原图 ↗</span></a>`).join('')}<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(postText(post))}</p></a></div>
     <div class="post-actions"><a class="action reply-action" href="${postURL(post.id)}" aria-label="查看${esc(user.name)}的讨论，${replies}条回复" title="查看回复">${icon('reply', 'action-icon')}<span class="reply-count">${replies}</span></a>${deleted ? '' : `<button type="button" class="action like-action" data-action="likes" data-id="${esc(post.id)}" aria-pressed="${liked}" aria-label="${liked ? '取消点赞' : '点赞'}${esc(user.name)}的发言，${post.likes + Number(liked)}个赞" title="${liked ? '取消点赞' : '点赞'}">${icon('heart', 'action-icon')}<span class="like-count">${post.likes + Number(liked)}</span></button>`}<button type="button" class="action share-action" data-action="share" data-id="${esc(post.id)}" aria-label="复制这条发言的链接" title="复制链接">${icon('link', 'action-icon')}</button></div>
     ${preview && !post.replyTo ? replyPreview(post) : ''}
   </article>`;
@@ -241,6 +272,10 @@ document.addEventListener('submit', event => {
   event.preventDefault(); location.hash = `/search?q=${encodeURIComponent(new FormData(event.target).get('q').trim())}`;
 });
 document.addEventListener('click', async event => {
+  const imageLink = event.target.closest('.post-image');
+  if (imageLink && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+    event.preventDefault(); openImage(imageLink); return;
+  }
   if (event.target.closest('.skip-link')) { event.preventDefault(); main.focus({ preventScroll: true }); return; }
   const loginButton = event.target.closest('#login-button');
   if (loginButton) { openLogin(loginButton); return; }
@@ -275,6 +310,7 @@ function selectReply() {
   main.scrollTop = Math.max(0, main.scrollTop + rect.top - viewport.top - Math.max(barHeight + 10, (main.clientHeight - rect.height) / 2));
 }
 window.addEventListener('hashchange', () => {
+  if (imageDialog.open) closeImage();
   if (!feed) return;
   scrollPositions.set(renderedRoute, main.scrollTop);
   renderedRoute = location.hash || '#/';

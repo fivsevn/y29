@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, cp, mkdir, writeFile, readFile, readdir, rm } from 'node:fs/promises';
+import { mkdtemp, cp, mkdir, writeFile, readFile, readdir, rm, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -23,6 +23,7 @@ test('built site preserves existing entrypoints and publishes only explicit soci
   for (const path of ['build.js', 'package.json', 'index.html', 'style.css', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0', 'social']) {
     await cp(new URL(path, project), join(directory, path), { recursive: true });
   }
+  await symlink(new URL('../node_modules', import.meta.url), join(directory, 'node_modules'), 'dir');
   await mkdir(join(directory, 'lucifer0/.private'), { recursive: true });
   await writeFile(join(directory, 'lucifer0/.private/test.json'), '{"syntheticPrivateMarker":true}');
   await writeFile(join(directory, 'lucifer0/assets/not-referenced.txt'), 'syntheticPrivateMarker');

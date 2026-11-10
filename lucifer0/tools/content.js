@@ -1,9 +1,10 @@
-import { readFile, mkdir, writeFile, realpath, lstat, rm } from 'node:fs/promises';
+import { readFile, mkdir, writeFile, realpath, lstat, rm, rename } from 'node:fs/promises';
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { readUserDocuments, buildUserDirectory, isUserAvatarPath, isUserNameColor } from './user-documents.js';
 import { readThreadPackages, writeThreadBatch, isPostMediaPath, threadDirectory } from './thread-packages.js';
+import { preparePostImages, rewritePostImages, normalizeArchivedImages } from './media.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
 const fail = message => { throw new Error(message); };
@@ -163,19 +164,75 @@ async function validateAssets(root, feed) {
   }
 }
 
-export async function buildFeed(root = socialRoot) {
-  const { feed } = await loadContent(root);
-  const path = join(root, 'data/feed.json');
-  await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, JSON.stringify(feed, null, 2) + '\n');
-  await buildUserDirectory(root);
-  return feed;
+export async function buildFeed(root = socialRoot, { locked = false } = {}) {
+  const lock = join(root, '.publish.lock');
+  if (!locked) {
+    try { await mkdir(lock); }
+    catch (error) {
+      if (error.code === 'EEXIST') fail('Another import or build is active; retry after it finishes');
+      throw error;
+    }
+  }
+  try {
+    let { feed } = await loadContent(root);
+    if (await normalizeArchivedImages(root)) ({ feed } = await loadContent(root));
+    const path = join(root, 'data/feed.json');
+    await mkdir(dirname(path), { recursive: true });
+    await writeFile(path, JSON.stringify(feed, null, 2) + '\n');
+    await buildUserDirectory(root);
+    return feed;
+  } finally { if (!locked) await rm(lock, { recursive: true, force: true }); }
 }
 
 function stableJSON(value) {
   if (Array.isArray(value)) return '[' + value.map(stableJSON).join(',') + ']';
   if (value && typeof value === 'object') return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + stableJSON(value[key])).join(',') + '}';
   return JSON.stringify(value);
+}
+
+// A converted draft must be saved before the pending archive is created, so
+// retries and finish use the same public media paths as the stored posts.
+async function saveMediaDraft(path, expected, posts) {
+  const absolute = resolve(path), stat = await lstat(absolute);
+  if (!stat.isFile() || stat.isSymbolicLink()) fail('The media draft must be a regular file');
+  if (stableJSON(await json(absolute)) !== stableJSON(expected)) fail('The draft changed during media conversion; review and retry');
+  const temporary = absolute + '.' + randomUUID() + '.tmp';
+  try {
+    await writeFile(temporary, JSON.stringify({ ...expected, posts }, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+    await rename(temporary, absolute);
+  } finally { await rm(temporary, { force: true }); }
+  expected.posts = posts;
+}
+
+
+const originalImage = /\.(?:png|jpe?g)$/;
+const webpVersion = post => ({ ...post, media: post.media?.map(image => ({ ...image, src: typeof image.src === 'string' ? image.src.replace(originalImage, '.webp') : image.src })) });
+
+// Accept only the exact mechanical path change, never a different body, alt,
+// author, timestamp or image basename. Existing output bytes prove recovery;
+// after cleanup, the validated archived WebP post is the remaining authority.
+async function sameConvertedPost(root, left, right, archived) {
+  if (stableJSON(left) === stableJSON(right)) return true;
+  if (!left || !right || !Array.isArray(left.media) || !Array.isArray(right.media) || stableJSON(webpVersion(left)) !== stableJSON(webpVersion(right))) return false;
+  for (let index = 0; index < left.media.length; index++) {
+    const first = left.media[index].src, second = right.media[index].src;
+    if (first === second) continue;
+    if (!isPostMediaPath(first) || !isPostMediaPath(second)) return false;
+    const original = originalImage.test(first) ? first : originalImage.test(second) ? second : null;
+    const target = original?.replace(originalImage, '.webp');
+    if (!original || ![first, second].includes(target)) return false;
+    try { await lstat(join(root, original)); }
+    catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      if (!archived || stableJSON(archived) !== stableJSON(webpVersion(left))) return false;
+      continue;
+    }
+    // Recovery must not create a new output before normal import validation.
+    try { await lstat(join(root, target)); }
+    catch (error) { if (error.code === 'ENOENT') return false; throw error; }
+    await preparePostImages(root, [{ ...left, media: [{ ...left.media[index], src: original }] }]);
+  }
+  return true;
 }
 
 export async function ingestBatch(input, { root = socialRoot, reviewed = false, ai = false, contextPath, backfill = false } = {}) {
@@ -201,8 +258,36 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
   if (ai && batch.posts.some(post => registry.users.some(user => user.id === post.author && user.kind === 'admin'))) fail('Administrator accounts require manual publication');
   if (pending && pending.id !== batch.id) fail(`An unfinished update must be retried first: ${pending.id}`);
   if (pending && pending.batchDigest !== createHash('sha256').update(stableJSON(batch)).digest('hex')) fail('Update ID already has an unfinished import with different content');
-  const resumingPartialWrite = Boolean(pending);
-  const existing = new Map(existingFeed.posts.map(post => [post.id, post])), seen = new Set(), fresh = [];
+  const separateContext = contextPath && resolve(contextPath) !== resolve(input);
+  const context = separateContext ? await json(resolve(contextPath)) : null;
+  const existing = new Map(existingFeed.posts.map(post => [post.id, post]));
+  const saveDrafts = async posts => {
+    if (context && stableJSON(context.posts) !== stableJSON(posts)) await saveMediaDraft(contextPath, context, posts);
+    if (stableJSON(value.posts) !== stableJSON(posts)) await saveMediaDraft(input, value, posts);
+    batch.posts = posts;
+  };
+  if (!pending) {
+    const recovered = [];
+    for (let index = 0; index < batch.posts.length; index++) {
+      let post = batch.posts[index];
+      const archived = existing.get(post.id);
+      if (archived && stableJSON(archived) !== stableJSON(post)) {
+        if (!await sameConvertedPost(root, post, archived, archived)) fail(`Post ID already exists with different content: ${post.id}`);
+        post = archived;
+      }
+      if (context && stableJSON(context.posts?.[index]) !== stableJSON(post)) {
+        const saved = context.posts?.[index];
+        if (!await sameConvertedPost(root, post, saved, archived)) fail('The batch does not match the saved operation posts');
+        // Existing posts must still match writeThreadBatch's archived snapshot.
+        // Fresh posts can converge on whichever side already contains WebP.
+        if (!archived) post = { ...post, media: post.media.map((image, imageIndex) => ({ ...image, src: image.src.endsWith('.webp') ? image.src : saved.media[imageIndex].src })) };
+      }
+      recovered.push(post);
+    }
+    if (context && (!Array.isArray(context.posts) || context.posts.length !== recovered.length)) fail('The batch does not match the saved operation posts');
+    await saveDrafts(recovered);
+  }
+  const resumingPartialWrite = Boolean(pending), seen = new Set(), fresh = [];
   for (const post of batch.posts) {
     identifier(post.id, 'post.id');
     if (seen.has(post.id)) fail(`Duplicate post ID: ${post.id}`);
@@ -211,8 +296,15 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
       if (stableJSON(existing.get(post.id)) !== stableJSON(post)) fail(`Post ID already exists with different content: ${post.id}`);
     } else fresh.push(post);
   }
+  const syncPublished = async published => {
+    const normalized = batch.posts.map(post => published.posts.find(item => item.id === post.id));
+    for (let index = 0; index < batch.posts.length; index++) {
+      if (!await sameConvertedPost(root, batch.posts[index], normalized[index], normalized[index])) fail(`Archived post changed during image conversion: ${batch.posts[index].id}`);
+    }
+    await saveDrafts(normalized);
+  };
   if (!fresh.length) {
-    await buildFeed(root);
+    await syncPublished(await buildFeed(root, { locked: true }));
     return { status: 'already-archived', id: batch.id, count: batch.posts.length };
   }
   const feed = validateContent(registry, [...batches, { ...batch, posts: fresh }], policy);
@@ -231,7 +323,15 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
   }
   const latest = Math.max(0, ...existingFeed.posts.map(post => Date.parse(post.createdAt)));
   if (!backfill && !resumingPartialWrite && fresh.some(post => Date.parse(post.createdAt) < latest)) fail('New posts must append to the existing timeline; use --backfill only for an explicitly requested historical update');
+  // Existing pending journals must resume with their original byte-for-byte batch.
+  if (!pending) {
+    const replacements = await preparePostImages(root, fresh);
+    if (replacements.size) {
+      const converted = new Map(rewritePostImages(fresh, replacements).map(post => [post.id, post]));
+      await saveDrafts(batch.posts.map(post => converted.get(post.id) || post));
+    }
+  }
   const { path } = await writeThreadBatch(root, batch, batches);
-  await buildFeed(root);
+  await syncPublished(await buildFeed(root, { locked: true }));
   return { status: 'archived', id: batch.id, count: batch.posts.length, path };
 }

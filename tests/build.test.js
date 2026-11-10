@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cp, mkdir, mkdtemp, readFile, readdir, rm, stat } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, stat, symlink } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -24,6 +24,7 @@ test('build stays in its repository and supplies every static runtime dependency
   for (const path of ['build.js', 'package.json', 'index.html', 'style.css', '.nojekyll', 'assets', 'signallock', 'mobileutopia', 'training', 'storyteller', 'lucifer0', 'social']) {
     await cp(new URL('../' + path, import.meta.url), join(project, path), { recursive: true });
   }
+  await symlink(new URL('../node_modules', import.meta.url), join(project, 'node_modules'), 'dir');
   // An absolute script path must not delete or create a dist in the caller's cwd.
   await mkdir(join(caller, 'dist'));
   await mkdir(join(caller, 'dist/keep-this-directory'));
