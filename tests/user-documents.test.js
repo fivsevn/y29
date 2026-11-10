@@ -132,9 +132,10 @@ test('catalog groups comma-separated names linking directly to profiles and pres
   assert.ok(text.endsWith('<!-- users:end -->\n\n模板填写提示保留在这里。\n'));
   assert.doesNotMatch(text, /旧目录|\| 启用 \||\| AI \||\| 主帖 \||\| 回复 \|/);
   await assert.rejects(readFile(join(root, 'users/用户总目录.md')), { code: 'ENOENT' });
-  assert.match(text, /### 本库人物：2人\n\n\[窗边的人\]\(\.\/sample-user\/profile.md\)，\[窗边的人\]\(\.\/second-user\/profile.md\)/);
-  assert.match(text, /### 其他作品人物：1人\n\n\[作品例\]\(\.\/work-user\/profile.md\)/);
+  assert.match(text, /^#### 本库人物：2人\n\n\[窗边的人\]\(\.\/sample-user\/profile.md\)，\[窗边的人\]\(\.\/second-user\/profile.md\)/m);
+  assert.match(text, /^#### 其他作品人物：1人\n\n\[作品例\]\(\.\/work-user\/profile.md\)/m);
   const generated = text.split('<!-- users:start -->')[1].split('<!-- users:end -->')[0];
+  assert.match(generated, /^### 用户总目录$/m);
   assert.match(generated, /^合计：3人。$/m);
   assert.doesNotMatch(generated, /查看档案|编辑档案|github\.com\/.*\/edit\/|^\||^共 /m);
   assert.equal((generated.match(/\]\(\.\/[^/]+\/profile\.md\)/g) || []).length, 3);
@@ -149,8 +150,8 @@ test('catalog groups comma-separated names linking directly to profiles and pres
   assert.equal((await buildUserDirectory(root)).count, 4);
   const expanded = await readFile(result.path, 'utf8');
   assert.match(expanded, /^合计：4人。$/m);
-  assert.match(expanded, /### 本库人物：3人\n/);
-  assert.match(expanded, /### 其他作品人物：1人\n/);
+  assert.match(expanded, /^#### 本库人物：3人\n/m);
+  assert.match(expanded, /^#### 其他作品人物：1人\n/m);
   assert.match(expanded, /\[窗边的人\]\(\.\/added-user\/profile\.md\)/);
   await rm(addedDirectory, { recursive: true });
   await saveAccounts(root, [user, account('second-user'), character]);

@@ -224,11 +224,11 @@ export async function readUserDocuments(root) {
 export async function buildUserDirectory(root) {
   const { registry } = await readUserDocuments(root);
   const users = [...registry.users].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN') || a.id.localeCompare(b.id, 'en'));
-  const lines = ['<!-- users:start -->', '', '## 用户总目录', '', `合计：${users.length}${users.some(user => isAccountDossier(user.kind)) ? '个账号' : '人'}。`];
+  const lines = ['<!-- users:start -->', '', '### 用户总目录', '', `合计：${users.length}${users.some(user => isAccountDossier(user.kind)) ? '个账号' : '人'}。`];
   for (const [kind, heading] of [['visitor', '本库人物'], ['character', '其他作品人物'], ['news', '资讯账号'], ['admin', '管理员账号']]) {
     const group = users.filter(user => user.kind === kind);
     const links = group.map(user => `[${cell(user.name).replace(/\[/g, '&#91;').replace(/\]/g, '&#93;')}](./${user.id}/profile.md)`);
-    lines.push('', `### ${heading}：${group.length}${isAccountDossier(kind) ? '个' : '人'}`, '', links.join('，'));
+    lines.push('', `#### ${heading}：${group.length}${isAccountDossier(kind) ? '个' : '人'}`, '', links.join('，'));
   }
   lines.push('', '<!-- users:end -->');
   const path = join(root, 'users/README.md');
