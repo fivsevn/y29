@@ -129,10 +129,8 @@ main::-webkit-scrollbar{display:none}
 .image-dialog::backdrop{background:#050608e6}
 .image-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;font-size:12px}
 .image-toolbar a,.image-toolbar button{display:flex;align-items:center;min-height:44px;padding:8px 12px;border-radius:8px;background:var(--raised)}
-.image-dialog figure{margin:0}
 .image-frame{display:flex;justify-content:center;align-items:center}
 .image-frame img{width:auto;height:auto;max-width:100%;max-height:calc(100vh - 180px);max-height:calc(100dvh - 180px);object-fit:contain}
-.image-dialog figcaption{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.6;overflow-wrap:anywhere}
 .image-status{margin-top:10px;font-size:12px;color:var(--muted)}
 .image-status:empty{display:none}
 .login-dialog{position:fixed;inset:0;margin:auto;width:calc(100% - 48px);max-width:336px;height:fit-content;max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);overflow:auto;border:1px solid #ffffff12;border-radius:16px;padding:30px 24px 24px;background:var(--surface);color:var(--ink);box-shadow:0 18px 48px #00000055;text-align:center}

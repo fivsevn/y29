@@ -15,7 +15,7 @@ try { storage = window.localStorage; } catch { /* Browsing works without storage
 let state, feed, users, posts, toastTimer;
 const main = document.querySelector('main');
 const imageDialog = document.querySelector('#image-dialog'), imageFrame = document.querySelector('#image-frame');
-const imageCaption = document.querySelector('#image-caption'), imageClose = document.querySelector('#image-close');
+const imageClose = document.querySelector('#image-close');
 const imageOriginal = document.querySelector('#image-original'), imageStatus = document.querySelector('#image-status');
 let imageReturnFocus;
 const loginDialog = document.querySelector('#login-dialog'), loginHeading = document.querySelector('#login-heading');
@@ -55,7 +55,6 @@ function openImage(link) {
   image.src = link.href;
   imageReturnFocus = link;
   imageFrame.replaceChildren(image);
-  imageCaption.textContent = image.alt;
   imageOriginal.href = link.href;
   imageStatus.textContent = '';
   if (!imageDialog.open) imageDialog.showModal();
@@ -68,7 +67,6 @@ imageDialog.addEventListener('click', event => { if (event.target === imageDialo
 imageDialog.addEventListener('close', () => {
   if (imageDialog.open) return;
   imageFrame.replaceChildren();
-  imageCaption.textContent = '';
   imageStatus.textContent = '';
   if (imageReturnFocus?.isConnected) imageReturnFocus.focus({ preventScroll: true });
   imageReturnFocus = null;

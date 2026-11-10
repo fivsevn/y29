@@ -100,7 +100,7 @@ async function renderer(feed, { pending = false, delayedClose = false } = {}) {
     addEventListener: (type, handler) => { dialogHandlers[type] = handler; } };
   // The real image dialog is exercised by social-images.browser.mjs. Keep its
   // static elements available to these renderer and login document doubles.
-  const imageElements = Object.fromEntries(['image-dialog', 'image-frame', 'image-caption', 'image-close', 'image-original', 'image-status']
+  const imageElements = Object.fromEntries(['image-dialog', 'image-frame', 'image-close', 'image-original', 'image-status']
     .map(id => ['#' + id, element(id)]));
   imageElements['#image-dialog'].open = false;
   const elements = { main, '#toast': toast, '#login-dialog': dialog, '#login-heading': loginHeading, '#invite-form': inviteForm,

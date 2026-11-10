@@ -78,7 +78,8 @@ try {
     });
     check(page.url() === url, 'opening the image preserves the post route');
     check(await page.locator('main').evaluate(main => main.scrollTop) === scroll, 'opening the image preserves reading position');
-    check(await page.locator('#image-caption').textContent() === post.media[0].alt, 'the viewer retains the image description');
+    check(await page.locator('#image-frame img').getAttribute('alt') === post.media[0].alt, 'the viewer retains its accessible image description');
+    check(await dialog.locator('figcaption, #image-caption').count() === 0, 'the viewer has no visible image caption');
     check(await page.locator('#image-close').evaluate(button => document.activeElement === button), 'the close button receives focus');
     check(await page.locator('#image-original').getAttribute('href') === new URL(post.media[0].src, base).href, 'the viewer links to the actual image file');
     return link;
