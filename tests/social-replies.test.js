@@ -49,20 +49,31 @@ test('nested replies count toward one thread and retain their immediate parents 
 async function renderer(feed, { pending = false } = {}) {
   const handlers = {}, main = { innerHTML: '', scrollTop: 0, focus() {}, querySelector() { return null; } };
   const toast = { textContent: '', classList: { add() {}, remove() {} } };
-  let fetches = 0, storageWrites = 0;
-  const document = { title: '', querySelector: selector => selector === 'main' ? main : selector === '#toast' ? toast : null,
+  const dialogHandlers = {}, loginCopy = { textContent: '' };
+  Object.defineProperty(loginCopy, 'innerHTML', { set() { throw new Error('Invitation copy must use textContent'); } });
+  let fetches = 0, storageWrites = 0, resumeFetch;
+  const loginButton = { focus() { document.activeElement = loginButton; } }, closeButton = { focus() { document.activeElement = closeButton; } };
+  const dialog = { open: false, showModal() { this.open = true; }, close() { this.open = false; dialogHandlers.close?.(); },
+    addEventListener: (type, handler) => { dialogHandlers[type] = handler; } };
+  const elements = { main, '#toast': toast, '#login-dialog': dialog, '#login-access-copy': loginCopy, '#login-close': closeButton };
+  const document = { title: '', activeElement: loginButton, querySelector: selector => elements[selector] || null,
     querySelectorAll: () => [], getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
   const location = { hash: '#/', href: 'https://fixture.invalid/lucifer0/#/' };
   const context = { ...core, esc: core.escapeHTML, URL, document, location, setTimeout: () => 1, clearTimeout() {},
     window: { localStorage: { getItem() { return null; }, setItem() { storageWrites++; } }, addEventListener: (type, handler) => { handlers[type] = handler; } },
-    fetch: async () => { fetches++; return pending ? new Promise(() => {}) : { ok: true, json: async () => feed }; } };
+    fetch: async () => { fetches++; const response = { ok: true, json: async () => feed };
+      return pending ? new Promise(resolve => { resumeFetch = () => resolve(response); }) : response; } };
   const source = await readFile(new URL('../lucifer0/app.js', import.meta.url), 'utf8');
   vm.runInNewContext(source.replace(/^import .*?;\n/, ''), context);
   await new Promise(resolve => setImmediate(resolve));
   if (!pending) assert.match(main.innerHTML, /empty-thread/);
   return { html: () => main.innerHTML, visit(hash) { location.hash = hash; handlers.hashchange(); return main.innerHTML; },
     toast: () => toast.textContent, fetches: () => fetches, storageWrites: () => storageWrites,
-    clickLogin: () => handlers.click({ target: { closest: selector => selector === '#login-button' ? {} : null } }) };
+    dialogOpen: () => dialog.open, loginCopy: () => loginCopy.textContent, focusRestored: () => document.activeElement === loginButton,
+    completeLoad: async () => { resumeFetch?.(); await new Promise(resolve => setImmediate(resolve)); },
+    clickLogin: () => handlers.click({ target: { closest: selector => selector === '#login-button' ? loginButton : null } }),
+    closeLogin: () => handlers.click({ target: { closest: selector => selector === '#login-close' ? closeButton : null } }),
+    escapeLogin: () => dialogHandlers.cancel({ preventDefault() {} }) };
 }
 const article = (html, id) => html.match(new RegExp(`<article\\b[^>]*id="post-${id}"[\\s\\S]*?<\\/article>`))?.[0] || '';
 const previewIds = html => [...html.matchAll(/class="preview-reply" href="#\/post\/([^"]+)"/g)].map(match => match[1]);
@@ -96,7 +107,7 @@ test('thread details keep all eleven replies and their actual parent links; prof
 const guideText = ['入站须知', '', '这里是这份公告的开头。', '',
   '01 保留自己的声音。', '02 回应原来的话题。', '03 转述时留下来源。',
   '04 不把别人的隐私当素材。', '05 不用重复发言占满页面。', '06 文案中的 <标签> 与 & 也照常显示。',
-  '', '谢谢读到这里。', '', '第二段结尾也来自公告。'].join('\n');
+  '', '谢谢读到这里。', '', '第二段结尾也来自公告。', '', '访问权限', '', '这份邀请说明仅在首帖保存。'].join('\n');
 
 function presentationFixture() {
   const feed = fixture();
@@ -155,10 +166,13 @@ test('the administrator welcome post provides the guide title, copy and original
   assert.equal(guide.title, '入站须知');
   assert.equal(guide.intro, '这里是这份公告的开头。');
   assert.equal(guide.closing, '谢谢读到这里。\n\n第二段结尾也来自公告。');
+  assert.deepEqual(guide.access, { title: '访问权限', text: '这份邀请说明仅在首帖保存。' });
   assert.deepEqual(guide.rules.map(rule => rule.number), ['01', '02', '03', '04', '05', '06']);
   const page = await renderer(feed), about = page.visit('#/about');
   for (const rule of guide.rules) assert.ok(about.includes(`<li data-number="${rule.number}"><p>${core.escapeHTML(rule.text)}</p></li>`));
   assert.ok(about.includes(core.escapeHTML(guide.intro)) && about.includes(core.escapeHTML(guide.closing)));
+  assert.match(about, /class="board-guide"[\s\S]*<span>\/guide<\/span>[\s\S]*<\/section>\s*<section class="board-access"[\s\S]*<span>\/access<\/span>/);
+  assert.ok(about.includes(`<h3 id="access-heading">${guide.access.title}</h3>`) && about.includes(core.escapeHTML(guide.access.text)));
   assert.match(about, /class="guide-post-link" href="#\/post\/site-welcome"/);
   assert.doesNotMatch(about, /<标签>|别刷屏、发广告，也别骚扰他人/);
   const detail = article(page.visit('#/post/site-welcome'), 'site-welcome');
@@ -178,6 +192,7 @@ test('missing, non-admin, reply and malformed welcome sources do not supply a fa
     feed => { feed.posts.find(post => post.id === core.WELCOME_POST_ID).replyTo = 'news-thread'; },
     feed => { feed.posts.find(post => post.id === core.WELCOME_POST_ID).text = guideText.replace('02 回应', '03 回应'); },
     feed => { feed.posts.find(post => post.id === core.WELCOME_POST_ID).text = '入站须知\n\n没有逐条公告。'; },
+    feed => { feed.posts.find(post => post.id === core.WELCOME_POST_ID).text = guideText.split('\n\n访问权限')[0]; },
     feed => { feed.posts.push({ ...feed.posts.find(post => post.id === core.WELCOME_POST_ID) }); }
   ]) {
     const feed = presentationFixture(); change(feed);
@@ -204,15 +219,68 @@ test('welcome number one does not renumber existing post IDs or their quote link
   assert.match(article(page.visit('#/post/welcome-reply'), 'welcome-reply'), /class="reply-context" href="#\/post\/site-welcome"[^>]*>&gt;&gt;0000000001/);
 });
 
-test('log in only shows the invitation toast, including before the feed has loaded', async () => {
+test('log in opens the invitation dialog from the source, restores focus, and sends no extra requests', async () => {
   const index = await readFile(new URL('../lucifer0/index.html', import.meta.url), 'utf8');
   assert.match(index, /<header class="topbar">[\s\S]*<button type="button" class="login-button" id="login-button">log in<\/button>[\s\S]*<\/header>/);
+  assert.match(index, /<dialog id="login-dialog"[^>]*aria-labelledby="login-heading"[^>]*aria-describedby="login-access-copy"/);
+  assert.match(index, /<h2 id="login-heading">内测邀请<\/h2>/);
+  assert.doesNotMatch(index, /type="password"|<form/);
   for (const pending of [false, true]) {
-    const page = await renderer(fixture(), { pending }), before = page.html();
+    const page = await renderer(presentationFixture(), { pending }), before = page.html();
     await page.clickLogin();
-    assert.equal(page.toast(), '本站目前采用内测邀请制，发帖权限随邀请开放。');
-    assert.equal(page.html(), before);
+    assert.equal(page.dialogOpen(), true);
+    assert.equal(page.focusRestored(), false);
+    assert.equal(page.toast(), '');
+    if (pending) {
+      assert.match(page.loginCopy(), /尚未载入/);
+      assert.equal(page.html(), before);
+      await page.completeLoad();
+      assert.equal(page.dialogOpen(), true);
+    }
+    assert.equal(page.loginCopy(), '这份邀请说明仅在首帖保存。');
+    await page.closeLogin();
+    assert.equal(page.dialogOpen(), false);
+    assert.equal(page.focusRestored(), true);
+    await page.clickLogin();
+    page.escapeLogin();
+    assert.equal(page.dialogOpen(), false);
+    assert.equal(page.focusRestored(), true);
     assert.equal(page.fetches(), 1);
     assert.equal(page.storageWrites(), 0);
   }
+});
+
+test('access changes update both about and the dialog as escaped text, never as markup', async () => {
+  const feed = presentationFixture(), page = await renderer(feed);
+  const welcome = feed.posts.find(post => post.id === core.WELCOME_POST_ID);
+  const unsafe = '<img src=x onerror=alert(1)> & 新说明';
+  welcome.text = welcome.text.replace('这份邀请说明仅在首帖保存。', unsafe);
+  const about = page.visit('#/about');
+  assert.ok(about.includes(core.escapeHTML(unsafe)));
+  assert.doesNotMatch(about, /<img src=x/);
+  await page.clickLogin();
+  assert.equal(page.loginCopy(), unsafe);
+  assert.equal(page.fetches(), 1);
+});
+
+test('deleted replies retain identity, dates, parent links and counts without original text, images or likes', async () => {
+  const feed = presentationFixture();
+  const deleted = feed.posts.find(post => post.id === 'admin-reply');
+  Object.assign(deleted, { deleted: true, text: '不应展示的删除前原文', media: [{ src: 'old-private-image.jpg', alt: '旧图' }] });
+  const page = await renderer(feed), world = article(page.html(), 'news-thread');
+  assert.match(world, /class="preview-reply is-deleted" href="#\/post\/admin-reply"/);
+  assert.match(world, /该回复已被删除/);
+  assert.match(world, /class="reply-count">3<\/span>/);
+  assert.doesNotMatch(world, /不应展示|old-private-image/);
+  const detail = article(page.visit('#/post/admin-reply'), 'admin-reply');
+  assert.match(detail, /标识站务/);
+  assert.match(detail, /<time datetime="2026-01-01T01:00:00Z"/);
+  assert.match(detail, /class="reply-context" href="#\/post\/news-thread"/);
+  assert.match(detail, /该回复已被删除/);
+  assert.match(detail, /reply-action|share-action/);
+  assert.doesNotMatch(detail, /不应展示|old-private-image|like-action|data-action="likes"/);
+  assert.match(page.visit('#/user/site-admin'), /该回复已被删除/);
+  assert.doesNotMatch(page.visit('#/search?q=删除前原文'), /id="post-admin-reply"/);
+  assert.match(page.visit('#/search?q=该回复已被删除'), /id="post-admin-reply"/);
+  assert.deepEqual(core.selectPosts(feed.posts, { bookmarks: [] }, { user: 'site-admin', query: '删除前原文' }), []);
 });

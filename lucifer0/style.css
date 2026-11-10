@@ -75,6 +75,7 @@ main::-webkit-scrollbar{display:none}
 .discussion-label{font:10px/1.6 Plex,sans-serif;color:var(--muted);padding:10px 20px 4px}
 .thread-reply{background:var(--surface);margin:8px 10px 8px 22px;padding:11px 12px 6px}
 .post.is-target.thread-reply{background:var(--raised);box-shadow:0 6px 24px #0000003d}
+.deleted-reply .post-text,.preview-reply.is-deleted p{color:var(--muted)}
 .feed-end{padding:24px 16px;color:var(--muted);font-size:10px;text-align:center;letter-spacing:.1em}
 .feed-end[aria-hidden="true"]{padding:18px 0 22px;font:600 16px/1 Arial,sans-serif;letter-spacing:.6em;text-indent:.6em;opacity:.45;user-select:none}
 
@@ -110,6 +111,7 @@ main::-webkit-scrollbar{display:none}
 .about-brand .company-name{font-size:12px;font-weight:500;line-height:1.6;letter-spacing:.15em;color:var(--red);margin-bottom:8px}
 .about-brand h2{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:17px;font-weight:650;line-height:1.6;letter-spacing:.015em;color:var(--ink)}
 .board-guide{margin-top:30px}
+.board-access{margin-top:30px}
 .guide-heading{display:flex;align-items:baseline;gap:12px;margin-bottom:20px}
 .guide-heading>span{font:10px/1.6 Plex,monospace;letter-spacing:.04em;color:var(--red)}
 .guide-heading h3{font-size:13px;line-height:1.6;font-weight:650;color:var(--ink)}
@@ -119,7 +121,13 @@ main::-webkit-scrollbar{display:none}
 .board-rules p,.guide-copy{font-size:12px;line-height:1.85;color:var(--muted);overflow-wrap:anywhere}
 .guide-copy{white-space:pre-wrap;margin-bottom:20px}
 .guide-closing{margin-bottom:0}
+.access-copy{margin-bottom:0}
 .guide-post-link{display:inline-block;margin-top:14px;color:var(--red);font-size:10px}
+.login-dialog{width:calc(100% - 40px);max-width:360px;border:0;border-radius:14px;padding:22px;background:var(--surface);color:var(--ink);box-shadow:var(--panel-shadow)}
+.login-dialog::backdrop{background:#0009}
+.login-dialog h2{font-size:15px;line-height:1.6;margin-bottom:12px}
+.login-dialog p{font-size:12px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}
+.dialog-close{min-width:60px;min-height:36px;margin-top:18px;padding:7px 14px;border-radius:9px;background:var(--raised);color:var(--red);font-size:12px}
 .loading-state{padding:65px 20px;text-align:center;font-size:12px;color:var(--muted)}
 
 #toast{position:fixed;left:50%;bottom:calc(72px + env(safe-area-inset-bottom));transform:translate(-50%,10px);opacity:0;pointer-events:none;z-index:50;max-width:calc(min(100vw,480px) - 28px);width:max-content;padding:10px 16px;border-radius:12px;background:var(--raised);color:var(--ink);box-shadow:var(--panel-shadow);font-size:11px;transition:opacity .15s,transform .15s}

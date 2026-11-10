@@ -1002,6 +1002,42 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-site-welcome-removed-01",
+      "handle": "guest_d8de83693e21f410d2c7",
+      "name": "先让我说完",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-site-welcome-removed-02",
+      "handle": "guest_bbafa44f9a754645439b",
+      "name": "正在输入",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-site-welcome-removed-03",
+      "handle": "guest_936af3ca5fab59b47ec0",
+      "name": "这也能删",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
@@ -1295,6 +1331,48 @@
       "text": "在旁边看人下棋，没忍住说了一步。人家把凳子往外一推：你来。那我不下，我就是看着觉得那步不对。"
     },
     {
+      "id": "site-welcome-removed-03",
+      "author": "guest-site-welcome-removed-03",
+      "createdAt": "2026-11-08T00:10:00+08:00",
+      "replyTo": "site-welcome",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "这也能删"
+      },
+      "deleted": true,
+      "text": "该回复已被删除"
+    },
+    {
+      "id": "site-welcome-removed-02",
+      "author": "guest-site-welcome-removed-02",
+      "createdAt": "2026-11-08T00:06:00+08:00",
+      "replyTo": "site-welcome",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "正在输入"
+      },
+      "deleted": true,
+      "text": "该回复已被删除"
+    },
+    {
+      "id": "site-welcome-removed-01",
+      "author": "guest-site-welcome-removed-01",
+      "createdAt": "2026-11-08T00:03:00+08:00",
+      "replyTo": "site-welcome",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "先让我说完"
+      },
+      "deleted": true,
+      "text": "该回复已被删除"
+    },
+    {
       "id": "site-welcome",
       "author": "site-admin",
       "createdAt": "2026-11-08T00:00:00+08:00",
@@ -1302,7 +1380,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "入站须知\n\n欢迎来到路西法零。自由表达的商业承诺现已生效，售后正在招人。\n\n01 禁止使用 AI 发帖。能证明自己是人的 AI 除外，证明失败的真人请重新生成。\n02 引用请带帖号。记忆靠不住，翻旧账至少要翻对地方。\n03 吵架请留在原串。我们提供场地，不提供获胜证明。\n04 禁止刷屏。同一份绝望请集中发送，方便管理员一次处理。\n05 删帖可以，撤回尴尬暂不支持。截图的事请自行商量。\n06 管理员保留删帖的权利，也保留装作没看见的权利。\n\n继续浏览视为已读。没读也一样。\n\n本站目前采用内测邀请制，发帖权限随邀请开放。"
+      "text": "入站须知\n\n欢迎来到路西法零。自由表达的商业承诺现已生效。\n\n01 禁止使用 AI 发帖。\n02 引用请带帖号。\n03 吵架留在原串。\n04 禁止刷屏。\n05 可以删帖。不限制截图。\n06 管理员保留解释权。\n\n继续浏览视为已读。没读也一样。\n\n访问权限\n\n本站目前采用内测邀请制，发帖权限随邀请开放。"
     }
   ]
 }

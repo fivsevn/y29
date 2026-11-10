@@ -70,7 +70,7 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
   for (const batch of batches) {
     validateBatch(batch, policy);
     for (const post of batch.posts) {
-      keys(post, ['id', 'author', 'createdAt', 'replyTo', 'text', 'likes', 'canon', 'media', 'guest'], 'post');
+      keys(post, ['id', 'author', 'createdAt', 'replyTo', 'text', 'likes', 'canon', 'media', 'guest', 'deleted'], 'post');
       identifier(post.id, 'post.id');
       identifier(post.author, 'post.author');
       if (posts.has(post.id)) fail(`Duplicate post ID: ${post.id}`);
@@ -95,16 +95,22 @@ export function validateContent(registry, batches, policy, { now = Date.now() } 
       if (!timestamp(post.createdAt) || Date.parse(post.createdAt) > now) fail(`Invalid or future timestamp: ${post.id}`);
       if (post.replyTo !== null) identifier(post.replyTo, 'replyTo');
       text(post.text, 2000, 'post.text');
+      if (Object.hasOwn(post, 'deleted') && typeof post.deleted !== 'boolean') fail('Invalid deleted flag');
+      if (post.deleted === true && (post.replyTo === null || post.text !== '该回复已被删除')) fail('Deleted replies must be replies containing only the deletion placeholder');
       if (!Number.isSafeInteger(post.likes) || post.likes < 0) fail('Invalid likes');
       if (!Array.isArray(post.media) || post.media.length > 4) fail('Invalid media');
+      if (post.deleted === true && post.media.length) fail('Deleted replies cannot retain media');
       for (const image of post.media) {
         keys(image, ['src', 'alt'], 'media');
         if (!isPostMediaPath(image.src)) fail('Invalid media path: use the thread package media directory');
         text(image.alt, 240, 'image.alt');
       }
-      const fingerprint = JSON.stringify([post.author, post.replyTo, post.text.normalize('NFKC').replace(/\s+/g, ' ').trim()]);
-      if (fingerprints.has(fingerprint)) fail(`Duplicate content: ${post.id}`);
-      fingerprints.add(fingerprint); posts.set(post.id, post);
+      if (post.deleted !== true) {
+        const fingerprint = JSON.stringify([post.author, post.replyTo, post.text.normalize('NFKC').replace(/\s+/g, ' ').trim()]);
+        if (fingerprints.has(fingerprint)) fail(`Duplicate content: ${post.id}`);
+        fingerprints.add(fingerprint);
+      }
+      posts.set(post.id, post);
     }
   }
   for (const post of posts.values()) {

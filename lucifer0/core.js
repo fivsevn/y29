@@ -52,6 +52,11 @@ export function parseSiteGuide(posts, users) {
   const lines = post.text.replace(/\r\n?/g, '\n').trim().split('\n');
   const title = lines.shift()?.trim();
   if (title !== '入站须知') return null;
+  const accessStart = lines.findIndex(line => line.trim() === '访问权限');
+  if (accessStart < 0) return null;
+  const access = { title: lines[accessStart].trim(), text: lines.slice(accessStart + 1).join('\n').trim() };
+  if (!access.text) return null;
+  lines.splice(accessStart);
   const ruleLine = line => /^(\d{2})[ \t]+(\S.*)$/.exec(line.trim());
   const firstRule = lines.findIndex(line => ruleLine(line));
   if (firstRule < 0) return null;
@@ -69,7 +74,7 @@ export function parseSiteGuide(posts, users) {
     }
   }
   const outro = ending.join('\n').trim();
-  return intro && rules.length && outro ? { id: post.id, title, intro, rules, closing: outro } : null;
+  return intro && rules.length && outro ? { id: post.id, title, intro, rules, closing: outro, access } : null;
 }
 
 export function rootOf(posts, id) {
@@ -91,6 +96,8 @@ export function threadReplyPreview(posts, id) {
   return { rootId: thread[0]?.id ?? null, replies: thread.slice(1, 11), total, collapsed: total > 10 };
 }
 
+export const postText = post => post.deleted === true ? '该回复已被删除' : post.text;
+
 export function selectPosts(posts, state, { view = 'all', user, query = '', users = [] } = {}) {
   const needle = query.trim().toLocaleLowerCase();
   const following = new Set(users.filter(account => account.inFollowing === true).map(account => account.id));
@@ -100,7 +107,7 @@ export function selectPosts(posts, state, { view = 'all', user, query = '', user
     if (post.replyTo) return false;
     if (view === 'following') return following.has(post.author);
     return true;
-  }).filter(post => !needle || post.text.toLocaleLowerCase().includes(needle)).sort(newestFirst);
+  }).filter(post => !needle || postText(post).toLocaleLowerCase().includes(needle)).sort(newestFirst);
 }
 
 const displayClock = new Intl.DateTimeFormat('en-GB', {

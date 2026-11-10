@@ -116,6 +116,57 @@ test('duplicate users, handles, batches, IDs and disguised repeat content are re
   for (const mutate of mutations) { const f = fixture(); mutate(f); assert.throws(() => validate(f), /Duplicate|duplicate/); }
 });
 
+test('deleted flags accept only empty-media reply placeholders and preserve unique IDs', () => {
+  const f = fixture(), root = f.batches.flatMap(batch => batch.posts).find(post => post.replyTo === null);
+  const reply = { ...root, id: 'deleted-reply-one', replyTo: root.id, text: '该回复已被删除', media: [], deleted: true };
+  const batch = { version: 1, id: 'deleted-replies', mode: 'sample', posts: [reply, { ...reply, id: 'deleted-reply-two' }] };
+  f.batches.push(batch);
+  assert.equal(validate(f).posts.filter(post => post.deleted === true).length, 2);
+  assert.ok(validate(f).posts.filter(post => !post.id.startsWith('deleted-reply')).every(post => !Object.hasOwn(post, 'deleted')));
+  const invalid = [
+    item => { item.deleted = 'true'; },
+    item => { item.deleted = null; },
+    item => { item.deleted = 1; },
+    item => { item.replyTo = null; },
+    item => { item.text = '仍然保留原来的发言'; },
+    item => { item.text += '\n'; },
+    item => { item.media = [{ src: `posts/2026/11/${root.id}/media/test.svg`, alt: '旧图片' }]; }
+  ];
+  for (const mutate of invalid) {
+    const broken = structuredClone(f); mutate(broken.batches.at(-1).posts[0]);
+    assert.throws(() => validate(broken), /deleted|Deleted/);
+  }
+  const duplicateId = structuredClone(f); duplicateId.batches.at(-1).posts[1].id = reply.id;
+  assert.throws(() => validate(duplicateId), /Duplicate post ID/);
+  for (const item of batch.posts) item.deleted = false;
+  assert.throws(() => validate(f), /Duplicate content/);
+  const ordinary = fixture(); ordinary.batches[0].posts[0].deleted = false;
+  assert.equal(validate(ordinary).posts.find(post => post.id === ordinary.batches[0].posts[0].id).deleted, false);
+});
+
+test('multiple deleted guest replies archive, rebuild and retry without losing their flags', async t => {
+  const { root, directory } = await repositoryCopy(t), batch = newBatch();
+  batch.posts = ['deleted-guest-one', 'deleted-guest-two', 'deleted-guest-three'].map(id => ({
+    ...batch.posts[0], id, author: 'guest-deleted-reader', guest: { name: '路过的读者' },
+    replyTo: source.feed.posts.find(post => post.replyTo === null).id, text: '该回复已被删除', deleted: true
+  }));
+  const input = join(directory, 'deleted-replies.json');
+  await writeFile(input, JSON.stringify(batch));
+  assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'archived');
+  assert.equal((await ingestBatch(input, { root, reviewed: true })).status, 'already-archived');
+  const loaded = await loadContent(root);
+  for (const expected of batch.posts) {
+    assert.deepEqual(loaded.feed.posts.find(post => post.id === expected.id), expected);
+    const path = loaded.files.find(path => path.endsWith(`/replies/${expected.id}.md`));
+    const markdown = await readFile(path, 'utf8');
+    assert.match(markdown, /\ndeleted: true\n/);
+    assert.deepEqual(parsePostDocument(markdown), expected);
+  }
+  batch.posts[0].deleted = false;
+  await writeFile(input, JSON.stringify(batch));
+  await assert.rejects(ingestBatch(input, { root, reviewed: true }), /conflict|different/i);
+});
+
 test('deleted historical accounts fail while disabled historical accounts remain readable', () => {
   const f = fixture(); f.registry.users.find(user => user.id === 'alan').enabled = false;
   assert.ok(validate(f).posts.some(post => post.author === 'alan'));

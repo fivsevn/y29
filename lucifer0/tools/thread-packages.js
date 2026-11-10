@@ -8,7 +8,7 @@ const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
 const POST_PATH = /^posts\/\d{4}\/\d{2}\/([a-z0-9][a-z0-9-]{1,63})\/(?:index\.md|replies\/([a-z0-9][a-z0-9-]{1,63})\.md)$/;
 const MEDIA_PATH = /^posts\/\d{4}\/(?:0[1-9]|1[0-2])\/[a-z0-9][a-z0-9-]{1,63}\/media\/[a-z0-9][a-z0-9-]{0,95}\.(?:svg|png|jpg|webp)$/;
 const META = ['id', 'author', 'createdAt', 'replyTo', 'likes', 'canon', 'media'];
-const OPTIONAL_META = ['guest'];
+const OPTIONAL_META = ['guest', 'deleted'];
 const PENDING_PATH = '.publish-pending.json';
 const hash = text => createHash('sha256').update(text).digest('hex');
 const canonical = value => Array.isArray(value) ? '[' + value.map(canonical).join(',') + ']' : value && typeof value === 'object' ? '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + canonical(value[key])).join(',') + '}' : JSON.stringify(value);
