@@ -1,4 +1,4 @@
-name: Lucifer Zero one-time draft briefs
+name: Lucifer Zero one-time reply quota preparation
 on:
   push:
     branches: [l0-update-20261110-evening]
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  brief:
+  draw:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
-      - name: Resume same operation and draw three root briefs
+      - name: Resume frozen lottery and inspect reply quotas
         run: |
           mkdir -p /tmp/l0-work
           cat > /tmp/l0-work/operation.json <<'L0_OPERATION_JSON'
@@ -397,20 +397,95 @@ jobs:
               "seal": "ae00c101a6d058e3f43f658b06988e223d4c9d218d1ba5fdcee194864f96c111"
             },
             "sourceDigest": "723b4722e8d71cf5414095ab9deced065e07a49b409c435b391a3aa3560c74bf",
-            "research": [],
-            "posts": [],
+            "research": [
+              {
+                "category": "news",
+                "kind": "feed",
+                "url": "https://www.fnn.jp/articles/-/1148894",
+                "visitedAt": "2026-11-10T19:15:00+08:00",
+                "publishedAt": "2026-11-09T17:26:00+09:00",
+                "summary": "已读11月9日FNN报道：长崎和平公园雨中静坐的现场诉求、受访声音和活动情况；取材价值在于公开活动告示的写法与报道边界，本轮未据此虚构具体政治新闻。"
+              },
+              {
+                "category": "trend",
+                "kind": "thread",
+                "url": "https://www.v2ex.com/t/1255444",
+                "visitedAt": "2026-11-10T19:17:00+08:00",
+                "publishedAt": null,
+                "summary": "实际阅读楼层上下投诉问题的完整主帖及可见多条回复，包含楼上楼下噪音、物业与业主群协调、住户自述及不同归责；借鉴日常分歧如何在回复中变换责任边界，改编为本次-01物业物件安置与-02公开共享权限争议，并非搬用其事件。"
+              },
+              {
+                "category": "daily",
+                "kind": "thread",
+                "url": "https://www.reddit.com/r/CasualConversation/comments/1xrqjpg/showed_my_dad_how_to_check_my_dashcam_app_and_now/",
+                "visitedAt": "2026-11-10T19:17:30+08:00",
+                "publishedAt": null,
+                "summary": "阅读原作者向父亲共享行车记录仪App权限后被反复点评驾驶习惯的正文与十余条可见回复；有人建议更改密码、轻松设限，也有人认为关切有温情。抽取最初共享授权与后续用途分歧的发言结构，改编为-02活动照片从群内留念被拿作店铺宣传的争议。"
+              }
+            ],
+            "posts": [
+              {
+                "id": "l0-20261110111419-7d66be80-01",
+                "author": "guest-b34c966c3c3ca328",
+                "guest": {
+                  "name": "凌晨才看见"
+                },
+                "createdAt": "2026-11-10T06:33:55.467Z",
+                "replyTo": null,
+                "text": "半夜在群里发了取件架挪位通知，第二天就说东西放错。谁半夜盯着物业群看啊。",
+                "likes": 0,
+                "canon": "derivative",
+                "media": []
+              },
+              {
+                "id": "l0-20261110111419-7d66be80-02",
+                "author": "guest-8e0ed248c03a8c04",
+                "guest": {
+                  "name": "相册还没删"
+                },
+                "createdAt": "2026-11-10T01:02:37.467Z",
+                "replyTo": null,
+                "text": "朋友让我把上周活动的照片传群里留念，我传了。今天一看，有人直接截了其中一张拿去做店里的宣传封面，还问我怎么这么计较。合照里不只有我，上传到群里就是同意谁都拿去招揽生意吗？",
+                "likes": 0,
+                "canon": "derivative",
+                "media": []
+              },
+              {
+                "id": "l0-20261110111419-7d66be80-03",
+                "author": "news-neon",
+                "createdAt": "2026-11-10T00:35:12.467Z",
+                "replyTo": null,
+                "text": "城南回声厅、旧船坞两家演出场馆：11月13日起，入场提示会标出夜间上车点和散场步行出口，先试两个周末。交通线路照常运行。\n\n散场时才四处问出口，实在折腾人。看晚场的记得提前核对各自场馆的提示。",
+                "likes": 4,
+                "canon": "derivative",
+                "media": []
+              }
+            ],
             "status": "prepared",
-            "reviews": [],
+            "reviews": [
+              {
+                "postId": "l0-20261110111419-7d66be80-01",
+                "negative": true,
+                "reason": "对物业深夜通知、次日即认定放错物品表达不满。"
+              },
+              {
+                "postId": "l0-20261110111419-7d66be80-02",
+                "negative": true,
+                "reason": "对共同照片未经合意被用于宣传及反指责产生明确争议。"
+              },
+              {
+                "postId": "l0-20261110111419-7d66be80-03",
+                "negative": true,
+                "reason": "报道演出场馆散场路线告示更新，并对先前散场问路不便表示不满。"
+              }
+            ],
             "researchMaintenance": []
           }
           L0_OPERATION_JSON
           node lucifer0/tools/update.js prepare --work /tmp/l0-work
-          echo 'BEGIN_BRIEF_1'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-01 --work /tmp/l0-work
-          echo 'END_BRIEF_1'
-          echo 'BEGIN_BRIEF_2'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-02 --work /tmp/l0-work
-          echo 'END_BRIEF_2'
-          echo 'BEGIN_BRIEF_3'
-          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-03 --work /tmp/l0-work
-          echo 'END_BRIEF_3'
+          echo 'BEGIN_QUOTAS'
+          node lucifer0/tools/update.js replies --work /tmp/l0-work
+          echo 'END_QUOTAS'
+          echo 'BEGIN_REPLY_BRIEF'
+          node lucifer0/tools/update.js brief --post l0-20261110111419-7d66be80-04 --thread l0-20261110111419-7d66be80-02 --work /tmp/l0-work
+          echo 'END_REPLY_BRIEF'
