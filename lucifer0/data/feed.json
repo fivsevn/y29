@@ -1950,9 +1950,233 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-707e113ce219304a",
+      "handle": "guest_0b6800a351e373bfa4bc",
+      "name": "周末又轮到我",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e9ffbcaffd1621e5",
+      "handle": "guest_db3c35e715a9f630567d",
+      "name": "晚班留灯",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-25627a89ced3fd7d",
+      "handle": "guest_738e45ef9b7215391145",
+      "name": "拆包先别扔",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-58fe2faaa837bde2",
+      "handle": "guest_b88f441e656cd0a9800f",
+      "name": "随手记账",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-931cfbe7df878888",
+      "handle": "guest_ac4e7d599acd3ce9083f",
+      "name": "夜班打字机",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a501cffc0a11fe1d",
+      "handle": "guest_a07cc274dbfa4c1cd984",
+      "name": "大碗别空",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261111214536-e145d75f-reply3",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-11T16:50:40.997Z",
+      "replyTo": "l0-20261111214536-e145d75f-72922b95dc8d",
+      "likes": 36,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111214536-e145d75f-72922b95dc8d/media/tray-placement.webp",
+          "alt": "手绘点心台摆放示意，前排三个托盘编号1至3，后排设补货位置并标明取餐方向。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "我给你画个简图。我们食堂点心台，卖得快的三盘放前边，后边得留地方补，不然顾客伸手拿时碰着其他盘。\n\n你会搭颜色挺好。至于商场专门做陈列要学什么，我真不知道，拿你以前摆过的照片去问问。"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-reply4",
+      "author": "visitor-kappa-upper",
+      "createdAt": "2026-11-11T16:49:31.997Z",
+      "replyTo": "l0-20261111214536-e145d75f-cb1dff9b9c4a",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "前天记的是同款同容量吗？"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-reply1",
+      "author": "visitor-eta-upper",
+      "createdAt": "2026-11-11T16:47:56.997Z",
+      "replyTo": "l0-20261111214536-e145d75f-f75f6eafc5c3",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "我孩子早上出门还念成“妈妈早上好，泳帽不见了，游泳靠你保”\n\n最后在他自己书包侧袋摸出来了。"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-reply5",
+      "author": "guest-e9ffbcaffd1621e5",
+      "createdAt": "2026-11-11T16:37:06.997Z",
+      "replyTo": "l0-20261111214536-e145d75f-85c23cd1ff3c",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "晚班留灯"
+      },
+      "text": "不是，你写的是“最后那个名字”，实际每次都是你锁门？"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-reply6",
+      "author": "guest-a501cffc0a11fe1d",
+      "createdAt": "2026-11-11T16:34:32.997Z",
+      "replyTo": "l0-20261111214536-e145d75f-f75f6eafc5c3",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "大碗别空"
+      },
+      "text": "一看到这几句脑子里就有拍子了，停不下来"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-reply2",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-11T16:30:59.997Z",
+      "replyTo": "l0-20261111214536-e145d75f-85c23cd1ff3c",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "先对一下实际交接吧，三周表上最后一个名字都是你，跟三周最后真是你一个人干的，是两回事。要是活也全你做，那就拿着表问他怎么轮的。"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-5795c2edd2e7",
+      "author": "visitor-kappa",
+      "createdAt": "2026-11-11T16:30:08.997Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "有人给我发这个，说照着改裤腿就行。\n\n /　\\\n |　||　|\n |　||　|\n |　||　|\n\n在我手机上两条腿挤成一条线了。到底是要收裤脚还是改裤裆啊\n\n能不能先把裤子穿上拍一张。"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-85c23cd1ff3c",
+      "author": "guest-707e113ce219304a",
+      "createdAt": "2026-11-11T16:20:26.997Z",
+      "replyTo": null,
+      "likes": 18,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111214536-e145d75f-85c23cd1ff3c/media/three-weeks.webp",
+          "alt": "手画的三周收尾排班记录，W1、W2、W3每行最后都是被红圈标出的ME。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "周末又轮到我"
+      },
+      "text": "群里又说周末收尾是轮着来的，说是大家都投过票。\n\n我把最近三周的表抄了一下，怎么每次最后那个名字都是我？上周问过一次，回我“你比较熟流程”。\n\n那投票是给谁看的啊。图我自己重画的，没放同事名字。"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-cb1dff9b9c4a",
+      "author": "guest-58fe2faaa837bde2",
+      "createdAt": "2026-11-11T16:20:23.997Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "随手记账"
+      },
+      "text": "双十一终于忍住没付款。那个保温壶我前天看是179，昨天变209，今天用了券还要189。\n\n问店家为什么券后比之前贵，对面就回“价格会随活动调整”。是，我当然看出来它调整了啊。\n\n图是我自己记的三个数，不是抓价软件。"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-bff2bff8e7a8",
+      "author": "guest-25627a89ced3fd7d",
+      "createdAt": "2026-11-11T16:20:03.997Z",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "拆包先别扔"
+      },
+      "text": "快递盒底下开了口，我拍了照找售后。群里有人说我想白嫖，理由居然是我把面单上的名字遮掉了。\n\n不遮名字你又说我乱发别人地址。到底想让我怎么拍？东西还没拆，先给我扣个帽子。"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-f75f6eafc5c3",
+      "author": "guest-931cfbe7df878888",
+      "createdAt": "2026-11-11T16:19:07.997Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "夜班打字机"
+      },
+      "text": "下班路上在群里看见一句：\n\n太太早上好\n你家先生要被炒\n工作靠你保\n\n下面有人回“先生早上好，你家太太也要炒，工作谁来保”\n\n坏了 我现在念什么都想往这个调上编"
+    },
+    {
+      "id": "l0-20261111214536-e145d75f-72922b95dc8d",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-11T16:18:58.997Z",
+      "replyTo": null,
+      "likes": 19,
+      "canon": "derivative",
+      "media": [],
+      "text": "想问问有人做商场陈列吗\n\n我以前做促销，现在在甜品店前台，收银、补货、改订单、摆台每天都要弄。最近给柜台换了两次颜色，越弄越想知道专门做陈列的工作是啥样。\n\n会搭颜色但什么专业软件我可不会……现在去学还来得及吗\n\n没辞职啊，先问问。"
+    },
     {
       "id": "l0-20261111160224-46b1ba58-14",
       "author": "guest-e64cfd78b63230c6",
