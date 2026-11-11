@@ -4,12 +4,15 @@ import { mkdtemp, mkdir, writeFile, readFile, rm, realpath } from 'node:fs/promi
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { refreshIntake, bindIntakeRequest, githubIntakeClient } from '../lucifer0/tools/intake-refresh.js';
+import { refreshIntake, bindIntakeRequest, githubIntakeClient, IntakeAPIError } from '../lucifer0/tools/intake-refresh.js';
 
 const NOW = Date.parse('2026-11-11T00:00:00Z'), HEAD = 'a'.repeat(40), COMMIT = 'b'.repeat(40);
 const DOCUMENT = 'lucifer0/environment/source-sampling.md';
+const REQUEST = '.github/state/lucifer0-intake-request.json';
 const iso = value => new Date(value).toISOString();
 const sha = text => createHash('sha1').update(`blob ${Buffer.byteLength(text)}\0`).update(text).digest('hex');
+const requestText = (requestId = 'request-one', requestedAt = NOW) => JSON.stringify({ version: 1, requestId, requestedAt: iso(requestedAt) }, null, 2) + '\n';
+const content = (path, text) => ({ path, encoding: 'base64', content: Buffer.from(text).toString('base64'), sha: sha(text) });
 const md = (id, text = '1. 发言者 1：今天有点累。\n2. 发言者 2：我也是。') => `# 素材\n\n固定说明。\n\n<!-- intake-request:${id} -->\n<!-- samples:start -->\n采集时间：2026-11-11 08:00:03（北京时间）\n\n### 讨论一\n${text}\n<!-- samples:end -->\n`;
 const run = (id = 'request-one', patch = {}) => ({ id: 321, event: 'workflow_dispatch', head_branch: 'main', head_sha: HEAD, display_title: `Opinion intake ${id}`, status: 'completed', conclusion: 'success', created_at: iso(NOW + 1000), run_started_at: iso(NOW + 2000), updated_at: iso(NOW + 10000), ...patch });
 
@@ -22,13 +25,18 @@ async function fixture(t) {
   root = await realpath(root);
   await writeFile(join(root, 'publication.json'), JSON.stringify({ caseAdaptation: { count: 3 } }));
   await writeFile(join(root, 'environment/source-sampling.md'), '# 素材\n<!-- samples:start -->\n旧内容\n<!-- samples:end -->\n');
-  const f = { root, workDirectory, dirty: false, runs: [], calls: [], gitCalls: [], remoteText: md('request-one'), canDispatch: true, commitHead: HEAD, documentCommit: COMMIT, commitDate: NOW + 8000 };
+  const f = { root, workDirectory, dirty: false, runs: [], calls: [], gitCalls: [], remoteText: md('request-one'), requestMainText: null, requestHeadText: requestText(), canDispatch: true, commitHead: HEAD, documentCommit: COMMIT, commitDate: NOW + 8000 };
   f.github = { get canDispatch() { return f.canDispatch; }, request: async (method, path, body) => {
     f.calls.push({ method, path, body });
-    if (method === 'POST') return null;
+    if (method === 'POST') { if (f.dispatchError) throw f.dispatchError; return null; }
     if (path.includes('/runs?')) return { workflow_runs: f.runs };
     if (path.includes('/commits?')) return [{ sha: f.documentCommit, parents: [{ sha: f.commitHead }], committer: { login: 'github-actions[bot]' }, commit: { committer: { date: iso(f.commitDate) } } }];
-    if (path.includes('/contents/')) return { path: DOCUMENT, encoding: 'base64', content: Buffer.from(f.remoteText).toString('base64'), sha: sha(f.remoteText) };
+    if (path.includes(`/contents/${REQUEST}?`)) {
+      const text = path.endsWith('?ref=main') ? f.requestMainText : f.requestHeadText;
+      if (text === null) throw new IntakeAPIError(404);
+      return content(REQUEST, text);
+    }
+    if (path.includes(`/contents/${DOCUMENT}?`)) return content(DOCUMENT, f.remoteText);
     throw new Error('Unexpected synthetic API path');
   } };
   f.git = async args => {
@@ -59,12 +67,142 @@ test('one prepare dispatches once, resumes the same request and never accepts an
   await assert.rejects(readFile(join(f.workDirectory, 'operation.json')), { code: 'ENOENT' });
 });
 
-test('without credentials the assistant receives one actionable browser dispatch and a persistent ID', async t => {
+test('without credentials the connected app receives an exact public request and a persistent ID', async t => {
   const f = await fixture(t); f.canDispatch = false;
   const first = await refreshIntake(f.options), second = await refreshIntake(f.options);
-  assert.equal(first.nextAction, 'dispatch-in-browser');
+  assert.equal(first.nextAction, 'publish-intake-request');
   assert.equal(first.workflowUrl, 'https://github.com/fivsevn/y29/actions/workflows/opinion-intake.yml');
   assert.equal(first.ref, 'main'); assert.equal(second.requestId, first.requestId);
+  assert.deepEqual(first.requestPublication, {
+    repository: 'fivsevn/y29', branch: 'main', path: REQUEST,
+    content: requestText(), commitMessage: 'Opinion intake request-one'
+  });
+  assert.deepEqual(second.requestPublication, first.requestPublication);
+  assert.deepEqual(JSON.parse(first.requestPublication.content), { version: 1, requestId: 'request-one', requestedAt: iso(NOW) });
+  assert.doesNotMatch(JSON.stringify(first.requestPublication), new RegExp(f.root.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.doesNotMatch(first.requestPublication.content, /token|workDirectory|root|GH_TOKEN|GITHUB_TOKEN/);
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 0);
+});
+
+test('an exact request already on main waits for its run without another publication', async t => {
+  const f = await fixture(t); f.canDispatch = false;
+  const first = await refreshIntake(f.options);
+  f.requestMainText = first.requestPublication.content;
+  const second = await refreshIntake(f.options);
+  assert.equal(second.nextAction, 'wait-for-run');
+  assert.equal(second.requestPublication, undefined);
+  assert.equal(second.requestId, first.requestId);
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 0);
+  await assert.rejects(readFile(join(f.workDirectory, 'operation.json')), { code: 'ENOENT' });
+});
+
+test('restored credentials do not dispatch a request already assigned to the connected app', async t => {
+  const f = await fixture(t); f.canDispatch = false;
+  const first = await refreshIntake(f.options);
+  f.canDispatch = true;
+  assert.equal((await refreshIntake(f.options)).nextAction, 'publish-intake-request');
+  f.requestMainText = first.requestPublication.content;
+  assert.equal((await refreshIntake(f.options)).nextAction, 'wait-for-run');
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 0);
+});
+
+test('a matching push verifies its head request before issuing the normal material receipt', async t => {
+  const f = await fixture(t); f.canDispatch = false;
+  await refreshIntake(f.options);
+  f.runs = [run('request-one', { event: 'push' })];
+  const ready = await refreshIntake({ ...f.options, now: NOW + 20000 });
+  assert.equal(ready.status, 'ready');
+  assert.equal(ready.intakeReceipt.requestId, 'request-one');
+  assert.equal(ready.intakeReceipt.documentSha, sha(f.remoteText));
+  assert.equal(ready.intakeReceipt.headSha, HEAD);
+  assert.ok(f.calls.some(call => call.path.endsWith(`/contents/${REQUEST}?ref=${HEAD}`)));
+  assert.deepEqual(f.gitCalls.filter(args => args[0] === 'merge'), [['merge', '--ff-only', '--no-edit', 'FETCH_HEAD']]);
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 0);
+});
+
+test('a push with the right title but a different head request cannot adopt old material', async t => {
+  const f = await fixture(t); f.canDispatch = false;
+  await refreshIntake(f.options);
+  f.requestMainText = requestText();
+  f.requestHeadText = requestText('another-request');
+  f.runs = [run('request-one', { event: 'push' })];
+  await assert.rejects(refreshIntake({ ...f.options, now: NOW + 20000 }), /exact intake request/);
+  assert.equal(f.calls.some(call => call.path.includes('/commits?')), false);
+  assert.equal(f.gitCalls.some(args => args[0] === 'fetch'), false);
+  assert.match(await readFile(join(f.root, 'environment/source-sampling.md'), 'utf8'), /旧内容/);
+});
+
+test('failed push runs report failure once and then publish a fresh request from current main', async t => {
+  const f = await fixture(t); f.canDispatch = false;
+  await refreshIntake(f.options);
+  f.requestMainText = requestText();
+  f.runs = [run('request-one', { event: 'push', conclusion: 'failure' })];
+  const failed = await refreshIntake({ ...f.options, now: NOW + 20000 });
+  assert.equal(failed.status, 'intake-failed');
+  assert.equal(failed.nextAction, 'retry-prepare');
+  assert.equal(failed.requestId, 'request-one');
+  const retry = await refreshIntake({ ...f.options, now: NOW + 30000, requestId: () => 'request-two' });
+  assert.equal(retry.nextAction, 'publish-intake-request');
+  assert.equal(retry.requestId, 'request-two');
+  assert.equal(retry.requestPublication.content, requestText('request-two', NOW + 30000));
+  assert.equal(retry.requestPublication.commitMessage, 'Opinion intake request-two');
+  assert.equal(f.gitCalls.some(args => args[0] === 'fetch'), false);
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 0);
+});
+
+test('a retry selected for publication does not dispatch again while its push run becomes visible', async t => {
+  const f = await fixture(t);
+  await refreshIntake(f.options);
+  f.runs = [run('request-one', { conclusion: 'failure' })];
+  await refreshIntake({ ...f.options, now: NOW + 20000 });
+  const retryOptions = { ...f.options, now: NOW + 30000, requestId: () => 'request-two' };
+  const retry = await refreshIntake(retryOptions);
+  assert.equal(retry.nextAction, 'publish-intake-request');
+  assert.equal((await refreshIntake(retryOptions)).nextAction, 'publish-intake-request');
+  f.requestMainText = retry.requestPublication.content;
+  assert.equal((await refreshIntake(retryOptions)).nextAction, 'wait-for-run');
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 1, 'only the original failed request was dispatched');
+});
+
+test('a saved dispatch attempt can recover through the connected app after credentials disappear', async t => {
+  const f = await fixture(t);
+  await refreshIntake(f.options);
+  f.canDispatch = false;
+  const bridge = await refreshIntake(f.options);
+  assert.equal(bridge.nextAction, 'publish-intake-request');
+  assert.equal(bridge.requestPublication.content, requestText());
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 1);
+});
+
+test('expired unbound requests rotate instead of waiting forever on an old published request', async t => {
+  const f = await fixture(t); f.canDispatch = false;
+  await refreshIntake(f.options);
+  f.requestMainText = requestText();
+  const later = NOW + 86400001;
+  const retry = await refreshIntake({ ...f.options, now: later, requestId: () => 'request-two' });
+  assert.equal(retry.nextAction, 'publish-intake-request');
+  assert.equal(retry.requestId, 'request-two');
+  assert.equal(retry.requestPublication.content, requestText('request-two', later));
+});
+
+test('a definite dispatch permission refusal stays on the publication bridge on repeated prepares', async t => {
+  const f = await fixture(t); f.dispatchError = new IntakeAPIError(403);
+  const first = await refreshIntake(f.options), second = await refreshIntake(f.options);
+  assert.equal(first.nextAction, 'publish-intake-request');
+  assert.equal(second.nextAction, 'publish-intake-request');
+  assert.deepEqual(second.requestPublication, first.requestPublication);
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 1);
+  f.requestMainText = first.requestPublication.content;
+  assert.equal((await refreshIntake(f.options)).nextAction, 'wait-for-run');
+});
+
+test('unavailable request status asks for connector inspection without risking duplicate publication', async t => {
+  const f = await fixture(t); f.canDispatch = false;
+  const request = f.github.request;
+  f.github.request = (...args) => args[1].includes(`/contents/${REQUEST}?`) ? Promise.reject(new IntakeAPIError(503)) : request(...args);
+  const result = await refreshIntake(f.options);
+  assert.equal(result.nextAction, 'inspect-request-with-connector');
+  assert.equal(result.requestPublication, undefined);
   assert.equal(f.calls.filter(call => call.method === 'POST').length, 0);
 });
 

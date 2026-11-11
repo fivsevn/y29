@@ -1,5 +1,5 @@
 name: Refresh daily opinion intake
-run-name: Opinion intake ${{ inputs.request_id || 'daily' }}
+run-name: ${{ github.event_name == 'push' && github.event.head_commit.message || format('Opinion intake {0}', inputs.request_id || 'daily') }}
 
 on:
   workflow_dispatch:
@@ -15,6 +15,8 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/opinion-intake.yml'
+      - '.github/scripts/opinion-intake-request.mjs'
+      - '.github/state/lucifer0-intake-request.json'
       - 'lucifer0/tools/collect-opinions.js'
       - 'lucifer0/tools/samples.js'
       - 'lucifer0/tools/case-usage.js'
@@ -38,27 +40,25 @@ jobs:
         with:
           # Keep the generated commit attributable to this run's exact head SHA.
           ref: ${{ github.sha }}
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Validate the refresh request
+        id: request
         env:
           INTAKE_REQUEST_ID: ${{ inputs.request_id }}
-        run: |
-          node --input-type=module - <<'JS'
-          const id = process.env.INTAKE_REQUEST_ID || '';
-          if (id && !/^[A-Za-z0-9_-]{1,100}$/.test(id)) throw new Error('Invalid intake request ID');
-          JS
+        run: node .github/scripts/opinion-intake-request.mjs
       - run: npm ci
       - name: Check collection and forum reading
-        run: node --test tests/opinion-collection.test.js tests/samples.test.js tests/intake-refresh.test.js tests/case-adaptation.test.js tests/social-operations.test.js tests/population.test.js
+        run: node --test tests/opinion-intake-request.test.js tests/opinion-collection.test.js tests/samples.test.js tests/intake-refresh.test.js tests/case-adaptation.test.js tests/social-operations.test.js tests/population.test.js
       - name: Collect the current batch
         id: collect
         continue-on-error: true
         run: node lucifer0/tools/collect-opinions.js
       - name: Attach the request receipt marker
         env:
-          INTAKE_REQUEST_ID: ${{ inputs.request_id }}
+          INTAKE_REQUEST_ID: ${{ steps.request.outputs.request_id }}
         run: |
           node --input-type=module - <<'JS'
           import { readFile, writeFile } from 'node:fs/promises';

@@ -11,6 +11,7 @@ const REPOSITORY = 'fivsevn/y29';
 const WORKFLOW = 'opinion-intake.yml';
 const DOCUMENT = 'lucifer0/environment/source-sampling.md';
 const REQUEST_FILE = 'intake-request.json';
+const REPOSITORY_REQUEST = '.github/state/lucifer0-intake-request.json';
 const REQUEST_ID = /^[A-Za-z0-9_-]{1,100}$/;
 const SHA = /^[a-f0-9]{40}$/;
 const API_ROOT = `/repos/${REPOSITORY}`;
@@ -52,7 +53,7 @@ export async function githubIntakeClient({ token = process.env.GH_TOKEN || proce
   let useGh = false;
   if (!token) {
     try { await execImpl('gh', ['auth', 'status', '--hostname', 'github.com'], { timeout: 5000, maxBuffer: 65536, env: { ...process.env, GH_PROMPT_DISABLED: '1' } }); useGh = true; }
-    catch { /* Public reads still work; dispatch can be performed by the assistant in GitHub's UI. */ }
+    catch { /* Public reads still work; the connected GitHub app can publish a push request. */ }
   }
   return {
     canDispatch: Boolean(token || useGh),
@@ -105,6 +106,30 @@ function pending(state, work, nextAction, message) {
     ...(state.runId ? { runId: state.runId, runUrl: `https://github.com/${REPOSITORY}/actions/runs/${state.runId}` } : {}) };
 }
 
+const requestContent = state => JSON.stringify({ version: 1, requestId: state.requestId, requestedAt: state.requestedAt }, null, 2) + '\n';
+function publicationRequest(state, work) {
+  return { ...pending(state, work, 'publish-intake-request', 'Use the connected GitHub app to create or update only requestPublication.path on main with the exact content and commit message below, then resume prepare. If that content is already on main, wait instead of making a duplicate commit. Browser or CLI login and Actions dispatch permission are not required.'),
+    requestPublication: { repository: REPOSITORY, branch: 'main', path: REPOSITORY_REQUEST, content: requestContent(state), commitMessage: `Opinion intake ${state.requestId}` } };
+}
+
+async function publishedRequest(client, state) {
+  try {
+    const data = await client.request('GET', `${API_ROOT}/contents/${REPOSITORY_REQUEST}?ref=main`);
+    return contentFile(data, REPOSITORY_REQUEST).text === requestContent(state);
+  } catch (error) { if (error instanceof IntakeAPIError && error.status === 404) return false; throw error; }
+}
+
+async function requestPublication(client, state, work) {
+  state.usePublication = true;
+  await saveJSON(join(work, REQUEST_FILE), state);
+  try {
+    if (await publishedRequest(client, state)) return pending(state, work, 'wait-for-run', 'This exact request is already on main. Wait for its push-triggered run, then resume prepare; do not publish it again.');
+  } catch {
+    return pending(state, work, 'inspect-request-with-connector', 'Use the connected GitHub app to inspect the request file on main and this workflow before retrying prepare. API status is unavailable; do not publish a duplicate request.');
+  }
+  return publicationRequest(state, work);
+}
+
 async function defaultGit(args, { cwd }) {
   try { return (await runFile('git', args, { cwd, timeout: 30000, maxBuffer: 2_000_000 })).stdout; }
   catch { fail('Git could not safely synchronize the material; keep local work and inspect the repository before continuing'); }
@@ -121,23 +146,32 @@ function checkMarker(text, requestId) {
   if (markers.length !== 1 || markers[0][0] !== `<!-- intake-request:${requestId} -->` || markers[0].index >= text.indexOf('<!-- samples:start -->')) fail('the generated material does not match this intake request');
 }
 
-function contentDocument(data, requestId) {
-  if (!data || data.path !== DOCUMENT || data.encoding !== 'base64' || typeof data.content !== 'string' || !SHA.test(data.sha)) fail('GitHub returned an invalid material document');
+function contentFile(data, path) {
+  if (!data || data.path !== path || data.encoding !== 'base64' || typeof data.content !== 'string' || !SHA.test(data.sha)) fail('GitHub returned an invalid document');
   const bytes = Buffer.from(data.content, 'base64'), text = bytes.toString('utf8');
   if (bytes.length > 2_000_000 || !Buffer.from(text, 'utf8').equals(bytes) || blobSha(text) !== data.sha) fail('material bytes do not match the GitHub blob');
-  checkMarker(text, requestId);
   return { text, sha: data.sha };
+}
+
+function contentDocument(data, requestId) {
+  const { text, sha } = contentFile(data, DOCUMENT);
+  checkMarker(text, requestId);
+  return { text, sha };
 }
 
 function verifyRun(run, state, now) {
   const startedAt = run.run_started_at, completedAt = run.updated_at;
-  if (!/^\d+$/.test(String(run.id)) || run.event !== 'workflow_dispatch' || run.head_branch !== 'main' || run.display_title !== `Opinion intake ${state.requestId}` || !SHA.test(run.head_sha) || !finiteDate(run.created_at) || !finiteDate(startedAt) || !finiteDate(completedAt) ||
+  if (!/^\d+$/.test(String(run.id)) || !['workflow_dispatch', 'push'].includes(run.event) || run.head_branch !== 'main' || run.display_title !== `Opinion intake ${state.requestId}` || !SHA.test(run.head_sha) || !finiteDate(run.created_at) || !finiteDate(startedAt) || !finiteDate(completedAt) ||
     Date.parse(run.created_at) < Date.parse(state.requestedAt) - 120000 || Date.parse(startedAt) < Date.parse(state.requestedAt) - 120000 || Date.parse(completedAt) < Date.parse(startedAt) || Date.parse(completedAt) > now + 300000 || now - Date.parse(completedAt) > 86400000) fail('the workflow result is stale or does not belong to this request');
   return { startedAt, completedAt };
 }
 
 async function verifyResult(client, state, run, now) {
   const { startedAt, completedAt } = verifyRun(run, state, now);
+  if (run.event === 'push') {
+    const request = contentFile(await client.request('GET', `${API_ROOT}/contents/${REPOSITORY_REQUEST}?ref=${run.head_sha}`), REPOSITORY_REQUEST);
+    if (request.text !== requestContent(state)) fail('the push run does not contain this exact intake request');
+  }
   const commits = await client.request('GET', `${API_ROOT}/commits?path=${encodeURIComponent(DOCUMENT)}&since=${encodeURIComponent(iso(Date.parse(startedAt) - 120000))}&per_page=20`);
   if (!Array.isArray(commits)) fail('could not verify the workflow document commit');
   const candidates = commits.filter(commit => SHA.test(commit.sha) && commit.parents?.length === 1 && commit.parents[0].sha === run.head_sha && commit.committer?.login === 'github-actions[bot]' && finiteDate(commit.commit?.committer?.date) && Date.parse(commit.commit.committer.date) >= Date.parse(startedAt) - 120000 && Date.parse(commit.commit.committer.date) <= Date.parse(completedAt) + 120000);
@@ -182,7 +216,7 @@ export async function refreshIntake({ root = socialRoot, workDirectory, now = Da
     await cleanDocument(root, git);
     let state = await readJSON(path);
     if (state) checkRequest(state, root);
-    if (!state || state.operationId) {
+    if (!state || state.operationId || now - Date.parse(state.requestedAt) > 86400000) {
       const id = requestId();
       if (!REQUEST_ID.test(id)) fail('invalid new request ID');
       state = { version: 1, root, requestId: id, requestedAt: iso(now) };
@@ -198,22 +232,29 @@ export async function refreshIntake({ root = socialRoot, workDirectory, now = Da
     }
     const client = github ?? await githubIntakeClient(clientOptions);
     let response;
-    try { response = await client.request('GET', `${API_ROOT}/actions/workflows/${WORKFLOW}/runs?event=workflow_dispatch&per_page=100`); }
-    catch { return pending(state, work, 'inspect-workflow-in-browser', 'The assistant should inspect this workflow in GitHub, then resume prepare; API status is currently unavailable.'); }
+    try { response = await client.request('GET', `${API_ROOT}/actions/workflows/${WORKFLOW}/runs?per_page=100`); }
+    catch { return pending(state, work, 'inspect-request-with-connector', 'Use the connected GitHub app to inspect this workflow and its request file, then resume prepare; API status is currently unavailable. Do not publish or dispatch a duplicate request.'); }
     if (!Array.isArray(response?.workflow_runs)) fail('invalid workflow run listing');
-    const runs = response.workflow_runs.filter(run => run.event === 'workflow_dispatch' && run.head_branch === 'main' && run.display_title === `Opinion intake ${state.requestId}`)
+    const runs = response.workflow_runs.filter(run => ['workflow_dispatch', 'push'].includes(run.event) && run.head_branch === 'main' && run.display_title === `Opinion intake ${state.requestId}`)
       .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at) || Number(b.id) - Number(a.id));
     const run = runs[0];
     if (!run) {
+      if (!client.canDispatch || state.usePublication) return requestPublication(client, state, work);
       if (state.dispatchAttemptedAt) return pending(state, work, 'wait-for-run', 'This request was already dispatched or attempted; inspect GitHub before retrying dispatch, then resume the same prepare.');
-      if (!client.canDispatch) return pending(state, work, 'dispatch-in-browser', 'The assistant should open workflowUrl, run main with workflowInputs, wait for completion, then resume prepare. No extra user startup command is needed.');
       state.dispatchAttemptedAt = iso(now);
       await saveJSON(path, state);
       try {
         await client.request('POST', `${API_ROOT}/actions/workflows/${WORKFLOW}/dispatches`, { ref: 'main', inputs: { request_id: state.requestId } });
         state.dispatchedAt = iso(now); await saveJSON(path, state);
         return pending(state, work, 'wait-for-run', 'GitHub Actions has been requested. Resume prepare after the run completes; this command makes one status check at a time.');
-      } catch { return pending(state, work, 'inspect-workflow-in-browser', 'Dispatch was not confirmed. The assistant should check GitHub for this request before manually running it, then resume prepare.'); }
+      } catch (error) {
+        // A definite permission refusal did not start a run. Use repository write access instead.
+        if (error instanceof IntakeAPIError && [401, 403, 404].includes(error.status)) {
+          state.usePublication = true; await saveJSON(path, state);
+          return requestPublication(client, state, work);
+        }
+        return pending(state, work, 'inspect-request-with-connector', 'Dispatch was not confirmed. Inspect this request in GitHub before publishing or dispatching it again, then resume prepare.');
+      }
     }
     state.runId = String(run.id); await saveJSON(path, state);
     // An unbound receipt can follow a failed prepare (for example, too few usable cases).
@@ -221,7 +262,17 @@ export async function refreshIntake({ root = socialRoot, workDirectory, now = Da
     if (cachedReady && state.receipt?.runId === String(run.id) && state.receipt.completedAt === run.updated_at && state.receipt.headSha === run.head_sha && run.status === 'completed' && run.conclusion === 'success') return { status: 'ready', workDirectory: work, intakeReceipt: state.receipt };
     if (state.receipt) { delete state.receipt; delete state.documentCommit; await saveJSON(path, state); }
     if (run.status !== 'completed') return pending(state, work, 'wait-for-run', 'This request is queued or running. Resume prepare after it completes.');
-    if (run.conclusion !== 'success') return { status: 'intake-failed', requestId: state.requestId, runId: state.runId, runUrl: `https://github.com/${REPOSITORY}/actions/runs/${state.runId}`, conclusion: run.conclusion, message: 'This round intake failed. Inspect or rerun this request; do not continue with an older material batch.' };
+    if (run.conclusion !== 'success') {
+      if (state.failedRunId === state.runId) {
+        const id = requestId();
+        if (!REQUEST_ID.test(id) || id === state.requestId) fail('retry requires a new intake request ID');
+        state = { version: 1, root, requestId: id, requestedAt: iso(now) };
+        await saveJSON(path, state);
+        return requestPublication(client, state, work);
+      }
+      state.failedRunId = state.runId; await saveJSON(path, state);
+      return { status: 'intake-failed', requestId: state.requestId, runId: state.runId, runUrl: `https://github.com/${REPOSITORY}/actions/runs/${state.runId}`, conclusion: run.conclusion, nextAction: 'retry-prepare', message: 'This round intake failed. Inspect its failure, then resume prepare to issue a fresh request from current main; do not rerun an obsolete head or reuse older material.' };
+    }
     const verified = await verifyResult(client, state, run, now);
     await synchronize(root, git, verified);
     state.receipt = verified.receipt; state.documentCommit = verified.commitSha;

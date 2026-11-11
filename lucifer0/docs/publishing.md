@@ -10,9 +10,15 @@
 node lucifer0/tools/update.js prepare
 ```
 
-新一轮先触发 GitHub Actions 采集并等待成功，再读取本次日更材料。返回 `awaiting-intake` 时还未创建发帖操作：`nextAction` 为 `dispatch-in-browser` 时，执行者打开 `workflowUrl`，在 `main` 分支运行工作流，将返回的 `workflowInputs.request_id` 填入同名输入；为 `wait-for-run` 时继续等待已有运行，为 `inspect-workflow-in-browser` 时先在网页核对该请求是否已触发，避免重复启动。重复同一 `prepare` 查看结果，成功后由工具核验采集回执并同步材料。
+新一轮先触发 GitHub Actions 采集并等待成功，再读取本次日更材料。返回 `awaiting-intake` 时还未创建发帖操作。有命令行授权时，工具直接请求工作流；没有命令行授权或启动权限时，改用已连接 GitHub 的文件提交能力，不要求浏览器登录。按返回的 `nextAction` 执行：
 
-运行失败返回 `intake-failed`；不足三份可用案例、文档有未提交改动或同步失败会明确报错。保留当前准备状态，按实际原因处理后继续；不覆盖本地改动、不用旧材料或虚构案例补数，也不扣减原流程数量。
+- `publish-intake-request`：执行者使用已连接 GitHub 的文件工具，在 `requestPublication.branch` 创建或更新 `requestPublication.path`，内容和提交标题分别完整采用 `content` 和 `commitMessage`，不要另外改文件、增加提交正文或把本地工作路径写入请求。文件已存在时先取得当前文件 SHA；完全相同的内容已在 `main` 时只等待，不重复提交。该提交自动启动原采集工作流，无需 `workflow_dispatch` 工具或额外的用户启动命令。
+- `wait-for-run`：请求已提交、已启动或正在排队，继续等待后重复同一 `prepare`。保留原工作目录和请求编号。
+- `inspect-request-with-connector`：运行状态暂时不可读或启动结果不确定，先通过 GitHub 连接工具核对请求文件与已有运行，避免重复启动；恢复读取后继续同一 `prepare`，不把状态未知解释成采集成功。
+
+请求文件只包含版本、请求编号和时间，不含登录凭据。工具对提交触发的运行额外核对运行头提交中的请求文件，再验证成功运行、机器人子提交、材料标记、文件摘要及当前 `main` 的一致性；核验通过后才同步本次材料。原每日定时采集和手动运行入口保留。
+
+运行失败返回 `intake-failed` 和 `retry-prepare`；核对并处理失败原因后，执行者再次运行同一 `prepare`，工具为尚未创建操作的这一轮生成新请求，由连接工具从当前 `main` 提交，避免重复运行旧头提交。超过24小时的未完成准备也会换新请求。不足三份可用案例、文档有未提交改动或同步失败会明确报错。保留当前准备状态，按实际原因处理后继续；不覆盖本地改动、不用旧材料或虚构案例补数，也不扣减原流程数量。
 
 准备完成后，工具输出 `operation.json` 与 `reading.md` 的绝对路径。前者保存当前更新的抽签、观察和草稿，后者按来源路径汇集人物、世界观和其他环境资料的完整原文，供 AI 阅读。账号表同时列出每个人登记的世界观。准备结果中的 `researchWindows` 按[抽签规则](lottery.md)用于本次素材取样。默认工作目录位于仓库外的 `~/.local/state/y29/lucifer0/current`。指定其他工作目录时使用：
 
