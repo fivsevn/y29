@@ -1,5 +1,5 @@
-name: Lucifer0 one-time briefing
-run-name: Lucifer0 brief ${{ github.run_id }}
+name: Lucifer0 one-time reply planning
+run-name: Lucifer0 replies ${{ github.run_id }}
 on:
   push:
     branches: [main]
@@ -9,7 +9,7 @@ permissions:
   contents: write
   actions: read
 jobs:
-  brief:
+  plan:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -18,33 +18,60 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
-      - name: Restore preparation and generate briefs
+      - name: Apply reviewed root drafts and draw reply limits
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           WORK="$HOME/.local/state/y29/lucifer0/current"
           mkdir -p "$WORK"
           gh run download 43105855927 -R fivsevn/y29 -n l0-preparation-43105855927 -D "$WORK"
-          for ID in \
-            l0-20261111214536-e145d75f-f75f6eafc5c3 \
-            l0-20261111214536-e145d75f-85c23cd1ff3c \
-            l0-20261111214536-e145d75f-5795c2edd2e7 \
-            l0-20261111214536-e145d75f-bff2bff8e7a8 \
-            l0-20261111214536-e145d75f-cb1dff9b9c4a \
-            l0-20261111214536-e145d75f-72922b95dc8d
-          do
-            echo "===BRIEF-BEGIN:$ID==="
-            node lucifer0/tools/update.js brief --post "$ID"
-            echo "===BRIEF-END:$ID==="
-          done
-      - name: Record briefing pointer
+          gh api repos/fivsevn/y29/git/blobs/4c6d6e089c8829f85c7c58b6c67e59c715a9a2f5 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
+          node --input-type=module - <<'JS'
+          import { readFile,writeFile } from 'node:fs/promises';
+          const work=process.env.HOME+'/.local/state/y29/lucifer0/current/';
+          const op=JSON.parse(await readFile(work+'operation.json','utf8'));
+          const patch=JSON.parse(await readFile(work+'root-patch.json','utf8'));
+          Object.assign(op,patch);
+          await writeFile(work+'operation.json',JSON.stringify(op,null,2)+'\n');
+          JS
+          echo '===REPLIES-BEGIN==='
+          node lucifer0/tools/update.js replies
+          echo '===REPLIES-END==='
+          echo '===SUGGEST-BEGIN==='
+          node lucifer0/tools/update.js suggest
+          echo '===SUGGEST-END==='
+          echo '===REPLYBRIEF-BEGIN:f75f6eafc5c3==='
+          node lucifer0/tools/update.js brief --post l0-20261111214536-e145d75f-reply1 --thread l0-20261111214536-e145d75f-f75f6eafc5c3
+          echo '===REPLYBRIEF-END:f75f6eafc5c3==='
+          echo '===REPLYBRIEF-BEGIN:85c23cd1ff3c==='
+          node lucifer0/tools/update.js brief --post l0-20261111214536-e145d75f-reply2 --thread l0-20261111214536-e145d75f-85c23cd1ff3c
+          echo '===REPLYBRIEF-END:85c23cd1ff3c==='
+          echo '===REPLYBRIEF-BEGIN:5795c2edd2e7==='
+          node lucifer0/tools/update.js brief --post l0-20261111214536-e145d75f-reply3 --thread l0-20261111214536-e145d75f-5795c2edd2e7
+          echo '===REPLYBRIEF-END:5795c2edd2e7==='
+          echo '===REPLYBRIEF-BEGIN:bff2bff8e7a8==='
+          node lucifer0/tools/update.js brief --post l0-20261111214536-e145d75f-reply4 --thread l0-20261111214536-e145d75f-bff2bff8e7a8
+          echo '===REPLYBRIEF-END:bff2bff8e7a8==='
+          echo '===REPLYBRIEF-BEGIN:cb1dff9b9c4a==='
+          node lucifer0/tools/update.js brief --post l0-20261111214536-e145d75f-reply5 --thread l0-20261111214536-e145d75f-cb1dff9b9c4a
+          echo '===REPLYBRIEF-END:cb1dff9b9c4a==='
+          echo '===REPLYBRIEF-BEGIN:72922b95dc8d==='
+          node lucifer0/tools/update.js brief --post l0-20261111214536-e145d75f-reply6 --thread l0-20261111214536-e145d75f-72922b95dc8d
+          echo '===REPLYBRIEF-END:72922b95dc8d==='
+      - name: Save operation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: l0-root-draft-${{ github.run_id }}
+          path: ~/.local/state/y29/lucifer0/current/operation.json
+          retention-days: 2
+      - name: Record planning pointer
         if: always()
         run: |
-          printf '{"runId":"%s"}\n' "$GITHUB_RUN_ID" > .github/state/lucifer0-agent-brief.json
+          printf '{"runId":"%s"}\n' "$GITHUB_RUN_ID" > .github/state/lucifer0-agent-stage3.json
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .github/state/lucifer0-agent-brief.json
-          git commit -m 'Record Lucifer0 briefing run'
+          git add .github/state/lucifer0-agent-stage3.json
+          git commit -m 'Record Lucifer0 reply planning run'
           git fetch origin main
           test "$(git rev-parse HEAD^)" = "$(git rev-parse FETCH_HEAD)"
           git push origin HEAD:main
