@@ -1,0 +1,64 @@
+name: Lucifer0 one-time preparation
+run-name: Lucifer0 preparation ${{ github.run_id }}
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lucifer0-automation-20261112.yml'
+permissions:
+  contents: write
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Prepare current update and display reading
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          WORK="$HOME/.local/state/y29/lucifer0/current"
+          mkdir -p "$WORK"
+          cat > "$WORK/intake-request.json" <<'EOF'
+          {"version":1,"root":"/home/runner/work/y29/y29/lucifer0","requestId":"intake-20261111214200-agent-a1","requestedAt":"2026-11-11T21:42:00.000Z","usePublication":true}
+          EOF
+          node lucifer0/tools/update.js prepare | tee "$RUNNER_TEMP/preparation-result.json"
+          test -f "$WORK/operation.json"
+          test -f "$WORK/reading.md"
+          mkdir -p "$RUNNER_TEMP/l0-artifact"
+          cp "$WORK/operation.json" "$WORK/reading.md" "$WORK/intake-request.json" "$RUNNER_TEMP/l0-artifact/"
+          echo '===OPERATION-BEGIN==='
+          cat "$WORK/operation.json"
+          echo '===OPERATION-END==='
+          echo '===READING-BEGIN==='
+          cat "$WORK/reading.md"
+          echo '===READING-END==='
+      - uses: actions/upload-artifact@v4
+        with:
+          name: l0-preparation-${{ github.run_id }}
+          path: ${{ runner.temp }}/l0-artifact/
+          retention-days: 2
+          if-no-files-found: error
+      - name: Record preparation pointer
+        run: |
+          node --input-type=module - <<'JS'
+          import { readFile, writeFile } from 'node:fs/promises';
+          const p = JSON.parse(await readFile(process.env.HOME+'/.local/state/y29/lucifer0/current/operation.json','utf8'));
+          const record = { runId: process.env.GITHUB_RUN_ID, operationId:p.id, preparedAt:p.preparedAt, requestId:'intake-20261111214200-agent-a1' };
+          await writeFile('.github/state/lucifer0-agent-prep.json', JSON.stringify(record,null,2)+'\n');
+          JS
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/state/lucifer0-agent-prep.json
+          git commit -m 'Record Lucifer0 preparation for one-time publishing'
+          git fetch origin main
+          test "$(git rev-parse HEAD^)" = "$(git rev-parse FETCH_HEAD)"
+          git push origin HEAD:main
