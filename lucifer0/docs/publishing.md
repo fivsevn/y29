@@ -41,7 +41,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 | 字段 | 内容 |
 | --- | --- |
 | `category` | `news` 正式资讯、`trend` 社交话题、`daily` 日常经历 |
-| `purpose` | Meme 采样页填 `"meme"`，其他观察可省略；发现入口与近期原用法分别记录，步骤见[Meme 研究](../environment/research-meme.md#每次更新读取近期-meme) |
+| `purpose` | Meme 采样页填 `"meme"`，其他观察可省略；发现入口与近期原用法分别记录，步骤见[研究-Meme](../environment/research-meme.md#每次更新读取近期-meme) |
 | `kind` | `feed` 资讯、榜单或单篇材料；`thread` 带回复的讨论 |
 | `url` | 原页 HTTPS 链接 |
 | `visitedAt` | 实际访问时间，带时区的 ISO 时间 |
@@ -82,7 +82,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 原有负向配额只核对原流程部分。案例主帖及其回复按实际语气、篇幅和开口动机写作，不为补配额扭转材料；回复数量抽签和总回复上限仍照常核对。
 
-`likes` 保存本条基础赞数，取值依据与建议数值的处理见[评论与点赞研究](../environment/research-comments.md#点赞怎样形成差异)。
+`likes` 保存本条基础赞数，取值依据与建议数值的处理见[研究-评论与点赞](../environment/research-comments.md#点赞怎样形成差异)。
 
 主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用带时区的 ISO 格式，按上海时区理解，沿已有可见时间线安排，且不超过实际当前时刻，回复时间晚于或等于父帖。间隔不足时允许相邻发言同一时刻。新草稿的时间由 `brief` 安排，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
 
@@ -96,9 +96,9 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 新增前先核对已有案例：同一原串的深化阅读补回原条目，写清这次新增的读取范围与访问日期；有独立价值的新样本沿原编号追加。记录原始日期、实际读到的楼层或分支、影响理解的先后关系，以及未展开、缺失或只见链接的部分。方法上的新发现修订本专题对应章节，已有概括相同的地方合并；过时资料核实后修正。
 
-冲突的触发与转向归[负面与争议研究](../environment/research-negative.md)，回复怎样参与和接续归[评论研究](../environment/research-comments.md)，表达形式与疏漏归[说话方式研究](../users/research-speech.md)。同一来源在主要专题登记一次，其他专题用链接引用适用处。现有文档能容纳的研究继续在原处深化；确需新增文档时，先向用户说明名称、职责及与现有文档的边界。
+冲突的触发与转向归[研究-负面与争议](../environment/research-negative.md)，回复怎样参与和接续归[研究-评论与点赞](../environment/research-comments.md)，表达形式与疏漏归[研究-说话方式](../users/research-speech.md)。同一来源在主要专题登记一次，其他专题用链接引用适用处。现有文档能容纳的研究继续在原处深化；确需新增文档时，先向用户说明名称、职责及与现有文档的边界。
 
-当前素材与用户挑选的长期案例沿[每日舆论素材](../environment/sources-daily-opinions.md)取用，专题只补分析并引用材料日期与标题，不复制整串。自动刷新与本轮研究补充各记实际完成的工作。
+当前素材与用户挑选的长期案例沿[素材-每日舆论](../environment/sources-daily-opinions.md)取用，专题只补分析并引用材料日期与标题，不复制整串。自动刷新与本轮研究补充各记实际完成的工作。
 
 完成检查后，将结果填入 `operation.json.researchMaintenance`，每份选中文档对应一项：
 
@@ -163,7 +163,7 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 node lucifer0/tools/update.js suggest --work /outside/work
 ```
 
-分池配置下，命令分别返回 `rootImagePostIds`、`replyImagePostIds` 和表情建议 `emotes`；`imagePostIds` 汇集两类普通图片候选，`imagePools` 分列候选、下限、实际已带普通图片的发言及缺口。结合已规划的用途，按[配图规则](writing.md#配图)完成图片与正文；表情素材从[Meme 资源](../environment/research-meme.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞研究](../environment/research-comments.md#点赞怎样形成差异)审定后填写。
+分池配置下，命令分别返回 `rootImagePostIds`、`replyImagePostIds` 和表情建议 `emotes`；`imagePostIds` 汇集两类普通图片候选，`imagePools` 分列候选、下限、实际已带普通图片的发言及缺口。结合已规划的用途，按[配图规则](writing.md#配图)完成图片与正文；表情素材从[研究-Meme](../environment/research-meme.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[研究-评论与点赞](../environment/research-comments.md#点赞怎样形成差异)审定后填写。
 
 采用新分池配置的操作，每个 `media` 项显式填写 `kind`：普通图片为 `"image"`，表情包或反应图为 `"emote"`。例如：
 
