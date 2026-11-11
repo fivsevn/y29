@@ -1746,9 +1746,285 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-b1605e435b7a2be3",
+      "handle": "guest_52efbca6dc483bd9a6d6",
+      "name": "硬盘还活着吗",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8b02a26a3d60b6d3",
+      "handle": "guest_5b5cdc0aa8b71074d183",
+      "name": "外置盘没有错",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-171b82a154e1d398",
+      "handle": "guest_d563ed13c541d6769be5",
+      "name": "优惠券过敏",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0a73d0db97469719",
+      "handle": "guest_0b87508f4586a3d23c92",
+      "name": "优惠叠加练习生",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1cbce421115bde90",
+      "handle": "guest_a4713b0e76c09c4cd233",
+      "name": "汤要趁热",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-de4fd5acff5ff479",
+      "handle": "guest_99f74dc7b1a1a9707245",
+      "name": "便利贴",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261111060742-8d34ec4f-dc3751c46372",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-11T10:23:26.467Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "今天11月11，光棍节快乐啊各位！！\n一个人吃两份甜品也挺酷的（　ﾟ 3ﾟ）\nstay pure！"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-e7904cefe389",
+      "author": "guest-de4fd5acff5ff479",
+      "createdAt": "2026-11-11T08:03:29.467Z",
+      "replyTo": null,
+      "likes": 19,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "便利贴"
+      },
+      "text": "上周群里说投影仪大家一起买，一人摊了钱，放谁那儿都行。结果现在发起人把机器拿回家，周末我们说借出来用一下，他回了句“东西一直我保管啊”，还让大家分摊来回快递费。\n\n钱不多，问题是买的时候谁也没说只有他能放。群里有人问了，他直接回“你们当时又没反对”……这算什么理？"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-06",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-11T05:47:20.467Z",
+      "replyTo": "l0-20261111060742-8d34ec4f-05",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "两块已经不错了吧，我前阵子喝到一碗连豆腐都没有的，拿勺子捞半天，只有海带。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-05",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-11T05:27:57.467Z",
+      "replyTo": "l0-20261111060742-8d34ec4f-04",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你这句豆腐把我看饿了……我上次点的那家汤里就两小块，找半天，怎么别人碗里都那么满啊。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-04",
+      "author": "visitor-tau-upper",
+      "createdAt": "2026-11-11T05:22:53.467Z",
+      "replyTo": "l0-20261111060742-8d34ec4f-b6da3c932fba",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111060742-8d34ec4f-b6da3c932fba/media/todays-miso.webp",
+          "alt": "木桌上一碗有豆腐块和海带的味噌汤，旁边搁着筷子与纸巾。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/okay.webp",
+          "alt": "L0半睁眼竖起拇指。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "正好今天中午也喝了，豆腐切小块放进去挺好吃。我第一口还嫌咸，喝到最后连碗底都没剩。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-03",
+      "author": "visitor-nu-upper",
+      "createdAt": "2026-11-11T05:17:45.467Z",
+      "replyTo": "l0-20261111060742-8d34ec4f-02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我这边卖豆腐，遇上人家讲价也得掰半天。你们买东西还有先退一次再买一次的？卖家不嫌折腾啊。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-02",
+      "author": "guest-0a73d0db97469719",
+      "createdAt": "2026-11-11T05:05:59.467Z",
+      "replyTo": "l0-20261111060742-8d34ec4f-aa1343d46fa4",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "优惠叠加练习生"
+      },
+      "text": "你还是没做对隔壁直播间那套数学题，先领券再拍，拍完还得退一次。省完钱记得给自己算一下时薪。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-01",
+      "author": "guest-8b02a26a3d60b6d3",
+      "createdAt": "2026-11-11T05:04:29.467Z",
+      "replyTo": "l0-20261111060742-8d34ec4f-071dac197809",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "外置盘没有错"
+      },
+      "text": "先拔掉外置盘再开机试过吗？我以前那台也出过这个禁止标志，最后是启动盘选错了。进不进得去恢复模式是两回事。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-ae4ff29beae2",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-11T04:54:44.467Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "今天有客人举着前两天的陈列照片，非说要跟照片上一模一样。那张图里摆的是展示样品，今天已经卖掉两款了，我说可以换颜色接近的，她问那你们拍照片干什么。\n\n就，我拍个好看的柜台也要保证每天都长那样吗？？她还让我去问后厨能不能现做。后厨在忙别人的单啊，我真服了。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-071dac197809",
+      "author": "guest-b1605e435b7a2be3",
+      "createdAt": "2026-11-11T04:44:56.467Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111060742-8d34ec4f-071dac197809/media/boot-screen.webp",
+          "alt": "木桌上的旧款 iMac 显示禁止符号，屏幕下方放着连接的外置固态硬盘。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "硬盘还活着吗"
+      },
+      "text": "问问有没有靠谱的地方能修老 iMac。19 年买的那台，后来接过外置固态，这两天系统直接进不去了，开机就一个禁止符号，底下还跟着苹果的网址。\n\n新电脑倒是已经买了，但这台屏幕没坏，扔了怪可惜的。找维修店估个价总可以吧？自己重装我是真不想再试了。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-b6da3c932fba",
+      "author": "guest-1cbce421115bde90",
+      "createdAt": "2026-11-11T04:38:16.467Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "汤要趁热"
+      },
+      "text": "以前真的喝不惯味噌汤。现在到饭点脑子里第一个想的就是那个味道。"
+    },
+    {
+      "id": "l0-20261111060742-8d34ec4f-aa1343d46fa4",
+      "author": "guest-171b82a154e1d398",
+      "createdAt": "2026-11-11T04:36:55.467Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "优惠券过敏"
+      },
+      "text": "双十一算半天券，最后跟昨天一个价？？"
+    },
     {
       "id": "l0-20261111043232-f0a325fd-20",
       "author": "guest-8fd0672190fa30b0",
