@@ -1818,9 +1818,464 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-cbda9fa43326acff",
+      "handle": "guest_9bf1d249ccb7cd5282b8",
+      "name": "隔壁桌6",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-83c7064d38b250e5",
+      "handle": "guest_a0dae697863e9aff46e8",
+      "name": "今天不要签收",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ed55ab176cd9c64f",
+      "handle": "guest_b2ad0e82f47961a1e403",
+      "name": "路口往南",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4ff19e548261788a",
+      "handle": "guest_31a45e3baaac348498be",
+      "name": "楼下等车8",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-eecc819b8a30c330",
+      "handle": "guest_cd7a3c34dd7345c1978b",
+      "name": "楼下等车9",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-51ec666ae9d9c281",
+      "handle": "guest_4aa69a1891b66cc29c6b",
+      "name": "楼下等车11",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-adaf2d44d2e157d1",
+      "handle": "guest_b4b945317ddd7e0051f7",
+      "name": "蹭饭小组长",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9b74e36a6892cd4b",
+      "handle": "guest_e348747d8f23629a0654",
+      "name": "隔壁桌4",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e64cfd78b63230c6",
+      "handle": "guest_58fcb51a1407d287a202",
+      "name": "包装泡水",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-18e90a7272be5256",
+      "handle": "guest_73d938b775e0f2cbae61",
+      "name": "快递来了12",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5a3489c538c93958",
+      "handle": "guest_200035dd29d968a02b20",
+      "name": "快递来了13",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261111160224-46b1ba58-14",
+      "author": "guest-e64cfd78b63230c6",
+      "createdAt": "2026-11-11T16:18:29.997Z",
+      "replyTo": "l0-20261111160224-46b1ba58-12",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "包装泡水"
+      },
+      "text": "内包装确实有口子，我先拍了。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-13",
+      "author": "guest-5a3489c538c93958",
+      "createdAt": "2026-11-11T16:18:29.676Z",
+      "replyTo": "l0-20261111160224-46b1ba58-12",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "快递来了13"
+      },
+      "text": "如果内包装裂了，留个照片去找售后。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-12",
+      "author": "guest-18e90a7272be5256",
+      "createdAt": "2026-11-11T16:18:29.361Z",
+      "replyTo": "l0-20261111160224-46b1ba58-c7879a996668",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "快递来了12"
+      },
+      "text": "我的纸也是到货一碰外箱就散了，里面那层塑料还好没破。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-11",
+      "author": "guest-51ec666ae9d9c281",
+      "createdAt": "2026-11-11T16:18:29.048Z",
+      "replyTo": "l0-20261111160224-46b1ba58-10",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "楼下等车11"
+      },
+      "text": "照片呢？我想看看粉椅子到底多显眼。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-10",
+      "author": "guest-ed55ab176cd9c64f",
+      "createdAt": "2026-11-11T16:18:28.744Z",
+      "replyTo": "l0-20261111160224-46b1ba58-08",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "路口往南"
+      },
+      "text": "我没听到他们吵，纯粹路过看了一眼，别当真。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-09",
+      "author": "guest-eecc819b8a30c330",
+      "createdAt": "2026-11-11T16:18:28.429Z",
+      "replyTo": "l0-20261111160224-46b1ba58-08",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "楼下等车9"
+      },
+      "text": "我觉得两家可能本来认识，粉椅子借着用吧。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-08",
+      "author": "guest-4ff19e548261788a",
+      "createdAt": "2026-11-11T16:18:28.114Z",
+      "replyTo": "l0-20261111160224-46b1ba58-50b2ce683a5a",
+      "likes": 79,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "楼下等车8"
+      },
+      "text": "那椅子是摆到人家门口了，还是把人家椅子换掉了？"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-07",
+      "author": "chenanjing",
+      "createdAt": "2026-11-11T16:18:27.802Z",
+      "replyTo": "l0-20261111160224-46b1ba58-06",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "如果是按时间正着看，我可能就没有那么难受。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-06",
+      "author": "guest-cbda9fa43326acff",
+      "createdAt": "2026-11-11T16:18:27.495Z",
+      "replyTo": "l0-20261111160224-46b1ba58-05",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "隔壁桌6"
+      },
+      "text": "《爱乐之城》这种？"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-05",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-11T16:18:27.185Z",
+      "replyTo": "l0-20261111160224-46b1ba58-251c94aee559",
+      "likes": 9,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我一点也不想看这种……知道结局再看他们高兴，太难受了。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-04",
+      "author": "guest-9b74e36a6892cd4b",
+      "createdAt": "2026-11-11T16:18:26.861Z",
+      "replyTo": "l0-20261111160224-46b1ba58-03",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "隔壁桌4"
+      },
+      "text": "带一回就会变成下次的“顺手”，还是按单子来。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-03",
+      "author": "news-surf",
+      "createdAt": "2026-11-11T16:18:26.551Z",
+      "replyTo": "l0-20261111160224-46b1ba58-a5fc300c5949",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "让她写个返箱单吧，月底核对的时候能少扯皮。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-02",
+      "author": "visitor-nu",
+      "createdAt": "2026-11-11T16:18:26.249Z",
+      "replyTo": "l0-20261111160224-46b1ba58-01",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/okay.webp",
+          "alt": "L0半睁眼竖起拇指。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我当时也是觉得门框那个颜色特别显眼，隔着一条街都看得到。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-01",
+      "author": "passerby17",
+      "createdAt": "2026-11-11T16:18:25.919Z",
+      "replyTo": "l0-20261111160224-46b1ba58-9cdb14528855",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-9cdb14528855/media/glass-door.webp",
+          "alt": "雨夜店铺玻璃门的照片放大截图",
+          "kind": "image"
+        }
+      ],
+      "text": "我把图放大了一点，这家门上的招牌是啥？"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-9cdb14528855",
+      "author": "visitor-nu",
+      "createdAt": "2026-11-11T15:59:17.467Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-9cdb14528855/media/after-rain.webp",
+          "alt": "雨夜的商店透着粉红色灯光，路面倒映灯影",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/peek.webp",
+          "alt": "L0从竖直边缘后露出半张脸和一只手。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": ""
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-66af83184300",
+      "author": "guest-adaf2d44d2e157d1",
+      "createdAt": "2026-11-11T10:52:34.467Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "蹭饭小组长"
+      },
+      "text": "肥哥肥哥，给我留口锅里的肉啊！\n我就下楼拿个快递，你们先别夹完。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-481b026a0293",
+      "author": "guest-83c7064d38b250e5",
+      "createdAt": "2026-11-11T10:39:47.467Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "今天不要签收"
+      },
+      "text": "我说包裹放错楼了，客服回复“系统显示已签收”。我就问谁签的？\n然后让我去问驿站。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-251c94aee559",
+      "author": "lixing",
+      "createdAt": "2026-11-11T10:26:10.467Z",
+      "replyTo": null,
+      "likes": 24,
+      "canon": "derivative",
+      "media": [],
+      "text": "我真的很喜欢看那种剪辑：两个人后来见面连话都懒得说，下一秒切回刚认识时的样子，笑一下都特别开心。\n\n两段台词刚好接上时我会倒回去再看一遍。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-c7879a996668",
+      "author": "guest-e64cfd78b63230c6",
+      "createdAt": "2026-11-11T10:25:11.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "包装泡水"
+      },
+      "text": "纸巾的塑膜都裂了，客服还说“正常运输”？"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-a5fc300c5949",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-11T10:25:10.467Z",
+      "replyTo": null,
+      "likes": 20,
+      "canon": "derivative",
+      "media": [],
+      "text": "今天送货又被要求“顺手”带走几箱空周转箱。单子上明明只写了入库，我车厢已经塞满了，店长说空箱放这儿影响她干活。我说下午回程再来，她脸就拉下来了。\n\n上次我帮忙带走了，她们后来干脆把空箱堆到门边等我。台阶那么高，手推车推不上去，折腾半天没人搭把手。这次我想让她把返箱数量写在单据上，省得明天又说我漏拿。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-50b2ce683a5a",
+      "author": "guest-ed55ab176cd9c64f",
+      "createdAt": "2026-11-11T10:24:53.467Z",
+      "replyTo": null,
+      "likes": 19,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路口往南"
+      },
+      "text": "楼下那家新甜品店，听说开门前把招牌改了四次。今天路过发现店门口的粉椅子摆到隔壁理发店门前去了，理发店老板坐在里头看着。两边都没说话，但看着很像要吵起来。"
+    },
     {
       "id": "l0-20261111060742-8d34ec4f-dc3751c46372",
       "author": "visitor-chi-upper",
