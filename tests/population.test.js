@@ -63,14 +63,14 @@ test('each original person has one complete human dossier, with operating contro
     assert.equal(documents.profiles[user.id].notes.trim(), text.trim(), `${user.id}: the complete dossier must reach the reader`);
   }
   const topLevel = (await readdir(join(socialRoot, 'users'), { withFileTypes: true })).filter(entry => entry.isFile()).map(entry => entry.name).sort();
-  assert.deepEqual(topLevel, ['ACCOUNT_TEMPLATE.md', 'README.md', 'TEMPLATE.md', 'character-research.md', 'speech-research.md']);
+  assert.deepEqual(topLevel, ['README.md', 'research-character.md', 'research-speech.md', 'template-account.md', 'template-character.md']);
 });
 
 test('individual methods and shared-life references have one owning research document', async () => {
   const { registry } = await readUserDocuments(socialRoot);
-  const individualNotes = await readFile(join(socialRoot, 'users/character-research.md'), 'utf8');
+  const individualNotes = await readFile(join(socialRoot, 'users/research-character.md'), 'utf8');
   const environmentPath = join(socialRoot, 'environment');
-  const environmentFiles = ['README.md', 'worldview-research.md', 'everyday-life-research.md', 'comments-research.md', 'meme-research.md', 'forum.md', 'negative-research.md', 'source-sampling.md', 'selected-cases.md'];
+  const environmentFiles = ['README.md', 'research-worldview.md', 'research-everyday-life.md', 'research-comments.md', 'research-meme.md', 'record-forum.md', 'research-negative.md', 'sources-daily-opinions.md', 'sources-selected-cases.md'];
   assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles, 'worldviews'].sort());
   const environmentIndex = await readFile(join(environmentPath, 'README.md'), 'utf8');
   for (const name of environmentFiles) {
@@ -83,7 +83,7 @@ test('individual methods and shared-life references have one owning research doc
     assert.equal(ids.length, unique.size, `${label}: duplicate source identifiers`);
     return unique;
   };
-  const lifeNotes = await readFile(join(environmentPath, 'everyday-life-research.md'), 'utf8');
+  const lifeNotes = await readFile(join(environmentPath, 'research-everyday-life.md'), 'utf8');
   const individualIds = sourceIds(individualNotes, 'individual references');
   const lifeIds = sourceIds(lifeNotes, 'shared-life references');
   assert.ok(individualIds.size && lifeIds.size);

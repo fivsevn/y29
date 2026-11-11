@@ -46,7 +46,7 @@ test('public API fixtures become neutral complete short fragments with stable re
   assert.match(result.markdown, /我也是？？/);
   assert.doesNotMatch(result.markdown, /V2EX|X岛|nmb|ORIGINAL|12345678|42345678|No\.|https?:/i);
   const full = replaceCurrentSamples(document, result.markdown);
-  assert.equal(parseSampleDocuments([{ path: 'environment/source-sampling.md', text: full }]).length, 2);
+  assert.equal(parseSampleDocuments([{ path: 'environment/sources-daily-opinions.md', text: full }]).length, 2);
   const summary = collectionSummary(result);
   assert.match(summary, /V2EX/); assert.match(summary, /X岛匿名版/);
   assert.doesNotMatch(summary, /ORIGINAL|https?:|闹钟/);
@@ -87,7 +87,7 @@ test('all failed or malformed sources clear stale material with an honest dated 
   assert.doesNotMatch(collectionSummary(result), /PRIVATE_ACCOUNT/);
   const full = replaceCurrentSamples(document, result.markdown);
   assert.doesNotMatch(full, /旧批材料/);
-  assert.equal(parseSampleDocuments([{ path: 'environment/source-sampling.md', text: full }]).length, 0);
+  assert.equal(parseSampleDocuments([{ path: 'environment/sources-daily-opinions.md', text: full }]).length, 0);
   const malformed = await collectOpinions({ now: NOW, fetchImpl: async () => new Response('{"error":"not a feed"}') });
   assert.equal(malformed.exitCode, 1);
 });
@@ -119,7 +119,7 @@ test('replacement preserves manual material, external preview leaves the origina
   const folder = await mkdtemp(join(tmpdir(), 'y29-opinion-'));
   t.after(() => rm(folder, { recursive: true, force: true }));
   await mkdir(join(folder, 'environment'));
-  const documentPath = join(folder, 'environment/source-sampling.md'), selected = join(folder, 'environment/selected-cases.md'), outputPath = join(folder, 'preview.md');
+  const documentPath = join(folder, 'environment/sources-daily-opinions.md'), selected = join(folder, 'environment/sources-selected-cases.md'), outputPath = join(folder, 'preview.md');
   await writeFile(documentPath, document); await writeFile(selected, '用户精选\n');
   const result = await updateOpinionDocument({ documentPath, outputPath, ...fixtures(), now: NOW });
   assert.equal(await readFile(documentPath, 'utf8'), document);
@@ -139,7 +139,7 @@ test('replacement preserves manual material, external preview leaves the origina
   const alias = join(folder, 'preview-link.md');
   await symlink(selected, alias);
   await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: alias }), /regular file/);
-  const repositoryPath = new URL('../lucifer0/environment/source-sampling.md', import.meta.url).pathname;
+  const repositoryPath = new URL('../lucifer0/environment/sources-daily-opinions.md', import.meta.url).pathname;
   await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: repositoryPath }), /outside the repository/);
   assert.equal(requested, false, 'unsafe output is rejected before any external requests');
   assert.equal(await readFile(selected, 'utf8'), '用户精选\n');
@@ -162,7 +162,7 @@ test('a healthy source supplies eight cases, seeds rotate candidates, and recent
   assert.equal(first.fragments, 8); assert.equal(first.ready, true);
   assert.notEqual(first.markdown, second.markdown);
   const { caseFingerprint } = await import('../lucifer0/tools/case-usage.js');
-  const samples = result => parseSampleDocuments([{ path: 'environment/source-sampling.md', text: replaceCurrentSamples(document, result.markdown) }]);
+  const samples = result => parseSampleDocuments([{ path: 'environment/sources-daily-opinions.md', text: replaceCurrentSamples(document, result.markdown) }]);
   const used = samples(first).map(entry => ({ fingerprint: caseFingerprint(entry.sample), usedAt: new Date(NOW).toISOString() }));
   const next = await collectOpinions({ fetchImpl, now: NOW, seed: 'b', used });
   assert.ok(samples(next).every(entry => !used.some(item => item.fingerprint === caseFingerprint(entry.sample))));

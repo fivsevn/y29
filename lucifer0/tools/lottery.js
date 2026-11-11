@@ -254,7 +254,7 @@ export function drawResearchMaintenance({ seed, lottery, documents, now }) {
   const pool = documents.map(document => {
     keys(document, ['path', 'updatedAt'], 'research maintenance document');
     const path = document.path, parts = typeof path === 'string' ? path.split('/') : [];
-    if (!['docs', 'environment', 'users'].includes(parts[0]) || !path.endsWith('-research.md') || path.length > 2000 || /[\\\x00-\x1f\x7f]/.test(path) ||
+    if (!['docs', 'environment', 'users'].includes(parts[0]) || !/^research-.+\.md$/.test(parts.at(-1)) || path.length > 2000 || /[\\\x00-\x1f\x7f]/.test(path) ||
       parts.some(part => !part || part === '.' || part === '..') || seen.has(path) ||
       !(document.updatedAt === null || typeof document.updatedAt === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(document.updatedAt) && Number.isFinite(Date.parse(document.updatedAt)))) fail('Invalid research maintenance document');
     seen.add(path);

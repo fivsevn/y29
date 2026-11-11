@@ -41,7 +41,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 | 字段 | 内容 |
 | --- | --- |
 | `category` | `news` 正式资讯、`trend` 社交话题、`daily` 日常经历 |
-| `purpose` | Meme 采样页填 `"meme"`，其他观察可省略；发现入口与近期原用法分别记录，步骤见[Meme 研究](../environment/meme-research.md#每次更新读取近期-meme) |
+| `purpose` | Meme 采样页填 `"meme"`，其他观察可省略；发现入口与近期原用法分别记录，步骤见[Meme 研究](../environment/research-meme.md#每次更新读取近期-meme) |
 | `kind` | `feed` 资讯、榜单或单篇材料；`thread` 带回复的讨论 |
 | `url` | 原页 HTTPS 链接 |
 | `visitedAt` | 实际访问时间，带时区的 ISO 时间 |
@@ -50,7 +50,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 观察覆盖三个类别、至少三个不同页面和两个来源域名，其中有一段实际读到回复的讨论。访问发生在本次更新前 48 小时内，至少一项材料发表于最近七天。旧材料保留原日期，当前话题的热度按本次可读内容记录。
 
-采用当前素材或精选案例时，按[素材取用](../environment/source-sampling.md#论坛怎样读取)记录，不为补足页面字段恢复原身份或平台，也不单独算作一项新鲜网页观察。
+采用当前素材或精选案例时，按[素材取用](../environment/sources-daily-opinions.md#论坛怎样读取)记录，不为补足页面字段恢复原身份或平台，也不单独算作一项新鲜网页观察。
 
 `posts` 使用以下结构；编号由本次更新编号加序号形成，署名在同一账号的后续回复中保持一致：
 
@@ -82,9 +82,9 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 原有负向配额只核对原流程部分。案例主帖及其回复按实际语气、篇幅和开口动机写作，不为补配额扭转材料；回复数量抽签和总回复上限仍照常核对。
 
-`likes` 保存本条基础赞数，取值依据与建议数值的处理见[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)。
+`likes` 保存本条基础赞数，取值依据与建议数值的处理见[评论与点赞研究](../environment/research-comments.md#点赞怎样形成差异)。
 
-主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用上海时区，处在已有时间线之后、实际当前时刻之前，回复时间晚于或等于父帖。新草稿的时间由 `brief` 安排，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
+主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用带时区的 ISO 格式，按上海时区理解，沿已有可见时间线安排，且不超过实际当前时刻，回复时间晚于或等于父帖。间隔不足时允许相邻发言同一时刻。新草稿的时间由 `brief` 安排，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
 
 删除根帖时，移除整个根串发布包；删除回复时，移除其正文及下级回复，并清理这些发言独用的普通配图。随后重新生成信息流，核对剩余帖子及图片引用。
 
@@ -96,9 +96,9 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 新增前先核对已有案例：同一原串的深化阅读补回原条目，写清这次新增的读取范围与访问日期；有独立价值的新样本沿原编号追加。记录原始日期、实际读到的楼层或分支、影响理解的先后关系，以及未展开、缺失或只见链接的部分。方法上的新发现修订本专题对应章节，已有概括相同的地方合并；过时资料核实后修正。
 
-冲突的触发与转向归[负面与争议研究](../environment/negative-research.md)，回复怎样参与和接续归[评论研究](../environment/comments-research.md)，表达形式与疏漏归[说话方式研究](../users/speech-research.md)。同一来源在主要专题登记一次，其他专题用链接引用适用处。现有文档能容纳的研究继续在原处深化；确需新增文档时，先向用户说明名称、职责及与现有文档的边界。
+冲突的触发与转向归[负面与争议研究](../environment/research-negative.md)，回复怎样参与和接续归[评论研究](../environment/research-comments.md)，表达形式与疏漏归[说话方式研究](../users/research-speech.md)。同一来源在主要专题登记一次，其他专题用链接引用适用处。现有文档能容纳的研究继续在原处深化；确需新增文档时，先向用户说明名称、职责及与现有文档的边界。
 
-当前素材与用户挑选的长期案例沿[每日舆论素材](../environment/source-sampling.md)取用，专题只补分析并引用材料日期与标题，不复制整串。自动刷新与本轮研究补充各记实际完成的工作。
+当前素材与用户挑选的长期案例沿[每日舆论素材](../environment/sources-daily-opinions.md)取用，专题只补分析并引用材料日期与标题，不复制整串。自动刷新与本轮研究补充各记实际完成的工作。
 
 完成检查后，将结果填入 `operation.json.researchMaintenance`，每份选中文档对应一项：
 
@@ -149,7 +149,7 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --thread 根帖ID -
 node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID --work /outside/work
 ```
 
-`--thread` 与 `--reply-to` 每次选用一个；目标与身份的选择方式见[抽签规则](lottery.md#负面与回复提示)。已有草稿也可以按它的 ID 读取材料。命令返回 `draft`、`writer` 和 `editor`。先查看 `editor.timing`：`ready` 时使用返回的草稿及时间；`deferred` 时，带案例计划的本轮等待 `earliestAt` 后用同一帖号继续获取，未带案例计划的旧操作沿原流程跳过候选。将 `writer` 作为本次单人写作输入，策划者使用 `editor` 安排当前操作；把完成的文字、图片和身份补进 `draft`，再保存到 `operation.json.posts`。临时路人的公开网名填入 `guest.name`。
+`--thread` 与 `--reply-to` 每次选用一个；目标与身份的选择方式见[抽签规则](lottery.md#负面与回复提示)。已有草稿也可以按它的 ID 读取材料。命令返回 `draft`、`writer` 和 `editor`。工具按抽中的间隔安排新草稿时间；超出实际当前时刻的部分自动压缩，`editor.timing.status` 返回 `ready`，可直接继续本轮写作与发布。原流程与案例主帖统一使用此规则，恢复操作时也按实际当前时刻安排新草稿，保留原抽签和案例映射。将 `writer` 作为本次单人写作输入，策划者使用 `editor` 安排当前操作；把完成的文字、图片和身份补进 `draft`，再保存到 `operation.json.posts`。临时路人的公开网名填入 `guest.name`。
 
 `writer.createdAt` 是本条的时间。`editor.discussion` 显示已审读条数、负面数及下一条的缺口；写作者按 `writer.discussion` 所带原文理解提示。回复材料同时携带评论方法原文。`writer.self.voiceExamples` 保存标记为 `practice` 的表达练习，本人正式背景保存在其余档案材料中。
 
@@ -163,7 +163,7 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 node lucifer0/tools/update.js suggest --work /outside/work
 ```
 
-分池配置下，命令分别返回 `rootImagePostIds`、`replyImagePostIds` 和表情建议 `emotes`；`imagePostIds` 汇集两类普通图片候选，`imagePools` 分列候选、下限、实际已带普通图片的发言及缺口。结合已规划的用途，按[配图规则](writing.md#配图)完成图片与正文；表情素材从[Meme 资源](../environment/meme-research.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞研究](../environment/comments-research.md#点赞怎样形成差异)审定后填写。
+分池配置下，命令分别返回 `rootImagePostIds`、`replyImagePostIds` 和表情建议 `emotes`；`imagePostIds` 汇集两类普通图片候选，`imagePools` 分列候选、下限、实际已带普通图片的发言及缺口。结合已规划的用途，按[配图规则](writing.md#配图)完成图片与正文；表情素材从[Meme 资源](../environment/research-meme.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[评论与点赞研究](../environment/research-comments.md#点赞怎样形成差异)审定后填写。
 
 采用新分池配置的操作，每个 `media` 项显式填写 `kind`：普通图片为 `"image"`，表情包或反应图为 `"emote"`。例如：
 

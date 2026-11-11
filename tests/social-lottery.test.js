@@ -262,8 +262,8 @@ test('research maintenance is occasional, favors older material and preserves th
   const now = Date.parse('2026-11-10T00:00:00Z');
   const lottery = { ...structuredClone(defaultLottery), researchMaintenance: { probability: 0.3, maxDocuments: 1, ageWeightDays: 7, maxAgeWeight: 5 } };
   const documents = [
-    { path: 'environment/old-research.md', updatedAt: '2026-10-01T00:00:00Z' },
-    { path: 'users/new-research.md', updatedAt: '2026-11-10T00:00:00Z' }
+    { path: 'environment/research-old.md', updatedAt: '2026-10-01T00:00:00Z' },
+    { path: 'users/research-new.md', updatedAt: '2026-11-10T00:00:00Z' }
   ];
   let triggered = 0, old = 0;
   for (let index = 0; index < 2000; index++) {
@@ -287,8 +287,8 @@ test('research maintenance handles new files, bounded unique selection and inval
   const now = Date.parse('2026-11-10T00:00:00Z');
   const lottery = { ...structuredClone(defaultLottery), researchMaintenance: { probability: 1, maxDocuments: 10, ageWeightDays: 7, maxAgeWeight: 5 } };
   const documents = [
-    { path: 'environment/future-research.md', updatedAt: '2026-11-11T00:00:00Z' },
-    { path: 'users/untracked-research.md', updatedAt: null }
+    { path: 'environment/research-future.md', updatedAt: '2026-11-11T00:00:00Z' },
+    { path: 'users/research-untracked.md', updatedAt: null }
   ];
   const input = { seed: 'new-research', lottery, documents, now };
   assert.deepEqual(drawResearchMaintenance(input).sort(), documents.map(document => document.path).sort());
@@ -299,7 +299,7 @@ test('research maintenance handles new files, bounded unique selection and inval
     const invalid = structuredClone(lottery); Object.assign(invalid.researchMaintenance, patch);
     assert.throws(() => validateLottery(invalid), /research maintenance/);
   }
-  for (const path of ['../outside-research.md', 'users/../outside-research.md', 'users\\outside-research.md', 'posts/old-research.md', 'environment/README.md']) {
+  for (const path of ['../research-outside.md', 'users/../research-outside.md', 'users\\research-outside.md', 'posts/research-old.md', 'environment/README.md']) {
     assert.throws(() => drawResearchMaintenance({ ...input, documents: [{ path, updatedAt: null }] }), /research maintenance document/);
   }
   assert.throws(() => drawResearchMaintenance({ ...input, documents: [documents[0], documents[0]] }), /research maintenance document/);

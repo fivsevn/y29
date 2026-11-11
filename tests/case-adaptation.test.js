@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { createCasePlan, validateCasePlan, validateIntakeReceipt, validateCasePolicy, validateCasePosts } from '../lucifer0/tools/case-adaptation.js';
 
 const now = Date.parse('2026-11-11T01:00:00Z');
-const document = (count = 4) => ({ path: 'environment/source-sampling.md', text: '# 每日素材\n<!-- samples:start -->\n<!-- intake-request:test-request -->\n整理日期：2026-11-11\n\n' + Array.from({ length: count }, (_, index) => '### 讨论 ' + index + '\np01：实际的一段文字 ' + index + '\np02：哦。').join('\n\n') + '\n<!-- samples:end -->\n' });
+const document = (count = 4) => ({ path: 'environment/sources-daily-opinions.md', text: '# 每日素材\n<!-- samples:start -->\n<!-- intake-request:test-request -->\n整理日期：2026-11-11\n\n' + Array.from({ length: count }, (_, index) => '### 讨论 ' + index + '\np01：实际的一段文字 ' + index + '\np02：哦。').join('\n\n') + '\n<!-- samples:end -->\n' });
 const receipt = text => ({ requestId: 'test-request', runId: '12345', runUrl: 'https://github.com/fivsevn/y29/actions/runs/12345', startedAt: '2026-11-11T00:55:00Z', completedAt: '2026-11-11T00:58:00Z', headSha: 'a'.repeat(40), documentSha: createHash('sha1').update('blob ' + Buffer.byteLength(text) + '\0' + text).digest('hex'), documentDigest: createHash('sha256').update(text).digest('hex') });
 const plan = (budget = 4) => ({ seed: 'stable-case-seed', budget, timeWindow: { start: '2026-11-10T01:00:00Z', end: '2026-11-11T01:00:00Z' } });
 function create(budget = 4, count = 4) {
@@ -31,7 +31,7 @@ test('three distinct daily snapshots and opaque root IDs are frozen with a stabl
   assert.equal(new Set(adapted.items.map(item => item.sample.id)).size, 3);
   assert.equal(adapted.rootOrder.length, 7);
   assert.deepEqual(create().adapted, adapted);
-  assert.ok(adapted.items.every(item => item.sourcePath === 'environment/source-sampling.md' && !item.postId.includes('case')));
+  assert.ok(adapted.items.every(item => item.sourcePath === 'environment/sources-daily-opinions.md' && !item.postId.includes('case')));
   const roots = adapted.rootOrder.map((id, index) => ({ id, replyTo: null, createdAt: new Date(now - 10000 + index * 1000).toISOString() }));
   validateCasePosts({ ...savedPlan, caseAdaptation: adapted }, roots, { complete: true });
   const changed = structuredClone(adapted); changed.items[0].postId = 'l0-synthetic-other';
@@ -41,7 +41,7 @@ test('three distinct daily snapshots and opaque root IDs are frozen with a stabl
 });
 
 test('missing or insufficient daily cases cannot be replaced by selected cases', () => {
-  const source = document(2), selected = { path: 'environment/selected-cases.md', text: '# 精选案例\n\n### 别的内容\n甲：长期保存的另一段。' };
+  const source = document(2), selected = { path: 'environment/sources-selected-cases.md', text: '# 精选案例\n\n### 别的内容\n甲：长期保存的另一段。' };
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [source, selected], intakeReceipt: receipt(source.text), now }), /three distinct usable cases/);
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [document()], now }), /GitHub Actions/);
   const duplicate = { ...source, text: source.text.replace('<!-- samples:end -->', '### 另一个标题\np01：实际的一段文字 0\np02：哦。\n<!-- samples:end -->') };

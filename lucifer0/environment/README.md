@@ -18,17 +18,19 @@
 
 世界设定、动态记录与各专题取材研究的入口。
 
+文件名按用途统一前缀：研究用 `research-`，素材用 `sources-`，记录用 `record-`，模板用 `template-`；后接具体主题。
+
 | 文档或入口 | 负责内容 |
 | --- | --- |
 | [目录-世界观](worldviews/README.md) | 已登记世界的简介、设定与动态记录入口 |
-| [研究-世界观](worldview-research.md) | 世界设定的组织方法与框架参考 |
-| [研究-日常生活](everyday-life-research.md) | 人口、劳动、收支、职业任务与公共服务资料，以及日常生活场景 |
-| [素材-每日舆论](source-sampling.md) | 每日自动刷新的当前材料，也可直接贴入用户来料 |
-| [素材-精选参考](selected-cases.md) | 用户挑选后长期保留的材料 |
-| [研究-负面与争议](negative-research.md) | 八卦、抱怨、爆点与冲突讨论的实际样本和话头结构 |
-| [研究-Meme](meme-research.md) | 表情包、反应图、网络句式的资源与用法 |
-| [研究-评论与点赞](comments-research.md) | 回复行为、互动样本与点赞差异 |
-| [记录-论坛](forum.md) | 平台自身事件与公共记忆 |
+| [研究-世界观](research-worldview.md) | 世界设定的组织方法与框架参考 |
+| [研究-日常生活](research-everyday-life.md) | 人口、劳动、收支、职业任务与公共服务资料，以及日常生活场景 |
+| [素材-每日舆论](sources-daily-opinions.md) | 每日自动刷新的当前材料，也可直接贴入用户来料 |
+| [素材-精选参考](sources-selected-cases.md) | 用户挑选后长期保留的材料 |
+| [研究-负面与争议](research-negative.md) | 八卦、抱怨、爆点与冲突讨论的实际样本和话头结构 |
+| [研究-Meme](research-meme.md) | 表情包、反应图、网络句式的资源与用法 |
+| [研究-评论与点赞](research-comments.md) | 回复行为、互动样本与点赞差异 |
+| [记录-论坛](record-forum.md) | 平台自身事件与公共记忆 |
 
 ## 使用说明
 

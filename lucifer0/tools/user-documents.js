@@ -169,7 +169,7 @@ async function readWorldviews(root) {
   };
   for (const entry of (await readdir(directory, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name, 'en'))) {
     if (entry.isSymbolicLink()) fail(`世界观目录不能包含符号链接：${entry.name}`);
-    if (!entry.isDirectory() && (!entry.name.endsWith('.md') || ['README.md', 'TEMPLATE.md'].includes(entry.name))) continue;
+    if (!entry.isDirectory() && (!entry.name.endsWith('.md') || ['README.md', 'template-worldview.md'].includes(entry.name))) continue;
     const id = entry.isDirectory() ? entry.name : entry.name.slice(0, -3), prefix = `environment/worldviews/${entry.name}`;
     if (!isWorldviewId(id) || ids.has(id)) fail(`世界观文件或目录不是唯一合法编号：${entry.name}`);
     ids.add(id);

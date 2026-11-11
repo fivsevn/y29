@@ -56,7 +56,7 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
   await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery, ...(caseAdaptation ? { caseAdaptation } : {}) }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'worldview-research.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md', 'negative-research.md']]]) {
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'research-worldview.md', 'research-everyday-life.md', 'record-forum.md', 'research-comments.md', 'research-meme.md', 'research-negative.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
@@ -75,8 +75,8 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
     profile.basics.worldview = user.kind === 'character' ? 'worldviewA' : '';
     await writeFile(join(root, 'users', user.id, 'profile.md'), renderUserDocument(user, profile));
   }
-  await writeFile(join(root, 'users/speech-research.md'), '# Synthetic speech research\n');
-  await writeFile(join(root, 'users/character-research.md'), '# Synthetic character research\n\nSYNTHETIC_CHARACTER_RESEARCH\n');
+  await writeFile(join(root, 'users/research-speech.md'), '# Synthetic speech research\n');
+  await writeFile(join(root, 'users/research-character.md'), '# Synthetic character research\n\nSYNTHETIC_CHARACTER_RESEARCH\n');
   const historical = { id: 'history-entry', author: 'person-0', createdAt: '2025-04-01T00:00:00Z', replyTo: null, text: 'SYNTHETIC_HISTORY_BODY', likes: 1, canon: 'derivative', media: [] };
   await mkdir(join(root, 'posts/2025/04/history-entry'), { recursive: true });
   await writeFile(join(root, 'posts/2025/04/history-entry/index.md'), renderPostDocument(historical));
@@ -308,7 +308,7 @@ test('comment and meme research refresh keep saved reply draws; changed saved lo
   const original = await readJSON(prepared.operationPath);
   const entries = [post('frozen-root', 'guest-frozen', f.now), ...Array.from({ length: 3 }, (_, index) => post('frozen-reply-' + index, 'guest-frozen-' + index, f.now, 'frozen-root'))];
   const { batch } = await draft(prepared, f.now, entries);
-  await writeFile(join(f.root, 'environment/comments-research.md'), '# Updated comment research\n\nSYNTHETIC_NEW_COMMENT_RESEARCH');
+  await writeFile(join(f.root, 'environment/research-comments.md'), '# Updated comment research\n\nSYNTHETIC_NEW_COMMENT_RESEARCH');
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
   const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
   policy.replyLottery = fixedReplies(9); await writeFile(policyPath, JSON.stringify(policy));
@@ -318,7 +318,7 @@ test('comment and meme research refresh keep saved reply draws; changed saved lo
   assert.ok((await readFile(prepared.readingPath, 'utf8')).includes('SYNTHETIC_NEW_COMMENT_RESEARCH'));
   assert.equal((await suggestUpdateReplies(f.options)).threads[0].replyCount, 2);
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /saved reply limit/);
-  await writeFile(join(f.root, 'environment/meme-research.md'), '# Updated meme research\n\nSYNTHETIC_NEW_MEME_RESEARCH');
+  await writeFile(join(f.root, 'environment/research-meme.md'), '# Updated meme research\n\nSYNTHETIC_NEW_MEME_RESEARCH');
   await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /Source material changed/);
   await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
   const memeRefreshed = await readJSON(prepared.operationPath);
@@ -436,7 +436,7 @@ test('explicit counts remain fixed on resume and respect integral range and the 
   await assert.rejects(prepareUpdate({ ...f.options, requestedCount: 18 }), /cannot change/);
   assert.deepEqual((await readJSON(result.operationPath)).plan, original.plan);
   for (const requestedCount of [0, 121, 17.5, '17', null, NaN, Infinity]) await assert.rejects(prepareUpdate({ ...f.options, requestedCount }), /integer from 1 to 120/);
-  await writeFile(join(f.root, 'environment/forum.md'), '# Updated source for the fixed count');
+  await writeFile(join(f.root, 'environment/record-forum.md'), '# Updated source for the fixed count');
   await prepareUpdate(f.options);
   const refreshed = await readJSON(result.operationPath);
   assert.notEqual(refreshed.sourceDigest, original.sourceDigest);
@@ -477,7 +477,7 @@ test('prepare creates only one work record and a full raw-source reading, then r
     assert.ok(reading.includes('users/' + user.id + '/profile.md'));
     assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_' + user.id));
   }
-  for (const name of ['README.md', 'worldview-research.md', 'everyday-life-research.md', 'forum.md', 'comments-research.md', 'meme-research.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
+  for (const name of ['README.md', 'research-worldview.md', 'research-everyday-life.md', 'record-forum.md', 'research-comments.md', 'research-meme.md']) assert.ok(reading.includes('SYNTHETIC_environment_' + name));
   assert.ok(reading.includes('SYNTHETIC_HISTORY_BODY'));
   assert.equal(reading.split('SYNTHETIC_CHARACTER_RESEARCH').length - 1, 1);
   for (const marker of ['SYNTHETIC_WORLDVIEW_INDEX', 'SYNTHETIC_worldviewA_SETTING', 'SYNTHETIC_worldviewA_EVENTS', 'SYNTHETIC_worldview0_SETTING', 'SYNTHETIC_worldview0_EVENTS']) assert.equal(reading.split(marker).length - 1, 1);
@@ -486,7 +486,7 @@ test('prepare creates only one work record and a full raw-source reading, then r
   assert.ok(reading.includes('docs/README.md') && reading.includes('docs/writing.md') && reading.includes('docs/publishing.md'));
   assert.ok(!JSON.stringify(original).includes('SYNTHETIC_FULL_PERSON_'));
   original.research = research(f.now); await writeFile(result.operationPath, JSON.stringify(original));
-  await writeFile(join(f.root, 'environment/forum.md'), '# Updated source\n\nSYNTHETIC_UPDATED_ENVIRONMENT');
+  await writeFile(join(f.root, 'environment/record-forum.md'), '# Updated source\n\nSYNTHETIC_UPDATED_ENVIRONMENT');
   const resumed = await prepareUpdate({ ...f.options, entropy: () => { throw new Error('Must not redraw'); } });
   const current = await readJSON(resumed.operationPath);
   assert.equal(current.id, original.id); assert.deepEqual(current.plan, original.plan);
@@ -907,8 +907,8 @@ test('lottery and common research enter source digest, while config snapshots st
   const postId = prepared.id + '-entry', initial = await briefUpdatePost({ ...f.options, postId });
   const saved = await readJSON(prepared.operationPath);
   assert.ok(!(JSON.stringify(initial.writer)).includes('SYNTHETIC_CHARACTER_RESEARCH'));
-  assert.ok(!(JSON.stringify(initial.writer)).includes('SYNTHETIC_environment_worldview-research.md'));
-  for (const path of ['README.md', 'docs/lottery.md', 'environment/worldview-research.md', 'users/character-research.md', 'users/speech-research.md']) {
+  assert.ok(!(JSON.stringify(initial.writer)).includes('SYNTHETIC_environment_research-worldview.md'));
+  for (const path of ['README.md', 'docs/lottery.md', 'environment/research-worldview.md', 'users/research-character.md', 'users/research-speech.md']) {
     await writeFile(join(f.root, path), '# changed ' + path);
     await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
     await prepareUpdate(f.options);
@@ -929,11 +929,11 @@ test('research maintenance discovers new files once and freezes the Git history 
   const git = (args, date) => execFileSync('git', args, { cwd: f.root, encoding: 'utf8', stdio: 'pipe', env: { ...process.env, ...(date ? { GIT_AUTHOR_DATE: iso(date), GIT_COMMITTER_DATE: iso(date) } : {}) } });
   git(['init']); git(['add', '.']);
   git(['-c', 'user.name=Synthetic test', '-c', 'user.email=test@example.org', 'commit', '-m', 'Initial research'], f.now - 30 * DAY);
-  const changedPath = 'users/speech-research.md';
+  const changedPath = 'users/research-speech.md';
   await writeFile(join(f.root, changedPath), '# Recently updated speech\n');
   git(['add', changedPath]);
   git(['-c', 'user.name=Synthetic test', '-c', 'user.email=test@example.org', 'commit', '-m', 'Recent research'], f.now - DAY);
-  const newPaths = ['docs/added-research.md', 'environment/added-research.md', 'users/person-0/added-research.md'];
+  const newPaths = ['docs/research-added.md', 'environment/research-added.md', 'users/person-0/research-added.md'];
   for (const path of newPaths) await writeFile(join(f.root, path), '# NEW_DISCOVERED_' + path + '\n');
   const prepared = await prepareUpdate(f.options), saved = await readJSON(prepared.operationPath);
   const maintenance = saved.plan.researchMaintenance, reading = await readFile(prepared.readingPath, 'utf8');
@@ -946,13 +946,13 @@ test('research maintenance discovers new files once and freezes the Git history 
     assert.equal(reading.split('NEW_DISCOVERED_' + path).length - 1, 1);
   }
   assert.equal(reading.split('SYNTHETIC_CHARACTER_RESEARCH').length - 1, 1);
-  assert.equal(reading.split('## 原文路径：users/person-0/added-research.md').length - 1, 1);
+  assert.equal(reading.split('## 原文路径：users/person-0/research-added.md').length - 1, 1);
   saved.posts = [post(prepared.id + '-paused', 'guest-paused-maintenance', f.now)];
   await writeFile(prepared.operationPath, JSON.stringify(saved));
   const policy = await readJSON(join(f.root, 'publication.json'));
   policy.lottery.researchMaintenance.probability = 0;
   await writeFile(join(f.root, 'publication.json'), JSON.stringify(policy));
-  await writeFile(join(f.root, 'docs/later-research.md'), '# LATER_DISCOVERED_RESEARCH\n');
+  await writeFile(join(f.root, 'docs/research-later.md'), '# LATER_DISCOVERED_RESEARCH\n');
   await writeFile(join(f.root, changedPath), '# CHANGED_RESEARCH_AFTER_DRAW\n');
   git(['add', '.']);
   git(['-c', 'user.name=Synthetic test', '-c', 'user.email=test@example.org', 'commit', '-m', 'Later research and settings'], f.now + 2 * DAY);
@@ -964,7 +964,7 @@ test('research maintenance discovers new files once and freezes the Git history 
   assert.notEqual(current.sourceDigest, saved.sourceDigest);
   assert.match(await readFile(prepared.readingPath, 'utf8'), /LATER_DISCOVERED_RESEARCH/);
   const brief = await briefUpdatePost({ ...f.options, now: f.now + 4 * DAY, postId: prepared.id + '-new' });
-  assert.doesNotMatch(JSON.stringify(brief.writer), /NEW_DISCOVERED_docs\/added-research.md|LATER_DISCOVERED_RESEARCH/);
+  assert.doesNotMatch(JSON.stringify(brief.writer), /NEW_DISCOVERED_docs\/research-added.md|LATER_DISCOVERED_RESEARCH/);
 });
 
 test('selected research maintenance requires actual source records for batches and empty finishes', async t => {
@@ -988,7 +988,7 @@ test('selected research maintenance requires actual source records for batches a
     value => { value.sources[0].visitedAt = iso(f.now - 3 * DAY); },
     value => { value.sources[0].visitedAt = iso(f.now + DAY); },
     value => { value.sources[0].url = 'http://forum.example.net/plain'; },
-    value => { value.path = 'environment/not-selected-research.md'; },
+    value => { value.path = 'environment/research-not-selected.md'; },
     value => { value.sources = []; }
   ]) {
     const changed = structuredClone(record); change(changed);
@@ -1019,8 +1019,8 @@ test('research maintenance skips and older saved operations finish without a new
 
 test('research discovery rejects linked files and linked source directories', async t => {
   const f = await fixture(t, 4, { lottery: maintenanceLottery(1) });
-  const outside = join(f.directory, 'outside-research.md'); await writeFile(outside, '# External material\n');
-  const linked = join(f.root, 'docs/linked-research.md'); await symlink(outside, linked);
+  const outside = join(f.directory, 'research-outside.md'); await writeFile(outside, '# External material\n');
+  const linked = join(f.root, 'docs/research-linked.md'); await symlink(outside, linked);
   await assert.rejects(prepareUpdate(f.options), /regular project directories/);
   await rm(linked);
   await symlink(f.directory, join(f.root, 'docs/linked-folder'));
@@ -1138,7 +1138,7 @@ test('a replies-only media round needs only new reply images and preserves prese
   assert.deepEqual((await briefUpdatePost({ ...f.options, postId: 'only-reply' })).writer.presentation, brief.writer.presentation);
 });
 
-test('brief schedules saved waits between drafts and defers candidates beyond its fixed window', async t => {
+test('brief preserves drawn intervals and compresses overflowing timestamps to now without delaying publication', async t => {
   const lottery = structuredClone(defaultLottery);
   lottery.authorKind = [{ value: 'guest', weight: 1 }];
   lottery.waitSeconds = [{ weight: 1, min: 120, max: 120 }];
@@ -1160,16 +1160,27 @@ test('brief schedules saved waits between drafts and defers candidates beyond it
   assert.deepEqual(await briefUpdatePost({ ...f.options, postId: prepared.id + '-two', replyTo: one.id }), second);
   one.createdAt = iso(f.now - 30000);
   await draft(prepared, f.now, [one]);
-  const deferred = await briefUpdatePost({ ...f.options, postId: prepared.id + '-two', replyTo: one.id });
-  assert.equal(deferred.draft, null);
-  assert.equal(deferred.editor.timing.status, 'deferred');
-  assert.equal(deferred.editor.timing.earliestAt, iso(f.now + 90000));
-  assert.equal(deferred.editor.timing.availableUntil, iso(f.now));
-  assert.equal(deferred.writer.createdAt, deferred.editor.timing.earliestAt);
-  assert.match(deferred.editor.instruction, /本轮跳过/);
+  const compressed = await briefUpdatePost({ ...f.options, postId: prepared.id + '-two', replyTo: one.id });
+  assert.equal(compressed.editor.timing.status, 'ready');
+  assert.equal(compressed.draft.createdAt, iso(f.now));
+  assert.equal(compressed.editor.timing.availableUntil, iso(f.now));
+  assert.equal(compressed.writer.createdAt, compressed.draft.createdAt);
+  assert.equal(compressed.editor.waitSeconds, second.editor.waitSeconds);
+  const two = { ...compressed.draft, text: '接着回复', guest: { name: '乙' } };
+  await draft(prepared, f.now, [one, two]);
+  const chain = [one, two];
+  for (let index = 0; index < 6; index++) {
+    const next = await briefUpdatePost({ ...f.options, postId: prepared.id + '-chain-' + index, replyTo: chain.at(-1).id });
+    assert.equal(next.editor.timing.status, 'ready');
+    assert.equal(next.draft.createdAt, two.createdAt);
+    chain.push({ ...next.draft, text: '继续接话', guest: { name: '参与者' + index } });
+    await draft(prepared, f.now, chain);
+  }
   await prepareUpdate({ ...f.options, now: f.now + 300000 });
   assert.deepEqual((await readJSON(prepared.operationPath)).plan.timeWindow, saved.plan.timeWindow);
-  assert.equal((await briefUpdatePost({ ...f.options, now: f.now + 300000, postId: prepared.id + '-two', replyTo: one.id })).editor.timing.status, 'deferred');
+  const resumed = await briefUpdatePost({ ...f.options, now: f.now + 300000, postId: prepared.id + '-three', replyTo: two.id });
+  assert.equal(resumed.editor.timing.status, 'ready');
+  assert.equal(resumed.draft.createdAt, iso(f.now + 120000));
   const edited = { ...one, createdAt: iso(f.now - 1000) };
   await draft(prepared, f.now, [edited]);
   const existing = await briefUpdatePost({ ...f.options, postId: one.id });
@@ -1252,7 +1263,7 @@ test('brief fills the actual reviewed gap and always carries negative guidance o
   assert.equal(first.editor.discussion.missingNegativePosts, 1);
   assert.ok(first.writer.discussion.negativeMotivation);
   assert.deepEqual(first.writer.discussion.rules, { sourcePath: 'docs/lottery.md', text: await readFile(join(f.root, 'docs/lottery.md'), 'utf8') });
-  assert.deepEqual(first.writer.discussion.research, { sourcePath: 'environment/negative-research.md', text: await readFile(join(f.root, 'environment/negative-research.md'), 'utf8') });
+  assert.deepEqual(first.writer.discussion.research, { sourcePath: 'environment/research-negative.md', text: await readFile(join(f.root, 'environment/research-negative.md'), 'utf8') });
   assert.ok(first.writer.conditions.every(condition => condition.dimension !== 'motivation'));
   const firstPost = { ...first.draft, guest: { name: 'Synthetic first' }, text: 'A concrete adopted request; reviewers decide its actual stance.' };
   await draft(prepared, f.now, [firstPost]);
@@ -1262,7 +1273,7 @@ test('brief fills the actual reviewed gap and always carries negative guidance o
   const shortage = await briefUpdatePost(next);
   assert.equal(shortage.writer.discussion.requiredTone, 'negative');
   assert.equal(shortage.editor.discussion.negativePosts, 0);
-  assert.deepEqual(shortage.writer.comments, { sourcePath: 'environment/comments-research.md', text: await readFile(join(f.root, 'environment/comments-research.md'), 'utf8') });
+  assert.deepEqual(shortage.writer.comments, { sourcePath: 'environment/research-comments.md', text: await readFile(join(f.root, 'environment/research-comments.md'), 'utf8') });
   assert.ok(shortage.writer.discussion.replyStance);
   await saveReviews(prepared.operationPath, [{ postId: firstPost.id, negative: true, reason: 'Changed text explicitly accuses the other person of crossing a boundary.' }]);
   const open = await briefUpdatePost(next);
@@ -1279,7 +1290,7 @@ test('negative and comments source changes refresh actual writer input while kee
   await saveReviews(prepared.operationPath, [{ postId: entry.id, negative: false, reason: 'Ordinary setup for the synthetic reply.' }]);
   const options = { ...f.options, postId: prepared.id + '-reply', replyTo: entry.id }, first = await briefUpdatePost(options);
   const saved = await readJSON(prepared.operationPath);
-  for (const path of ['environment/comments-research.md', 'environment/negative-research.md']) {
+  for (const path of ['environment/research-comments.md', 'environment/research-negative.md']) {
     const updated = '# Updated canonical source ' + path;
     await writeFile(join(f.root, path), updated);
     await assert.rejects(briefUpdatePost(options), /Source material changed/);
@@ -1289,7 +1300,7 @@ test('negative and comments source changes refresh actual writer input while kee
     assert.equal(refreshed.editor.waitSeconds, first.editor.waitSeconds);
     assert.equal(refreshed.writer.discussion.negativeMotivation, first.writer.discussion.negativeMotivation);
     assert.equal(refreshed.writer.discussion.replyStance, first.writer.discussion.replyStance);
-    assert.equal((path.endsWith('comments-research.md') ? refreshed.writer.comments : refreshed.writer.discussion.research).text, updated);
+    assert.equal((path.endsWith('research-comments.md') ? refreshed.writer.comments : refreshed.writer.discussion.research).text, updated);
   }
 });
 
@@ -1434,9 +1445,10 @@ test('unavailable root and future-only participants use the original new-author 
   const pastRoot = post(futureId + '-root', 'guest-future-root', future.now - 10000);
   const later = post(futureId + '-future-participant', 'guest-later-reader', future.now + 5000, pastRoot.id);
   await saveIdentityDraft(future, [pastRoot, later]);
-  const deferred = await briefUpdatePost({ ...future.options, postId: futureId + '-return', replyTo: pastRoot.id });
-  assert.equal(deferred.editor.timing.status, 'deferred'); assert.equal(deferred.draft, null);
-  assert.equal(deferred.editor.replyAuthor.used, 'new'); assert.notEqual(deferred.writer.self.id, later.author);
+  const current = await briefUpdatePost({ ...future.options, postId: futureId + '-return', replyTo: pastRoot.id });
+  assert.equal(current.editor.timing.status, 'ready');
+  assert.ok(Date.parse(current.draft.createdAt) <= future.now);
+  assert.equal(current.editor.replyAuthor.used, 'new'); assert.notEqual(current.writer.self.id, later.author);
 });
 
 test('saved snapshots without replyAuthor preserve the new-author result after the policy gains identity draws', async t => {
@@ -1554,7 +1566,7 @@ test('automatic targets exclude future and deleted bodies without exposing unrea
   assert.deepEqual(brief.writer.visiblePosts.map(post => post.text), [earlier.text]);
   assert.ok(!JSON.stringify(brief.writer).includes(future.text));
   assert.ok(!JSON.stringify(brief.writer).includes(deleted.text));
-  assert.equal(brief.editor.timing.status, 'deferred');
+  assert.equal(brief.editor.timing.status, 'ready');
 });
 
 test('the real brief CLI accepts one thread and rejects conflicting or non-root targets', async t => {
@@ -1656,8 +1668,8 @@ test('writers read the exact shared emote catalog and catalog changes refresh ma
 const sampleMarkdown = body => '# Synthetic sampling guide\n\nSYNTHETIC_SAMPLING_ENTRYPOINT\n\n<!-- samples:start -->\n\n' + body + '\n\n<!-- samples:end -->\n';
 async function sampleDocuments(f, count = 5) {
   const blocks = Array.from({ length: count }, (_, index) => '### 讨论 ' + index + '\np01：SYNTHETIC_SAMPLE_BODY_' + index + '\np02回复p01：那后来呢？？\np01回复p02：后来没去。');
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown(blocks.join('\n\n')));
-  await writeFile(join(f.root, 'environment/selected-cases.md'), '# 精选案例\n');
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown(blocks.join('\n\n')));
+  await writeFile(join(f.root, 'environment/sources-selected-cases.md'), '# 精选案例\n');
   return blocks;
 }
 
@@ -1675,8 +1687,8 @@ test('preparation reads both Markdown pages once and writers receive complete pa
   const guide = sampleMarkdown('采集时间：2026-11-11\n\n' + blocks.join('\n\n'));
   const selected = '甲：SYNTHETIC_SELECTED_CASE\n乙回复甲：哦\n甲：没别的了。';
   const selectedPage = '# 精选案例\n\n' + selected + '\n';
-  await writeFile(join(f.root, 'environment/source-sampling.md'), guide);
-  await writeFile(join(f.root, 'environment/selected-cases.md'), selectedPage);
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), guide);
+  await writeFile(join(f.root, 'environment/sources-selected-cases.md'), selectedPage);
   const prepared = await prepareUpdate(f.options), postId = prepared.id + '-sample-reader';
   const first = await briefUpdatePost({ ...f.options, postId });
   const second = await briefUpdatePost({ ...f.options, postId });
@@ -1692,7 +1704,7 @@ test('preparation reads both Markdown pages once and writers receive complete pa
   for (const item of first.writer.sourceSamples.items) {
     assert.ok(passages.includes(item.sample.text), 'whole conversations and reply wording are retained');
     assert.deepEqual(Object.keys(item.sample).sort(), item.sample.text === selected ? ['id', 'text', 'title'] : ['context', 'id', 'text', 'title']);
-    assert.equal(item.sourcePath, item.sample.text === selected ? 'environment/selected-cases.md' : 'environment/source-sampling.md');
+    assert.equal(item.sourcePath, item.sample.text === selected ? 'environment/sources-selected-cases.md' : 'environment/sources-daily-opinions.md');
   }
   for (const text of passages.filter(text => !chosen.has(text))) assert.ok(!JSON.stringify(first.writer).includes(JSON.stringify(text).slice(1, -1)));
   assert.doesNotMatch(JSON.stringify(first.writer.self), /SYNTHETIC_SAMPLE_BODY_|SYNTHETIC_SELECTED_CASE|自动更改人物档案/);
@@ -1705,7 +1717,7 @@ test('preparation reads both Markdown pages once and writers receive complete pa
 test('writer passages carry the collection date and shared excerpt scope without making them independent samples', async t => {
   const f = await fixture(t), blocks = await sampleDocuments(f, 3);
   const context = '整理日期：2026-11-09\n读取范围：只保留当前可见的短对话，缺失的后续没有补写。';
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown(context + '\n\n' + blocks.join('\n\n')));
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown(context + '\n\n' + blocks.join('\n\n')));
   const prepared = await prepareUpdate(f.options), postId = prepared.id + '-dated-material';
   const first = await briefUpdatePost({ ...f.options, postId });
   assert.equal(first.writer.sourceSamples.items.length, 3);
@@ -1713,7 +1725,7 @@ test('writer passages carry the collection date and shared excerpt scope without
   assert.deepEqual(first.writer.sourceSamples.items.map(item => item.sample.text).sort(), blocks.slice().sort());
 
   const updatedContext = context.replace('2026-11-09', '2026-11-10');
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown(updatedContext + '\n\n' + blocks.join('\n\n')));
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown(updatedContext + '\n\n' + blocks.join('\n\n')));
   await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
   await prepareUpdate(f.options);
   const second = await briefUpdatePost({ ...f.options, postId });
@@ -1729,7 +1741,7 @@ test('both material pages and unselected passages affect freshness while re-prep
   const chosen = new Set(first.writer.sourceSamples.items.map(item => item.sample.text));
   const unselected = blocks.findIndex(text => !chosen.has(text));
   blocks[unselected] += '\nSYNTHETIC_UNSELECTED_EDIT';
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown(blocks.join('\n\n')));
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown(blocks.join('\n\n')));
   await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
   await prepareUpdate(f.options);
   const refreshed = await readJSON(prepared.operationPath);
@@ -1740,8 +1752,8 @@ test('both material pages and unselected passages affect freshness while re-prep
 
   const replacement = '不用标题也能直接贴。\n甲：SYNTHETIC_REPLACED_DAY\n乙：我也是。';
   const saved = '甲：SYNTHETIC_SELECTED_REFRESH\n乙回复甲：没懂\n甲：就是忘记了。';
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown(replacement));
-  await writeFile(join(f.root, 'environment/selected-cases.md'), '# 精选案例\n\n' + saved + '\n');
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown(replacement));
+  await writeFile(join(f.root, 'environment/sources-selected-cases.md'), '# 精选案例\n\n' + saved + '\n');
   await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
   await prepareUpdate(f.options);
   const next = await briefUpdatePost({ ...f.options, postId });
@@ -1752,7 +1764,7 @@ test('both material pages and unselected passages affect freshness while re-prep
   assert.ok(reading.includes(replacement) && reading.includes(saved));
   assert.doesNotMatch(reading, /SYNTHETIC_SAMPLE_BODY_|SYNTHETIC_UNSELECTED_EDIT/);
 
-  await writeFile(join(f.root, 'environment/selected-cases.md'), '# 精选案例\n');
+  await writeFile(join(f.root, 'environment/sources-selected-cases.md'), '# 精选案例\n');
   await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
   await prepareUpdate(f.options);
   const afterRemoval = await briefUpdatePost({ ...f.options, postId });
@@ -1761,13 +1773,13 @@ test('both material pages and unselected passages affect freshness while re-prep
 
 test('obvious source leaks cannot enter either the reading pack or writer material', async t => {
   const f = await fixture(t);
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown('来自小红书的原账号 @original_person'));
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown('来自小红书的原账号 @original_person'));
   await assert.rejects(prepareUpdate(f.options), /identifying text requires review/);
   await assert.rejects(readFile(join(f.workDirectory, 'reading.md')), { code: 'ENOENT' });
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown('本次未取得可用材料。'));
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown('本次未取得可用材料。'));
   const prepared = await prepareUpdate(f.options), postId = prepared.id + '-empty-day';
   assert.deepEqual((await briefUpdatePost({ ...f.options, postId })).writer.sourceSamples.items, []);
-  await writeFile(join(f.root, 'environment/selected-cases.md'), '# 精选案例\n\n联系 test@example.com');
+  await writeFile(join(f.root, 'environment/sources-selected-cases.md'), '# 精选案例\n\n联系 test@example.com');
   await assert.rejects(briefUpdatePost({ ...f.options, postId }), /identifying text requires review/);
   await assert.rejects(prepareUpdate(f.options), /identifying text requires review/);
 });
@@ -1776,7 +1788,7 @@ async function caseFixture(t, budget = 4, settings = {}, count = 5) {
   const f = await fixture(t, budget, { ...settings, caseAdaptation: { count: 3 } });
   const blocks = await sampleDocuments(f, count), requestId = 'synthetic-intake-request';
   const document = sampleMarkdown('<!-- intake-request:' + requestId + ' -->\n整理日期：' + iso(f.now).slice(0, 10) + '\n\n' + blocks.join('\n\n'));
-  await writeFile(join(f.root, 'environment/source-sampling.md'), document);
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), document);
   const intakeReceipt = { requestId, runId: '12345678', runUrl: 'https://github.com/fivsevn/y29/actions/runs/12345678',
     startedAt: iso(f.now - 120000), completedAt: iso(f.now - 60000), headSha: 'a'.repeat(40),
     documentSha: createHash('sha1').update('blob ' + Buffer.byteLength(document) + '\0' + document).digest('hex'), documentDigest: createHash('sha256').update(document).digest('hex') };
@@ -1813,7 +1825,7 @@ test('a fresh intake adds three fixed cases without changing the original draw a
   assert.deepEqual(first.writer.conditions, []);
   assert.equal(first.writer.discussion, undefined);
   assert.ok(!Object.hasOwn(first.draft, 'caseAdaptation'));
-  await writeFile(join(f.root, 'environment/source-sampling.md'), sampleMarkdown('本次未取得可用材料。'));
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), sampleMarkdown('本次未取得可用材料。'));
   await assert.rejects(briefUpdatePost({ ...f.options, postId: caseId }), /Source material changed/);
   const resumed = await prepareUpdate(f.options), saved = await readJSON(prepared.operationPath);
   assert.equal(resumed.status, 'resumed');
@@ -1882,7 +1894,7 @@ test('case threads preserve their source tone while their replies obey the origi
   await assert.rejects(validateUpdateForBatch(tooMany.batch, { ...f.options, contextPath: prepared.operationPath }), /overall reply hard limit/);
 });
 
-test('a zero-original-root round still requires three cases and deferred briefs become ready at the saved wait time', async t => {
+test('a zero-original-root round keeps all three cases immediately writable with a recent archived post', async t => {
   const lottery = structuredClone(defaultLottery);
   lottery.rootBudget = { bands: [{ weight: 1, min: 0, max: 0 }] };
   lottery.authorKind = [{ value: 'library', weight: 1 }];
@@ -1894,9 +1906,10 @@ test('a zero-original-root round still requires three cases and deferred briefs 
   assert.equal(prepared.caseAdaptation.rootOrder.length, 3);
   await assert.rejects(finishUpdate(f.options), /all three fixed case/);
   const postId = prepared.caseAdaptation.postIds[0], before = await briefUpdatePost({ ...f.options, postId });
-  assert.equal(before.draft, null);
-  assert.equal(before.editor.timing.status, 'deferred');
-  const later = Date.parse(before.editor.timing.earliestAt), ready = await briefUpdatePost({ ...f.options, postId, now: later });
+  assert.ok(before.draft);
+  assert.equal(before.editor.timing.status, 'ready');
+  assert.equal(before.draft.createdAt, iso(f.now));
+  const ready = await briefUpdatePost({ ...f.options, postId });
   assert.ok(ready.draft);
   assert.equal(ready.editor.timing.status, 'ready');
   assert.equal(ready.draft.createdAt, before.editor.timing.earliestAt);
@@ -1906,14 +1919,15 @@ test('a zero-original-root round still requires three cases and deferred briefs 
   await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
 });
 
-test('ordinary briefs in case-enabled rounds can also resume after the original window end while old operations stay compatible', async t => {
+test('ordinary briefs in case-enabled rounds are immediately writable and saved plans remain stable', async t => {
   const lottery = structuredClone(defaultLottery); lottery.waitSeconds = [{ weight: 1, min: 20, max: 20 }];
   const f = await caseFixture(t, 4, { lottery, replyLottery: fixedReplies(2) });
   await recentCaseHistory(f);
   const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt }), ids = new Set(prepared.caseAdaptation.postIds);
   const postId = prepared.caseAdaptation.rootOrder.find(id => !ids.has(id));
   const early = await briefUpdatePost({ ...f.options, postId });
-  assert.equal(early.editor.timing.status, 'deferred');
+  assert.equal(early.editor.timing.status, 'ready');
+  assert.equal(early.draft.createdAt, iso(f.now));
   const later = await briefUpdatePost({ ...f.options, postId, now: Date.parse(early.editor.timing.earliestAt) });
   assert.ok(later.draft);
   assert.equal(later.writer.caseAdaptation, undefined);

@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 
 const defaultRoot = fileURLToPath(new URL('../', import.meta.url));
 const MAX_BYTES = 2000000;
-export const sampleDocumentPaths = ['environment/source-sampling.md', 'environment/selected-cases.md'];
+export const sampleDocumentPaths = ['environment/sources-daily-opinions.md', 'environment/sources-selected-cases.md'];
 const START = '<!-- samples:start -->', END = '<!-- samples:end -->';
 const URL_PATTERN = /(?:[a-z][a-z0-9+.-]{1,20}:\/\/|www\.|data:|mailto:)[^\s<>\]）)]+|\b(?:[a-z0-9-]+\.)+(?:com|org|net|cn|io|tv|me|dev|app|co)(?:\b|\/)[^\s<>\]）)]*/i;
 const EMAIL = /[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+/i;

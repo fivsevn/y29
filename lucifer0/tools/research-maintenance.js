@@ -11,7 +11,7 @@ const inside = (root, path) => {
 };
 
 export function isResearchPath(path) {
-  return typeof path === 'string' && path.length <= 1000 && /^(docs|environment|users)\/.+-research\.md$/.test(path) &&
+  return typeof path === 'string' && path.length <= 1000 && /^(docs|environment|users)\/(?:[^/]+\/)*research-[^/]+\.md$/.test(path) &&
     path.split('/').every(part => part && !['.', '..'].includes(part) && !/[\\\x00-\x1f]/.test(part));
 }
 
@@ -22,7 +22,7 @@ export async function researchPaths(root) {
     if (stat.isSymbolicLink() || !inside(root, await realpath(absolute))) throw new Error('Research sources must stay in regular project directories: ' + path);
     if (stat.isDirectory()) {
       for (const entry of (await readdir(absolute)).sort()) await visit(path + '/' + entry);
-    } else if (path.endsWith('-research.md')) {
+    } else if (/^research-.+\.md$/.test(path.split('/').at(-1))) {
       if (!stat.isFile() || !isResearchPath(path) || stat.size > 500000) throw new Error('Invalid research source: ' + path);
       found.push(path);
     }
