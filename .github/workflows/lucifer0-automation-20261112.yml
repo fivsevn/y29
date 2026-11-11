@@ -38,6 +38,7 @@ jobs:
             echo "===BRIEF-END:$ID==="
           done
       - name: Record briefing pointer
+        if: always()
         run: |
           printf '{"runId":"%s"}\n' "$GITHUB_RUN_ID" > .github/state/lucifer0-agent-brief.json
           git config user.name 'github-actions[bot]'
