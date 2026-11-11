@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "fingerprint": "0dc6fe3fe9e9aedf1d66452c2edfa71f7eb1a9743f9253ca5e39224f34d995c9",
+    "usedAt": "2026-11-11T04:39:37.133Z"
+  },
+  {
+    "fingerprint": "b188bc03e4d5554bf30764f5552d0c940a64f06c42a8c88b137a46118e8f358d",
+    "usedAt": "2026-11-11T04:39:37.133Z"
+  },
+  {
+    "fingerprint": "5e7664bad25dbfbf8e27acbafc0794266069605fe4bf072798c7345d9623642e",
+    "usedAt": "2026-11-11T04:39:37.133Z"
+  }
+]

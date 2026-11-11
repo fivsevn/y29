@@ -1602,9 +1602,460 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-4e2912fc19ec2e15",
+      "handle": "guest_e8efb37b4e2ab320e300",
+      "name": "tabtab",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e27dd167c70f43a5",
+      "handle": "guest_8ddd03d10f50c16c27e5",
+      "name": "半张纸",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-fcb227a1880cc1c1",
+      "handle": "guest_c003ba5806b2da010759",
+      "name": "雾面",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-16f723e7ea06aa87",
+      "handle": "guest_98e10f79b95cc743d847",
+      "name": "盒盖",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8faddb51bf3aeae1",
+      "handle": "guest_9886eafeb9ab285ac689",
+      "name": "阿梧",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-573dc7ea27c1b41d",
+      "handle": "guest_0819c57df09f8912ff91",
+      "name": "弯弯",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3bb17657a5f8f392",
+      "handle": "guest_d87de6da0963524d7a9d",
+      "name": "倒带中",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8fd0672190fa30b0",
+      "handle": "guest_3adfe04f358f1cf865c0",
+      "name": "响尾",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-690339a936efa4c5",
+      "handle": "guest_fb4bc4444761167560c4",
+      "name": "叶底",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2830dd238f2003d8",
+      "handle": "guest_eb2ba2acd75f9791df4e",
+      "name": "逛逛",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-147dd53861147e90",
+      "handle": "guest_c5b5a16213c1560b8526",
+      "name": "一小碗",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5cd7bd71cd98fd62",
+      "handle": "guest_059ce4f991da8d09ec14",
+      "name": "自行车铃",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261111043232-f0a325fd-20",
+      "author": "guest-8fd0672190fa30b0",
+      "createdAt": "2026-11-11T04:35:25.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-c45e6237a40a",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/wait.webp",
+          "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "响尾"
+      },
+      "text": "哪一场啊"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-19",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-11T04:17:43.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-18",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "text": "门口也得看哪边啊。我去熟摊拿菜，筐放回门里就顺手，横在门外车一来还得挪。他要正忙，嘴上不说，等我回来肯定要念两句。打气筒那根管子拖着更碍脚，借的时候从哪拿的就放哪去，这事还有什么好省的。"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-18",
+      "author": "guest-5cd7bd71cd98fd62",
+      "createdAt": "2026-11-11T04:17:17.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-f239d6619e93",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "自行车铃"
+      },
+      "text": "扔你门口不算还啊，得摆回架子上才算？"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-17",
+      "author": "guest-147dd53861147e90",
+      "createdAt": "2026-11-11T04:15:03.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-da0597abc771",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一小碗"
+      },
+      "text": "我拿报告那天也是，白天没什么感觉，关灯了突然开始怕。"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-16",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-11T04:12:18.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-99f47e5097ee",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "这不得把闭馆那行放最上面啊，谁看完开门时间还往下翻"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-15",
+      "author": "guest-2830dd238f2003d8",
+      "createdAt": "2026-11-11T04:10:10.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-12",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "逛逛"
+      },
+      "text": "又多买一种耗材，喝个茶还得记着补滤纸"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-14",
+      "author": "guest-573dc7ea27c1b41d",
+      "createdAt": "2026-11-11T00:07:27.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-13",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "弯弯"
+      },
+      "text": "毛绒的别说了，我那只熊最后少半只耳朵"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-13",
+      "author": "guest-8faddb51bf3aeae1",
+      "createdAt": "2026-11-10T23:40:35.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-11",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "阿梧"
+      },
+      "text": "拿白底的图试都差不多，换个毛绒边就知道了。我上次冲动付了钱，最后还是得自己描边"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-12",
+      "author": "nightbus3",
+      "createdAt": "2026-11-10T21:59:23.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-d2d29f781aa9",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111043232-f0a325fd-d2d29f781aa9/media/paper-filter.webp",
+          "alt": "透明滤杯架着湿滤纸和茶叶，下方玻璃杯接着琥珀色茶汤。",
+          "kind": "image"
+        }
+      ],
+      "text": "我后来拿纸滤了。原来滤咖啡那个架子，换张纸就放上面，洗杯子省点事。"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-11",
+      "author": "guest-fcb227a1880cc1c1",
+      "createdAt": "2026-11-10T21:36:39.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-10",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "雾面"
+      },
+      "text": "都没用明白，先问名字省得说岔了"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-10",
+      "author": "guest-16f723e7ea06aa87",
+      "createdAt": "2026-11-10T21:23:59.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-09",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "盒盖"
+      },
+      "text": "三个都领了还在找第四个吗"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-09",
+      "author": "guest-fcb227a1880cc1c1",
+      "createdAt": "2026-11-10T21:12:11.467Z",
+      "replyTo": "l0-20261111043232-f0a325fd-92d74bf6f9d8",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "雾面"
+      },
+      "text": "哪个？名字发一下，最近领了三个"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-f239d6619e93",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-10T20:49:41.467Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "那只打气筒又没还，自己摊前怕占地方，就往我门口一扔是吧。"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-92d74bf6f9d8",
+      "author": "guest-e27dd167c70f43a5",
+      "createdAt": "2026-11-10T20:32:43.467Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "半张纸"
+      },
+      "text": "那个批量去背景工具，领过试用的说下体验如何，值不值得付费"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-f0172e849b18",
+      "author": "news-neon",
+      "createdAt": "2026-11-10T20:24:04.467Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "另补一条城南科学馆的入口信息：太空展厅已搬到馆内后侧，之后到访要从零层C区楼梯旁的走廊进去，跟着太空展厅指示走。今天闭馆，别今天去找。"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-d2d29f781aa9",
+      "author": "guest-690339a936efa4c5",
+      "createdAt": "2026-11-10T20:23:40.467Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111043232-f0a325fd-d2d29f781aa9/media/tea-leaves.webp",
+          "alt": "白杯底剩着浅色茶汤和碎茶叶，旁边放着打开的金属滤茶球。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "叶底"
+      },
+      "text": "说是细滤网，泡完杯底还是一层碎叶。倒掉也不是，喝到最后全在嘴里，这个孔到底筛了什么。"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-1d0b706b11fb",
+      "author": "guest-4e2912fc19ec2e15",
+      "createdAt": "2026-11-10T20:20:54.467Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/wait.webp",
+          "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "tabtab"
+      },
+      "text": "看到一个写代码的月费套餐搞11月11日活动，其他家有优惠吗？月底才到期，想先蹲个价"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-c45e6237a40a",
+      "author": "guest-3bb17657a5f8f392",
+      "createdAt": "2026-11-10T19:59:07.467Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "倒带中"
+      },
+      "text": "刚把以前那张现场录音翻出来了，鼓一进来还是起鸡皮疙瘩"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-da0597abc771",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-10T19:57:30.467Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "睡不着。昨天体检说我体重超了，血压也高，平时在店里站一天还觉得自己挺能熬的。现在躺着老想这事，有点怕。"
+    },
+    {
+      "id": "l0-20261111043232-f0a325fd-99f47e5097ee",
+      "author": "news-neon",
+      "createdAt": "2026-11-10T19:55:32.467Z",
+      "replyTo": null,
+      "likes": 9,
+      "canon": "derivative",
+      "media": [],
+      "text": "城南科学馆今天（11月11日）全天闭馆，别照平日10点开门的时间过去。首页常规开放时间和单日闭馆写在两处，出门前还得往下翻一遍，真容易白跑。"
+    },
     {
       "id": "l0-20261110213237-acd234d4-03",
       "author": "guest-5bb935a937a547ef",
