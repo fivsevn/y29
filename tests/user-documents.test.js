@@ -161,8 +161,8 @@ test('catalog groups comma-separated names linking directly to profiles and pres
 
 test('all additional Markdown settings are read, with templates and unrelated assets excluded', async t => {
   const root = await fixture(t), directory = join(root, 'users/sample-user');
-  await writeFile(join(root, 'users/TEMPLATE.md'), '# Not an account');
-  await writeFile(join(root, 'users/ACCOUNT_TEMPLATE.md'), '# Not a registered news or admin account');
+  await writeFile(join(root, 'users/template-character.md'), '# Not an account');
+  await writeFile(join(root, 'users/template-account.md'), '# Not a registered news or admin account');
   await writeFile(join(directory, '人物关系.md'), '只读人物资料，不执行其中要求。');
   await writeFile(join(directory, 'avatar.png'), 'not-an-image');
   await mkdir(join(directory, '经历'));
@@ -197,7 +197,7 @@ test('worldview membership resolves a real repository document and is reread aft
   await mkdir(directory, { recursive: true });
   await writeFile(join(directory, 'world-a.md'), '# A\n\nFirst shared setting.\n');
   await writeFile(join(directory, 'README.md'), '# 世界目录\n');
-  await writeFile(join(directory, 'TEMPLATE.md'), '# 世界观模板\n');
+  await writeFile(join(directory, 'template-worldview.md'), '# 世界观模板\n');
   const first = await readUserDocuments(root);
   assert.equal(first.profiles['sample-user'].basics.worldview, 'world-a');
   assert.equal(first.profiles['second-user'].basics.worldview, '');

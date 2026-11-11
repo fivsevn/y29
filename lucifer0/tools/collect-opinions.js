@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID } from 'node:crypto';
 import { parseSampleDocuments } from './samples.js';
 
-const DEFAULT_DOCUMENT = fileURLToPath(new URL('../environment/source-sampling.md', import.meta.url));
+const DEFAULT_DOCUMENT = fileURLToPath(new URL('../environment/sources-daily-opinions.md', import.meta.url));
 const REPOSITORY = fileURLToPath(new URL('../../', import.meta.url));
 const START = '<!-- samples:start -->', END = '<!-- samples:end -->';
 const LIMITS = Object.freeze({ threadsPerSource: 8, detailRequests: 10, repliesPerThread: 10, rootCharacters: 1200, replyCharacters: 400, threadCharacters: 2200, responseBytes: 2_000_000, timeoutMs: 15_000 });
@@ -197,7 +197,7 @@ export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date
       if (!fragment) continue;
       let entry;
       try {
-        entry = parseSampleDocuments([{ path: 'environment/source-sampling.md', text: `${START}\n${renderFragment(fragment, 1)}\n${END}` }])[0];
+        entry = parseSampleDocuments([{ path: 'environment/sources-daily-opinions.md', text: `${START}\n${renderFragment(fragment, 1)}\n${END}` }])[0];
       } catch { continue; }
       if (!entry) continue;
       const fingerprint = caseFingerprint(entry.sample);
@@ -228,7 +228,7 @@ export function replaceCurrentSamples(document, markdown) {
 }
 
 async function outputTarget(documentPath, outputPath) {
-  if (basename(documentPath).toLowerCase() === 'selected-cases.md' || outputPath && basename(outputPath).toLowerCase() === 'selected-cases.md') fail('Selected cases are never a collector target');
+  if (basename(documentPath).toLowerCase() === 'sources-selected-cases.md' || outputPath && basename(outputPath).toLowerCase() === 'sources-selected-cases.md') fail('Selected cases are never a collector target');
   const source = resolve(documentPath), sourceStat = await lstat(source);
   if (!sourceStat.isFile() || sourceStat.isSymbolicLink()) fail('The material source must be a regular file');
   if (outputPath === undefined) return source;

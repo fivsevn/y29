@@ -9,7 +9,7 @@ import { defaultWorkDirectory } from './operations.js';
 
 const REPOSITORY = 'fivsevn/y29';
 const WORKFLOW = 'opinion-intake.yml';
-const DOCUMENT = 'lucifer0/environment/source-sampling.md';
+const DOCUMENT = 'lucifer0/environment/sources-daily-opinions.md';
 const REQUEST_FILE = 'intake-request.json';
 const REPOSITORY_REQUEST = '.github/state/lucifer0-intake-request.json';
 const REQUEST_ID = /^[A-Za-z0-9_-]{1,100}$/;
@@ -194,7 +194,7 @@ async function synchronize(root, git, expected) {
   await git(['fetch', 'origin', 'main'], { cwd: repository });
   await cleanDocument(root, git);
   await git(['merge', '--ff-only', '--no-edit', 'FETCH_HEAD'], { cwd: repository });
-  const text = await regularText(join(root, 'environment/source-sampling.md'));
+  const text = await regularText(join(root, 'environment/sources-daily-opinions.md'));
   if (digest(text) !== expected.receipt.documentDigest || blobSha(text) !== expected.receipt.documentSha) fail('the synchronized material differs from this workflow result; keep local work and verify the latest batch');
 }
 
@@ -224,7 +224,7 @@ export async function refreshIntake({ root = socialRoot, workDirectory, now = Da
     }
     let cachedReady = false;
     if (state.receipt) {
-      const text = await regularText(join(root, 'environment/source-sampling.md'));
+      const text = await regularText(join(root, 'environment/sources-daily-opinions.md'));
       let markerMatches = true;
       try { checkMarker(text, state.requestId); } catch { markerMatches = false; }
       cachedReady = markerMatches && finiteDate(state.receipt.completedAt) && now - Date.parse(state.receipt.completedAt) <= 86400000 && digest(text) === state.receipt.documentDigest && blobSha(text) === state.receipt.documentSha;

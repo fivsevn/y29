@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { refreshIntake, bindIntakeRequest, githubIntakeClient, IntakeAPIError } from '../lucifer0/tools/intake-refresh.js';
 
 const NOW = Date.parse('2026-11-11T00:00:00Z'), HEAD = 'a'.repeat(40), COMMIT = 'b'.repeat(40);
-const DOCUMENT = 'lucifer0/environment/source-sampling.md';
+const DOCUMENT = 'lucifer0/environment/sources-daily-opinions.md';
 const REQUEST = '.github/state/lucifer0-intake-request.json';
 const iso = value => new Date(value).toISOString();
 const sha = text => createHash('sha1').update(`blob ${Buffer.byteLength(text)}\0`).update(text).digest('hex');
@@ -24,7 +24,7 @@ async function fixture(t) {
   await mkdir(join(root, 'environment'), { recursive: true });
   root = await realpath(root);
   await writeFile(join(root, 'publication.json'), JSON.stringify({ caseAdaptation: { count: 3 } }));
-  await writeFile(join(root, 'environment/source-sampling.md'), '# 素材\n<!-- samples:start -->\n旧内容\n<!-- samples:end -->\n');
+  await writeFile(join(root, 'environment/sources-daily-opinions.md'), '# 素材\n<!-- samples:start -->\n旧内容\n<!-- samples:end -->\n');
   const f = { root, workDirectory, dirty: false, runs: [], calls: [], gitCalls: [], remoteText: md('request-one'), requestMainText: null, requestHeadText: requestText(), canDispatch: true, commitHead: HEAD, documentCommit: COMMIT, commitDate: NOW + 8000 };
   f.github = { get canDispatch() { return f.canDispatch; }, request: async (method, path, body) => {
     f.calls.push({ method, path, body });
@@ -44,7 +44,7 @@ async function fixture(t) {
     if (args[0] === 'status') return f.dirty ? ` M ${DOCUMENT}\n` : '';
     if (args[0] === 'remote') return 'https://github.com/fivsevn/y29.git\n';
     if (args[0] === 'fetch') return '';
-    if (args[0] === 'merge') { await writeFile(join(root, 'environment/source-sampling.md'), f.remoteText); return ''; }
+    if (args[0] === 'merge') { await writeFile(join(root, 'environment/sources-daily-opinions.md'), f.remoteText); return ''; }
     throw new Error('Unexpected synthetic Git operation');
   };
   f.options = { root, workDirectory, now: NOW, requestId: () => 'request-one', github: f.github, git: f.git };
@@ -129,7 +129,7 @@ test('a push with the right title but a different head request cannot adopt old 
   await assert.rejects(refreshIntake({ ...f.options, now: NOW + 20000 }), /exact intake request/);
   assert.equal(f.calls.some(call => call.path.includes('/commits?')), false);
   assert.equal(f.gitCalls.some(args => args[0] === 'fetch'), false);
-  assert.match(await readFile(join(f.root, 'environment/source-sampling.md'), 'utf8'), /旧内容/);
+  assert.match(await readFile(join(f.root, 'environment/sources-daily-opinions.md'), 'utf8'), /旧内容/);
 });
 
 test('failed push runs report failure once and then publish a fresh request from current main', async t => {
@@ -250,7 +250,7 @@ test('failed runs and mismatched document markers never continue with old materi
   assert.equal(f.gitCalls.filter(args => args[0] === 'fetch').length, 0);
   f.runs = [run()]; f.remoteText = md('another-request');
   await assert.rejects(refreshIntake({ ...f.options, now: NOW + 20000 }), /matching material commit/);
-  assert.match(await readFile(join(f.root, 'environment/source-sampling.md'), 'utf8'), /旧内容/);
+  assert.match(await readFile(join(f.root, 'environment/sources-daily-opinions.md'), 'utf8'), /旧内容/);
 });
 
 test('dirty material is protected before dispatch and again before synchronization', async t => {
@@ -267,7 +267,7 @@ test('dirty material is protected before dispatch and again before synchronizati
 test('a later matching dispatch can repair a replaced pending receipt', async t => {
   const f = await fixture(t); await refreshIntake(f.options); f.runs = [run()];
   await refreshIntake({ ...f.options, now: NOW + 20000 });
-  await writeFile(join(f.root, 'environment/source-sampling.md'), md('scheduled-other'));
+  await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), md('scheduled-other'));
   f.runs = [run('request-one', { id: 322, status: 'queued', conclusion: null, created_at: iso(NOW + 30000) }), run()];
   const pending = await refreshIntake({ ...f.options, now: NOW + 31000 });
   assert.equal(pending.runId, '322'); assert.equal(pending.status, 'awaiting-intake');
