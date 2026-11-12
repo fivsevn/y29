@@ -420,13 +420,15 @@ try {
   const indexRoot = { ...roots[0], id: 'index-root', replyTo: null, media: [] };
   const fixtureImage = feed.posts.flatMap(post => post.media).find(image => !isEmoteMedia(image));
   assert.ok(fixtureImage, 'the reply-media fixture needs an existing image file');
-  indexRoot.media = [fixtureImage];
+  const fixtureEmote = { src: 'assets/emotes/l0/huh.webp', alt: '测试表情', kind: 'emote' };
+  // Put the emote first in source order to exercise photo-before-body layout.
+  indexRoot.media = [fixtureEmote, fixtureImage];
   const longReply = '这是一条无需展开即可读完的回复。'.repeat(12);
   const indexReplies = Array.from({ length: 11 }, (_, i) => ({ ...indexRoot, id: `index-reply-${i + 1}`,
     replyTo: i === 10 ? 'index-reply-10' : indexRoot.id,
     createdAt: new Date(Date.parse(indexRoot.createdAt) + (i + 1) * 60000).toISOString(),
     text: i ? `第${i + 1}条回复。` : longReply,
-    media: i ? [] : [fixtureImage, { src: 'assets/emotes/l0/huh.webp', alt: '测试表情', kind: 'emote' }] }));
+    media: i ? [] : [fixtureImage, fixtureEmote] }));
   let indexFeed = { ...feed, users: feed.users.map(user => user.id === indexRoot.author ? { ...user, inFollowing: true } : user), posts: [indexRoot, ...indexReplies] };
   await indexed.route('**/data/feed.json', route => route.fulfill({ json: indexFeed }));
   await indexed.route(/\/core\.js(?:\?|$)/, async route => {
@@ -438,48 +440,75 @@ try {
   });
   await indexed.goto(base); await indexed.locator('article').first().waitFor();
   check(await indexed.locator('.reply-count').textContent() === '11' &&
-    await indexed.locator('.preview-reply').count() === 11 &&
-    await indexed.locator('.preview-more').count() === 0, 'the indexed home shows all eleven replies without expansion');
+    await indexed.locator('.preview-reply').count() === 5 &&
+    await indexed.locator('.preview-more').textContent() === '显示更多>>>', 'the home keeps the total count while limiting previews to five replies');
+  check(await indexed.locator('.preview-more').getAttribute('href') === '#/post/index-root', 'more replies link to the complete discussion');
+  check(JSON.stringify(await indexed.locator('.preview-reply').evaluateAll(replies => replies.map(reply => reply.dataset.replyId))) ===
+    JSON.stringify(indexReplies.slice(0, 5).map(reply => reply.id)), 'the preview keeps the first five replies in thread order');
   check(await indexed.locator('.preview-reply').evaluateAll(replies => new Set(replies.map(reply => reply.dataset.replyId)).size === replies.length), 'each reply appears only once');
   const fullReply = indexed.locator('[data-reply-id="index-reply-1"]');
-  check(await fullReply.locator('p').textContent() === longReply, 'long reply text is complete on the feed');
+  check((await fullReply.locator('p').textContent()).endsWith(longReply), 'long reply text is complete after its media placeholders');
   check(await fullReply.locator('p').evaluate(paragraph => {
     const style = getComputedStyle(paragraph);
     return style.webkitLineClamp === 'none' && style.whiteSpace === 'pre-wrap' &&
       paragraph.getBoundingClientRect().height > 2 * parseFloat(style.lineHeight) && paragraph.scrollHeight <= paragraph.clientHeight + 1;
   }), 'long replies occupy all required lines instead of clipping at two');
-  check(await fullReply.locator('img').count() === 1 && await fullReply.locator('img[loading="lazy"]').count() === 1, 'reply emotes remain lazy images while ordinary images use links');
-  check(await fullReply.locator('.post-image-link').textContent() === '[图片]' && await fullReply.locator('.post-image').count() === 0 &&
-    await fullReply.locator('.post-emote').count() === 1 && await fullReply.locator('.preview-heading img,a a').count() === 0,
-    'ordinary reply images become separate accessible image links');
+  check(await fullReply.locator('.preview-content img,.preview-content a,.preview-content button').count() === 0,
+    'reply preview media neither load images nor expose image links');
+  const previewText = await fullReply.locator('.preview-content').textContent();
+  check(previewText.includes('[图片]') && previewText.includes('[huh]'), 'reply media use the photo placeholder and English emote token');
+  check(await fullReply.locator('.preview-heading img,a a').count() === 0, 'reply identity links remain separate from plain media placeholders');
+  const rootMediaOrder = await indexed.locator('#post-index-root > .post-content').evaluate(content => {
+    const photo = content.querySelector('.post-image'), emote = content.querySelector('.post-emote');
+    return Boolean(photo && emote && (photo.compareDocumentPosition(emote) & Node.DOCUMENT_POSITION_FOLLOWING)) &&
+      emote.getBoundingClientRect().top >= photo.getBoundingClientRect().bottom - 1;
+  });
+  check(rootMediaOrder, 'home photos appear before the emote body even when the source media begin with an emote');
   const thumbnail = indexed.locator('#post-index-root > .post-content .post-image img');
   await thumbnail.evaluate(image => image.decode());
   check(await thumbnail.evaluate(image => {
     const box = image.getBoundingClientRect();
     return box.width <= 160 && box.height <= 160 && Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
   }), 'home root photos use small proportional thumbnails');
-  await fullReply.locator('.post-image-link').click();
-  await indexed.waitForFunction(() => document.querySelector('#image-frame img')?.naturalWidth > 0);
-  check(await indexed.locator('#image-frame img').getAttribute('alt') === fixtureImage.alt, 'reply image links open the actual full image with its description');
-  await indexed.locator('#image-close').click();
-  check(await fullReply.locator('.post-emote').evaluate(image => {
-    const box = image.getBoundingClientRect(); return box.width <= 80 && box.height <= 80;
-  }), 'reply emotes keep the existing eighty-pixel size');
-  const lastReply = indexed.locator('[data-reply-id="index-reply-11"]');
-  await lastReply.scrollIntoViewIfNeeded();
-  check(await lastReply.evaluate(reply => {
-    const viewport = document.querySelector('main').getBoundingClientRect(), box = reply.getBoundingClientRect();
-    return box.bottom > viewport.top && box.top < viewport.bottom;
-  }), 'scrolling alone reaches the eleventh reply');
+  await indexed.locator('.preview-more').click();
+  await indexed.locator('.boardbar h2').filter({ hasText: '讨论串' }).waitFor();
+  check(await indexed.locator('article').count() === 12 && await indexed.locator('#post-index-reply-11').count() === 1,
+    'show more opens all eleven replies, including the nested final reply');
+  await indexed.locator('[data-nav="home"]').click();
+  await indexed.getByRole('heading', { name: '/world', exact: true }).waitFor();
   await indexed.locator('[data-nav="following"]').click();
   await indexed.getByRole('heading', { name: '/following', exact: true }).waitFor();
-  check(await indexed.locator('.post-image-link').count() === 1 && await indexed.locator('.post-image.is-thumbnail').count() === 1, 'following keeps the same compact image presentation');
+  check(await indexed.locator('.preview-content img,.preview-content a').count() === 0 &&
+    await indexed.locator('.post-image.is-thumbnail').count() === 1 &&
+    await indexed.locator('.preview-reply').count() === 5 && await indexed.locator('.preview-more').count() === 1,
+    'following keeps the same compact images, plain media placeholders and five-reply limit');
   await indexed.locator('[data-nav="home"]').click();
   await indexed.getByRole('heading', { name: '/world', exact: true }).waitFor();
   await indexed.locator('.post-number').click();
   await indexed.locator('.boardbar h2').filter({ hasText: '讨论串' }).waitFor();
-  check(await indexed.locator('.post-image-link,.post-image.is-thumbnail').count() === 0 &&
-    await indexed.locator('#post-index-reply-1 .post-image img').count() === 1, 'discussion pages retain full reply images');
+  check(await indexed.locator('.preview-reply,.preview-more,.post-image-link').count() === 0 &&
+    await indexed.locator('#post-index-root .post-image:not(.is-thumbnail) img').count() === 1 &&
+    await indexed.locator('#post-index-reply-1 .post-image.is-thumbnail img').count() === 1,
+    'discussion pages show a large root photo, reply thumbnails and every reply');
+  check(await indexed.locator('#post-index-root .post-emote,#post-index-reply-1 .post-emote').count() === 2,
+    'discussion pages load both the root and reply emotes');
+  for (const image of await indexed.locator('.post-image img,.post-emote').all()) {
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(image => image.decode());
+  }
+  check(await indexed.locator('#post-index-root .post-image img').evaluate(image => {
+    const box = image.getBoundingClientRect(), content = image.closest('.post-content').getBoundingClientRect();
+    return box.width > 160 && box.width <= content.width && box.height > 0;
+  }), 'the root photo is larger than a thumbnail and stays inside the discussion card');
+  check(await indexed.locator('#post-index-reply-1 .post-image img').evaluate(image => {
+    const box = image.getBoundingClientRect();
+    return box.width <= 160 && box.height <= 160 && Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
+  }), 'discussion reply photos keep small proportional thumbnails');
+  check(await indexed.locator('#post-index-root > .post-content').evaluate(content => {
+    const photo = content.querySelector('.post-image'), emote = content.querySelector('.post-emote');
+    return Boolean(photo.compareDocumentPosition(emote) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+      emote.getBoundingClientRect().top >= photo.getBoundingClientRect().bottom - 1;
+  }), 'the discussion root photo also precedes its emote body');
   await indexed.locator('.author-name').first().click();
   await indexed.getByRole('heading', { name: '/user', exact: true }).waitFor();
   await indexed.locator('[data-nav="home"]').click();
@@ -490,8 +519,16 @@ try {
   indexFeed = { ...indexFeed, posts: [...indexFeed.posts, { ...indexReplies.at(-1), id: 'index-new-reply', replyTo: indexReplies.at(-1).id, text: '新载入的回复。' }] };
   await indexed.reload(); await indexed.locator('article').first().waitFor();
   check(await indexed.locator('.reply-count').textContent() === '12' &&
-    await indexed.locator('.preview-reply').count() === 12 &&
-    (await indexed.locator('.reply-preview').textContent()).includes('新载入的回复。'), 'replacing the feed rebuilds counts and previews with new nested replies');
+    await indexed.locator('.preview-reply').count() === 5 &&
+    !(await indexed.locator('.reply-preview').textContent()).includes('新载入的回复。'), 'replacing the feed updates total counts without exceeding five previews');
+  await indexed.locator('.preview-more').click();
+  await indexed.locator('.boardbar h2').filter({ hasText: '讨论串' }).waitFor();
+  check(await indexed.locator('article').count() === 13 &&
+    await indexed.locator('#post-index-new-reply .post-text').textContent() === '新载入的回复。', 'show more includes a newly loaded nested reply');
+  indexFeed = { ...indexFeed, posts: [indexRoot, ...indexReplies.slice(0, 5)] };
+  await indexed.goto(base); await indexed.reload(); await indexed.locator('article').first().waitFor();
+  check(await indexed.locator('.preview-reply').count() === 5 && await indexed.locator('.preview-more').count() === 0,
+    'exactly five replies need no show-more link');
   check(await indexed.evaluate(() => window.threadIndexBuilds) === 1, 'the replacement feed is indexed once');
   await indexed.close();
   check(errors.length === 0, `no browser errors: ${errors.join(', ')}`);

@@ -382,6 +382,12 @@ test('a thread index preserves chronology, direct reply counts and invalid-chain
 test('repeated indexed queries do not rescan posts or expose cached reply arrays', () => {
   const records = [{ id: 'root', replyTo: null, createdAt: '2026-11-07T10:00:00Z' },
     ...Array.from({ length: 12 }, (_, i) => ({ id: `reply-${String(i).padStart(2, '0')}`, replyTo: 'root', createdAt: '2026-11-07T10:01:00Z' }))];
+  for (const total of [5, 6]) {
+    const preview = createThreadIndex(records.slice(0, total + 1)).threadReplyPreview('root');
+    assert.equal(preview.total, total);
+    assert.equal(preview.replies.length, 5);
+    assert.equal(preview.collapsed, total > 5, 'only the sixth reply starts the collapsed remainder');
+  }
   let reads = 0;
   const posts = new Proxy(records, { get(target, key, receiver) {
     if (/^\d+$/.test(String(key))) reads++;
@@ -395,14 +401,14 @@ test('repeated indexed queries do not rescan posts or expose cached reply arrays
     const preview = index.threadReplyPreview(post.id);
     assert.equal(preview.total, 12);
     assert.equal(preview.collapsed, true);
-    assert.deepEqual(preview.replies.map(reply => reply.id), records.slice(1, 11).map(reply => reply.id));
+    assert.deepEqual(preview.replies.map(reply => reply.id), records.slice(1, 6).map(reply => reply.id));
     index.replyCount(post.id);
   }
   assert.equal(reads, builtReads, 'route renders reuse the built index without rereading the source array');
   index.threadPosts('root').splice(0);
   index.threadReplyPreview('root').replies.reverse();
   assert.deepEqual(index.threadPosts('root'), records);
-  assert.deepEqual(index.threadReplyPreview('root').replies, records.slice(1, 11));
+  assert.deepEqual(index.threadReplyPreview('root').replies, records.slice(1, 6));
 });
 
 test('new feed snapshots rebuild their index and two-argument helpers see array changes', () => {

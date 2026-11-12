@@ -130,7 +130,21 @@ try {
   await dialog.waitFor({ state: 'hidden' });
   check(await link.evaluate(element => document.activeElement === element), 'clicking the backdrop closes the viewer and restores focus');
 
+  await visitThread(root);
+  const threadPhoto = page.locator(`#post-${root.id} .post-image img`).first();
+  await readyImage(threadPhoto);
+  check(await threadPhoto.evaluate(image => {
+    const box = image.getBoundingClientRect(), content = image.closest('.post-content').getBoundingClientRect();
+    return !image.closest('.post-image').classList.contains('is-thumbnail') && box.width > 160 && box.width <= content.width;
+  }), 'the root photo is large within the discussion card rather than a feed thumbnail');
   await visitThread(reply);
+  const replyPhoto = page.locator(`#post-${reply.id} .post-image img`).first();
+  await readyImage(replyPhoto);
+  check(await replyPhoto.evaluate(image => {
+    const box = image.getBoundingClientRect();
+    return image.closest('.post-image').classList.contains('is-thumbnail') && box.width <= 160 && box.height <= 160 &&
+      Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
+  }), 'ordinary discussion reply images use compact proportional thumbnails');
   link = await open(reply);
   await assertWholeImage();
   await page.locator('#image-close').click();
