@@ -1,5 +1,5 @@
 name: Lucifer0 automated fresh preparation
-run-name: Lucifer0 prepare fresh batch ${{ github.run_id }}
+run-name: Lucifer0 prepare 2026-11-12 15-35 ${{ github.run_id }}
 on:
   push:
     branches: [main]
