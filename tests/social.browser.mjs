@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { parseSiteGuide, userNameColor, WELCOME_POST_ID } from '../lucifer0/core.js';
+import { parseSiteGuide, userNameColor, WELCOME_POST_ID, isEmoteMedia } from '../lucifer0/core.js';
 
 const browsers = await import(process.env.Y29_PLAYWRIGHT_MODULE || 'playwright');
 const browserName = process.env.Y29_BROWSER || 'chromium';
@@ -165,10 +165,26 @@ try {
 
   const likePost = mediaPost;
   const like = `#post-${likePost.id} button[data-action="likes"]`;
+  await page.locator(like).evaluate(button => {
+    window.beforeLikeNodes = { button, articles: [...document.querySelectorAll('article')], images: [...document.querySelectorAll('main img')] };
+  });
   await page.locator(like).click();
   check(await page.locator(like).getAttribute('aria-pressed') === 'true', 'like toggles');
   check(Number((await page.locator(like).textContent()).trim()) === likePost.likes + 1, 'heart count increments once');
   check((await page.locator(like).getAttribute('aria-label')).includes('取消点赞'), 'liked heart exposes its state to assistive technology');
+  check(await page.locator(like).getAttribute('title') === '取消点赞', 'liked heart updates its tooltip');
+  check(await page.locator(like).evaluate(button => {
+    const before = window.beforeLikeNodes;
+    return button === before.button && document.activeElement === button &&
+      before.articles.every((article, index) => article === document.querySelectorAll('article')[index]) &&
+      before.images.every((image, index) => image === document.querySelectorAll('main img')[index]);
+  }), 'liking keeps the focused button, articles and loaded image nodes in place');
+  await page.locator(like).click();
+  check(await page.locator(like).getAttribute('aria-pressed') === 'false' &&
+    await page.locator(like).getAttribute('title') === '点赞' &&
+    await page.locator(like).getAttribute('aria-label') === `点赞${usersById.get(likePost.author).name}的发言，${likePost.likes}个赞` &&
+    Number((await page.locator(like).textContent()).trim()) === likePost.likes, 'unliking restores the count, accessible label and tooltip');
+  await page.locator(like).click();
   await page.reload(); await page.locator(like).waitFor();
   check(await page.locator(like).getAttribute('aria-pressed') === 'true', 'like persists after reload');
   await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.copiedPostURL = text; } } }));
@@ -365,6 +381,70 @@ try {
   await failed.unroute('**/data/feed.json');
   await failed.getByRole('button', { name: '重新载入' }).click();
   await failed.locator('article').first().waitFor(); checks++;
+
+  const indexed = await context.newPage(); trackErrors(indexed);
+  const indexRoot = { ...roots[0], id: 'index-root', replyTo: null, media: [] };
+  const fixtureImage = feed.posts.flatMap(post => post.media).find(image => !isEmoteMedia(image));
+  assert.ok(fixtureImage, 'the reply-media fixture needs an existing image file');
+  const longReply = '这是一条无需展开即可读完的回复。'.repeat(12);
+  const indexReplies = Array.from({ length: 11 }, (_, i) => ({ ...indexRoot, id: `index-reply-${i + 1}`,
+    replyTo: i === 10 ? 'index-reply-10' : indexRoot.id,
+    createdAt: new Date(Date.parse(indexRoot.createdAt) + (i + 1) * 60000).toISOString(),
+    text: i ? `第${i + 1}条回复。` : longReply,
+    media: i ? [] : [fixtureImage, { src: 'assets/emotes/l0/huh.webp', alt: '测试表情', kind: 'emote' }] }));
+  let indexFeed = { ...feed, posts: [indexRoot, ...indexReplies] };
+  await indexed.route('**/data/feed.json', route => route.fulfill({ json: indexFeed }));
+  await indexed.route(/\/core\.js(?:\?|$)/, async route => {
+    const response = await route.fetch(), body = await response.text();
+    const instrumented = body.replace('export function createThreadIndex(posts) {',
+      'export function createThreadIndex(posts) { window.threadIndexBuilds = (window.threadIndexBuilds || 0) + 1;');
+    assert.notEqual(instrumented, body, 'the index factory is instrumented for build-count checks');
+    await route.fulfill({ response, body: instrumented });
+  });
+  await indexed.goto(base); await indexed.locator('article').first().waitFor();
+  check(await indexed.locator('.reply-count').textContent() === '11' &&
+    await indexed.locator('.preview-reply').count() === 11 &&
+    await indexed.locator('.preview-more').count() === 0, 'the indexed home shows all eleven replies without expansion');
+  check(await indexed.locator('.preview-reply').evaluateAll(replies => new Set(replies.map(reply => reply.dataset.replyId)).size === replies.length), 'each reply appears only once');
+  const fullReply = indexed.locator('[data-reply-id="index-reply-1"]');
+  check(await fullReply.locator('p').textContent() === longReply, 'long reply text is complete on the feed');
+  check(await fullReply.locator('p').evaluate(paragraph => {
+    const style = getComputedStyle(paragraph);
+    return style.webkitLineClamp === 'none' && style.whiteSpace === 'pre-wrap' &&
+      paragraph.getBoundingClientRect().height > 2 * parseFloat(style.lineHeight) && paragraph.scrollHeight <= paragraph.clientHeight + 1;
+  }), 'long replies occupy all required lines instead of clipping at two');
+  check(await fullReply.locator('img').count() === 2 && await fullReply.locator('img[loading="lazy"]').count() === 2, 'reply images and emotes render once with lazy loading');
+  check(await fullReply.locator('.post-image').count() === 1 && await fullReply.locator('.post-emote').count() === 1 &&
+    await fullReply.locator('.preview-heading img,a a').count() === 0, 'image links remain separate from reply heading links');
+  check(await fullReply.locator('.post-emote').evaluate(image => {
+    const box = image.getBoundingClientRect(); return box.width <= 80 && box.height <= 80;
+  }), 'reply emotes keep the existing eighty-pixel size');
+  const lastReply = indexed.locator('[data-reply-id="index-reply-11"]');
+  await lastReply.scrollIntoViewIfNeeded();
+  check(await lastReply.evaluate(reply => {
+    const viewport = document.querySelector('main').getBoundingClientRect(), box = reply.getBoundingClientRect();
+    return box.bottom > viewport.top && box.top < viewport.bottom;
+  }), 'scrolling alone reaches the eleventh reply');
+  await indexed.locator('[data-nav="following"]').click();
+  await indexed.getByRole('heading', { name: '/following', exact: true }).waitFor();
+  await indexed.locator('[data-nav="home"]').click();
+  await indexed.getByRole('heading', { name: '/world', exact: true }).waitFor();
+  await indexed.locator('.post-number').click();
+  await indexed.locator('.boardbar h2').filter({ hasText: '讨论串' }).waitFor();
+  await indexed.locator('.author-name').first().click();
+  await indexed.getByRole('heading', { name: '/user', exact: true }).waitFor();
+  await indexed.locator('[data-nav="home"]').click();
+  await indexed.getByRole('heading', { name: '/world', exact: true }).waitFor();
+  await indexed.locator('.like-action').click();
+  await indexed.locator('.like-action').click();
+  check(await indexed.evaluate(() => window.threadIndexBuilds) === 1, 'navigation and repeated likes reuse the single feed index');
+  indexFeed = { ...indexFeed, posts: [...indexFeed.posts, { ...indexReplies.at(-1), id: 'index-new-reply', replyTo: indexReplies.at(-1).id, text: '新载入的回复。' }] };
+  await indexed.reload(); await indexed.locator('article').first().waitFor();
+  check(await indexed.locator('.reply-count').textContent() === '12' &&
+    await indexed.locator('.preview-reply').count() === 12 &&
+    (await indexed.locator('.reply-preview').textContent()).includes('新载入的回复。'), 'replacing the feed rebuilds counts and previews with new nested replies');
+  check(await indexed.evaluate(() => window.threadIndexBuilds) === 1, 'the replacement feed is indexed once');
+  await indexed.close();
   check(errors.length === 0, `no browser errors: ${errors.join(', ')}`);
   console.log(`Passed ${checks} browser assertions (${browserName}). Screenshots: ${output}`);
 } finally { await browser.close(); }

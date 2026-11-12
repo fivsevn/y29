@@ -99,7 +99,7 @@ export function validateContent(registry, batches, policy, { now = Date.now(), s
       if (Object.hasOwn(post, 'deleted') && typeof post.deleted !== 'boolean') fail('Invalid deleted flag');
       if (post.deleted === true && (post.replyTo === null || post.text !== '该回复已被删除')) fail('Deleted replies must be replies containing only the deletion placeholder');
       if (!Number.isSafeInteger(post.likes) || post.likes < 0) fail('Invalid likes');
-      if (!Array.isArray(post.media) || post.media.length > 4) fail('Invalid media');
+      if (!Array.isArray(post.media)) fail('Invalid media');
       if (!post.text.trim() && !post.media.length) fail('A post needs text or media');
       if (post.deleted === true && post.media.length) fail('Deleted replies cannot retain media');
       for (const image of post.media) {

@@ -5,7 +5,8 @@ createdAt: "2026-11-10T17:01:29.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/melon.webp","alt":"L0扒着边沿，双手拿一片西瓜。","fit":"contain"}]
+media: [{"src":"assets/emotes/l0/peek.webp","alt":"L0从竖直边缘后露出半张脸和一只手。","kind":"emote","fit":"contain"}]
 ---
 
-群里有个柜子，昨天还说接回来自己修。今天发的完工照，地砖怎么跟另一个师傅工作间一样。我越看越像。
+群里那个柜子，昨天说接回家自己修，今天完工照的地砖怎么那么眼熟。
+另一个师傅工作间不也是这个地吗。

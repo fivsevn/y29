@@ -1077,9 +1077,7 @@ test('new media updates enforce ordinary images independently in each nonempty p
   await check(/root ordinary-image pool/);
   entries[0].media = [media.image, media.emote, media.emote, media.localEmote];
   await check();
-  entries[0].media.push(media.emote);
-  await check(/Invalid media|at most four/);
-  entries[0].media.pop();
+  entries[0].media.push(media.emote, media.emote, media.emote);
   await check();
   const interrupted = await readJSON(prepared.operationPath), thread = join(f.root, threadDirectory(entries[0], new Map(entries.map(entry => [entry.id, entry]))));
   const blocked = join(thread, 'replies/media-reply.md');
@@ -1089,7 +1087,7 @@ test('new media updates enforce ordinary images independently in each nonempty p
   assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).count, 2);
   assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).status, 'already-archived');
   const imported = (await loadContent(f.root)).feed.posts;
-  assert.deepEqual(imported.find(entry => entry.id === 'media-root').media.map(item => item.kind), ['image', 'emote', 'emote', 'emote']);
+  assert.deepEqual(imported.find(entry => entry.id === 'media-root').media, entries[0].media);
 });
 
 test('new media updates reject missing kinds and copied catalog emotes classified as ordinary pictures', async t => {
@@ -1257,7 +1255,7 @@ test('a replies-only media round needs only new reply images and preserves prese
   assert.deepEqual(suggested.imagePools.root, { postIds: [], minimumPosts: 0, actualImagePostIds: [], missingPosts: 0 });
   assert.deepEqual(suggested.imagePools.reply.actualImagePostIds, ['only-reply']);
   const brief = await briefUpdatePost({ ...f.options, postId: 'only-reply' });
-  assert.deepEqual(brief.writer.presentation, { image: brief.editor.image, emoteCount: brief.editor.emoteCount, maximumMedia: 4 });
+  assert.deepEqual(brief.writer.presentation, { image: brief.editor.image, emoteCount: brief.editor.emoteCount });
   await prepareUpdate(f.options);
   assert.deepEqual(await suggestUpdatePresentation(f.options), suggested);
   assert.deepEqual((await briefUpdatePost({ ...f.options, postId: 'only-reply' })).writer.presentation, brief.writer.presentation);
@@ -1476,13 +1474,15 @@ test('own recent posts supply actual voice context without later, deleted or oth
   for (const body of ['PRIVATE_DELETED_BODY', 'LATER_OWN_BODY', 'OTHER_AUTHOR_BODY', 'CURRENT_BODY']) assert.ok(!JSON.stringify(brief.writer.self.recentPosts).includes(body));
 });
 
-async function replyIdentityFixture(t, replyAuthor) {
+async function replyIdentityFixture(t, replyAuthor, { now } = {}) {
   const lottery = structuredClone(productionLottery);
   lottery.authorKind = [{ value: 'guest', weight: 1 }];
   lottery.waitSeconds = [{ weight: 1, min: 1, max: 1 }];
   lottery.reading = [{ value: 'target-only', weight: 1 }];
   lottery.discussion.replyAuthor = [{ value: replyAuthor, weight: 1 }];
-  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(10), maxBatchPosts: 120 }), prepared = await prepareUpdate(f.options);
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(10), maxBatchPosts: 120 });
+  if (now !== undefined) f.now = f.options.now = now;
+  const prepared = await prepareUpdate(f.options);
   return { ...f, prepared };
 }
 async function saveIdentityDraft(f, entries) {
@@ -1637,7 +1637,7 @@ test('automatic thread replies bring the root author back to a real incoming res
   await assert.rejects(briefUpdatePost({ ...f.options, postId: adopted.id, threadId: 'history-entry' }), /different thread/);
 });
 
-test('automatic participant replies prefer responses to that participant and new arrivals take the latest other post', async t => {
+test('automatic participant replies prefer responses to that participant while new arrivals can choose another visible target', async t => {
   for (const choice of ['participant', 'new']) {
     const f = await replyIdentityFixture(t, choice), id = f.prepared.id;
     const root = post(id + '-root', 'guest-thread-root', f.now - 30000);
@@ -1646,11 +1646,47 @@ test('automatic participant replies prefer responses to that participant and new
     const side = post(id + '-side', root.author, f.now - 15000, root.id);
     await saveIdentityDraft(f, [root, participant, incoming, side]);
     const brief = await briefUpdatePost({ ...f.options, postId: id + '-next', threadId: root.id });
-    assert.equal(brief.draft.replyTo, choice === 'participant' ? incoming.id : side.id);
+    if (choice === 'participant') assert.equal(brief.draft.replyTo, incoming.id);
+    else assert.ok([root, participant, incoming, side].some(post => post.id === brief.draft.replyTo));
     assert.equal(brief.editor.replyAuthor.used, choice);
     assert.equal(brief.writer.thread.role, choice === 'participant' ? 'participant' : 'new');
-    assert.notEqual(brief.draft.author, (choice === 'participant' ? incoming : side).author);
+    assert.notEqual(brief.draft.author, [root, participant, incoming, side].find(post => post.id === brief.draft.replyTo).author);
     if (choice === 'participant') assert.equal(brief.draft.author, participant.author);
+  }
+});
+
+test('new arrivals reproducibly enter at the root, an older branch or recent replies instead of extending one chain', async t => {
+  const f = await replyIdentityFixture(t, 'new', { now: Date.parse('2026-01-10T12:00:00Z') }), id = f.prepared.id;
+  const root = post(id + '-root', 'guest-entry-root', f.now - 60000);
+  const branch = post(id + '-branch', 'guest-entry-branch', f.now - 50000, root.id);
+  const older = post(id + '-older', 'guest-entry-older', f.now - 40000, branch.id);
+  const recent = post(id + '-recent', 'guest-entry-recent', f.now - 30000, older.id);
+  const newer = post(id + '-newer', 'guest-entry-newer', f.now - 20000, recent.id);
+  const latest = post(id + '-latest', 'guest-entry-latest', f.now - 10000, newer.id);
+  const entries = [root, branch, older, recent, newer, latest];
+  await saveIdentityDraft(f, entries);
+  const targets = new Set(), results = [];
+  for (let index = 0; index < 48; index++) {
+    const options = { ...f.options, postId: id + '-arrival-' + index, threadId: root.id };
+    const brief = await briefUpdatePost(options);
+    const target = entries.find(post => post.id === brief.draft.replyTo);
+    assert.ok(target);
+    assert.notEqual(brief.draft.author, target.author);
+    assert.equal(brief.writer.thread.role, 'new');
+    assert.deepEqual(brief.writer.visiblePosts.map(post => post.id), [target.id]);
+    targets.add(target.id); results.push({ options, brief });
+  }
+  assert.ok(targets.has(root.id), 'an established thread still admits independent replies to its root');
+  assert.ok(targets.has(branch.id), 'an earlier branch remains a possible entry even outside the recent window');
+  assert.ok(targets.has(latest.id), 'the latest exchange remains available without monopolizing arrivals');
+  assert.ok(targets.has(recent.id) || targets.has(newer.id), 'recent attention is not restricted to the final post');
+  for (const { options, brief } of results.slice(0, 3)) assert.deepEqual(await briefUpdatePost(options), brief);
+  // Source iteration order cannot redraw the attention choice.
+  await saveIdentityDraft(f, [root, branch, older, latest, newer, recent]);
+  for (const { options, brief } of results.slice(0, 3)) {
+    const again = await briefUpdatePost(options);
+    assert.equal(again.draft.replyTo, brief.draft.replyTo);
+    assert.equal(again.draft.author, brief.draft.author);
   }
 });
 
@@ -1687,8 +1723,9 @@ test('automatic targets exclude future and deleted bodies without exposing unrea
   const future = { ...post(id + '-future', 'guest-future', f.now + 5000, root.id), text: 'FUTURE_PRIVATE_BODY' };
   await saveIdentityDraft(f, [root, earlier, deleted, future]);
   const brief = await briefUpdatePost({ ...f.options, postId: id + '-next', threadId: root.id });
-  assert.equal(brief.editor.replyTarget.postId, earlier.id);
-  assert.deepEqual(brief.writer.visiblePosts.map(post => post.text), [earlier.text]);
+  const target = [root, earlier].find(post => post.id === brief.editor.replyTarget.postId);
+  assert.ok(target);
+  assert.deepEqual(brief.writer.visiblePosts.map(post => post.text), [target.text]);
   assert.ok(!JSON.stringify(brief.writer).includes(future.text));
   assert.ok(!JSON.stringify(brief.writer).includes(deleted.text));
   assert.equal(brief.editor.timing.status, 'ready');
@@ -1722,7 +1759,7 @@ test('consecutive root draws move to a fresh speaker after the root has answered
   const next = await briefUpdatePost({ ...f.options, postId: id + '-second-return', threadId: root.id });
   assert.equal(next.editor.replyAuthor.drawn, 'root'); assert.equal(next.editor.replyAuthor.used, 'new');
   assert.notEqual(next.draft.author, root.author); assert.notEqual(next.draft.author, critic.author);
-  assert.equal(next.draft.replyTo, answered.id); assert.equal(next.writer.thread.role, 'new');
+  assert.ok([root.id, critic.id, answered.id].includes(next.draft.replyTo)); assert.equal(next.writer.thread.role, 'new');
 });
 
 test('a new incoming reply makes the root eligible again while explicit parents remain available', async t => {
@@ -1758,7 +1795,7 @@ test('automatic new arrivals exclude every existing thread identity and fall bac
   const exhausted = await briefUpdatePost({ ...f.options, postId: prepared.id + '-fresh-guest', threadId: root.id });
   assert.ok(exhausted.draft.author.startsWith('guest-'));
   assert.equal(exhausted.editor.replyAuthor.used, 'new'); assert.equal(exhausted.writer.thread.role, 'new');
-  assert.equal(exhausted.draft.replyTo, adopted.id);
+  assert.ok([root.id, participant.id, adopted.id].includes(exhausted.draft.replyTo));
 });
 
 test('writers read the exact shared emote catalog and catalog changes refresh material without redrawing', async t => {
@@ -2065,3 +2102,23 @@ test('ordinary briefs in case-enabled rounds are immediately writable and saved 
   assert.equal((await finishUpdate(old.options)).status, 'no-posts');
 });
 
+
+test('large media review lists resume without a former four-images-per-post ceiling', async t => {
+  const f = await fixture(t, 4);
+  const prepared = await prepareUpdate(f.options);
+  const entry = post(prepared.id + '-01', 'guest-media-list', f.now);
+  const { operation } = await draft(prepared, f.now, [entry]);
+  operation.mediaReviews = Array.from({ length: 493 }, (_, i) => ({
+    postId: entry.id, src: 'posts/2025/04/' + entry.id + '/media/view-' + i + '.webp',
+    type: 'life-photo', scene: 'Synthetic distinct scene ' + i
+  }));
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  assert.equal((await suggestUpdatePresentation(f.options)).count, 1);
+  operation.mediaReviews.push({ ...operation.mediaReviews[0] });
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  await assert.rejects(suggestUpdatePresentation(f.options), /Invalid or duplicate media review/);
+  operation.mediaReviews.pop();
+  operation.mediaReviews[0].type = 'unknown';
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  await assert.rejects(suggestUpdatePresentation(f.options), /Invalid or duplicate media review/);
+});

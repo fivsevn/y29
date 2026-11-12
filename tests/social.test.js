@@ -8,7 +8,7 @@ import { validateContent, loadContent, buildFeed, ingestBatch, socialRoot } from
 import { emptyProfile, readProfiles, validateProfile } from '../lucifer0/tools/profiles.js';
 import { readUserDocuments, renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { writeThreadBatch, parsePostDocument, renderPostDocument } from '../lucifer0/tools/thread-packages.js';
-import { escapeHTML, readState, saveState, toggle, threadPosts, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
+import { escapeHTML, readState, saveState, toggle, createThreadIndex, threadPosts, threadReplyPreview, rootOf, selectPosts, dateLabel, boardID, postNumber } from '../lucifer0/core.js';
 
 // Fixed synthetic content keeps behavior checks independent of editorial updates.
 const source = JSON.parse(await readFile(new URL('./fixtures/social-content.json', import.meta.url), 'utf8'));
@@ -156,6 +156,25 @@ test('media retains explicit kinds and contain sizing while omitted fields stay 
   for (const fit of ['cover', 'fill', 'contain;display:none', '', null, false, 1, {}, undefined]) {
     image.fit = fit;
     assert.throws(() => validate(f), /Invalid media fit/);
+  }
+});
+
+test('long photo and emote sequences keep every item while validating the full media array', () => {
+  const f = fixture(), original = f.batches[0].posts.find(post => post.replyTo === null);
+  const directory = `posts/${original.createdAt.slice(0, 4)}/${original.createdAt.slice(5, 7)}/${original.id}/media`;
+  original.media = Array.from({ length: 12 }, (_, index) => ({
+    src: `${directory}/sequence-${index}.webp`, alt: `Sequence item ${index + 1}`, kind: index < 6 ? 'image' : 'emote'
+  }));
+  assert.deepEqual(validate(f).posts.find(post => post.id === original.id).media, original.media);
+  const last = original.media.at(-1);
+  last.src = 'https://example.org/outside.webp';
+  assert.throws(() => validate(f), /Invalid media path/);
+  last.src = `${directory}/sequence-last.webp`;
+  last.alt = '';
+  assert.throws(() => validate(f), /image.alt/);
+  for (const invalid of [null, {}, 'photo.webp']) {
+    original.media = invalid;
+    assert.throws(() => validate(f), /Invalid media/);
   }
 });
 
@@ -332,6 +351,79 @@ test('threads include replies to replies with the actual parent preserved', () =
   assert.equal(thread[2].replyTo, thread[1].id);
   assert.deepEqual(threadPosts(source.feed.posts, 'unknown'), []);
   assert.equal(rootOf([{ id: 'a', replyTo: 'b' }, { id: 'b', replyTo: 'a' }], 'a'), null);
+});
+
+test('a thread index preserves chronology, direct reply counts and invalid-chain behavior', () => {
+  const post = (id, replyTo = null, minute = 0) => ({ id, replyTo, createdAt: `2026-11-07T10:${String(minute).padStart(2, '0')}:00Z` });
+  const posts = [post('root'), post('other'), post('later', 'nested', 3), post('sibling-b', 'root', 1),
+    post('nested', 'sibling-a', 2), post('sibling-a', 'root', 1), post('orphan', 'missing'),
+    post('self', 'self'), post('cycle-a', 'cycle-b'), post('cycle-b', 'cycle-a'), post('cycle-tail', 'cycle-a')];
+  const index = createThreadIndex(posts);
+  const expected = ['root', 'sibling-a', 'sibling-b', 'nested', 'later'];
+  for (const id of expected) {
+    assert.equal(index.rootOf(id), posts[0]);
+    assert.deepEqual(index.threadPosts(id).map(post => post.id), expected);
+  }
+  assert.equal(index.replyCount('root'), 4);
+  assert.equal(index.replyCount('sibling-a'), 1);
+  assert.equal(index.replyCount('later'), 0);
+  assert.equal(index.replyCount('missing'), 0);
+  assert.deepEqual(index.threadPosts('other'), [posts[1]]);
+  assert.deepEqual(index.threadReplyPreview('nested'), { rootId: 'root', replies: index.threadPosts('root').slice(1), total: 4, collapsed: false });
+  for (const id of ['missing', 'orphan', 'self', 'cycle-a', 'cycle-b', 'cycle-tail']) {
+    assert.equal(index.rootOf(id), null);
+    assert.equal(rootOf(posts, id), null);
+    assert.deepEqual(index.threadPosts(id), []);
+    assert.deepEqual(threadPosts(posts, id), []);
+    assert.deepEqual(index.threadReplyPreview(id), { rootId: null, replies: [], total: 0, collapsed: false });
+  }
+});
+
+test('repeated indexed queries do not rescan posts or expose cached reply arrays', () => {
+  const records = [{ id: 'root', replyTo: null, createdAt: '2026-11-07T10:00:00Z' },
+    ...Array.from({ length: 12 }, (_, i) => ({ id: `reply-${String(i).padStart(2, '0')}`, replyTo: 'root', createdAt: '2026-11-07T10:01:00Z' }))];
+  let reads = 0;
+  const posts = new Proxy(records, { get(target, key, receiver) {
+    if (/^\d+$/.test(String(key))) reads++;
+    return Reflect.get(target, key, receiver);
+  } });
+  const index = createThreadIndex(posts), builtReads = reads;
+  assert.ok(builtReads > 0);
+  for (const post of records) {
+    assert.equal(index.rootOf(post.id), records[0]);
+    assert.equal(index.threadPosts(post.id).length, 13);
+    const preview = index.threadReplyPreview(post.id);
+    assert.equal(preview.total, 12);
+    assert.equal(preview.collapsed, true);
+    assert.deepEqual(preview.replies.map(reply => reply.id), records.slice(1, 11).map(reply => reply.id));
+    index.replyCount(post.id);
+  }
+  assert.equal(reads, builtReads, 'route renders reuse the built index without rereading the source array');
+  index.threadPosts('root').splice(0);
+  index.threadReplyPreview('root').replies.reverse();
+  assert.deepEqual(index.threadPosts('root'), records);
+  assert.deepEqual(index.threadReplyPreview('root').replies, records.slice(1, 11));
+});
+
+test('new feed snapshots rebuild their index and two-argument helpers see array changes', () => {
+  const posts = [{ id: 'root', replyTo: null, createdAt: '2026-11-07T10:00:00Z' },
+    { id: 'reply', replyTo: 'root', createdAt: '2026-11-07T10:01:00Z' }];
+  const original = createThreadIndex(posts);
+  posts.push({ id: 'new-reply', replyTo: 'reply', createdAt: '2026-11-07T10:02:00Z' });
+  const replacement = createThreadIndex([...posts]);
+  assert.equal(original.replyCount('root'), 1);
+  assert.equal(original.rootOf('new-reply'), null);
+  assert.equal(replacement.replyCount('root'), 2);
+  assert.equal(replacement.rootOf('new-reply'), posts[0]);
+  assert.deepEqual(replacement.threadPosts('root'), posts);
+  assert.deepEqual(threadPosts(posts, 'new-reply'), posts);
+  assert.equal(threadReplyPreview(posts, 'root').total, 2);
+  posts[2] = { ...posts[2], replyTo: null };
+  assert.equal(rootOf(posts, 'new-reply'), posts[2]);
+  assert.deepEqual(threadPosts(posts, 'root'), posts.slice(0, 2));
+  const changedParent = createThreadIndex([...posts]);
+  assert.equal(changedParent.replyCount('root'), 1);
+  assert.deepEqual(changedParent.threadPosts('new-reply'), [posts[2]]);
 });
 
 test('following channel and reply bookmarks do not mix into the public main timeline', () => {

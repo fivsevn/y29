@@ -5,7 +5,7 @@ createdAt: "2026-11-09T00:46:55.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/sweat.webp","alt":"L0额头挂着一大滴汗，嘴角翘起。","fit":"contain"}]
+media: [{"src":"assets/emotes/l0/sweat.webp","alt":"L0额头挂着一大滴汗，嘴角翘起。","fit":"contain","kind":"emote"}]
 guest: {"name":"下午再说"}
 ---
 

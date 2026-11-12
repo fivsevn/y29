@@ -66,6 +66,40 @@ test('HTML, source names, contact fields and mentions are treated as text and de
   assert.equal(plainText('one<br>two &amp; &#x4e09;'), 'one\ntwo & 三');
 });
 
+test('explicit platform accounts are removed with attached, spaced and labelled contact syntax', () => {
+  const root = { id: '1', actor: 'ROOT', names: [], text: '' };
+  // These identifiers are synthetic fixtures, never harvested account values.
+  const contacts = ['qq23456789', 'QQ 23456', 'QQ号是23456789', 'QQ群：23456789',
+    'TG: @sample_contact77', 'tg samplecontact', 'Telegram用户名 samplecontact', '电报号=sample_contact77',
+    '微信sample_contact77', '微信号samplecontact', '微信：sample-contact77', 'Wechat ID: samplecontact',
+    'weixin sample_contact77', 'wx:samplecontact', 'vxsample_contact77', '加我微信samplecontact'];
+  for (const contact of contacts) {
+    const value = anonymizeDiscussion({ root: { ...root, text: `前一句。${contact}，后一句。` }, replies: [] });
+    assert.equal(value.messages[0].text, '前一句。[联系标识隐去]，后一句。', contact);
+  }
+});
+
+test('contact redaction keeps prices, years, ordinary numbers and platform product discussion', () => {
+  const text = '2026年，原价179，现价189，预算12345678元；帖号No.87654321，编号987654321012345678。\nQQ音乐还能用，QQ会员2026年到期。微信 Windows版和Telegram Desktop。wxWidgets也没问题。\n我也是？？我也是？？';
+  const value = anonymizeDiscussion({ root: { id: '1', actor: 'ROOT', names: [], text }, replies: [] });
+  assert.equal(value.messages[0].text, text.replace('微信', '某社区').replace('Telegram', '某社区'));
+});
+
+test('removing contact details keeps repeated replies and their original citation relationships', () => {
+  const topic = { id: '12345678', actor: 'ROOT', names: [], text: '2026年要花179元？' };
+  const payload = { ...islandRoot(), id: Number(topic.id), content: topic.text, Replies: [
+    { id: 22345678, user_hash: 'REPLY_A', name: '无名氏', content: '我也是？？ qq23456789' },
+    { id: 22345679, user_hash: 'REPLY_B', name: '无名氏', content: '&gt;&gt;No.22345678 我也是？？ TG: @sample_contact77' }
+  ] };
+  const value = anonymizeDiscussion(parseDiscussion('island', topic, payload));
+  assert.equal(value.messages.length, 3);
+  assert.equal(value.messages[0].text, topic.text);
+  assert.equal(value.messages[1].text, '我也是？？ [联系标识隐去]');
+  assert.equal(value.messages[2].text, '[引用第 2 条] 我也是？？ [联系标识隐去]');
+  assert.equal(value.messages[2].replyTo, 2);
+  assert.equal(value.messages[2].missingTarget, false);
+});
+
 test('long roots and precise personal clues are omitted; short replies are not invented or repaired', () => {
   const root = { id: '1', actor: 'A', names: ['A'], text: '普通事情' };
   assert.equal(anonymizeDiscussion({ root: { ...root, text: '长'.repeat(1201) }, replies: [] }), null);

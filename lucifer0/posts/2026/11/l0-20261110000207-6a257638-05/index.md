@@ -5,8 +5,8 @@ createdAt: "2026-11-09T02:15:36.467Z"
 replyTo: null
 likes: 19
 canon: "derivative"
-media: []
+media: [{"src":"assets/emotes/l0/melon.webp","alt":"L0扒着边沿，双手拿一片西瓜。","kind":"emote","fit":"contain"}]
 ---
 
-同学发了个“终于靠自己”的作品，下面有人问是不是她叔叔那边的项目，过一会儿那条评论就没了。
-是我想多了吗？（图确实漂亮，但也不用把自己写得那么惨吧）
+同学发作品，说“终于靠自己”。下面有人问是不是她叔叔那个项目，刚才再看，评论没了。
+（图是挺好看的）

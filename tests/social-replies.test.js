@@ -7,7 +7,7 @@ import * as core from '../lucifer0/core.js';
 function thread(id, count, author = 'preview-owner') {
   const post = (postId, index, replyTo = null) => ({ id: postId, author: index % 2 ? 'preview-reader' : author,
     createdAt: new Date(Date.UTC(2026, 0, 1, 0, index)).toISOString(), replyTo,
-    text: index ? `第${index}条回复：${index === 1 ? '这是一段用来检查两行摘要的较长文字。'.repeat(12) : '接着前面的话说。'}` : `${id}的主帖`,
+    text: index ? `第${index}条回复：${index === 1 ? '这是一段用来检查全文展示的较长文字。'.repeat(12) : '接着前面的话说。'}` : `${id}的主帖`,
     likes: 0, canon: 'sample', media: [] });
   const root = post(id, 0);
   const replies = Array.from({ length: count }, (_, index) => post(`${id}-reply-${index + 1}`, index + 1,
@@ -145,31 +145,38 @@ async function renderer(feed, { pending = false, delayedClose = false } = {}) {
     escapeLogin: () => dialogHandlers.cancel({ preventDefault() {} }) };
 }
 const article = (html, id) => html.match(new RegExp(`<article\\b[^>]*id="post-${id}"[\\s\\S]*?<\\/article>`))?.[0] || '';
-const previewIds = html => [...html.matchAll(/class="preview-reply" href="#\/post\/([^"]+)"/g)].map(match => match[1]);
+const previewIds = html => [...html.matchAll(/class="preview-reply(?: is-deleted)?" data-reply-id="([^"]+)"/g)].map(match => match[1]);
+const previewMarkup = (html, id) => html.match(new RegExp(`<div class="preview-reply[^\"]*" data-reply-id="${id}">([\\s\\S]*?)<\\/div><\\/div>`))?.[1] || '';
 
-test('world and following render the ten/eleven boundary and link the full count to the root', async () => {
-  const page = await renderer(fixture());
+test('world and following show every reply once in full without a ten-reply cutoff', async () => {
+  const feed = fixture(), page = await renderer(feed);
   for (const route of ['#/', '#/following']) {
     const html = page.visit(route), ten = article(html, 'ten-thread'), eleven = article(html, 'eleven-thread');
     assert.equal(previewIds(ten).length, 10);
     assert.doesNotMatch(ten, /preview-more/);
-    assert.deepEqual(previewIds(eleven), Array.from({ length: 10 }, (_, index) => `eleven-thread-reply-${index + 1}`));
-    assert.match(eleven, /class="preview-more" href="#\/post\/eleven-thread">查看全部 11 条回复/);
+    assert.deepEqual(previewIds(eleven), Array.from({ length: 11 }, (_, index) => `eleven-thread-reply-${index + 1}`));
+    assert.doesNotMatch(eleven, /preview-more/);
     assert.match(eleven, /class="reply-count">11<\/span>/);
+    assert.ok(eleven.includes(core.escapeHTML(feed.posts.find(post => post.id === 'eleven-thread-reply-1').text)));
+    assert.match(previewMarkup(eleven, 'eleven-thread-reply-11'), /class="preview-heading" href="#\/post\/eleven-thread-reply-11"/);
     assert.doesNotMatch(article(html, 'empty-thread'), /reply-preview/);
   }
   assert.doesNotMatch(page.html(), /id="post-outside-thread"/);
+  const css = await readFile(new URL('../lucifer0/style.css', import.meta.url), 'utf8');
+  const paragraphRule = css.match(/\.preview-reply p\{([^}]+)\}/)?.[1];
+  assert.match(paragraphRule, /white-space:pre-wrap/);
+  assert.doesNotMatch(paragraphRule, /line-clamp|overflow:hidden|max-height/);
 });
 
-test('reply previews distinguish images and emotes without expanding media or replacing text and deletion notices', async () => {
+test('feed replies show actual lazy images and emotes beside full text without nested links', async () => {
   const feed = fixture();
   const image = { src: 'posts/2026/01/ten-thread/media/photo.webp', alt: '普通图片', kind: 'image' };
   const emote = { src: 'posts/2026/01/ten-thread/media/reaction.webp', alt: '随帖表情', kind: 'emote' };
   const cases = [
-    { media: [{ src: 'assets/emotes/l0/huh.webp', alt: '公共表情' }], expected: '[表情]' },
-    { media: [emote], expected: '[表情]' },
-    { media: [image], expected: '[图片]' },
-    { media: [emote, image], expected: '[图片] [表情]' },
+    { media: [{ src: 'assets/emotes/l0/huh.webp', alt: '公共表情' }], expected: '' },
+    { media: [emote], expected: '' },
+    { media: [image], expected: '' },
+    { media: [emote, image], expected: '' },
     { media: [image, emote], text: '保留原来的回复 <文字>', expected: '保留原来的回复 &lt;文字&gt;' },
     { media: [image, emote], deleted: true, expected: '该回复已被删除' },
     { media: [], expected: '' }
@@ -179,11 +186,24 @@ test('reply previews distinguish images and emotes without expanding media or re
   const page = await renderer(feed);
   for (const route of ['#/', '#/following']) {
     const markup = article(page.visit(route), 'ten-thread');
-    cases.forEach(({ expected }, index) => {
-      const preview = markup.match(new RegExp(`href="#/post/ten-thread-reply-${index + 1}"><div>[\\s\\S]*?</div><p>(.*?)</p></a>`));
-      assert.equal(preview?.[1], expected);
+    cases.forEach(({ expected, media, deleted }, index) => {
+      const preview = previewMarkup(markup, `ten-thread-reply-${index + 1}`);
+      assert.ok(preview, 'each reply is rendered');
+      assert.equal(preview.match(/<p>([\s\S]*?)<\/p>/)?.[1] || '', expected);
+      const visibleMedia = deleted ? [] : media;
+      assert.equal((preview.match(/<img\b/g) || []).length, visibleMedia.length);
+      assert.equal((preview.match(/loading="lazy"/g) || []).length, visibleMedia.length);
+      assert.equal((preview.match(/class="post-emote"/g) || []).length, visibleMedia.filter(core.isEmoteMedia).length);
+      assert.equal((preview.match(/class="post-image/g) || []).length, visibleMedia.filter(item => !core.isEmoteMedia(item)).length);
+      assert.doesNotMatch(preview, /\[图片\]|\[表情\]/);
+      let insideLink = false;
+      for (const [tag] of preview.matchAll(/<\/?a\b[^>]*>/g)) {
+        if (tag.startsWith('</')) { assert.equal(insideLink, true); insideLink = false; }
+        else { assert.equal(insideLink, false, 'reply headings and image links must be siblings'); insideLink = true; }
+      }
+      assert.equal(insideLink, false);
     });
-    assert.doesNotMatch(markup, /<img|class="post-image/);
+    assert.equal((markup.match(/<img\b/g) || []).length, 7);
   }
 });
 
@@ -526,7 +546,7 @@ test('deleted replies retain identity, dates, parent links and counts without or
   const deleted = feed.posts.find(post => post.id === 'admin-reply');
   Object.assign(deleted, { deleted: true, text: '不应展示的删除前原文', media: [{ src: 'old-private-image.jpg', alt: '旧图' }] });
   const page = await renderer(feed), world = article(page.html(), 'news-thread');
-  assert.match(world, /class="preview-reply is-deleted" href="#\/post\/admin-reply"/);
+  assert.match(world, /class="preview-reply is-deleted" data-reply-id="admin-reply"/);
   assert.match(world, /该回复已被删除/);
   assert.match(world, /class="reply-count">3<\/span>/);
   assert.doesNotMatch(world, /不应展示|old-private-image/);

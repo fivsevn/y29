@@ -5,7 +5,8 @@ createdAt: "2026-11-09T17:38:27.467Z"
 replyTo: null
 likes: 1
 canon: "derivative"
-media: []
+media: [{"src":"posts/2026/11/l0-20261110002939-55dccee1-03/media/half-finished-puzzle.webp","alt":"宿舍桌上的海边拼图，大片蓝天还没有拼好","kind":"image","fit":"contain"},{"src":"assets/emotes/l0/tableflip.webp","alt":"L0张嘴举起双手，旁边一张桌子翻了起来。","kind":"emote","fit":"contain"}]
 ---
 
-拼图没拼完就得立刻拆吗？？边框都拼上了，天空那块分了几堆，现在全扫回盒子不等于重来。舍友说桌面共用，我也没说不能用啊，另外半张是空的。最烦她那句“反正你也拼不完”，借桌子就借桌子，别顺便踩我一下好吧
+边框都拼好了，天空分了这么几堆，现在非让我拆。
+我都给他挪地方了。用就用，为什么还要说“反正你也拼不完”？？

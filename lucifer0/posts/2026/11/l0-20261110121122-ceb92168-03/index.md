@@ -5,7 +5,7 @@ createdAt: "2026-11-10T10:19:06.467Z"
 replyTo: null
 likes: 4
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/angry.webp","alt":"L0皱眉张嘴指向一旁。","fit":"contain"}]
+media: [{"src":"assets/emotes/l0/disgust.webp","alt":"L0一手捏鼻子，一手向外推。","kind":"emote","fit":"contain"}]
 guest: {"name":"还没到副歌"}
 ---
 

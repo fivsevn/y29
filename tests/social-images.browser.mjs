@@ -95,7 +95,11 @@ try {
   };
 
   const defaultThumbnail = page.locator(`#post-${root.id} .post-image img`).first();
-  check(await defaultThumbnail.evaluate(image => getComputedStyle(image).objectFit) === 'cover', 'ordinary photos retain their existing cover crop');
+  await defaultThumbnail.evaluate(image => image.decode());
+  check(await defaultThumbnail.evaluate(image => {
+    const box = image.getBoundingClientRect();
+    return Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
+  }), 'ordinary photos are readable in the feed without a fixed crop');
   let link = await open(root);
   await assertWholeImage();
   await page.screenshot({ path: join(output, 'phone-original-image.png') });
@@ -155,7 +159,7 @@ try {
       return { width: rect.width, height: rect.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, fit: style.objectFit };
     });
     check(box.fit === 'scale-down' && box.naturalWidth === expectedWidth && box.naturalHeight === expectedHeight, 'reaction thumbnail uses the complete image at most at its native size');
-    check(Math.abs(box.width / box.height - 7 / 4) < .01, 'reaction images retain the existing thumbnail box');
+    check(Math.abs(box.width / box.height - expectedWidth / expectedHeight) < .01, 'inline images preserve their natural proportions');
     const scale = Math.min(1, box.width / expectedWidth, box.height / expectedHeight);
     const painted = { width: expectedWidth * scale, height: expectedHeight * scale };
     check(painted.width <= expectedWidth && painted.height <= expectedHeight && painted.width <= box.width && painted.height <= box.height, 'the whole reaction fits without enlargement or crop');
@@ -171,7 +175,7 @@ try {
       check(near(pixel(info.width / 2, top + (expectedHeight - 12) * scale), [40, 160, 80]), 'the portrait bottom caption region survives thumbnail rendering');
     } else {
       check(near(pixel(info.width / 2, info.height / 2), [73, 111, 255]), 'the small reaction renders normally');
-      check(!near(pixel(left - 3, info.height / 2), [73, 111, 255]) && !near(pixel(left + painted.width + 3, info.height / 2), [73, 111, 255]), 'a 128 pixel reaction stays 128 pixels wide in a larger thread box');
+      check(box.width <= 128 && box.height <= 128, 'a small image stays at its native size in a larger thread box');
     }
   };
   displayedFeed = imageOnly;

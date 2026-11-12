@@ -1210,7 +1210,7 @@
     {
       "id": "guest-76d0e98e61fb7625",
       "handle": "guest_45a7e93ccff1ef93cdb8",
-      "name": "遥控器藏哪儿",
+      "name": "梅子酒",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1222,7 +1222,7 @@
     {
       "id": "guest-b34c966c3c3ca328",
       "handle": "guest_a16cb56c8c995f28e921",
-      "name": "凌晨才看见",
+      "name": "冬冬",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1234,7 +1234,7 @@
     {
       "id": "guest-d24bf8dc8c16ffe7",
       "handle": "guest_4016c69d55659b3a941d",
-      "name": "贴纸看不见",
+      "name": "去去",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1270,7 +1270,7 @@
     {
       "id": "guest-ccc9022e765c7fb2",
       "handle": "guest_0f20eb11b6dc282250f8",
-      "name": "散场别堵门",
+      "name": "riku",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1282,7 +1282,7 @@
     {
       "id": "guest-c5be56cf625f3573",
       "handle": "guest_5d3545337f6835677dca",
-      "name": "跟着走走停停",
+      "name": "一尾",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1318,7 +1318,7 @@
     {
       "id": "guest-2433cd98af0f0f7b",
       "handle": "guest_b85c65d4b462f1367a0d",
-      "name": "袋子有点沉",
+      "name": "mumu",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1342,7 +1342,7 @@
     {
       "id": "guest-d04fbe6fde070501",
       "handle": "guest_ab2c63f2def7948b8cfe",
-      "name": "楼下围观者",
+      "name": "眠眠",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1366,7 +1366,7 @@
     {
       "id": "guest-3c9462cf09873019",
       "handle": "guest_cf9cb2ba1fdbae0da890",
-      "name": "退房单还没签",
+      "name": "pita",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1378,7 +1378,7 @@
     {
       "id": "guest-c222d71a464a56d8",
       "handle": "guest_69247bd2255ab4c79b38",
-      "name": "柜门打不开",
+      "name": "豆沙",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1426,7 +1426,7 @@
     {
       "id": "guest-caa8ac8700b68044",
       "handle": "guest_214a2810a206f748eb04",
-      "name": "叉子已就位",
+      "name": "Soda",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1450,7 +1450,7 @@
     {
       "id": "guest-56ad32b43d15e281",
       "handle": "guest_4e23856b752c1e488762",
-      "name": "糖块32",
+      "name": "薄糖",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1462,7 +1462,7 @@
     {
       "id": "guest-3b924a40ca216d18",
       "handle": "guest_55da88733ad6218479ea",
-      "name": "饭点迟到",
+      "name": "nao",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1822,7 +1822,7 @@
     {
       "id": "guest-cbda9fa43326acff",
       "handle": "guest_9bf1d249ccb7cd5282b8",
-      "name": "隔壁桌6",
+      "name": "没有片单",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1858,7 +1858,7 @@
     {
       "id": "guest-4ff19e548261788a",
       "handle": "guest_31a45e3baaac348498be",
-      "name": "楼下等车8",
+      "name": "走错出口",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1870,7 +1870,7 @@
     {
       "id": "guest-eecc819b8a30c330",
       "handle": "guest_cd7a3c34dd7345c1978b",
-      "name": "楼下等车9",
+      "name": "每周少一天",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1882,7 +1882,7 @@
     {
       "id": "guest-51ec666ae9d9c281",
       "handle": "guest_4aa69a1891b66cc29c6b",
-      "name": "楼下等车11",
+      "name": "浅水区",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1906,7 +1906,7 @@
     {
       "id": "guest-9b74e36a6892cd4b",
       "handle": "guest_e348747d8f23629a0654",
-      "name": "隔壁桌4",
+      "name": "茶水间常驻",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1930,7 +1930,7 @@
     {
       "id": "guest-18e90a7272be5256",
       "handle": "guest_73d938b775e0f2cbae61",
-      "name": "快递来了12",
+      "name": "茉莉乌龙半糖",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -1942,7 +1942,7 @@
     {
       "id": "guest-5a3489c538c93958",
       "handle": "guest_200035dd29d968a02b20",
-      "name": "快递来了13",
+      "name": "拆完再说",
       "bio": "",
       "avatar": "",
       "enabled": true,
@@ -2034,13 +2034,12 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261111214536-e145d75f-72922b95dc8d/media/tray-placement.webp",
-          "alt": "手绘点心台摆放示意，前排三个托盘编号1至3，后排设补货位置并标明取餐方向。",
-          "kind": "image",
-          "fit": "contain"
+          "src": "posts/2026/11/l0-20261111214536-e145d75f-72922b95dc8d/media/canteen-pastry-service.webp",
+          "alt": "食堂不锈钢台上放着包子、芝麻面包和切块蛋糕三个托盘，靠工作人员一侧留出空台面。",
+          "kind": "image"
         }
       ],
-      "text": "我给你画个简图。我们食堂点心台，卖得快的三盘放前边，后边得留地方补，不然顾客伸手拿时碰着其他盘。\n\n你会搭颜色挺好。至于商场专门做陈列要学什么，我真不知道，拿你以前摆过的照片去问问。"
+      "text": "我们食堂就这样摆，前边卖完了往前挪，后头得空着补货，不然一伸胳膊碰倒一片。颜色是有什么用什么。\n\n商场那个我真不知道，感觉跟我们不是一回事。"
     },
     {
       "id": "l0-20261111214536-e145d75f-reply4",
@@ -2049,8 +2048,15 @@
       "replyTo": "l0-20261111214536-e145d75f-cb1dff9b9c4a",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "前天记的是同款同容量吗？"
+      "media": [
+        {
+          "src": "assets/emotes/l0/guilty.webp",
+          "alt": "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "前天也是那个容量吗，我经常在这儿看串。"
     },
     {
       "id": "l0-20261111214536-e145d75f-reply1",
@@ -2059,8 +2065,15 @@
       "replyTo": "l0-20261111214536-e145d75f-f75f6eafc5c3",
       "likes": 1,
       "canon": "derivative",
-      "media": [],
-      "text": "我孩子早上出门还念成“妈妈早上好，泳帽不见了，游泳靠你保”\n\n最后在他自己书包侧袋摸出来了。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我孩子早上出门还念成“妈妈早上好，泳帽不见了，游泳靠你保”\n\n在他自己书包侧袋。"
     },
     {
       "id": "l0-20261111214536-e145d75f-reply5",
@@ -2069,11 +2082,18 @@
       "replyTo": "l0-20261111214536-e145d75f-85c23cd1ff3c",
       "likes": 7,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "晚班留灯"
       },
-      "text": "不是，你写的是“最后那个名字”，实际每次都是你锁门？"
+      "text": "熟流程这三个字一出来我就知道要下班失败"
     },
     {
       "id": "l0-20261111214536-e145d75f-reply6",
@@ -2082,11 +2102,18 @@
       "replyTo": "l0-20261111214536-e145d75f-f75f6eafc5c3",
       "likes": 3,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/play-dead.webp",
+          "alt": "L0仰面躺着，头上有一个带叉号的小气泡。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "大碗别空"
       },
-      "text": "一看到这几句脑子里就有拍子了，停不下来"
+      "text": "别念了我这边还在单曲循环"
     },
     {
       "id": "l0-20261111214536-e145d75f-reply2",
@@ -2096,7 +2123,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "先对一下实际交接吧，三周表上最后一个名字都是你，跟三周最后真是你一个人干的，是两回事。要是活也全你做，那就拿着表问他怎么轮的。"
+      "text": "那到底是不是你锁门，排在最后跟最后一个走还不一样。"
     },
     {
       "id": "l0-20261111214536-e145d75f-5795c2edd2e7",
@@ -2106,7 +2133,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "有人给我发这个，说照着改裤腿就行。\n\n /　\\\n |　||　|\n |　||　|\n |　||　|\n\n在我手机上两条腿挤成一条线了。到底是要收裤脚还是改裤裆啊\n\n能不能先把裤子穿上拍一张。"
+      "text": "有人给我发这个，说照着改裤腿就行。\n\n /　\\\n |　||　|\n |　||　|\n |　||　|\n\n在我手机上两条腿挤成一条线了。这到底要改哪里啊\n\n先把裤子穿上拍一张行吗。"
     },
     {
       "id": "l0-20261111214536-e145d75f-85c23cd1ff3c",
@@ -2118,7 +2145,7 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261111214536-e145d75f-85c23cd1ff3c/media/three-weeks.webp",
-          "alt": "手画的三周收尾排班记录，W1、W2、W3每行最后都是被红圈标出的ME。",
+          "alt": "三周收尾排班的简化示意，每周最后一格都标着ME并用红圈圈出。",
           "kind": "image",
           "fit": "contain"
         }
@@ -2126,7 +2153,7 @@
       "guest": {
         "name": "周末又轮到我"
       },
-      "text": "群里又说周末收尾是轮着来的，说是大家都投过票。\n\n我把最近三周的表抄了一下，怎么每次最后那个名字都是我？上周问过一次，回我“你比较熟流程”。\n\n那投票是给谁看的啊。图我自己重画的，没放同事名字。"
+      "text": "最近三周的收尾班，我只抄了最后一格。\n\n说好轮着来，怎么又是我？问就是“你比较熟流程”。群里那个投票还挂着呢。"
     },
     {
       "id": "l0-20261111214536-e145d75f-cb1dff9b9c4a",
@@ -2135,11 +2162,18 @@
       "replyTo": null,
       "likes": 1,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/ignore.webp",
+          "alt": "L0托腮侧身看着手机。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "随手记账"
       },
-      "text": "双十一终于忍住没付款。那个保温壶我前天看是179，昨天变209，今天用了券还要189。\n\n问店家为什么券后比之前贵，对面就回“价格会随活动调整”。是，我当然看出来它调整了啊。\n\n图是我自己记的三个数，不是抓价软件。"
+      "text": "那个保温壶，前天179，昨天209，今天券后189。\n\n问店家，回我“价格会随活动调整”。\n\n好的，我的购买欲也调整了。"
     },
     {
       "id": "l0-20261111214536-e145d75f-bff2bff8e7a8",
@@ -2148,11 +2182,23 @@
       "replyTo": null,
       "likes": 10,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111214536-e145d75f-bff2bff8e7a8/media/parcel-bottom-open.webp",
+          "alt": "楼梯间的快递箱底缝已经张开，侧面的面单被空白纸片挡住，箱内物品还未取出。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "拆包先别扔"
       },
-      "text": "快递盒底下开了口，我拍了照找售后。群里有人说我想白嫖，理由居然是我把面单上的名字遮掉了。\n\n不遮名字你又说我乱发别人地址。到底想让我怎么拍？东西还没拆，先给我扣个帽子。"
+      "text": "快递盒底下开了口，东西还没拆。发群里问这种怎么找售后，有人说我想白嫖。\n\n理由是我把面单名字遮了。\n\n名字不给你看就急成这样？"
     },
     {
       "id": "l0-20261111214536-e145d75f-f75f6eafc5c3",
@@ -2174,209 +2220,19 @@
       "replyTo": null,
       "likes": 19,
       "canon": "derivative",
-      "media": [],
-      "text": "想问问有人做商场陈列吗\n\n我以前做促销，现在在甜品店前台，收银、补货、改订单、摆台每天都要弄。最近给柜台换了两次颜色，越弄越想知道专门做陈列的工作是啥样。\n\n会搭颜色但什么专业软件我可不会……现在去学还来得及吗\n\n没辞职啊，先问问。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-14",
-      "author": "guest-e64cfd78b63230c6",
-      "createdAt": "2026-11-11T16:18:29.997Z",
-      "replyTo": "l0-20261111160224-46b1ba58-12",
-      "likes": 5,
-      "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/doubt.webp",
-          "alt": "L0双臂交叉，眯眼看向一侧。",
-          "kind": "emote",
-          "fit": "contain"
+          "src": "posts/2026/11/l0-20261111214536-e145d75f-72922b95dc8d/media/counter-colour-try.webp",
+          "alt": "甜品店柜台上粉色与奶白色盘子里剩着几块点心，白色高脚盘下垫了淡紫色布。",
+          "kind": "image"
         }
       ],
-      "guest": {
-        "name": "包装泡水"
-      },
-      "text": "内包装确实有口子，我先拍了。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-13",
-      "author": "guest-5a3489c538c93958",
-      "createdAt": "2026-11-11T16:18:29.676Z",
-      "replyTo": "l0-20261111160224-46b1ba58-12",
-      "likes": 8,
-      "canon": "derivative",
-      "media": [],
-      "guest": {
-        "name": "快递来了13"
-      },
-      "text": "如果内包装裂了，留个照片去找售后。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-12",
-      "author": "guest-18e90a7272be5256",
-      "createdAt": "2026-11-11T16:18:29.361Z",
-      "replyTo": "l0-20261111160224-46b1ba58-c7879a996668",
-      "likes": 0,
-      "canon": "derivative",
-      "media": [
-        {
-          "src": "assets/emotes/l0/angry.webp",
-          "alt": "L0皱眉张嘴指向一旁。",
-          "kind": "emote",
-          "fit": "contain"
-        }
-      ],
-      "guest": {
-        "name": "快递来了12"
-      },
-      "text": "我的纸也是到货一碰外箱就散了，里面那层塑料还好没破。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-11",
-      "author": "guest-51ec666ae9d9c281",
-      "createdAt": "2026-11-11T16:18:29.048Z",
-      "replyTo": "l0-20261111160224-46b1ba58-10",
-      "likes": 12,
-      "canon": "derivative",
-      "media": [],
-      "guest": {
-        "name": "楼下等车11"
-      },
-      "text": "照片呢？我想看看粉椅子到底多显眼。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-10",
-      "author": "guest-ed55ab176cd9c64f",
-      "createdAt": "2026-11-11T16:18:28.744Z",
-      "replyTo": "l0-20261111160224-46b1ba58-08",
-      "likes": 6,
-      "canon": "derivative",
-      "media": [
-        {
-          "src": "assets/emotes/l0/sweat.webp",
-          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
-          "kind": "emote",
-          "fit": "contain"
-        }
-      ],
-      "guest": {
-        "name": "路口往南"
-      },
-      "text": "我没听到他们吵，纯粹路过看了一眼，别当真。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-09",
-      "author": "guest-eecc819b8a30c330",
-      "createdAt": "2026-11-11T16:18:28.429Z",
-      "replyTo": "l0-20261111160224-46b1ba58-08",
-      "likes": 3,
-      "canon": "derivative",
-      "media": [
-        {
-          "src": "assets/emotes/l0/doubt.webp",
-          "alt": "L0双臂交叉，眯眼看向一侧。",
-          "kind": "emote",
-          "fit": "contain"
-        }
-      ],
-      "guest": {
-        "name": "楼下等车9"
-      },
-      "text": "我觉得两家可能本来认识，粉椅子借着用吧。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-08",
-      "author": "guest-4ff19e548261788a",
-      "createdAt": "2026-11-11T16:18:28.114Z",
-      "replyTo": "l0-20261111160224-46b1ba58-50b2ce683a5a",
-      "likes": 79,
-      "canon": "derivative",
-      "media": [],
-      "guest": {
-        "name": "楼下等车8"
-      },
-      "text": "那椅子是摆到人家门口了，还是把人家椅子换掉了？"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-07",
-      "author": "chenanjing",
-      "createdAt": "2026-11-11T16:18:27.802Z",
-      "replyTo": "l0-20261111160224-46b1ba58-06",
-      "likes": 4,
-      "canon": "derivative",
-      "media": [],
-      "text": "如果是按时间正着看，我可能就没有那么难受。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-06",
-      "author": "guest-cbda9fa43326acff",
-      "createdAt": "2026-11-11T16:18:27.495Z",
-      "replyTo": "l0-20261111160224-46b1ba58-05",
-      "likes": 6,
-      "canon": "derivative",
-      "media": [
-        {
-          "src": "assets/emotes/l0/huh.webp",
-          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "kind": "emote",
-          "fit": "contain"
-        }
-      ],
-      "guest": {
-        "name": "隔壁桌6"
-      },
-      "text": "《爱乐之城》这种？"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-05",
-      "author": "visitor-gamma-upper",
-      "createdAt": "2026-11-11T16:18:27.185Z",
-      "replyTo": "l0-20261111160224-46b1ba58-251c94aee559",
-      "likes": 9,
-      "canon": "derivative",
-      "media": [
-        {
-          "src": "assets/emotes/l0/cry.webp",
-          "alt": "L0双手捧在胸前，眼里流出两行泪。",
-          "kind": "emote",
-          "fit": "contain"
-        }
-      ],
-      "text": "我一点也不想看这种……知道结局再看他们高兴，太难受了。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-04",
-      "author": "guest-9b74e36a6892cd4b",
-      "createdAt": "2026-11-11T16:18:26.861Z",
-      "replyTo": "l0-20261111160224-46b1ba58-03",
-      "likes": 6,
-      "canon": "derivative",
-      "media": [
-        {
-          "src": "assets/emotes/l0/speechless.webp",
-          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "kind": "emote",
-          "fit": "contain"
-        }
-      ],
-      "guest": {
-        "name": "隔壁桌4"
-      },
-      "text": "带一回就会变成下次的“顺手”，还是按单子来。"
-    },
-    {
-      "id": "l0-20261111160224-46b1ba58-03",
-      "author": "news-surf",
-      "createdAt": "2026-11-11T16:18:26.551Z",
-      "replyTo": "l0-20261111160224-46b1ba58-a5fc300c5949",
-      "likes": 0,
-      "canon": "derivative",
-      "media": [],
-      "text": "让她写个返箱单吧，月底核对的时候能少扯皮。"
+      "text": "想问问有人做商场陈列吗\n\n我以前做促销，现在在甜品店前台，收银补货摆台都弄。柜台换了两次颜色，同事说比之前顺眼，我就有点想学这个。\n\n软件一个不会，会摆我们店这点东西有用吗\n\n没辞职啊，先问问。"
     },
     {
       "id": "l0-20261111160224-46b1ba58-02",
       "author": "visitor-nu",
-      "createdAt": "2026-11-11T16:18:26.249Z",
+      "createdAt": "2026-11-11T16:11:26.249Z",
       "replyTo": "l0-20261111160224-46b1ba58-01",
       "likes": 5,
       "canon": "derivative",
@@ -2388,12 +2244,12 @@
           "fit": "contain"
         }
       ],
-      "text": "我当时也是觉得门框那个颜色特别显眼，隔着一条街都看得到。"
+      "text": "应该是吧，没进去。我就隔着街拍的，那个黄框太亮了。"
     },
     {
       "id": "l0-20261111160224-46b1ba58-01",
       "author": "passerby17",
-      "createdAt": "2026-11-11T16:18:25.919Z",
+      "createdAt": "2026-11-11T16:04:25.919Z",
       "replyTo": "l0-20261111160224-46b1ba58-9cdb14528855",
       "likes": 5,
       "canon": "derivative",
@@ -2404,7 +2260,7 @@
           "kind": "image"
         }
       ],
-      "text": "我把图放大了一点，这家门上的招牌是啥？"
+      "text": "黄的那张是收旧瓶子的牌子？"
     },
     {
       "id": "l0-20261111160224-46b1ba58-9cdb14528855",
@@ -2429,17 +2285,242 @@
       "text": ""
     },
     {
+      "id": "l0-20261111160224-46b1ba58-11",
+      "author": "guest-51ec666ae9d9c281",
+      "createdAt": "2026-11-11T14:18:29.048Z",
+      "replyTo": "l0-20261111160224-46b1ba58-50b2ce683a5a",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-50b2ce683a5a/media/pink-balcony-chair.webp",
+          "alt": "阳台上的亮粉色塑料椅被太阳照着，栏杆投下斜影，后面挂着两条毛巾。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "浅水区"
+      },
+      "text": "我家阳台也有这色，太阳一晒更吓人。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-07",
+      "author": "chenanjing",
+      "createdAt": "2026-11-11T13:04:27.802Z",
+      "replyTo": "l0-20261111160224-46b1ba58-05",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "正着看反而没事。一切回去，那个笑就看不下去了。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-06",
+      "author": "guest-cbda9fa43326acff",
+      "createdAt": "2026-11-11T12:30:27.495Z",
+      "replyTo": "l0-20261111160224-46b1ba58-251c94aee559",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "没有片单"
+      },
+      "text": "《爱乐之城》那种？"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-04",
+      "author": "guest-9b74e36a6892cd4b",
+      "createdAt": "2026-11-11T12:15:26.861Z",
+      "replyTo": "l0-20261111160224-46b1ba58-a5fc300c5949",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "茶水间常驻"
+      },
+      "text": "空箱套起来不就行了，你这也没几箱。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-03",
+      "author": "news-surf",
+      "createdAt": "2026-11-11T12:06:13.551Z",
+      "replyTo": "l0-20261111160224-46b1ba58-a5fc300c5949",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "顺手这个词是不是谁发明了就能终身免搬东西"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-05",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-11T11:13:27.185Z",
+      "replyTo": "l0-20261111160224-46b1ba58-251c94aee559",
+      "likes": 9,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我一点也不想看这种……知道结局再看他们高兴，太难受了。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-10",
+      "author": "guest-ed55ab176cd9c64f",
+      "createdAt": "2026-11-11T11:11:28.744Z",
+      "replyTo": "l0-20261111160224-46b1ba58-08",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "路口往南"
+      },
+      "text": "就是门口，门倒是还能开。我没听见吵啊，只看了这一眼。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-09",
+      "author": "guest-eecc819b8a30c330",
+      "createdAt": "2026-11-11T11:05:42.429Z",
+      "replyTo": "l0-20261111160224-46b1ba58-50b2ce683a5a",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "每周少一天"
+      },
+      "text": "没准人家认识呢，理发店老板等着吃蛋糕。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-14",
+      "author": "guest-e64cfd78b63230c6",
+      "createdAt": "2026-11-11T11:02:29.997Z",
+      "replyTo": "l0-20261111160224-46b1ba58-13",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-c7879a996668/media/tissue-tear-closeup.webp",
+          "alt": "手指轻轻提起浅绿色纸巾塑封的破口，同一包纸和灰色地砖在近景中可见。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "包装泡水"
+      },
+      "text": "就这个口子。干的，但我买的又不是散装纸。"
+    },
+    {
       "id": "l0-20261111160224-46b1ba58-66af83184300",
       "author": "guest-adaf2d44d2e157d1",
       "createdAt": "2026-11-11T10:52:34.467Z",
       "replyTo": null,
       "likes": 1,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-66af83184300/media/leave-some-meat.webp",
+          "alt": "家里的火锅剩下白菜、蘑菇和几片肉，一双筷子正从锅里夹起一片肉。",
+          "kind": "image"
+        }
+      ],
       "guest": {
         "name": "蹭饭小组长"
       },
       "text": "肥哥肥哥，给我留口锅里的肉啊！\n我就下楼拿个快递，你们先别夹完。"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-13",
+      "author": "guest-5a3489c538c93958",
+      "createdAt": "2026-11-11T10:49:29.676Z",
+      "replyTo": "l0-20261111160224-46b1ba58-c7879a996668",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "拆完再说"
+      },
+      "text": "开口的那包直接让他退啊，纸受潮了没？"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-08",
+      "author": "guest-4ff19e548261788a",
+      "createdAt": "2026-11-11T10:48:13.114Z",
+      "replyTo": "l0-20261111160224-46b1ba58-50b2ce683a5a",
+      "likes": 79,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "走错出口"
+      },
+      "text": "是摆人家门口了，还是把人家原来的椅子换了？"
+    },
+    {
+      "id": "l0-20261111160224-46b1ba58-12",
+      "author": "guest-18e90a7272be5256",
+      "createdAt": "2026-11-11T10:44:29.361Z",
+      "replyTo": "l0-20261111160224-46b1ba58-c7879a996668",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-c7879a996668/media/collapsed-outer-carton.webp",
+          "alt": "鞋架旁的快递纸箱已经压瘪散开，里面带浅蓝色条纹的纸巾塑封仍然完整。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "茉莉乌龙半糖"
+      },
+      "text": "我的是外箱一碰就散，里面倒没破。最近都在扔件吗"
     },
     {
       "id": "l0-20261111160224-46b1ba58-481b026a0293",
@@ -2452,7 +2533,7 @@
       "guest": {
         "name": "今天不要签收"
       },
-      "text": "我说包裹放错楼了，客服回复“系统显示已签收”。我就问谁签的？\n然后让我去问驿站。"
+      "text": "我说包裹放错楼了，客服回复“系统显示已签收”。\n\n谢谢，我就是看见签收才下楼找的。"
     },
     {
       "id": "l0-20261111160224-46b1ba58-251c94aee559",
@@ -2471,7 +2552,13 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-c7879a996668/media/tissue-wrapper-tear.webp",
+          "alt": "灰色地砖上的快递箱里，一大包纸巾的浅绿色塑封在右上角裂开。",
+          "kind": "image"
+        }
+      ],
       "guest": {
         "name": "包装泡水"
       },
@@ -2484,8 +2571,20 @@
       "replyTo": null,
       "likes": 20,
       "canon": "derivative",
-      "media": [],
-      "text": "今天送货又被要求“顺手”带走几箱空周转箱。单子上明明只写了入库，我车厢已经塞满了，店长说空箱放这儿影响她干活。我说下午回程再来，她脸就拉下来了。\n\n上次我帮忙带走了，她们后来干脆把空箱堆到门边等我。台阶那么高，手推车推不上去，折腾半天没人搭把手。这次我想让她把返箱数量写在单据上，省得明天又说我漏拿。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-a5fc300c5949/media/delivery-and-return-crates.webp",
+          "alt": "配送车敞开的车厢里塞着纸箱和折叠推车，店后门的高台阶旁摞着四只蓝色空周转箱。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "今天送货，店长又让我“顺手”带几箱空周转箱。\n\n我车里都快顶到门了，她还说挤一挤。我说下午回程再来，她就自己转回店里去了。\n\n上次搬这些箱子，那个台阶我抬了三趟。这回先放那吧。"
     },
     {
       "id": "l0-20261111160224-46b1ba58-50b2ce683a5a",
@@ -2494,11 +2593,17 @@
       "replyTo": null,
       "likes": 19,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111160224-46b1ba58-50b2ce683a5a/media/pink-chairs-next-door.webp",
+          "alt": "街边相邻的甜品店和理发店门外摆着三把粉色塑料椅，其中一把靠近理发店入口。",
+          "kind": "image"
+        }
+      ],
       "guest": {
         "name": "路口往南"
       },
-      "text": "楼下那家新甜品店，听说开门前把招牌改了四次。今天路过发现店门口的粉椅子摆到隔壁理发店门前去了，理发店老板坐在里头看着。两边都没说话，但看着很像要吵起来。"
+      "text": "楼下新甜品店的粉椅子，摆到隔壁理发店门前去了。理发店老板出来看了一眼就回去了。\n\n两边都没说话，但我已经走慢了。"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-dc3751c46372",
@@ -2508,6 +2613,11 @@
       "likes": 6,
       "canon": "derivative",
       "media": [
+        {
+          "src": "posts/2026/11/l0-20261111060742-8d34ec4f-dc3751c46372/media/two-desserts-break.webp",
+          "alt": "两只打开的甜品盒放在浅色台面上，草莓奶油蛋糕已经吃掉一部分，旁边是完整的巧克力慕斯。",
+          "kind": "image"
+        },
         {
           "src": "assets/emotes/l0/laugh.webp",
           "alt": "L0仰躺着张嘴笑，双腿抬起。",
@@ -2524,11 +2634,18 @@
       "replyTo": null,
       "likes": 19,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "便利贴"
       },
-      "text": "上周群里说投影仪大家一起买，一人摊了钱，放谁那儿都行。结果现在发起人把机器拿回家，周末我们说借出来用一下，他回了句“东西一直我保管啊”，还让大家分摊来回快递费。\n\n钱不多，问题是买的时候谁也没说只有他能放。群里有人问了，他直接回“你们当时又没反对”……这算什么理？"
+      "text": "上周群里一人摊钱买的投影仪，现在放在发起人家里。周末我们想借出来，他说可以，来回运费大家摊。\n\n我说我过去拿。\n\n没回了。"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-06",
@@ -2545,7 +2662,7 @@
           "fit": "contain"
         }
       ],
-      "text": "两块已经不错了吧，我前阵子喝到一碗连豆腐都没有的，拿勺子捞半天，只有海带。"
+      "text": "至少有豆腐，我上次那碗只有海带，喝了个咸水。"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-05",
@@ -2556,13 +2673,18 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261111060742-8d34ec4f-b6da3c932fba/media/two-tofu-cubes.webp",
+          "alt": "黑色小汤碗里有两块豆腐和少量海带，金属勺搭在碗边，旁边露出米饭碗。",
+          "kind": "image"
+        },
+        {
           "src": "assets/emotes/l0/cry.webp",
           "alt": "L0双手捧在胸前，眼里流出两行泪。",
           "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "你这句豆腐把我看饿了……我上次点的那家汤里就两小块，找半天，怎么别人碗里都那么满啊。"
+      "text": "翻到我上次点的那碗了。豆腐就这两块，你那是另外加钱的吗……"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-04",
@@ -2584,7 +2706,7 @@
           "fit": "contain"
         }
       ],
-      "text": "正好今天中午也喝了，豆腐切小块放进去挺好吃。我第一口还嫌咸，喝到最后连碗底都没剩。"
+      "text": "正好今天中午也喝了，第一口还嫌咸，最后连碗底都没剩。"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-03",
@@ -2601,7 +2723,7 @@
           "fit": "contain"
         }
       ],
-      "text": "我这边卖豆腐，遇上人家讲价也得掰半天。你们买东西还有先退一次再买一次的？卖家不嫌折腾啊。"
+      "text": "我卖豆腐，碰到讲价的也得掰半天，你们买东西还得先退一次再买一次？卖家不嫌烦啊"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-02",
@@ -2627,7 +2749,7 @@
       "guest": {
         "name": "优惠叠加练习生"
       },
-      "text": "你还是没做对隔壁直播间那套数学题，先领券再拍，拍完还得退一次。省完钱记得给自己算一下时薪。"
+      "text": "你没做隔壁直播间那道数学题。先领券再拍，拍完还得退一次。\n\n省完钱记得给自己算时薪。"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-01",
@@ -2636,11 +2758,17 @@
       "replyTo": "l0-20261111060742-8d34ec4f-071dac197809",
       "likes": 2,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111060742-8d34ec4f-071dac197809/media/old-external-drive.webp",
+          "alt": "抽屉里的银色外置硬盘连着发黄的短线，周围堆着黑色线材，桌沿露出旧白色键盘。",
+          "kind": "image"
+        }
+      ],
       "guest": {
         "name": "外置盘没有错"
       },
-      "text": "先拔掉外置盘再开机试过吗？我以前那台也出过这个禁止标志，最后是启动盘选错了。进不进得去恢复模式是两回事。"
+      "text": "这破线我还留着……当时也是这个标志，最后发现启动盘选错了。你把外置盘拔了能开吗？"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-ae4ff29beae2",
@@ -2651,13 +2779,18 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261111060742-8d34ec4f-ae4ff29beae2/media/sold-out-counter.webp",
+          "alt": "甜品柜里的粉色和白色长盘，有两只盘子已空，旁边还剩几份奶油泡芙。",
+          "kind": "image"
+        },
+        {
           "src": "assets/emotes/l0/angry.webp",
           "alt": "L0皱眉张嘴指向一旁。",
           "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "今天有客人举着前两天的陈列照片，非说要跟照片上一模一样。那张图里摆的是展示样品，今天已经卖掉两款了，我说可以换颜色接近的，她问那你们拍照片干什么。\n\n就，我拍个好看的柜台也要保证每天都长那样吗？？她还让我去问后厨能不能现做。后厨在忙别人的单啊，我真服了。"
+      "text": "那个拿前两天照片来买甜品的客人，最后还是没买。\n\n非要一模一样，颜色近的也不要。照片里有两款中午就卖完了，我说没有了，她问“那你们拍照片干什么”。\n\n行，下次发空盘子。"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-071dac197809",
@@ -2685,11 +2818,17 @@
       "replyTo": null,
       "likes": 3,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111060742-8d34ec4f-b6da3c932fba/media/miso-before-lunch.webp",
+          "alt": "厨房不锈钢台面上，红褐色碗里盛着半碗味噌汤，旁边的搪瓷锅里还留着汤和长柄勺。",
+          "kind": "image"
+        }
+      ],
       "guest": {
         "name": "汤要趁热"
       },
-      "text": "以前真的喝不惯味噌汤。现在到饭点脑子里第一个想的就是那个味道。"
+      "text": "以前喝味噌汤觉得一股怪味，现在饭还没做好就先盛半碗喝。\n\n怎么变的我也不知道。"
     },
     {
       "id": "l0-20261111060742-8d34ec4f-aa1343d46fa4",
@@ -2698,7 +2837,14 @@
       "replyTo": null,
       "likes": 1,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/crash.webp",
+          "alt": "L0张着小嘴，两眼呈螺旋状，头上冒着弯曲线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "优惠券过敏"
       },
@@ -2731,8 +2877,21 @@
       "replyTo": "l0-20261111043232-f0a325fd-18",
       "likes": 6,
       "canon": "derivative",
-      "media": [],
-      "text": "门口也得看哪边啊。我去熟摊拿菜，筐放回门里就顺手，横在门外车一来还得挪。他要正忙，嘴上不说，等我回来肯定要念两句。打气筒那根管子拖着更碍脚，借的时候从哪拿的就放哪去，这事还有什么好省的。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111043232-f0a325fd-f239d6619e93/media/market-crates.webp",
+          "alt": "菜摊入口横着几个红蓝绿周转筐，前景露出小推车把手。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你看我早上拿菜碰到这个，车都进不去，还得替他挪。\n放回去了和放好了，差老远了"
     },
     {
       "id": "l0-20261111043232-f0a325fd-18",
@@ -2761,7 +2920,14 @@
       "replyTo": "l0-20261111043232-f0a325fd-da0597abc771",
       "likes": 3,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/plead.webp",
+          "alt": "L0双手合在一起，抬着大眼睛流泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "一小碗"
       },
@@ -2793,6 +2959,12 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261111043232-f0a325fd-d2d29f781aa9/media/stuck-tea-strainer.webp",
+          "alt": "水槽旁的滤篮边缝卡着湿茶叶，杯盖边放着一支旧牙刷。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
           "kind": "emote",
@@ -2802,7 +2974,7 @@
       "guest": {
         "name": "逛逛"
       },
-      "text": "又多买一种耗材，喝个茶还得记着补滤纸"
+      "text": "又得记着买滤纸。不过看看我这个，茶叶全卡卷边里，牙刷都用上了"
     },
     {
       "id": "l0-20261111043232-f0a325fd-14",
@@ -2828,14 +3000,21 @@
       "id": "l0-20261111043232-f0a325fd-13",
       "author": "guest-8faddb51bf3aeae1",
       "createdAt": "2026-11-10T23:40:35.467Z",
-      "replyTo": "l0-20261111043232-f0a325fd-11",
+      "replyTo": "l0-20261111043232-f0a325fd-92d74bf6f9d8",
       "likes": 5,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111043232-f0a325fd-92d74bf6f9d8/media/rough-cutout.webp",
+          "alt": "放大的抠图画布里，毛绒熊左侧头顶被削平，右肩还留着浅色残边。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "阿梧"
       },
-      "text": "拿白底的图试都差不多，换个毛绒边就知道了。我上次冲动付了钱，最后还是得自己描边"
+      "text": "先拿你自己要用的图试，别看它那几个白底样张。我上次付了钱，毛绒边还是得自己描"
     },
     {
       "id": "l0-20261111043232-f0a325fd-12",
@@ -2851,7 +3030,7 @@
           "kind": "image"
         }
       ],
-      "text": "我后来拿纸滤了。原来滤咖啡那个架子，换张纸就放上面，洗杯子省点事。"
+      "text": "我拿滤咖啡那个架子泡了，纸一提就能倒掉。省得抠半天茶叶"
     },
     {
       "id": "l0-20261111043232-f0a325fd-11",
@@ -2860,7 +3039,14 @@
       "replyTo": "l0-20261111043232-f0a325fd-10",
       "likes": 2,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/guilty.webp",
+          "alt": "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "雾面"
       },
@@ -2906,8 +3092,15 @@
       "replyTo": null,
       "likes": 3,
       "canon": "derivative",
-      "media": [],
-      "text": "那只打气筒又没还，自己摊前怕占地方，就往我门口一扔是吧。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111043232-f0a325fd-f239d6619e93/media/pump-in-doorway.webp",
+          "alt": "打气筒斜倒在修车铺门槛旁，气管横过出入口。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "打气筒往我门口一扔就算还了，自己摊前倒知道怕占地方。"
     },
     {
       "id": "l0-20261111043232-f0a325fd-92d74bf6f9d8",
@@ -2930,7 +3123,7 @@
       "likes": 2,
       "canon": "derivative",
       "media": [],
-      "text": "另补一条城南科学馆的入口信息：太空展厅已搬到馆内后侧，之后到访要从零层C区楼梯旁的走廊进去，跟着太空展厅指示走。今天闭馆，别今天去找。"
+      "text": "城南科学馆的太空展厅也换入口了：在馆内后侧，从零层C区楼梯旁的走廊进去。等明天开馆再去找，今天11月11日闭馆。"
     },
     {
       "id": "l0-20261111043232-f0a325fd-d2d29f781aa9",
@@ -2949,7 +3142,7 @@
       "guest": {
         "name": "叶底"
       },
-      "text": "说是细滤网，泡完杯底还是一层碎叶。倒掉也不是，喝到最后全在嘴里，这个孔到底筛了什么。"
+      "text": "买的时候说是细滤网。喝到最后全是碎叶，这个孔到底筛了什么"
     },
     {
       "id": "l0-20261111043232-f0a325fd-1d0b706b11fb",
@@ -2978,11 +3171,18 @@
       "replyTo": null,
       "likes": 4,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261111043232-f0a325fd-c45e6237a40a/media/old-live-disc.webp",
+          "alt": "旧纸套里半抽出一张光盘，散着的耳机线压在深蓝被罩上。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "倒带中"
       },
-      "text": "刚把以前那张现场录音翻出来了，鼓一进来还是起鸡皮疙瘩"
+      "text": "以前刻的那张现场录音还真能读。鼓一进来，鸡皮疙瘩还是照起"
     },
     {
       "id": "l0-20261111043232-f0a325fd-da0597abc771",
@@ -3009,7 +3209,7 @@
       "likes": 9,
       "canon": "derivative",
       "media": [],
-      "text": "城南科学馆今天（11月11日）全天闭馆，别照平日10点开门的时间过去。首页常规开放时间和单日闭馆写在两处，出门前还得往下翻一遍，真容易白跑。"
+      "text": "城南科学馆11月11日全天闭馆。首页上面还写平日10点开门，闭馆通知在下面，准备今天去的先别跑。"
     },
     {
       "id": "l0-20261110213237-acd234d4-03",
@@ -3021,14 +3221,14 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261110213237-acd234d4-01/media/trip.webp",
-          "alt": "模拟行程详情截图：当前状态写着计费中，下方操作记录写结束请求已提交。",
+          "alt": "行程详情显示「计费中」，下方操作记录却写着「结束请求已提交」。",
           "kind": "image"
         }
       ],
       "guest": {
         "name": "豆子"
       },
-      "text": "我那次截到的是这两行，一个说结束请求提交了，时长还在往上跳。后来客服要我给订单号，不是车牌，你看看操作记录那里有没有？"
+      "text": "我那次也这样，提交完了时长还在跳。截了图给客服，后来要的是订单号。你试试换个人问？"
     },
     {
       "id": "l0-20261110213237-acd234d4-02",
@@ -3047,7 +3247,7 @@
       "guest": {
         "name": "橘猫不胖"
       },
-      "text": "约了热水器检修，预约写上门检测30，维修前报价。来了说要拆开看，我就让拆了。\n拆完给我写检测30、拆机80、材料160。我没让修，先问80什么时候说过，他让我翻订单底下的条款\n真有，挤在最下面那一大段里。现在还问我到底换不换板子"
+      "text": "约热水器检修，写着上门检测30、维修前报价。师傅说要拆开看，我就让拆了。\n拆完递给我这张。我问拆机80什么时候说过，他让我翻订单最下面的条款。\n还真有，夹在一大段里。现在机器敞着，他就站旁边问我换不换板子"
     },
     {
       "id": "l0-20261110213237-acd234d4-01",
@@ -3056,11 +3256,18 @@
       "replyTo": null,
       "likes": 6,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110213237-acd234d4-01/media/ride-requests.webp",
+          "alt": "骑行页面仍在计费，操作记录有连续三次结束请求已提交，订单号已遮住。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "abao_2"
       },
-      "text": "骑到小区门口，车锁卡了，我在软件里点了三次结束，都弹出“已提交”。回家一看还在计费。客服让我补拍车牌和锁头，可车已经不在那儿了。现在说没现场照片就不退，多扣的钱算谁的？"
+      "text": "骑到小区门口锁卡了，点三次结束都说已提交，回家还在扣钱。\n客服要车牌和锁头照片。我下楼找，车都没了。现在说没现场照片不能退，我那三次提交就白点了？"
     },
     {
       "id": "l0-20261110210715-bd3468e0-09",
@@ -3077,7 +3284,7 @@
           "fit": "contain"
         }
       ],
-      "text": "我店里也这样，拍纸托一开自动增强就白了。\n左边自动，右边锁了曝光拍的，我把两张拼一起了。实际是浅紫色的"
+      "text": "我店里拍纸托也是，一自动增强就白了。\n左边自动，右边锁了曝光。纸托本来是浅紫的，拍出来跟两个货一样"
     },
     {
       "id": "l0-20261110210715-bd3468e0-10",
@@ -3106,8 +3313,15 @@
       "replyTo": null,
       "likes": 14,
       "canon": "derivative",
-      "media": [],
-      "text": "刚刷到有人把“信息出错”画成拎花上门的人，名牌还写错了。有人接剧情有人纠字，楼主后来又把勘误单画进花束里\n评论还在纠那个字"
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "刚刷到有人把“信息出错”画成拎花上门的人，名牌还写错了。有人接剧情有人纠字，楼主干脆把勘误单插进花束里\n评论还在纠那个字，花都没人接"
     },
     {
       "id": "l0-20261110210715-bd3468e0-01",
@@ -3116,11 +3330,24 @@
       "replyTo": null,
       "likes": 4,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-01/media/short-fringe.webp",
+          "alt": "镜子前拍到的短刘海离眉毛很远，侧边夹了发夹仍有碎发翘着。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/hold-it.webp",
+          "alt": "L0闭眼抿嘴，攥紧双拳。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "眠"
       },
-      "text": "刘海让他修一点，剪完在眉毛中间了。。。他说显精神\n我问还有救吗，他说再剪更短。现在夹也夹不住"
+      "text": "让他修一点刘海，剪完离眉毛这么远。。。他说显精神\n夹子也夹不住，放弃了"
     },
     {
       "id": "l0-20261110210715-bd3468e0-03",
@@ -3129,8 +3356,15 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "收货点门口那只猫今天没躲，站着看了半分钟。想拍一下，手机还没掏出来它就跑了\n又没拍到"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-03/media/cat-under-van.webp",
+          "alt": "面包车底露出猫的后腿和尾巴，头已经钻进去了。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "收货点那只猫站了半分钟都没走，我一掏手机就往车底钻。\n又只剩个屁股"
     },
     {
       "id": "l0-20261110210715-bd3468e0-07",
@@ -3149,7 +3383,7 @@
       "guest": {
         "name": "lalala"
       },
-      "text": "公共柜子那张取物图把门和墙画反了。我照现场重新画了一下，发群里，管理员让我别改，统一看墙上那张。\n旧图箭头是往墙里走的，我还给他圈了。他回我按箭头理解就行\n？？"
+      "text": "公共柜子那张取物图，箭头指着墙。我照现场画了一张发群里，管理员让我别改，统一看墙上那张。\n我说那边没门，他回我「按箭头理解就行」\n？？"
     },
     {
       "id": "l0-20261110210715-bd3468e0-02",
@@ -3158,18 +3392,32 @@
       "replyTo": null,
       "likes": 14,
       "canon": "derivative",
-      "media": [],
-      "text": "展板右下角是我故意留暗的。今天过去一看，青灰变亮蓝了，影子也没了。\n问了一圈，说是屏幕开了自动增强，怕观众看不清。我已经发过设置了啊。\n刚又把原稿和设置发了一遍，让他们关掉。这样挂着我名字我不认"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110210715-bd3468e0-02/media/overbright-display.webp",
+          "alt": "展厅墙上的屏幕显示城市画面，右下角亮蓝发白，顶部映着射灯。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "展屏右下角是我故意留暗的。白天过去一看，青灰变亮蓝，影子都没了。\n他们开了自动增强，说怕观众看不清。我发的设置呢？\n原稿和设置又发了一遍，让他们关掉。这样挂着我名字我不认"
     },
     {
       "id": "l0-20261110191228-b8ed4062-08",
       "author": "visitor-gamma-upper",
       "createdAt": "2026-11-10T19:11:11.467Z",
-      "replyTo": "l0-20261110184824-39f6a5a6-20",
+      "replyTo": "l0-20261110184824-39f6a5a6-03",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "我也想看，多大个呀。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/okay.webp",
+          "alt": "L0半睁眼竖起拇指。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我以为多大一块呢，这么小。"
     },
     {
       "id": "l0-20261110191228-b8ed4062-04",
@@ -3180,9 +3428,16 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110191228-b8ed4062-04/media/missed-cutscene.webp",
+          "alt": "手柄搁在腿上的毯子上，客厅电视里两名角色已经在桥上打起来。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/heh.webp",
           "alt": "L0半睁眼，嘴角轻微上扬。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -3197,7 +3452,14 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110191228-b8ed4062-03/media/two-hems.webp",
+          "alt": "灯下挂着长裤和外套，裤腿还留着粗缝线，旁边是缝纫机和收音机。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "text": "衣服还剩两件，我先听完这段。"
     },
     {
@@ -3209,12 +3471,19 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110191228-b8ed4062-02/media/one-bun.webp",
+          "alt": "缝纫机台面上，塑料袋里只有一只白馒头。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "给她带饭都说随便，轮到给我带一个白馒头，就说怕买错。白馒头也能买错啊。"
+      "text": "我给她带饭，问吃什么都说随便。叫她给我带，她拎回来一个白馒头，说别的怕买错。\n就一个，连咸菜都没有。"
     },
     {
       "id": "l0-20261110190347-d31be36f-12",
@@ -3227,7 +3496,7 @@
       "guest": {
         "name": "noct_4"
       },
-      "text": "你往上翻一下啊"
+      "text": "人家说的是不让拍啊"
     },
     {
       "id": "l0-20261110190347-d31be36f-11",
@@ -3240,7 +3509,8 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": "问个吃的也不行啊？"
@@ -3252,7 +3522,14 @@
       "replyTo": "l0-20261110190347-d31be36f-09",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "text": "你还问吃的！！"
     },
     {
@@ -3266,7 +3543,8 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -3281,7 +3559,14 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "echobear"
       },
@@ -3298,10 +3583,11 @@
         {
           "src": "assets/emotes/l0/angry.webp",
           "alt": "L0皱眉张嘴指向一旁。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "拍到我吃东西那个样子笑半天，我说删了还说我太较真。不好笑，真的不好笑"
+      "text": "拍了我吃东西的样子笑半天，我说删了，还说我太较真。不好笑，真的不好笑"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-23",
@@ -3310,8 +3596,20 @@
       "replyTo": "l0-20261110184824-39f6a5a6-22",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "裹了不就更粗了？"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-09/media/too-much-tape.webp",
+          "alt": "手指把缠了大片透明胶带的桃色线头对着木珠，扁平胶带头明显比珠孔宽。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我裹了，就是更粗了……这是胶带剪太宽吗"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-22",
@@ -3320,11 +3618,17 @@
       "replyTo": "l0-20261110184824-39f6a5a6-09",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-09/media/taped-yarn-tip.webp",
+          "alt": "手指捏着用一小片透明胶带收成细尖的浅色线头，旁边木珠尚未穿入。",
+          "kind": "image"
+        }
+      ],
       "guest": {
         "name": "nana_8"
       },
-      "text": "拿胶带裹住线头捻一下呢"
+      "text": "胶带裁窄一点，顺着线头捻紧，我平时这么穿"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-21",
@@ -3337,7 +3641,8 @@
         {
           "src": "assets/emotes/l0/melon.webp",
           "alt": "L0扒着边沿，双手拿一片西瓜。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": ""
@@ -3350,7 +3655,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "多大一块？揣着不硌啊。"
+      "text": "这揣兜里不硌？我兜里几颗螺丝都嫌硌。"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-19",
@@ -3361,12 +3666,18 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-01/media/cake-blocked-shot.webp",
+          "alt": "同一只白盘奶油蛋糕前，一只握勺的手突然伸过来，模糊的前景挡住了蛋糕缺口。",
+          "kind": "image"
+        },
+        {
           "src": "assets/emotes/l0/angry.webp",
           "alt": "L0皱眉张嘴指向一旁。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "十分钟哪来的啊，我就拍了两张，第二张他手挡着了。我自己也还没动叉子，又不是光饿着他。你又没坐边上"
+      "text": "我就拍了两张，第二张他手挡着。十分钟是你替我拍的？"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-18",
@@ -3387,15 +3698,21 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-01/media/held-up-glass.webp",
+          "alt": "一只穿浅色袖子的手弯着手腕举起冰茶杯，背后是粗糙的灰墙。",
+          "kind": "image"
+        },
+        {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
-        "name": "糖块32"
+        "name": "薄糖"
       },
-      "text": "我就给朋友举过一次杯子，拍的什么没记住，倒记得那天胳膊是真酸。。她还一直喊我低一点，再低一点，我都快蹲下去了"
+      "text": "真有。我给朋友举杯子，举得手酸，她还喊低点、再低点。我都快蹲下去了"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-16",
@@ -3406,13 +3723,14 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/heh.webp",
-          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "src": "assets/emotes/l0/clap.webp",
+          "alt": "L0半睁眼拍着双手。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "饭点迟到"
+        "name": "nao"
       },
       "text": "人也摆回去，吃个饭还得当道具。"
     },
@@ -3423,21 +3741,40 @@
       "replyTo": "l0-20261110184824-39f6a5a6-13",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
-        "name": "糖块32"
+        "name": "薄糖"
       },
-      "text": "杯子也得摆回去啊？"
+      "text": "杯子还要回原位啊？"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-13",
       "author": "visitor-omega",
       "createdAt": "2026-11-10T17:15:44.467Z",
-      "replyTo": "l0-20261110184824-39f6a5a6-12",
+      "replyTo": "l0-20261110184824-39f6a5a6-01",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "我等拍照的时候也烦，还得把手拿开，杯子摆回去。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-01/media/lunch-moved-glass.webp",
+          "alt": "午饭桌边一只手正把水杯往旁边挪，另一人握着筷子停在面碗上方。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我也烦。喝口水都让我放回去，还得找原来那个位置。"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-12",
@@ -3450,6 +3787,13 @@
         {
           "src": "assets/emotes/l0/laugh.webp",
           "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
@@ -3469,11 +3813,12 @@
         {
           "src": "assets/emotes/l0/heh.webp",
           "alt": "L0半睁眼，嘴角轻微上扬。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
-        "name": "叉子已就位"
+        "name": "Soda"
       },
       "text": "不会是拍了十分钟，最后再等两分钟吧"
     },
@@ -3484,8 +3829,20 @@
       "replyTo": null,
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "毛线头散开了，怎么穿珠子啊 手边没有针"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-09/media/frayed-yarn.webp",
+          "alt": "深蓝针织布上的浅桃色线头散成一束，旁边的小木珠孔比线头窄。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/plead.webp",
+          "alt": "L0双手合在一起，抬着大眼睛流泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "毛线头散开了，这颗珠子死活穿不过去\n手边没有针啊"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-08",
@@ -3496,12 +3853,13 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/melon.webp",
-          "alt": "L0扒着边沿，双手拿一片西瓜。",
+          "src": "assets/emotes/l0/peek.webp",
+          "alt": "L0从竖直边缘后露出半张脸和一只手。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "群里有个柜子，昨天还说接回来自己修。今天发的完工照，地砖怎么跟另一个师傅工作间一样。我越看越像。"
+      "text": "群里那个柜子，昨天说接回家自己修，今天完工照的地砖怎么那么眼熟。\n另一个师傅工作间不也是这个地吗。"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-03",
@@ -3510,8 +3868,14 @@
       "replyTo": null,
       "likes": 1,
       "canon": "derivative",
-      "media": [],
-      "text": "听曲子听了半天，口袋里那块木头都让我摸热了。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-03/media/pocket-wood.webp",
+          "alt": "摊开的掌心托着一小块边缘磨圆的棕色木料，背景是旧棉裤和一截耳机线。",
+          "kind": "image"
+        }
+      ],
+      "text": "听曲子听了半天，才发现手一直攥着这块木头。"
     },
     {
       "id": "l0-20261110184824-39f6a5a6-01",
@@ -3522,22 +3886,35 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/huh.webp",
-          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "src": "posts/2026/11/l0-20261110184824-39f6a5a6-01/media/cake-with-a-scoop.webp",
+          "alt": "白盘里的小奶油蛋糕被挖掉一勺，盘边放着沾奶油的勺子，左侧是水杯。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "吃饭先拍一下有什么好烦的啊。今天那个小蛋糕还没拍完就被挖走一勺，留个坑在上面。我就让他等两分钟，又不是不让吃"
+      "text": "刚要拍就挖了一勺，留这么大个坑。\n等两分钟怎么了啊，我也还没吃呢"
     },
     {
       "id": "l0-20261110181010-bba72479-07",
       "author": "visitor-pi",
       "createdAt": "2026-11-10T16:28:31.467Z",
-      "replyTo": "l0-20261110002939-55dccee1-15",
+      "replyTo": "l0-20261110002939-55dccee1-02",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "我也没看明白。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-02/media/removed-lid-ring.webp",
+          "alt": "倒放的杯盖与完整取出的半透明胶圈并排放在水槽沥水台上。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "我这盖子从喝水口背面能先顶出来一点，出来就好拿了。你这个形状不太一样。"
     },
     {
       "id": "l0-20261110181010-bba72479-06",
@@ -3550,13 +3927,14 @@
         {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "生椰不加糖"
       },
-      "text": "我也，可能就是烦睡醒又得上班，才不想睡"
+      "text": "不想一闭眼再睁眼就得上班"
     },
     {
       "id": "l0-20261110181010-bba72479-05",
@@ -3569,7 +3947,7 @@
       "guest": {
         "name": "再划两下"
       },
-      "text": "好困啊，几个软件来回点也没啥想看的，还不肯睡"
+      "text": "困了，几个软件挨个打开又关掉，还不肯睡"
     },
     {
       "id": "l0-20261110181010-bba72479-02",
@@ -3581,13 +3959,14 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261110181010-bba72479-02/media/crossed-notes-v2.webp",
-          "alt": "暖灯下，皱白纸上抄着几行中文地址片段，几处被蓝笔划改，旁边斜放着圆珠笔。"
+          "alt": "暖灯下，皱白纸上抄着几行中文地址片段，几处被蓝笔划改，旁边斜放着圆珠笔。",
+          "kind": "image"
         }
       ],
       "guest": {
         "name": "旧电池"
       },
-      "text": "抄几个地址也能抄串行。看一眼消息回来就忘了刚抄到哪，偏偏还一直点，纸上划了好几处了，烦死"
+      "text": "抄几个地址也能抄串行。看一眼消息回来就忘了刚抄到哪，手还老去点消息，纸上划好几处了，烦死"
     },
     {
       "id": "l0-20261110161717-6d582dbc-09",
@@ -3600,10 +3979,11 @@
         {
           "src": "assets/emotes/l0/heh.webp",
           "alt": "L0半睁眼，嘴角轻微上扬。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "整理费。。。那我店里是不是也能收欣赏费\n你问他合同哪一行写了，让他圈出来"
+      "text": "整理费。。。那我店里收个欣赏费好了\n让他把那一行圈出来啊"
     },
     {
       "id": "l0-20261110161717-6d582dbc-08",
@@ -3613,7 +3993,7 @@
       "likes": 3,
       "canon": "derivative",
       "media": [],
-      "text": "那个视频有年份没有？我们做节目也碰到过，剪掉时间地点又传一轮。\n不过你最后那句确实有点冲，人家可能就是怕下回买不到票"
+      "text": "那个视频有年份没有？我们剪节目碰到过，时间地点切掉，又被转一轮。"
     },
     {
       "id": "l0-20261110161717-6d582dbc-07",
@@ -3622,11 +4002,18 @@
       "replyTo": "l0-20261110161717-6d582dbc-01",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "原味就行"
       },
-      "text": "群主是老板，也不代表每条消息都是老板自己打的吧。涨一块可以不高兴，但你拿群主头像认定她撒谎，也挺会扣帽子。"
+      "text": "群主也不是一天到晚盯群的吧。涨一块钱而已。"
     },
     {
       "id": "l0-20261110161717-6d582dbc-06",
@@ -3637,15 +4024,21 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/speechless.webp",
-          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "src": "posts/2026/11/l0-20261110161717-6d582dbc-06/media/locker-at-night.webp",
+          "alt": "夜里灯下的灰蓝柜门紧闭，柜面和地面沾着水，画面下方露出湿鞋尖与纸袋。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/crash.webp",
+          "alt": "L0张着小嘴，两眼呈螺旋状，头上冒着弯曲线。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "柜门打不开"
+        "name": "豆沙"
       },
-      "text": "快递柜门不开，页面倒先提醒“超时将收费”。打电话问，客服说可能网络卡顿，让我过一会儿再试。你们的门卡住了，为什么是我超时？"
+      "text": "门不开。\n超时收费那个提醒倒是一点不卡，点一次弹一次。电话打过去还叫我等会儿再试。"
     },
     {
       "id": "l0-20261110161717-6d582dbc-04",
@@ -3656,12 +4049,18 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/angry.webp",
-          "alt": "L0皱眉张嘴指向一旁。",
+          "src": "posts/2026/11/l0-20261110161717-6d582dbc-04/media/trouser-hems.webp",
+          "alt": "改衣台上并排放着两条深灰裤腿，一只手压住旧折痕，旁边有划粉和拆线器。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "一条裤子，客人说左边短，右边长。我给她量两遍，是她自己站着一边膝盖弯着。现在要我白拆一遍重做，还说机器踩两脚的事。\n你先站直了让我量，好不好？"
+      "text": "裤腿我量了两遍，一样长。她穿着站一边膝盖弯着，非说我改歪了。\n叫她站直，又说不管站不站都得给她重拆。还说机器踩两脚的事，你来踩嘛。"
     },
     {
       "id": "l0-20261110161717-6d582dbc-03",
@@ -3670,11 +4069,17 @@
       "replyTo": null,
       "likes": 18,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110161717-6d582dbc-03/media/mopped-room.webp",
+          "alt": "退租前的空房地板留着湿拖痕，墙角只放着蓝色水桶和旧拖把。",
+          "kind": "image"
+        }
+      ],
       "guest": {
-        "name": "退房单还没签"
+        "name": "pita"
       },
-      "text": "退房清单里写着固定收二百块“整理费”，合同上只写损坏另算。我问擦过的地板还要整理什么，中介说所有租户都是这样。按他们这个说法，我昨天自己擦半天算什么？"
+      "text": "昨天擦地擦到腰疼，今天清单多了二百整理费。\n\n问他整理什么，回我每户都收。合同上我只找到损坏赔偿，这二百到底在哪儿写的"
     },
     {
       "id": "l0-20261110161717-6d582dbc-02",
@@ -3687,10 +4092,11 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "今天早班，一个人拿着转来的视频问我，我们车站是不是下个月就没有人工售票窗口了。视频上既没有站名，也没有日期，就是有人对着一排机器说以后都得自己弄。\n\n我说我没收到这种通知，他不信，还说网上都在传。后面排队的大姐跟着问，那我以后该去哪里买票。\n\n我天天就在窗口坐着，连这事还要先听路过的人告诉我？要是真有调整，总该把具体哪天、哪个窗口说明白呀。"
+      "text": "早班有个人举着视频问我，车站下个月是不是撤人工窗口。视频连站名都没有。\n\n我说没接到通知，他说网上都传了。后面的大姐也着急，问她以后去哪买票。\n我先让她照旧来窗口，真有变动，站里总得告诉我们呀。"
     },
     {
       "id": "l0-20261110161717-6d582dbc-01",
@@ -3703,13 +4109,14 @@
         {
           "src": "assets/emotes/l0/melon.webp",
           "alt": "L0扒着边沿，双手拿一片西瓜。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "楼下围观者"
+        "name": "眠眠"
       },
-      "text": "楼下蛋糕店的群里昨天还在说“这周不涨价”，今天柜台已经换了新签。有人问老板怎么回事，她说群里那句是店员发错的。可群主就是老板本人啊。现在群里有人发昨天的截图，没人回。"
+      "text": "昨天群里说这周不涨价，今天柜台换新签了。\n问老板，老板说店员发错的。群主不就是她吗，昨天怎么不出来改？"
     },
     {
       "id": "l0-20261110121122-ceb92168-14",
@@ -3722,7 +4129,8 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -3737,7 +4145,14 @@
       "replyTo": "l0-20261110121122-ceb92168-12",
       "likes": 5,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/peek.webp",
+          "alt": "L0从竖直边缘后露出半张脸和一只手。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "text": "再说下去是不是还要画站位图。"
     },
     {
@@ -3751,19 +4166,20 @@
         {
           "src": "assets/emotes/l0/angry.webp",
           "alt": "L0皱眉张嘴指向一旁。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
-        "name": "袋子有点沉"
+        "name": "mumu"
       },
-      "text": "我换过一筐，她也跟过来了。这句没写而已，我又不是看见两只手就编了个故事。"
+      "text": "我换了筐，她也跟过来。这句没写而已，又不是看两只手碰一起就编个故事。"
     },
     {
       "id": "l0-20261110121122-ceb92168-10",
       "author": "visitor-rho-upper",
       "createdAt": "2026-11-10T10:51:40.467Z",
-      "replyTo": "l0-20261110121122-ceb92168-09",
+      "replyTo": "l0-20261110121122-ceb92168-04",
       "likes": 0,
       "canon": "derivative",
       "media": [],
@@ -3773,14 +4189,26 @@
       "id": "l0-20261110121122-ceb92168-09",
       "author": "guest-73e7738ed990c6b0",
       "createdAt": "2026-11-10T10:50:34.467Z",
-      "replyTo": "l0-20261110121122-ceb92168-08",
+      "replyTo": "l0-20261110121122-ceb92168-04",
       "likes": 1,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110121122-ceb92168-04/media/orange-rind.webp",
+          "alt": "白色沥水板上的橙子剥开后露出厚白瓤和小小的果肉，一只手掀着橙皮。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "半瓶汽水"
       },
-      "text": "对，我也就拿手边那几个，懒得绕过去。"
+      "text": "我连厚皮都看不出来。剥完剩这么点"
     },
     {
       "id": "l0-20261110121122-ceb92168-08",
@@ -3789,8 +4217,15 @@
       "replyTo": "l0-20261110121122-ceb92168-04",
       "likes": 3,
       "canon": "derivative",
-      "media": [],
-      "text": "也不一定是在跟着你挑吧。那一堆就那么大，两个人伸手到同一边也很正常。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "也不一定就是跟着你挑吧。那一堆橙子，两个人拿到同一边很正常。"
     },
     {
       "id": "l0-20261110121122-ceb92168-07",
@@ -3799,8 +4234,20 @@
       "replyTo": "l0-20261110121122-ceb92168-01",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "忽然想看看你们那把削皮刀。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110121122-ceb92168-01/media/peeler-in-sink.webp",
+          "alt": "旧金属削皮器放在水槽边，旁边是一只削到一半的土豆和一条厚薄不均的皮。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你们用的哪种削皮刀？我这个也爱带肉，削完看着都心疼。"
     },
     {
       "id": "l0-20261110121122-ceb92168-05",
@@ -3813,6 +4260,7 @@
         {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
@@ -3827,15 +4275,21 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110121122-ceb92168-04/media/oranges-on-the-bus.webp",
+          "alt": "公交座位上，牛仔裤膝头的薄塑料袋里装着五只大小不齐的橙子。",
+          "kind": "image"
+        },
+        {
           "src": "assets/emotes/l0/guilty.webp",
           "alt": "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "袋子有点沉"
+        "name": "mumu"
       },
-      "text": "我挑橙子真就只会看有没有烂。刚才有个阿姨一直跟着我拿，还问我是不是做水果生意的，我说不是，她笑了一下又跟着拿了两个。"
+      "text": "阿姨一路跟着我挑橙子，还问我是不是做水果的。\n不是啊，我就会看烂没烂。她听完笑了一下，还是跟着拿了俩"
     },
     {
       "id": "l0-20261110121122-ceb92168-03",
@@ -3846,8 +4300,9 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/angry.webp",
-          "alt": "L0皱眉张嘴指向一旁。",
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
@@ -3863,11 +4318,17 @@
       "replyTo": null,
       "likes": 2,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110121122-ceb92168-02/media/closed-bedroom.webp",
+          "alt": "白色扫地机停在关上的卧室门前，右边探进一只猫的头和前爪。",
+          "kind": "image"
+        }
+      ],
       "guest": {
         "name": "门后有猫"
       },
-      "text": "扫地机有没有那种只给家人一个启动按钮的共享？\n我妈现在天天看清扫地图，问我为什么卧室连续三天没扫。门关着它当然进不去啊。说明书里只找到整个设备共享，关掉又怕她来喂猫的时候不会开。"
+      "text": "想给我妈只留一个扫地机启动键，有这种共享吗。\n\n她现在天天盯地图问我卧室怎么又没扫。门关着啊……可不共享，她来喂猫又不会开。\n说明书找半天，只有整个设备分享。"
     },
     {
       "id": "l0-20261110121122-ceb92168-01",
@@ -3878,12 +4339,18 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/speechless.webp",
-          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "src": "posts/2026/11/l0-20261110121122-ceb92168-01/media/potato-peelings.webp",
+          "alt": "后厨水槽里泡着削好的小土豆，旁边塑料筐堆着带厚肉的土豆皮。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "20斤土豆，后厨削完剩13斤，少的7斤全记我采购损耗，说我专挑便宜货。我是拿的小个头，没拿烂的啊，皮连着肉削那么厚，这也全算我的？"
+      "text": "20斤土豆，削完13斤，少的7斤全记我采购损耗。\n\n我是拿的小个头，没拿烂的。这皮上还带多少肉呢，也全算我的？"
     },
     {
       "id": "l0-20261110111419-7d66be80-08",
@@ -3896,11 +4363,12 @@
         {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
-        "name": "跟着走走停停"
+        "name": "一尾"
       },
       "text": "上回散场跟着人走，走到停车场了 我又没开车"
     },
@@ -3911,11 +4379,23 @@
       "replyTo": "l0-20261110111419-7d66be80-03",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110111419-7d66be80-03/media/exit-arrow-at-night.webp",
+          "alt": "散场的人沿混凝土通道往左走，门上方亮着绿色出口图标和左箭头。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/okay.webp",
+          "alt": "L0半睁眼竖起拇指。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
-        "name": "散场别堵门"
+        "name": "riku"
       },
-      "text": "总比散场站门口听人喊方向强。"
+      "text": "上回就跟着这个箭头走，拐出去还是绕了一圈。总比站门口听人喊强。"
     },
     {
       "id": "l0-20261110111419-7d66be80-05",
@@ -3924,11 +4404,17 @@
       "replyTo": "l0-20261110111419-7d66be80-01",
       "likes": 4,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110111419-7d66be80-01/media/our-shelf-arrow.webp",
+          "alt": "楼门旁的墙上贴着黄色胶带箭头，指向右边摆有纸箱的旧取件架。",
+          "kind": "image"
+        }
+      ],
       "guest": {
-        "name": "贴纸看不见"
+        "name": "去去"
       },
-      "text": "架子旁边没贴新位置吗？"
+      "text": "没贴箭头？我们楼就拿胶带贴个大的，不看群也知道往哪走。"
     },
     {
       "id": "l0-20261110111419-7d66be80-07",
@@ -3937,8 +4423,15 @@
       "replyTo": "l0-20261110111419-7d66be80-04",
       "likes": 8,
       "canon": "derivative",
-      "media": [],
-      "text": "群里给朋友看，和拿来替店里招客人是两回事吧。合照里其他人知道吗？"
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你给朋友看个合照，转头让人贴店门口试试。"
     },
     {
       "id": "l0-20261110111419-7d66be80-04",
@@ -3949,8 +4442,9 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/huh.webp",
-          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
@@ -3968,15 +4462,21 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110111419-7d66be80-01/media/shelf-moved.webp",
+          "alt": "楼门旁的空地上留着长方形浅痕，墙边剩两只没有外露标签的纸箱。",
+          "kind": "image"
+        },
+        {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
       "guest": {
-        "name": "凌晨才看见"
+        "name": "冬冬"
       },
-      "text": "半夜在群里发了取件架挪位通知，第二天就说东西放错。谁半夜盯着物业群看啊。"
+      "text": "取件架挪了，昨晚一点多才发群里。早上又说别往原来地方放。\n我还在这块空地上找了半天。"
     },
     {
       "id": "l0-20261110111419-7d66be80-02",
@@ -3987,15 +4487,16 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/angry.webp",
-          "alt": "L0皱眉张嘴指向一旁。",
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
       "guest": {
         "name": "相册还没删"
       },
-      "text": "朋友让我把上周活动的照片传群里留念，我传了。今天一看，有人直接截了其中一张拿去做店里的宣传封面，还问我怎么这么计较。合照里不只有我，上传到群里就是同意谁都拿去招揽生意吗？"
+      "text": "活动合照传群里留念，今天被拿去做店里的宣传封面了。没问过我，倒先问我怎么这么计较。\n\n照片里又不止我一个人。存着看就存着看，拿去招揽生意也不说一声？"
     },
     {
       "id": "l0-20261110111419-7d66be80-03",
@@ -4004,8 +4505,15 @@
       "replyTo": null,
       "likes": 4,
       "canon": "derivative",
-      "media": [],
-      "text": "城南回声厅、旧船坞两家演出场馆：11月13日起，入场提示会标出夜间上车点和散场步行出口，先试两个周末。交通线路照常运行。\n\n散场时才四处问出口，实在折腾人。看晚场的记得提前核对各自场馆的提示。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110111419-7d66be80-03/media/night-exit-notice.webp",
+          "alt": "夜场散场提示：11月13日起试行两个周末，城南回声厅与旧船坞增设夜间上车点和步行出口提示，交通线路照常运行。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "11月13日起，城南回声厅和旧船坞的夜场入场提示会加上散场步行出口、夜间上车点。先试两个周末，交通线路不变。\n\n看晚场的，去之前留意一下各自场馆的提示。"
     },
     {
       "id": "l0-20261110061018-47537328-13",
@@ -4028,7 +4536,7 @@
       "likes": 11,
       "canon": "derivative",
       "media": [],
-      "text": "他急的是有人拿音箱折腾吧，怎么变成两分钟吃饭的问题了。"
+      "text": "人家说音箱吵，你怎么光看见肉了"
     },
     {
       "id": "l0-20261110061018-47537328-11",
@@ -4039,15 +4547,22 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110061018-47537328-04/media/yellow-leaves.webp",
+          "alt": "黑色塑料盆的土湿得发亮，下面几片叶子发黄下垂，上面的叶子还绿着。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/cry.webp",
           "alt": "L0双手捧在胸前，眼里流出两行泪。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "浇完就忘"
       },
-      "text": "我照着浇了。黄叶了。"
+      "text": "我还真照着浇了。现在这样。"
     },
     {
       "id": "l0-20261110061018-47537328-12",
@@ -4057,7 +4572,7 @@
       "likes": 9,
       "canon": "derivative",
       "media": [],
-      "text": "我小时候也有半本字帖等着写，写到最后谁也不高兴。玩一会儿不行吗。"
+      "text": "我小时候那个字帖也没写完。玩一会儿不行吗"
     },
     {
       "id": "l0-20261110061018-47537328-10",
@@ -4066,11 +4581,18 @@
       "replyTo": "l0-20261110061018-47537328-03",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110061018-47537328-03/media/window-bulb.webp",
+          "alt": "窗台的旧白杯里挤着一个球根，短短的绿芽偏向窗边。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "窗边一小格"
       },
-      "text": "你卖的时候有没有写怎么养啊？我第一次买花，人家就说好养，拿回去才知道不能一直浇。\n储物间肯定不行，但新手真的不一定知道。隔壁那句你让她找隔壁去"
+      "text": "我第一次也不知道怎么放，拿个旧杯子种的，你看都挤歪了。卖花的就跟我说好养，别的没讲。"
     },
     {
       "id": "l0-20261110061018-47537328-16",
@@ -4080,7 +4602,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "谁叫你再买一杯了。我问的是你有没有证据说人家糊弄，别岔开。"
+      "text": "谁叫你再买了？我问你有没有比过，你回没有不就完了。"
     },
     {
       "id": "l0-20261110061018-47537328-14",
@@ -4093,13 +4615,14 @@
         {
           "src": "assets/emotes/l0/heh.webp",
           "alt": "L0半睁眼，嘴角轻微上扬。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
-        "name": "遥控器藏哪儿"
+        "name": "梅子酒"
       },
-      "text": "先插上旧电视试试。没准只缺电。"
+      "text": "先插上试试呗，它现在还没得到证明自己没坏的机会。"
     },
     {
       "id": "l0-20261110061018-47537328-08",
@@ -4109,7 +4632,7 @@
       "likes": 0,
       "canon": "derivative",
       "media": [],
-      "text": "我之前也被催装过。说“自愿”的那张公告先别删，省得以后全变成你自己提的。"
+      "text": "我上回也是，最后就剩我没装，天天单独问我。"
     },
     {
       "id": "l0-20261110061018-47537328-02",
@@ -4120,12 +4643,18 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/angry.webp",
-          "alt": "L0皱眉张嘴指向一旁。",
+          "src": "posts/2026/11/l0-20261110061018-47537328-02/media/late-bill.webp",
+          "alt": "小饭馆餐桌上放着两只用过的饭碗和剩菜盘，对面的椅子空着。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/tableflip.webp",
+          "alt": "L0张嘴举起双手，旁边一张桌子翻了起来。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "说好一人一半，结账他去接电话了！上回那二十块还没还呢。"
+      "text": "结账人去接电话了！说好一人一半的。\n上回那二十还没还，今天又是我先付。"
     },
     {
       "id": "l0-20261110061018-47537328-07",
@@ -4136,15 +4665,22 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110061018-47537328-07/media/unplugged-tv.webp",
+          "alt": "电视背后的插头垂在空插座旁边",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/sweat.webp",
           "alt": "L0额头挂着一大滴汗，嘴角翘起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "遥控器放哪了"
       },
-      "text": "爸妈催我给老房买台新电视。我问平时开不开，都说买了就看。旧电视遥控器上次回去就找不到，这回连电视机的电源插头都没插。买完再落灰？"
+      "text": "让我给老房换电视，说买了就看。刚拉开柜子，旧的插头都没插。遥控器呢，也没人知道。"
     },
     {
       "id": "l0-20261110061018-47537328-05",
@@ -4155,15 +4691,22 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110061018-47537328-05/media/three-word-cards.webp",
+          "alt": "地垫上的山、水、火字卡和一本厚练习册",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "字卡先放着"
       },
-      "text": "说好每天陪孩子认三个字，奶奶寄来一整本习题，转头问我是不是不重视教育。三个字还没认完呢。"
+      "text": "一天认三个字，还没认完，奶奶寄来这么厚一本。\n她问我为什么不重视。"
     },
     {
       "id": "l0-20261110061018-47537328-03",
@@ -4172,8 +4715,15 @@
       "replyTo": null,
       "likes": 18,
       "canon": "derivative",
-      "media": [],
-      "text": "昨天有客人拎着盆来，说我卖的球根半个月不出芽，要退。我问放哪儿，她说收在储物间，怕摆客厅沾灰。盆里那点土还是湿黏的。\n我没说不让退，可总得讲讲怎么放的吧。她又说隔壁摊的老板告诉她球根什么都不用管。隔壁说的话，倒让我负责。这口气我是真有点咽不下去。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110061018-47537328-03/media/wet-bulb-pot.webp",
+          "alt": "塑料袋里的花盆，球根露在积水的土面上",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "客人把这盆拎回来了，说半个月不出芽。土还黏着，问放哪儿，说储物间，怕放客厅落灰。\n我正跟她讲，她说隔壁老板说不用管。那你找隔壁买去啊……这句没说出口。"
     },
     {
       "id": "l0-20261110061018-47537328-01",
@@ -4186,13 +4736,14 @@
         {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "先看一眼通知"
       },
-      "text": "群公告写着“自愿换打卡软件”，早上主管挨个催。自愿在哪儿？"
+      "text": "公告写自愿换打卡软件，早上挨个问装好了没。\n哦，自愿。"
     },
     {
       "id": "l0-20261110061018-47537328-04",
@@ -4203,12 +4754,19 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110061018-47537328-04/media/two-pot-positions.webp",
+          "alt": "花摊上两盆花，一盆土色发白，另一盆土还很湿",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/doubt.webp",
           "alt": "L0双臂交叉，眯眼看向一侧。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "视频里一句“每周浇三次”就敢教所有人养花。屋里屋外都不分，出了事又怪卖花的。"
+      "text": "这两盆一个晒得到一个晒不到，土干得都不一样。视频就一句“每周浇三次”，底下还一堆人记笔记。"
     },
     {
       "id": "l0-20261110061018-47537328-06",
@@ -4220,13 +4778,14 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261110061018-47537328-06/media/crowded-fridge.webp",
-          "alt": "打开的冰箱里，两层搁板摆满瓶装和罐装饮料，几乎没有空位。"
+          "alt": "打开的冰箱里，两层搁板摆满瓶装和罐装饮料，几乎没有空位。",
+          "kind": "image"
         }
       ],
       "guest": {
         "name": "冰箱二层"
       },
-      "text": "合租电费说好均摊我认了。出差三天回来，冰箱被舍友囤的饮料塞满了，连我的饭盒都没地儿放。电费算一半，冰箱也能一人占一半吗？"
+      "text": "出差三天，回来冰箱成这样了。饭盒塞不进去。\n电费均摊的时候可没说只给我留个门。"
     },
     {
       "id": "l0-20261110002939-55dccee1-20",
@@ -4239,7 +4798,8 @@
         {
           "src": "assets/emotes/l0/okay.webp",
           "alt": "L0半睁眼竖起拇指。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": ""
@@ -4255,7 +4815,8 @@
         {
           "src": "assets/emotes/l0/play-dead.webp",
           "alt": "L0仰面躺着，头上有一个带叉号的小气泡。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4274,7 +4835,8 @@
         {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4293,7 +4855,8 @@
         {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4312,7 +4875,8 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4331,7 +4895,8 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4350,7 +4915,8 @@
         {
           "src": "assets/emotes/l0/laugh.webp",
           "alt": "L0仰躺着张嘴笑，双腿抬起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4365,24 +4931,38 @@
       "replyTo": "l0-20261110002939-55dccee1-12",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "不想起名"
       },
-      "text": "你除了吃还会啥。"
+      "text": "你来这儿报菜名的？"
     },
     {
       "id": "l0-20261110002939-55dccee1-12",
       "author": "visitor-tau",
       "createdAt": "2026-11-09T18:47:13.467Z",
-      "replyTo": "l0-20261110002939-55dccee1-11",
+      "replyTo": "l0-20261110002939-55dccee1-02",
       "likes": 11,
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-02/media/late-noodles.webp",
+          "alt": "一碗拌面上撒着葱花，旁边压着煎蛋，筷子横放在碗口。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": "饿了"
@@ -4394,8 +4974,15 @@
       "replyTo": "l0-20261110002939-55dccee1-02",
       "likes": 7,
       "canon": "derivative",
-      "media": [],
-      "text": "想起我那抽屉也还卡着，算了明天再弄。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-02/media/stuck-parts-drawer.webp",
+          "alt": "修车铺的零件抽屉拉到一半，侧面的滑轨露在外面，里面堆着螺丝和螺母。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "看得我想起这个抽屉了，拉到这儿就卡，明天再拆。"
     },
     {
       "id": "l0-20261110002939-55dccee1-10",
@@ -4404,11 +4991,18 @@
       "replyTo": "l0-20261110002939-55dccee1-07",
       "likes": 9,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-05/media/cup-base-detail.webp",
+          "alt": "手指托着奶茶杯底，中央压着字母M，塑料上还沾着水珠和奶茶残渍。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "少点冰"
       },
-      "text": "没中杯。还得再花钱买一杯回来，才配问这一句了？"
+      "text": "就这个M。我只有这一杯，还得再买个中杯回来？"
     },
     {
       "id": "l0-20261110002939-55dccee1-09",
@@ -4417,8 +5011,15 @@
       "replyTo": "l0-20261110002939-55dccee1-08",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "哪句摆脸了，你指出来。我问比没比过中杯，你答一句啊。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "哪句摆脸了？我问比没比过中杯。"
     },
     {
       "id": "l0-20261110002939-55dccee1-08",
@@ -4427,8 +5028,15 @@
       "replyTo": "l0-20261110002939-55dccee1-07",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "又没说你\n你怎么先摆上脸了"
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "又没说你\n怎么先摆上脸了"
     },
     {
       "id": "l0-20261110002939-55dccee1-07",
@@ -4437,8 +5045,15 @@
       "replyTo": "l0-20261110002939-55dccee1-05",
       "likes": 4,
       "canon": "derivative",
-      "media": [],
-      "text": "跟中杯比过没？我上次点炸物盒子一样大，里面份数不一样。杯底M是啥我也不懂，你上来就说人家糊弄，我在柜台听了也不乐意"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-05/media/takeaway-boxes.webp",
+          "alt": "两个同样大小的外带纸盒，一盒薯角较少，另一盒装了更多薯角和两块炸物。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "我今天这两盒外面也一样大，里面不一样多。你跟中杯比过没？别看个M就说人家糊弄。"
     },
     {
       "id": "l0-20261110002939-55dccee1-05",
@@ -4447,11 +5062,18 @@
       "replyTo": null,
       "likes": 9,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-05/media/drink-cup-side.webp",
+          "alt": "横放在托盘里的饮料杯，杯底有一个 M",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "少点冰"
       },
-      "text": "贴纸是大杯，杯底一个M，店员在糊弄我吧。"
+      "text": "贴纸打的大杯，底下一个M。拿中杯糊弄我？"
     },
     {
       "id": "l0-20261110002939-55dccee1-04",
@@ -4464,7 +5086,8 @@
         {
           "src": "assets/emotes/l0/flat.webp",
           "alt": "L0趴下伸舌头，头上有一圈弯线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4479,8 +5102,21 @@
       "replyTo": null,
       "likes": 1,
       "canon": "derivative",
-      "media": [],
-      "text": "拼图没拼完就得立刻拆吗？？边框都拼上了，天空那块分了几堆，现在全扫回盒子不等于重来。舍友说桌面共用，我也没说不能用啊，另外半张是空的。最烦她那句“反正你也拼不完”，借桌子就借桌子，别顺便踩我一下好吧"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110002939-55dccee1-03/media/half-finished-puzzle.webp",
+          "alt": "宿舍桌上的海边拼图，大片蓝天还没有拼好",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/tableflip.webp",
+          "alt": "L0张嘴举起双手，旁边一张桌子翻了起来。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "边框都拼好了，天空分了这么几堆，现在非让我拆。\n我都给他挪地方了。用就用，为什么还要说“反正你也拼不完”？？"
     },
     {
       "id": "l0-20261110002939-55dccee1-02",
@@ -4492,13 +5128,14 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261110002939-55dccee1-02/media/lid-gasket.webp",
-          "alt": "杯盖反面朝上放在台面上，透明胶圈嵌在边缘凹槽里，一小段被拉起。"
+          "alt": "杯盖反面朝上放在台面上，透明胶圈嵌在边缘凹槽里，一小段被拉起。",
+          "kind": "image"
         }
       ],
       "guest": {
         "name": "还有半杯"
       },
-      "text": "杯盖那圈胶圈怎么拿出来洗？抠起一边就滑回去了。"
+      "text": "这圈胶怎么抠出来洗啊，起一点又滑回去了"
     },
     {
       "id": "l0-20261110002939-55dccee1-01",
@@ -4511,23 +5148,24 @@
       "guest": {
         "name": "晚点到"
       },
-      "text": "伞是你借的，凭什么还得我上门取啊。"
+      "text": "伞你借走的，现在叫我去拿。外面还下着呢。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-19",
       "author": "visitor-sigma",
       "createdAt": "2026-11-09T17:00:24.467Z",
-      "replyTo": "l0-20261110001741-ab4f1398-18",
+      "replyTo": "l0-20261110001741-ab4f1398-01",
       "likes": 10,
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/doubt.webp",
-          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": ""
+      "text": "我上周最后在画具盒里找着的，那个盒子之前明明翻过两次。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-18",
@@ -4540,7 +5178,8 @@
         {
           "src": "assets/emotes/l0/heated.webp",
           "alt": "L0脸颊发红，双拳攥在胸前。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": "宝宝的事你少管"
@@ -4556,7 +5195,8 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4568,14 +5208,21 @@
       "id": "l0-20261110001741-ab4f1398-16",
       "author": "guest-9c81d3f9724f9b00",
       "createdAt": "2026-11-09T16:45:54.467Z",
-      "replyTo": "l0-20261110001741-ab4f1398-15",
+      "replyTo": "l0-20261110001741-ab4f1398-01",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110001741-ab4f1398-01/media/one-slipper.webp",
+          "alt": "楼道的小鞋架上只剩一只蓝拖鞋，旁边空着。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "周末不早起"
       },
-      "text": "别翻了，等会儿又要说你吓着小孩了。我们楼那盏灯坏了也说小孩弄的，拖鞋少一只也说小孩拿去玩了，保洁还让我把鞋收家里。行，我收。问一句是哪家的小孩总可以吧，问完群里又没人说话，天天拿小孩堵嘴。"
+      "text": "我们楼这个也说小孩拿去玩了。只拿一只，另一只还给我留架上。问哪家小孩，又没人回。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-15",
@@ -4588,7 +5235,8 @@
         {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4607,7 +5255,8 @@
         {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": "这也能怪你。"
@@ -4619,8 +5268,15 @@
       "replyTo": "l0-20261110001741-ab4f1398-11",
       "likes": 6,
       "canon": "derivative",
-      "media": [],
-      "text": "袜子又不是我藏的。他自己不找，你倒先找着我的毛病了。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "袜子又不是我藏的。他不找，你先找着我的毛病了。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-12",
@@ -4633,7 +5289,8 @@
         {
           "src": "assets/emotes/l0/laugh.webp",
           "alt": "L0仰躺着张嘴笑，双腿抬起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4648,11 +5305,18 @@
       "replyTo": "l0-20261110001741-ab4f1398-10",
       "likes": 10,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "泡面没叉"
       },
-      "text": "那不是你惯的吗。"
+      "text": "那不是你惯的。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-10",
@@ -4663,12 +5327,19 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110001741-ab4f1398-01/media/sock-under-sofa.webp",
+          "alt": "沙发与茶几之间的地砖上，一只灰袜子落在茶几腿旁。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "我家这个都五百多个月了，袜子还得问我在哪儿。"
+      "text": "我家都五百多个月了，还问袜子在哪。就在茶几底下，他弯个腰会怎样啊"
     },
     {
       "id": "l0-20261110001741-ab4f1398-09",
@@ -4677,7 +5348,14 @@
       "replyTo": "l0-20261110001741-ab4f1398-01",
       "likes": 11,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "泡面没叉"
       },
@@ -4690,7 +5368,14 @@
       "replyTo": "l0-20261110001741-ab4f1398-06",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "白开水"
       },
@@ -4704,17 +5389,24 @@
       "likes": 1,
       "canon": "derivative",
       "media": [],
-      "text": "吃饭这家！人跑去拧音箱了，我那盘肉还在后头等着呢。"
+      "text": "吃饭这家！人跑去拧音箱，我那盘肉还没来。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-05",
       "author": "visitor-gamma",
       "createdAt": "2026-11-09T16:10:48.467Z",
-      "replyTo": "l0-20261110001741-ab4f1398-04",
+      "replyTo": "l0-20261110001741-ab4f1398-03",
       "likes": 9,
       "canon": "derivative",
-      "media": [],
-      "text": "自己那台好办，隔壁的才烦。我店里隔壁一开歌，收钱问个数都得喊。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110001741-ab4f1398-03/media/shop-door-speaker.webp",
+          "alt": "从修车铺门内看出去，对面店门前的音箱正朝着这边，近处挡着车轮和内胎。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "对门这个正冲我店门。收钱问个数都得喊。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-04",
@@ -4723,11 +5415,18 @@
       "replyTo": "l0-20261110001741-ab4f1398-03",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110001741-ab4f1398-03/media/speaker-foam.webp",
+          "alt": "桌面音箱下垫着两块黑色泡棉，电线贴着桌边。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "不带遥控器"
       },
-      "text": "谁在放？你自己家，还是店里的音箱？"
+      "text": "在哪听的？我自己这台底下垫了两块泡棉，桌子不跟着震了。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-03",
@@ -4738,12 +5437,19 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110001741-ab4f1398-03/media/restaurant-speaker.webp",
+          "alt": "餐馆墙角高处的音箱，下面是冰柜和碗",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/angry.webp",
           "alt": "L0皱眉张嘴指向一旁。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "一进鼓就嗡嗡嗡。还往大了拧！"
+      "text": "一进鼓就嗡嗡嗡，还往大了拧！"
     },
     {
       "id": "l0-20261110001741-ab4f1398-02",
@@ -4754,15 +5460,22 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110001741-ab4f1398-02/media/lunch-tray.webp",
+          "alt": "食堂餐盘里的米饭、青菜和几块土豆",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/angry.webp",
           "alt": "L0皱眉张嘴指向一旁。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "多加一勺"
       },
-      "text": "排到我没鸡腿，插进来的倒是有。"
+      "text": "到我就没鸡腿了，刚插进来那个人倒有。"
     },
     {
       "id": "l0-20261110001741-ab4f1398-01",
@@ -4775,7 +5488,7 @@
       "guest": {
         "name": "半杯豆浆"
       },
-      "text": "昨晚楼道里有人喊“把钥匙还我”，早上群里说是小孩闹着玩。那嗓门低得跟我爸一样，谁家小孩啊。"
+      "text": "昨晚楼道有人喊“把钥匙还我”，早上群里说小孩闹着玩。\n那声音比我爸还低，谁家小孩啊。"
     },
     {
       "id": "l0-20261110000207-6a257638-29",
@@ -4788,7 +5501,8 @@
         {
           "src": "assets/emotes/l0/wait.webp",
           "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4800,14 +5514,15 @@
       "id": "l0-20261110000207-6a257638-28",
       "author": "guest-c6990ce4e6399e47",
       "createdAt": "2026-11-09T14:06:00.467Z",
-      "replyTo": "l0-20261110000207-6a257638-20",
+      "replyTo": "l0-20261110000207-6a257638-05",
       "likes": 0,
       "canon": "derivative",
       "media": [
         {
           "src": "assets/emotes/l0/wait.webp",
           "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4819,30 +5534,38 @@
       "id": "l0-20261110000207-6a257638-27",
       "author": "guest-6f9f9ffd47a5b90d",
       "createdAt": "2026-11-09T14:04:54.467Z",
-      "replyTo": "l0-20261110000207-6a257638-26",
+      "replyTo": "l0-20261110000207-6a257638-24",
       "likes": 5,
       "canon": "derivative",
       "media": [
         {
           "src": "assets/emotes/l0/leave.webp",
           "alt": "L0向一旁迈步，回头看，身后有几条速度线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "拐个弯"
       },
-      "text": "我小姨这会儿又在发相亲照片。介绍工作可以，这个真不用了。"
+      "text": "我小姨这会儿又在发相亲照片。工作介绍完就轮到这个了。"
     },
     {
       "id": "l0-20261110000207-6a257638-26",
       "author": "visitor-delta-upper",
       "createdAt": "2026-11-09T14:03:38.467Z",
-      "replyTo": "l0-20261110000207-6a257638-25",
+      "replyTo": "l0-20261110000207-6a257638-22",
       "likes": 11,
       "canon": "derivative",
-      "media": [],
-      "text": "你到底说她什么了？光看这句我没懂。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-05/media/curtain-colour.webp",
+          "alt": "浅紫窗帘被手拎起一角，叠在一起的部分更深，透光处接近灰色。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "会不会灯的问题。我家窗帘也是，叠起来紫，放下来灰的。"
     },
     {
       "id": "l0-20261110000207-6a257638-25",
@@ -4851,8 +5574,15 @@
       "replyTo": "l0-20261110000207-6a257638-23",
       "likes": 1,
       "canon": "derivative",
-      "media": [],
-      "text": "我说她没画了吗？你也挺会补的。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我说她没画了吗？我说的是那句“终于靠自己”。"
     },
     {
       "id": "l0-20261110000207-6a257638-24",
@@ -4865,27 +5595,41 @@
       "guest": {
         "name": "拐个弯"
       },
-      "text": "我现在的活就是亲戚介绍的，也没谁替我上班啊。"
+      "text": "我现在的活也是亲戚介绍的，没人替我上班啊。"
     },
     {
       "id": "l0-20261110000207-6a257638-23",
       "author": "visitor-upsilon-upper",
       "createdAt": "2026-11-09T13:44:13.467Z",
-      "replyTo": "l0-20261110000207-6a257638-22",
+      "replyTo": "l0-20261110000207-6a257638-05",
       "likes": 5,
       "canon": "derivative",
-      "media": [],
-      "text": "接到什么项目，和图是不是自己做的，能算同一件事吗？有叔叔就一笔都不用自己画了？"
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "叔叔介绍的项目，图就不算她自己做的了？"
     },
     {
       "id": "l0-20261110000207-6a257638-22",
       "author": "visitor-theta-upper",
       "createdAt": "2026-11-09T13:34:06.467Z",
-      "replyTo": "l0-20261110000207-6a257638-21",
+      "replyTo": "l0-20261110000207-6a257638-20",
       "likes": 5,
       "canon": "derivative",
-      "media": [],
-      "text": "图我不贴了，有她名字。我都说了图是好看的，哪句说她画得不好了？问纸是因为那种浅紫印出来容易灰，问一句也不至于是什么机密吧。你刚还说想看作品，转头就跟着笑，到底想看图还是想看我急啊？"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-05/media/stamp-proof.webp",
+          "alt": "同一张花朵试印纸的平面扫描图",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "右边吧。扫出来又不一样了，实物偏灰，我想要再紫一点（这是我自己的试印）。"
     },
     {
       "id": "l0-20261110000207-6a257638-21",
@@ -4898,7 +5642,8 @@
         {
           "src": "assets/emotes/l0/laugh.webp",
           "alt": "L0仰躺着张嘴笑，双腿抬起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4910,33 +5655,47 @@
       "id": "l0-20261110000207-6a257638-20",
       "author": "guest-543b2df0f966a0e4",
       "createdAt": "2026-11-09T13:28:25.467Z",
-      "replyTo": "l0-20261110000207-6a257638-19",
+      "replyTo": "l0-20261110000207-6a257638-16",
       "likes": 7,
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-05/media/purple-paper-pair.webp",
+          "alt": "窗台上两片色调不同的紫色纸样",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/wait.webp",
           "alt": "L0蹲着，双手托住脸，尾巴向一侧弯起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "剪刀找不到"
       },
-      "text": "图呢，我想看那个作品"
+      "text": "你想要的是哪种？我这两张包装上都叫香芋紫，放一块根本不是一个色。"
     },
     {
       "id": "l0-20261110000207-6a257638-19",
       "author": "guest-c6990ce4e6399e47",
       "createdAt": "2026-11-09T13:27:52.467Z",
-      "replyTo": "l0-20261110000207-6a257638-18",
+      "replyTo": "l0-20261110000207-6a257638-05",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "断网十分钟"
       },
-      "text": "那评论不能是发的人自己删的？你怎么知道谁动的手。"
+      "text": "也可能是问的人自己删的。你看见谁删了？"
     },
     {
       "id": "l0-20261110000207-6a257638-18",
@@ -4949,7 +5708,8 @@
         {
           "src": "assets/emotes/l0/huh.webp",
           "alt": "L0一手托下巴，斜眼看着旁边的问号。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": "你笑什么啊？"
@@ -4965,7 +5725,8 @@
         {
           "src": "assets/emotes/l0/laugh.webp",
           "alt": "L0仰躺着张嘴笑，双腿抬起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -4980,8 +5741,15 @@
       "replyTo": "l0-20261110000207-6a257638-15",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "她那个浅紫色我还存了。我昨天问她用的什么纸，到现在没回，朋友圈倒是又更了两条。"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-05/media/lavender-sample.webp",
+          "alt": "手里的淡紫卡纸上盖了几排花朵试印",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "她那个浅紫我还存了。我自己上次试印成这样，灰不灰？问她用什么纸没回，朋友圈倒是又发了。"
     },
     {
       "id": "l0-20261110000207-6a257638-15",
@@ -4990,7 +5758,14 @@
       "replyTo": "l0-20261110000207-6a257638-05",
       "likes": 8,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/clap.webp",
+          "alt": "L0半睁眼拍着双手。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "番茄去皮"
       },
@@ -5007,7 +5782,8 @@
         {
           "src": "assets/emotes/l0/melon.webp",
           "alt": "L0扒着边沿，双手拿一片西瓜。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": ""
@@ -5019,18 +5795,32 @@
       "replyTo": "l0-20261110000207-6a257638-12",
       "likes": 1,
       "canon": "derivative",
-      "media": [],
-      "text": "那你这句算不算也在管别人？"
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你这盆是塑料的吧？"
     },
     {
       "id": "l0-20261110000207-6a257638-12",
       "author": "visitor-latebell",
       "createdAt": "2026-11-09T08:33:11.467Z",
-      "replyTo": "l0-20261110000207-6a257638-11",
+      "replyTo": "l0-20261110000207-6a257638-04",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
-      "text": "这都能管到口气上"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-04/media/plastic-plant.webp",
+          "alt": "白方盆里的仿真植物，石子中露出塑料接头",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "我这盆，转了一学期了，一点没长"
     },
     {
       "id": "l0-20261110000207-6a257638-11",
@@ -5039,8 +5829,15 @@
       "replyTo": "l0-20261110000207-6a257638-10",
       "likes": 3,
       "canon": "derivative",
-      "media": [],
-      "text": "你自己都叫不上，还先凶别人。"
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你自己也叫不上来，刚才还那么凶"
     },
     {
       "id": "l0-20261110000207-6a257638-10",
@@ -5051,34 +5848,48 @@
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-04/media/round-leaf-pot.webp",
+          "alt": "水槽旁一盆圆叶植物，白色标签背面朝外",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/sweat.webp",
           "alt": "L0额头挂着一大滴汗，嘴角翘起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "小陶盆"
       },
-      "text": "我那盆倒是有名字，卖花的和识图软件各说一个。现在谁问我都只敢说是绿的。"
+      "text": "我这个卖花的和识图软件各说一个，问到现在也没弄明白。"
     },
     {
       "id": "l0-20261110000207-6a257638-09",
       "author": "guest-fec6b3d78d0a2be0",
       "createdAt": "2026-11-09T06:05:14.467Z",
-      "replyTo": "l0-20261110000207-6a257638-08",
+      "replyTo": "l0-20261110000207-6a257638-04",
       "likes": 0,
       "canon": "derivative",
       "media": [
         {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-04/media/unknown-pothos.webp",
+          "alt": "玻璃杯中水培的一枝植物，根须挤满杯底",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
           "src": "assets/emotes/l0/guilty.webp",
           "alt": "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
         "name": "小绿活着就行"
       },
-      "text": "我连自己那盆叫什么都不知道"
+      "text": "我连自己这盆叫什么都不知道，养着就行吧"
     },
     {
       "id": "l0-20261110000207-6a257638-08",
@@ -5087,11 +5898,18 @@
       "replyTo": "l0-20261110000207-6a257638-04",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "小陶盆"
       },
-      "text": "连是什么植物都不说，这谁敢答啊。"
+      "text": "什么植物啊？先说个名字呀"
     },
     {
       "id": "l0-20261110000207-6a257638-07",
@@ -5104,7 +5922,8 @@
         {
           "src": "assets/emotes/l0/laugh.webp",
           "alt": "L0仰躺着张嘴笑，双腿抬起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "text": "手机还想过你脸这一关"
@@ -5120,10 +5939,11 @@
         {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
-      "text": "有些少儿书的腰封比正文还吵，翻两页全是“你就是最棒的”。推荐的人只说孩子爱看，我也没法接。爱看和写得好，总不能是一回事吧。"
+      "text": "有些少儿书腰封比正文还吵，翻两页又是“你就是最棒的”。问推荐的人好在哪儿，只回我孩子爱看。\n那我也不知道怎么接。"
     },
     {
       "id": "l0-20261110000207-6a257638-05",
@@ -5132,8 +5952,15 @@
       "replyTo": null,
       "likes": 19,
       "canon": "derivative",
-      "media": [],
-      "text": "同学发了个“终于靠自己”的作品，下面有人问是不是她叔叔那边的项目，过一会儿那条评论就没了。\n是我想多了吗？（图确实漂亮，但也不用把自己写得那么惨吧）"
+      "media": [
+        {
+          "src": "assets/emotes/l0/melon.webp",
+          "alt": "L0扒着边沿，双手拿一片西瓜。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "同学发作品，说“终于靠自己”。下面有人问是不是她叔叔那个项目，刚才再看，评论没了。\n（图是挺好看的）"
     },
     {
       "id": "l0-20261110000207-6a257638-04",
@@ -5142,8 +5969,15 @@
       "replyTo": null,
       "likes": 17,
       "canon": "derivative",
-      "media": [],
-      "text": "顺便问一句，花盆转了方向，原来歪掉的茎也会慢慢直回来吗？"
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261110000207-6a257638-04/media/window-lean.webp",
+          "alt": "窗边一盆绿萝的茎向同一侧伸出去",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "想把这盆转半圈。原来已经歪掉的茎，还会慢慢直回来吗？"
     },
     {
       "id": "l0-20261110000207-6a257638-03",
@@ -5156,7 +5990,8 @@
         {
           "src": "assets/emotes/l0/sweat.webp",
           "alt": "L0额头挂着一大滴汗，嘴角翘起。",
-          "fit": "contain"
+          "fit": "contain",
+          "kind": "emote"
         }
       ],
       "guest": {
@@ -5173,12 +6008,13 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/flat.webp",
-          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。",
+          "kind": "emote",
           "fit": "contain"
         }
       ],
-      "text": "过关了，手机差点掉在脸上。"
+      "text": "过了！手机差点砸脸。"
     },
     {
       "id": "l0-20261110000207-6a257638-01",
@@ -5190,10 +6026,11 @@
       "media": [
         {
           "src": "posts/2026/11/l0-20261110000207-6a257638-01/media/white-paper.webp",
-          "alt": "一张亮白色的纸铺在有划痕的棕色木桌上，纸角微微翘起。"
+          "alt": "一张亮白色的纸铺在有划痕的棕色木桌上，纸角微微翘起。",
+          "kind": "image"
         }
       ],
-      "text": "这纸的样图是不是加了灰。收到的白得刺眼，铺在桌上像一块灯。\n店家说是我屏幕的问题。"
+      "text": "这纸白得像开了灯，样图里那点灰呢。\n店家说是我屏幕的问题。"
     },
     {
       "id": "site-welcome",

@@ -5,8 +5,10 @@ createdAt: "2026-11-10T01:02:37.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/angry.webp","alt":"L0皱眉张嘴指向一旁。","fit":"contain"}]
+media: [{"src":"assets/emotes/l0/heated.webp","alt":"L0脸颊发红，双拳攥在胸前。","kind":"emote","fit":"contain"}]
 guest: {"name":"相册还没删"}
 ---
 
-朋友让我把上周活动的照片传群里留念，我传了。今天一看，有人直接截了其中一张拿去做店里的宣传封面，还问我怎么这么计较。合照里不只有我，上传到群里就是同意谁都拿去招揽生意吗？
+活动合照传群里留念，今天被拿去做店里的宣传封面了。没问过我，倒先问我怎么这么计较。
+
+照片里又不止我一个人。存着看就存着看，拿去招揽生意也不说一声？

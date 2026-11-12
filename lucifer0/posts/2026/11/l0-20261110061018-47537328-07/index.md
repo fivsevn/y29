@@ -5,8 +5,8 @@ createdAt: "2026-11-09T23:21:28.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/sweat.webp","alt":"L0额头挂着一大滴汗，嘴角翘起。","fit":"contain"}]
+media: [{"src":"posts/2026/11/l0-20261110061018-47537328-07/media/unplugged-tv.webp","alt":"电视背后的插头垂在空插座旁边","kind":"image","fit":"contain"},{"src":"assets/emotes/l0/sweat.webp","alt":"L0额头挂着一大滴汗，嘴角翘起。","fit":"contain","kind":"emote"}]
 guest: {"name":"遥控器放哪了"}
 ---
 
-爸妈催我给老房买台新电视。我问平时开不开，都说买了就看。旧电视遥控器上次回去就找不到，这回连电视机的电源插头都没插。买完再落灰？
+让我给老房换电视，说买了就看。刚拉开柜子，旧的插头都没插。遥控器呢，也没人知道。

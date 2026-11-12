@@ -5,7 +5,9 @@ createdAt: "2026-11-10T10:08:40.467Z"
 replyTo: null
 likes: 6
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/speechless.webp","alt":"L0抬眼向上看，嘴边有一团呼气线。","fit":"contain"}]
+media: [{"src":"posts/2026/11/l0-20261110121122-ceb92168-01/media/potato-peelings.webp","alt":"后厨水槽里泡着削好的小土豆，旁边塑料筐堆着带厚肉的土豆皮。","kind":"image"},{"src":"assets/emotes/l0/angry.webp","alt":"L0皱眉张嘴指向一旁。","kind":"emote","fit":"contain"}]
 ---
 
-20斤土豆，后厨削完剩13斤，少的7斤全记我采购损耗，说我专挑便宜货。我是拿的小个头，没拿烂的啊，皮连着肉削那么厚，这也全算我的？
+20斤土豆，削完13斤，少的7斤全记我采购损耗。
+
+我是拿的小个头，没拿烂的。这皮上还带多少肉呢，也全算我的？

@@ -5,7 +5,7 @@ createdAt: "2026-11-09T00:28:57.467Z"
 replyTo: null
 likes: 12
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/flat.webp","alt":"L0趴下伸舌头，头上有一圈弯线。","fit":"contain"}]
+media: [{"src":"assets/emotes/l0/laugh.webp","alt":"L0仰躺着张嘴笑，双腿抬起。","kind":"emote","fit":"contain"}]
 ---
 
-过关了，手机差点掉在脸上。
+过了！手机差点砸脸。

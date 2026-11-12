@@ -5,10 +5,12 @@ createdAt: "2026-11-11T16:20:03.997Z"
 replyTo: null
 likes: 10
 canon: "derivative"
-media: []
+media: [{"src":"posts/2026/11/l0-20261111214536-e145d75f-bff2bff8e7a8/media/parcel-bottom-open.webp","alt":"楼梯间的快递箱底缝已经张开，侧面的面单被空白纸片挡住，箱内物品还未取出。","kind":"image"},{"src":"assets/emotes/l0/heated.webp","alt":"L0脸颊发红，双拳攥在胸前。","kind":"emote","fit":"contain"}]
 guest: {"name":"拆包先别扔"}
 ---
 
-快递盒底下开了口，我拍了照找售后。群里有人说我想白嫖，理由居然是我把面单上的名字遮掉了。
+快递盒底下开了口，东西还没拆。发群里问这种怎么找售后，有人说我想白嫖。
 
-不遮名字你又说我乱发别人地址。到底想让我怎么拍？东西还没拆，先给我扣个帽子。
+理由是我把面单名字遮了。
+
+名字不给你看就急成这样？

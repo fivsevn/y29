@@ -1,4 +1,4 @@
-import { escapeHTML as esc, readState, saveState, toggle, selectPosts, threadPosts, threadReplyPreview, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText, isEmoteMedia } from './core.js?v=20261111-media-kinds';
+import { escapeHTML as esc, readState, saveState, toggle, selectPosts, createThreadIndex, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText, isEmoteMedia } from './core.js?v=20261112-thread-index';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -12,7 +12,7 @@ const icon = (name, className = '') => `<svg class="${className}" viewBox="0 0 2
 document.querySelectorAll('[data-icon]').forEach(element => { element.innerHTML = icon(element.dataset.icon); });
 let storage;
 try { storage = window.localStorage; } catch { /* Browsing works without storage. */ }
-let state, feed, users, posts, toastTimer;
+let state, feed, users, posts, threadIndex, toastTimer;
 const main = document.querySelector('main');
 const imageDialog = document.querySelector('#image-dialog'), imageFrame = document.querySelector('#image-frame');
 const imageClose = document.querySelector('#image-close');
@@ -196,28 +196,29 @@ function mediaMarkup(image) {
   }
   return `<a class="post-image${image.fit === 'contain' ? ' is-contained' : ''}" href="./${esc(image.src)}" aria-haspopup="dialog" aria-label="查看原图：${esc(image.alt)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看原图 ↗</span></a>`;
 }
-function replyPreviewText(reply) {
-  const text = postText(reply).trim();
-  if (text) return text;
-  return [reply.media.some(image => !isEmoteMedia(image)) ? '[图片]' : '',
-    reply.media.some(isEmoteMedia) ? '[表情]' : ''].filter(Boolean).join(' ');
-}
 function replyPreview(post) {
-  const { rootId, replies, total, collapsed } = threadReplyPreview(feed.posts, post.id);
-  if (!total) return '';
-  return `<div class="reply-preview">${replies.map(reply => `<a class="preview-reply${reply.deleted === true ? ' is-deleted' : ''}" href="${postURL(reply.id)}"><div><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong${nameStyle(users.get(reply.author))}>${esc(users.get(reply.author).name)}</strong></div><p>${esc(replyPreviewText(reply))}</p></a>`).join('')}${collapsed ? `<a class="preview-more" href="${postURL(rootId)}">查看全部 ${total} 条回复 <span aria-hidden="true">↗</span></a>` : ''}</div>`;
+  const replies = threadIndex.threadPosts(post.id).slice(1);
+  if (!replies.length) return '';
+  return `<div class="reply-preview">${replies.map(reply => {
+    const deleted = reply.deleted === true, media = deleted ? [] : reply.media, text = postText(reply);
+    return `<div class="preview-reply${deleted ? ' is-deleted' : ''}" data-reply-id="${esc(reply.id)}"><a class="preview-heading" href="${postURL(reply.id)}"><span class="quote-mark">&gt;&gt;${postNumber(reply.replyTo)}</span><strong${nameStyle(users.get(reply.author))}>${esc(users.get(reply.author).name)}</strong></a><div class="preview-content">${media.map(mediaMarkup).join('')}${text.trim() ? `<p>${esc(text)}</p>` : ''}</div></div>`;
+  }).join('')}</div>`;
+}
+function likeButtonState(post) {
+  const liked = state.likes.includes(post.id), count = post.likes + Number(liked);
+  const title = liked ? '取消点赞' : '点赞';
+  return { liked, count, title, label: `${title}${users.get(post.author).name}的发言，${count}个赞` };
 }
 function postMarkup(post, { threaded = false, target, preview = false } = {}) {
   const user = users.get(post.author), parent = posts.get(post.replyTo);
   const deleted = post.deleted === true, media = deleted ? [] : post.media, text = postText(post);
-  const replies = post.replyTo ? feed.posts.filter(item => item.replyTo === post.id).length : threadPosts(feed.posts, post.id).length - 1;
-  const liked = state.likes.includes(post.id);
+  const replies = threadIndex.replyCount(post.id), like = likeButtonState(post);
   return `<article class="post${threaded && post.replyTo ? ' thread-reply' : ''}${target === post.id ? ' is-target' : ''}${deleted ? ' deleted-reply' : ''}" id="post-${esc(post.id)}" aria-label="${esc(user.name)}的${post.replyTo ? '回复' : '动态'}">
     <div class="post-heading"><a class="author-name" href="${userURL(user.id)}"${nameStyle(user)}>${esc(user.name)}</a><a class="author-id" href="${userURL(user.id)}">ID:${boardID(user.id)}</a><a class="post-number" href="${postURL(post.id)}">${numberLabel(post.id)}</a></div>
     <div class="post-metadata"><time datetime="${esc(post.createdAt)}" title="${esc(dateLabel(post.createdAt, true))}">${esc(dateLabel(post.createdAt, true))}</time>${post.replyTo ? '<span>回应</span>' : ''}</div>
     ${parent ? `<a class="reply-context" href="${postURL(parent.id)}" aria-label="回复${esc(users.get(parent.author).name)}的${numberLabel(parent.id)}">&gt;&gt;${postNumber(parent.id)}</a>` : ''}
     <div class="post-content${media.length ? ' with-media' : ''}">${media.map(mediaMarkup).join('')}${text.trim() ? `<a class="post-text-link" href="${postURL(post.id)}"><p class="post-text">${esc(text)}</p></a>` : ''}</div>
-    <div class="post-actions"><a class="action reply-action" href="${postURL(post.id)}" aria-label="查看${esc(user.name)}的讨论，${replies}条回复" title="查看回复">${icon('reply', 'action-icon')}<span class="reply-count">${replies}</span></a>${deleted ? '' : `<button type="button" class="action like-action" data-action="likes" data-id="${esc(post.id)}" aria-pressed="${liked}" aria-label="${liked ? '取消点赞' : '点赞'}${esc(user.name)}的发言，${post.likes + Number(liked)}个赞" title="${liked ? '取消点赞' : '点赞'}">${icon('heart', 'action-icon')}<span class="like-count">${post.likes + Number(liked)}</span></button>`}<button type="button" class="action share-action" data-action="share" data-id="${esc(post.id)}" aria-label="复制这条发言的链接" title="复制链接">${icon('link', 'action-icon')}</button></div>
+    <div class="post-actions"><a class="action reply-action" href="${postURL(post.id)}" aria-label="查看${esc(user.name)}的讨论，${replies}条回复" title="查看回复">${icon('reply', 'action-icon')}<span class="reply-count">${replies}</span></a>${deleted ? '' : `<button type="button" class="action like-action" data-action="likes" data-id="${esc(post.id)}" aria-pressed="${like.liked}" aria-label="${esc(like.label)}" title="${like.title}">${icon('heart', 'action-icon')}<span class="like-count">${like.count}</span></button>`}<button type="button" class="action share-action" data-action="share" data-id="${esc(post.id)}" aria-label="复制这条发言的链接" title="复制链接">${icon('link', 'action-icon')}</button></div>
     ${preview && !post.replyTo ? replyPreview(post) : ''}
   </article>`;
 }
@@ -235,7 +236,7 @@ function renderProfile(id) {
     (history.length ? history.map(post => postMarkup(post)).join('') : empty('还没有发言', '偶尔来看看。'));
 }
 function renderThread(id) {
-  const thread = threadPosts(feed.posts, id);
+  const thread = threadIndex.threadPosts(id);
   return boardbar('讨论串', thread.length ? `${thread.length - 1} 回应` : '', backLink()) +
     (thread.length ? `<div class="thread">${postMarkup(thread[0], { target: id })}${thread.length > 1 ? '<div class="discussion-label">回应 / REPLIES</div>' : ''}${thread.slice(1).map(post => postMarkup(post, { threaded: true, target: id })).join('')}</div><p class="feed-end">${thread.length === 1 ? '还没有人接话。' : '— 串末 —'}</p>` : empty('没有找到这条帖子', '这个链接可能不完整。'));
 }
@@ -301,10 +302,12 @@ document.addEventListener('click', async event => {
     return;
   }
   toggle(state, action, id);
-  const saved = saveState(storage, state), scroll = main.scrollTop;
-  render();
-  main.querySelector(`button[data-action="${action}"][data-id="${id}"]`)?.focus({ preventScroll: true });
-  main.scrollTop = scroll;
+  const saved = saveState(storage, state), like = likeButtonState(posts.get(id));
+  button.setAttribute('aria-pressed', String(like.liked));
+  button.setAttribute('aria-label', like.label);
+  button.title = like.title;
+  button.querySelector('.like-count').textContent = like.count;
+  button.focus({ preventScroll: true });
   if (!saved) notify('浏览器未允许保存，这次操作仅在当前页面有效。');
 });
 // Route positions belong to the app's scroll view, never the browser document.
@@ -337,6 +340,7 @@ async function load() {
     feed = await response.json();
     if (feed.version !== 1 || !Array.isArray(feed.users) || !Array.isArray(feed.posts)) throw new Error('Invalid feed');
     users = new Map(feed.users.map(user => [user.id, user])); posts = new Map(feed.posts.map(post => [post.id, post]));
+    threadIndex = createThreadIndex(feed.posts);
     state ??= readState(storage);
     render(); renderedRoute = location.hash || '#/'; selectReply();
   } catch {

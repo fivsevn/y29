@@ -5,9 +5,9 @@ createdAt: "2026-11-10T19:13:27.467Z"
 replyTo: null
 likes: 4
 canon: "derivative"
-media: []
+media: [{"src":"posts/2026/11/l0-20261110210715-bd3468e0-01/media/short-fringe.webp","alt":"镜子前拍到的短刘海离眉毛很远，侧边夹了发夹仍有碎发翘着。","kind":"image","fit":"contain"},{"src":"assets/emotes/l0/hold-it.webp","alt":"L0闭眼抿嘴，攥紧双拳。","kind":"emote","fit":"contain"}]
 guest: {"name":"眠"}
 ---
 
-刘海让他修一点，剪完在眉毛中间了。。。他说显精神
-我问还有救吗，他说再剪更短。现在夹也夹不住
+让他修一点刘海，剪完离眉毛这么远。。。他说显精神
+夹子也夹不住，放弃了

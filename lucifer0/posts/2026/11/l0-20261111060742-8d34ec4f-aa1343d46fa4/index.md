@@ -5,7 +5,7 @@ createdAt: "2026-11-11T04:36:55.467Z"
 replyTo: null
 likes: 1
 canon: "derivative"
-media: []
+media: [{"src":"assets/emotes/l0/crash.webp","alt":"L0张着小嘴，两眼呈螺旋状，头上冒着弯曲线。","kind":"emote","fit":"contain"}]
 guest: {"name":"优惠券过敏"}
 ---
 

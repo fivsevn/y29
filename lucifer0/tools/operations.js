@@ -4,7 +4,7 @@ import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
-import { defaultLottery, compatibilityLotteryV1, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, imagePoolProgress, emotePoolProgress, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance } from './lottery.js';
+import { defaultLottery, compatibilityLotteryV1, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, imagePoolProgress, emotePoolProgress, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance, randomFor } from './lottery.js';
 export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
 import { siteEmoteManifestPath } from './site-emotes.js';
@@ -96,13 +96,29 @@ function returningReplyAuthor({ seed, postId, choice, target, before, eligible, 
   return chooseReplyParticipant({ seed, postId, participants: [...participants.values()] });
 }
 
-function threadReplyTarget({ before, rootId, author, until, preferIncoming = false, unansweredOnly = false }) {
+function threadReplyTarget({ before, rootId, author, until, seed, postId, preferIncoming = false, unansweredOnly = false }) {
   const answered = new Set(unansweredOnly ? [...before.values()].filter(post => post.author === author && validDate(post.createdAt) &&
     Date.parse(post.createdAt) <= until).map(post => post.replyTo) : []);
   const candidates = [...before.values()].filter(post => post.author !== author && !post.deleted && !answered.has(post.id) && validDate(post.createdAt) &&
     Date.parse(post.createdAt) <= until && threadRoot(post.id, before).id === rootId)
     .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en'));
-  return preferIncoming && candidates.find(post => before.get(post.replyTo)?.author === author) || candidates[0] || null;
+  const incoming = preferIncoming && candidates.find(post => before.get(post.replyTo)?.author === author);
+  if (incoming) return incoming;
+  // A reader can enter at the root, an existing branch or a recent exchange.
+  // Keep the root's chance independent of thread length instead of extending
+  // the latest branch on every arrival. Returning speakers still answer their
+  // own incoming replies first, and answered/deleted targets stay excluded.
+  const replies = candidates.filter(post => post.id !== rootId);
+  const pools = [
+    { weight: 4, posts: candidates.filter(post => post.id === rootId) },
+    { weight: 3, posts: replies.filter(post => post.replyTo === rootId) },
+    { weight: 3, posts: replies.slice(0, 3) }
+  ].filter(pool => pool.posts.length);
+  if (!pools.length) return null;
+  const random = randomFor(seed + '\0reply-target\0' + postId + '\0' + rootId + '\0' + author);
+  let draw = random() * pools.reduce((sum, pool) => sum + pool.weight, 0);
+  const selected = pools.find(pool => (draw -= pool.weight) < 0) ?? pools.at(-1);
+  return selected.posts[Math.floor(random() * selected.posts.length)];
 }
 
 export function planThreadReplies({ seed, posts, history = [], replyLottery, threadIds = [] }) {
@@ -403,7 +419,7 @@ export async function suggestUpdatePresentation({ root = socialRoot, workDirecto
 }
 
 function checkMediaReviews(reviews) {
-  if (!Array.isArray(reviews) || reviews.length > 492) fail('Invalid media reviews');
+  if (!Array.isArray(reviews)) fail('Invalid media reviews');
   const seen = new Set();
   for (const review of reviews) {
     onlyKeys(review, ['postId', 'src', 'type', 'scene'], 'media review');
@@ -541,7 +557,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const freshThreadMode = Boolean(requestedRoot && config.discussion?.replyAuthor);
   const threadAuthors = new Set(freshThreadMode ? [...before.values()].filter(post => validDate(post.createdAt) && Date.parse(post.createdAt) <= until &&
     threadRoot(post.id, before).id === requestedRoot.id).map(post => post.author) : []);
-  const targetForAuthor = author => threadReplyTarget({ before, rootId: requestedRoot.id, author, until, preferIncoming: true, unansweredOnly: freshThreadMode });
+  const targetForAuthor = author => threadReplyTarget({ before, rootId: requestedRoot.id, author, until, seed: operation.plan.seed, postId, preferIncoming: true, unansweredOnly: freshThreadMode });
   const returning = existing ? null : returningReplyAuthor({ seed: operation.plan.seed, postId, choice: choices.discussion?.replyAuthor,
     target, before, eligible, publicUsers: data.feed.users, createdAt, now,
     ...(requestedRoot ? { targetForAuthor } : choices.discussion?.replyAuthor ? { excludeAuthor: target.author } : {}) });
@@ -549,10 +565,10 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
     users: eligible.filter(user => user.id !== excluded && !threadAuthors.has(user.id)), profiles: data.material.profiles });
   let author = existing?.author ?? returning?.author ?? newAuthor(!requestedRoot && choices.discussion?.replyAuthor ? target?.author : undefined);
   if (requestedRoot && !existing) {
-    let selectedTarget = threadReplyTarget({ before, rootId: requestedRoot.id, author, until, preferIncoming: Boolean(returning), unansweredOnly: freshThreadMode && Boolean(returning) });
+    let selectedTarget = threadReplyTarget({ before, rootId: requestedRoot.id, author, until, seed: operation.plan.seed, postId, preferIncoming: Boolean(returning), unansweredOnly: freshThreadMode && Boolean(returning) });
     if (!selectedTarget) {
       author = newAuthor(author);
-      selectedTarget = threadReplyTarget({ before, rootId: requestedRoot.id, author, until });
+      selectedTarget = threadReplyTarget({ before, rootId: requestedRoot.id, author, until, seed: operation.plan.seed, postId });
     }
     if (!selectedTarget) fail('The thread has no earlier visible post available for this reply');
     target = selectedTarget; targetId = target.id;
@@ -613,7 +629,7 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
         ...(discussion.requiredTone === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: writerSource('environment/research-negative.md') } : {}),
         ...(target ? { replyStance: discussion.replyStance } : {}),
         rules: writerSource('docs/lottery.md') } } : {}),
-      ...(config.media ? { presentation: { image: choices.image, emoteCount: choices.emoteCount, maximumMedia: 4 } } : {}),
+      ...(config.media ? { presentation: { image: choices.image, emoteCount: choices.emoteCount } } : {}),
       visiblePosts
     },
     editor: {
@@ -671,7 +687,7 @@ async function validateImagePools(operation, data, root) {
   if (operation.posts.some(post => archivedIds.has(post.id))) fail('New media-pool updates cannot reuse archived posts; only this update counts');
   const ordinaryFiles = new Set();
   for (const post of operation.posts) {
-    if (!Array.isArray(post.media) || post.media.length > 4) fail('Each post supports at most four media items');
+    if (!Array.isArray(post.media)) fail('Each post needs a media array');
     for (const image of post.media) {
       if (!plain(image) || !['image', 'emote'].includes(image.kind)) fail('New media-pool updates require an explicit image or emote kind');
       if (typeof image.src !== 'string') fail('Media needs a real source path');

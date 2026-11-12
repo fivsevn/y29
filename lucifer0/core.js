@@ -80,23 +80,65 @@ export function parseSiteGuide(posts, users) {
   return intro && rules.length ? { id: post.id, title, intro, rules, closing: outro, access } : null;
 }
 
-export function rootOf(posts, id) {
+function createRootLookup(posts) {
   const byId = new Map(posts.map(post => [post.id, post]));
-  const seen = new Set();
-  let post = byId.get(id);
-  while (post?.replyTo && !seen.has(post.id)) { seen.add(post.id); post = byId.get(post.replyTo); }
-  return post && !seen.has(post.id) ? post : null;
+  const roots = new Map();
+  function findRoot(id) {
+    if (roots.has(id)) return roots.get(id);
+    const path = new Set();
+    let post = byId.get(id), root = null;
+    while (post && !path.has(post.id)) {
+      if (roots.has(post.id)) { root = roots.get(post.id); break; }
+      path.add(post.id);
+      if (!post.replyTo) { root = post; break; }
+      post = byId.get(post.replyTo);
+    }
+    for (const visited of path) roots.set(visited, root);
+    return root;
+  }
+  return { byId, findRoot };
+}
+
+// Reuse this index for one immutable feed snapshot; rebuild when loading new data.
+export function createThreadIndex(posts) {
+  const { byId, findRoot } = createRootLookup(posts);
+  const repliesByRoot = new Map(), directReplies = new Map();
+  for (const post of posts) {
+    if (post.replyTo) directReplies.set(post.replyTo, (directReplies.get(post.replyTo) || 0) + 1);
+    const root = findRoot(post.id);
+    if (!root || post.id === root.id) continue;
+    if (!repliesByRoot.has(root.id)) repliesByRoot.set(root.id, []);
+    repliesByRoot.get(root.id).push(post);
+  }
+  for (const replies of repliesByRoot.values()) replies.sort(oldestFirst);
+  return {
+    rootOf: findRoot,
+    threadPosts(id) {
+      const root = findRoot(id);
+      return root ? [root, ...(repliesByRoot.get(root.id) || [])] : [];
+    },
+    threadReplyPreview(id) {
+      const root = findRoot(id), replies = root ? repliesByRoot.get(root.id) || [] : [];
+      return { rootId: root?.id ?? null, replies: replies.slice(0, 10), total: replies.length, collapsed: replies.length > 10 };
+    },
+    replyCount(id) {
+      const post = byId.get(id);
+      if (!post) return 0;
+      return post.replyTo ? directReplies.get(id) || 0 : repliesByRoot.get(id)?.length || 0;
+    }
+  };
+}
+
+export function rootOf(posts, id) {
+  return createRootLookup(posts).findRoot(id);
 }
 
 export function threadPosts(posts, id) {
-  const root = rootOf(posts, id);
-  if (!root) return [];
-  return [root, ...posts.filter(post => post.id !== root.id && rootOf(posts, post.id)?.id === root.id).sort(oldestFirst)];
+  return createThreadIndex(posts).threadPosts(id);
 }
 
 export function threadReplyPreview(posts, id) {
-  const thread = threadPosts(posts, id), total = Math.max(0, thread.length - 1);
-  return { rootId: thread[0]?.id ?? null, replies: thread.slice(1, 11), total, collapsed: total > 10 };
+  return createThreadIndex(posts).threadReplyPreview(id);
 }
 
 export const postText = post => post.deleted === true ? '该回复已被删除' : post.text;
