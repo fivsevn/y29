@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant, imagePoolProgress, suggestPostPresentation } from '../lucifer0/tools/lottery.js';
+import { defaultLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant, imagePoolProgress, emotePoolProgress, suggestPostPresentation } from '../lucifer0/tools/lottery.js';
 import { drawUpdatePlan } from '../lucifer0/tools/operations.js';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -86,6 +86,16 @@ test('legacy image snapshots retain the exact earlier draws and presentation sha
   assert.equal(imagePoolProgress({ posts: [], lottery }), null);
 });
 
+function originalPoolLottery() {
+  const lottery = structuredClone(defaultLottery);
+  for (const role of ['root', 'reply']) {
+    lottery.media.images[role].minimumPosts = 1;
+    for (const key of ['minimumShare', 'enforceDraw', 'lifePhotoShare']) delete lottery.media.images[role][key];
+    for (const key of ['minimumPosts', 'minimumShare', 'enforceDraw']) delete lottery.media.emotes[role][key];
+  }
+  return lottery;
+}
+
 test('image and emote decisions are independent within separate root and reply pools', () => {
   const lottery = structuredClone(defaultLottery);
   for (const role of ['root', 'reply']) {
@@ -112,11 +122,11 @@ test('image and emote decisions are independent within separate root and reply p
 });
 
 test('production media frequencies allow either, both or neither and favor emotes in replies', () => {
-  assert.equal(defaultLottery.media.images.root.probability, .40);
-  assert.equal(defaultLottery.media.images.reply.probability, .25);
+  assert.equal(defaultLottery.media.images.root.probability, .65);
+  assert.equal(defaultLottery.media.images.reply.probability, .35);
   assert.equal(defaultLottery.media.emotes.root.probability, .40);
   assert.equal(defaultLottery.media.emotes.reply.probability, .65);
-  for (const [role, imageRate, emoteRate] of [['root', .40, .40], ['reply', .25, .65]]) {
+  for (const [role, imageRate, emoteRate] of [['root', .65, .40], ['reply', .35, .65]]) {
     const states = new Set(); let images = 0, emotes = 0, both = 0;
     for (let index = 0; index < 3000; index++) {
       const choice = drawPostChoices({ seed: 'media-distribution-' + index, postId: 'media-' + role,
@@ -140,7 +150,7 @@ const mediaPosts = () => [
 ];
 
 test('suggestions fill each nonempty ordinary-image pool without replacing independent emote draws', () => {
-  const lottery = structuredClone(defaultLottery);
+  const lottery = originalPoolLottery();
   for (const role of ['root', 'reply']) {
     lottery.media.images[role].probability = 0;
     lottery.media.emotes[role] = { probability: 1, counts: [{ weight: 1, min: 3, max: 3 }] };
@@ -180,12 +190,12 @@ test('ordinary-image progress counts posts once and excludes all declared or sha
   posts[1].media = Array.from({ length: 4 }, (_, index) => ({ src: `posts/2026/11/pool-root-b/media/photo-${index}.webp`, kind: 'image' }));
   posts[2].media = [{ src: 'posts/2026/11/older-root/media/reaction.webp', kind: 'emote' }];
   posts[3].media = [{ src: 'posts/2026/11/pool-root-a/media/unclassified.webp' }];
-  const pools = imagePoolProgress({ posts });
+  const pools = imagePoolProgress({ posts, lottery: originalPoolLottery() });
   assert.deepEqual(pools.root.actualImagePostIds, ['pool-root-b']);
   assert.equal(pools.root.missingPosts, 0);
   assert.deepEqual(pools.reply.actualImagePostIds, []);
   assert.equal(pools.reply.missingPosts, 1);
-  const stricter = structuredClone(defaultLottery); stricter.media.images.root.minimumPosts = 3;
+  const stricter = originalPoolLottery(); stricter.media.images.root.minimumPosts = 3;
   assert.equal(imagePoolProgress({ posts, lottery: stricter }).root.minimumPosts, 2, 'the minimum cannot exceed the actual pool size');
 });
 
@@ -342,5 +352,72 @@ test('weighted root budgets preserve old budget fingerprints, author selection a
   }
   for (const rootBudget of [{ bands: [] }, { bands: [{ weight: 1, min: -1, max: 2 }] }, { bands: [{ weight: 1, min: 0, max: 21 }] }, { bands: [{ weight: 0, min: 0, max: 2 }] }, { bands: [{ weight: 1, min: 0, max: 2 }], min: 1, max: 10 }]) {
     assert.throws(() => validateLottery({ ...structuredClone(defaultLottery), rootBudget }), /root budget/);
+  }
+});
+
+
+test('enforced media draws set real per-pool quantities while preserving movable stable candidates', () => {
+  const posts = Array.from({ length: 20 }, (_, i) => ({ id: 'quota-post-' + String(i).padStart(2, '0'), replyTo: i < 8 ? null : 'quota-post-00', media: [] }));
+  const lottery = structuredClone(defaultLottery), seed = 'quota-replay';
+  const first = suggestPostPresentation({ seed, posts, lottery });
+  assert.deepEqual(suggestPostPresentation({ seed, posts: [...posts].reverse(), lottery }).imagePools, first.imagePools);
+  assert.deepEqual(suggestPostPresentation({ seed, posts: [...posts].reverse(), lottery }).images, first.images);
+  for (const role of ['root', 'reply']) {
+    const pool = posts.filter(post => (post.replyTo === null ? 'root' : 'reply') === role);
+    const imageDraws = pool.filter(post => drawPostChoices({ seed, postId: post.id, replyTo: post.replyTo, lottery }).image !== 'none').length;
+    const emoteDraws = pool.filter(post => drawPostChoices({ seed, postId: post.id, replyTo: post.replyTo, lottery }).emoteCount > 0).length;
+    assert.equal(first.imagePools[role].minimumPosts, Math.max(lottery.media.images[role].minimumPosts, Math.ceil(pool.length * lottery.media.images[role].minimumShare), imageDraws));
+    assert.equal(first.emotePools[role].minimumPosts, Math.max(lottery.media.emotes[role].minimumPosts, Math.ceil(pool.length * lottery.media.emotes[role].minimumShare), emoteDraws));
+    assert.ok(first[role + 'ImagePostIds'].length >= first.imagePools[role].minimumPosts);
+    assert.equal(first.lifePhotoPostIds.filter(id => first.imagePools[role].postIds.includes(id)).length, first.imagePools[role].minimumLifePhotoPosts);
+  }
+  assert.ok(first.images.every(image => ['life-photo', 'photo', 'screenshot', 'illustration'].includes(image.type)));
+  assert.throws(() => imagePoolProgress({ posts, lottery }), /saved seed/);
+  assert.throws(() => emotePoolProgress({ posts, lottery }), /saved seed/);
+  const quantities = new Set(Array.from({ length: 30 }, (_, i) => suggestPostPresentation({ seed: 'quota-varies-' + i, posts, lottery }).imagePools.root.minimumPosts));
+  assert.ok(quantities.size > 1, 'drawn quantities can rise above the fractional floor');
+});
+
+test('new media minima handle empty and one-post pools and cannot substitute emotes or repeated image sources', () => {
+  const seed = 'quota-small', lottery = structuredClone(defaultLottery);
+  const empty = suggestPostPresentation({ seed, posts: [], lottery });
+  for (const role of ['root', 'reply']) {
+    assert.equal(empty.imagePools[role].minimumPosts, 0);
+    assert.equal(empty.imagePools[role].minimumLifePhotoPosts, 0);
+    assert.equal(empty.emotePools[role].minimumPosts, 0);
+  }
+  const posts = [{ id: 'small-root', replyTo: null, media: [{ src: 'assets/emotes/l0/huh.webp', kind: 'emote' }] }];
+  const small = suggestPostPresentation({ seed, posts, lottery });
+  assert.equal(small.imagePools.root.minimumPosts, 1);
+  assert.equal(small.imagePools.root.missingPosts, 1);
+  assert.equal(small.imagePools.root.minimumLifePhotoPosts, 1);
+  assert.equal(small.emotePools.root.missingPosts, 0);
+  const src = 'posts/2026/11/small-root/media/lunch.webp';
+  posts[0].media.push({ src, kind: 'image' });
+  posts.push({ id: 'small-root-two', replyTo: null, media: [{ src, kind: 'image' }] });
+  let pools = imagePoolProgress({ seed, posts, lottery, mediaReviews: [{ postId: 'small-root', src, type: 'life-photo', scene: '桌边随手拍的午饭' }, { postId: 'small-root-two', src, type: 'life-photo', scene: '同一张午饭照片' }] });
+  assert.equal(pools.root.actualImagePostIds.length, 1, 'one shared file cannot fill two image-bearing slots');
+  assert.equal(pools.root.actualLifePhotoPostIds.length, 1);
+  assert.equal(pools.root.missingPosts, 1);
+  pools = imagePoolProgress({ seed, posts, lottery, mediaReviews: [{ postId: 'small-root', src: 'different.webp', type: 'life-photo', scene: '不对应实际图片' }] });
+  assert.equal(pools.root.actualLifePhotoPostIds.length, 0);
+  const legacy = originalPoolLottery();
+  assert.equal(imagePoolProgress({ posts, lottery: legacy }).root.actualImagePostIds.length, 2, 'old snapshots retain their former counting contract');
+  assert.equal(emotePoolProgress({ posts, lottery: legacy }).root.minimumPosts, 0);
+});
+
+test('media quota and diversity settings reject malformed optional parameters', () => {
+  for (const mutate of [
+    lottery => { lottery.media.images.root.minimumShare = 1.1; },
+    lottery => { lottery.media.images.root.lifePhotoShare = -0.1; },
+    lottery => { lottery.media.images.reply.enforceDraw = 'true'; },
+    lottery => { lottery.media.emotes.root.minimumPosts = -1; },
+    lottery => { lottery.media.emotes.reply.minimumShare = NaN; },
+    lottery => { lottery.media.emotes.reply.enforceDraw = 1; },
+    lottery => { lottery.diversity.recentUpdates = 0; },
+    lottery => { lottery.diversity.extra = true; }
+  ]) {
+    const lottery = structuredClone(defaultLottery); mutate(lottery);
+    assert.throws(() => validateLottery(lottery), /image|emote|diversity/);
   }
 });

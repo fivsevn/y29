@@ -34,7 +34,7 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 ## 填写当前更新
 
-在 `operation.json` 中填写 `research`、`posts`、适用的 `reviews` 和[研究补充结果](#研究补充)。其余自动字段由工具管理。工具汇集材料后，执行者实际读完 `reading.md`，再开展观察与写作。
+在 `operation.json` 中填写 `research`、`posts`、适用的 `reviews`、[配图与整轮审读](#生成并归档配图)及[研究补充结果](#研究补充)。其余自动字段由工具管理。工具汇集材料后，执行者实际读完 `reading.md`，再开展观察与写作。
 
 `research` 每项记录一个实际读到的公开页面：
 
@@ -155,6 +155,8 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 
 策划者从 `editor` 提示的本人背景资料选取当事人已知的片段，补入单条 `writer`；临时路人的当前处境也在这一步补齐。每写完一条，保存草稿及其 `reviews` 审读项，再获取下一条材料。完整 `reading.md` 供策划者核对资料；操作文件保留全部草稿与研究记录。命令中的 ID 替换为实际当前操作编号，回复目标使用草稿或归档中已有的帖号。
 
+启用整轮对照的操作，`editor.recentUpdates` 提供最近几轮完整发言与媒体，`editor.currentPosts` 提供本轮草稿，只供策划者按[审读方法](writing.md#审读)检查重复。单条写作者继续使用独立的 `writer`，避免从整批稿件学到同一种口吻。
+
 ## 生成并归档配图
 
 构思发言时按[配图](writing.md#配图)统筹图片用途；完成本次条数抽取与实际 `posts` 后，再用当前工作目录执行：
@@ -163,7 +165,7 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 node lucifer0/tools/update.js suggest --work /outside/work
 ```
 
-分池配置下，命令分别返回 `rootImagePostIds`、`replyImagePostIds` 和表情建议 `emotes`；`imagePostIds` 汇集两类普通图片候选，`imagePools` 分列候选、下限、实际已带普通图片的发言及缺口。结合已规划的用途，按[配图规则](writing.md#配图)完成图片与正文；表情素材从[研究-Meme](../environment/research-meme.md)进入原页选用。按[配图审读](writing.md#配图)查看实际文件，把采用结果填回操作文件。基础赞数结合[研究-评论与点赞](../environment/research-comments.md#点赞怎样形成差异)审定后填写。
+命令返回普通图候选、生活照片候选与表情候选，以及 `imagePools`、`emotePools` 的完成量和缺口；字段与抽取含义见[抽签规则](lottery.md#图片与表情抽取)。执行者须实际运行命令并读清本轮要求，按[配图规则](writing.md#配图)完成图片与正文；表情使用写作输入的公共清单或从[研究-Meme](../environment/research-meme.md)进入原页选用。打开实际图片审读后，把采用结果填回操作文件。基础赞数结合[研究-评论与点赞](../environment/research-comments.md#点赞怎样形成差异)审定后填写。
 
 采用新分池配置的操作，每个 `media` 项显式填写 `kind`：普通图片为 `"image"`，表情包或反应图为 `"emote"`。例如：
 
@@ -184,6 +186,27 @@ node lucifer0/tools/update.js suggest --work /outside/work
 
 素材获取或生成受限时，保留当前操作，记录实际完成状态和具体原因，后续沿原操作接续。普通图片的缺口不能用表情顶替。`media` 按已取得、已检查的实际文件登记。
 
+启用生活照片配额的操作，在私有 `mediaReviews` 中为每张实际普通图填写一项，不给表情填写，也不把这些字段放入公开帖子：
+
+```json
+{ "postId": "本轮帖号", "src": "posts/2026/11/根帖号/media/scene.webp", "type": "life-photo", "scene": "晚饭吃到一半，从座位上用手机斜拍碗沿，顶灯偏冷，旁边露出餐巾和衣袖。" }
+```
+
+`type` 取 `life-photo`（生活照片）、`photo`（其他照片）、`screenshot` 或 `illustration`；`scene` 写实际画面与取景，按[配图定义](writing.md#配图)分类。工具核对逐张记录与真实引用，生活照片额度只认可对应实际普通图的记录。文件重复字节不能凑不同普通图名额。分类由执行者看图判断，工具不自动识别照片语义或 AI 痕迹。
+
+完成全部文字、媒体、分类和赞数后，再运行 `suggest`，按[整轮审读](writing.md#审读)对照 `recentUpdates`、`currentPosts` 和实际图片。把返回的 `reviewBasis` 两个摘要原样写入私有 `diversityReview`，并填写 `content`、`images` 两项具体审读说明：前者记本轮如何处理题材、叙述路线与口吻趋同，保留了哪些随口、敷衍或低信息表达；后者记实际画面、取景及与近期配图的差异。说明仅记录真实审读，不写统一的“已通过”。
+
+```json
+"diversityReview": {
+  "postsDigest": "复制 suggest 返回的 postsDigest",
+  "historyDigest": "复制 suggest 返回的 historyDigest",
+  "content": "填写本轮具体审读情况",
+  "images": "填写实际终稿的看图结果"
+}
+```
+
+正文、媒体引用或分类记录变化后重新审读并取得摘要；历史变化时先沿原操作 `prepare` 补读，再重新对照。摘要绑定草稿、分类及近期归档，图片文件本身被替换时也须重新打开终稿看图。PNG 等格式转换由导入器同步迁移分类路径，不需要手工篡改摘要。所有要求完成后再导入，不删配置、不重抽帖号来降低缺口。旧操作沿其已保存的配置继续，新规则在后续新操作自动采用。
+
 ## 导入与上线
 
 `posts` 为空时，先核对本轮资料变更。有变更时完成本节的仓库检查、提交与线上核验，再执行 `node lucifer0/tools/update.js finish --work /outside/work`；资料沿用时直接执行该命令。工作目录使用工具输出的实际位置。
@@ -196,7 +219,7 @@ node lucifer0/tools/publish.js validate
 node build.js
 ```
 
-导入器核对当前更新、新主帖数、逐串回复额度、整体上限、账号权限、资料变化、观察记录、帖子编号、回复关系、时间和媒体。新分池操作还分别核对本轮主帖、回复的实际普通图片采用量是否达到[配图下限](writing.md#配图)；只填表情的轮次不能通过。资料在创作期间发生变化时，用原工作目录重新执行 `prepare`，读清变化并重新审读原草稿。
+导入器核对当前更新、新主帖数、逐串回复额度、整体上限、账号权限、资料变化、观察记录、帖子编号、回复关系、时间和媒体；按保存配置分别核对普通图、生活照片、表情的实际完成量和整轮审读摘要，缺项时停止导入。计算规则见[媒体抽签](lottery.md#图片与表情抽取)。资料在创作期间发生变化时，用原工作目录重新执行 `prepare`，读清变化并重新审读原草稿。
 
 帖子 Markdown 是正文来源：
 
@@ -256,3 +279,4 @@ node lucifer0/tools/update.js cancel --work /outside/work
 工具按当前操作的未完成写入记录逐一核对，只撤回其中仍与记录吻合、尚未进入 Git 的帖子文件。既有帖子、配图和手工改动继续保留；发现文件冲突时保留现场并报告具体路径。
 
 成功撤回后，原操作编号、抽签与观察继续保留，草稿清空，阅读材料刷新。沿同一操作重写、审读并导入。撤回中途被打断时，可重复执行原命令。已经完成归档的正文按旧帖修正流程处理。
+

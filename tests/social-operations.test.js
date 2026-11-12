@@ -15,6 +15,7 @@ const productionLottery = structuredClone(rawProductionLottery);
 delete productionLottery.media;
 productionLottery.image = [{ value: 'none', weight: 72 }, { value: 'photo', weight: 14 }, { value: 'screenshot', weight: 8 }, { value: 'meme', weight: 6 }];
 delete productionLottery.researchMaintenance;
+delete productionLottery.diversity;
 productionLottery.rootBudget = { min: 1, max: 10 };
 const defaultLottery = structuredClone(productionLottery);
 delete defaultLottery.discussion;
@@ -96,6 +97,12 @@ function mediaLottery() {
   const lottery = structuredClone(rawProductionLottery);
   delete lottery.discussion;
   delete lottery.researchMaintenance;
+  delete lottery.diversity;
+  for (const role of ['root', 'reply']) {
+    for (const key of ['minimumShare', 'enforceDraw', 'lifePhotoShare']) delete lottery.media.images[role][key];
+    lottery.media.images[role].minimumPosts = 1;
+    for (const key of ['minimumPosts', 'minimumShare', 'enforceDraw']) delete lottery.media.emotes[role][key];
+  }
   lottery.rootBudget = { min: 1, max: 10 };
   lottery.authorKind = [{ value: 'guest', weight: 1 }];
   return lottery;
@@ -1103,6 +1110,124 @@ test('new media updates reject missing kinds and copied catalog emotes classifie
   await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
 });
 
+test('current media policy blocks zero emotes, all illustrations and stale reviews before ingest, then preserves reviewed PNG conversion', async t => {
+  const lottery = mediaLottery();
+  lottery.diversity = { recentUpdates: 3 };
+  for (const role of ['root', 'reply']) {
+    Object.assign(lottery.media.images[role], { probability: 0, minimumShare: 1, enforceDraw: true, lifePhotoShare: 1 });
+    Object.assign(lottery.media.emotes[role], { probability: 0, minimumPosts: 1, minimumShare: 1, enforceDraw: true });
+  }
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(8) });
+  const entries = [post('reviewed-root', 'guest-reviewed-root', f.now), post('reviewed-reply', 'guest-reviewed-reply', f.now, 'reviewed-root')];
+  entries[0].text = '啊？？'; entries[1].text = '哦';
+  const media = await mediaFiles(f, entries), replyImage = { ...media.image, src: media.image.src.replace('scene.webp', 'another.png'), alt: 'Synthetic different scene' };
+  await sharp({ create: { width: 8, height: 7, channels: 3, background: '#876543' } }).png().toFile(join(f.root, replyImage.src));
+  entries[0].media = [media.image]; entries[1].media = [replyImage];
+  const prepared = await prepareUpdate(f.options);
+  await draft(prepared, f.now, entries);
+  const save = async update => {
+    const operation = await readJSON(prepared.operationPath);
+    update(operation);
+    await writeFile(prepared.operationPath, JSON.stringify(operation));
+  };
+  const reject = expected => assert.rejects(ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true }), expected);
+  await reject(/matching media review/);
+  await save(operation => { operation.mediaReviews = entries.flatMap(entry => entry.media.map(image => ({ postId: entry.id, src: image.src, type: 'illustration', scene: 'Synthetic hand-drawn diagram' }))); });
+  await reject(/root life-photo pool/);
+  await save(operation => { operation.mediaReviews.forEach(review => { review.type = 'life-photo'; review.scene = 'Synthetic everyday photograph, close phone framing'; }); });
+  await reject(/root emote pool/);
+  await save(operation => { operation.posts[0].media.push(media.emote); });
+  await reject(/reply emote pool/);
+  await save(operation => { operation.posts[1].media.push(media.emote); });
+  await reject(/current diversity review basis/);
+  const suggestion = await suggestUpdatePresentation(f.options);
+  assert.equal(suggestion.imagePools.root.missingPosts, 0);
+  assert.equal(suggestion.imagePools.reply.missingLifePhotoPosts, 0);
+  assert.equal(suggestion.emotePools.reply.missingPosts, 0);
+  const brief = await briefUpdatePost({ ...f.options, postId: entries[0].id });
+  assert.deepEqual(brief.editor.imagePools, suggestion.imagePools);
+  assert.deepEqual(brief.editor.emotePools, suggestion.emotePools);
+  assert.deepEqual(brief.editor.reviewBasis, suggestion.reviewBasis);
+  assert.equal(brief.writer.recentUpdates, undefined);
+  await save(operation => { operation.diversityReview = { ...suggestion.reviewBasis, content: '两个作者只各留一个短反应，保留低信息发言，未补成解释。', images: '主帖与回复使用不同场景照片，分别核对近景取景与物件状态。' }; });
+  await save(operation => { operation.posts[1].text = '哦哦'; });
+  await reject(/current diversity review basis/);
+  await save(operation => { operation.posts[1].text = '哦'; });
+  await save(operation => { operation.mediaReviews[0].scene += ' changed'; });
+  await reject(/current diversity review basis/);
+  await save(operation => { operation.mediaReviews[0].scene = operation.mediaReviews[0].scene.replace(/ changed$/, ''); });
+  await save(operation => { operation.mediaReviews.push({ ...operation.mediaReviews[0], src: media.image.src.replace('scene.webp', 'unused.webp') }); });
+  await reject(/matching media review/);
+  await save(operation => { operation.mediaReviews.pop(); });
+  const originalReplyBytes = await readFile(join(f.root, replyImage.src));
+  await writeFile(join(f.root, replyImage.src), await readFile(join(f.root, media.image.src)));
+  await reject(/Repeated ordinary-image bytes/);
+  await writeFile(join(f.root, replyImage.src), originalReplyBytes);
+  const outcome = await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  assert.equal(outcome.count, 2);
+  const converted = await readJSON(prepared.operationPath);
+  assert.equal(converted.mediaReviews[1].src, replyImage.src.replace('.png', '.webp'));
+  assert.equal(converted.diversityReview.postsDigest, suggestion.reviewBasis.postsDigest);
+  const published = (await loadContent(f.root)).feed.posts.filter(entry => entries.some(draft => draft.id === entry.id));
+  assert.equal(published.length, 2);
+  assert.deepEqual(published.map(entry => entry.text).sort(), ['哦', '啊？？'].sort(), 'media requirements preserve low-information utterances');
+  assert.ok(published.every(entry => !['mediaReviews', 'diversityReview', 'reviewBasis', 'scene', 'type'].some(key => Object.hasOwn(entry, key))));
+  assert.equal((await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true })).status, 'already-archived');
+});
+
+test('a growing batch cannot publish with only the old one-root and one-reply image minimums', async t => {
+  const lottery = mediaLottery();
+  Object.assign(lottery.media.images.root, { probability: 0, minimumPosts: 1, minimumShare: 1, enforceDraw: true, lifePhotoShare: 0 });
+  Object.assign(lottery.media.images.reply, { probability: 0, minimumPosts: 1, minimumShare: 1, enforceDraw: true, lifePhotoShare: 0 });
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(8) });
+  const entries = [post('quota-root-one', 'guest-quota-one', f.now), post('quota-root-two', 'guest-quota-two', f.now),
+    post('quota-reply-one', 'guest-quota-three', f.now, 'quota-root-one'), post('quota-reply-two', 'guest-quota-four', f.now, 'quota-root-one')];
+  const media = await mediaFiles(f, entries), second = { ...media.image, src: media.image.src.replace('scene.webp', 'second.webp') };
+  await sharp({ create: { width: 9, height: 8, channels: 3, background: '#998877' } }).webp().toFile(join(f.root, second.src));
+  entries[0].media = [media.image]; entries[2].media = [second];
+  const prepared = await prepareUpdate(f.options);
+  await draft(prepared, f.now, entries);
+  const operation = await readJSON(prepared.operationPath);
+  operation.mediaReviews = entries.flatMap(entry => entry.media.map(image => ({ postId: entry.id, src: image.src, type: 'photo', scene: 'Synthetic distinct ordinary picture' })));
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  const suggestion = await suggestUpdatePresentation(f.options);
+  assert.equal(suggestion.imagePools.root.minimumPosts, 2);
+  assert.equal(suggestion.imagePools.reply.minimumPosts, 2);
+  assert.equal(suggestion.imagePools.root.missingPosts, 1);
+  assert.equal(suggestion.imagePools.reply.missingPosts, 1);
+  await assert.rejects(ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true }), /root ordinary-image pool needs at least 2/);
+});
+
+test('diversity context exposes exactly the recent rounds only to the editor and invalidates a changed history', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.diversity = { recentUpdates: 3 };
+  const f = await fixture(t, 4, { lottery });
+  const appendHistory = async index => {
+    const id = 'l0-2026010100000' + index + '-aaaaaaa' + index;
+    const entry = post(id + '-root', 'person-0', f.now - DAY * (6 - index));
+    await writeThreadBatch(f.root, { version: 1, id, mode: 'daily', posts: [entry] }, (await loadContent(f.root)).batches);
+    return id;
+  };
+  const ids = [];
+  for (let index = 1; index <= 4; index++) ids.push(await appendHistory(index));
+  const prepared = await prepareUpdate(f.options), entry = post(prepared.id + '-new', 'guest-one-new', f.now);
+  await draft(prepared, f.now, [entry]);
+  const suggestion = await suggestUpdatePresentation(f.options);
+  assert.deepEqual(suggestion.recentUpdates.map(update => update.id), ids.slice(1).reverse());
+  assert.deepEqual(suggestion.currentPosts, [entry]);
+  const brief = await briefUpdatePost({ ...f.options, postId: entry.id });
+  assert.deepEqual(brief.editor.reviewBasis, suggestion.reviewBasis);
+  assert.equal(brief.writer.recentUpdates, undefined, 'global comparison is editorial context, not a voice model');
+  const operation = await readJSON(prepared.operationPath);
+  operation.diversityReview = { ...suggestion.reviewBasis, content: '本条保留未整理的短发言，检查没有沿用前三轮整条叙述路线。', images: '本条没有普通图片，核对最近画面并保留当前无图状态。' };
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  const batch = { version: 1, id: operation.id, mode: 'daily', posts: operation.posts };
+  await validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath });
+  await appendHistory(5);
+  await prepareUpdate(f.options);
+  await assert.rejects(validateUpdateForBatch(batch, { ...f.options, contextPath: prepared.operationPath }), /current diversity review basis/);
+});
+
 test('new media pools cannot count archived picture posts mixed into a fresh operation', async t => {
   const f = await fixture(t, 4, { lottery: mediaLottery() });
   const historical = (await loadContent(f.root)).feed.posts.find(entry => entry.id === 'history-entry');
@@ -1939,3 +2064,4 @@ test('ordinary briefs in case-enabled rounds are immediately writable and saved 
   assert.deepEqual((await readJSON(oldPrepared.operationPath)).plan, saved.plan);
   assert.equal((await finishUpdate(old.options)).status, 'no-posts');
 });
+

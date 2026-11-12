@@ -195,12 +195,19 @@ async function saveMediaDraft(path, expected, posts) {
   const absolute = resolve(path), stat = await lstat(absolute);
   if (!stat.isFile() || stat.isSymbolicLink()) fail('The media draft must be a regular file');
   if (stableJSON(await json(absolute)) !== stableJSON(expected)) fail('The draft changed during media conversion; review and retry');
+  const paths = new Map();
+  for (const post of expected.posts) {
+    const converted = posts.find(item => item.id === post.id);
+    for (const [index, image] of (post.media ?? []).entries()) paths.set(post.id + '\0' + image.src, converted?.media?.[index]?.src ?? image.src);
+  }
+  const mediaReviews = expected.mediaReviews?.map(review => ({ ...review, src: paths.get(review.postId + '\0' + review.src) ?? review.src }));
   const temporary = absolute + '.' + randomUUID() + '.tmp';
   try {
-    await writeFile(temporary, JSON.stringify({ ...expected, posts }, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+    await writeFile(temporary, JSON.stringify({ ...expected, posts, ...(mediaReviews ? { mediaReviews } : {}) }, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
     await rename(temporary, absolute);
   } finally { await rm(temporary, { force: true }); }
   expected.posts = posts;
+  if (mediaReviews) expected.mediaReviews = mediaReviews;
 }
 
 
@@ -343,3 +350,4 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
   await recordCases();
   return { status: 'archived', id: batch.id, count: batch.posts.length, path };
 }
+

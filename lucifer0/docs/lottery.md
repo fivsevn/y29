@@ -12,6 +12,7 @@
 | `replyLottery.maxReplies`、`maxBatchPosts` | 分别限制一轮新增回复总量和原流程发言总量（额外三条案例主帖另计）。 |
 | `lottery.discussion.minimumNegativeShare` | 实际采用发言的负面最低占比；计算与提示见[负面与回复提示](#负面与回复提示)。 |
 | `lottery.sampling` | 为各类素材独立抽取列表起点 `offset` 与连续读取数量 `count`，在准备结果的 `researchWindows` 中返回。 |
+| `lottery.diversity.recentUpdates` | 策划输入提供最近多少轮归档发言，供本轮内容、口吻与画面对照；审读方法见[写作与改编](writing.md#审读)，保存方式见[执行与发布](publishing.md#生成并归档配图)。 |
 
 每轮表示一次更新操作。原流程主帖额度可以为零，仍可接续旧串或补充研究；启用案例改编的新轮另外完成三条案例主帖。先从已有材料决定实际主帖，再从最新发言与明确后续中选择要接续的旧串，逐串抽取本轮新增回复额度。每条楼中楼计入所属根串；累计楼层随多轮更新增长。
 
@@ -62,13 +63,19 @@
 
 | 参数 | 含义 |
 | --- | --- |
-| `media.images.root.probability`、`media.images.reply.probability` | 分别对每条主帖、回复独立抽取是否建议普通图片；这是出现概率，不是全轮固定比例。 |
+| `media.images.root.probability`、`media.images.reply.probability` | 分别对每条主帖、回复独立抽取普通图片机会；启用 `enforceDraw` 时，命中条数也构成本池完成量下限。 |
 | `media.images.root.types`、`media.images.reply.types` | 各自按权重抽取 `photo`、`screenshot` 或 `illustration`，用于构思现场照片、截图、作品图或示意字图。 |
 | `media.images.root.minimumPosts`、`media.images.reply.minimumPosts` | 各非空池实际带普通图片的发言下限，执行方式见[配图](writing.md#配图)。 |
+| `media.images.*.minimumShare` | 本池实际发言数乘此比例后向上取整，作为随条数增长的下限。 |
+| `media.images.*.enforceDraw`、`media.emotes.*.enforceDraw` | 将本池逐帖抽中的条数纳入硬下限；承载帖子可以调整，完成条数不能因改选而减少。 |
+| `media.images.*.lifePhotoShare` | 普通图所需条数乘此比例后向上取整，得到本池必须带生活照片的条数；按实际文件的私有审读分类核对，定义见[配图](writing.md#配图)。 |
 | `media.emotes.root.probability`、`media.emotes.reply.probability` | 分别抽取主帖、回复的表情机会，与同条普通图片抽取互不替代。 |
 | `media.emotes.root.counts`、`media.emotes.reply.counts` | 抽中表情机会后，再按档位权重取本条建议张数；未抽中时为零。 |
+| `media.emotes.*.minimumPosts`、`media.emotes.*.minimumShare` | 表情独立使用的绝对下限与比例下限；计算与普通图相同，重复使用公共表情可以计数。 |
 
-`brief` 返回本条的普通图片建议与独立表情数量，原始抽取随操作和帖号保持稳定。最终实际发言确定后，`suggest` 分别整理主帖与回复的普通图片候选；某池候选少于配置下限时，用该池的独立种子补选，不固定取首条。补选只形成承载图片的候选，不改本条原抽签，也不改作者、时间和正文。根据实际话头调整承载图片的草稿后，仍须核对该池的真实采用量。
+`brief` 返回本条建议及当前池的完成情况，原始抽取随操作和帖号保持稳定。最终实际发言确定后，`suggest` 为普通图与表情分别整理候选；候选不足时，用各自的独立种子补选，不固定取首条。本池所需条数为绝对下限、比例下限及启用硬抽签后的命中条数三者最大值，最多为本池实际条数，空池为零。案例主帖及其回复同样计入实际发言。工具分别返回 `imagePools`、`emotePools` 的所需、已完成和缺口，以及 `images` 的媒介建议、`lifePhotoPostIds` 的生活照片候选。
+
+补选不改作者、时间和正文，也不重新抽取原条件；可以按实际话头换承载帖。普通图按不同实际来源计数，生活照片由匹配的 `mediaReviews` 分类计数，导入时再核对文件与重复字节，表情与普通图互不抵扣。最终采用量必须满足所需条数。新字段只用于保存了这些配置的新操作；旧快照沿原规则恢复，不重抽已有更新。
 
 ### 负面与回复提示
 
@@ -108,3 +115,4 @@
 新操作保存种子、配置、抽中的候选与本次时间窗口；时间窗口为准备时刻之前的24小时。主帖、逐串回复、逐条条件与配图建议使用各自独立的抽取标识，同一操作及帖号重复执行时沿用结果。配置调整用于后续新操作，已保存操作按原快照继续；资料更新后重新准备会刷新阅读内容。已有快照缺少 `discussion` 或 `replyAuthor` 的操作沿原结果完成。保留旧 `image` 配置的操作仍沿原先混合图片抽取，不补入新的 `media` 配置与下限；新操作采用分池配置，已归档帖子不迁移。
 
 实现集中在 `tools/lottery.js`；`tools/operations.js` 负责读取资料、保存操作与组织流程。当前工作文件和恢复命令见[执行与发布](publishing.md#恢复与修正)。
+
