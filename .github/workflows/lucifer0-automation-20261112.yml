@@ -1,5 +1,5 @@
 name: Lucifer0 automated fresh preparation
-run-name: Lucifer0 prepare 2026-11-12 20-40 ${{ github.run_id }}
+run-name: Lucifer0 verification round 1 ${{ github.run_id }}
 on:
   push:
     branches: [main]
@@ -65,6 +65,13 @@ jobs:
             console.log('===BRIEF_'+id+'_END===');
           }
           await writeFile(w+'briefs.json',JSON.stringify(briefs,null,2)+'\n');
+          const exported={};
+          for(const name of ['operation.json','reading.md','briefs.json']) {
+            const payload=JSON.stringify({content:await readFile(w+name,'utf8'),encoding:'utf-8'});
+            const result=JSON.parse(execFileSync('gh',['api','repos/fivsevn/y29/git/blobs','--input','-'],{input:payload,encoding:'utf8',maxBuffer:4*1024*1024}));
+            exported[name]=result.sha;
+          }
+          console.log('L0_EXECUTION_BLOBS='+JSON.stringify(exported));
           JS
       - uses: actions/upload-artifact@v4
         with:
