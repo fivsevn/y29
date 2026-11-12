@@ -2118,9 +2118,692 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-42dee23e0da15c53",
+      "handle": "guest_fd179015fce1538044fc",
+      "name": "Mio",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c0e403c97ec260ca",
+      "handle": "guest_7250364ea630ff62e70d",
+      "name": "毛豆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-069cf0002499c2ba",
+      "handle": "guest_26cd84bd7c4d7d42eb95",
+      "name": "木木",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-cd470be515c7d4ca",
+      "handle": "guest_f4c77cf2173123d79688",
+      "name": "lea",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4643ccd8f4179d9b",
+      "handle": "guest_499610ef426cba054d91",
+      "name": "K2",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-662e3fb8aa87bb95",
+      "handle": "guest_9b411587623f0625e6b8",
+      "name": "toto",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e8aadd6d006fab39",
+      "handle": "guest_3d00a37b01cf621f7ce5",
+      "name": "YY",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b7112cf2aa4dbe62",
+      "handle": "guest_4fb33519e7c5ec1cea0e",
+      "name": "kiwi",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0c5a2046b14333b9",
+      "handle": "guest_d5dfee39b88e9f36fc92",
+      "name": "阿佑",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d843753018722af4",
+      "handle": "guest_6d546102055ab904c7e1",
+      "name": "一杯水",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-58667c87bd566b3b",
+      "handle": "guest_c3d0243de55609ea5684",
+      "name": "嗯嗯",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3f6704a1511c7df6",
+      "handle": "guest_72c914cdf0ba61fd18cc",
+      "name": "耳朵",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9c88b9b32b1ba6a9",
+      "handle": "guest_896cdda664aaee4537ac",
+      "name": "林檎",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f7d8e87e4a46a00b",
+      "handle": "guest_d93a5118588eb8f611ad",
+      "name": "Haku",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-edd355d098070471",
+      "handle": "guest_a65fa5d52c37829bcfb9",
+      "name": "uki",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-186b710585500ec0",
+      "handle": "guest_f64ab365b88a362c8c18",
+      "name": "小鹿",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c2469abb4fc09708",
+      "handle": "guest_f39d28a431fe3340f4f1",
+      "name": "88_",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2ced7f3088346aa6",
+      "handle": "guest_103c0ea4b85e72b9dc4b",
+      "name": "n7",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1440c19e382be2d7",
+      "handle": "guest_9ce3f046367d7679c413",
+      "name": "一一",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7cc876310feed28f",
+      "handle": "guest_4fd1a29469169f6b4593",
+      "name": "路过",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-73aed99fc7dc9d5c",
+      "handle": "guest_4be99c192a08cc97a365",
+      "name": "小椰",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9c305715bc6b599f",
+      "handle": "guest_ab3acd47aaf1c51cbfd4",
+      "name": "momo",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3dd4d10db3d0b27d",
+      "handle": "guest_a548bf51ffb97ff2ed37",
+      "name": "东东",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-74259952e8044b67",
+      "handle": "guest_2d3b5b6ea2421133941a",
+      "name": "拾柒",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-11",
+      "author": "guest-74259952e8044b67",
+      "createdAt": "2026-11-12T22:13:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "拾柒"
+      },
+      "text": "你们不觉得接电话很恐怖吗\n接起来就什么都不能做了，全身都被锁在跟人讲话这件事里，一边听还得想下面怎么回"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-original-reply-9",
+      "author": "guest-3f6704a1511c7df6",
+      "createdAt": "2026-11-12T22:08:40.925Z",
+      "replyTo": "l0-20261112230605-a2415717-5a3ed64b37c1",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "耳朵"
+      },
+      "text": "我也放过，皮都放蔫了还是酸。最烦的是买的时候给尝的那个很甜，回家再吃就不是那回事。我现在都是剥开先吃一瓣，酸的放旁边，再剥一个，后来几个都摊在那儿。扔了又觉得亏，吃又不想吃，反正下次不买那家的了。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-09",
+      "author": "guest-3dd4d10db3d0b27d",
+      "createdAt": "2026-11-12T22:06:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "东东"
+      },
+      "text": "工作经常打，父母出门不开流量也得打。要说纯聊天，好像是上辈子的事了"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-08",
+      "author": "guest-9c305715bc6b599f",
+      "createdAt": "2026-11-12T22:00:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "momo"
+      },
+      "text": "师傅你做什么工作的，我天天打，超了套餐还得加通话包\n\n运营商也是傻逼，一边分析我通话少，一边推个贵80但只加流量的套餐。你是傻逼还是我是傻逼"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-06",
+      "author": "guest-73aed99fc7dc9d5c",
+      "createdAt": "2026-11-12T21:53:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小椰"
+      },
+      "text": "领导快退休了，什么都非得打电话说，消息不能发吗……"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-05",
+      "author": "guest-7cc876310feed28f",
+      "createdAt": "2026-11-12T21:48:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路过"
+      },
+      "text": "上班天天打╮(╯▽╰)╭"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-04",
+      "author": "guest-1440c19e382be2d7",
+      "createdAt": "2026-11-12T21:44:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一一"
+      },
+      "text": "我爸还给我打，懒得点开别的软件。反正一个月几百分钟也用不完"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-03",
+      "author": "guest-2ced7f3088346aa6",
+      "createdAt": "2026-11-12T21:41:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "n7"
+      },
+      "text": "感觉也没很久"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-phone-02",
+      "author": "guest-c2469abb4fc09708",
+      "createdAt": "2026-11-12T21:38:16.170Z",
+      "replyTo": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "88_"
+      },
+      "text": "给没有智能机的爷爷奶奶打啊"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-f46f6f8b8908",
+      "author": "guest-186b710585500ec0",
+      "createdAt": "2026-11-12T21:37:16.170Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小鹿"
+      },
+      "text": "你们多久没用手机自带那个拨号打过电话了，不算外卖快递骚扰电话。\n我是真的想不起来上一次主动拨号是什么时候了( ﾟ∀。)"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-original-reply-8",
+      "author": "visitor-nu-upper",
+      "createdAt": "2026-11-12T21:31:06.866Z",
+      "replyTo": "l0-20261112230605-a2415717-original-reply-6",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "text": "我那几个放到皮都皱了还酸，留着占地方，懒得吃。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-original-reply-7",
+      "author": "guest-58667c87bd566b3b",
+      "createdAt": "2026-11-12T21:16:01.866Z",
+      "replyTo": "l0-20261112230605-a2415717-original-reply-6",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "嗯嗯"
+      },
+      "text": "我上次放了几天更难吃，酸的还是酸的。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-original-reply-6",
+      "author": "guest-d843753018722af4",
+      "createdAt": "2026-11-12T21:02:05.866Z",
+      "replyTo": "l0-20261112230605-a2415717-5a3ed64b37c1",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一杯水"
+      },
+      "text": "放几天真能甜吗，酸橘子好烦"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-5a3ed64b37c1",
+      "author": "guest-0c5a2046b14333b9",
+      "createdAt": "2026-11-12T20:59:22.866Z",
+      "replyTo": null,
+      "likes": 16,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112230605-a2415717-5a3ed64b37c1/media/sour-oranges.webp",
+          "alt": "水槽旁的塑料袋里放着橘子，台面上有橘子皮，手里拿着剥开的一个。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "阿佑"
+      },
+      "text": "新买的橘子，吃了两个都酸。先放着了。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-8465b3ff191b",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-12T20:45:50.665Z",
+      "replyTo": null,
+      "likes": 32,
+      "canon": "derivative",
+      "media": [],
+      "text": "手机上有没有广告少点的纸牌游戏？我就午后打几局，打完一把就弹广告，太烦了。花几块钱买下来也行。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-a46f05d2a622",
+      "author": "guest-9c88b9b32b1ba6a9",
+      "createdAt": "2026-11-12T19:23:59.667Z",
+      "replyTo": null,
+      "likes": 17,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "林檎"
+      },
+      "text": "让骰子评价自己今天过得怎么样，到底有什么好玩的。底下一排数字，翻下去还是数字，看烦了。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-original-reply-3",
+      "author": "guest-b7112cf2aa4dbe62",
+      "createdAt": "2026-11-12T18:56:47.222Z",
+      "replyTo": "l0-20261112230605-a2415717-513c39533522",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "kiwi"
+      },
+      "text": "我想看点具体怎么用的，翻半天全在聊花了多少钱。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-513c39533522",
+      "author": "guest-e8aadd6d006fab39",
+      "createdAt": "2026-11-12T18:54:31.222Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "YY"
+      },
+      "text": "怎么又有人晒模型用量。一千多刀，知道你用得多了，下面还一堆人帮着算，烦。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-free-02",
+      "author": "guest-edd355d098070471",
+      "createdAt": "2026-11-12T14:55:06.185Z",
+      "replyTo": "l0-20261112230605-a2415717-d140b0883ece",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "uki"
+      },
+      "text": "free 现在也要验证身份了？"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-d140b0883ece",
+      "author": "guest-f7d8e87e4a46a00b",
+      "createdAt": "2026-11-12T14:50:06.185Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Haku"
+      },
+      "text": "随然我也不知道有什么影响，但是 free 账号至少能对话了"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-anime-09",
+      "author": "guest-4643ccd8f4179d9b",
+      "createdAt": "2026-11-12T07:44:45.079Z",
+      "replyTo": "l0-20261112230605-a2415717-case-anime-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "K2"
+      },
+      "text": "我当初看完把他们别的几部也翻出来看了(　ﾟ 3ﾟ)"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-anime-05",
+      "author": "guest-cd470be515c7d4ca",
+      "createdAt": "2026-11-12T07:32:45.079Z",
+      "replyTo": "l0-20261112230605-a2415717-case-anime-04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "lea"
+      },
+      "text": "好看，非常好看"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-anime-04",
+      "author": "guest-069cf0002499c2ba",
+      "createdAt": "2026-11-12T07:28:45.079Z",
+      "replyTo": "l0-20261112230605-a2415717-0313b082ac57",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "木木"
+      },
+      "text": "这部好看吗( ´ﾟДﾟ`)"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-anime-03",
+      "author": "guest-42dee23e0da15c53",
+      "createdAt": "2026-11-12T07:24:45.079Z",
+      "replyTo": "l0-20261112230605-a2415717-case-anime-02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Mio"
+      },
+      "text": "还真是。就那一下，又觉得她有点可怜，烦。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-case-anime-02",
+      "author": "guest-c0e403c97ec260ca",
+      "createdAt": "2026-11-12T07:21:45.079Z",
+      "replyTo": "l0-20261112230605-a2415717-0313b082ac57",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "毛豆"
+      },
+      "text": "她被吸收前喊了妈妈那一下吧"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-0313b082ac57",
+      "author": "guest-42dee23e0da15c53",
+      "createdAt": "2026-11-12T07:17:45.079Z",
+      "replyTo": null,
+      "likes": 28,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Mio"
+      },
+      "text": "针目缝真是看得我烦。我一直想看她赶快退场，看完又老在想会不会有别的结局。\n\n说不上喜欢，就是很在意，想起来难受。有没有这种讨厌又放不下的反派啊"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-original-reply-1",
+      "author": "visitor-pi",
+      "createdAt": "2026-11-12T05:57:03.068Z",
+      "replyTo": "l0-20261112230605-a2415717-0b514b43e38e",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "text": "还知道给你留两口，挺好啊，你还嫌。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-original-reply-2",
+      "author": "guest-662e3fb8aa87bb95",
+      "createdAt": "2026-11-12T05:53:01.193Z",
+      "replyTo": "l0-20261112230605-a2415717-225ff6fedd1f",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "toto"
+      },
+      "text": "我楼下那家直接把糖拌好了，端上来就齁甜。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-225ff6fedd1f",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-12T05:50:53.193Z",
+      "replyTo": null,
+      "likes": 9,
+      "canon": "derivative",
+      "media": [],
+      "text": "甜豆腐脑有什么好吃的，豆腥味没盖住，还弄得那么腻。\n一早上就吃这个。"
+    },
+    {
+      "id": "l0-20261112230605-a2415717-0b514b43e38e",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-12T05:37:47.068Z",
+      "replyTo": null,
+      "likes": 50,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "就剩那两口，吃完能怎么样，非要给我留着。"
+    },
     {
       "id": "l0-20261112174153-117eae41-reply07",
       "author": "guest-f3bea3c29e239399",
