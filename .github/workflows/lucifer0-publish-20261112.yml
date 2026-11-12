@@ -1,5 +1,5 @@
-name: Lucifer0 inspect prepared root author briefs
-run-name: Lucifer0 roots briefing ${{ github.run_id }}
+name: Lucifer0 stage replies from fresh roots
+run-name: Lucifer0 reply plan ${{ github.run_id }}
 on:
   push:
     branches: [main]
@@ -9,7 +9,7 @@ permissions:
   contents: read
   actions: read
 jobs:
-  briefs:
+  replies:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
-      - name: Restore fresh operation and brief all mixed roots
+      - name: Restore stable operation, approved roots and review, draw reply quotas
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -26,23 +26,43 @@ jobs:
           WORK="$HOME/.local/state/y29/lucifer0/current"
           mkdir -p "$WORK"
           gh run download 43142567899 -R fivsevn/y29 -n l0-fresh-preparation-43142567899 -D "$WORK"
+          gh api repos/fivsevn/y29/git/blobs/f8e8f01ffd3d37f1def6a39e8ab15fc667210448 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
+          node --input-type=module - <<'JS'
+          import {readFile,writeFile,mkdir} from 'node:fs/promises';
+          import {join,dirname} from 'node:path';
+          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
+          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
+          if(op.id!=='l0-20261112023707-f9dca533')throw Error('Operation mismatch');
+          const patch=JSON.parse(await readFile(w+'root-patch.json','utf8'));
+          op.research=patch.research;op.posts=patch.posts;op.reviews=patch.reviews;
+          for(const asset of patch.mediaFiles){const path=join('lucifer0',asset.src);await mkdir(dirname(path),{recursive:true});await writeFile(path,asset.content,'utf8');}
+          await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
+          console.log('ROOTS_OK '+op.posts.length);
+          JS
+          node lucifer0/tools/update.js replies > "$WORK/quotas.json"
           node --input-type=module - <<'JS'
           import {readFile} from 'node:fs/promises';
           import {execFileSync} from 'node:child_process';
-          const op=JSON.parse(await readFile(process.env.HOME+'/.local/state/y29/lucifer0/current/operation.json','utf8'));
-          for(const id of op.plan.caseAdaptation.rootOrder){
-            const r=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id],{encoding:'utf8',maxBuffer:25*1024*1024}));
-            const w=r.writer,e=r.editor;
-            const user=w.self||{};
-            const result={
-              id, draft:r.draft,
-              self:{id:user.id,name:user.name,documents:(user.documents||[]).map(d=>({path:d.path,text:d.text?.slice(0,9000)})),recentPosts:(user.recentPosts||[]).slice(0,4)},
-              conditions:w.conditions,discussion:w.discussion && {requiredTone:w.discussion.requiredTone,negativeMotivation:w.discussion.negativeMotivation},
-              case:w.case || w.caseAdaptation || null,
-              editor: e && Object.fromEntries(Object.entries(e).filter(([k])=>!['reading','research','sources','samples'].includes(k)))
-            };
-            console.log('ROOT_BRIEF_START '+id);
-            console.log(JSON.stringify(result));
-            console.log('ROOT_BRIEF_END '+id);
+          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
+          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
+          const quota=JSON.parse(await readFile(w+'quotas.json','utf8'));
+          console.log('REPLY_QUOTAS '+JSON.stringify(quota));
+          const targets=quota.threads.filter(x=>x.replyCount>0);
+          let k=0;
+          for(const t of targets){
+            if(k>=8)break;
+            const id=op.id+'-reply'+String(++k).padStart(2,'0');
+            const b=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id,'--thread',t.rootId],{encoding:'utf8',maxBuffer:25*1024*1024}));
+            const self=b.writer?.self;
+            console.log('REPLY_BRIEF_START '+id);
+            console.log(JSON.stringify({draft:b.draft,root:t.rootId,self:self&&{id:self.id,name:self.name,documents:self.documents?.map(d=>({path:d.path,text:d.text?.slice(0,6500)})),recentPosts:self.recentPosts?.slice(0,3)},conditions:b.writer?.conditions,discussion:b.writer?.discussion&&{requiredTone:b.writer.discussion.requiredTone,negativeMotivation:b.writer.discussion.negativeMotivation},editor:b.editor&&{replyTarget:b.editor.replyTarget,replyAuthor:b.editor.replyAuthor,waitSeconds:b.editor.waitSeconds,emoteCount:b.editor.emoteCount,image:b.editor.image,timing:b.editor.timing}}));
+            console.log('REPLY_BRIEF_END '+id);
           }
           JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: l0-roots-replies-${{ github.run_id }}
+          path: |
+            ~/.local/state/y29/lucifer0/current/operation.json
+            ~/.local/state/y29/lucifer0/current/quotas.json
+          retention-days: 3
