@@ -1,0 +1,38 @@
+name: Inspect prepared Lucifer0 batch
+run-name: Inspect Lucifer0 2026-11-12 case writers
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lucifer0-inspect-20261112.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Download prepared operation and inspect root briefs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          WORK="$HOME/.local/state/y29/lucifer0/current"
+          mkdir -p "$WORK"
+          gh run download 43176593674 -R fivsevn/y29 -n l0-fresh-preparation-43176593674 -D "$WORK"
+          node --input-type=module - <<'JS'
+          import {readFile} from 'node:fs/promises';
+          import {execFileSync} from 'node:child_process';
+          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
+          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
+          const ids=op.plan.caseAdaptation?.rootOrder ?? [];
+          console.log('===OP===', JSON.stringify({id:op.id,createdAt:op.createdAt,plan:op.plan?.caseAdaptation?.rootOrder,researchWindows:op.plan.researchWindows,researchMaintenance:op.researchMaintenance,keys:Object.keys(op)}));
+          for(const id of ids) {
+            const d=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id,'--work',w],{encoding:'utf8',maxBuffer:12000000}));
+            console.log('===CASE_BRIEF=== '+id+' '+JSON.stringify({draft:d.draft,writer:d.writer,editor:d.editor}).slice(0,16000));
+          }
+          JS
