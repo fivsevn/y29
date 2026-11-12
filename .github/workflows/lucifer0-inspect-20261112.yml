@@ -1,5 +1,5 @@
-name: Inspect reviewed Lucifer0 evening replies
-run-name: Inspect Lucifer0 evening reply lottery
+name: Inspect new Lucifer0 root briefs
+run-name: Lucifer0 root brief audit 2026-11-13
 on:
   push:
     branches: [main]
@@ -10,42 +10,36 @@ permissions:
 jobs:
   inspect:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Restore verified operation, stage roots and inspect reply lottery
+      - run: npm ci
+      - name: Restore the fixed preparation and inspect every root
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           WORK="$HOME/.local/state/y29/lucifer0/current"
           mkdir -p "$WORK"
-          gh run download 43220072908 -R fivsevn/y29 -n l0-fresh-preparation-43220072908 -D "$WORK"
-          gh api repos/fivsevn/y29/git/blobs/03eed8eb6360155d3d615f8e6b0e64c41e14bb24 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
+          gh run download 43272001416 -R fivsevn/y29 -n l0-fresh-preparation-43272001416 -D "$WORK"
           node --input-type=module - <<'JS'
-          import {readFile,writeFile} from 'node:fs/promises';
+          import {readFile} from 'node:fs/promises';
           import {execFileSync} from 'node:child_process';
           const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
           const op=JSON.parse(await readFile(w+'operation.json','utf8'));
-          const patch=JSON.parse(await readFile(w+'root-patch.json','utf8'));
-          if(op.id!=='l0-20261112124122-c232611e'||op.posts.length||patch.posts.length!==5)throw Error('Unexpected operation or root count');
-          if(JSON.stringify(op.plan.caseAdaptation.rootOrder)!==JSON.stringify(patch.posts.map(p=>p.id)))throw Error('Unexpected root order');
-          op.research=patch.research;op.researchMaintenance=patch.researchMaintenance;op.posts=patch.posts;op.reviews=patch.reviews;
-          await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
-          const response=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','replies','--work',w],{encoding:'utf8',maxBuffer:1000000}));
-          console.log('===REPLIES==='+JSON.stringify(response));
-          const records=response.threads||response.roots||response.replies||[];
-          if(!Array.isArray(records))throw Error('Unexpected reply lottery format');
-          let seq=0;
-          for(const r of records) {
-            for(let k=0;k<Math.min(3,r.replyCount);k++){
-              seq++;
-              const id=op.id+'-reply'+String(seq).padStart(2,'0');
-              const d=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id,'--thread',r.rootId,'--work',w],{encoding:'utf8',maxBuffer:25000000}));
-              const x=d.writer;
-              console.log('===REPLY_BRIEF==='+JSON.stringify({id,root:r.rootId,draft:d.draft,self:{id:x.self?.id,name:x.self?.name,documents:x.self?.documents?.map(y=>({sourcePath:y.sourcePath,text:y.text?.slice(0,3600)})),recentPosts:x.self?.recentPosts?.slice(0,4)},thread:x.thread,conditions:x.conditions,motivation:x.motivation,discussion:x.discussion?.requiredTone,editor:{time:d.editor?.timing,discussion:d.editor?.discussion},context:x.caseAdaptation}));
-            }
+          if(op.id!=='l0-20261112174153-117eae41'||op.posts.length) throw Error('Wrong preparation');
+          console.log('AUDIT_ROOT_ORDER='+JSON.stringify(op.plan.caseAdaptation.rootOrder));
+          for(const id of op.plan.caseAdaptation.rootOrder) {
+            const d=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id,'--work',w],{encoding:'utf8',maxBuffer:15*1024*1024}));
+            const wri=d.writer,ed=d.editor;
+            const docs=(wri.self?.documents||[]).map(q=>{
+              const t=q.text||'';
+              const p=t.search(/## 网络交往与表达|## 日常表达|## 说话|## 近期/);
+              return {path:q.sourcePath||q.path,overview:t.slice(0,620),voice:p<0?'':t.slice(p,p+1700)};
+            });
+            console.log('AUDIT_ROOT='+JSON.stringify({id,draft:d.draft,writer:{self:wri.self?.name,author:wri.self?.id,documents:docs,conditions:wri.conditions,requiredTone:wri.discussion?.requiredTone,negativeMotivation:wri.discussion?.negativeMotivation,sourceSample:wri.sourceSamples?.selected||null},editor:{timing:ed.timing,replyAuthor:ed.replyAuthor,media:ed.media}}));
           }
           JS
