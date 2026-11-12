@@ -1,51 +1,61 @@
-name: Inspect new Lucifer0 replies lottery
-run-name: Lucifer0 replies audit 2026-11-13
+name: Verify published Lucifer0 forum files
+run-name: Verify live Lucifer0 2026-11-13 batch
 on:
   push:
     branches: [main]
     paths: ['.github/workflows/lucifer0-inspect-20261112.yml']
 permissions:
   contents: read
-  actions: read
 jobs:
-  inspect:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm ci
-      - name: Restore fixed preparation and inspect reply quotas
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Compare current Git tree with live forum feed and every image
         run: |
           set -euo pipefail
-          WORK="$HOME/.local/state/y29/lucifer0/current"
-          mkdir -p "$WORK"
-          gh run download 43272001416 -R fivsevn/y29 -n l0-fresh-preparation-43272001416 -D "$WORK"
-          gh api repos/fivsevn/y29/git/blobs/d7738cea43f35e876e18d1f6f9060150308df3f3 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
           node --input-type=module - <<'JS'
-          import {readFile,writeFile} from 'node:fs/promises';
-          import {execFileSync} from 'node:child_process';
-          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
-          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
-          const patch=JSON.parse(await readFile(w+'root-patch.json','utf8'));
-          if(op.id!==patch.operationId||op.posts.length||JSON.stringify(op.plan.caseAdaptation.rootOrder)!==JSON.stringify(patch.rootOrder))throw Error('Wrong root order');
-          op.posts=patch.posts;op.reviews=patch.reviews;op.research=patch.research;op.mediaReviews=patch.mediaReviews;
-          await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
-          const d=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','replies','--work',w],{encoding:'utf8',maxBuffer:1000000}));
-          console.log('REPLY_DRAW='+JSON.stringify(d));
-          const rows=d.threads||d.roots||d.replies||[];
-          let idx=0;
-          for(const row of rows){
-            if(row.replyCount<1)continue;
-            if(idx>=8)break;
-            idx++;
-            const id=op.id+'-reply'+String(idx).padStart(2,'0');
-            const x=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id,'--thread',row.rootId,'--work',w],{encoding:'utf8',maxBuffer:14000000}));
-            const wt=x.writer;const ed=x.editor;
-            console.log('REPLY_BRIEF='+JSON.stringify({id,root:row.rootId,drawn:row.replyCount,draft:x.draft,writer:{self:wt.self?.name,author:wt.self?.id,conditions:wt.conditions,discussion:wt.discussion?.requiredTone,stance:wt.discussion?.replyStance,thread:wt.thread,visiblePosts:wt.visiblePosts?.slice?.(0,4),motivation:wt.writing},editor:{replyTarget:ed.replyTarget,replyAuthor:ed.replyAuthor,timing:ed.timing,discussion:ed.discussion}}));
+          import {readFile} from 'node:fs/promises';
+          import {createHash} from 'node:crypto';
+          const id='l0-20261112174153-117eae41';
+          const expected=JSON.parse(await readFile('lucifer0/data/feed.json','utf8'));
+          const local=expected.posts.filter(p=>p.id.startsWith(id));
+          if(local.length!==17||local.filter(p=>p.replyTo===null).length!==10||local.filter(p=>p.replyTo!==null).length!==7)
+            throw Error('Local archive does not contain the reviewed 10 root / 7 reply set');
+          const expectedPhotos=local.flatMap(p=>p.media.filter(m=>m.kind==='image'));
+          if(expectedPhotos.length!==11)throw Error('Expected eleven archived images');
+          const base='https://y29.fivsevn.com/lucifer0/';
+          const request=async url=>{
+            let last;
+            for(let attempt=0;attempt<6;attempt++){
+              try {
+                const response=await fetch(url,{cache:'no-store',headers:{'User-Agent':'Lucifer0-live-audit/1.0'}});
+                if(!response.ok)throw Error('HTTP '+response.status);
+                const bytes=Buffer.from(await response.arrayBuffer());
+                if(bytes.length<1000)throw Error('Body shorter than expected');
+                return bytes;
+              }catch(error){last=error;await new Promise(done=>setTimeout(done,5000));}
+            }
+            throw new Error(url+': '+last);
+          };
+          const onlineBytes=await request(base+'data/feed.json');
+          const online=JSON.parse(onlineBytes.toString('utf8'));
+          const actual=online.posts.filter(p=>p.id.startsWith(id));
+          const keys=p=>JSON.stringify(p.map(x=>({id:x.id,text:x.text,replyTo:x.replyTo,media:x.media})).sort((a,b)=>a.id.localeCompare(b.id)));
+          if(keys(actual)!==keys(local))throw Error('Live feed not identical to archived batch');
+          const fingerprints=new Set();
+          for(const media of expectedPhotos){
+            if(!media.src.endsWith('.webp'))throw Error('Archival image was not converted');
+            const bytes=await request(base+media.src);
+            if(bytes.toString('ascii',0,4)!=='RIFF'||bytes.toString('ascii',8,12)!=='WEBP')throw Error('Invalid live WebP '+media.src);
+            const sum=createHash('sha256').update(bytes).digest('hex');
+            if(fingerprints.has(sum))throw Error('Repeated image bytes on live page');
+            fingerprints.add(sum);
+            console.log('LIVE_IMAGE_OK '+media.src+' '+bytes.length);
           }
+          console.log('LUCIFER0_LIVE_VERIFIED '+JSON.stringify({commit:'fd95f88d5c9afedc8023bc68e52c4474737ea9f7',posts:actual.length,roots:10,replies:7,images:expectedPhotos.length}));
           JS
