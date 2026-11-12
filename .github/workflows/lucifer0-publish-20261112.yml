@@ -1,114 +1,48 @@
-name: Publish prepared Lucifer0 forum update
-run-name: Publish L0 posts 2026-11-12
+name: Lucifer0 inspect prepared root author briefs
+run-name: Lucifer0 roots briefing ${{ github.run_id }}
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/lucifer0-publish-20261112.yml'
 permissions:
-  contents: write
+  contents: read
   actions: read
-  pages: write
 jobs:
-  publish:
+  briefs:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm ci
-      - name: Restore operation and approved main threads
+      - name: Restore fresh operation and brief all mixed roots
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           WORK="$HOME/.local/state/y29/lucifer0/current"
           mkdir -p "$WORK"
-          gh run download 43105855927 -R fivsevn/y29 -n l0-preparation-43105855927 -D "$WORK"
-          gh api repos/fivsevn/y29/git/blobs/4c6d6e089c8829f85c7c58b6c67e59c715a9a2f5 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
-          gh api repos/fivsevn/y29/git/blobs/853e03742f1df4c8339740db46e8a4fdf6946167 --jq '.content' | base64 --decode > "$WORK/replies-patch.json"
+          gh run download 43142567899 -R fivsevn/y29 -n l0-fresh-preparation-43142567899 -D "$WORK"
           node --input-type=module - <<'JS'
-          import {readFile,writeFile} from 'node:fs/promises';
-          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
-          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
-          const patch=JSON.parse(await readFile(w+'root-patch.json','utf8'));
-          if(op.id!=='l0-20261111214536-e145d75f')throw Error('Unexpected operation');
-          Object.assign(op,patch);
-          await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
-          console.log('Prepared original roots:',op.posts.length,'research pages:',op.research.length);
-          JS
-      - name: Draw and store reply allowances
-        run: |
-          set -euo pipefail
-          node lucifer0/tools/update.js replies --work "$HOME/.local/state/y29/lucifer0/current"
-      - name: Complete reviewed replies and actual image assets
-        run: |
-          set -euo pipefail
-          node --input-type=module - <<'JS'
-          import {readFile,writeFile,mkdir} from 'node:fs/promises';
-          import {join,dirname} from 'node:path';
-          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
-          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
-          const patch=JSON.parse(await readFile(w+'replies-patch.json','utf8'));
-          const known=new Set(op.posts.map(p=>p.id));
-          for(const p of patch.posts){if(known.has(p.id))throw Error('Duplicate post '+p.id);known.add(p.id);}
-          op.posts.push(...patch.posts);
-          op.reviews.push(...patch.reviews);
-          for(const asset of patch.mediaFiles){
-            const full=join('lucifer0',asset.src);
-            await mkdir(dirname(full),{recursive:true});
-            await writeFile(full,asset.content,'utf8');
+          import {readFile} from 'node:fs/promises';
+          import {execFileSync} from 'node:child_process';
+          const op=JSON.parse(await readFile(process.env.HOME+'/.local/state/y29/lucifer0/current/operation.json','utf8'));
+          for(const id of op.plan.caseAdaptation.rootOrder){
+            const r=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id],{encoding:'utf8',maxBuffer:25*1024*1024}));
+            const w=r.writer,e=r.editor;
+            const user=w.self||{};
+            const result={
+              id, draft:r.draft,
+              self:{id:user.id,name:user.name,documents:(user.documents||[]).map(d=>({path:d.path,text:d.text?.slice(0,9000)})),recentPosts:(user.recentPosts||[]).slice(0,4)},
+              conditions:w.conditions,discussion:w.discussion && {requiredTone:w.discussion.requiredTone,negativeMotivation:w.discussion.negativeMotivation},
+              case:w.case || w.caseAdaptation || null,
+              editor: e && Object.fromEntries(Object.entries(e).filter(([k])=>!['reading','research','sources','samples'].includes(k)))
+            };
+            console.log('ROOT_BRIEF_START '+id);
+            console.log(JSON.stringify(result));
+            console.log('ROOT_BRIEF_END '+id);
           }
-          for(const media of patch.mediaAssignments){
-            const post=op.posts.find(p=>p.id===media.postId);
-            if(!post)throw Error('Missing image post '+media.postId);
-            post.media.push({src:media.src,alt:media.alt,kind:media.kind,fit:media.fit});
-          }
-          await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
-          console.log('Final drafts:',op.posts.length,'images:',patch.mediaAssignments.length,'reviews:',op.reviews.length);
           JS
-          node lucifer0/tools/update.js suggest --work "$HOME/.local/state/y29/lucifer0/current"
-      - name: Ingest reviewed update, validate and build
-        run: |
-          set -euo pipefail
-          WORK="$HOME/.local/state/y29/lucifer0/current"
-          node lucifer0/tools/publish.js ingest "$WORK/operation.json" --reviewed --ai
-          node lucifer0/tools/publish.js validate
-          node build.js
-          npm run check
-          git status --short
-      - name: Publish source packages on main
-        run: |
-          set -euo pipefail
-          git fetch origin main
-          test "$(git rev-parse HEAD)" = "$(git rev-parse FETCH_HEAD)" || { echo 'Main changed, re-evaluate before publishing'; exit 1; }
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- lucifer0 .github/state/lucifer0-case-usage.json
-          git diff --cached --quiet && { echo 'No publication changes'; exit 1; }
-          git commit -m 'Publish Lucifer0 forum update 2026-11-12'
-          git push origin HEAD:main
-      - name: Refresh GitHub Pages for the published source
-        uses: actions/github-script@v7
-        with:
-          script: await github.rest.repos.requestPagesBuild(context.repo);
-      - name: Confirm live feed and archive final operation
-        run: |
-          set -euo pipefail
-          WORK="$HOME/.local/state/y29/lucifer0/current"
-          for i in $(seq 1 32); do
-            if node lucifer0/tools/update.js finish --work "$WORK" > /tmp/lucifer-finish.log 2>&1; then
-              cat /tmp/lucifer-finish.log
-              echo 'Lucifer0 publication finished and feed verified'
-              exit 0
-            fi
-            echo "Feed not verified on attempt $i:"
-            tail -c 800 /tmp/lucifer-finish.log
-            sleep 10
-          done
-          echo 'Publication is committed, but final online verification failed'
-          exit 1
