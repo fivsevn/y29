@@ -32,6 +32,16 @@ try {
     await page.locator('.boardbar h2').filter({ hasText: title }).waitFor();
   };
   const scrollTop = () => page.locator('main').evaluate(element => element.scrollTop);
+  const waitForScrollIdle = () => page.locator('main').evaluate(async main => {
+    let previous = main.scrollTop, stableSince = performance.now();
+    const deadline = stableSince + 5000;
+    while (performance.now() - stableSince < 150) {
+      await new Promise(requestAnimationFrame);
+      if (Math.abs(main.scrollTop - previous) > .1) stableSince = performance.now();
+      previous = main.scrollTop;
+      if (performance.now() > deadline) throw new Error('The reading-area scroll did not settle');
+    }
+  });
   const screenshot = async name => {
     await page.waitForFunction(() => !document.querySelector('#toast.visible'));
     await page.screenshot({ path: join(output, name), fullPage: false, animations: 'disabled' });
@@ -199,21 +209,45 @@ try {
   await page.mouse.move(mainBox.x + mainBox.width / 2, mainBox.y + mainBox.height / 2);
   await page.mouse.wheel(0, 420);
   await page.waitForFunction(() => document.querySelector('main').scrollTop > 0);
+  await waitForScrollIdle();
   check(await scrollTop() > 0, 'wheel input scrolls the app content');
   check(await page.evaluate(() => window.scrollY === 0 && document.documentElement.scrollTop === 0 && document.body.scrollTop === 0), 'outer document does not scroll');
   const framesAfter = await fixedFrames();
   check(framesAfter.every((value, index) => Math.abs(value - framesBefore[index]) < 1), 'header and bottom navigation remain fixed during feed scrolling');
   const visibleLike = await page.locator('main').evaluate(main => {
-    const box = main.getBoundingClientRect();
+    const box = main.getBoundingClientRect(), bar = main.querySelector('.boardbar').getBoundingClientRect();
     return [...main.querySelectorAll('button[data-action="likes"]')].find(button => {
       const rect = button.getBoundingClientRect();
-      return rect.top > box.top + 60 && rect.bottom < box.bottom - 10;
+      return rect.top > Math.max(box.top, bar.bottom) + 10 && rect.bottom < box.bottom - 10;
     })?.dataset.id;
   });
   check(Boolean(visibleLike), 'a like button is visible after scrolling');
-  const beforeLike = await scrollTop();
-  await page.locator(`button[data-action="likes"][data-id="${visibleLike}"]`).click();
-  check(Math.abs(await scrollTop() - beforeLike) < 1, 'liking a scrolled post preserves internal scroll position');
+  const scrolledLike = page.locator(`button[data-action="likes"][data-id="${visibleLike}"]`);
+  await scrolledLike.scrollIntoViewIfNeeded();
+  await waitForScrollIdle();
+  const beforeLike = await scrolledLike.evaluate(button => {
+    const main = button.closest('main'), rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2, y = rect.top + rect.height / 2;
+    window.beforeScrolledLike = { button, scrollTop: main.scrollTop, pressed: button.getAttribute('aria-pressed'),
+      articles: [...main.querySelectorAll('article')], images: [...main.querySelectorAll('img')] };
+    button.addEventListener('click', () => { window.beforeScrolledLike.clickScrollTop = main.scrollTop; }, { capture: true, once: true });
+    return { x, y, scrollTop: main.scrollTop, visible: button.contains(document.elementFromPoint(x, y)) };
+  });
+  check(beforeLike.visible, 'the scrolled like button receives pointer input at its visible center');
+  // A coordinate click exercises the user action without Locator.click adding
+  // its own automatic scroll after the baseline has been measured.
+  await page.mouse.click(beforeLike.x, beforeLike.y);
+  await waitForScrollIdle();
+  const afterLike = await scrolledLike.evaluate(button => {
+    const main = button.closest('main'), before = window.beforeScrolledLike;
+    return { scrollTop: main.scrollTop, clickScrollTop: before.clickScrollTop,
+      changed: before.pressed !== button.getAttribute('aria-pressed'),
+      sameNodes: button === before.button && before.articles.every((article, index) => article === main.querySelectorAll('article')[index]) &&
+        before.images.every((image, index) => image === main.querySelectorAll('img')[index]) };
+  });
+  check(afterLike.changed && afterLike.sameNodes, 'liking a scrolled post updates its state without replacing articles or images');
+  check(Math.abs(afterLike.scrollTop - beforeLike.scrollTop) < 1 && Math.abs(afterLike.clickScrollTop - beforeLike.scrollTop) < 1,
+    `liking a scrolled post preserves internal scroll position: ${JSON.stringify({ before: beforeLike.scrollTop, click: afterLike.clickScrollTop, after: afterLike.scrollTop })}`);
 
   check(await page.locator('#theme-toggle,#theme-menu,.theme-control,[data-theme-choice]').count() === 0, 'theme switching is removed');
   const blackBackground = await page.locator('.app-shell').evaluate(element => getComputedStyle(element).backgroundColor);
