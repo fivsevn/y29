@@ -1,5 +1,5 @@
 name: Publish Lucifer0 fresh forum update
-run-name: Publish Lucifer0 batch 2026-11-12 second pass
+run-name: Publish Lucifer0 2026-11-12 afternoon operation
 on:
   push:
     branches: [main]
@@ -21,41 +21,57 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
-      - name: Restore reviewed roots and new replies with genuine illustrations
+      - name: Restore verified fresh case material and reviewed first drafts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           WORK="$HOME/.local/state/y29/lucifer0/current"
           mkdir -p "$WORK"
-          gh run download 43143698087 -R fivsevn/y29 -n l0-roots-replies-43143698087 -D "$WORK"
-          gh api repos/fivsevn/y29/git/blobs/f8e8f01ffd3d37f1def6a39e8ab15fc667210448 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
-          gh api repos/fivsevn/y29/git/blobs/8fd38de75f789ec4252c29a6cdfe0700ceec38a8 --jq '.content' | base64 --decode > "$WORK/reply-patch.json"
+          gh run download 43176593674 -R fivsevn/y29 -n l0-fresh-preparation-43176593674 -D "$WORK"
+          gh api repos/fivsevn/y29/git/blobs/c511c1fcf481ddfed905e0cba5c9af670449bd59 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
+          gh api repos/fivsevn/y29/git/blobs/a0a8d645edea79f16a6c8aaa585625de38441411 --jq '.content' | base64 --decode > "$WORK/reply-patch.json"
           node --input-type=module - <<'JS'
           import {readFile,writeFile,mkdir} from 'node:fs/promises';
           import {join,dirname} from 'node:path';
           const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
           const op=JSON.parse(await readFile(w+'operation.json','utf8'));
-          if(op.id!=='l0-20261112023707-f9dca533')throw Error('Unexpected operation');
-          const root=JSON.parse(await readFile(w+'root-patch.json','utf8'));
+          const roots=JSON.parse(await readFile(w+'root-patch.json','utf8'));
+          if(op.id!=='l0-20261112073822-86a53324'||op.posts.length!==0)throw Error('Unexpected prepared operation');
+          if(op.plan.budget!==0||roots.posts.length!==3||roots.research.length<3)throw Error('Unexpected case selection or research');
+          const order=op.plan.caseAdaptation.rootOrder;
+          if(JSON.stringify(order)!==JSON.stringify(roots.posts.map(p=>p.id)))throw Error('Case IDs do not match prepared lottery');
+          op.research=roots.research;op.posts=roots.posts;op.reviews=roots.reviews;
+          await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
+          JS
+          node lucifer0/tools/update.js replies --work "$WORK"
+          node --input-type=module - <<'JS'
+          import {readFile,writeFile,mkdir} from 'node:fs/promises';
+          import {join,dirname} from 'node:path';
+          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
+          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
+          const roots=JSON.parse(await readFile(w+'root-patch.json','utf8'));
           const patch=JSON.parse(await readFile(w+'reply-patch.json','utf8'));
-          if(JSON.stringify(op.posts)!==JSON.stringify(root.posts)||JSON.stringify(op.reviews)!==JSON.stringify(root.reviews))throw Error('Reviewed roots differ from staged plan');
           const known=new Set(op.posts.map(p=>p.id));
           for(const p of patch.posts){if(known.has(p.id))throw Error('Duplicate '+p.id);known.add(p.id);}
           op.posts.push(...patch.posts);
           op.reviews.push(...patch.reviews);
-          for(const asset of [...root.mediaFiles,...patch.mediaFiles]){
+          for(const asset of [...roots.mediaFiles,...patch.mediaFiles]){
+            if(!/^posts\/2026\/11\/l0-20261112073822-86a53324-[\w-]+\/media\/[\w.-]+\.svg$/.test(asset.src))throw Error('Unsafe image path '+asset.src);
             const full=join('lucifer0',asset.src);
             await mkdir(dirname(full),{recursive:true});
             await writeFile(full,asset.content,'utf8');
           }
-          if(op.posts.length!==18||op.reviews.length!==18||op.research.length<3)throw Error('Incomplete reviewed batch');
-          const actualImages=op.posts.filter(p=>p.media.some(m=>m.kind==='image'));
-          console.log('Review: '+op.posts.length+' posts; '+actualImages.length+' illustrated; '+op.research.length+' research pages.');
+          if(op.posts.length!==8||op.reviews.length!==8)throw Error('Review or post count mismatch');
+          const rootsCount=op.posts.filter(p=>!p.replyTo).length;
+          const mediaRoots=op.posts.filter(p=>!p.replyTo&&p.media.some(m=>m.kind==='image')).length;
+          const mediaReplies=op.posts.filter(p=>p.replyTo&&p.media.some(m=>m.kind==='image')).length;
+          if(rootsCount!==3||!mediaRoots||!mediaReplies)throw Error('Required ordinary-image pools missing');
           await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
+          console.log('Prepared reviewed publication: '+rootsCount+' case roots, '+(op.posts.length-rootsCount)+' replies, '+(mediaRoots+mediaReplies)+' illustrated posts');
           JS
           node lucifer0/tools/update.js suggest --work "$WORK"
-      - name: Ingest, validate, build and check forum
+      - name: Ingest, validate, build and test complete publication
         run: |
           set -euo pipefail
           WORK="$HOME/.local/state/y29/lucifer0/current"
@@ -64,7 +80,7 @@ jobs:
           node build.js
           npm run check
           git status --short
-      - name: Commit complete published packages to latest main
+      - name: Publish checked packages to current main
         run: |
           set -euo pipefail
           git fetch origin main
@@ -73,26 +89,35 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -- lucifer0 .github/state/lucifer0-case-usage.json
           git diff --cached --quiet && { echo 'No publication changes'; exit 1; }
-          git commit -m 'Publish Lucifer0 forum update 2026-11-12 second batch'
+          git commit -m 'Publish Lucifer0 forum update 2026-11-12 afternoon'
           git push origin HEAD:main
           echo "Published source commit $(git rev-parse HEAD)"
-      - name: Trigger GitHub Pages source deployment
+      - name: Trigger GitHub Pages publishing source
         uses: actions/github-script@v7
         with:
           script: await github.rest.repos.requestPagesBuild(context.repo);
-      - name: Verify live content and finish batch
+      - name: Verify live feed and ordinary images, then finish
         run: |
           set -euo pipefail
           WORK="$HOME/.local/state/y29/lucifer0/current"
           for i in $(seq 1 32); do
             if node lucifer0/tools/update.js finish --work "$WORK" > /tmp/l0-finish.log 2>&1; then
               cat /tmp/l0-finish.log
-              echo 'Lucifer0 fresh publication completed, online feed verified'
-              exit 0
+              break
             fi
-            echo "Online verification attempt $i:"
-            tail -c 1000 /tmp/l0-finish.log
+            if [ "$i" -eq 32 ]; then
+              echo 'Online feed verification did not pass'
+              tail -c 4000 /tmp/l0-finish.log
+              exit 1
+            fi
             sleep 10
           done
-          echo 'Source was committed but online verification has not passed'
-          exit 1
+          for src in \
+            "posts/2026/11/l0-20261112073822-86a53324-91399be41d6f/media/hot-pot-doodle.webp" \
+            "posts/2026/11/l0-20261112073822-86a53324-1dcbd4ee3a19/media/hour-tally.webp"; do
+            url="https://y29.fivsevn.com/lucifer0/$src"
+            curl --fail --location --silent --show-error --retry 6 --retry-delay 5 -o "/tmp/$(basename "$src")" "$url"
+            test "$(wc -c < "/tmp/$(basename "$src")")" -gt 300 || { echo "Empty image $src"; exit 1; }
+            echo "Live image verified: $url"
+          done
+          echo 'Lucifer0 afternoon publication completed and verified online'
