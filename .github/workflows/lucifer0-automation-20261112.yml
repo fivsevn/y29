@@ -1,5 +1,5 @@
 name: Lucifer0 automated fresh preparation
-run-name: Lucifer0 verification round 1 ${{ github.run_id }}
+run-name: Lucifer0 verification round 2 ${{ github.run_id }}
 on:
   push:
     branches: [main]
