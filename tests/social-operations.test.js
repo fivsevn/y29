@@ -10,7 +10,8 @@ import { emptyProfile } from '../lucifer0/tools/profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
 import { defaultLottery as rawProductionLottery, drawPostChoices } from '../lucifer0/tools/lottery.js';
-const productionLottery = structuredClone(rawProductionLottery);
+const savedPoolLottery = JSON.parse(readFileSync(new URL('./fixtures/lottery-v1-pools.json', import.meta.url), 'utf8'));
+const productionLottery = structuredClone(savedPoolLottery);
 // Existing operation scenarios replay the saved, pre-pool presentation contract.
 delete productionLottery.media;
 productionLottery.image = [{ value: 'none', weight: 72 }, { value: 'photo', weight: 14 }, { value: 'screenshot', weight: 8 }, { value: 'meme', weight: 6 }];
@@ -20,6 +21,7 @@ productionLottery.rootBudget = { min: 1, max: 10 };
 const defaultLottery = structuredClone(productionLottery);
 delete defaultLottery.discussion;
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { loadContent, ingestBatch, validateContent } from '../lucifer0/tools/content.js';
 
 const DAY = 86400000;
@@ -94,7 +96,7 @@ async function draft(prepared, now, posts) {
   return { operation, batch: { version: 1, id: operation.id, mode: 'daily', posts } };
 }
 function mediaLottery() {
-  const lottery = structuredClone(rawProductionLottery);
+  const lottery = structuredClone(savedPoolLottery);
   delete lottery.discussion;
   delete lottery.researchMaintenance;
   delete lottery.diversity;
@@ -2121,4 +2123,50 @@ test('large media review lists resume without a former four-images-per-post ceil
   operation.mediaReviews[0].type = 'unknown';
   await writeFile(prepared.operationPath, JSON.stringify(operation));
   await assert.rejects(suggestUpdatePresentation(f.options), /Invalid or duplicate media review/);
+});
+
+test('current case descendants retain source structure without consuming original reply draws or presentation suggestions', async t => {
+  const lottery = structuredClone(rawProductionLottery);
+  delete lottery.researchMaintenance;
+  delete lottery.diversity;
+  lottery.rootBudget = { bands: [{ weight: 1, min: 2, max: 2 }] };
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  const f = await caseFixture(t, 4, { maxBatchPosts: 12, lottery, replyLottery: fixedReplies(0, 0) });
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt });
+  const caseIds = new Set(prepared.caseAdaptation.postIds), roots = caseRoots(f, prepared);
+  const caseRootId = prepared.caseAdaptation.postIds[0];
+  const replies = [
+    post(prepared.id + '-source-one', 'guest-source-one', f.now - 3000, caseRootId),
+    post(prepared.id + '-source-two', 'guest-source-two', f.now - 2000, prepared.id + '-source-one'),
+    post(prepared.id + '-source-three', 'guest-source-three', f.now - 1000, prepared.id + '-source-two')
+  ];
+  const entries = [...roots, ...replies], valid = await draft(prepared, f.now, entries);
+  await saveReviews(prepared.operationPath, reviewed(entries, 0));
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  const adaptedBrief = await briefUpdatePost({ ...f.options, postId: replies[2].id });
+  assert.equal(adaptedBrief.writer.caseAdaptation.rootPostId, caseRootId);
+  assert.deepEqual(adaptedBrief.writer.conditions, []);
+  assert.equal(adaptedBrief.writer.discussion, undefined);
+  assert.equal(adaptedBrief.writer.presentation, undefined);
+  for (const key of ['image', 'emoteCount', 'imagePools', 'emotePools']) assert.equal(adaptedBrief.editor[key], undefined);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: prepared.id + '-source-next', threadId: caseRootId }), /actual source parent/);
+  const directBrief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-source-next', replyTo: replies[1].id });
+  assert.equal(directBrief.draft.replyTo, replies[1].id);
+  assert.equal(directBrief.writer.caseAdaptation.rootPostId, caseRootId);
+  const suggested = await suggestUpdatePresentation(f.options);
+  assert.deepEqual([...suggested.casePostIds].sort(), entries.filter(entry => caseIds.has(entry.id) || replies.includes(entry)).map(entry => entry.id).sort());
+  assert.equal(suggested.imagePools.root.postIds.length, 2);
+  assert.deepEqual(suggested.imagePools.reply.postIds, []);
+  const response = await suggestUpdateReplies(f.options);
+  assert.deepEqual(response.caseThreads, prepared.caseAdaptation.postIds.sort().map(rootId => ({ rootId, mode: 'source' })));
+  assert.ok(response.threads.every(thread => !caseIds.has(thread.rootId) && thread.replyCount === 0));
+  const originalRoot = roots.find(entry => !caseIds.has(entry.id));
+  const originalReply = post(prepared.id + '-ordinary-reply', 'guest-ordinary-reply', f.now, originalRoot.id);
+  const excessive = await draft(prepared, f.now, [...entries, originalReply]);
+  await saveReviews(prepared.operationPath, reviewed(excessive.batch.posts, 0));
+  await assert.rejects(validateUpdateForBatch(excessive.batch, { ...f.options, contextPath: prepared.operationPath }), /reply hard limit|saved reply limit/);
+  const extraCases = Array.from({ length: 5 }, (_, index) => post(prepared.id + '-source-extra-' + index, 'guest-extra-' + index, f.now, replies[2].id));
+  const full = await draft(prepared, f.now, [...entries, ...extraCases]);
+  await saveReviews(prepared.operationPath, reviewed(full.batch.posts, 0));
+  await assert.rejects(validateUpdateForBatch(full.batch, { ...f.options, contextPath: prepared.operationPath }), /physical batch limit/);
 });

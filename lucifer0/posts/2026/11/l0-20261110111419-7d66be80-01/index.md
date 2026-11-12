@@ -5,7 +5,7 @@ createdAt: "2026-11-10T06:33:55.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"posts/2026/11/l0-20261110111419-7d66be80-01/media/shelf-moved.webp","alt":"楼门旁的空地上留着长方形浅痕，墙边剩两只没有外露标签的纸箱。","kind":"image"},{"src":"assets/emotes/l0/speechless.webp","alt":"L0抬眼向上看，嘴边有一团呼气线。","kind":"emote","fit":"contain"}]
+media: [{"src":"posts/2026/11/l0-20261110111419-7d66be80-01/media/shelf-moved.webp","alt":"楼门旁的空地上留着长方形浅痕，墙边剩两只没有外露标签的纸箱。","kind":"image"}]
 guest: {"name":"冬冬"}
 ---
 

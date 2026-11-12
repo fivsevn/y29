@@ -5,7 +5,7 @@ createdAt: "2026-11-11T17:46:30.927Z"
 replyTo: null
 likes: 16
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/heated.webp","alt":"L0表情","kind":"emote","fit":"contain"}]
+media: []
 guest: {"name":"旧版规"}
 ---
 

@@ -168,7 +168,7 @@ test('world and following show every reply once in full without a ten-reply cuto
   assert.doesNotMatch(paragraphRule, /line-clamp|overflow:hidden|max-height/);
 });
 
-test('feed replies show actual lazy images and emotes beside full text without nested links', async () => {
+test('feed replies show image links and lazy emotes beside full text without nested links', async () => {
   const feed = fixture();
   const image = { src: 'posts/2026/01/ten-thread/media/photo.webp', alt: '普通图片', kind: 'image' };
   const emote = { src: 'posts/2026/01/ten-thread/media/reaction.webp', alt: '随帖表情', kind: 'emote' };
@@ -191,11 +191,12 @@ test('feed replies show actual lazy images and emotes beside full text without n
       assert.ok(preview, 'each reply is rendered');
       assert.equal(preview.match(/<p>([\s\S]*?)<\/p>/)?.[1] || '', expected);
       const visibleMedia = deleted ? [] : media;
-      assert.equal((preview.match(/<img\b/g) || []).length, visibleMedia.length);
-      assert.equal((preview.match(/loading="lazy"/g) || []).length, visibleMedia.length);
+      assert.equal((preview.match(/<img\b/g) || []).length, visibleMedia.filter(core.isEmoteMedia).length);
+      assert.equal((preview.match(/loading="lazy"/g) || []).length, visibleMedia.filter(core.isEmoteMedia).length);
       assert.equal((preview.match(/class="post-emote"/g) || []).length, visibleMedia.filter(core.isEmoteMedia).length);
-      assert.equal((preview.match(/class="post-image/g) || []).length, visibleMedia.filter(item => !core.isEmoteMedia(item)).length);
-      assert.doesNotMatch(preview, /\[图片\]|\[表情\]/);
+      assert.equal((preview.match(/class="post-image-link"/g) || []).length, visibleMedia.filter(item => !core.isEmoteMedia(item)).length);
+      assert.doesNotMatch(preview, /class="post-image(?: |")|\[表情\]/);
+      assert.equal((preview.match(/>\[图片\]<\/a>/g) || []).length, visibleMedia.filter(item => !core.isEmoteMedia(item)).length);
       let insideLink = false;
       for (const [tag] of preview.matchAll(/<\/?a\b[^>]*>/g)) {
         if (tag.startsWith('</')) { assert.equal(insideLink, true); insideLink = false; }
@@ -203,7 +204,7 @@ test('feed replies show actual lazy images and emotes beside full text without n
       }
       assert.equal(insideLink, false);
     });
-    assert.equal((markup.match(/<img\b/g) || []).length, 7);
+    assert.equal((markup.match(/<img\b/g) || []).length, 4);
   }
 });
 
@@ -233,8 +234,8 @@ test('explicit local emotes render without image links while ordinary contain im
     assert.match(markup, /<img class="post-emote" src="\.\/assets\/emotes\/l0\/huh\.webp"/);
     assert.match(markup, /<img class="post-emote" src="\.\/posts\/2026\/01\/empty-thread\/media\/local-emote\.webp"/);
     assert.doesNotMatch(markup, /<a[^>]*href="[^"]*(?:huh|local-emote)\.webp"/);
-    assert.match(markup, /<a class="post-image is-contained" href="\.\/posts\/2026\/01\/empty-thread\/media\/diagram\.webp" aria-haspopup="dialog"/);
-    assert.match(markup, /<a class="post-image is-contained" href="\.\/posts\/2026\/01\/empty-thread\/media\/legacy\.webp" aria-haspopup="dialog"/);
+    assert.match(markup, /<a class="post-image is-contained(?: is-thumbnail)?" href="\.\/posts\/2026\/01\/empty-thread\/media\/diagram\.webp" aria-haspopup="dialog"/);
+    assert.match(markup, /<a class="post-image is-contained(?: is-thumbnail)?" href="\.\/posts\/2026\/01\/empty-thread\/media\/legacy\.webp" aria-haspopup="dialog"/);
     assert.equal((markup.match(/查看原图 ↗/g) || []).length, 2);
   }
 });
@@ -561,4 +562,24 @@ test('deleted replies retain identity, dates, parent links and counts without or
   assert.doesNotMatch(page.visit('#/search?q=删除前原文'), /id="post-admin-reply"/);
   assert.match(page.visit('#/search?q=该回复已被删除'), /id="post-admin-reply"/);
   assert.deepEqual(core.selectPosts(feed.posts, { bookmarks: [] }, { user: 'site-admin', query: '删除前原文' }), []);
+});
+
+test('home roots use thumbnails while reply placeholders become full images in the discussion', async () => {
+  const feed = fixture(), root = feed.posts.find(post => post.id === 'ten-thread');
+  const reply = feed.posts.find(post => post.id === 'ten-thread-reply-1');
+  const image = { src: 'posts/2026/01/ten-thread/media/photo.webp', alt: '完整画面 & 说明', kind: 'image' };
+  root.media = [image]; reply.media = [image];
+  const page = await renderer(feed);
+  for (const route of ['#/', '#/following']) {
+    const home = article(page.visit(route), root.id);
+    assert.match(home, /class="post-image is-thumbnail"/);
+    assert.match(home, /class="post-image-link"/);
+    assert.match(home, /data-image-alt="完整画面 &amp; 说明"/);
+    assert.equal((home.match(/<img\b/g) || []).length, 1);
+  }
+  const detail = page.visit('#/post/' + reply.id);
+  assert.equal((detail.match(/class="post-image"/g) || []).length, 2);
+  assert.doesNotMatch(detail, /is-thumbnail|post-image-link/);
+  const css = await readFile(new URL('../lucifer0/style.css', import.meta.url), 'utf8');
+  assert.match(css, /\.post-image\.is-thumbnail img\{[^}]*max-width:160px;max-height:160px/);
 });

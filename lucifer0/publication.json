@@ -80,11 +80,11 @@
     "authorKind": [
       {
         "value": "guest",
-        "weight": 55
+        "weight": 75
       },
       {
         "value": "library",
-        "weight": 45
+        "weight": 25
       }
     ],
     "motivation": [
@@ -184,8 +184,6 @@
     "media": {
       "images": {
         "root": {
-          "probability": 0.65,
-          "minimumPosts": 2,
           "types": [
             {
               "value": "photo",
@@ -199,14 +197,9 @@
               "value": "illustration",
               "weight": 10
             }
-          ],
-          "minimumShare": 0.6,
-          "enforceDraw": true,
-          "lifePhotoShare": 0.6
+          ]
         },
         "reply": {
-          "probability": 0.35,
-          "minimumPosts": 1,
           "types": [
             {
               "value": "photo",
@@ -220,60 +213,89 @@
               "value": "illustration",
               "weight": 10
             }
-          ],
-          "minimumShare": 0.3,
-          "enforceDraw": true,
-          "lifePhotoShare": 0.6
+          ]
         }
       },
       "emotes": {
         "root": {
-          "probability": 0.4,
           "counts": [
             {
-              "weight": 75,
+              "weight": 90,
               "min": 1,
               "max": 1
             },
             {
-              "weight": 20,
+              "weight": 10,
               "min": 2,
               "max": 2
-            },
-            {
-              "weight": 5,
-              "min": 3,
-              "max": 3
             }
-          ],
-          "minimumPosts": 1,
-          "minimumShare": 0.2,
-          "enforceDraw": true
+          ]
         },
         "reply": {
-          "probability": 0.65,
           "counts": [
             {
-              "weight": 75,
+              "weight": 90,
               "min": 1,
               "max": 1
             },
             {
-              "weight": 20,
+              "weight": 10,
               "min": 2,
               "max": 2
-            },
-            {
-              "weight": 5,
-              "min": 3,
-              "max": 3
             }
-          ],
-          "minimumPosts": 1,
-          "minimumShare": 0.4,
-          "enforceDraw": true
+          ]
         }
-      }
+      },
+      "profiles": [
+        {
+          "id": "text-led",
+          "weight": 55,
+          "root": {
+            "none": 65,
+            "image": 20,
+            "emote": 10,
+            "both": 5
+          },
+          "reply": {
+            "none": 65,
+            "image": 8,
+            "emote": 22,
+            "both": 5
+          }
+        },
+        {
+          "id": "mixed",
+          "weight": 30,
+          "root": {
+            "none": 40,
+            "image": 35,
+            "emote": 15,
+            "both": 10
+          },
+          "reply": {
+            "none": 50,
+            "image": 12,
+            "emote": 28,
+            "both": 10
+          }
+        },
+        {
+          "id": "image-led",
+          "weight": 15,
+          "root": {
+            "none": 25,
+            "image": 45,
+            "emote": 10,
+            "both": 20
+          },
+          "reply": {
+            "none": 40,
+            "image": 20,
+            "emote": 25,
+            "both": 15
+          }
+        }
+      ]
     },
     "likes": {
       "root": [
@@ -332,7 +354,6 @@
       }
     },
     "discussion": {
-      "minimumNegativeShare": 0.5,
       "negativeMotivation": [
         {
           "value": "complaint",
@@ -388,17 +409,18 @@
       "replyAuthor": [
         {
           "value": "new",
-          "weight": 55
+          "weight": 85
         },
         {
           "value": "root",
-          "weight": 25
+          "weight": 8
         },
         {
           "value": "participant",
-          "weight": 20
+          "weight": 7
         }
-      ]
+      ],
+      "negativeProbability": 0.5
     },
     "researchMaintenance": {
       "probability": 0.3,

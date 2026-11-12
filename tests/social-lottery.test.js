@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant, imagePoolProgress, emotePoolProgress, suggestPostPresentation } from '../lucifer0/tools/lottery.js';
+import { defaultLottery as currentLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant, imagePoolProgress, emotePoolProgress, suggestPostPresentation } from '../lucifer0/tools/lottery.js';
 import { drawUpdatePlan } from '../lucifer0/tools/operations.js';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 
+// Frozen production snapshot: legacy compatibility assertions must not follow current tuning.
+const defaultLottery = JSON.parse(readFileSync(new URL('./fixtures/lottery-v1-pools.json', import.meta.url), 'utf8'));
 const legacyImages = [{ value: 'none', weight: 72 }, { value: 'photo', weight: 14 }, { value: 'screenshot', weight: 8 }, { value: 'meme', weight: 6 }];
 function legacyLottery() {
   const lottery = structuredClone(defaultLottery);
@@ -121,7 +123,7 @@ test('image and emote decisions are independent within separate root and reply p
   }
 });
 
-test('production media frequencies allow either, both or neither and favor emotes in replies', () => {
+test('saved media frequencies allow either, both or neither and favor emotes in replies', () => {
   assert.equal(defaultLottery.media.images.root.probability, .65);
   assert.equal(defaultLottery.media.images.reply.probability, .35);
   assert.equal(defaultLottery.media.emotes.root.probability, .40);
@@ -130,7 +132,7 @@ test('production media frequencies allow either, both or neither and favor emote
     const states = new Set(); let images = 0, emotes = 0, both = 0;
     for (let index = 0; index < 3000; index++) {
       const choice = drawPostChoices({ seed: 'media-distribution-' + index, postId: 'media-' + role,
-        replyTo: role === 'root' ? null : 'actual-parent' });
+        replyTo: role === 'root' ? null : 'actual-parent', lottery: defaultLottery });
       const hasImage = choice.image !== 'none', hasEmote = choice.emoteCount > 0;
       states.add(`${hasImage}/${hasEmote}`); images += hasImage; emotes += hasEmote; both += hasImage && hasEmote;
       assert.ok(['none', 'photo', 'screenshot', 'illustration'].includes(choice.image));
@@ -420,4 +422,47 @@ test('media quota and diversity settings reject malformed optional parameters', 
     const lottery = structuredClone(defaultLottery); mutate(lottery);
     assert.throws(() => validateLottery(lottery), /image|emote|diversity/);
   }
+});
+
+
+test('current joint media profiles replay one round tendency and allow all combinations without quotas', () => {
+  const lottery = structuredClone(currentLottery), posts = Array.from({length: 18}, (_, i) => ({id: 'joint-post-' + i, replyTo: i < 6 ? null : 'joint-post-0', media: []}));
+  const combinations = new Set(), profiles = new Set();
+  for (let i = 0; i < 80; i++) {
+    const seed = 'joint-round-' + i, first = suggestPostPresentation({seed, posts, lottery});
+    assert.deepEqual(suggestPostPresentation({seed, posts: [...posts].reverse(), lottery}).images, first.images);
+    profiles.add(first.mediaProfile);
+    for (const post of posts) {
+      const choice = drawPostChoices({seed, postId:post.id, replyTo:post.replyTo, lottery});
+      assert.equal(choice.presentation.profile, first.mediaProfile);
+      combinations.add(choice.presentation.combination);
+      assert.equal(choice.image !== 'none', ['image','both'].includes(choice.presentation.combination));
+      assert.equal(choice.emoteCount > 0, ['emote','both'].includes(choice.presentation.combination));
+    }
+    for (const role of ['root','reply']) {
+      assert.equal(first.imagePools[role].minimumPosts, 0);
+      assert.equal(first.emotePools[role].minimumPosts, 0);
+      assert.equal(first.imagePools[role].missingPosts, 0);
+    }
+  }
+  assert.equal(profiles.size, lottery.media.profiles.length);
+  assert.deepEqual([...combinations].sort(), ['both','emote','image','none']);
+  for (const broken of [[], [{id:'bad-profile',weight:1,root:{none:0,image:0,emote:0,both:0},reply:{none:1,image:0,emote:0,both:0}}]]) {
+    const invalid=structuredClone(lottery); invalid.media.profiles=broken;
+    assert.throws(()=>validateLottery(invalid), /media profile|media combinations/);
+  }
+});
+
+test('current discussion and identity draws favor strangers and never chase a negative share', () => {
+  const lottery=currentLottery, states=new Set(); let fresh=0, guest=0;
+  assert.equal(lottery.discussion.minimumNegativeShare, undefined);
+  for(let i=0;i<1000;i++) {
+    const choice=drawPostChoices({seed:'new-public-'+i,postId:'ordinary-reply',replyTo:'ordinary-root',lottery});
+    states.add(choice.discussion.toneSuggestion);
+    fresh+=choice.discussion.replyAuthor==='new'; guest+=choice.authorKind==='guest';
+  }
+  assert.deepEqual([...states].sort(), ['negative','open']);
+  assert.ok(fresh>800&&fresh<900); assert.ok(guest>700&&guest<800);
+  const invalid=structuredClone(lottery); invalid.discussion.negativeProbability=1.1;
+  assert.throws(()=>validateLottery(invalid), /negative probability/);
 });

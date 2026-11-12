@@ -95,10 +95,11 @@ try {
   };
 
   const defaultThumbnail = page.locator(`#post-${root.id} .post-image img`).first();
+  check(await defaultThumbnail.evaluate(image => image.closest('.post-image').classList.contains('is-thumbnail')), 'home root image uses the thumbnail presentation');
   await defaultThumbnail.evaluate(image => image.decode());
   check(await defaultThumbnail.evaluate(image => {
     const box = image.getBoundingClientRect();
-    return Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
+    return box.width <= 160 && box.height <= 160 && Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
   }), 'ordinary photos are readable in the feed without a fixed crop');
   let link = await open(root);
   await assertWholeImage();
