@@ -5,7 +5,7 @@ createdAt: "2026-11-10T11:42:42.467Z"
 replyTo: null
 likes: 18
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/huh.webp","alt":"L0一手托下巴，斜眼看着旁边的问号。","kind":"emote","fit":"contain"}]
+media: []
 ---
 
 早班有个人举着视频问我，车站下个月是不是撤人工窗口。视频连站名都没有。

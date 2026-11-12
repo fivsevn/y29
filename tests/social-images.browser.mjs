@@ -41,10 +41,20 @@ try {
   await page.reload();
   await page.locator(`#post-${root.id}`).waitFor();
   const dialog = page.getByRole('dialog', { name: '查看原图', exact: true });
+  const visitThread = async post => {
+    await page.goto(`${base}#/post/${post.id}`);
+    // Both routes contain the same thread: the target class confirms that the
+    // hashchange renderer has replaced the previous route's image elements.
+    await page.locator(`#post-${post.id}.is-target`).waitFor();
+  };
+  const readyImage = async image => {
+    await image.scrollIntoViewIfNeeded();
+    await page.waitForFunction(image => image.complete && image.naturalWidth > 0, await image.elementHandle());
+    await image.evaluate(image => image.decode());
+  };
   const assertCompactEmote = async post => {
     const image = page.locator(`#post-${post.id} .post-emote`).first();
-    await image.scrollIntoViewIfNeeded();
-    await image.evaluate(image => image.decode());
+    await readyImage(image);
     const presentation = await image.evaluate(image => {
       const box = image.getBoundingClientRect(), content = image.closest('.post-content').getBoundingClientRect();
       return { width: box.width, height: box.height, left: box.left - content.left,
@@ -60,9 +70,9 @@ try {
     check(page.url() === url && !await dialog.isVisible(), 'clicking a site emote leaves the route and image viewer unchanged');
   };
   await assertCompactEmote(emoteRoot);
-  await page.goto(`${base}#/post/${emoteRoot.id}`);
+  await visitThread(emoteRoot);
   await assertCompactEmote(emoteRoot);
-  await page.goto(`${base}#/post/${emoteReply.id}`);
+  await visitThread(emoteReply);
   await assertCompactEmote(emoteReply);
   await page.goto(base);
   await page.locator(`#post-${root.id}`).waitFor();
@@ -95,10 +105,11 @@ try {
   };
 
   const defaultThumbnail = page.locator(`#post-${root.id} .post-image img`).first();
-  await defaultThumbnail.evaluate(image => image.decode());
+  check(await defaultThumbnail.evaluate(image => image.closest('.post-image').classList.contains('is-thumbnail')), 'home root image uses the thumbnail presentation');
+  await readyImage(defaultThumbnail);
   check(await defaultThumbnail.evaluate(image => {
     const box = image.getBoundingClientRect();
-    return Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
+    return box.width <= 160 && box.height <= 160 && Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
   }), 'ordinary photos are readable in the feed without a fixed crop');
   let link = await open(root);
   await assertWholeImage();
@@ -119,8 +130,7 @@ try {
   await dialog.waitFor({ state: 'hidden' });
   check(await link.evaluate(element => document.activeElement === element), 'clicking the backdrop closes the viewer and restores focus');
 
-  await page.goto(`${base}#/post/${reply.id}`);
-  await page.locator(`#post-${reply.id}`).waitFor();
+  await visitThread(reply);
   link = await open(reply);
   await assertWholeImage();
   await page.locator('#image-close').click();
@@ -153,7 +163,7 @@ try {
   await page.route('**/contained-small.webp*', route => route.fulfill({ contentType: 'image/webp', body: small }));
   const containedImage = async (post, expectedWidth, expectedHeight) => {
     const image = page.locator(`#post-${post.id} .post-image img`).first();
-    await image.evaluate(image => image.decode());
+    await readyImage(image);
     const box = await image.evaluate(image => {
       const rect = image.getBoundingClientRect(), style = getComputedStyle(image);
       return { width: rect.width, height: rect.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, fit: style.objectFit };
@@ -163,18 +173,41 @@ try {
     const scale = Math.min(1, box.width / expectedWidth, box.height / expectedHeight);
     const painted = { width: expectedWidth * scale, height: expectedHeight * scale };
     check(painted.width <= expectedWidth && painted.height <= expectedHeight && painted.width <= box.width && painted.height <= box.height, 'the whole reaction fits without enlargement or crop');
-    const { data, info } = await sharp(await image.screenshot()).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-    const pixel = (x, y) => {
-      const offset = (Math.max(0, Math.min(info.height - 1, Math.round(y))) * info.width + Math.max(0, Math.min(info.width - 1, Math.round(x)))) * info.channels;
+    // A full portrait can be taller than the bounded main scroller. An element
+    // screenshot then includes clipped content or the fixed navigation, so read
+    // each source marker only after scrolling it into the visible reading area.
+    const visiblePixel = async (sourceX, sourceY, label) => {
+      const source = { x: sourceX, y: sourceY, width: expectedWidth, height: expectedHeight };
+      await image.evaluate((image, source) => {
+        const main = image.closest('main'), viewport = main.getBoundingClientRect();
+        const top = Math.max(viewport.top, main.querySelector('.boardbar').getBoundingClientRect().bottom) + 4;
+        const bottom = viewport.bottom - 4, rect = image.getBoundingClientRect();
+        const scale = Math.min(1, rect.width / source.width, rect.height / source.height);
+        const y = rect.top + (rect.height - source.height * scale) / 2 + source.y * scale;
+        main.scrollTop += y - (top + bottom) / 2;
+      }, source);
+      const point = await image.evaluate((image, source) => {
+        const main = image.closest('main'), viewport = main.getBoundingClientRect(), rect = image.getBoundingClientRect();
+        const scale = Math.min(1, rect.width / source.width, rect.height / source.height);
+        return { x: rect.left + (rect.width - source.width * scale) / 2 + source.x * scale,
+          y: rect.top + (rect.height - source.height * scale) / 2 + source.y * scale,
+          top: Math.max(viewport.top, main.querySelector('.boardbar').getBoundingClientRect().bottom),
+          bottom: viewport.bottom, viewportWidth: innerWidth };
+      }, source);
+      check(point.y >= point.top && point.y < point.bottom, `${label} is reachable by scrolling the reading area`);
+      const { data, info } = await sharp(await page.screenshot({ animations: 'disabled' })).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+      const screenshotScale = info.width / point.viewportWidth;
+      const x = Math.round(point.x * screenshotScale), y = Math.round(point.y * screenshotScale);
+      check(x >= 0 && x < info.width && y >= 0 && y < info.height, `${label} is inside the viewport screenshot`);
+      const offset = (y * info.width + x) * info.channels;
       return [...data.subarray(offset, offset + 3)];
     };
     const near = (actual, expected) => actual.every((value, index) => Math.abs(value - expected[index]) < 12);
-    const left = (info.width - painted.width) / 2, top = (info.height - painted.height) / 2;
     if (expectedHeight > expectedWidth) {
-      check(near(pixel(info.width / 2, top + 12 * scale), [208, 32, 32]), 'the portrait top edge survives thumbnail rendering');
-      check(near(pixel(info.width / 2, top + (expectedHeight - 12) * scale), [40, 160, 80]), 'the portrait bottom caption region survives thumbnail rendering');
+      check(near(await visiblePixel(expectedWidth / 2, 12, 'the portrait top marker'), [208, 32, 32]), 'the portrait top edge survives thumbnail rendering');
+      check(near(await visiblePixel(expectedWidth / 2, expectedHeight - 12, 'the portrait bottom marker'), [40, 160, 80]), 'the portrait bottom caption region survives thumbnail rendering');
     } else {
-      check(near(pixel(info.width / 2, info.height / 2), [73, 111, 255]), 'the small reaction renders normally');
+      check(near(await visiblePixel(expectedWidth / 2, expectedHeight / 2, 'the small reaction'), [73, 111, 255]), 'the small reaction renders normally');
       check(box.width <= 128 && box.height <= 128, 'a small image stays at its native size in a larger thread box');
     }
   };
@@ -188,8 +221,7 @@ try {
   await assertWholeImage();
   await page.keyboard.press('Escape');
   await dialog.waitFor({ state: 'hidden' });
-  await page.goto(`${base}#/post/${reply.id}`);
-  await page.locator(`#post-${reply.id}`).waitFor();
+  await visitThread(reply);
   check(await page.locator(`#post-${reply.id} .post-text-link`).count() === 0, 'whitespace-only reply has no empty text link');
   await containedImage(replyOnly, 128, 128);
   await page.screenshot({ path: join(output, 'phone-image-only.png') });
@@ -199,11 +231,9 @@ try {
   await dialog.waitFor({ state: 'hidden' });
   for (const [width, height] of [[320, 568], [1440, 900]]) {
     await page.setViewportSize({ width, height });
-    await page.goto(`${base}#/post/${root.id}`);
-    await page.locator(`#post-${root.id}`).waitFor();
+    await visitThread(root);
     await containedImage(rootOnly, 360, 640);
-    await page.goto(`${base}#/post/${reply.id}`);
-    await page.locator(`#post-${reply.id}`).waitFor();
+    await visitThread(reply);
     await containedImage(replyOnly, 128, 128);
   }
   check(errors.length === 0, `no browser errors: ${errors.join(', ')}`);

@@ -23,9 +23,10 @@ async function fixture(t) {
   const root = join(dir, 'project/lucifer0'), work = join(dir, 'work');
   await cp(new URL('../lucifer0/', import.meta.url), root, { recursive: true, filter: path => !/\/(?:posts|data|\.publish-lock|\.publish-staging|\.publish\.lock)(?:\/|$)/.test(path) });
   const policyPath = join(root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.lottery = await readJSON(new URL('./fixtures/lottery-v1-pools.json', import.meta.url));
   delete policy.lottery.researchMaintenance;
   // Conversion/recovery fixtures retain the saved pre-quota media contract.
-  // Current quota enforcement is exercised through real ingest in social-operations.
+  // Frozen quota compatibility and current suggestion-only behavior are exercised in social-operations.
   delete policy.lottery.diversity;
   for (const role of ['root', 'reply']) {
     for (const key of ['minimumShare', 'enforceDraw', 'lifePhotoShare']) delete policy.lottery.media.images[role][key];

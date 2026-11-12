@@ -5,7 +5,7 @@ createdAt: "2026-11-11T16:20:03.997Z"
 replyTo: null
 likes: 10
 canon: "derivative"
-media: [{"src":"posts/2026/11/l0-20261111214536-e145d75f-bff2bff8e7a8/media/parcel-bottom-open.webp","alt":"楼梯间的快递箱底缝已经张开，侧面的面单被空白纸片挡住，箱内物品还未取出。","kind":"image"},{"src":"assets/emotes/l0/heated.webp","alt":"L0脸颊发红，双拳攥在胸前。","kind":"emote","fit":"contain"}]
+media: [{"src":"posts/2026/11/l0-20261111214536-e145d75f-bff2bff8e7a8/media/parcel-bottom-open.webp","alt":"楼梯间的快递箱底缝已经张开，侧面的面单被空白纸片挡住，箱内物品还未取出。","kind":"image"}]
 guest: {"name":"拆包先别扔"}
 ---
 

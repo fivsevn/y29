@@ -5,7 +5,7 @@ createdAt: "2026-11-10T11:38:23.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/melon.webp","alt":"L0扒着边沿，双手拿一片西瓜。","kind":"emote","fit":"contain"}]
+media: []
 guest: {"name":"眠眠"}
 ---
 

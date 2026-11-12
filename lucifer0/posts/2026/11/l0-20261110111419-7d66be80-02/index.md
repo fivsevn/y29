@@ -5,7 +5,7 @@ createdAt: "2026-11-10T01:02:37.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/heated.webp","alt":"L0脸颊发红，双拳攥在胸前。","kind":"emote","fit":"contain"}]
+media: []
 guest: {"name":"相册还没删"}
 ---
 

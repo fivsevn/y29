@@ -1,0 +1,364 @@
+{
+  "version": 1,
+  "rootBudget": {
+    "bands": [
+      {
+        "weight": 5,
+        "min": 0,
+        "max": 1
+      },
+      {
+        "weight": 35,
+        "min": 2,
+        "max": 4
+      },
+      {
+        "weight": 45,
+        "min": 5,
+        "max": 8
+      },
+      {
+        "weight": 15,
+        "min": 9,
+        "max": 12
+      }
+    ]
+  },
+  "authors": {
+    "candidates": 3,
+    "recentPosts": 7,
+    "recentMultiplier": 0.5
+  },
+  "authorKind": [
+    {
+      "value": "guest",
+      "weight": 55
+    },
+    {
+      "value": "library",
+      "weight": 45
+    }
+  ],
+  "motivation": [
+    {
+      "value": "ask-help",
+      "weight": 24
+    },
+    {
+      "value": "vent",
+      "weight": 22
+    },
+    {
+      "value": "passing-thought",
+      "weight": 24
+    },
+    {
+      "value": "share",
+      "weight": 18
+    },
+    {
+      "value": "correct",
+      "weight": 6
+    },
+    {
+      "value": "celebrate",
+      "weight": 6
+    }
+  ],
+  "length": [
+    {
+      "value": "fragment",
+      "weight": 45
+    },
+    {
+      "value": "short",
+      "weight": 40
+    },
+    {
+      "value": "long",
+      "weight": 15
+    }
+  ],
+  "conditionCount": {
+    "min": 1,
+    "max": 2
+  },
+  "waitSeconds": [
+    {
+      "weight": 45,
+      "min": 20,
+      "max": 180
+    },
+    {
+      "weight": 40,
+      "min": 181,
+      "max": 1800
+    },
+    {
+      "weight": 15,
+      "min": 1801,
+      "max": 21600
+    }
+  ],
+  "reading": [
+    {
+      "value": "target-only",
+      "weight": 40
+    },
+    {
+      "value": "root-and-target",
+      "weight": 35
+    },
+    {
+      "value": "nearby",
+      "weight": 25
+    }
+  ],
+  "textWindow": [
+    {
+      "value": "full",
+      "weight": 45
+    },
+    {
+      "value": "opening",
+      "weight": 35
+    },
+    {
+      "value": "fragment",
+      "weight": 20
+    }
+  ],
+  "excerptCharacters": 140,
+  "nearbyReplies": {
+    "min": 0,
+    "max": 3
+  },
+  "media": {
+    "images": {
+      "root": {
+        "probability": 0.65,
+        "minimumPosts": 2,
+        "types": [
+          {
+            "value": "photo",
+            "weight": 70
+          },
+          {
+            "value": "screenshot",
+            "weight": 20
+          },
+          {
+            "value": "illustration",
+            "weight": 10
+          }
+        ],
+        "minimumShare": 0.6,
+        "enforceDraw": true,
+        "lifePhotoShare": 0.6
+      },
+      "reply": {
+        "probability": 0.35,
+        "minimumPosts": 1,
+        "types": [
+          {
+            "value": "photo",
+            "weight": 50
+          },
+          {
+            "value": "screenshot",
+            "weight": 40
+          },
+          {
+            "value": "illustration",
+            "weight": 10
+          }
+        ],
+        "minimumShare": 0.3,
+        "enforceDraw": true,
+        "lifePhotoShare": 0.6
+      }
+    },
+    "emotes": {
+      "root": {
+        "probability": 0.4,
+        "counts": [
+          {
+            "weight": 75,
+            "min": 1,
+            "max": 1
+          },
+          {
+            "weight": 20,
+            "min": 2,
+            "max": 2
+          },
+          {
+            "weight": 5,
+            "min": 3,
+            "max": 3
+          }
+        ],
+        "minimumPosts": 1,
+        "minimumShare": 0.2,
+        "enforceDraw": true
+      },
+      "reply": {
+        "probability": 0.65,
+        "counts": [
+          {
+            "weight": 75,
+            "min": 1,
+            "max": 1
+          },
+          {
+            "weight": 20,
+            "min": 2,
+            "max": 2
+          },
+          {
+            "weight": 5,
+            "min": 3,
+            "max": 3
+          }
+        ],
+        "minimumPosts": 1,
+        "minimumShare": 0.4,
+        "enforceDraw": true
+      }
+    }
+  },
+  "likes": {
+    "root": [
+      {
+        "weight": 20,
+        "min": 0,
+        "max": 0
+      },
+      {
+        "weight": 73,
+        "min": 1,
+        "max": 20
+      },
+      {
+        "weight": 6,
+        "min": 21,
+        "max": 60
+      },
+      {
+        "weight": 1,
+        "min": 61,
+        "max": 160
+      }
+    ],
+    "reply": [
+      {
+        "weight": 35,
+        "min": 0,
+        "max": 0
+      },
+      {
+        "weight": 62,
+        "min": 1,
+        "max": 12
+      },
+      {
+        "weight": 2,
+        "min": 13,
+        "max": 35
+      },
+      {
+        "weight": 1,
+        "min": 36,
+        "max": 90
+      }
+    ]
+  },
+  "sampling": {
+    "offset": {
+      "min": 0,
+      "max": 30
+    },
+    "count": {
+      "min": 3,
+      "max": 6
+    }
+  },
+  "discussion": {
+    "minimumNegativeShare": 0.5,
+    "negativeMotivation": [
+      {
+        "value": "complaint",
+        "weight": 22
+      },
+      {
+        "value": "gossip",
+        "weight": 24
+      },
+      {
+        "value": "dispute",
+        "weight": 24
+      },
+      {
+        "value": "grievance",
+        "weight": 16
+      },
+      {
+        "value": "suspicion",
+        "weight": 14
+      }
+    ],
+    "replyStance": [
+      {
+        "value": "support",
+        "weight": 15
+      },
+      {
+        "value": "push-back",
+        "weight": 28
+      },
+      {
+        "value": "doubt",
+        "weight": 10
+      },
+      {
+        "value": "defend",
+        "weight": 15
+      },
+      {
+        "value": "provoke",
+        "weight": 20
+      },
+      {
+        "value": "ask-detail",
+        "weight": 4
+      },
+      {
+        "value": "sidetrack",
+        "weight": 8
+      }
+    ],
+    "replyAuthor": [
+      {
+        "value": "new",
+        "weight": 55
+      },
+      {
+        "value": "root",
+        "weight": 25
+      },
+      {
+        "value": "participant",
+        "weight": 20
+      }
+    ]
+  },
+  "researchMaintenance": {
+    "probability": 0.3,
+    "maxDocuments": 1,
+    "ageWeightDays": 7,
+    "maxAgeWeight": 5
+  },
+  "diversity": {
+    "recentUpdates": 3
+  }
+}

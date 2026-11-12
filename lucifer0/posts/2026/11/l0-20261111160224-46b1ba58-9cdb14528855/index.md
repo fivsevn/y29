@@ -5,7 +5,7 @@ createdAt: "2026-11-11T15:59:17.467Z"
 replyTo: null
 likes: 5
 canon: "derivative"
-media: [{"src":"posts/2026/11/l0-20261111160224-46b1ba58-9cdb14528855/media/after-rain.webp","alt":"雨夜的商店透着粉红色灯光，路面倒映灯影","kind":"image"},{"src":"assets/emotes/l0/peek.webp","alt":"L0从竖直边缘后露出半张脸和一只手。","kind":"emote","fit":"contain"}]
+media: [{"src":"posts/2026/11/l0-20261111160224-46b1ba58-9cdb14528855/media/after-rain.webp","alt":"雨夜的商店透着粉红色灯光，路面倒映灯影","kind":"image"}]
 ---
 
 

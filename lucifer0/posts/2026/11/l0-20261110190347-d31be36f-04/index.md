@@ -5,7 +5,7 @@ createdAt: "2026-11-10T18:51:40.467Z"
 replyTo: null
 likes: 0
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/flat.webp","alt":"L0趴下伸舌头，头上有一圈弯线。","kind":"emote","fit":"contain"}]
+media: []
 guest: {"name":"echobear"}
 ---
 

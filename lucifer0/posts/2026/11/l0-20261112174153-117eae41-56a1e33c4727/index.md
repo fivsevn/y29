@@ -5,7 +5,7 @@ createdAt: "2026-11-11T17:50:06.317Z"
 replyTo: null
 likes: 12
 canon: "derivative"
-media: [{"src":"posts/2026/11/l0-20261112174153-117eae41-56a1e33c4727/media/apartment-wall.webp","alt":"一栋棕色公寓楼外墙和窗户","kind":"image"},{"src":"assets/emotes/l0/flat.webp","alt":"L0表情","kind":"emote","fit":"contain"}]
+media: []
 guest: {"name":"墙外有脚手架"}
 ---
 

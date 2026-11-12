@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { createCasePlan, validateCasePlan, validateIntakeReceipt, validateCasePolicy, validateCasePosts } from '../lucifer0/tools/case-adaptation.js';
+import { createCasePlan, validateCasePlan, validateIntakeReceipt, validateCasePolicy, validateCasePosts, caseForPost } from '../lucifer0/tools/case-adaptation.js';
 
 const now = Date.parse('2026-11-11T01:00:00Z');
 const document = (count = 4) => ({ path: 'environment/sources-daily-opinions.md', text: '# 每日素材\n<!-- samples:start -->\n<!-- intake-request:test-request -->\n整理日期：2026-11-11\n\n' + Array.from({ length: count }, (_, index) => '### 讨论 ' + index + '\np01：实际的一段文字 ' + index + '\np02：哦。').join('\n\n') + '\n<!-- samples:end -->\n' });
@@ -46,6 +46,21 @@ test('missing or insufficient daily cases cannot be replaced by selected cases',
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [document()], now }), /GitHub Actions/);
   const duplicate = { ...source, text: source.text.replace('<!-- samples:end -->', '### 另一个标题\np01：实际的一段文字 0\np02：哦。\n<!-- samples:end -->') };
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [duplicate], intakeReceipt: receipt(duplicate.text), now }), /three distinct usable cases/);
+});
+
+test('case membership follows saved ancestry for nested replies and stops at unrelated or broken chains', () => {
+  const { adapted, savedPlan } = create(), plan = { ...savedPlan, caseAdaptation: adapted };
+  const root = { id: adapted.items[0].postId, replyTo: null };
+  const reply = { id: 'source-reply', replyTo: root.id }, nested = { id: 'source-nested', replyTo: reply.id };
+  const original = { id: 'original-root', replyTo: null }, originalReply = { id: 'original-reply', replyTo: original.id };
+  const orphan = { id: 'orphan-reply', replyTo: 'missing-parent' };
+  const cycleA = { id: 'cycle-one', replyTo: 'cycle-two' }, cycleB = { id: 'cycle-two', replyTo: 'cycle-one' };
+  const posts = [nested, originalReply, cycleA, orphan, root, cycleB, original, reply];
+  for (const index of [posts, new Map(posts.map(post => [post.id, post]))]) {
+    for (const post of [root, reply, nested]) assert.equal(caseForPost(plan, post, index), adapted.items[0]);
+    for (const post of [original, originalReply, orphan, cycleA, cycleB, undefined]) assert.equal(caseForPost(plan, post, index), null);
+  }
+  assert.equal(caseForPost(savedPlan, nested, posts), null, 'only the saved private mapping identifies a case');
 });
 
 test('zero original roots still require all three cases, and original roots prevent a separate case block', () => {

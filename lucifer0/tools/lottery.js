@@ -73,18 +73,35 @@ export function validateLottery(config) {
   range(config.nearbyReplies, 10, 'nearby replies');
   if (config.media !== undefined) {
     if (Object.hasOwn(config, 'image')) fail('Use either image or media lottery, not both');
-    keys(config.media, ['images', 'emotes'], 'media lottery');
+    keys(config.media, ['images', 'emotes', 'profiles'], 'media lottery');
+    if (config.media.profiles !== undefined) {
+      const profiles = config.media.profiles;
+      if (!Array.isArray(profiles) || !profiles.length || profiles.length > 10 || new Set(profiles.map(profile => profile?.id)).size !== profiles.length) fail('Invalid media profiles');
+      for (const profile of profiles) {
+        keys(profile, ['id', 'weight', 'root', 'reply'], 'media profile');
+        if (!ID.test(profile.id) || !weight(profile.weight)) fail('Invalid media profile');
+        for (const role of ['root', 'reply']) {
+          keys(profile[role], ['none', 'image', 'emote', 'both'], role + ' media combinations');
+          const values = ['none', 'image', 'emote', 'both'].map(kind => profile[role][kind]);
+          if (values.some(value => typeof value !== 'number' || !Number.isFinite(value) || value < 0 || value > 1000000) || values.reduce((sum, value) => sum + value, 0) <= 0) fail('Invalid ' + role + ' media combinations');
+        }
+      }
+    }
     keys(config.media.images, ['root', 'reply'], 'image pools');
     keys(config.media.emotes, ['root', 'reply'], 'emote pools');
     for (const role of ['root', 'reply']) {
       const images = config.media.images[role], emotes = config.media.emotes[role];
       keys(images, ['probability', 'minimumPosts', 'minimumShare', 'enforceDraw', 'lifePhotoShare', 'types'], role + ' image pool');
-      if (!probability(images.probability) || !integer(images.minimumPosts, 1, 120)) fail('Invalid ' + role + ' image pool');
+      if (config.media.profiles) {
+        if (Object.keys(images).some(key => key !== 'types')) fail('Media profiles use image suggestions without quotas');
+      } else if (!probability(images.probability) || !integer(images.minimumPosts, 1, 120)) fail('Invalid ' + role + ' image pool');
       for (const key of ['minimumShare', 'lifePhotoShare']) if (images[key] !== undefined && !probability(images[key])) fail('Invalid ' + role + ' image ' + key);
       if (images.enforceDraw !== undefined && typeof images.enforceDraw !== 'boolean') fail('Invalid ' + role + ' image enforceDraw');
       options(images.types, ['photo', 'screenshot', 'illustration'], role + ' image types');
       keys(emotes, ['probability', 'counts', 'minimumPosts', 'minimumShare', 'enforceDraw'], role + ' emote pool');
-      if (!probability(emotes.probability)) fail('Invalid ' + role + ' emote pool');
+      if (config.media.profiles) {
+        if (Object.keys(emotes).some(key => key !== 'counts')) fail('Media profiles use emote suggestions without quotas');
+      } else if (!probability(emotes.probability)) fail('Invalid ' + role + ' emote pool');
       if (emotes.minimumPosts !== undefined && !integer(emotes.minimumPosts, 0, 120) || emotes.minimumShare !== undefined && !probability(emotes.minimumShare) || emotes.enforceDraw !== undefined && typeof emotes.enforceDraw !== 'boolean') fail('Invalid ' + role + ' emote minimum');
       bands(emotes.counts, 3, role + ' emote count');
       if (emotes.counts.some(band => band.min < 1)) fail('Invalid ' + role + ' emote count');
@@ -96,9 +113,12 @@ export function validateLottery(config) {
   range(config.sampling.offset, 500, 'sampling offset');
   range(config.sampling.count, 30, 'sampling count', 1);
   if (config.discussion !== undefined) {
-    keys(config.discussion, ['minimumNegativeShare', 'negativeMotivation', 'replyStance', 'replyAuthor'], 'discussion');
+    keys(config.discussion, ['minimumNegativeShare', 'negativeProbability', 'negativeMotivation', 'replyStance', 'replyAuthor'], 'discussion');
     const share = config.discussion.minimumNegativeShare;
-    if (typeof share !== 'number' || !Number.isFinite(share) || share < 0 || share > 1) fail('Invalid minimum negative share');
+    if (share !== undefined && !probability(share)) fail('Invalid minimum negative share');
+    if (config.discussion.negativeProbability !== undefined && !probability(config.discussion.negativeProbability)) fail('Invalid negative probability');
+    if (share === undefined && config.discussion.negativeProbability === undefined) fail('Discussion needs a negative probability or legacy share');
+    if (share !== undefined && config.discussion.negativeProbability !== undefined) fail('Do not combine negative probability and legacy share');
     options(config.discussion.negativeMotivation, ['complaint', 'gossip', 'dispute', 'grievance', 'suspicion'], 'negative motivation');
     options(config.discussion.replyStance, ['support', 'push-back', 'doubt', 'defend', 'provoke', 'ask-detail', 'sidetrack'], 'reply stance');
     if (config.discussion.replyAuthor !== undefined) options(config.discussion.replyAuthor, ['new', 'root', 'participant'], 'reply author');
@@ -166,9 +186,11 @@ export function drawPostChoices({ seed, postId, replyTo = null, lottery = defaul
   const conditions = [{ dimension: 'motivation', value: motivation }, { dimension: 'length', value: length }];
   if (conditionCount === 1) conditions.splice(Math.floor(stream('condition-choice')() * 2), 1);
   const role = replyTo === null ? 'root' : 'reply', media = lottery.media;
-  const image = media ? (stream('image-presence')() < media.images[role].probability
+  const profile = media?.profiles ? pick(randomFor(seed + '\0media-profile'), media.profiles) : null;
+  const combination = profile ? pick(stream('media-combination'), Object.entries(profile[role]).map(([value, weight]) => ({ value, weight }))).value : null;
+  const image = media ? ((profile ? ['image', 'both'].includes(combination) : stream('image-presence')() < media.images[role].probability)
     ? pick(stream('image-type'), media.images[role].types).value : 'none') : pick(stream('image'), lottery.image).value;
-  const emoteCount = media ? (stream('emote-presence')() < media.emotes[role].probability
+  const emoteCount = media ? ((profile ? ['emote', 'both'].includes(combination) : stream('emote-presence')() < media.emotes[role].probability)
     ? pickBand(stream('emote-count'), media.emotes[role].counts) : 0) : undefined;
   return {
     conditions,
@@ -179,9 +201,11 @@ export function drawPostChoices({ seed, postId, replyTo = null, lottery = defaul
     nearbyReplies: pickInteger(stream('nearby-replies'), lottery.nearbyReplies),
     image,
     ...(media ? { emoteCount } : {}),
+    ...(profile ? { presentation: { profile: profile.id, combination } } : {}),
     likes: pickBand(stream('likes'), lottery.likes[replyTo === null ? 'root' : 'reply']),
     ...(lottery.discussion ? { discussion: {
       negativeMotivation: pick(stream('negative-motivation'), lottery.discussion.negativeMotivation).value,
+      ...(lottery.discussion.negativeProbability !== undefined ? { toneSuggestion: stream('negative-presence')() < lottery.discussion.negativeProbability ? 'negative' : 'open' } : {}),
       ...(replyTo !== null ? { replyStance: pick(stream('reply-stance'), lottery.discussion.replyStance).value,
         ...(lottery.discussion.replyAuthor ? { replyAuthor: pick(stream('reply-author'), lottery.discussion.replyAuthor).value } : {}) } : {})
     } } : {})
@@ -211,6 +235,7 @@ function validatePresentationPosts(posts) {
 
 function mediaMinimum({ seed, pool, lottery, role, kind }) {
   const config = lottery.media[kind][role];
+  if (lottery.media.profiles) return 0;
   let drawn = 0;
   if (config.enforceDraw && pool.length) {
     if (typeof seed !== 'string' || !seed.trim() || seed.length > 200) fail('Enforced media draws need the saved seed');
@@ -302,7 +327,7 @@ export function suggestPostPresentation({ seed, posts, lottery = defaultLottery,
   });
   return { imagePostIds, rootImagePostIds: targets.root, replyImagePostIds: targets.reply, images, lifePhotoPostIds,
     emotes: [...emoteTargets.root, ...emoteTargets.reply].sort().map(postId => ({ postId, count: choices.find(item => item.id === postId).emoteCount || 1 })),
-    imagePools, emotePools, likes };
+    imagePools, emotePools, likes, ...(lottery.media.profiles ? { mediaProfile: pick(randomFor(seed + '\0media-profile'), lottery.media.profiles).id } : {}) };
 }
 
 export function drawResearchWindows({ seed, lottery }) {
