@@ -36,3 +36,35 @@ jobs:
             console.log('===CASE_BRIEF=== '+id+' '+JSON.stringify({draft:d.draft,writer:d.writer,editor:d.editor}).slice(0,16000));
           }
           JS
+
+      - name: Stage three case roots and inspect per-thread reply allowances
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          WORK="$HOME/.local/state/y29/lucifer0/current"
+          gh api repos/fivsevn/y29/git/blobs/c511c1fcf481ddfed905e0cba5c9af670449bd59 --jq '.content' | base64 --decode > "$WORK/root-patch.json"
+          node --input-type=module - <<'JS'
+          import {readFile,writeFile} from 'node:fs/promises';
+          import {execFileSync} from 'node:child_process';
+          const w=process.env.HOME+'/.local/state/y29/lucifer0/current/';
+          const op=JSON.parse(await readFile(w+'operation.json','utf8'));
+          const patch=JSON.parse(await readFile(w+'root-patch.json','utf8'));
+          if(op.posts.length||op.id!=='l0-20261112073822-86a53324')throw Error('Unexpected batch state');
+          op.posts=patch.posts;op.reviews=patch.reviews;op.research=patch.research;
+          await writeFile(w+'operation.json',JSON.stringify(op,null,2)+'\n');
+          const x=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','replies','--work',w],{encoding:'utf8',maxBuffer:12000000}));
+          console.log('===REPLY_LOTTERY=== '+JSON.stringify(x));
+          const threads=x.threads||x.roots||x.replies||[];
+          if(!Array.isArray(threads))throw Error('Unexpected lottery result');
+          let n=0;
+          for(const t of threads){
+            if(t.replyCount<=0)continue;
+            for(let k=0;k<Math.min(3,t.replyCount);k++){
+              n++;
+              const id=op.id+'-reply'+String(n).padStart(2,'0');
+              const d=JSON.parse(execFileSync('node',['lucifer0/tools/update.js','brief','--post',id,'--thread',t.rootId,'--work',w],{encoding:'utf8',maxBuffer:12000000}));
+              console.log('===REPLY_BRIEF=== '+id+' '+JSON.stringify({rootId:t.rootId,draft:d.draft,writer:d.writer,editor:d.editor}).slice(0,15000));
+            }
+          }
+          JS
