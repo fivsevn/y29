@@ -7,6 +7,7 @@ import { readSiteEmotes, siteEmoteFiles } from './lucifer0/tools/site-emotes.js'
 const root = fileURLToPath(new URL('.', import.meta.url));
 const output = join(root, 'dist');
 const socialFeed = await buildFeed();
+const socialIndex = JSON.parse(await readFile(join(root, 'lucifer0/data/feed-index.json'), 'utf8'));
 await rm(output, { recursive: true, force: true });
 
 // Only browser runtime files enter the preview; authoring tools and source
@@ -18,7 +19,8 @@ const runtimeFiles = [
   'training/index.html', 'training/style.css', 'training/game.js', 'training/content.js',
   'training/narrative.js', 'training/expansion.js', 'training/variety.js',
   'storyteller/index.html', 'storyteller/style.css', 'storyteller/app.js', 'storyteller/state.js', 'storyteller/current.json',
-  'lucifer0/index.html', 'lucifer0/style.css', 'lucifer0/app.js', 'lucifer0/core.js', 'lucifer0/data/feed.json'
+  'lucifer0/index.html', 'lucifer0/style.css', 'lucifer0/app.js', 'lucifer0/core.js', 'lucifer0/feed-store.js',
+  'lucifer0/data/feed.json', 'lucifer0/data/feed-index.json', ...socialIndex.parts.map(part => 'lucifer0/' + part.src)
 ];
 const socialAssets = new Set([
   'assets/icon.svg', 'assets/verification-lucifer.webp', ...socialFeed.users.map(user => user.avatar).filter(Boolean),

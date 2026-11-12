@@ -80,11 +80,28 @@ node lucifer0/tools/update.js prepare --work /outside/work
 
 `postId` 对应当前 `posts` 中的一条实际发言；`negative` 填本次审读的布尔判断，`reason` 写清依据。普通内容同样填写记录，例如 `negative: false`、`reason: "询问桌腿怎样固定，正文只在请求操作帮助。"`。字段只保存在操作文件，用于[讨论审读](lottery.md#负面与回复提示)。补写或修改正文后同步复核该项，判断按终稿内容填写，发布页面沿用原帖子字段。
 
-原创与案例主帖及其回复都按实际语气、篇幅和开口动机写作，当前软性动机提示不要求凑足负面条数。原创回复核对本轮抽中的数量空间，案例回复沿采用的源帖互动形成；两路统一核对实际父关系、时间和内容记录。旧操作沿[保存快照](lottery.md#保存与恢复)恢复，不改原计划。
+当前v2只要求简短的终稿分类，`reason` 可以只是“嫌弃画面难看”“跟着嘲笑”，无需为当事人辩护。`context` 按需选填，用于事实、知情或具体改写的核对。旧v1操作仍要求每条原创填写该项，字段如下：
+
+```json
+"context": {
+  "decision": "adapt",
+  "action": "询问桌腿怎样固定，想先确认是否需要换零件",
+  "basis": [
+    { "kind": "visible-post", "ref": "实际可见父帖ID", "detail": "父帖只展示了晃动位置，还没有说明接口是否松脱。" }
+  ],
+  "postDigest": "复制 suggest 中本帖对应的 postDigest"
+}
+```
+
+`decision` 取 `use`（采用）、`adapt`（结合处境调整）或 `drop`（放弃）；`action` 写人物实际想做的事。`basis` 每项填写具体依据：`situation` 使用 `ref: null`，说明已明确的本次情境；`profile` 引用本人档案路径，`visible-post` 引用本条写作材料中实际可见的帖号，`own-post` 引用本人已有发言的帖号。`detail` 说明该内容与本次动作的关系，不能只写“抽签要求”或拿他人私下档案作依据。
+
+终稿保存后运行 `suggest`，从返回的 `contextReviewBasis` 数组中按 `postId` 找到对应 `postDigest` 并复制，不手算摘要。正文、作者、时间、父关系、赞数或媒体等公开字段变化后，重新审读并取得摘要。工具核对引用范围与终稿摘要，实际情境和采用理由是否成立仍由审读者判断。案例主帖及其回复沿源互动，不强套原创 `context`；缺少新开关的旧操作沿原字段恢复。
+
+当前v2按本轮全部实际发言核对至少一半负面，奇数向上取整，包含原创、案例、主帖与回复；不分摊到每个人、每串，也不按正负轮流发布。原创保留50%的负面抽取机会，案例从取材与采用范围中形成，不为比例歪改原互动。负面判定包括琐碎嫌烦、酸话、贬低和无理起哄，不要求完整冲突或合理受害。原创回复核对本轮抽中的数量空间，案例回复沿采用的源帖互动形成；两路统一核对实际父关系、时间和内容记录。旧操作沿[保存快照](lottery.md#保存与恢复)恢复，不改原计划。
 
 `likes` 保存本条基础赞数，取值依据与建议数值的处理见[研究-评论与点赞](../environment/research-comments.md#点赞怎样形成差异)。
 
-主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用带时区的 ISO 格式，按上海时区理解，沿已有可见时间线安排，且不超过实际当前时刻，回复时间晚于或等于父帖。间隔不足时允许相邻发言同一时刻。新草稿的时间由 `brief` 安排，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
+主帖的 `replyTo` 为 `null`；回复填写真正父帖的 ID。时间使用带时区的 ISO 格式，按本人时区排定，页面统一以上海时区显示；回复不早于父帖，发言不超过实际当前时刻。新草稿由 `brief` 安排，启用人物时段的操作还核对保存窗口与本人先前发言，处理方式见[逐条写作](#逐条写作)。示例时间与正文在使用时替换为本次实际内容。
 
 删除根帖时，移除整个根串发布包；删除回复时，移除其正文及下级回复，并清理这些发言独用的普通配图。随后重新生成信息流，核对剩余帖子及图片引用。
 
@@ -149,13 +166,17 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --thread 根帖ID -
 node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID --work /outside/work
 ```
 
-`--thread` 与 `--reply-to` 每次选用一个；原创目标与身份的选择方式见[抽签规则](lottery.md#负面与回复提示)，案例沿原互动的接话对象及发言身份对应处理。已有草稿也可以按 ID 读取材料。新草稿时间由工具安排，超出当前时刻的部分自动压缩；案例采用互动的先后适配本站时间线，两路都核对父帖时间与实际当前时刻。`editor.timing.status` 为 `ready` 时继续写作与发布，恢复时保留原操作、已有草稿和案例映射。
+`--thread` 与 `--reply-to` 每次选用一个；原创目标与身份的选择方式见[抽签规则](lottery.md#负面与回复提示)，案例沿原互动的接话对象及发言身份对应处理。已有草稿也可以按 ID 读取材料。启用 `participation` 的新操作先确定身份和真实父帖，再用 `plan.participationSchedules` 中本人的时段排时；时间不早于父帖与本人先前发言，不超过实际当前时刻和保存窗口结束时刻。恢复时保留原操作、已有草稿和案例映射，旧操作沿[保存快照](lottery.md#保存与恢复)的原排时规则完成。
+
+先检查 `editor.timing.status`：`ready` 时继续，`unavailable` 时返回 `writer: null`，跳过或后续接续。v2常用时段只提供偏好，偶尔在时段外发言不需逐次解释。无明确结构化窗口的身份保持开放，不能据此补写固定的深夜习惯；中文 `activeHours` 用于理解，实际偏好读取 `postingWindows` 与 `timezone`。
+
+确需指定本次时间时，可在 `operation.timingExceptions[本条帖号]` 保存 `{ "createdAt": "带时区的实际ISO时间" }`；只有已有具体情境时再填 `reason`。时间仍在保存窗口内，不早于父帖及本人先前发言，不晚于当前时刻。v1旧操作继续沿原有严格时段及明确理由恢复，不重抽。
 
 新临时身份的名字由 `brief` 的独立随机流先分配，保存到 `operation.guestNames[author]`，并填入 `draft.guest.name`；写作者直接沿用。取名只读取本次种子、身份编号与已占用名字，不读取当前帖子、配图或回复内容。既有身份优先沿用原名，恢复和取消操作也保留已存署名；个别应景名按实际语境判断，不将历史网名批量改成另一套统一格式。
 
 把返回的 `writer` 单独交给本条写作者，策划者保留 `editor` 与整轮材料；将完成的文字、图片和已确定身份填入 `draft`，再保存到 `operation.json.posts`。
 
-`writer.createdAt` 是本条的时间。原创写作者按 `writer.discussion` 和篇幅、媒体提示理解参与机会，策划者查看 `editor.discussion` 的实际审读信息；案例写作者按 `writer.caseAdaptation` 和源帖全文处理。公共写作与评论方法只保留本条需要的短提示，完整研究留在策划材料，采用原互动时沿实际接话关系。`writer.self.voiceExamples` 保存标记为 `practice` 的表达练习，本人正式背景保存在其余档案材料中。
+`writer.createdAt` 是本条的时间。v2原创写作者保留普通动机及本次抽中的负面倾向，具体负面方向、篇幅与回复姿态随实际可见话头调整；可以不讲理、不接话或说到一半离开，不给每次开口补完整理由。策划者简短登记终稿分类，`context` 按需填写；v1沿保存规则处理。候选权重不表示人群统计或每人的固定性格。案例写作者按 `writer.caseAdaptation` 和源帖全文处理。公共写作与评论方法只保留本条需要的短提示，完整研究留在策划材料，采用原互动时沿实际接话关系。`writer.self.voiceExamples` 保存标记为 `practice` 的表达练习，本人正式背景保存在其余档案材料中。
 
 策划者仅在本条用得上时，从 `editor` 的背景资料核对发言者本人已知的片段，补入单条 `writer`；不能把另一人的档案内容当作他自然知道的背景。无档案的发言者只需当前发言用得上的处境，无须另编完整经历。每写完一条，先保存初稿，再执行：
 
@@ -163,7 +184,7 @@ node lucifer0/tools/update.js brief --post 本次操作ID-02 --reply-to 父帖ID
 node lucifer0/tools/update.js checkpoint --stage draft --work /outside/work
 ```
 
-审读并将实际采用的编辑稿保存到 `operation.json.posts` 后，执行：
+审读并将实际采用的编辑稿保存到 `operation.json.posts` 后，运行 `suggest`；v2完成实际分类，需要补充 `reviews.context` 时再使用对应 `contextReviewBasis`；v1仍逐条填写，再执行：
 
 ```sh
 node lucifer0/tools/update.js checkpoint --stage edited --work /outside/work
@@ -241,6 +262,42 @@ node lucifer0/tools/update.js suggest --work /outside/work
 两组各自只使用相应的独立写作输入，保存实际初稿、编辑稿与改动依据，混排后隐去方法标签及署名审读。记录哪些不同人物仍共用同一条叙述路线、哪些初稿在编辑时被补成完整故事，以及短回应、自然重复和人物已知范围是否得到保留。几个字的回话无需能辨认作者，改善也不靠缩短全部帖子、统一去标点或提高俏皮话密度判断。
 
 小样沿已有事实试写，不写入公开帖子、素材采用记录或日常发布额度。保留输入快照与评估结果，先据此确定实际需要修改的环节，再用于后续正常更新。
+
+匿名包和空白评分表可由工具导出：
+
+```sh
+node lucifer0/tools/writer-evaluation.js blind --input tests/fixtures/writer-trial-v2-20261113.json --methods baseline,v2 --seed review-20261113 --out /outside/review-v2
+node lucifer0/tools/writer-evaluation.js report --key /outside/review-v2/key.json --scores /outside/review-v2/completed-scores.json --out /outside/review-v2/report.json
+```
+
+审读者只读 `packet.json` 和 `scores.json`，`key.json` 单独保留；原稿保持原文，仅隐去显式署名和方法标签。分别记录自然程度、人物区别、事实矛盾及跨样本重复路线，无法判断的项目可留空；不合成为一个质量总分。同一执行者写作并评估时标记 `independent: false`，不称为独立盲评。
+
+本轮24例沿用旧固定事实和可见范围，原材料中的“目的”已经过整理，因此它只能帮助比较同一材料的表达，不能证明取材已有更多低级、无序的话头。后续评估取材环节时，还需冻结未经诉求归纳的原始脱敏片段，保留本来就杂乱、重复与不完整的内容；不能用这份旧小样代替取材效果检查。
+
+## 持久保存与工作流重放
+
+GitHub Actions 的准备与发布分别使用 `.github/workflows/lucifer0-prepare.yml`、`.github/workflows/lucifer0-publish.yml`。准备流程只手动启动；发布接收实际 `operation_id`，可指定不可变的 `bundle_id`，不再修改脚本里的运行编号、草稿 blob 或帖数。
+
+两份流程从输入 `archive_repository` 或仓库变量 `LUCIFER0_ARCHIVE_REPOSITORY` 读取私有归档仓库（`owner/repo`），`archive_ref` 默认 `main`，该分支须已存在；`ARCHIVE_TOKEN` 需要此私有仓库 Contents 读写权限。未配置时流程在开始处说明缺项，不将未发表草稿和审读记录上传到公开仓库的临时产物中。命令行更新仍可沿本页原流程执行。
+
+归档保存阅读包、原操作与抽签、实际草稿、已有初稿历史和引用媒体，并记录源提交与各文件校验和；`prepared` 和 `reviewed` 分别保存，后续修订保留先前版本。研究、档案、规则及工具源修改先提交，再沿原工作目录 `prepare` 补读并审定；归档工具拒绝未提交的源改动，仅允许本次已经逐字节纳入归档的媒体和指定工作目录。
+
+在源仓库根目录执行，`L0_WORK` 为原工作目录，`L0_ARCHIVE` 为私有归档仓库的本地目录：
+
+```sh
+node .github/scripts/lucifer0-operation-archive.mjs save --root "$PWD/lucifer0" --work "$L0_WORK" --archive "$L0_ARCHIVE" --stage prepared
+node .github/scripts/lucifer0-operation-archive.mjs save --root "$PWD/lucifer0" --work "$L0_WORK" --archive "$L0_ARCHIVE" --stage reviewed
+```
+
+第二条在实际文字、图片与审读完成后执行；随后在归档仓库提交并推送 `operations/`。本地工具本身不联网、不自动推送；准备工作流会保存并提交 `prepared` 版本。
+
+恢复时先把源仓库切到清单记录的 `sourceRevision`，再执行：
+
+```sh
+node .github/scripts/lucifer0-operation-archive.mjs restore --root "$PWD/lucifer0" --work "$L0_WORK" --archive "$L0_ARCHIVE" --operation 实际操作编号 --stage reviewed --bundle 实际摘要
+```
+
+省略 `--bundle` 时读取该阶段最新版本；复查旧稿时使用明确摘要。工具验证全部文件与目标碰撞后才写入，迁移绝对工作路径时保持原抽签。旧稿可以离线复查，公开发布仍要求源版本与当前 `main` 一致，照常核对素材、父关系、时效、权限和审读；归档不会延长旧操作的发帖时间窗口。
 
 ## 导入与上线
 

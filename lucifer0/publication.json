@@ -357,45 +357,65 @@
       "negativeMotivation": [
         {
           "value": "complaint",
-          "weight": 22
-        },
-        {
-          "value": "gossip",
-          "weight": 24
-        },
-        {
-          "value": "dispute",
-          "weight": 24
-        },
-        {
-          "value": "grievance",
           "weight": 16
         },
         {
+          "value": "gossip",
+          "weight": 10
+        },
+        {
+          "value": "dispute",
+          "weight": 8
+        },
+        {
+          "value": "grievance",
+          "weight": 8
+        },
+        {
           "value": "suspicion",
-          "weight": 14
+          "weight": 8
+        },
+        {
+          "value": "irritation",
+          "weight": 16
+        },
+        {
+          "value": "contempt",
+          "weight": 12
+        },
+        {
+          "value": "envy",
+          "weight": 6
+        },
+        {
+          "value": "pile-on",
+          "weight": 10
+        },
+        {
+          "value": "grudge",
+          "weight": 6
         }
       ],
       "replyStance": [
         {
           "value": "support",
-          "weight": 15
+          "weight": 12
         },
         {
           "value": "push-back",
-          "weight": 28
+          "weight": 12
         },
         {
           "value": "doubt",
-          "weight": 10
+          "weight": 8
         },
         {
           "value": "defend",
-          "weight": 15
+          "weight": 8
         },
         {
           "value": "provoke",
-          "weight": 20
+          "weight": 12
         },
         {
           "value": "ask-detail",
@@ -403,6 +423,18 @@
         },
         {
           "value": "sidetrack",
+          "weight": 14
+        },
+        {
+          "value": "dismiss",
+          "weight": 12
+        },
+        {
+          "value": "repeat",
+          "weight": 10
+        },
+        {
+          "value": "pile-on",
           "weight": 8
         }
       ],
@@ -420,7 +452,8 @@
           "weight": 7
         }
       ],
-      "negativeProbability": 0.5
+      "negativeProbability": 0.5,
+      "minimumNegativeShare": 0.5
     },
     "researchMaintenance": {
       "probability": 0.3,
@@ -430,6 +463,9 @@
     },
     "diversity": {
       "recentUpdates": 3
+    },
+    "participation": {
+      "version": 2
     }
   }
 }

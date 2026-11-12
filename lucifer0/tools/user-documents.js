@@ -1,6 +1,7 @@
 import { readFile, readdir, lstat, realpath, writeFile } from 'node:fs/promises';
 import { join, resolve, sep } from 'node:path';
 import { emptyProfile, validateProfile, isWorldviewId } from './profile-schema.js';
+import { validatePostingWindows } from './participation.js';
 
 const PERSON_FIELDS = ['编号', '网名', '用户名', '个人简介', '所属世界观', '年龄', '性别', '职业', '居住区域', '教育与训练', '家庭与居住', '资料更新'];
 const PERSON_HEADINGS = ['基本情况', '成长与工作经历', '经济与日常生活', '家庭与社会关系', '兴趣与闲暇', '观念与处事方式', '私下的顾虑', '压力与情绪反应', '经验与局限', '网络交往与表达', '近期生活与打算'];
@@ -78,13 +79,22 @@ export function renderUserDocument(user, suppliedProfile = emptyProfile(user.id)
 }
 
 function validateSettings(setting) {
-  if (!setting || typeof setting !== 'object' || Array.isArray(setting) || Object.keys(setting).some(key => ![...SETTING_FIELDS, 'nameColor'].includes(key)) || SETTING_FIELDS.some(key => !own(setting, key))) fail('accounts.json 的账号配置字段不完整或含未知字段');
+  if (!setting || typeof setting !== 'object' || Array.isArray(setting) || Object.keys(setting).some(key => ![...SETTING_FIELDS, 'nameColor', 'postingWindows', 'postingMode'].includes(key)) || SETTING_FIELDS.some(key => !own(setting, key))) fail('accounts.json 的账号配置字段不完整或含未知字段');
   if (!ID.test(setting.id)) fail('accounts.json 的稳定 ID 格式不正确');
   if (!isUserAvatarPath(setting.avatar, setting.id)) fail('accounts.json 的头像路径无效');
   if (own(setting, 'nameColor') && !isUserNameColor(setting.nameColor)) fail('accounts.json 的 nameColor 必须为 #RRGGBB');
   for (const key of BOOLS) if (typeof setting[key] !== 'boolean') fail(`accounts.json 的 ${key} 必须为布尔值`);
   for (const [key, values] of Object.entries(ENUMS)) if (!values.includes(setting[key])) fail(`accounts.json 的 ${key} 无效`);
   for (const [key, maximum] of [['sourceWork', 80], ['timezone', 240], ['activeHours', 240]]) if (typeof setting[key] !== 'string' || setting[key].length > maximum) fail(`accounts.json 的 ${key} 无效`);
+  if (own(setting, 'postingWindows')) {
+    if (!Array.isArray(setting.postingWindows)) fail('accounts.json 的 postingWindows 必须为数组');
+    validatePostingWindows(setting.postingWindows, setting.timezone);
+  }
+  if (own(setting, 'postingMode')) {
+    if (!['scheduled', 'event-driven', 'manual'].includes(setting.postingMode)) fail('accounts.json 的 postingMode 无效');
+    validatePostingWindows(setting.postingWindows, setting.timezone);
+    if (!Array.isArray(setting.postingWindows) || (setting.postingMode === 'scheduled' ? !setting.postingWindows.length : setting.postingWindows.length)) fail('accounts.json 的 postingMode 与 postingWindows 不一致');
+  }
   if (typeof setting.activityWeight !== 'number' || !Number.isFinite(setting.activityWeight) || setting.activityWeight < 0 || setting.activityWeight > 10) fail('accounts.json 的权重必须为 0–10');
   return setting;
 }
@@ -102,7 +112,7 @@ export function parseUserDocument(source, expectedId, settings) {
     values[key] = value;
   }
   for (const key of fields) if (!own(values, key)) fail(`基本情况缺少“${key}”`);
-  const { activityWeight, timezone, activeHours, ...controls } = settings;
+  const { activityWeight, timezone, activeHours, postingWindows, postingMode, ...controls } = settings;
   const user = { ...controls, id: values['编号'], name: values['网名'], handle: values['用户名'], bio: values['个人简介'] };
   if (!ID.test(user.id) || user.id !== settings.id || expectedId !== undefined && user.id !== expectedId) fail('文档稳定 ID 与文件夹或 accounts.json 不一致');
   if (!/^[a-z0-9_]{2,32}$/.test(user.handle)) fail('用户名只能包含 2–32 位小写字母、数字和下划线');
@@ -110,6 +120,8 @@ export function parseUserDocument(source, expectedId, settings) {
   const items = heading => sections[heading].trim().split(/\n\s*\n/).filter(Boolean).map(text => text.replace(/^- /gm, ''));
   const profile = emptyProfile(user.id);
   Object.assign(profile.basics, { updatedAt: values['资料更新'], worldview: values['所属世界观'], timezone, activeHours });
+  if (postingWindows !== undefined) profile.basics.postingWindows = structuredClone(postingWindows);
+  if (postingMode !== undefined) profile.basics.postingMode = postingMode;
   if (account) {
     Object.assign(profile.basics, { occupation: values['运营方式'], location: values['报道范围'], interests: items('取材与选题') });
     Object.assign(profile, { voice: items('表达与互动'), postingHabits: items('账号定位与运营'), currentStatus: sections['当前安排'].trim() });
@@ -243,3 +255,4 @@ export async function buildUserDirectory(root) {
   if (previous !== text) await writeFile(path, text);
   return { path, count: users.length };
 }
+

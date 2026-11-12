@@ -54,8 +54,13 @@ export function validateReplyLottery(lottery) {
   return lottery;
 }
 export function validateLottery(config) {
-  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'media', 'likes', 'sampling', 'discussion', 'researchMaintenance', 'diversity'], 'lottery');
+  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'media', 'likes', 'sampling', 'discussion', 'researchMaintenance', 'diversity', 'participation'], 'lottery');
   if (config.version !== 1) fail('Invalid lottery version');
+  if (config.participation !== undefined) {
+    keys(config.participation, ['version'], 'participation rules');
+    if (![1, 2].includes(config.participation.version)) fail('Invalid participation rules version');
+    if (config.participation.version === 1 && config.discussion?.minimumNegativeShare !== undefined) fail('Contextual participation v1 cannot impose a negative share');
+  }
   if (Object.hasOwn(config.rootBudget ?? {}, 'bands')) {
     keys(config.rootBudget, ['bands'], 'root budget');
     bands(config.rootBudget.bands, 20, 'root budget band');
@@ -118,9 +123,9 @@ export function validateLottery(config) {
     if (share !== undefined && !probability(share)) fail('Invalid minimum negative share');
     if (config.discussion.negativeProbability !== undefined && !probability(config.discussion.negativeProbability)) fail('Invalid negative probability');
     if (share === undefined && config.discussion.negativeProbability === undefined) fail('Discussion needs a negative probability or legacy share');
-    if (share !== undefined && config.discussion.negativeProbability !== undefined) fail('Do not combine negative probability and legacy share');
-    options(config.discussion.negativeMotivation, ['complaint', 'gossip', 'dispute', 'grievance', 'suspicion'], 'negative motivation');
-    options(config.discussion.replyStance, ['support', 'push-back', 'doubt', 'defend', 'provoke', 'ask-detail', 'sidetrack'], 'reply stance');
+    if (share !== undefined && config.discussion.negativeProbability !== undefined && config.participation?.version !== 2) fail('Do not combine negative probability and legacy share');
+    options(config.discussion.negativeMotivation, ['complaint', 'gossip', 'dispute', 'grievance', 'suspicion', 'irritation', 'contempt', 'envy', 'pile-on', 'grudge'], 'negative motivation');
+    options(config.discussion.replyStance, ['support', 'push-back', 'doubt', 'defend', 'provoke', 'ask-detail', 'sidetrack', 'dismiss', 'repeat', 'pile-on'], 'reply stance');
     if (config.discussion.replyAuthor !== undefined) options(config.discussion.replyAuthor, ['new', 'root', 'participant'], 'reply author');
   }
   if (config.researchMaintenance !== undefined) {
@@ -362,4 +367,5 @@ export function drawResearchMaintenance({ seed, lottery, documents, now }) {
   }
   return selected;
 }
+
 

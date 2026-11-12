@@ -14,7 +14,22 @@
       "allowReplies": true,
       "activityWeight": 0.35,
       "timezone": "Asia/Shanghai",
-      "activeHours": "轮晚班时 23:00–01:00；休息日傍晚偶尔出现"
+      "activeHours": "轮晚班时 23:00–01:00；休息日傍晚偶尔出现",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "23:00",
+          "end": "01:00"
+        }
+      ]
     },
     {
       "id": "passerby17",
@@ -29,7 +44,22 @@
       "allowReplies": true,
       "activityWeight": 0.8,
       "timezone": "Asia/Shanghai",
-      "activeHours": "工作日 07:30–08:30、午饭后和 22:00 左右"
+      "activeHours": "工作日 07:30–08:30、午饭后和 22:00 左右",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "07:30",
+          "end": "08:30"
+        }
+      ]
     },
     {
       "id": "visitor-alpha-upper",
@@ -44,7 +74,22 @@
       "allowReplies": true,
       "activityWeight": 0.65,
       "timezone": "Asia/Shanghai",
-      "activeHours": "开门前 09:00 左右，或收店后 20:30–22:00"
+      "activeHours": "开门前 09:00 左右，或收店后 20:30–22:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "20:30",
+          "end": "22:00"
+        }
+      ]
     },
     {
       "id": "visitor-beta-upper",
@@ -59,7 +104,8 @@
       "allowReplies": true,
       "activityWeight": 0.18,
       "timezone": "Asia/Shanghai",
-      "activeHours": "随检修排班变化；下班吃早饭或晚饭后短暂上线"
+      "activeHours": "随检修排班变化；下班吃早饭或晚饭后短暂上线",
+      "postingWindows": []
     },
     {
       "id": "visitor-chi",
@@ -74,7 +120,22 @@
       "allowReplies": true,
       "activityWeight": 0.6,
       "timezone": "Asia/Shanghai",
-      "activeHours": "休息日午后，工作日 18:00–20:00"
+      "activeHours": "休息日午后，工作日 18:00–20:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "18:00",
+          "end": "20:00"
+        }
+      ]
     },
     {
       "id": "visitor-chi-upper",
@@ -89,7 +150,8 @@
       "allowReplies": true,
       "activityWeight": 1.6,
       "timezone": "Asia/Shanghai",
-      "activeHours": "轮休的下午，闭店后 22:00 左右"
+      "activeHours": "轮休的下午，闭店后 22:00 左右",
+      "postingWindows": []
     },
     {
       "id": "visitor-clearcalendar",
@@ -104,7 +166,8 @@
       "allowReplies": true,
       "activityWeight": 1.35,
       "timezone": "Asia/Shanghai",
-      "activeHours": "通勤候车与晚间，出差不固定"
+      "activeHours": "通勤候车与晚间，出差不固定",
+      "postingWindows": []
     },
     {
       "id": "visitor-delta",
@@ -119,7 +182,22 @@
       "allowReplies": true,
       "activityWeight": 1.1,
       "timezone": "Asia/Shanghai",
-      "activeHours": "早班前 05:30 附近很短，收工后 15:00–17:00"
+      "activeHours": "早班前 05:30 附近很短，收工后 15:00–17:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "15:00",
+          "end": "17:00"
+        }
+      ]
     },
     {
       "id": "visitor-delta-upper",
@@ -134,7 +212,22 @@
       "allowReplies": true,
       "activityWeight": 0.4,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午休 12:00–13:00、傍晚走路时停下休息的间隙"
+      "activeHours": "午休 12:00–13:00、傍晚走路时停下休息的间隙",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "12:00",
+          "end": "13:00"
+        }
+      ]
     },
     {
       "id": "visitor-epsilon",
@@ -149,7 +242,22 @@
       "allowReplies": true,
       "activityWeight": 0.45,
       "timezone": "Asia/Shanghai",
-      "activeHours": "闭馆后 19:00–21:00；周末忙时可能整天不出现"
+      "activeHours": "闭馆后 19:00–21:00；周末忙时可能整天不出现",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-epsilon-upper",
@@ -164,7 +272,22 @@
       "allowReplies": true,
       "activityWeight": 0.5,
       "timezone": "Asia/Shanghai",
-      "activeHours": "晚饭后 20:00–22:00；忙完一件活才集中回复"
+      "activeHours": "晚饭后 20:00–22:00；忙完一件活才集中回复",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "20:00",
+          "end": "22:00"
+        }
+      ]
     },
     {
       "id": "visitor-eta",
@@ -179,7 +302,22 @@
       "allowReplies": true,
       "activityWeight": 0.7,
       "timezone": "Asia/Shanghai",
-      "activeHours": "开店前 10:00 附近、傍晚 17:00–19:00"
+      "activeHours": "开店前 10:00 附近、傍晚 17:00–19:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "17:00",
+          "end": "19:00"
+        }
+      ]
     },
     {
       "id": "visitor-eta-upper",
@@ -194,7 +332,8 @@
       "allowReplies": true,
       "activityWeight": 0.7,
       "timezone": "Asia/Shanghai",
-      "activeHours": "两节课之间只看不回，晚间 21:00 后较有空"
+      "activeHours": "两节课之间只看不回，晚间 21:00 后较有空",
+      "postingWindows": []
     },
     {
       "id": "visitor-gamma",
@@ -209,7 +348,22 @@
       "allowReplies": true,
       "activityWeight": 1.4,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午后店里闲的时候，或关门后 18:00–20:00"
+      "activeHours": "午后店里闲的时候，或关门后 18:00–20:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "18:00",
+          "end": "20:00"
+        }
+      ]
     },
     {
       "id": "visitor-gamma-upper",
@@ -224,7 +378,22 @@
       "allowReplies": true,
       "activityWeight": 1.8,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午饭后短看，晚上 19:30–21:00"
+      "activeHours": "午饭后短看，晚上 19:30–21:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "19:30",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-halfkettle",
@@ -239,7 +408,8 @@
       "allowReplies": true,
       "activityWeight": 0.2,
       "timezone": "Asia/Shanghai",
-      "activeHours": "家务间隙，无固定在线保证"
+      "activeHours": "家务间隙，无固定在线保证",
+      "postingWindows": []
     },
     {
       "id": "visitor-iota",
@@ -254,7 +424,22 @@
       "allowReplies": true,
       "activityWeight": 1.7,
       "timezone": "Asia/Shanghai",
-      "activeHours": "兼职班次结束后、22:00–00:00；白天随课程变化"
+      "activeHours": "兼职班次结束后、22:00–00:00；白天随课程变化",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "22:00",
+          "end": "00:00"
+        }
+      ]
     },
     {
       "id": "visitor-iota-upper",
@@ -269,7 +454,8 @@
       "allowReplies": true,
       "activityWeight": 0.35,
       "timezone": "Asia/Shanghai",
-      "activeHours": "随车站早晚班变化，休息日早上看得多"
+      "activeHours": "随车站早晚班变化，休息日早上看得多",
+      "postingWindows": []
     },
     {
       "id": "visitor-kappa",
@@ -284,7 +470,8 @@
       "allowReplies": true,
       "activityWeight": 0.65,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午后试衣间隙和 21:00 左右；周末常忙到很晚"
+      "activeHours": "午后试衣间隙和 21:00 左右；周末常忙到很晚",
+      "postingWindows": []
     },
     {
       "id": "visitor-kappa-upper",
@@ -299,7 +486,8 @@
       "allowReplies": true,
       "activityWeight": 1.25,
       "timezone": "Asia/Shanghai",
-      "activeHours": "排练间隙零散出现，收工时间不固定"
+      "activeHours": "排练间隙零散出现，收工时间不固定",
+      "postingWindows": []
     },
     {
       "id": "visitor-lambda",
@@ -314,7 +502,8 @@
       "allowReplies": true,
       "activityWeight": 1.9,
       "timezone": "Asia/Shanghai",
-      "activeHours": "工作日午休和 23:00 前后，周末不稳定"
+      "activeHours": "工作日午休和 23:00 前后，周末不稳定",
+      "postingWindows": []
     },
     {
       "id": "visitor-lambda-upper",
@@ -329,7 +518,22 @@
       "allowReplies": true,
       "activityWeight": 0.3,
       "timezone": "Asia/Shanghai",
-      "activeHours": "收货结束后 18:00–20:00，周休日午后"
+      "activeHours": "收货结束后 18:00–20:00，周休日午后",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "18:00",
+          "end": "20:00"
+        }
+      ]
     },
     {
       "id": "visitor-latebell",
@@ -344,7 +548,22 @@
       "allowReplies": true,
       "activityWeight": 1.45,
       "timezone": "Asia/Shanghai",
-      "activeHours": "晚自习后 21:30–22:20，周末随返家变化"
+      "activeHours": "晚自习后 21:30–22:20，周末随返家变化",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "21:30",
+          "end": "22:20"
+        }
+      ]
     },
     {
       "id": "visitor-levelpath",
@@ -359,7 +578,8 @@
       "allowReplies": true,
       "activityWeight": 0.8,
       "timezone": "Asia/Shanghai",
-      "activeHours": "工作间隙和晚间，不保证即时回覆"
+      "activeHours": "工作间隙和晚间，不保证即时回覆",
+      "postingWindows": []
     },
     {
       "id": "visitor-mu",
@@ -374,7 +594,22 @@
       "allowReplies": true,
       "activityWeight": 0.9,
       "timezone": "Asia/Shanghai",
-      "activeHours": "花市早间忙完后 10:00–12:00，晚上偶尔"
+      "activeHours": "花市早间忙完后 10:00–12:00，晚上偶尔",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "10:00",
+          "end": "12:00"
+        }
+      ]
     },
     {
       "id": "visitor-mu-upper",
@@ -389,7 +624,22 @@
       "allowReplies": true,
       "activityWeight": 1.3,
       "timezone": "Asia/Shanghai",
-      "activeHours": "晚场散场后 23:00–01:00，休息日午后"
+      "activeHours": "晚场散场后 23:00–01:00，休息日午后",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "23:00",
+          "end": "01:00"
+        }
+      ]
     },
     {
       "id": "visitor-nu",
@@ -404,7 +654,22 @@
       "allowReplies": true,
       "activityWeight": 0.65,
       "timezone": "Asia/Shanghai",
-      "activeHours": "下午外拍结束后和 21:00–23:00"
+      "activeHours": "下午外拍结束后和 21:00–23:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "21:00",
+          "end": "23:00"
+        }
+      ]
     },
     {
       "id": "visitor-nu-upper",
@@ -419,7 +684,22 @@
       "allowReplies": true,
       "activityWeight": 2,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午前收摊后 11:00–13:00，晚上 20:00 前"
+      "activeHours": "午前收摊后 11:00–13:00，晚上 20:00 前",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "11:00",
+          "end": "13:00"
+        }
+      ]
     },
     {
       "id": "visitor-omega",
@@ -434,7 +714,22 @@
       "allowReplies": true,
       "activityWeight": 0.4,
       "timezone": "Asia/Shanghai",
-      "activeHours": "录音工作结束后 20:00–23:00；录制期间不回"
+      "activeHours": "录音工作结束后 20:00–23:00；录制期间不回",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "20:00",
+          "end": "23:00"
+        }
+      ]
     },
     {
       "id": "visitor-omega-upper",
@@ -449,7 +744,22 @@
       "allowReplies": true,
       "activityWeight": 0.6,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午休和下班后 19:00–21:00，忙班日只看不写"
+      "activeHours": "午休和下班后 19:00–21:00，忙班日只看不写",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-omicron",
@@ -464,7 +774,8 @@
       "allowReplies": true,
       "activityWeight": 1.1,
       "timezone": "Asia/Shanghai",
-      "activeHours": "晚间 22:00 后比较活跃，白天录音时断续"
+      "activeHours": "晚间 22:00 后比较活跃，白天录音时断续",
+      "postingWindows": []
     },
     {
       "id": "visitor-omicron-upper",
@@ -479,7 +790,22 @@
       "allowReplies": true,
       "activityWeight": 0.65,
       "timezone": "Asia/Shanghai",
-      "activeHours": "早饭后 08:00–10:00、下午散步回来"
+      "activeHours": "早饭后 08:00–10:00、下午散步回来",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "08:00",
+          "end": "10:00"
+        }
+      ]
     },
     {
       "id": "visitor-phi",
@@ -494,7 +820,22 @@
       "allowReplies": true,
       "activityWeight": 0.5,
       "timezone": "Asia/Shanghai",
-      "activeHours": "早上散步后、晚上 19:00–21:00"
+      "activeHours": "早上散步后、晚上 19:00–21:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-phi-upper",
@@ -509,7 +850,8 @@
       "allowReplies": true,
       "activityWeight": 0.25,
       "timezone": "Asia/Shanghai",
-      "activeHours": "巡检休息间隙和下班后 20:00 左右"
+      "activeHours": "巡检休息间隙和下班后 20:00 左右",
+      "postingWindows": []
     },
     {
       "id": "visitor-pi",
@@ -524,7 +866,8 @@
       "allowReplies": true,
       "activityWeight": 0.8,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午后交货间隙，晚间 20:00 后"
+      "activeHours": "午后交货间隙，晚间 20:00 后",
+      "postingWindows": []
     },
     {
       "id": "visitor-pi-upper",
@@ -539,7 +882,22 @@
       "allowReplies": true,
       "activityWeight": 0.6,
       "timezone": "Asia/Shanghai",
-      "activeHours": "工作日午休、晚饭后 20:00–22:00"
+      "activeHours": "工作日午休、晚饭后 20:00–22:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "20:00",
+          "end": "22:00"
+        }
+      ]
     },
     {
       "id": "visitor-psi",
@@ -554,7 +912,22 @@
       "allowReplies": true,
       "activityWeight": 2.2,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午饭忙完后 13:00–14:00，晚饭后短暂出现"
+      "activeHours": "午饭忙完后 13:00–14:00，晚饭后短暂出现",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "13:00",
+          "end": "14:00"
+        }
+      ]
     },
     {
       "id": "visitor-psi-upper",
@@ -569,7 +942,22 @@
       "allowReplies": true,
       "activityWeight": 0.9,
       "timezone": "Asia/Shanghai",
-      "activeHours": "节目忙完后 18:00–21:00，周末早上也会看"
+      "activeHours": "节目忙完后 18:00–21:00，周末早上也会看",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-rainledger",
@@ -584,7 +972,8 @@
       "allowReplies": true,
       "activityWeight": 0.25,
       "timezone": "Asia/Shanghai",
-      "activeHours": "农闲午后，忙季可能数周不上线"
+      "activeHours": "农闲午后，忙季可能数周不上线",
+      "postingWindows": []
     },
     {
       "id": "visitor-rho",
@@ -599,7 +988,22 @@
       "allowReplies": true,
       "activityWeight": 0.12,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午后休息时短看，傍晚 18:00–20:00"
+      "activeHours": "午后休息时短看，傍晚 18:00–20:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "18:00",
+          "end": "20:00"
+        }
+      ]
     },
     {
       "id": "visitor-rho-upper",
@@ -614,7 +1018,22 @@
       "allowReplies": true,
       "activityWeight": 0.3,
       "timezone": "Asia/Shanghai",
-      "activeHours": "下班后 19:00–22:00；午休偶尔只点爱心"
+      "activeHours": "下班后 19:00–22:00；午休偶尔只点爱心",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "19:00",
+          "end": "22:00"
+        }
+      ]
     },
     {
       "id": "visitor-secondpage",
@@ -629,7 +1048,8 @@
       "allowReplies": true,
       "activityWeight": 0.45,
       "timezone": "Asia/Shanghai",
-      "activeHours": "上午或深夜不定，有时连续数日不回"
+      "activeHours": "上午或深夜不定，有时连续数日不回",
+      "postingWindows": []
     },
     {
       "id": "visitor-shiftcard",
@@ -644,7 +1064,8 @@
       "allowReplies": true,
       "activityWeight": 0.55,
       "timezone": "Asia/Shanghai",
-      "activeHours": "换班后零散上线，操作中不看手机"
+      "activeHours": "换班后零散上线，操作中不看手机",
+      "postingWindows": []
     },
     {
       "id": "visitor-sigma",
@@ -659,7 +1080,8 @@
       "allowReplies": true,
       "activityWeight": 1.5,
       "timezone": "Asia/Shanghai",
-      "activeHours": "店里清闲的午后、晚上 22:00 附近"
+      "activeHours": "店里清闲的午后、晚上 22:00 附近",
+      "postingWindows": []
     },
     {
       "id": "visitor-sigma-upper",
@@ -674,7 +1096,22 @@
       "allowReplies": true,
       "activityWeight": 1.7,
       "timezone": "Asia/Shanghai",
-      "activeHours": "下班后 18:00–21:00，天气合适的休息日少在线"
+      "activeHours": "下班后 18:00–21:00，天气合适的休息日少在线",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-slowradio",
@@ -689,7 +1126,8 @@
       "allowReplies": true,
       "activityWeight": 0.18,
       "timezone": "Asia/Shanghai",
-      "activeHours": "早饭后或下午，可能数周不发言"
+      "activeHours": "早饭后或下午，可能数周不发言",
+      "postingWindows": []
     },
     {
       "id": "visitor-tau",
@@ -704,7 +1142,8 @@
       "allowReplies": true,
       "activityWeight": 2.4,
       "timezone": "Asia/Shanghai",
-      "activeHours": "采购回程停稳后、午后 14:00 左右，比赛日晚上"
+      "activeHours": "采购回程停稳后、午后 14:00 左右，比赛日晚上",
+      "postingWindows": []
     },
     {
       "id": "visitor-tau-upper",
@@ -719,7 +1158,22 @@
       "allowReplies": true,
       "activityWeight": 0.85,
       "timezone": "Asia/Shanghai",
-      "activeHours": "课程结束后 16:00–18:00，晚上偶尔回帖"
+      "activeHours": "课程结束后 16:00–18:00，晚上偶尔回帖",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "16:00",
+          "end": "18:00"
+        }
+      ]
     },
     {
       "id": "visitor-theta",
@@ -734,7 +1188,22 @@
       "allowReplies": true,
       "activityWeight": 0.22,
       "timezone": "Asia/Shanghai",
-      "activeHours": "关店收工后 19:00–21:00；晨跑前后很少发帖"
+      "activeHours": "关店收工后 19:00–21:00；晨跑前后很少发帖",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-theta-upper",
@@ -749,7 +1218,22 @@
       "allowReplies": true,
       "activityWeight": 0.7,
       "timezone": "Asia/Shanghai",
-      "activeHours": "通勤和午休，晚上 21:00–23:00"
+      "activeHours": "通勤和午休，晚上 21:00–23:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "21:00",
+          "end": "23:00"
+        }
+      ]
     },
     {
       "id": "visitor-upsilon",
@@ -764,7 +1248,8 @@
       "allowReplies": true,
       "activityWeight": 0.35,
       "timezone": "Asia/Shanghai",
-      "activeHours": "下午工作间隙、夜间 22:00 前后；交稿日不固定"
+      "activeHours": "下午工作间隙、夜间 22:00 前后；交稿日不固定",
+      "postingWindows": []
     },
     {
       "id": "visitor-upsilon-upper",
@@ -779,7 +1264,22 @@
       "allowReplies": true,
       "activityWeight": 1.6,
       "timezone": "Asia/Shanghai",
-      "activeHours": "店里散场后 22:00–00:00；周末白天忙时不回"
+      "activeHours": "店里散场后 22:00–00:00；周末白天忙时不回",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "22:00",
+          "end": "00:00"
+        }
+      ]
     },
     {
       "id": "visitor-xi",
@@ -794,7 +1294,22 @@
       "allowReplies": true,
       "activityWeight": 0.55,
       "timezone": "Asia/Shanghai",
-      "activeHours": "午饭后 12:30 左右，晚间 19:00–21:00"
+      "activeHours": "午饭后 12:30 左右，晚间 19:00–21:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "visitor-xi-upper",
@@ -809,7 +1324,22 @@
       "allowReplies": true,
       "activityWeight": 0.4,
       "timezone": "Asia/Shanghai",
-      "activeHours": "下班后 20:00–23:00，工作日午休通常只浏览"
+      "activeHours": "下班后 20:00–23:00，工作日午休通常只浏览",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "20:00",
+          "end": "23:00"
+        }
+      ]
     },
     {
       "id": "visitor-zeta",
@@ -824,7 +1354,8 @@
       "allowReplies": true,
       "activityWeight": 0.28,
       "timezone": "Asia/Shanghai",
-      "activeHours": "早晚班随排班变化，休息日清晨或午后"
+      "activeHours": "早晚班随排班变化，休息日清晨或午后",
+      "postingWindows": []
     },
     {
       "id": "visitor-zeta-upper",
@@ -839,7 +1370,22 @@
       "allowReplies": true,
       "activityWeight": 1.2,
       "timezone": "Asia/Shanghai",
-      "activeHours": "车辆停妥的午休、收工后 18:00–21:00"
+      "activeHours": "车辆停妥的午休、收工后 18:00–21:00",
+      "postingWindows": [
+        {
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ]
     },
     {
       "id": "alan",
@@ -854,7 +1400,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "anmianyao",
@@ -869,7 +1416,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "baiyanyan",
@@ -884,7 +1432,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "chenanjing",
@@ -899,7 +1448,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "guyu",
@@ -914,7 +1464,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "lidianlong",
@@ -929,7 +1480,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "lixing",
@@ -944,7 +1496,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "zhaoyangxue",
@@ -959,7 +1512,8 @@
       "allowReplies": true,
       "activityWeight": 1,
       "timezone": "Asia/Shanghai",
-      "activeHours": ""
+      "activeHours": "",
+      "postingWindows": []
     },
     {
       "id": "news-morningstar",
@@ -975,7 +1529,8 @@
       "activityWeight": 1.3,
       "nameColor": "#A6C8FF",
       "timezone": "Asia/Shanghai",
-      "activeHours": "随公共事件进展更新"
+      "activeHours": "随公共事件进展更新",
+      "postingWindows": []
     },
     {
       "id": "news-neon",
@@ -991,7 +1546,8 @@
       "activityWeight": 1.1,
       "nameColor": "#8DDBD7",
       "timezone": "Asia/Shanghai",
-      "activeHours": "城市服务与活动有变化时"
+      "activeHours": "城市服务与活动有变化时",
+      "postingWindows": []
     },
     {
       "id": "news-backstage",
@@ -1007,7 +1563,8 @@
       "activityWeight": 1.2,
       "nameColor": "#D5B4F0",
       "timezone": "Asia/Shanghai",
-      "activeHours": "发行、演出和公开动态出现后"
+      "activeHours": "发行、演出和公开动态出现后",
+      "postingWindows": []
     },
     {
       "id": "news-gadgets",
@@ -1023,7 +1580,8 @@
       "activityWeight": 1.1,
       "nameColor": "#EACB83",
       "timezone": "Asia/Shanghai",
-      "activeHours": "新工具、研究或演示值得聊时"
+      "activeHours": "新工具、研究或演示值得聊时",
+      "postingWindows": []
     },
     {
       "id": "news-surf",
@@ -1039,7 +1597,8 @@
       "activityWeight": 1.4,
       "nameColor": "#ABD9B2",
       "timezone": "Asia/Shanghai",
-      "activeHours": "看到合适的近期话题后"
+      "activeHours": "看到合适的近期话题后",
+      "postingWindows": []
     },
     {
       "id": "site-admin",
@@ -1055,7 +1614,8 @@
       "activityWeight": 0,
       "nameColor": "#F1A1A1",
       "timezone": "Asia/Shanghai",
-      "activeHours": "用户命令触发的站务发布"
+      "activeHours": "用户命令触发的站务发布",
+      "postingWindows": []
     }
   ]
 }

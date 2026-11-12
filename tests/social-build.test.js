@@ -66,7 +66,8 @@ test('built site preserves current entrypoints and publishes only explicit socia
   execFileSync(process.execPath, ['build.js'], { cwd: directory });
   const published = await files(join(directory, 'dist/lucifer0'));
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
-  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'data/feed.json', 'assets/icon.svg', 'assets/verification-lucifer.webp', `${mediaDirectory}/LICENSE.txt`,
+  const index = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed-index.json'), 'utf8'));
+  const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'feed-store.js', 'data/feed.json', 'data/feed-index.json', ...index.parts.map(part => part.src), 'assets/icon.svg', 'assets/verification-lucifer.webp', `${mediaDirectory}/LICENSE.txt`,
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src)),
     siteEmoteManifestPath, ...emoteCatalog.items.map(item => item.src)]);
   const mediaLicenses = new Set(feed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')));

@@ -1,0 +1,2508 @@
+{
+  "version": 2,
+  "id": "writer-trial-v2-20261113",
+  "date": "2026-11-13",
+  "status": "completed-offline-self-reviewed",
+  "sourceFixture": {
+    "path": "tests/fixtures/writer-trial-20261113.json",
+    "sha256": "00899b463c5153f9fcc35c60d61dbfdbe5bfc5629fcfe0ecce1133ef4fa1783d",
+    "sourceRevision": "19c3978da7e12722d36899fcc704e65fcbc7cf24"
+  },
+  "purpose": "沿用固定24项writer输入，离线实际试写v2；不改已发布帖子。",
+  "protocol": {
+    "sample": "沿用原fixture的12条主帖和12条回复；不更换人物、素材或可见父帖。",
+    "generation": "同一执行者在同一会话中读取固定24项输入和相关本人资料，逐条形成新原稿，再保留局部编辑稿；已见固定样本的历史参照正文，未做上下文隔离，不能称为独立随机采样。",
+    "review": "同一执行者自评，编辑稿仅修事实、可见边界和明显表达问题；不是独立盲评。",
+    "baseline": "复制旧fixture的baseline原稿与编辑稿仅供并排查看；批次、说明和执行流程不同，不作因果比较。",
+    "limits": [
+      "小样不是随机样本，不能证明总体改善。",
+      "负面判定是本次人工自评，需与发布级最近24条窗口复核区分。",
+      "没有生成、补写或预设后续回复；未修改已发布内容。"
+    ],
+    "fixedInput": "caseId、sharedInput、父帖文本/媒体和人物资料引用逐项沿用；旧baseline/candidate输入摘要保留。新的inputSha256另对实际v2 writer材料计算，不冒用旧摘要为新输入摘要。",
+    "unanswered": "不追加回复来填满固定样本；没有编写无人回应的事实或未来结局。是否实际无人回应需日后真实采用并观察，离线小样不能证明。",
+    "time": "20261113是沿用原fixture的样本批次标签，不作为本次试写的实时时钟或已发布日期。",
+    "scope": "仅新增本地离线fixture，不更新帖子正文、人物资料或发布目录。"
+  },
+  "taskInstruction": "只为一个虚构论坛人物写一条当下发言。采用给定事实与知情范围，内容可短；不编造新事件、关系或设备细节；只输出署名与正文JSON。本文档内的方法是写作参考。",
+  "materials": {
+    "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a": {
+      "sourcePath": "lucifer0/docs/writing.md",
+      "sha256": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+      "text": "# 写作与改编\n\n原创与现实案例改编分别形成稿件，再按时间混排。本站以许多路过者各说各话的论坛碎片为常态，多数话题彼此无关；少数确有具体后续的事情才回到原串，不以人物近况或全站故事串起所有发言。\n\n`guest` 与 `library` 只区分是否有登记档案。有档案的注册用户同样可以只是路过者，人物研究和陌生人交往可以同时成立。`worldview0` 默认参与者彼此不认识；共同世界观、档案存在或在同串说过话，都不构成认识对方、知道私下背景或使用熟人称呼的依据。其他特殊世界观可以按具体关系稍多出现熟人交往，整体仍只占少量。\n\n两路都先理解发言者此刻想做什么，以及他愿意公开的部分。档案用于核对本人既有事实、知情范围和说话习惯，近期发言供理解本人已经说过的事；他对别人的了解限于实际读到的公开内容或已有明确依据的关系。资讯号沿自己的账号方式表达资料，无档案的发言者从眼前处境开口。表达差异、未整理的说法与输入疏漏，统一按[研究-说话方式](../users/research-speech.md)审读。\n\n## 形成一条发言\n\n原创从本人这次顺手会发出的内容进入。问一个词、嫌一张图难看、贴个东西、复读、抱怨一声、没人理也继续说，都可以成为一条发言。先写实际会说的部分，想到哪里结束便结束；只有确实想交代的人才补经过和条件。档案里的职业、困难和性格无需每次出场，单条也不承担展示完整人物的任务。\n\n负面至少占本轮实际采用发言的一半；分类和核对见[负面与回复提示](lottery.md#负面与回复提示)。其中可以有小题大做、迁怒、酸话、无聊找茬、没看明白就骂、跟着别人笑和反复念叨。同一人可以这次厚道、下次刻薄，也可以在自己擅长的事上判断准确，换个话题便一知半解。人物已有事实和知情范围仍然有效，抱怨是否公允、嫉妒是否有道理则不需要策划者替他证明。具体写法见[低级与无序的参与](../environment/research-negative.md#低级与无序的参与)。\n\n发言可以低信息、重复、敷衍、指代含混或没有得到回应。负面可以只有一句嫌弃，长帖可以绕圈说半天；短和乱都不是必须完成的样式。篇幅、用图与回复姿态提供机会，话头已经说完便停，材料多时再展开。不逐条安排背景、受委屈、举证、反击、总结，也不把求助一律补成已经试过哪些办法的说明书。\n\n回复只接自己实际读到的那一点，可以误解、漏看、不回答、隔几楼还说同一句，或忽然把话题换掉。有人问也可以不回来，有人解释以后对方仍不领情，局部争执不需要带动全串升级。冷场、各说各话和中途消失沿实际写作保留，回应数量只是空间，不是需要填满的剧本。\n\n单条写作读取独立的 `writer` 材料，只用本人资料、已公开经历和实际可见内容。完整研究与整轮信息流供策划者核对。表达差异从关注点、知情范围、输入习惯与当下精力形成；几个字的普通回应不必能辨认作者，也不为区别人物统一安排口头禅、错字或俏皮话。\n\n临时路人的公开网名由工具在正文写作前独立确定，保存在操作的 `guestNames` 中，并随 `draft.guest.name` 提供给写作者；同一身份返回时沿用原名与已公开背景。写作者直接使用已存署名，再从本人的处境进入话题。数字网名、普通昵称和个别应景名都可以成立，整批人物却不应像各条帖子的标题；正文完成后也不因这次谈论的物件给他重新命名。带档案的用户沿自己的经验和知情范围发言，人物资料只在这句话用得上的部分进入正文。账号权限与署名格式见[执行与发布](publishing.md)。\n\n## 现实素材改编\n\n每轮从本次刷新的日更材料中选三份真实案例，与原创一路分别形成稿件，最后按时间自然混排，公开帖子不标注创作类型。案例写作沿实际读到的主帖及互动展开：篇幅、停顿、图片、表情、回复数量与接话关系取自原素材，不套原创的篇幅、情绪、媒体组合和回复抽签。准备与记录见[执行与发布](publishing.md#准备)。\n\n真实案例可以成为整条话题、发言推进或一段互动的底稿，也可以只采用一句话。保留具体细节、常见口语、错字、乱标点、复读、低信息回应、误会和跑题，不要求把处境、物件与措辞全部重新发明。只对身份、私人信息、人物已有经历、关系与本站时间线作必要调整；采用原互动时保留真正接话对象及未决状态，缺失的楼层与未读内容不凭空补齐。\n\n源帖的一句求推荐可以仍是一句求推荐，尚在发愁可以停在发愁的位置，原本没有结论就不额外补成说理段。原素材提到照片、圈注或表情时，取得适合发布的对应画面，无法采用时连同相关文字调整，不留下空指代。采用范围按[素材取用](../environment/sources-daily-opinions.md#论坛怎样读取)记录，其他来源从[环境资料](../environment/README.md)进入。\n\n两路稿件共用人物和论坛时间线，发布前核对署名、权限、事实、时间、回复关系、媒体路径与脱敏。审读保留各自的信息量与参与方式，不把它们润色成同一种完整、机智的表达。\n\n## 配图\n\n原创按这次表达结合[图片与表情抽取](lottery.md#图片与表情抽取)的整轮倾向与逐条组合建议用图，案例改编沿原素材的画面与实际用途形成。`suggest` 用于查看原创候选和终稿实际分布，两路都不为图片、表情或生活照片补足比例。两类媒体各按实际用途登记：现场照片、作品图、截图、示意图和字图属于普通图片；表情包、反应图和接梗用图属于表情，放在帖子目录里也不能充作普通图片。字段、保存与页面显示见[生成并归档配图](publishing.md#生成并归档配图)。\n\n普通图片随这次发图的动作形成：给人看现场、圈出问题、展示成果，或在回复中拿自己的照片接眼前的话头。图文一起完成表达，文字写到需要补充的位置即可；简单晒图、无正文照片和一句话配图都可以成立。组合建议与原素材、人物习惯或这次表达不合时，按实际话头调整，普通图可以集中出现在几段现场交流里，其他串保留文字。不同作者的经历分别成立，不统一补上“没拍到，给你画一下”“我自己重画了”来迁就抽签。\n\n表情按人物习惯和这次接话采用；原创的组合与张数抽签只提供建议，改编沿原互动采用。纯表情、文后附图、同图复读、斗图和随手使用熟图都可以成立，具体用法见[用表情接话](../environment/research-comments.md#用表情接话)。常用图从写作输入的公共清单选取，其他素材沿[研究-Meme](../environment/research-meme.md)取用；整页的疏密在[审读](#审读)时一起判断。\n\n一条发言采用几张图，由当时的表达决定。多角度现场、前后对照、连续过程和斗图都可使用多张，同一物件的重复画面也可能有用。普通图片与表情没有统一的每帖张数上限，画面已经完成表达时就停。\n\n按角色实际会拍、会截或会画什么选择媒介。照片从拍摄者站在哪里、正在做什么和为什么拍进入，确定镜头朝向、可见范围、光线和距离，保留相应的材质、杂物、遮挡与构图偏移；截图保留对应设备和界面的具体状态；手绘、作品图和示意图沿本人的工具、熟练程度与用途形成。\n\n生活照片指日常处境中以相机取得的画面，例如吃到一半的饭、手边物件、宠物、路上所见、工作现场或随手自拍。实拍素材和生成的照片质感画面均可采用，按实际获取方式记录；手绘生活物件、便笺字图、商品宣传图和通用风景壁纸不计入生活照片。普通手机画面的平淡、偏色、压缩和拍歪可以保留，取景差异来自各自场景，不把所有题材摆在整洁木桌中央，也不统一套暖灯、浅景深、霓虹夜景或刻意添加的噪声。\n\n需要照片质感时，采用合适的实拍素材或图像生成工具。程序绘图用于实际需要的图表、示意或排版，不用通用卡片、几何图形或伪截图替代照片。并排查看本轮及最近几轮的普通图片，比较媒介、构图、光线和制作痕迹；同一场景的连续图片可以相近。生成画面分别交代拍摄情境，不批量沿用一份提示词只替换物件。\n\n打开最终归档图片，核对物件、数量、状态和图文对应关系。正文提到“这张图”“圈出来了”“我拍了”时，逐一找到承载的画面；没有附图或细节看不见时，回到原文修正。含字图片按原尺寸核对汉字、数字与关键细节，再看页面是否清楚，修正缺字、乱码、假字或裁切后重新查看。纯图发言由画面完成表达，`alt` 简短描述实际可见内容。\n\n## 审读\n\n保留实际写出的初稿与编辑稿，把本次草稿接在最近的信息流后面检查。先判断这次修改解决了什么具体问题，再决定是否改写：\n\n- 核对发言者实际说出的话；无聊、迁怒、跟风与理由含糊也可保留，不要求逐条解释动机。表达的完成程度按[研究-说话方式](../users/research-speech.md)检查，保留人物当时未整理的说法。\n- 核对已经发生的事、人物经验、时间和父帖；发言者对这些事的理解，按本人读到的片段与偏见形成。猜测、误读和嘴硬留在这位发言者的说法里，策划者核清它们各自从哪里来。配图按[配图](#配图)检查。\n- 使用策划输入的 `recentUpdates`，并排读不同作者的完整发言和不同串的回复分支，比较题材、信息顺序、转折与收尾。换了人物和物件仍反复推进同一条叙述路线时，记下相关帖号与具体相似处，再回到各自素材、目的和表达资料重新取舍信息；有具体后续的旧话题仍可延续。\n- 对照初稿与编辑稿，查看策划者是否统一补上背景、完整经过、机智收尾或结论，或把刻薄与无理一律改成有正当理由的委屈。普通词语、反问、复读、短反应和偶尔相近的经历按语境保留；审读修正整批共用的加工方式，不以逐条换词、添错字或给每个人安排鲜明口头禅制造差异。单条改写继续只提供本人的材料与具体反馈。\n- 连续滚动本轮及近期信息流，查看长短发言、纯文字、普通图和表情怎样交错。图片仍从丰富的生活场景取用，多少与集中位置随话头变化；人物习惯沿档案和既往发言理解。局部连贴、复读和斗图按上下文保留，多串都像逐句配图时再回到各人的话头调整。删图前核对后文是否接住了那张图，不把整页统计变成固定比例或每串配额。\n- 对照原始素材，保留问号、未决问题、具体不满和低信息反应原有的作用。\n- 按[研究-评论与点赞](../environment/research-comments.md)审读回复及基础赞数，按[发布说明](publishing.md#填写当前更新)核对记录字段。\n\n发言确实改变了已有用户的事实、经验或关系时，回写本人档案的相应原章节；一次性路人片段和临时情绪留在帖子中，不为归档扩写生平或安排后续。\n\n审读记录对应具体帖号，说明重复的叙述路线、保留的自然相似以及实际修改；无需修改时也记清判断依据。隐去署名后仍像同一人轮流换物件，是继续检查的线索；几个字的普通回应难以辨认作者，并不表示人物塑造失败。固定材料的比较方法见[离线小样对照](publishing.md#离线小样对照)。\n\n"
+    },
+    "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5": {
+      "sourcePath": "lucifer0/environment/research-negative.md",
+      "sha256": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5",
+      "text": "# 研究-负面与争议\n\n这里研究不满、猜疑、护短和争胜欲怎样成为发言，以及一个话头怎样从抱怨变成争执。以下是定向挑选的讨论样本，用来理解交流机制；各站内容比例另需连续采样统计。抽取与数量安排见[抽签规则](../docs/lottery.md)，正文组织见[写作与改编](../docs/writing.md)，回复形成见[研究-评论与点赞](research-comments.md)。\n\n## 什么算负面\n\n正文与实际配图表达了负面态度：不满、厌烦、嘲讽、指责、猜疑、敌意、失望、委屈、嫉妒、轻蔑，也包括反复嫌弃和没头没尾的骂声。可以只是在抱怨自己无聊、东西难看或别人碍眼，无须有值得讨论的矛盾。简短登记实际语气即可；不要求替当事人找到正当理由。语气可以很淡，笑脸和玩笑也可能带着攻击。\n\n普通问句、坏掉的物件和一次失败提供情境；是否计入负面，看这条发言实际表达的态度。中性询问修法、单纯报一个数字、只转述消息，按它们各自的作用保留。八卦中的负面来自可争的说法、声誉落差、怀疑或利益纠葛；信息缺口给追问、猜测和质疑留下空间。\n\n## 低级与无序的参与\n\n这是本站本轮采用的写作设定，不是从下面定向样本推算出的全网比例。保留一半负面，是为了容纳信息流里大量不体面、不成熟和没有结果的参与；负面程度与道理是否充分分别看待。\n\n嫌烦可以没有长篇遭遇，嫉妒可以不承认嫉妒，轻蔑可以只凭一眼，八卦也可能以讹传讹。跟风的人未必愿意看解释，挑刺的人可能换个标准继续挑，骂完的人可以离开或去别处问午饭。把这些作为当下发言，别逐条补上深层创伤、利益争端、社会道理或可以让读者叫好的反击。已有事实由档案和时间线核对，人物误读、双标和无知留在其说法里。\n\n无序不靠随机插脏话或批量删标点制造。局部跳接、复读、跑题、夸大、前后口径变化与突然沉默从实际话头形成；有些人说得完整，有些人只回半句。同一串可以一支在吵、一支问别的、另几个人只贴表情。别给每次嘴硬安排对手，也别让每条解释都得到回答。\n\n这些可能性不逐项打卡，一轮无需集齐。取材和审读尤其注意：策划者是否把普通的讨厌加工成完整冲突，把随口冒犯改成有理有据，或为了显得自然又统一写成机灵的几字短句。发言停在其实际完成的程度。\n\n## 从哪里找有张力的材料\n\n| 材料里的矛盾 | 取材时具体看什么 |\n| --- | --- |\n| 吃亏与占便宜 | 谁付出了时间、钱或面子，谁认为这是对方自愿；同一个人怎样给自己和别人用不同标准 |\n| 护短与踩一脚 | 喜欢的作品、圈子或熟人被批评后，参与者先维护哪一点；批评者又抓住哪处破绽 |\n| 八卦与爆料 | 亲眼所见、转述和猜测分别到哪一步；什么时间、原话、利益关系或前后矛盾值得追问 |\n| 资格与解释权 | 谁在拿资历、经验、付出或受害经历压人；谁认为自己被扣帽子或被管教 |\n| 未被接住的情绪 | 作者要认同，回复给方案；作者要答案，回复拿他的处境开玩笑；作者补条件后，别人嫌他事多 |\n| 退让与不甘心 | 当事人暂时认输、删一句或离开时，旁人怎样继续翻旧话；表面收场后，实际损失或不满还剩什么 |\n\n一份材料记录：**具体冲突点、各方想要什么、各自知道什么、哪句话触发下一轮，以及回答出现后争点是否改变**。同一个矛盾可以有诚恳辩解、理直气壮的双标、短促反问和带笑的冷话，顺着实际来回判断，单句尖刻不足以说明整场争执。\n\n## 异议怎样转成抬杠\n\n先分清原来的分歧。有人不认可事实依据，有人不接受处置办法，也有人只是厌烦说话方式。反对、追问证据和纠正用词本身都能推进理解；当事人骂对方“杠精”，也只说明他怎样评价对方。核对后续是否承接了回答：补上信息后能缩小问题、改口或承认一处，和反复略过已经给出的答案，是不同的过程。N10里反对封禁的解释有一支得到楼主认同，不能因为站在楼主对面就写成故意找茬。\n\n争胜可以从原话的一小处获得入口。N09把工作流的不满接成行文资格之争；N08从求陪伴转到词义，再转到谁能用一句话证明自己没有抬杠。此时观察参与者如何把自己的要求变成下一轮门槛：要求解释一个词，解释后又换一个词；拿到核对材料后转问对方的动机；用对方的生气或继续解释证明对方有问题。每次转向要有眼前触发它的话，保留双方真正相争的部分，不把所有不同意都套成偷换概念。\n\n旁人的加入也会改变代价。有人来核对，有人沿一句讥讽起哄，有人维护被指责的一方，原先愿意解释的人也可能开始争谁先冒犯、谁配结束谈话。N04里身份指认让话题转向跨站指认的资格；N09里“别回复”又被下一位当作占最后一句。发言者未必从头就是一个固定的“杠精”角色，当前受挫、被围观或急于保住面子都可能改变这次的做法。\n\n这些是定向样本中局部发生的偏差，不是每串的必经步骤，也不据此推算出现比例。尖话可以无人接，澄清可以收住一支，其他人仍可讨论原来的事；N08的长争执旁边一直有人讲自己的生活，N10的事实核对收住一处后，动机争议仍未解决。取材时同时保留这些未升级、分叉和中断；逐条回应与整串节奏沿[研究-评论与点赞](research-comments.md#组织一串交流)，人物怎样表达沿[研究-说话方式](../users/research-speech.md)。\n\n## 持续观察入口\n\n- [X岛综合版1](https://www.nmbxd1.com/f/%E7%BB%BC%E5%90%88%E7%89%881)：日常判断、冒犯与反问；[社畜](https://www.nmbxd1.com/f/%E7%A4%BE%E7%95%9C)：工作负担、权责和积怨；[主播管人](https://www.nmbxd1.com/f/%E4%B8%BB%E6%92%AD%E7%AE%A1%E4%BA%BA)：围观、护短和兴趣圈争执。\n- [BOG综合版](https://bog.ac/f/%E7%BB%BC%E5%90%88%E7%89%88)与[圈内](https://bog.ac/f/%E5%9C%88%E5%86%85)：短反应、身份判断和社区内部争论。\n- [V2EX生活](https://www.v2ex.com/go/life)：消费、合租与日常边界；沿主帖的附言和作者回复观察态度变化。\n- [Bangumi站务讨论](https://bgm.tv/group/forum)：核对规则解释、纠正事实与人物评价怎样交错；具体处置是否发生另查当事人或管理员的可见确认。\n\n本次 `nmbxd.com` 跳转到 `www.nmbxd1.com` 后可读；`www.nmbxd.com` 读取失败。以后按实际跳转与可见范围记录。版面只展示部分回复时，进入原串再看争论发生在哪里。\n\n## 参考案例\n\n未另注的访问日期为 **2026-11-10**，补读日期见各条。原始日期按原页记录。下面研究的是参与者怎样说话，帖内对真人、机构、法律和医疗的判断仍是参与者的说法；引用关系按帖号、楼层和显式提及核对，不把相邻两楼直接当作彼此回复。\n\n### N01｜回消息频率与关系边界\n\n- **来源与范围**：[X岛：朋友要求及时回消息，No.68501257](https://www.nmbxd1.com/t/68501257)及[第2页](https://www.nmbxd1.com/t/68501257?page=2)。原始日期2026-04-17；2026-11-11复读主帖及前两页37条文字回复，核对显式帖号引用；附图未打开，第3页未读。\n- **参考要点**：作者从回复频率讲到被反复关注；旁人有劝断交的、有追问关系的，也有人承认自己同样怕被冷落。后来有人因作者迟迟没断交而反过来嫌他消遣读者。求助会暴露作者自己的犹豫，支持者也可能失去耐心；承认相似毛病的人提供另一种理解。\n\n### N02｜施救责任与风险顾虑\n\n- **来源与范围**：[X岛：是否应该施救，No.69752063](https://www.nmbxd1.com/t/69752063?r=69752063)。原始日期2026-11-07；已读首帖、作者两次附图发言及第1页返回的文字回复，图片未读，其余页未读。\n- **参考要点**：首帖先猜测施救的风险；回复分别讨论路人、工作人员、报道里的阻拦和事后成本。有人指出首帖忽略的信息，另有人仍坚持自己担心的风险。分歧可以来自各人认定的责任范围；新信息出现后，争论也可能转到另一个尚未消除的顾虑。\n\n### N03｜主播姿态与围观期待\n\n- **来源与范围**：[X岛：主播围观串，No.69603292](https://www.nmbxd1.com/t/69603292)。原始日期2026-10-11；已读主帖、作者3条后续和1条旁人回复，配图仅见链接。\n- **参考要点**：作者借聊天记录表达确信，后来搜索到对方退让又感到扫兴；旁人把强硬和退让都当作围观理由。爆点可以是姿态与行为不一致；围观者想继续看热闹，当事人想尽快结束，双方目标本来就不同。\n\n### N04｜社区抱怨与身份质疑\n\n- **来源与范围**：[BOG：对另一匿名版的抱怨，Po.1028541，第1页](https://bog.ac/t/1028541/1)。原始日期2023-07-05；2026-11-11复读主帖及第1页20条文字回复，核对显式帖号引用；指认身份的附图、第2—3页未读，未展示的被引楼层不补猜。\n- **参考要点**：抱怨引来认同、旧经历和身份质疑；#1028613转向身份指认，#1028623反对跨平台指认，作者#1028630则把这种回法当作自己判断正确的证据。原来的社区评价变成谁有资格说、怎样指认别人；后面仍有人谈版面内容或求旧串链接，局部争执没有把所有回应都变成对线。\n\n### N05｜均摊电费与占便宜\n\n- **来源与范围**：[V2EX：合租电费与情绪](https://www.v2ex.com/t/1168544)。原始日期2025-10-27；已读主帖、附言及原页返回的部分评论正文，部分楼层正文缺失。\n- **参考要点**：作者先承认担心吃亏，后来补充公区与卫生问题；评论有人认同舒适消费，有人反指作者才是用电更多的人，还有人讲自己的合租遭遇。同一账单可以被解释成公平、占便宜或不被尊重；自己容许的行为换个人做，就成为新的攻击点。\n\n### N06｜租房家具与说教口气\n\n- **来源与范围**：[V2EX：租房买家具的观点差异](https://www.v2ex.com/t/1059376)。原始日期2024-07-23；已读首帖、附言及第1页返回的部分评论正文，部分楼层正文缺失。\n- **参考要点**：作者原想比较观点，却多次纠正他人理解，隔天在附言里抱怨评论的说教口气；旁人把话题延伸到消费习惯与工作设备。作者想讨论的事与回复者想教育他的事可以错位；“我是在问什么”本身就会成为冲突。\n\n### N07｜得意分享被接成纠词与说教\n\n- **来源与范围**：[Reddit：Godly Feeling](https://www.reddit.com/r/memes/comments/1xcbc6z/godly_feeling/)。原始日期：`null`（页面仅给相对时间，返回显示缓存）。2026-11-10读取标题、图片替代文字及Best排序下推荐区之前12条有正文的可见文字发言，其中原作者回复4条；另一个账号仅返回署名。图片未打开，隐藏回复未展开。\n- **参考要点**：首帖分享替弟弟过关的得意，一位回复抓住POV用法，作者重新解释自己想表达的视角，对方接受。另一支要求交回手柄、让弟弟自己练，作者说自己也会教他再试，旁人又批评这样容易依赖教程。原作者想分享的一小段，被别人分别接成纠词和说教；一处意见已经收住，另一支仍能继续评价做法。\n\n### N08｜从求陪伴转成词义与输赢\n\n- **来源与范围**：[V2EX：没有可以倾诉的知己是人生的常态么？](https://s.v2ex.com/t/1104533)。原始日期2025-01-12；2026-11-11读取主帖和原页公开结构化正文的全部70条回复，核对页面楼号及`@`关系，后续至2025-01-16；附图未读。\n- **参考要点**：#9用成熟与否评价倾诉，作者#16反驳，#24之后双方围绕词义连写长解释。#65又把能否一句话表达观点变成辨认谁在抬杠的标准；#66承认一句有歧义，#67仍沿旧问题要求对方作答，并打算找AI裁判。原先找陪伴的需要退到旁边，说明局部事实松动后，争胜目标仍可继续；其他人一直另讲孤独与交友经验。\n\n### N09｜抓住行文习惯以后，谁还能结束谈话\n\n- **来源与范围**：[V2EX：关于微信办公？](https://v2ex.com/t/1119489)。原始日期2025-03-19；2026-11-11读取主帖、附言及原页公开结构化正文的全部69条回复，核对页面楼号及`@`关系，后续至2025-03-22；附图未读。\n- **参考要点**：#17从流程抱怨转批中英夹杂，再要求作者适应或离开；作者#20解释术语和换工作的打算。另一组#22、#36、#38、#41从正式报告能否混写争到论坛是否等于考试，互指先抬杠；一方说不再聊、别回，另一方仍反击这种收场姿态。流程、留档和责任的实质异议仍在#28、#34、#47等楼另行展开；表达上的冒犯与事情本身的分歧分别核对。\n\n### N10｜解释得到认同，证据却被换成新问题\n\n- **来源与范围**：[Bangumi：询问一下这个用户的行为能否算刷分？能否封禁？](https://bgm.tv/group/topic/415789)。原始日期2025-02-04；2026-11-11读主帖及#8、#9、#37、#39、#44分支的58条有正文回复，另有1条已删除提示，核对嵌套楼号与引用；其他楼仅作上下文，未逐条计入，外链、图片、私信与被指认账号历史未核验。\n- **参考要点**：#37解释现行规则并提出机制方向，作者#37-1表示同意。另一支#39把记录消失认作管理处理，旁人提出其他解释；#39-8给出清空脚本链接后，争点转向为什么清空、为何改名及是否马甲，#39-14追问给了材料以后为何不再回答原问题。管理员#39-24只确认自己没操作，谁删除和为何删除仍不能由此证实；#44后来仍争评价与动机。核查事实、质疑处置和拿人物动机继续顶回去，可以在同一串中并存。\n\n### N11｜情境影响不等于固定人格或全网比例\n\n- **来源与范围**：Cheng等，[Anyone Can Become a Troll: Causes of Trolling Behavior in Online Discussions](https://hci.stanford.edu/publications/2017/trolls/troll-cscw2017.pdf)（CSCW 2017）。2026-11-11读取作者PDF第1—2页的摘要、引言和定义，实验细节与后续结果未逐页读取。\n- **参考要点**：作者把情绪和前序讨论列为行为触发因素，并区分实验人工编码与新闻社区标记的代理指标。这里借它提醒写作者保留普通人的状态变化；论文包含辱骂、攻击等更广行为，不能直接等同中文“杠精”，也不能把特定社区数字移成本平台或全网比例。\n\n"
+    }
+  },
+  "cases": [
+    {
+      "caseId": "trial-01",
+      "referencePostId": "l0-20261112174153-117eae41-e2f43eaf0a82",
+      "sharedInput": {
+        "role": "root",
+        "facts": "做文具相关工作；用一本普通小皮本记尺寸，夹子经常掉。昨天有人翻看后评价本子普通。",
+        "purpose": "对别人以职业要求随身本子精致感到烦，想说说眼前这件事。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-theta-upper",
+          "name": "扣扣",
+          "profileRef": "a3835fe7b53da537e0d2c21b71707796cb58f7e4cd219ffd5926bc91951625c9"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "笔和夹子旁边放着一本小皮面随身笔记本",
+          "L0表情"
+        ],
+        "conditions": {
+          "length": "short",
+          "tone": "negative"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-01",
+        "profileRef": "a3835fe7b53da537e0d2c21b71707796cb58f7e4cd219ffd5926bc91951625c9",
+        "baselineInputSha256": "fa2551e5c39139697960c9251b2d9fbcc52100a7028e3a48e289017b6fc5a84f",
+        "candidateInputSha256": "63057e116b6bb3e89feb51aa2db604ae5a2ff64e85b40c1a55355f1315d41015",
+        "sharedInputSha256": "33a963091300e8244c96ceefff3b34d367ce652305b4a60a303628ae1a8e4fdd",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "negative": "c6145fef6021013dbcbbded0989dee6e42e004da1a106d57bb13de1e1bafbe28"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "fa2551e5c39139697960c9251b2d9fbcc52100a7028e3a48e289017b6fc5a84f",
+          "generationTask": "utterance_1000",
+          "original": {
+            "name": "扣扣",
+            "text": "昨天有人翻了我的小皮本，还评价一句普通。做文具的，随身本也得多精致啊？我就拿来记尺寸的。"
+          },
+          "editorial": {
+            "name": "扣扣",
+            "text": "昨天有人翻了我的小皮本，还评价一句普通。做文具的，随身本也得多精致啊？我就拿来记尺寸的。",
+            "reason": "保留。以用途解释不满，信息量足以完成这次发言。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "扣扣",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "af79d0a140db6bef461fd03bceeee76055be8b4527a0f91d9dab1f402205cfe9",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-01",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "扣扣",
+            "text": "昨天翻我小皮本那个，烦死了。\n普通怎么了，我记个尺寸还要多好看"
+          },
+          "editorial": {
+            "name": "扣扣",
+            "text": "昨天翻我小皮本那个，烦死了。\n普通怎么了，我记个尺寸还要多好看",
+            "reason": "保留。只发眼前的不爽，没有补职业受辱的论证，也没有替她安排一句赢回面子的结尾。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "烦躁、对评价者的厌恶",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "翻看、普通小皮本、记尺寸均来自固定事实；“要多好看”是她的反问，不是对方确实提出过的标准。",
+            "expressionAndPattern": "把被评价的一点拎出来就骂，没讲夹子和完整经过。仍有反问，不能仅凭短就认定摆脱共同套路。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-02",
+      "referencePostId": "l0-20261112174153-117eae41-56a1e33c4727",
+      "sharedInput": {
+        "role": "root",
+        "facts": "楼下外立面施工搭架子，最近几天早上七点钻孔；物业公告写九点。询问两次，答复均为已转达，噪声继续。",
+        "purpose": "烦躁，想抱怨或问还有谁能处理。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-02"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [],
+        "conditions": {
+          "length": "short",
+          "tone": "negative"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-02",
+        "profileRef": null,
+        "baselineInputSha256": "9cbddf873852d6a07de9bef3af1f071a8472ecb50e4243ce37b5495c723d014c",
+        "candidateInputSha256": "001c7f84bcac79abe6ca628f2f6a09c453d53bd369e4b050fe0fc71d02a7930a",
+        "sharedInputSha256": "f1b4a94ff01e869c414814191e2ac6d8cda02d33d61392c326d9762962c75aaa",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "negative": "c6145fef6021013dbcbbded0989dee6e42e004da1a106d57bb13de1e1bafbe28"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "9cbddf873852d6a07de9bef3af1f071a8472ecb50e4243ce37b5495c723d014c",
+          "generationTask": "utterance_1002",
+          "original": {
+            "name": "山芋",
+            "text": "楼下外立面施工，这几天早上七点就开始钻。物业公告明明写的九点，问了两次都说已转达，还是照钻。还有谁能管一下啊"
+          },
+          "editorial": {
+            "name": "山芋",
+            "text": "楼下外立面施工，这几天早上七点就开始钻。物业公告明明写的九点，问了两次都说已转达，还是照钻。还有谁能管一下啊",
+            "reason": "保留。时间、已尝试的询问与当前求助对象都直接相关。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "Mio",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "642e58cff46cea7b7818a04623d46e2995f9d46ca32b4038372040f552f81a6c",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-02",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "Mio",
+            "text": "又七点钻，吵死了吵死了\n物业那边问两次了，还是这样"
+          },
+          "editorial": {
+            "name": "Mio",
+            "text": "又七点钻，吵死了吵死了\n物业那边问两次了，还是这样",
+            "reason": "保留重复的“吵死了”。没有把九点公告重列为证据，也没有把本条改成投诉建议。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "厌烦、抱怨无效",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "七点、钻孔、问过两次和仍有噪声均在输入内；没有声称物业已作其他处置。",
+            "expressionAndPattern": "抱怨停在同一句上。与trial-04都有复读，但复读分别来自声音烦扰和客服原话，可保留这处自然相似。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-03",
+      "referencePostId": "l0-20261111214536-e145d75f-cb1dff9b9c4a",
+      "sharedInput": {
+        "role": "root",
+        "facts": "同一保温壶前天179，昨天209，今天券后189；问店家，答复价格随活动调整。尚未购买。",
+        "purpose": "在比较价格后购买兴致下降，随手发一句或几句。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-03"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "L0托腮侧身看着手机。"
+        ],
+        "conditions": {
+          "length": "short",
+          "tone": "negative"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-03",
+        "profileRef": null,
+        "baselineInputSha256": "203044237c3146d5da157d065bab18a3b29486a67feea0093d74bed5e069df87",
+        "candidateInputSha256": "692936f21cd6622dc7d3d141af60b46a3a8b85c224dda13f26001d6992c8eaf6",
+        "sharedInputSha256": "3c9b3cffb5f12972b31667c1f20ee41b82dee4ea414ea83ad9baade943b57f88",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "negative": "c6145fef6021013dbcbbded0989dee6e42e004da1a106d57bb13de1e1bafbe28"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "203044237c3146d5da157d065bab18a3b29486a67feea0093d74bed5e069df87",
+          "generationTask": "utterance_1004",
+          "original": {
+            "name": "豆苗儿",
+            "text": "前天179，昨天209，今天券后189，问就是随活动调整。一个保温壶看得我都不想买了。"
+          },
+          "editorial": {
+            "name": "豆苗儿",
+            "text": "前天179，昨天209，今天券后189，问就是随活动调整。一个保温壶看得我都不想买了。",
+            "reason": "保留。补了商家答复，但没有再制作对称的讽刺结尾。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "团团",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "ace2f93b98a08e74e6bae4186f02710a5c26faa69d503e5037f4dcf184192adc",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-03",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "团团",
+            "text": "179，209，189\n算了不买了。看见券字就烦"
+          },
+          "editorial": {
+            "name": "团团",
+            "text": "179，209，189\n算了不买了。看见券字就烦",
+            "reason": "保留。数字无需解释成完整的价格争理，“券”也无需被证明有错；不把末句加工成购买欲随价格调整的机智对应。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "购买兴致下降，并把烦躁迁到优惠券",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "三个数字依次来自同一壶的三天价格；“不买了”是当下决定，没有新增已下单或退款事件。",
+            "expressionAndPattern": "由眼前价格跳到嫌券，缺少周全理由。三数字排列依旧很整齐，是保留事实造成的一处整洁感。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-04",
+      "referencePostId": "l0-20261111160224-46b1ba58-481b026a0293",
+      "sharedInput": {
+        "role": "root",
+        "facts": "包裹不在应到的楼；已向客服说明放错楼。客服只回复系统显示已签收。发言者正因看见签收才下楼找。",
+        "purpose": "对答非所问感到烦，发一条抱怨。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-04"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [],
+        "conditions": {
+          "length": "short",
+          "tone": "negative"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-04",
+        "profileRef": null,
+        "baselineInputSha256": "232233678e020c9acf03c991a616d53b4bf03c8fd50f9ba4c3c4536f070043ad",
+        "candidateInputSha256": "d7a96719c63a118c5b601c261fa034c4010dda265037310e132a4c9e53bb2976",
+        "sharedInputSha256": "f8cdc130f4cc3cc632a8949855f05f931d9cce0b782b655ee63661272d6c32ed",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "negative": "c6145fef6021013dbcbbded0989dee6e42e004da1a106d57bb13de1e1bafbe28"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "232233678e020c9acf03c991a616d53b4bf03c8fd50f9ba4c3c4536f070043ad",
+          "generationTask": "utterance_1006",
+          "original": {
+            "name": "小杉",
+            "text": "跟客服说包裹放错楼了，回我“系统显示已签收”。我就是看见签收才下楼找的啊，烦死了。"
+          },
+          "editorial": {
+            "name": "小杉",
+            "text": "跟客服说包裹放错楼了，回我“系统显示已签收”。我就是看见签收才下楼找的啊，烦死了。",
+            "reason": "保留。没有额外扩写经历或解决办法，烦躁仍指向眼前答复。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "rin_2",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "b167cf9395fd0773f439c526269a1490845c9c21c5481b8bb026e82ae2c2d0a2",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-04",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "rin_2",
+            "text": "已签收已签收，我知道已签收。\n东西放错楼了看不见这几个字吗"
+          },
+          "editorial": {
+            "name": "rin_2",
+            "text": "已签收已签收，我知道已签收。\n东西放错楼了看不见这几个字吗",
+            "reason": "保留。她重复自己最烦的三个字，停在指责，不再加客服系统与实际找件之间的漂亮反转。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "重复客服话语以发泄，带指责",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "放错楼与客服回复已签收均有依据；反问指向客服没有接住问题，没有新增客服对话。",
+            "expressionAndPattern": "与trial-02都在反复念叨，但本条明显更冲。仍有“别人说错→我顶回去”的局部顺序，整组审读不能把它当作已经彻底消失。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-05",
+      "referencePostId": "l0-20261111060742-8d34ec4f-ae4ff29beae2",
+      "sharedInput": {
+        "role": "root",
+        "facts": "甜品店顾客拿前两天的陈列照片要买完全相同的甜品，其中两款中午已卖完。说明没有后，顾客问拍照片做什么，最终未购买。",
+        "purpose": "下班后谈这位顾客带来的烦躁。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-chi-upper",
+          "name": "小满不在线",
+          "profileRef": "f76a79793b70d883d11be8e607a35912d647519c18aebf6a9233cc06ce99f78f"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "甜品柜里的粉色和白色长盘，有两只盘子已空，旁边还剩几份奶油泡芙。",
+          "L0皱眉张嘴指向一旁。"
+        ],
+        "conditions": {
+          "length": "short",
+          "tone": "negative"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-05",
+        "profileRef": "f76a79793b70d883d11be8e607a35912d647519c18aebf6a9233cc06ce99f78f",
+        "baselineInputSha256": "fb85937ec8b9ad3fd589907dffcb884945c65daf72f0bb8e06ff5a339e9845c7",
+        "candidateInputSha256": "2a96acf0d69f3cceeeba008a83d8ab32e31eb92fe73ce71198a926a2dc5a7337",
+        "sharedInputSha256": "37af870791ad8eedfd4e380a6eef1e02e3378022eaf5076faad97bc7fe43ca4b",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "negative": "c6145fef6021013dbcbbded0989dee6e42e004da1a106d57bb13de1e1bafbe28"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "fb85937ec8b9ad3fd589907dffcb884945c65daf72f0bb8e06ff5a339e9845c7",
+          "generationTask": "utterance_1008",
+          "original": {
+            "name": "小满不在线",
+            "text": "今天有人拿前两天的陈列照片来，要买一模一样的。两款中午就卖完了，说了没有，还问我拍照片干什么，最后什么也没买。都下班了想起这句还是烦。"
+          },
+          "editorial": {
+            "name": "小满不在线",
+            "text": "今天有人拿前两天的陈列照片来，要买一模一样的。两款中午就卖完了，说了没有，还问我拍照片干什么，最后什么也没买。都下班了想起这句还是烦。",
+            "reason": "保留。把烦躁放在下班后仍记着这件事上，没有再加给对方的一句判词。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "小满不在线",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "50077824441d8f2514a178061c272df00a4e3dfd6349317ff9c926bfe48c4df7",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-05",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "小满不在线",
+            "text": "拿前两天的照片非得要一模一样的。两款中午就没了，说了没有，还问拍照片干什么\n\n后来再问照片我都不想理\n最后也没买"
+          },
+          "editorial": {
+            "name": "小满不在线",
+            "text": "拿前两天的照片非得要一模一样的。两款中午就没了，说了没有，还问拍照片干什么\n\n现在想到那张照片都烦\n最后也没买",
+            "reason": "将“后来再问照片我都不想理”改为“现在想到那张照片都烦”，去掉容易被读成后来又有人问照片的未提供经过；保留绕回“最后也没买”和没有答案的抱怨。",
+            "changed": true
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "厌烦顾客，嫌弃同一张照片",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "照片日期、两款卖完、顾客问话和未买均在输入内。编辑后只保留当下情绪，没有新增后来顾客。",
+            "expressionAndPattern": "这是本组仍有较多经过的一条，因她此刻在倒苦水而保留。末尾绕回未买，不替她设计反击，也不保证读者站她一边。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-06",
+      "referencePostId": "l0-20261111160224-46b1ba58-a5fc300c5949",
+      "sharedInput": {
+        "role": "root",
+        "facts": "送货车已经装满；店长要求顺便带几只空周转箱，建议挤一挤。发言者提出下午回程再来，店长转回店里。上次在门口高台阶搬箱子跑过三趟。",
+        "purpose": "说这次先不搬，表达工作边界与疲惫。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-zeta-upper",
+          "name": "Mile",
+          "profileRef": "c7cf0b9f3fe18104bab5babd9b5c281a5f49898cc4ff09cb7d53c51e17c7a624"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "配送车敞开的车厢里塞着纸箱和折叠推车，店后门的高台阶旁摞着四只蓝色空周转箱。",
+          "L0抬眼向上看，嘴边有一团呼气线。"
+        ],
+        "conditions": {
+          "length": "short",
+          "tone": "negative"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-06",
+        "profileRef": "c7cf0b9f3fe18104bab5babd9b5c281a5f49898cc4ff09cb7d53c51e17c7a624",
+        "baselineInputSha256": "2414a9190499f569ee33579454dcad2bd84a0794a4f9209b4070eaf9a0c2c5e2",
+        "candidateInputSha256": "2e8149b151a45d57c09c1c3949b7b92987bc5b8a54f965c5becf95218fb3f120",
+        "sharedInputSha256": "a02890f97bd03cbb347cc9218e1cea330d0dfa27ee61889ed22e1cd7638ec0aa",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "negative": "c6145fef6021013dbcbbded0989dee6e42e004da1a106d57bb13de1e1bafbe28"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "2414a9190499f569ee33579454dcad2bd84a0794a4f9209b4070eaf9a0c2c5e2",
+          "generationTask": "utterance_1010",
+          "original": {
+            "name": "Mile",
+            "text": "车都塞满了，还说空箱挤一挤。跟店长说了下午回程再来，这趟先不搬。上次那高台阶来回三趟，真够累的"
+          },
+          "editorial": {
+            "name": "Mile",
+            "text": "车都塞满了，还说空箱挤一挤。跟店长说了下午回程再来，这趟先不搬。上次那高台阶来回三趟，真够累的",
+            "reason": "保留。顺序虽接近争理叙述，却围绕明确的送货安排，没有新增道理或处罚对方。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "Mile",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "49f268403106c150f0a8b83d85b7dff51a83ecf9e262df820e41b6e671b65c50",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-06",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "Mile",
+            "text": "先放着吧，下午回程再来。\n车里没地儿了还挤一挤，我是真不想再跑那个台阶。上次三趟\n一说顺手我就烦"
+          },
+          "editorial": {
+            "name": "Mile",
+            "text": "先放着吧，下午回程再来。\n车里没地儿了还挤一挤，我是真不想再跑那个台阶。上次三趟\n一说顺手我就烦",
+            "reason": "保留。先说当下决定，再想到台阶和上次，最后又烦“顺手”；没有补店长理亏或下午处理成功。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "疲惫、对顺手一词的厌烦",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "车满、下午回程再来、台阶与上次三趟均来自固定输入；没有续写下午已经来过。",
+            "expressionAndPattern": "比trial-01—04长，信息顺序从决定往回跳。末句仍概括情绪，但没有把它写成所有劳动边界的道理。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-07",
+      "referencePostId": "l0-20261110191228-b8ed4062-03",
+      "sharedInput": {
+        "role": "root",
+        "facts": "在家处理衣服，还剩两件未做完；手边收音机或音频正在播放一段想听完的内容。",
+        "purpose": "随手报个状态，决定先听一会儿。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-gamma-upper",
+          "name": "春卷儿",
+          "profileRef": "813f58e6b698209ea9884f39abb7ec66103ff984e77cd61c35a3281aa2ff91e8"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "灯下挂着长裤和外套，裤腿还留着粗缝线，旁边是缝纫机和收音机。"
+        ],
+        "conditions": {
+          "length": "fragment-or-short",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-07",
+        "profileRef": "813f58e6b698209ea9884f39abb7ec66103ff984e77cd61c35a3281aa2ff91e8",
+        "baselineInputSha256": "7f2629972b1c4e86f8d24b61dcfe2eff1e5dec44b087a6b74c7a0fe1b3602494",
+        "candidateInputSha256": "21e68153363d9d97fcccb2aeea7b47fbfa8c224fd8415cf2398b78f5fbe378de",
+        "sharedInputSha256": "5006c5e1f3aa7d5973fca61eabbadaf80d1fe82e2c1e74d984549b42b20b071b",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "7f2629972b1c4e86f8d24b61dcfe2eff1e5dec44b087a6b74c7a0fe1b3602494",
+          "generationTask": "utterance_1012",
+          "original": {
+            "name": "春卷儿",
+            "text": "还剩两件，先放放，这段我想听完。"
+          },
+          "editorial": {
+            "name": "春卷儿",
+            "text": "还剩两件，先放放，这段我想听完。",
+            "reason": "保留。停在先听一会儿的决定，没有扩写生活寓意。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "春卷儿",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "5bb56e986dfeb0ceccded0c44cbbac7aacf988b375aebed85c348838206fd4aa",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-07",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "春卷儿",
+            "text": "这段先听完，手停了。还两件"
+          },
+          "editorial": {
+            "name": "春卷儿",
+            "text": "这段先听完，手停了。还两件",
+            "reason": "保留。没说清是哪一段和哪两件也成立，不补成家务与个人时间之间的冲突。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "中性报状态，想继续听",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "手边有衣服两件及正在听的内容；停手是这次发言同时作出的选择，没有新增家人催促。",
+            "expressionAndPattern": "普通短句难以辨认作者属于本例允许的信息量，不为辨识度补口头禅。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-08",
+      "referencePostId": "l0-20261110184824-39f6a5a6-09",
+      "sharedInput": {
+        "role": "root",
+        "facts": "毛线头散开，小木珠孔比散开的线头窄，穿不过去；手边没有针。",
+        "purpose": "卡在眼前操作上，想问有没有办法。",
+        "identity": {
+          "kind": "character",
+          "id": "zhaoyangxue",
+          "name": "糯米纸",
+          "profileRef": "b503229f8edf78a217b8a514ff4988967f4959e69da0d6970abc0adfe441ef69"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "深蓝针织布上的浅桃色线头散成一束，旁边的小木珠孔比线头窄。",
+          "L0双手合在一起，抬着大眼睛流泪。"
+        ],
+        "conditions": {
+          "length": "fragment-or-short",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-08",
+        "profileRef": "b503229f8edf78a217b8a514ff4988967f4959e69da0d6970abc0adfe441ef69",
+        "baselineInputSha256": "320ae29c48ed6d28e0eaa12ccc8ff7948a3a325cc7838eecb699cff0f068b5d2",
+        "candidateInputSha256": "c59a01a71f4129c774d209d0d8c96352729acc031d4d2b0d0efbd016812dfa54",
+        "sharedInputSha256": "96038de134bb12b8b21a520285fc51554c27b8f526dfc6f00795819fdd216950",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "320ae29c48ed6d28e0eaa12ccc8ff7948a3a325cc7838eecb699cff0f068b5d2",
+          "generationTask": "utterance_1014",
+          "original": {
+            "name": "糯米纸",
+            "text": "线头散开了，塞不进小木珠的孔，手边还没有针。这个怎么穿过去呀？"
+          },
+          "editorial": {
+            "name": "糯米纸",
+            "text": "线头散开了，塞不进小木珠的孔，手边还没有针。这个怎么穿过去呀？",
+            "reason": "保留。求助说明卡住的位置，未把尝试和原因补成故事。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "糯米纸",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "8a632947c01769bbda89859f921a4ca4f2df28883b4c8efdfacb1ebe20161148",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-08",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "糯米纸",
+            "text": "线头散成这样，珠子穿不过去。没针还能怎么弄"
+          },
+          "editorial": {
+            "name": "糯米纸",
+            "text": "线头散成这样，珠子穿不过去。没针还能怎么弄",
+            "reason": "保留。卡住的操作和问法已经够用，不加尝试次数或解决步骤。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "求助，没有明确抱怨态度",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "散线头、木珠穿不过去、无针均有依据；没有编造已经用了胶水或其他工具。",
+            "expressionAndPattern": "与其他普通求助一样能很短，不强行把这条也改成嫌弃材料。物件失败本身不计负面。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-09",
+      "referencePostId": "l0-20261111043232-f0a325fd-1d0b706b11fb",
+      "sharedInput": {
+        "role": "root",
+        "facts": "见到某写代码的月费套餐在11月11日搞活动；当前订阅月底到期，尚未续费。",
+        "purpose": "问别家有没有优惠，先了解价格。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-09"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "L0蹲着，双手托住脸，尾巴向一侧弯起。"
+        ],
+        "conditions": {
+          "length": "fragment-or-short",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-09",
+        "profileRef": null,
+        "baselineInputSha256": "c4b9769842bec87908807f05b1bf54dd78d9bf3b94627e6b87134510ff5c8558",
+        "candidateInputSha256": "fca136c398f147c50d68cc0b923599f0e0638c900e72cb163bde01b94d1eca54",
+        "sharedInputSha256": "4b53a76b7afaf815f0ea637e9d61ddfc766bc89ead235e53af58d71dd564162b",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "c4b9769842bec87908807f05b1bf54dd78d9bf3b94627e6b87134510ff5c8558",
+          "generationTask": "utterance_1016",
+          "original": {
+            "name": "小井",
+            "text": "昨天看到有个写代码的月费套餐搞活动，别家也有优惠吗？我现在的月底到期，还没续，先看看价格。"
+          },
+          "editorial": {
+            "name": "小井",
+            "text": "11号看到有个写代码的月费套餐搞活动，别家也有优惠吗？我现在的月底到期，还没续，先看看价格。",
+            "reason": "修改。固定事实只给11月11日，盲化材料未给当前日期，因此将昨天改回11号；这项属于时间表达校正。",
+            "changed": true
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "n7",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "3294c5cd8856549e863c4ce6165e68f1ce1477ecb21bbbc2698cedd8f4252d59",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-09",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "n7",
+            "text": "月底才到期，先不续。写代码的月费最近还有哪家便宜？看见一家做11.11活动"
+          },
+          "editorial": {
+            "name": "n7",
+            "text": "月底才到期，先不续。写代码的月费最近还有哪家便宜？看见一家做11.11活动",
+            "reason": "保留。没有解释订阅功能、测评或续费策略，问完就停。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "询价、等待优惠",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "月底到期和见过11.11活动在输入内；“先不续”是当前决定，不新增品牌、价格或活动有效期。",
+            "expressionAndPattern": "短句内先说到期时间再问价格，末尾才补看到活动，语序不追求说明书式完整。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-10",
+      "referencePostId": "l0-20261111043232-f0a325fd-c45e6237a40a",
+      "sharedInput": {
+        "role": "root",
+        "facts": "以前刻的一张现场录音光盘现在还能读；听到鼓声进来时身体仍有熟悉的激动反应。",
+        "purpose": "分享重新听旧录音的瞬间。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-10"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "旧纸套里半抽出一张光盘，散着的耳机线压在深蓝被罩上。"
+        ],
+        "conditions": {
+          "length": "fragment-or-short",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-10",
+        "profileRef": null,
+        "baselineInputSha256": "329d78c01c60450e0b9f2f210c063dd932e3c356369783a53c1121baaff5649d",
+        "candidateInputSha256": "4f4798d7495646f630a1352bd1ffd4043d1a39f25959c9e731d29981dbe7626b",
+        "sharedInputSha256": "4473cef6af358a822f175d45327d2ad9d4d51402b975adaa53649c6444680bf6",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "329d78c01c60450e0b9f2f210c063dd932e3c356369783a53c1121baaff5649d",
+          "generationTask": "utterance_1018",
+          "original": {
+            "name": "半颗葡萄",
+            "text": "以前刻的这张现场录音还能读。鼓声一进来，身上还是那股激动劲。"
+          },
+          "editorial": {
+            "name": "半颗葡萄",
+            "text": "以前刻的这张现场录音还能读。鼓声一进来，身上还是那股激动劲。",
+            "reason": "保留。没有追补怀旧经历或人生归纳。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "普通人",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "c2ff38d5586e295959c74714ba1ca9fd1fe9317174b17d0bf2bbd9c367855110",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-10",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "普通人",
+            "text": "还能读！\n鼓进来那一下，胳膊上又全起来了"
+          },
+          "editorial": {
+            "name": "普通人",
+            "text": "还能读！\n鼓进来那一下，胳膊上又全起来了",
+            "reason": "保留。指代“全起来了”随眼前兴奋省略，没补乐队、年份和往事。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "兴奋、熟悉的身体反应",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "旧光盘仍能读与鼓进入后的激动反应有依据；没写不知情的演出身份。",
+            "expressionAndPattern": "没有把旧物写成人生感慨，信息只停留在这个瞬间。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-11",
+      "referencePostId": "l0-20261110184824-39f6a5a6-03",
+      "sharedInput": {
+        "role": "root",
+        "facts": "正戴耳机听曲子，过了一阵发现手里一直攥着一小块边角磨圆的木头。",
+        "purpose": "随手说刚发现的小动作。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-epsilon-upper",
+          "name": "wodoo",
+          "profileRef": "41634342684a0ebdfa0965d9c3c6687734e74d65419f6712ce72c1d919b3fbfa"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "摊开的掌心托着一小块边缘磨圆的棕色木料，背景是旧棉裤和一截耳机线。"
+        ],
+        "conditions": {
+          "length": "fragment-or-short",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-11",
+        "profileRef": "41634342684a0ebdfa0965d9c3c6687734e74d65419f6712ce72c1d919b3fbfa",
+        "baselineInputSha256": "0659d7f7554248a96d70b0fecb239bbd052537b69f4af99ba01b62fdd443afb6",
+        "candidateInputSha256": "5966afeafb15bed413f4c5031de1c1968b90e2d5705a8e9c6b4c8412c0b7ac42",
+        "sharedInputSha256": "456eda1016bb88ff2676c2966a062a189ad60eec9de7bf797b86d8b6e5a45c8d",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "0659d7f7554248a96d70b0fecb239bbd052537b69f4af99ba01b62fdd443afb6",
+          "generationTask": "utterance_1020",
+          "original": {
+            "name": "wodoo",
+            "text": "听了好一会儿，才发现手里一直攥着这块木头。"
+          },
+          "editorial": {
+            "name": "wodoo",
+            "text": "听了好一会儿，才发现手里一直攥着这块木头。",
+            "reason": "保留。没有为了凸显木工身份额外补材质知识。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "wodoo",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "4c9059ca0d5717ca248bbf39da42b850ac07334b123d6f6089b348ca1f14d746",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-11",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "wodoo",
+            "text": "听半天了，手里还攥着这小木头。都没留神。"
+          },
+          "editorial": {
+            "name": "wodoo",
+            "text": "听半天了，手里还攥着这小木头。都没留神。",
+            "reason": "保留。普通地说发现了什么，不给木头安排象征或工匠式结尾。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "中性发现自己的小动作",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "听曲子、攥小木块和过一阵才发现均在输入内；不推断木种、用途与制作时间。",
+            "expressionAndPattern": "与trial-07同样是随手报状态，但一个主动停手，一个后知后觉；不为单条辨识度增加职业细节。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-12",
+      "referencePostId": "l0-20261111214536-e145d75f-72922b95dc8d",
+      "sharedInput": {
+        "role": "root",
+        "facts": "以前做过商场促销，现在甜品店前台，做收银补货摆台；柜台换过两次颜色，同事说更顺眼。还不会专业软件，未辞职。",
+        "purpose": "想了解商场陈列这类工作，问自己的现有经验是否有用。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-chi-upper",
+          "name": "小满不在线",
+          "profileRef": "f76a79793b70d883d11be8e607a35912d647519c18aebf6a9233cc06ce99f78f"
+        },
+        "visiblePosts": [],
+        "mediaDescription": [
+          "甜品店柜台上粉色与奶白色盘子里剩着几块点心，白色高脚盘下垫了淡紫色布。"
+        ],
+        "conditions": {
+          "length": "fragment-or-short",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-12",
+        "profileRef": "f76a79793b70d883d11be8e607a35912d647519c18aebf6a9233cc06ce99f78f",
+        "baselineInputSha256": "c1678863546e581b42540c883690d92221a3a6e0f80504e22c52592542bebc0e",
+        "candidateInputSha256": "9c41edf7e618ead6b5f3ee9a5a22f92211a313d7b1ead6ee142a4068d3300319",
+        "sharedInputSha256": "dc09e193aa377c011812105031167e57b6aff4ca01a4829371a8b86313902e82",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "c1678863546e581b42540c883690d92221a3a6e0f80504e22c52592542bebc0e",
+          "generationTask": "utterance_1022",
+          "original": {
+            "name": "小满不在线",
+            "text": "最近给柜台换了两次颜色，同事说更顺眼了\n想问问商场陈列的工作，我以前做过促销，现在前台收银补货摆台，这些经验有用吗，软件还不会"
+          },
+          "editorial": {
+            "name": "小满不在线",
+            "text": "最近给柜台换了两次颜色，同事说更顺眼了\n想问问商场陈列的工作，我以前做过促销，现在前台收银补货摆台，这些经验有用吗，软件还不会",
+            "reason": "保留。同一个人在求具体职业信息时比抱怨更聚焦条件，分行自然。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "小满不在线",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "6beb0472626ff047abe0fa7e25c65cce333b3621a14f804e60d3306a0896dd39",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-12",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "小满不在线",
+            "text": "做陈列是不是都得先会软件啊\n\n我现在甜品店收银补货，也弄柜台的颜色，同事说换了两次比以前顺眼。我就会这个\n\n想学，但不知道先学哪样。商场促销以前做过，跟这个算挨着吗"
+          },
+          "editorial": {
+            "name": "小满不在线",
+            "text": "做陈列是不是都得先会软件啊\n\n我现在甜品店收银补货，也弄柜台的颜色，同事说换了两次比以前顺眼。我就会这个\n\n想学，但不知道先学哪样。商场促销以前做过，跟这个算挨着吗",
+            "reason": "保留。两个问题未整理成职业转换说明，没有补辞职宣言、励志动机或学习计划。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "询问入门方向，带不确定",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "现职、收银补货、两次配色得到反馈、过去促销、不会软件均有依据；没有声称已经求职。",
+            "expressionAndPattern": "仍是有材料的求助，保留较长正文。它与trial-05是同一个人，但情绪和注意点不同，不固定成同一种短骂。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-13",
+      "referencePostId": "l0-20261111160224-46b1ba58-03",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；发言者没有亲自经历这趟送货，也不知道装载的其他细节。",
+        "purpose": "针对顺手一词接一句话，可以开玩笑。",
+        "identity": {
+          "kind": "news",
+          "id": "news-surf",
+          "name": "我冲浪回来了",
+          "profileRef": "5a030a5c934c8ca60bdc484981797129bc006147711c01fd7580e57cb285c44c"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261111160224-46b1ba58-a5fc300c5949",
+            "text": "今天送货，店长又让我“顺手”带几箱空周转箱。\n\n我车里都快顶到门了，她还说挤一挤。我说下午回程再来，她就自己转回店里去了。\n\n上次搬这些箱子，那个台阶我抬了三趟。这回先放那吧。",
+            "mediaDescription": [
+              "配送车敞开的车厢里塞着纸箱和折叠推车，店后门的高台阶旁摞着四只蓝色空周转箱。",
+              "L0抬眼向上看，嘴边有一团呼气线。"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "L0一手托下巴，斜眼看着旁边的问号。"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-13",
+        "profileRef": "5a030a5c934c8ca60bdc484981797129bc006147711c01fd7580e57cb285c44c",
+        "baselineInputSha256": "d5acd7e709e9f19f867515c7fae22f06c811ba2369b8949d73fc048ae4589aea",
+        "candidateInputSha256": "12da20d6ef19b1f4416e9886690bb1e2c2a801b03c3bf2a6634a5c2c85e73f1d",
+        "sharedInputSha256": "1d5207b6a7af12527b5f0a0f2041c4430e6a5963baf84cc6ac6dc298d587f4a2",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "d5acd7e709e9f19f867515c7fae22f06c811ba2369b8949d73fc048ae4589aea",
+          "generationTask": "utterance_1024",
+          "original": {
+            "name": "我冲浪回来了",
+            "text": "顺手（手是你的）"
+          },
+          "editorial": {
+            "name": "我冲浪回来了",
+            "text": "顺手（手是你的）",
+            "reason": "保留。仅拆开父帖的“顺手”接一个括号笑话，没有杜撰送货经历，也没有向店长追加追责要求。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "我冲浪回来了",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "7542fbf0e4df6ed44af4a1545fbe96cf845ea31aeb6e2347a13ed8f39e085e6f",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-13",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "我冲浪回来了",
+            "text": "顺手 顺手 顺手\n看见这俩字就累"
+          },
+          "editorial": {
+            "name": "我冲浪回来了",
+            "text": "顺手 顺手 顺手\n看见这俩字就累",
+            "reason": "保留。这条接“顺手”一个词就走，未编出新段子或替送货者作全面辩护。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "借复读表达嫌弃",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "所接词语确在父帖内；“就累”是这次阅读反应，没有冒充亲历这趟配送。",
+            "expressionAndPattern": "低信息复读，署名隐去后无法辨认账号也不必补材料。与trial-06话头相接，不替它续写对方感谢。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-14",
+      "referencePostId": "l0-20261111060742-8d34ec4f-02",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；发言者知道某直播优惠要先领券下单，有时要退一次再买，过程繁琐。",
+        "purpose": "接优惠话题，指出还有更繁琐的领券流程。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-14"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261111060742-8d34ec4f-aa1343d46fa4",
+            "text": "双十一算半天券，最后跟昨天一个价？？",
+            "mediaDescription": [
+              "L0张着小嘴，两眼呈螺旋状，头上冒着弯曲线。"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "L0仰躺着张嘴笑，双腿抬起。",
+          "L0半睁眼，嘴角轻微上扬。"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-14",
+        "profileRef": null,
+        "baselineInputSha256": "567e6fd3876744f2be1ddd73c199e9334f8968efc29145b01906d5ef413302be",
+        "candidateInputSha256": "936e65258f54ae5aaa492e01c38d84d413afdf193dd9041eb36ac9ed04feb002",
+        "sharedInputSha256": "d87dd76ef01720e89fec5cbe850d6247106c92f22f23610e9ff070c22ecf479d",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "567e6fd3876744f2be1ddd73c199e9334f8968efc29145b01906d5ef413302be",
+          "generationTask": "utterance_1026",
+          "original": {
+            "name": "小池",
+            "text": "直播间有的还得先领券下单，有时候还要退一次再买，麻烦死了"
+          },
+          "editorial": {
+            "name": "小池",
+            "text": "直播间有的还得先领券下单，有时候还要退一次再买，麻烦死了",
+            "reason": "保留。同样只交代已给的领券流程，“麻烦死了”是当下感受，没有把经历扩写成独立小故事。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "lea",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "c8103ae8f36e25b3345d151f7c2718f6efd73a4195f7ee8563b4631c69b0245b",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-14",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "lea",
+            "text": "你这还没到退货再买那步呢\n先领券下单，退掉，再买。折腾这么一圈我都不想知道便宜多少了"
+          },
+          "editorial": {
+            "name": "lea",
+            "text": "你这还没到退货再买那步呢\n先领券下单，退掉，再买。折腾这么一圈我都不想知道便宜多少了",
+            "reason": "保留。没有在末尾算时薪或给出节省时间的正确策略，酸完也没说明到底买不买。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "调侃楼主，嫌优惠流程折腾",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "已知有先领券下单、退一次再买的流程；首句是顺着父帖夸张接话，不断言楼主实际已完成哪一步。",
+            "expressionAndPattern": "相对完整的两句带冷话，可以保留；末句仍有可传播的小感慨，不能把它当作已经没有文案感。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-15",
+      "referencePostId": "l0-20261112174153-117eae41-reply01",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；发言者上周遇到一家只看表皮颜色就退了两盘面包，当时厨师很生气。发言者知道糖也能影响上色。",
+        "purpose": "接住面包颜色问题，补自己知道的一点。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-epsilon-upper",
+          "name": "wodoo",
+          "profileRef": "41634342684a0ebdfa0965d9c3c6687734e74d65419f6712ce72c1d919b3fbfa"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261112174153-117eae41-01e6003033ae",
+            "text": "早上那盘面包有人说颜色深一点就卖相不好。我说你先掰开看，外面深跟里面没熟可不是一回事。还没吃就判它不行，谁教的呀。",
+            "mediaDescription": [
+              "面包店货架上的面包"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "一筐深浅不同的面包近景"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-15",
+        "profileRef": "41634342684a0ebdfa0965d9c3c6687734e74d65419f6712ce72c1d919b3fbfa",
+        "baselineInputSha256": "4a05ce08d258ebcfdd0d556d7e42d42ddf38ec99b79e7b44086bb00b94b8448f",
+        "candidateInputSha256": "02e1cc6868b07fd2fa0ef2cff055c0cb3ce280e5c9a0043b3697a72e9487fa57",
+        "sharedInputSha256": "4fd4bbe991561d16442308887edd004274d607185e3c8e092ecd66a307d464f5",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "4a05ce08d258ebcfdd0d556d7e42d42ddf38ec99b79e7b44086bb00b94b8448f",
+          "generationTask": "utterance_1028",
+          "original": {
+            "name": "wodoo",
+            "text": "上周也碰到有人只看表皮颜色就退了两盘，厨师当时气得很。糖也会影响上色的。"
+          },
+          "editorial": {
+            "name": "wodoo",
+            "text": "上周也碰到有人只看表皮颜色就退了两盘，厨师当时气得很。糖也会影响上色的。",
+            "reason": "保留。退两盘和厨师生气是已给经历，随后补糖影响上色，符合接住话题、只补一点的目的。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "wodoo",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "786306d9960313a2106ac8e6b6a1fccbb1865078939a58542c7d2dc8bd837dd6",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-15",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "wodoo",
+            "text": "又是看颜色。糖一多就会这样，先掰开。上周也碰到一家光看表皮就退两盘，厨师当时就气了。"
+          },
+          "editorial": {
+            "name": "wodoo",
+            "text": "又是看颜色。糖也会影响上色，先掰开。上周也碰到一家光看表皮就退两盘，厨师当时就气了。",
+            "reason": "将“糖一多就会这样”改为“糖也会影响上色”，去掉对这盘面包糖量和成因的过度确定；保留先嫌一句再接自己经历的口气。",
+            "changed": true
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "嫌只看表皮就判定，并补建议",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "只知道糖能影响上色，不知道父帖这盘的配方和真实成因；上周退两盘与厨师生气来自输入。",
+            "expressionAndPattern": "保留了一条有帮助也有不耐烦的回复。没有把人物的木工职业写成烘焙专家，仍要警惕“我遇过所以我懂”的口吻。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-16",
+      "referencePostId": "l0-20261112174153-117eae41-reply03",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；自己居住处的施工早上先搬钢管，很响。问物业是否提前施工，物业称那是准备。",
+        "purpose": "提供自己碰到的相似情况。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-shiftcard",
+          "name": "阿禾",
+          "profileRef": "7af4cc69ffda1db8ac424f93cd4383d78388322fd8da9027563f220432920a34"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261112174153-117eae41-56a1e33c4727",
+            "text": "楼下外立面搭架子以后，早上七点就开始钻，物业公告写的施工时间是九点。问了两次说已转达，这几天照响。到底谁在看这个公告啊。",
+            "mediaDescription": []
+          }
+        ],
+        "mediaDescription": [
+          "公寓楼窗户与外墙的照片"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-16",
+        "profileRef": "7af4cc69ffda1db8ac424f93cd4383d78388322fd8da9027563f220432920a34",
+        "baselineInputSha256": "aca8abf5e715fd7434a747202f9b8abb7bc8ab541199ed40105e17ba80b5bf3a",
+        "candidateInputSha256": "8a48e220559d6cb47b285b428ecd9528550d463cd891044df8aab8c538cfd325",
+        "sharedInputSha256": "46a3d324b6a1c49c777a04f685823ed56de56048e014e64629afcaf66140da6b",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "aca8abf5e715fd7434a747202f9b8abb7bc8ab541199ed40105e17ba80b5bf3a",
+          "generationTask": "utterance_1030",
+          "original": {
+            "name": "阿禾",
+            "text": "我住的这边早上先搬钢管，响得很。问物业是不是提前施工了，说那是准备"
+          },
+          "editorial": {
+            "name": "阿禾",
+            "text": "我住的这边早上先搬钢管，响得很。问物业是不是提前施工了，说那是准备",
+            "reason": "保留。“响得很”和“那是准备”保持随口叙述，未强添讥讽句，内容也没有越过所知范围。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "阿禾",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "c8d591beba5f833c1a684b4bb81ec54d528bcb9e7720f0bb50ca6ec4ffe16fdc",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-16",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "阿禾",
+            "text": "我这边早上钢管先响起来。物业说在准备\n准备也吵啊"
+          },
+          "editorial": {
+            "name": "阿禾",
+            "text": "我这边早上钢管先响起来。物业说在准备\n准备也吵啊",
+            "reason": "保留。最后半句没有推导公告是否违规，也不安排物业回话。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "借自己遭遇抱怨物业说法",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "早上搬钢管、很响、物业称准备均有依据；没有挪用父帖七点和九点为自己的时间。",
+            "expressionAndPattern": "有相似经历，但信息只够说两句；与trial-02不采用相同的时刻举证顺序。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-17",
+      "referencePostId": "l0-20261111214536-e145d75f-reply1",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；自己的孩子今天早上找泳帽，顺着类似调子念过一段，后来在自己的书包侧袋找到泳帽。",
+        "purpose": "顺口接孩子也会乱编这类歌的经历。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-eta-upper",
+          "name": "7_7",
+          "profileRef": "5b8785fdd85742a5f5ae4e40f7ad255825830157ebcdb736e925539d4c71ecd5"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261111214536-e145d75f-f75f6eafc5c3",
+            "text": "下班路上在群里看见一句：\n\n太太早上好\n你家先生要被炒\n工作靠你保\n\n下面有人回“先生早上好，你家太太也要炒，工作谁来保”\n\n坏了 我现在念什么都想往这个调上编",
+            "mediaDescription": []
+          }
+        ],
+        "mediaDescription": [],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-17",
+        "profileRef": "5b8785fdd85742a5f5ae4e40f7ad255825830157ebcdb736e925539d4c71ecd5",
+        "baselineInputSha256": "2bd1153051843c376a1b02edb744f32bcc6820462d273c1f467e1a657954c7b2",
+        "candidateInputSha256": "5babc33049002e82623b13a939d9574d6aa16573e421c81c68700034a2783762",
+        "sharedInputSha256": "39237c0d53cd0845d2dcd503bd5ee46646f66bf31bc09c54dc9787aa3cce13df",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "2bd1153051843c376a1b02edb744f32bcc6820462d273c1f467e1a657954c7b2",
+          "generationTask": "utterance_1032",
+          "original": {
+            "name": "7_7",
+            "text": "我家孩子今早找泳帽也在这么编，最后在自己书包侧袋里找到了。"
+          },
+          "editorial": {
+            "name": "7_7",
+            "text": "我家孩子今早找泳帽也在这么编，最后在自己书包侧袋里找到了。",
+            "reason": "保留。孩子找泳帽、跟调乱编、在书包侧袋找到都在事实内，既没另编歌词，也没追加教训孩子的结尾。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "7_7",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "ab1b12299da7c10aa3fd83fd476cd4cca3c465aa971b1aa208d6ea128a5df586",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-17",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "7_7",
+            "text": "我家早上接的是\n妈妈早上好\n泳帽不见了\n游泳靠你保\n\n帽子在他自己书包侧袋"
+          },
+          "editorial": {
+            "name": "7_7",
+            "text": "我家早上接的是\n妈妈早上好\n泳帽不见了\n游泳靠你保\n\n帽子在他自己书包侧袋",
+            "reason": "保留。只接乱编歌，不把找帽子扩成家务或照料负担。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "轻松分享孩子乱编的调子",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "孩子早上找泳帽、同类调子、最后在自己书包侧袋找到均有依据；未补孩子学校或上课安排。",
+            "expressionAndPattern": "分行来自所接的调子，和别处短行有不同用途；不为同一作者平时压力大就把这次也写成抱怨。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-18",
+      "referencePostId": "l0-20261112174153-117eae41-reply07",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；没有其他交通或等待的事实。",
+        "purpose": "对父帖的抱怨不认同，想顶回去。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-18"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261112174153-117eae41-f21cb1e41a07",
+            "text": "雨天在车里拍窗外，照片看起来还蛮安静。实际司机刚刚因为有人忘了带伞，停在路边等了十来分钟，我后面还有个约。现在拍张照也不耽误我烦。",
+            "mediaDescription": [
+              "从带雨滴的窗玻璃后看见湿漉漉的城市街道"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "L0表情"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "negative"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-18",
+        "profileRef": null,
+        "baselineInputSha256": "b995e97caea18dc40894b3e19fe1ff61072886e2f4ae07c20de5b99e8fc9f02f",
+        "candidateInputSha256": "4ca76037ffa4cfe954ddb5338e2161b445d163c46653ec53787dd8c44785e445",
+        "sharedInputSha256": "fbe228f854305bc4d9c1202cdb8f4f487c68bccd4b6a5383d98de14683d037dd",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2",
+            "negative": "c6145fef6021013dbcbbded0989dee6e42e004da1a106d57bb13de1e1bafbe28"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "b995e97caea18dc40894b3e19fe1ff61072886e2f4ae07c20de5b99e8fc9f02f",
+          "generationTask": "utterance_1034",
+          "original": {
+            "name": "卷纸芯",
+            "text": "等十来分钟而已，至于烦成这样吗。"
+          },
+          "editorial": {
+            "name": "卷纸芯",
+            "text": "等十来分钟而已，至于烦成这样吗。",
+            "reason": "保留。只表达对十来分钟等待引发烦躁的不认同，刻薄程度属于本题目的，未加对方迟到等未知事实。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "一杯水",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "df7c3b1411bc8abaccc5f2fa86bc695ac0aaa5c2ab0776f1f9a1b52c7d72ef27",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-18",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "一杯水",
+            "text": "有约就都得给你让路啊\n等十分钟而已，这也要发一条"
+          },
+          "editorial": {
+            "name": "一杯水",
+            "text": "有约就都得给你让路啊\n等十分钟而已，这也要发一条",
+            "reason": "保留轻蔑和不讲理的口气。不给他补真实交通情况来证明指责成立，也不加劝和或作者反击。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "指责发帖者小题大做，轻蔑且不公允",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "只从父帖十来分钟等待与后续约会拎出一句；“都得给你让路”是强加的意思，登记为无依据解读，不升级成客观事实。",
+            "expressionAndPattern": "这是负面直接冲楼主的一条，缺少正当理由和完整举证。父帖说的是司机停等忘带伞的人，回复故意忽略这一层。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-19",
+      "referencePostId": "l0-20261111043232-f0a325fd-20",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；不知道光盘是哪一次演出的录音。",
+        "purpose": "想问录音对应哪场演出。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-19"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261111043232-f0a325fd-c45e6237a40a",
+            "text": "以前刻的那张现场录音还真能读。鼓一进来，鸡皮疙瘩还是照起",
+            "mediaDescription": [
+              "旧纸套里半抽出一张光盘，散着的耳机线压在深蓝被罩上。"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "L0蹲着，双手托住脸，尾巴向一侧弯起。"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-19",
+        "profileRef": null,
+        "baselineInputSha256": "78a98059dcb317ea3920b6b635cd6112055565a53917c9cc6250ca9006ae55ef",
+        "candidateInputSha256": "55ee07a3344abbe95408ddbede1ec5a6242b63316e9a1996edb77e02161d8845",
+        "sharedInputSha256": "2c4bd326434d721c630643f008b302e9a8c0511010d4c835499f17ea90f00069",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "78a98059dcb317ea3920b6b635cd6112055565a53917c9cc6250ca9006ae55ef",
+          "generationTask": "utterance_1036",
+          "original": {
+            "name": "叶子没落",
+            "text": "这是哪场的录音？"
+          },
+          "editorial": {
+            "name": "叶子没落",
+            "text": "这是哪场的录音？",
+            "reason": "保留。与A完全相同也自然，普通资料询问不需要承担作者辨识任务。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "石头",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "e2950bf5b8e50f4958821d0544851819b7441b872be2d96b12587c8e7a26f90d",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-19",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "石头",
+            "text": "哪场啊"
+          },
+          "editorial": {
+            "name": "石头",
+            "text": "哪场啊",
+            "reason": "保留。三个字已经完成询问，不添自己也听过或想起某场的假经历。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "中性追问录音是哪场",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "未声称知道演出，只问父帖未交代的信息。",
+            "expressionAndPattern": "与历史问法相近是最直接的普通问句，不为求新而改成机灵表达。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-20",
+      "referencePostId": "l0-20261111160224-46b1ba58-02",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；自己隔街拍照，没有进店，黄框很亮，只能猜是收旧瓶子的牌子。",
+        "purpose": "回答对方关于牌子的询问，交代自己没确认。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-nu",
+          "name": "蓝蓝路",
+          "profileRef": "87fe5ca491ba0f83e3370c4f4d58bee2cb0ab76adcaeb9a1681025ec20ce6909"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261111160224-46b1ba58-01",
+            "text": "黄的那张是收旧瓶子的牌子？",
+            "mediaDescription": [
+              "雨夜店铺玻璃门的照片放大截图"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "L0半睁眼竖起拇指。"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-20",
+        "profileRef": "87fe5ca491ba0f83e3370c4f4d58bee2cb0ab76adcaeb9a1681025ec20ce6909",
+        "baselineInputSha256": "579f6ccdf08c230eb5252633fb7d4c67918260c913994ce438090e80005496c0",
+        "candidateInputSha256": "8419ed60bf166d441fc16565d6db6da6e9b8992b08b53998a2d5abf9035ddf81",
+        "sharedInputSha256": "9e5faae308ce88cf186f28b5c6d11396d1ce649c81b245c72956acb6f671181d",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "579f6ccdf08c230eb5252633fb7d4c67918260c913994ce438090e80005496c0",
+          "generationTask": "utterance_1038",
+          "original": {
+            "name": "蓝蓝路",
+            "text": "我猜是，隔街拍的，没进去看。那个黄框好亮。"
+          },
+          "editorial": {
+            "name": "蓝蓝路",
+            "text": "我猜是，隔街拍的，没进去看。那个黄框好亮。",
+            "reason": "保留。简短答“我猜是”，再交代没进店和黄框亮，既接住提问，也保持了未确认的范围。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "蓝蓝路",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "2a1ddfd9a3c95766b0063315dde3e69e73651ceaf368ca6230d6de8bd0f55b1d",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-20",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "蓝蓝路",
+            "text": "是收旧瓶子的，我没进去，隔街拍的，光看那个黄框了。"
+          },
+          "editorial": {
+            "name": "蓝蓝路",
+            "text": "看着像收旧瓶子的，我没进去，隔街拍的，光看那个黄框了。",
+            "reason": "把肯定的“是”改为“看着像”，恢复输入明确要求的猜测边界；后面仍是随口交代，不整理成核查说明。",
+            "changed": true
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "回答询问，交代没有确认",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "自己隔街拍、没进店、黄框很亮均有依据；最终没有确认牌子内容。",
+            "expressionAndPattern": "主要风险是肯定句滑出所见范围，而非情绪是否体面；边界修正只改开头两字，不润色整段。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-21",
+      "referencePostId": "l0-20261112174153-117eae41-reply06",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；自己平时用文具店三块一本的本子。",
+        "purpose": "说一下自己用的普通本子。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-21"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261112174153-117eae41-e2f43eaf0a82",
+            "text": "谁说做文具的就必须随身带本特别精致的本子。我记尺寸用这个小皮本，夹子还老掉。昨天有人翻我东西说这么普通，真就很无语。",
+            "mediaDescription": [
+              "笔和夹子旁边放着一本小皮面随身笔记本",
+              "L0表情"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "桌面上小笔记本、手机与耳机"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-21",
+        "profileRef": null,
+        "baselineInputSha256": "9ffc12480f74497cccf39850a58e2bf2cb8e3af8f92ae12a63062ca9f5c5d203",
+        "candidateInputSha256": "e9edabb9199e063944fc82833066df1cb064d744bb0521223466fb9b6c68102a",
+        "sharedInputSha256": "97b78bd257e32b37fa89a7fc574f4586125e3efcea4dcdb9cbf7f99b6efbd384",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "9ffc12480f74497cccf39850a58e2bf2cb8e3af8f92ae12a63062ca9f5c5d203",
+          "generationTask": "utterance_1040",
+          "original": {
+            "name": "木棉籽",
+            "text": "我用的就是文具店三块一本的本子。"
+          },
+          "editorial": {
+            "name": "木棉籽",
+            "text": "我用的就是文具店三块一本的本子。",
+            "reason": "保留。语序略有强调而内容仍普通，三块一本来自已给事实，不必靠职业习惯或俏皮结尾制造特色。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "kiwi",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "f811b7b3f16be2b3b13f04fa6a2e9df28f70ec1bb49dc50d259fb83004015706",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-21",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "kiwi",
+            "text": "文具店三块一本的，我就用那个"
+          },
+          "editorial": {
+            "name": "kiwi",
+            "text": "文具店三块一本的，我就用那个",
+            "reason": "保留。没有替楼主站队，也不把三块钱写成反精致宣言。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "中性补自己用的本子",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "本人与文具店三块一本的本子来自输入；没有说与父帖是同款或一样耐用。",
+            "expressionAndPattern": "日常材料只够一句，保留其低信息量。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-22",
+      "referencePostId": "l0-20261111214536-e145d75f-reply4",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；自己买东西时曾把不同容量的价格看混。",
+        "purpose": "先确认比较的是否同一容量。",
+        "identity": {
+          "kind": "visitor",
+          "id": "visitor-kappa-upper",
+          "name": "nono",
+          "profileRef": "67d170bf4726b9c2577c724868a7fd7561fc3d69aa018f0e03be5e9ffe689262"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261111214536-e145d75f-cb1dff9b9c4a",
+            "text": "那个保温壶，前天179，昨天209，今天券后189。\n\n问店家，回我“价格会随活动调整”。\n\n好的，我的购买欲也调整了。",
+            "mediaDescription": [
+              "L0托腮侧身看着手机。"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "L0缩着肩膀，双手抓着衣领，眼睛看向一侧。"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-22",
+        "profileRef": "67d170bf4726b9c2577c724868a7fd7561fc3d69aa018f0e03be5e9ffe689262",
+        "baselineInputSha256": "dc59eeb0144168239b6e4d9fffd6ad349487bb6a91c3933e4d4845931196f0a1",
+        "candidateInputSha256": "b2c15ac1cdcbb902adaba0e38db5bcc85fb3e533b2868af5f0bb3f056d39a3bc",
+        "sharedInputSha256": "65228b8ea4fd2746f1f6614286154d52520980064d648d7bf265c333f9789c4e",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "dc59eeb0144168239b6e4d9fffd6ad349487bb6a91c3933e4d4845931196f0a1",
+          "generationTask": "utterance_1042",
+          "original": {
+            "name": "nono",
+            "text": "这三次是同一个容量吗？我之前买东西就把不同容量的价格看混了。"
+          },
+          "editorial": {
+            "name": "nono",
+            "text": "这三次是同一个容量吗？我之前买东西就把不同容量的价格看混了。",
+            "reason": "保留。保留同样的核实问题和本人误看经历，没有断言楼主比较有误，也没改为向商家追责。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "nono",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "82b3e9d1eb98bc637926cc47ef3b3871bf9073413f08980d7ad8c35622c344ae",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-22",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "nono",
+            "text": "前天也是这容量？我之前把容量看串过"
+          },
+          "editorial": {
+            "name": "nono",
+            "text": "前天也是这容量？我之前把容量看串过",
+            "reason": "保留。问同容量本身不算怀疑楼主撒谎，不把它改成指责或价格辩论。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "求确认，说明自己为什么问",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "只能看到父帖，自己的混看经历有依据；没有断言父帖比较错了。",
+            "expressionAndPattern": "仍是一个问题加半句自己的经历，和trial-19的纯问句信息量不同。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-23",
+      "referencePostId": "l0-20261111160224-46b1ba58-01",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖照片的文字描述；照片里雨夜商店有一个很亮的黄框，自己不能看清文字。",
+        "purpose": "问黄框是不是收旧瓶子的牌子。",
+        "identity": {
+          "kind": "visitor",
+          "id": "passerby17",
+          "name": "阿北",
+          "profileRef": "a4c5a25fe6fcd89dceae8d123bc1e887b80e1a5a78edf4c382beb55ce5b2a640"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261111160224-46b1ba58-9cdb14528855",
+            "text": "",
+            "mediaDescription": [
+              "雨夜的商店透着粉红色灯光，路面倒映灯影"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "雨夜店铺玻璃门的照片放大截图"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-23",
+        "profileRef": "a4c5a25fe6fcd89dceae8d123bc1e887b80e1a5a78edf4c382beb55ce5b2a640",
+        "baselineInputSha256": "cc20fcbf9b558b96f977b244bdfc45d2ba85798adddef81895526e2d02608a84",
+        "candidateInputSha256": "65ea583f9fdf4b954e066b0c5cf4fdfc27606c035c650ee25f1ecbdd99d6b9a0",
+        "sharedInputSha256": "4983af3b224694429a83b74fe7cd2ac1e2f2182f8593335b49c1cc7ae22a2774",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "沿用给定姓名。"
+          },
+          "inputSha256": "cc20fcbf9b558b96f977b244bdfc45d2ba85798adddef81895526e2d02608a84",
+          "generationTask": "utterance_1044",
+          "original": {
+            "name": "阿北",
+            "text": "那个黄框是不是收旧瓶子的牌子？"
+          },
+          "editorial": {
+            "name": "阿北",
+            "text": "那个黄框是不是收旧瓶子的牌子？",
+            "reason": "保留。以疑问提出收旧瓶子的猜测，未声称读清文字；一句足以完成目的。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "阿北",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "3f56b1624614e191375719d9e3b8655a4f233f77da26482e19c343c00612bb24",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-23",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "阿北",
+            "text": "黄框那块写的收旧瓶子吗，看不清"
+          },
+          "editorial": {
+            "name": "阿北",
+            "text": "黄框那块写的收旧瓶子吗，看不清",
+            "reason": "保留。只问一处图上信息，不补自己认识店铺或跑题解释回收。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": false,
+            "attitude": "辨认照片中的招牌",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "照片里有亮黄框、字看不清来自固定描述；是疑问，没有当作已识别文字。",
+            "expressionAndPattern": "与trial-20互相接话但不新增后续，也不保证这个问句必被再次答复。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "v2",
+        "B": "baseline"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    },
+    {
+      "caseId": "trial-24",
+      "referencePostId": "l0-20261112174153-117eae41-reply04",
+      "sharedInput": {
+        "role": "reply",
+        "facts": "只看到父帖；不知道发帖者到站时间、车实际经过时间。",
+        "purpose": "怀疑对方可能已经错过车，问一下。",
+        "identity": {
+          "kind": "guest",
+          "id": "guest-trial-24"
+        },
+        "visiblePosts": [
+          {
+            "id": "l0-20261112174153-117eae41-894f59e24b20",
+            "text": "站台这盏灯都亮起来了，车还没影。时刻表写二十分钟一班，我等得都能记住广告牌上的字了。",
+            "mediaDescription": [
+              "夜间站台灯光照着候车者"
+            ]
+          }
+        ],
+        "mediaDescription": [
+          "L0表情"
+        ],
+        "conditions": {
+          "length": "follow-the-utterance",
+          "tone": "open"
+        }
+      },
+      "sourceInput": {
+        "fixtureCaseId": "trial-24",
+        "profileRef": null,
+        "baselineInputSha256": "bac9438762f0f5a0d46880ed09615a31416c22dec8e298b5a382b71ca9b55f4e",
+        "candidateInputSha256": "097a2551d8adef4dd255c52afeca0c561cd3d2b110a9ace5ba6e49dec68814ac",
+        "sharedInputSha256": "46d4cb8b159dc5971e2b44e9857b714d8cd2ed0bd5b8cdf7ff9e196bdcd08a92",
+        "nameFrom": "sourceFixture.cases[].drafts.candidate.original.name；库内人物沿用既有署名，临时路人沿用此前独立命名结果。"
+      },
+      "drafts": {
+        "baseline": {
+          "inputMaterials": {
+            "writing": "5976e8b0f45661977d2fbe06161d9f188ab213351211224eb0c39c6ecc78ccd2",
+            "comments": "1338c2b21d4baacb75ceedacabfae27bb8d3044c6ec71cd242ba7b2128a987e2"
+          },
+          "nameInstruction": {
+            "instruction": "为这位临时网友取一个公开网名，与正文一起返回。"
+          },
+          "inputSha256": "bac9438762f0f5a0d46880ed09615a31416c22dec8e298b5a382b71ca9b55f4e",
+          "generationTask": "utterance_1046",
+          "original": {
+            "name": "阿垣",
+            "text": "你到站多久了，会不会刚好错过上一班？"
+          },
+          "editorial": {
+            "name": "阿垣",
+            "text": "你到站多久了，会不会刚好错过上一班？",
+            "reason": "保留。逗号连着问的写法自然，仍只提出可能性；无需为了与A不同而添一个站台经历。",
+            "changed": false
+          }
+        },
+        "v2": {
+          "inputMaterials": {
+            "writing": "ad55d88c6f3d3a950163970fcb1a0ad93065b87d2bc59b8ade72d182bbc9472a",
+            "comments": {
+              "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+            },
+            "negative": "a73faf204f5300f9516450043a3925f1e94c7d8299818faea1a73b6b84b085d5"
+          },
+          "nameInstruction": {
+            "fixedName": "名字没想好",
+            "instruction": "署名已在话题前独立确定，直接沿用。"
+          },
+          "inputSha256": "557e0dcb1871210b6f079c65c081f320466fae75f92dd8f1e1bbddb4ff5f8e4c",
+          "inputDigestFormat": "SHA-256(UTF-8 JSON, ensure_ascii=false, sort_keys=true, separators=(comma,colon)); reconstruct taskInstruction/sharedInput/nameInstruction/profile/writing/negative and reply-only comments via recorded references.",
+          "generationTask": "v2-offline-trial-24",
+          "generationBatch": "same-executor-v2-offline-20261113",
+          "original": {
+            "name": "名字没想好",
+            "text": "你确定不是已经走了？\n在这儿背广告牌也没用"
+          },
+          "editorial": {
+            "name": "名字没想好",
+            "text": "你确定不是已经走了？\n在这儿背广告牌也没用",
+            "reason": "保留没帮助的末句；没有为刻薄补充真实车辆记录，也不设计被对方一句话驳倒的后续。",
+            "changed": false
+          },
+          "negativeAssessment": {
+            "isNegative": true,
+            "attitude": "怀疑并挖苦对方等车的抱怨",
+            "basis": "按实际正文的态度人工判定；不是按原tone或物件是否出问题自动分类。",
+            "assessor": "same-executor-self-review"
+          },
+          "selfReview": {
+            "scope": "同一执行者自评；不是独立盲评。",
+            "factAndVisibility": "是否错过车仍用疑问，不知道到站和车辆经过时刻；广告牌来自父帖，不新增交通事实。",
+            "expressionAndPattern": "把父帖等得能背广告接成挖苦，带一点刻意收尾的风险。可保留一条，不能让所有回复都如此结束。",
+            "futureReplies": "本试写未生成后续回复，也未将无人接话当作已观测到的结果。"
+          }
+        }
+      },
+      "blindMapping": {
+        "A": "baseline",
+        "B": "v2"
+      },
+      "pairObservation": "旧baseline与本次v2分属不同批次和执行流程。这里只保留可审读的并排原稿，尚无独立匿名评审结果。"
+    }
+  ],
+  "findings": {
+    "selfReviewOnly": true,
+    "independentBlindReview": false,
+    "counts": {
+      "roots": 12,
+      "replies": 12,
+      "total": 24,
+      "negative": 12,
+      "negativeRoots": 6,
+      "negativeReplies": 6,
+      "negativeRatio": 0.5,
+      "edited": 3,
+      "unchanged": 21
+    },
+    "negativeCaseIds": [
+      "trial-01",
+      "trial-02",
+      "trial-03",
+      "trial-04",
+      "trial-05",
+      "trial-06",
+      "trial-13",
+      "trial-14",
+      "trial-15",
+      "trial-16",
+      "trial-18",
+      "trial-24"
+    ],
+    "editedCaseIds": [
+      "trial-05",
+      "trial-15",
+      "trial-20"
+    ],
+    "length": {
+      "metric": "Python len(text)，含标点与换行；统计v2.editorial.text",
+      "min": 3,
+      "max": 82,
+      "median": 24.0,
+      "valuesByCase": {
+        "trial-01": 31,
+        "trial-02": 25,
+        "trial-03": 24,
+        "trial-04": 29,
+        "trial-05": 55,
+        "trial-06": 48,
+        "trial-07": 13,
+        "trial-08": 21,
+        "trial-09": 37,
+        "trial-10": 20,
+        "trial-11": 20,
+        "trial-12": 82,
+        "trial-13": 16,
+        "trial-14": 42,
+        "trial-15": 42,
+        "trial-16": 24,
+        "trial-17": 37,
+        "trial-18": 24,
+        "trial-19": 3,
+        "trial-20": 27,
+        "trial-21": 14,
+        "trial-22": 17,
+        "trial-23": 15,
+        "trial-24": 21
+      }
+    },
+    "observations": [
+      "负面共12/24，按实际写出的态度自评得到；6条主帖、6条回复。不是每条都受委屈、举证再赢回来。trial-03把烦躁迁到券，trial-18不公允地压低别人的等待，trial-24留无帮助的挖苦。",
+      "有复读、有普通求助、有很短的问句，也有trial-05/06/12的较长未整理正文；同一人物不固定一种情绪。没有为每个没帮助的回复安排对手。",
+      "原稿中发现3处需要局部修正：trial-05的“后来”可能添出未提供的后续，trial-15把糖影响上色说得过于确定，trial-20把猜测写成确认。编辑后逐条自核未见其他明确新增事件，但这不是独立事实审核。",
+      "仍见共同语言痕迹：数条负面以“烦”收束，trial-01/04保留反问，trial-14/24仍有较利落的末句；多数样本仍较短。固定样本本来要求short或fragment，不能凭此宣称全站长短已改善。",
+      "简单问句和低信息回复并不需要隐去署名后仍可识别人；本次保留trial-19/21/23这类普通句，未给每个人增设标志口癖。"
+    ],
+    "conclusion": "这是同一执行者对固定材料的一次实际离线试写和自评，供检查机制是否有具体可读的落点。未进行独立盲评，未测量读者判断或发布后互动，不能据此证明质量、自然度或人物差异已经改善；也不能把复制的旧baseline与本次v2之差解释为机制的因果效果。"
+  },
+  "materialReferences": {
+    "profiles": "sourceFixture.materials[sharedInput.identity.profileRef]",
+    "replyBrief": {
+      "sourceFixtureMaterialKey": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90",
+      "textSha256": "655197477e4db65768d78b5a93e788f149d74189cdc46ceb15bbae605da01b90"
+    },
+    "baseline": "每条drafts.baseline.inputMaterials的值均引用sourceFixture.materials；为避免重复巨量旧材料，本文件不重存旧字典。"
+  }
+}

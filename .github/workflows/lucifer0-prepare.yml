@@ -1,0 +1,100 @@
+name: Prepare Lucifer0 forum update
+run-name: Prepare Lucifer0 ${{ github.run_id }}
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: Optional original-post limit (1–120); leave empty for the saved lottery
+        type: string
+        required: false
+      archive_repository:
+        description: Private owner/repo for durable replay inputs; defaults to LUCIFER0_ARCHIVE_REPOSITORY
+        type: string
+        required: false
+      archive_ref:
+        description: Existing archive branch
+        type: string
+        default: main
+        required: true
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: lucifer0-preparation
+  cancel-in-progress: false
+env:
+  ARCHIVE_REPOSITORY: ${{ inputs.archive_repository || vars.LUCIFER0_ARCHIVE_REPOSITORY }}
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Select external working directory
+        run: echo "Y29_SOCIAL_WORK_DIR=$RUNNER_TEMP/lucifer0-current" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Check private archive configuration
+        env:
+          GH_TOKEN: ${{ secrets.ARCHIVE_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$ARCHIVE_REPOSITORY" || { echo 'Set LUCIFER0_ARCHIVE_REPOSITORY or supply archive_repository. Unpublished replay inputs are saved only to a private archive.'; exit 1; }
+          test -n "$GH_TOKEN" || { echo 'Configure ARCHIVE_TOKEN for the private archive repository'; exit 1; }
+          test "$(gh api "repos/$ARCHIVE_REPOSITORY" --jq '.private')" = true || { echo 'Replay inputs require a private archive repository'; exit 1; }
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.ARCHIVE_REPOSITORY }}
+          ref: ${{ inputs.archive_ref }}
+          token: ${{ secrets.ARCHIVE_TOKEN }}
+          path: _operation_archive
+      - name: Collect fresh intake and prepare a stable operation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORIGINAL_COUNT: ${{ inputs.count }}
+        run: |
+          set -euo pipefail
+          ready=0
+          for attempt in $(seq 1 65); do
+            node --input-type=module - <<'JS' > "$RUNNER_TEMP/l0-prepare.json"
+          import { execFileSync } from 'node:child_process';
+          const count = process.env.ORIGINAL_COUNT;
+          if (count && !/^(?:[1-9]|[1-9]\d|1[01]\d|120)$/.test(count)) throw Error('count must be 1–120');
+          process.stdout.write(execFileSync(process.execPath, ['lucifer0/tools/update.js', 'prepare', ...(count ? ['--count', count] : [])], { encoding: 'utf8' }));
+          JS
+            status=$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).status)' "$RUNNER_TEMP/l0-prepare.json")
+            echo "Prepare attempt $attempt: $status"
+            if [ "$status" = prepared ] || [ "$status" = resumed ]; then ready=1; break; fi
+            if [ "$status" = intake-failed ]; then cat "$RUNNER_TEMP/l0-prepare.json"; exit 1; fi
+            git fetch origin main
+            git merge --ff-only FETCH_HEAD
+            sleep 12
+          done
+          test "$ready" = 1 || { echo 'Fresh intake is still pending; rerun preparation'; exit 1; }
+          node --input-type=module - <<'JS'
+          import { readFile, writeFile } from 'node:fs/promises';
+          import { execFileSync } from 'node:child_process';
+          import { join } from 'node:path';
+          const work = process.env.Y29_SOCIAL_WORK_DIR;
+          const operation = JSON.parse(await readFile(join(work, 'operation.json'), 'utf8'));
+          const roots = operation.plan.caseAdaptation?.rootOrder ?? Array.from({ length: operation.plan.budget }, (_, i) => operation.id + '-' + String(i + 1).padStart(2, '0'));
+          const briefs = roots.map(postId => JSON.parse(execFileSync(process.execPath, ['lucifer0/tools/update.js', 'brief', '--post', postId], { encoding: 'utf8', maxBuffer: 12 * 1024 * 1024 })));
+          await writeFile(join(work, 'briefs.json'), JSON.stringify(briefs, null, 2) + '\n');
+          console.log('Prepared operation ' + operation.id + '; source ' + execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim());
+          JS
+      - name: Persist the operation in the private archive
+        run: |
+          set -euo pipefail
+          node .github/scripts/lucifer0-operation-archive.mjs save --root "$GITHUB_WORKSPACE/lucifer0" --work "$Y29_SOCIAL_WORK_DIR" --archive "$GITHUB_WORKSPACE/_operation_archive" --stage prepared
+          git -C _operation_archive config user.name 'github-actions[bot]'
+          git -C _operation_archive config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C _operation_archive add -- operations
+          if ! git -C _operation_archive diff --cached --quiet; then
+            git -C _operation_archive commit -m 'Archive prepared Lucifer0 operation'
+            git -C _operation_archive push
+          fi

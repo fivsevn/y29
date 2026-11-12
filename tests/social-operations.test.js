@@ -23,6 +23,7 @@ delete defaultLottery.discussion;
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { loadContent, ingestBatch, validateContent } from '../lucifer0/tools/content.js';
+import { contextPostDigest } from '../lucifer0/tools/context-review.js';
 
 const DAY = 86400000;
 const replyLottery = { bands: [{ weight: 90, min: 0, max: 10 }, { weight: 10, min: 21, max: 60 }], maxReplies: 100 };
@@ -1053,6 +1054,7 @@ test('an older unfinished operation gains one stable lottery snapshot without re
   await writeFile(prepared.operationPath, JSON.stringify(operation));
   const policyPath = join(f.root, 'publication.json'), policy = await readJSON(policyPath);
   policy.lottery = mediaLottery();
+  policy.lottery.participation = { version: 1 };
   await writeFile(policyPath, JSON.stringify(policy));
   await assert.rejects(suggestUpdatePresentation(f.options), /Prepare again/);
   await prepareUpdate(f.options);
@@ -1061,6 +1063,8 @@ test('an older unfinished operation gains one stable lottery snapshot without re
   assert.deepEqual(upgraded.plan.selectedIds, operation.plan.selectedIds);
   assert.ok(upgraded.plan.lottery);
   assert.ok(!upgraded.plan.lottery.media, 'resuming a pre-snapshot operation must not introduce new image obligations');
+  assert.equal(upgraded.plan.lottery.participation, undefined, 'a pre-snapshot operation must not gain current participation constraints');
+  assert.equal(upgraded.plan.participationSchedules, undefined);
   assert.ok(upgraded.plan.lottery.image);
   assert.deepEqual(upgraded.plan.timeWindow, { start: iso(f.now - DAY), end: iso(f.now) });
   await prepareUpdate(f.options);
@@ -2136,6 +2140,8 @@ test('current case descendants retain source structure without consuming origina
   const lottery = structuredClone(rawProductionLottery);
   delete lottery.researchMaintenance;
   delete lottery.diversity;
+  delete lottery.participation; // Replay the saved media contract without adding contextual participation.
+  delete lottery.discussion.minimumNegativeShare; // The v2 final-share contract is not part of this older snapshot.
   lottery.rootBudget = { bands: [{ weight: 1, min: 2, max: 2 }] };
   lottery.authorKind = [{ value: 'guest', weight: 1 }];
   const f = await caseFixture(t, 4, { maxBatchPosts: 12, lottery, replyLottery: fixedReplies(0, 0) });
@@ -2343,3 +2349,312 @@ test('a reserved unposted guest name cannot collide with a legacy draft identity
   assert.equal(await readFile(prepared.operationPath, 'utf8'), before);
 });
 
+function contextualLottery({ discussion = false } = {}) {
+  const lottery = structuredClone(defaultLottery);
+  lottery.participation = { version: 1 };
+  lottery.authorKind = [{ value: 'library', weight: 1 }];
+  lottery.reading = [{ value: 'target-only', weight: 1 }];
+  lottery.textWindow = [{ value: 'full', weight: 1 }];
+  lottery.waitSeconds = [{ weight: 1, min: 1, max: 1 }];
+  if (discussion) {
+    lottery.discussion = structuredClone(productionLottery.discussion);
+    delete lottery.discussion.minimumNegativeShare;
+    lottery.discussion.negativeProbability = 1;
+    lottery.discussion.replyStance = [{ value: 'provoke', weight: 1 }];
+  }
+  return lottery;
+}
+async function onlyContextualLibrary(root, { windows = [], timezone = 'Asia/Shanghai' } = {}) {
+  for (const user of users()) await configureAccount(root, user.id, {
+    enabled: user.id === 'person-0', timezone, postingWindows: windows
+  });
+}
+const contextReview = (entry, basis = [{ kind: 'situation', ref: null, detail: 'The actual synthetic situation gives this person a concrete reason to speak.' }], decision = 'use') => ({
+  postId: entry.id, negative: false, reason: 'An ordinary adopted statement with its own local purpose.',
+  context: { decision, action: 'Ask or respond to the specific information available in this situation.', basis, postDigest: contextPostDigest(entry) }
+});
+
+test('contextual preparation freezes each personal timezone and posting window while refresh keeps its draw and participation time', async t => {
+  const lottery = contextualLottery();
+  const f = await fixture(t, 4, { lottery });
+  const windows = [{ days: [1, 2, 3, 4, 5, 6, 7], start: '13:00', end: '14:00' }];
+  await onlyContextualLibrary(f.root, { windows });
+  const prepared = await prepareUpdate(f.options), saved = await readJSON(prepared.operationPath);
+  assert.deepEqual(saved.plan.participationSchedules['person-0'].windows, windows);
+  assert.equal(saved.plan.participationSchedules['person-0'].timezone, 'Asia/Shanghai');
+  const options = { ...f.options, postId: prepared.id + '-scheduled' }, first = await briefUpdatePost(options);
+  assert.equal(first.draft.author, 'person-0');
+  assert.equal(first.editor.timing.status, 'ready');
+  assert.equal(first.writer.participation.mode, 'usual');
+  const hour = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Shanghai', hour: '2-digit', hourCycle: 'h23' }).format(new Date(first.draft.createdAt));
+  assert.equal(hour, '13');
+  await configureAccount(f.root, 'person-0', { postingWindows: [{ days: [1, 2, 3, 4, 5, 6, 7], start: '22:00', end: '23:00' }] });
+  await prepareUpdate({ ...f.options, entropy: () => { throw new Error('No redraw on source refresh'); } });
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
+  const refreshed = await briefUpdatePost(options);
+  assert.equal(refreshed.draft.createdAt, first.draft.createdAt);
+  assert.equal(refreshed.draft.author, first.draft.author);
+});
+
+test('a contextual speaker with no remaining usual slot keeps the drawn identity and target without creating a writer', async t => {
+  const lottery = contextualLottery(), f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(4) });
+  f.now = f.options.now = Date.parse('2026-11-13T00:00:00Z');
+  await onlyContextualLibrary(f.root, { windows: [{ days: [2], start: '13:00', end: '14:00' }] });
+  const prepared = await prepareUpdate(f.options), initial = await readFile(prepared.operationPath, 'utf8');
+  const options = { ...f.options, postId: prepared.id + '-no-slot' }, first = await briefUpdatePost(options);
+  assert.equal(first.writer, null);
+  assert.equal(first.draft.author, 'person-0');
+  assert.equal(first.editor.timing.status, 'unavailable');
+  assert.deepEqual(await briefUpdatePost(options), first);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), initial);
+  const root = post(prepared.id + '-visible-root', 'guest-visible-root', f.now - 3600000);
+  await draft(prepared, f.now, [root]);
+  const before = await readFile(prepared.operationPath, 'utf8');
+  const reply = await briefUpdatePost({ ...f.options, postId: prepared.id + '-no-slot-reply', replyTo: root.id });
+  assert.equal(reply.writer, null);
+  assert.equal(reply.draft.author, 'person-0');
+  assert.equal(reply.draft.replyTo, root.id);
+  assert.equal(reply.editor.timing.status, 'unavailable');
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), before);
+});
+
+test('contextual timing exceptions need concrete reasons and stay after the parent and own previous participation', async t => {
+  const lottery = contextualLottery(), f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(4) });
+  f.now = f.options.now = Date.parse('2026-11-13T00:00:00Z');
+  await onlyContextualLibrary(f.root, { windows: [{ days: [2], start: '13:00', end: '14:00' }] });
+  const prepared = await prepareUpdate(f.options), root = post(prepared.id + '-root', 'guest-exception-root', f.now - 3600000);
+  const own = post(prepared.id + '-previous', 'person-0', f.now - 2700000, root.id);
+  await draft(prepared, f.now, [root, own]);
+  const options = { ...f.options, postId: prepared.id + '-exception', replyTo: root.id };
+  const saved = await readJSON(prepared.operationPath);
+  for (const exception of [
+    { createdAt: iso(f.now - 1800000), reason: ' ' },
+    { createdAt: iso(f.now - 3000000), reason: 'A real late shift does not allow a reply before the person last spoke.' },
+    { createdAt: iso(f.now + 1), reason: 'A concrete reason cannot move a reply into the future.' },
+    { createdAt: iso(f.now - DAY - 1), reason: 'A concrete reason cannot move a reply before this operation.' }
+  ]) {
+    await writeFile(prepared.operationPath, JSON.stringify({ ...saved, timingExceptions: { [options.postId]: exception } }));
+    await assert.rejects(briefUpdatePost(options), /exception|real time|concrete reason/i);
+  }
+  const exception = { createdAt: iso(f.now - 1800000), reason: 'The person remained awake to finish the specific synthetic late order.' };
+  await writeFile(prepared.operationPath, JSON.stringify({ ...saved, timingExceptions: { [options.postId]: exception } }));
+  const brief = await briefUpdatePost(options);
+  assert.equal(brief.draft.createdAt, exception.createdAt);
+  assert.equal(brief.editor.timing.mode, 'exception');
+  assert.equal(brief.writer.participation.exception, exception.reason);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
+});
+
+test('contextual negative and reply stance draws remain candidates alongside ordinary motives and private reviews stay private', async t => {
+  const lottery = contextualLottery({ discussion: true });
+  lottery.motivation = [{ value: 'ask-help', weight: 1 }];
+  lottery.conditionCount = { min: 2, max: 2 };
+  const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(4) });
+  await onlyContextualLibrary(f.root);
+  const prepared = await prepareUpdate(f.options), rootBrief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-ordinary-root' });
+  assert.equal(rootBrief.writer.discussion.candidates.toneSuggestion, 'negative');
+  assert.ok(rootBrief.writer.conditions.some(condition => condition.dimension === 'motivation' && condition.value === 'ask-help'));
+  assert.equal(rootBrief.writer.discussion.requiredTone, undefined);
+  const root = { ...rootBrief.draft, text: 'A plain concrete request remains a valid adoption.' };
+  await draft(prepared, f.now, [root]);
+  await saveReviews(prepared.operationPath, [contextReview(root, undefined, 'drop')]);
+  const replyBrief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-ordinary-reply', replyTo: root.id });
+  assert.equal(replyBrief.writer.discussion.candidates.replyStance, 'provoke');
+  assert.ok(replyBrief.writer.conditions.some(condition => condition.dimension === 'motivation' && condition.value === 'ask-help'));
+  const reply = { ...replyBrief.draft, text: 'A short ordinary reply instead of the suggested provocation.' };
+  const valid = await draft(prepared, f.now, [root, reply]);
+  await saveReviews(prepared.operationPath, [contextReview(root, undefined, 'drop'), contextReview(reply, [{ kind: 'visible-post', ref: root.id, detail: 'Only the actual question being answered is used.' }], 'adapt')]);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  const suggested = await suggestUpdatePresentation(f.options);
+  assert.deepEqual(suggested.contextReviewBasis, [root, reply].map(entry => ({ postId: entry.id, postDigest: contextPostDigest(entry) })));
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  const feed = (await loadContent(f.root)).feed;
+  for (const entry of feed.posts) for (const key of ['context', 'participation', 'timingExceptions', 'participationSchedules', 'contextReviewBasis']) assert.ok(!Object.hasOwn(entry, key));
+  for (const user of feed.users) for (const key of ['postingWindows', 'postingMode', 'participationSchedules']) assert.ok(!Object.hasOwn(user, key));
+});
+
+test('an open tone draw keeps ordinary motives without injecting an unused negative motive', async t => {
+  const lottery = contextualLottery({ discussion: true });
+  lottery.discussion.negativeProbability = 0;
+  const f = await fixture(t, 4, { lottery });
+  await onlyContextualLibrary(f.root);
+  const prepared = await prepareUpdate(f.options);
+  const brief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-open' });
+  assert.deepEqual(brief.writer.discussion.candidates, { toneSuggestion: 'open' });
+  assert.ok(brief.editor.discussion.negativeMotivation, 'the saved draw remains available to the editor');
+});
+
+test('publication rejects out-of-hours drafts until an explicit time and reason justify the actual exception', async t => {
+  const lottery = contextualLottery(), f = await fixture(t, 4, { lottery });
+  f.now = f.options.now = Date.parse('2026-11-13T00:00:00Z');
+  await onlyContextualLibrary(f.root, { windows: [{ days: [1, 2, 3, 4, 5, 6, 7], start: '13:00', end: '14:00' }] });
+  const prepared = await prepareUpdate(f.options);
+  const entry = post(prepared.id + '-late', 'person-0', f.now - 3600000);
+  const saved = await draft(prepared, f.now, [entry]);
+  await saveReviews(prepared.operationPath, [contextReview(entry)]);
+  const options = { ...f.options, contextPath: prepared.operationPath };
+  await assert.rejects(validateUpdateForBatch(saved.batch, options), /usual time|timing exception/);
+  const operation = await readJSON(prepared.operationPath);
+  operation.timingExceptions = { [entry.id]: { createdAt: entry.createdAt, reason: 'This person is answering an actual early call before leaving home.' } };
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  await validateUpdateForBatch(saved.batch, options);
+  operation.timingExceptions[entry.id].createdAt = iso(f.now - 1800000);
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  await assert.rejects(validateUpdateForBatch(saved.batch, options), /exception/);
+});
+
+test('context reviews bind final text and allow only this author dossier and current actual visible posts', async t => {
+  const lottery = contextualLottery(), f = await fixture(t, 4, { lottery });
+  await onlyContextualLibrary(f.root);
+  const target = post('context-visible-target', 'guest-visible-speaker', f.now - 10000, 'history-entry');
+  const neighbor = post('context-unread-neighbor', 'guest-unread-speaker', f.now - 9000, 'history-entry');
+  await writeThreadBatch(f.root, { version: 1, id: 'context-visible-history', mode: 'daily', posts: [target, neighbor] }, (await loadContent(f.root)).batches);
+  const prepared = await prepareUpdate(f.options), brief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-scope', replyTo: target.id });
+  assert.deepEqual(brief.writer.visiblePosts.map(entry => entry.id), [target.id]);
+  const entry = { ...brief.draft, text: 'The answer refers only to the visible target.' };
+  const valid = await draft(prepared, f.now, [entry]);
+  const allowed = [
+    { kind: 'profile', ref: 'users/person-0/profile.md', detail: 'A fact in the actual author dossier.' },
+    { kind: 'visible-post', ref: target.id, detail: 'The single actual visible target.' }
+  ];
+  await saveReviews(prepared.operationPath, [contextReview(entry, allowed)]);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  for (const basis of [
+    { kind: 'profile', ref: 'users/person-1/profile.md', detail: 'Another person dossier cannot enter this author knowledge.' },
+    { kind: 'visible-post', ref: 'history-entry', detail: 'The root was not included in the target-only reading window.' },
+    { kind: 'visible-post', ref: neighbor.id, detail: 'An unread neighboring reply is not an allowed basis.' },
+    { kind: 'own-post', ref: target.id, detail: 'A different person statement cannot become this person memory.' }
+  ]) {
+    await saveReviews(prepared.operationPath, [contextReview(entry, [basis])]);
+    await assert.rejects(validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath }), /not available to this author/);
+  }
+  await saveReviews(prepared.operationPath, [contextReview(entry, allowed)]);
+  const changed = await readJSON(prepared.operationPath);
+  changed.posts[0].text = 'The final text changed after the review.';
+  await writeFile(prepared.operationPath, JSON.stringify(changed));
+  await assert.rejects(validateUpdateForBatch({ ...valid.batch, posts: changed.posts }, { ...f.options, contextPath: prepared.operationPath }), /digest is stale/);
+});
+
+test('context review own-post references are limited to the same five recent statements actually supplied to the writer', async t => {
+  const lottery = contextualLottery(), f = await fixture(t, 4, { lottery });
+  await onlyContextualLibrary(f.root);
+  const previous = Array.from({ length: 6 }, (_, index) => post('context-own-' + index, 'person-0', f.now - 10000 + index * 1000, 'history-entry'));
+  await writeThreadBatch(f.root, { version: 1, id: 'context-own-history', mode: 'daily', posts: previous }, (await loadContent(f.root)).batches);
+  const prepared = await prepareUpdate(f.options), brief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-own-basis' });
+  assert.deepEqual(brief.writer.self.recentPosts.map(entry => entry.id), previous.slice(1).reverse().map(entry => entry.id));
+  const entry = { ...brief.draft, text: 'The person only relies on a recent statement supplied in the input.' };
+  const valid = await draft(prepared, f.now, [entry]);
+  await saveReviews(prepared.operationPath, [contextReview(entry, [{ kind: 'own-post', ref: previous[5].id, detail: 'The most recent supplied own statement.' }])]);
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  await saveReviews(prepared.operationPath, [contextReview(entry, [{ kind: 'own-post', ref: previous[0].id, detail: 'The sixth old statement was not supplied to this writer.' }])]);
+  await assert.rejects(validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath }), /not available to this author/);
+});
+
+test('adapted cases do not need original context judgments but still obey the fixed participation window', async t => {
+  const lottery = contextualLottery(), f = await caseFixture(t, 4, { lottery, replyLottery: fixedReplies(4), maxBatchPosts: 20 });
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt });
+  const entries = caseRoots(f, prepared, 0), valid = await draft(prepared, f.now, entries);
+  await saveReviews(prepared.operationPath, reviewed(entries, 0));
+  await validateUpdateForBatch(valid.batch, { ...f.options, contextPath: prepared.operationPath });
+  const changed = await readJSON(prepared.operationPath);
+  changed.posts[0].createdAt = iso(f.now - DAY - 1);
+  await writeFile(prepared.operationPath, JSON.stringify(changed));
+  await assert.rejects(validateUpdateForBatch({ ...valid.batch, posts: changed.posts }, { ...f.options, contextPath: prepared.operationPath }), /participation time bounds/);
+});
+
+test('a real own statement after the saved horizon makes a contextual reply unavailable rather than backdating it', async t => {
+  const lottery = contextualLottery(), f = await fixture(t, 4, { lottery });
+  await onlyContextualLibrary(f.root);
+  const prepared = await prepareUpdate(f.options);
+  const root = post('context-late-root', 'guest-late-root', f.now - 1500);
+  const actualOwn = post('context-real-later-own', 'person-0', f.now + 1000, root.id);
+  await writeThreadBatch(f.root, { version: 1, id: 'context-later-history', mode: 'daily', posts: [root, actualOwn] }, (await loadContent(f.root)).batches);
+  const laterOptions = { ...f.options, now: f.now + 2000 };
+  await prepareUpdate(laterOptions);
+  const saved = await readJSON(prepared.operationPath);
+  const reply = await briefUpdatePost({ ...laterOptions, postId: prepared.id + '-cannot-backdate', replyTo: root.id });
+  assert.equal(reply.writer, null);
+  assert.equal(reply.draft.author, 'person-0');
+  assert.equal(reply.editor.timing.status, 'unavailable');
+  assert.equal(reply.editor.timing.availableUntil, iso(f.now));
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
+});
+
+test('expired contextual windows remain fixed and require a separate new operation rather than a silent time shift', async t => {
+  const lottery = contextualLottery(), f = await fixture(t, 4, { lottery });
+  await onlyContextualLibrary(f.root);
+  const prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
+  const later = { ...f.options, now: f.now + 3 * DAY };
+  await prepareUpdate(later);
+  const brief = await briefUpdatePost({ ...later, postId: prepared.id + '-expired' });
+  assert.equal(brief.writer, null);
+  assert.equal(brief.editor.timing.status, 'unavailable');
+  assert.match(brief.editor.timing.reason, /expired/);
+  assert.match(brief.editor.timing.recovery, /different work directory/);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, original.plan);
+});
+
+
+function informalLottery() {
+  const lottery = contextualLottery({ discussion: true });
+  lottery.participation.version = 2;
+  lottery.discussion.negativeProbability = 0.5;
+  lottery.discussion.minimumNegativeShare = 0.5;
+  return lottery;
+}
+
+test('v2 keeps half the actual final posts negative without prefix tone debts or compulsory context reports', async t => {
+  const lottery = informalLottery(), f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(10) });
+  const prepared = await prepareUpdate(f.options);
+  const entries = [post(prepared.id + '-plain', 'guest-plain', f.now - 10000),
+    post(prepared.id + '-petty', 'guest-petty', f.now - 9000),
+    post(prepared.id + '-repeat', 'guest-repeat', f.now - 8000, prepared.id + '-petty')];
+  entries[0].text = '饭吃完了'; entries[1].text = '丑死了'; entries[2].text = '就是难看啊';
+  let saved = await draft(prepared, f.now, entries);
+  const reviews = entries.map((entry, index) => ({ postId: entry.id, negative: index > 0, reason: index ? '嫌弃。' : '报个状态。' }));
+  await saveReviews(prepared.operationPath, reviews);
+  await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+  const brief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-next', replyTo: entries[1].id });
+  assert.equal(brief.writer.discussion.requiredTone, undefined, 'the quota does not prescribe alternating utterances');
+  assert.equal(brief.editor.discussion.requiredTone, undefined);
+  assert.equal(brief.editor.discussion.missingNegativePosts, undefined);
+  const summary = await suggestUpdatePresentation(f.options);
+  assert.deepEqual(summary.discussion, { minimumNegativeShare: 0.5, adoptedPosts: 3, reviewedPosts: 3, unreviewedPosts: 0, negativePosts: 2, requiredNegativePosts: 2, missingNegativePosts: 0 });
+  assert.match(brief.writer.discussion.instruction, /不必给人充分理由/);
+  reviews[2].negative = false; await saveReviews(prepared.operationPath, reviews);
+  await assert.rejects(validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath }), /fewer reviewed negative/);
+  reviews[2].negative = true; reviews[2].context = contextReview(entries[2]).context;
+  reviews[2].context.basis = [{ kind: 'visible-post', ref: 'never-read', detail: 'A claim outside this reader window.' }];
+  await saveReviews(prepared.operationPath, reviews);
+  await assert.rejects(validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath }), /not available/);
+});
+
+test('v2 accepts ordinary out-of-hours participation and explicit times without inventing reasons', async t => {
+  const lottery = informalLottery(), f = await fixture(t, 4, { lottery });
+  f.now = f.options.now = Date.parse('2026-11-13T00:00:00Z');
+  await onlyContextualLibrary(f.root, { windows: [{ days: [1,2,3,4,5,6,7], start: '13:00', end: '14:00' }] });
+  const prepared = await prepareUpdate(f.options);
+  const entry = post(prepared.id + '-outside', 'person-0', f.now - 3600000);
+  const saved = await draft(prepared, f.now, [entry]);
+  await saveReviews(prepared.operationPath, [{ postId: entry.id, negative: true, reason: '随口嫌烦。' }]);
+  await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+  const operation = await readJSON(prepared.operationPath);
+  operation.timingExceptions = { [entry.id]: { createdAt: entry.createdAt } };
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  const reread = await briefUpdatePost({ ...f.options, postId: entry.id });
+  assert.equal(reread.draft.createdAt, entry.createdAt);
+  assert.equal(reread.writer.participation.exception, undefined);
+  await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+});
+
+test('v2 final negative share counts adapted cases and original posts together without rewriting source structure', async t => {
+  const lottery = informalLottery(), f = await caseFixture(t, 4, { lottery, replyLottery: fixedReplies(4), maxBatchPosts: 20 });
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt });
+  const entries = caseRoots(f, prepared, 1), negatives = new Set(prepared.caseAdaptation.postIds.slice(0, 2));
+  const saved = await draft(prepared, f.now, entries);
+  const reviews = entries.map(entry => ({ postId: entry.id, negative: negatives.has(entry.id), reason: '实际语气分类。' }));
+  await saveReviews(prepared.operationPath, reviews);
+  await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
+  reviews.find(review => review.negative).negative = false; await saveReviews(prepared.operationPath, reviews);
+  await assert.rejects(validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath }), /fewer reviewed negative/);
+});

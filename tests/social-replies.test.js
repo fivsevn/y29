@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 import * as core from '../lucifer0/core.js';
+import { createFeedStore, FEED_PAGE_SIZE } from '../lucifer0/feed-store.js';
 
 function thread(id, count, author = 'preview-owner') {
   const post = (postId, index, replyTo = null) => ({ id: postId, author: index % 2 ? 'preview-reader' : author,
@@ -47,7 +48,7 @@ test('nested replies count toward one thread and retain their immediate parents 
 // Execute the real renderer with a document double; browser layout is checked
 // separately using the same synthetic content, never by changing the live feed.
 async function renderer(feed, { pending = false, delayedClose = false } = {}) {
-  const handlers = {}, main = { innerHTML: '', scrollTop: 0, focus() {}, querySelector() { return null; } };
+  const handlers = {}, main = { innerHTML: '', scrollTop: 0, focus() {}, setAttribute() {}, removeAttribute() {}, querySelector() { return null; } };
   const toast = { textContent: '', classList: { add() {}, remove() {} } };
   const dialogHandlers = {}, formHandlers = {}, checkHandlers = {}, gridHandlers = {}, refreshHandlers = {}, verifyHandlers = {}, requests = [], closeEvents = [];
   const timerTasks = new Map();
@@ -111,12 +112,12 @@ async function renderer(feed, { pending = false, delayedClose = false } = {}) {
     querySelectorAll: selector => selector === '[data-tile]' ? tiles : [], createTextNode: textContent => ({ textContent }),
     getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
   const location = { hash: '#/', href: 'https://fixture.invalid/lucifer0/#/' };
-  const context = { ...core, esc: core.escapeHTML, URL, document, location, setTimeout: setTimer, clearTimeout: id => timerTasks.delete(id),
+  const context = { ...core, createFeedStore, FEED_PAGE_SIZE, esc: core.escapeHTML, URL, document, location, setTimeout: setTimer, clearTimeout: id => timerTasks.delete(id),
     window: { localStorage: { getItem() { return null; }, setItem() { storageWrites++; } }, addEventListener: (type, handler) => { handlers[type] = handler; } },
     fetch: async (url, options = {}) => { requests.push({ url: String(url), method: options.method || 'GET' }); const response = { ok: true, json: async () => feed };
       return pending ? new Promise(resolve => { resumeFetch = () => resolve(response); }) : response; } };
   const source = await readFile(new URL('../lucifer0/app.js', import.meta.url), 'utf8');
-  vm.runInNewContext(source.replace(/^import .*?;\n/, ''), context);
+  vm.runInNewContext(source.replace(/^import .*?;\n/gm, ''), context);
   await new Promise(resolve => setImmediate(resolve));
   if (!pending) assert.match(main.innerHTML, /empty-thread/);
   return { html: () => main.innerHTML, visit(hash) { location.hash = hash; handlers.hashchange(); return main.innerHTML; },
@@ -464,7 +465,7 @@ test('invite submission advances to local verification, always fails and never c
     assert.equal(page.url(), originalURL);
     assert.equal(page.hash(), originalHash);
     if (!pending) assert.equal(page.html(), before);
-    assert.deepEqual(page.requests(), [{ url: './data/feed.json', method: 'GET' }]);
+    assert.deepEqual(page.requests(), [{ url: './data/feed-index.json', method: 'GET' }]);
     assert.equal(page.storageWrites(), 0);
   }
 });
@@ -489,7 +490,7 @@ test('closing during the timed check cancels it, including after a new dialog ha
     assert.equal(page.login().formVisible, true);
     assert.equal(page.login().challengeVisible, false);
     assert.equal(page.login().focus, 'invite-code');
-    assert.deepEqual(page.requests(), [{ url: './data/feed.json', method: 'GET' }]);
+    assert.deepEqual(page.requests(), [{ url: './data/feed-index.json', method: 'GET' }]);
   }
 });
 
@@ -577,3 +578,4 @@ test('home root thumbnails lead into the emote body while discussion replies use
   const css = await readFile(new URL('../lucifer0/style.css', import.meta.url), 'utf8');
   assert.match(css, /\.post-image\.is-thumbnail img\{[^}]*max-width:160px;max-height:160px/);
 });
+

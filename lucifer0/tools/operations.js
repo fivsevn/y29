@@ -13,6 +13,8 @@ import { isResearchPath, researchPaths, researchCandidates } from './research-ma
 import { sampleDocumentPaths, parseSampleDocuments, selectSamples } from './samples.js';
 import { createCasePlan, validateCasePlan, caseRootIds, caseRoot, caseForPost, validateCasePosts, casePlanSummary } from './case-adaptation.js';
 import { writerSource, assignGuestName } from './writer-input.js';
+import { scheduleParticipation, validatePostingWindows } from './participation.js';
+import { contextReviewBasis, checkContextReviewShape, validateContextReview } from './context-review.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
@@ -31,6 +33,7 @@ const inside = (root, path) => { const rel = relative(root, path); return !rel |
 export const defaultWorkDirectory = () => resolve(process.env.Y29_SOCIAL_WORK_DIR || join(homedir(), '.local/state/y29/lucifer0/current'));
 function ready(user, material) {
   return user.kind !== 'admin' && user.enabled && user.aiScope === 'daily' && user.profileStatus === 'approved' &&
+    material.profiles[user.id]?.basics?.postingMode !== 'manual' &&
     (user.allowPosts !== false || user.allowReplies !== false) && material.profiles[user.id]?.activityWeight > 0;
 }
 
@@ -170,17 +173,18 @@ const planExtensions = plan => ({
   ...(plan.lottery !== undefined ? { lottery: plan.lottery } : {}),
   ...(plan.timeWindow !== undefined ? { timeWindow: plan.timeWindow } : {}),
   ...(plan.researchMaintenance !== undefined ? { researchMaintenance: plan.researchMaintenance } : {}),
-  ...(plan.caseAdaptation !== undefined ? { caseAdaptation: plan.caseAdaptation } : {})
+  ...(plan.caseAdaptation !== undefined ? { caseAdaptation: plan.caseAdaptation } : {}),
+  ...(plan.participationSchedules !== undefined ? { participationSchedules: plan.participationSchedules } : {})
 });
 function planSeal(id, root, plan) {
   return digest({ id, root, seed: plan.seed, budget: plan.budget, selectedIds: plan.selectedIds, ...planExtensions(plan) });
 }
 const operationSourceDigest = (data, plan) => Object.keys(planExtensions(plan)).length ? digest({ sourceDigest: data.sourceDigest, ...planExtensions(plan) }) : data.sourceDigest;
 function checkOperation(value, root) {
-  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews', 'researchMaintenance', 'mediaReviews', 'diversityReview', 'guestNames'], 'operation');
+  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews', 'researchMaintenance', 'mediaReviews', 'diversityReview', 'guestNames', 'timingExceptions'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
-  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow', 'researchMaintenance', 'caseAdaptation'], 'saved plan');
+  onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow', 'researchMaintenance', 'caseAdaptation', 'participationSchedules'], 'saved plan');
   if (plan.timeWindow !== undefined) {
     onlyKeys(plan.timeWindow, ['start', 'end'], 'saved time window');
     const { start, end } = plan.timeWindow;
@@ -191,6 +195,24 @@ function checkOperation(value, root) {
   if (plan.replyLottery !== undefined || plan.totalBudget !== undefined) {
     validateReplyLottery(plan.replyLottery);
     if (!Number.isInteger(plan.totalBudget) || plan.totalBudget < 1 || plan.totalBudget > 120 || plan.requestedCount !== undefined && plan.totalBudget !== plan.requestedCount) fail('Invalid saved total budget');
+  }
+  if (plan.lottery?.participation) {
+    if (!plain(plan.participationSchedules)) fail('Contextual participation needs its saved schedules');
+    for (const [author, schedule] of Object.entries(plan.participationSchedules)) {
+      if (!ID.test(author)) fail('Invalid scheduled author');
+      onlyKeys(schedule, ['timezone', 'windows', 'mode'], 'saved posting schedule');
+      validatePostingWindows(schedule.windows, schedule.timezone);
+      if (schedule.mode !== undefined && (!['scheduled', 'event-driven', 'manual', 'unconfigured'].includes(schedule.mode) ||
+        schedule.mode === 'scheduled' && !schedule.windows.length || ['event-driven', 'manual'].includes(schedule.mode) && schedule.windows.length)) fail('Invalid saved posting mode');
+    }
+  } else if (plan.participationSchedules !== undefined) fail('Posting schedules need contextual participation');
+  if (value.timingExceptions !== undefined) {
+    if (!plain(value.timingExceptions)) fail('Invalid timing exceptions');
+    for (const [postId, exception] of Object.entries(value.timingExceptions)) {
+      onlyKeys(exception, ['createdAt', 'reason'], 'timing exception');
+      const needsReason = plan.lottery?.participation?.version !== 2 || exception.reason !== undefined;
+      if (!ID.test(postId) || !validDate(exception.createdAt) || needsReason && !bounded(exception.reason, 1000)) fail('A timing exception needs a real time and, for v1, a concrete reason');
+    }
   }
   if (!bounded(plan.seed, 200) || !Number.isInteger(plan.budget) || plan.budget < 0 || plan.budget > (plan.replyLottery === undefined ? 120 : 20) || !Array.isArray(plan.selectedIds) || plan.selectedIds.length > 3 || new Set(plan.selectedIds).size !== plan.selectedIds.length || plan.selectedIds.some(id => !ID.test(id))) fail('Invalid saved plan');
   checkMaintenancePlan(plan);
@@ -267,9 +289,10 @@ function reviewIndex(operation) {
   if (!Array.isArray(reviews)) fail('Invalid content reviews');
   const posts = new Set(operation.posts.map(post => post.id)), indexed = new Map();
   for (const review of reviews) {
-    onlyKeys(review, ['postId', 'negative', 'reason'], 'content review');
+    onlyKeys(review, ['postId', 'negative', 'reason', 'context'], 'content review');
     if (!ID.test(review.postId) || !posts.has(review.postId) || indexed.has(review.postId) || typeof review.negative !== 'boolean' || !bounded(review.reason, 240)) fail('Invalid content review: use one actual post ID, a boolean and a concrete reason');
     indexed.set(review.postId, review);
+    if (review.context !== undefined) checkContextReviewShape(review.context);
   }
   return indexed;
 }
@@ -279,9 +302,10 @@ function discussionProgress(operation, posts = operation.posts) {
   if (!config) return null;
   const indexed = reviewIndex(operation);
   for (const post of posts) if (!indexed.has(post.id)) fail('Review saved drafts before requesting the next brief or publishing: ' + post.id);
-  const originalPosts = posts.filter(post => !caseForPost(operation.plan, post, operation.posts));
-  const negativePosts = originalPosts.filter(post => indexed.get(post.id).negative).length;
-  return { ...(config.minimumNegativeShare !== undefined ? { minimumNegativeShare: config.minimumNegativeShare } : {}), reviewedPosts: originalPosts.length, negativePosts };
+  const countedPosts = operation.plan.lottery.participation?.version === 2 ? posts :
+    posts.filter(post => !caseForPost(operation.plan, post, operation.posts));
+  const negativePosts = countedPosts.filter(post => indexed.get(post.id).negative).length;
+  return { ...(config.minimumNegativeShare !== undefined ? { minimumNegativeShare: config.minimumNegativeShare } : {}), reviewedPosts: countedPosts.length, negativePosts };
 }
 
 async function checkedRoot(root) {
@@ -388,6 +412,13 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
       const seed = entropy(), id = 'l0-' + new Date(now).toISOString().replace(/\D/g, '').slice(0, 14) + '-' + digest(seed).slice(0, 8);
       const plan = drawUpdatePlan({ users: data.registry.users, profiles: data.material.profiles, posts: data.feed.posts, seed, requestedCount, replyLottery: data.policy.replyLottery, lottery: data.policy.lottery ?? defaultLottery, maxBatchPosts: data.policy.maxBatchPosts });
       plan.timeWindow = { start: new Date(now - DAY).toISOString(), end: new Date(now).toISOString() };
+      if (plan.lottery?.participation) plan.participationSchedules = Object.fromEntries(data.registry.users.map(user => {
+        const basics = data.material.profiles[user.id]?.basics ?? {};
+        const timezone = basics.timezone || 'Asia/Shanghai', windows = structuredClone(basics.postingWindows ?? []);
+        validatePostingWindows(windows, timezone);
+        return [user.id, { timezone, windows,
+          mode: basics.postingMode ?? (basics.postingWindows?.length ? 'scheduled' : 'unconfigured') }];
+      }));
       if (data.policy.caseAdaptation) plan.caseAdaptation = createCasePlan({ operationId: id, plan, documents: data.documents, intakeReceipt, now, used: await readCaseUsage(root, now) });
       if (plan.lottery?.researchMaintenance) {
         const candidates = await researchCandidates(root, data.discoveredResearch);
@@ -406,6 +437,7 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
         operation.plan.lottery.rootBudget = { min: 1, max: 10 };
         delete operation.plan.lottery.discussion;
         delete operation.plan.lottery.diversity;
+        delete operation.plan.lottery.participation;
       }
       operation.plan.timeWindow ??= { start: new Date(Date.parse(operation.preparedAt) - DAY).toISOString(), end: operation.preparedAt };
       operation.plan.seal = planSeal(operation.id, root, operation.plan);
@@ -425,9 +457,19 @@ export async function suggestUpdatePresentation({ root = socialRoot, workDirecto
   if (!operation.plan.lottery) fail('Prepare again to attach a stable lottery snapshot to this older operation');
   const { feed } = await loadContent(root, { allowPending: true });
   const originals = operation.plan.lottery.media?.profiles ? operation.posts.filter(post => !caseForPost(operation.plan, post, operation.posts)) : operation.posts;
-  return { id: operation.id, count: operation.posts.length, ...suggestPostPresentation({ seed: operation.plan.seed, posts: originals, lottery: operation.plan.lottery, mediaReviews: operation.mediaReviews }),
+  const reviews = reviewIndex(operation), share = operation.plan.lottery.discussion?.minimumNegativeShare;
+  const reviewedPosts = operation.posts.filter(post => reviews.has(post.id)).length;
+  const negativePosts = operation.posts.filter(post => reviews.get(post.id)?.negative).length;
+  return { id: operation.id, count: operation.posts.length,
+    ...(operation.plan.lottery.participation?.version === 2 && share !== undefined ? { discussion: {
+      minimumNegativeShare: share, adoptedPosts: operation.posts.length, reviewedPosts,
+      unreviewedPosts: operation.posts.length - reviewedPosts, negativePosts,
+      requiredNegativePosts: Math.ceil(operation.posts.length * share),
+      missingNegativePosts: Math.max(0, Math.ceil(operation.posts.length * share) - negativePosts)
+    } } : {}), ...suggestPostPresentation({ seed: operation.plan.seed, posts: originals, lottery: operation.plan.lottery, mediaReviews: operation.mediaReviews }),
     ...(operation.plan.lottery.media?.profiles ? { casePostIds: operation.posts.filter(post => caseForPost(operation.plan, post, operation.posts)).map(post => post.id) } : {}),
-    ...diversityContext(operation, feed.posts) };
+    ...diversityContext(operation, feed.posts),
+    ...(operation.plan.lottery?.participation ? { contextReviewBasis: contextReviewBasis(operation.posts) } : {}) };
 }
 
 function checkMediaReviews(reviews) {
@@ -555,6 +597,8 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
   if (!operation.plan.timeWindow) fail('Prepare again to attach a stable time window to this older operation');
   if (!existing && !postId.startsWith(operation.id + '-')) fail('A new brief ID must begin with this operation ID and a hyphen: ' + operation.id + '-');
   const config = operation.plan.lottery;
+  const contextual = Boolean(config.participation);
+  const informal = config.participation?.version === 2;
   if (adaptedCase && config.media?.profiles && requestedRoot && !existing) fail('Case replies need their actual source parent through --reply-to, not a drawn --thread target');
   const choices = drawPostChoices({ seed: operation.plan.seed, postId, replyTo: targetId, lottery: config });
   const eligible = data.registry.users.filter(user => ready(user, data.material) &&
@@ -563,22 +607,27 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
   const progress = discussionProgress(operation, priorDrafts);
   const requiredNegativePosts = progress?.minimumNegativeShare !== undefined ? Math.ceil((progress.reviewedPosts + (adaptedCase ? 0 : 1)) * progress.minimumNegativeShare) : 0;
   const discussion = progress && !adaptedCase ? { ...progress,
-    ...(progress.minimumNegativeShare !== undefined ? { requiredNegativePosts, missingNegativePosts: Math.max(0, requiredNegativePosts - progress.negativePosts), requiredTone: progress.negativePosts < requiredNegativePosts ? 'negative' : 'open' } : {}), ...choices.discussion } : null;
+    ...(!informal && progress.minimumNegativeShare !== undefined ? { requiredNegativePosts,
+      missingNegativePosts: Math.max(0, requiredNegativePosts - progress.negativePosts),
+      requiredTone: progress.negativePosts < requiredNegativePosts ? 'negative' : 'open' } : {}), ...choices.discussion } : null;
   const before = new Map([...data.feed.posts, ...priorDrafts].filter(post => post.id !== postId).map(post => [post.id, post]));
   let target = targetId === null ? null : before.get(targetId);
   if (targetId !== null && !target) fail('A brief needs its actual earlier target, archived or in an earlier draft slot');
   if (target && (!validDate(target.createdAt) || Date.parse(target.createdAt) > now)) fail('A brief needs its actual earlier target with a current real timestamp');
   const window = operation.plan.timeWindow;
-  const availableUntil = new Date(now).toISOString();
+  const horizon = contextual ? Math.min(now, Date.parse(window.end)) : now;
+  const availableUntil = new Date(horizon).toISOString();
   const base = [...before.values()].reduce((latest, post) => validDate(post.createdAt) && Date.parse(post.createdAt) <= now ?
     Math.max(latest, Date.parse(post.createdAt)) : latest, Math.max(Math.min(Date.parse(window.start), now), now - DAY));
   // Drawn intervals describe the timeline's rhythm, not a publication delay.
   // Compress an overflowing interval to now; parent timestamps may be equal.
-  const createdAt = existing?.createdAt ?? new Date(Math.min(now, base + choices.waitSeconds * 1000)).toISOString();
-  if (existing && (!validDate(createdAt) || Date.parse(createdAt) > now || now - Date.parse(createdAt) > 2 * DAY || target && Date.parse(target.createdAt) > Date.parse(createdAt))) fail('Brief timestamps must be current, real and follow the visible target');
-  const timing = { status: 'ready',
+  const preferredAt = new Date(Math.min(horizon, base + choices.waitSeconds * 1000)).toISOString();
+  let createdAt = existing?.createdAt ?? (contextual ? availableUntil : preferredAt);
+  if (existing && (!validDate(createdAt) || Date.parse(createdAt) > now || now - Date.parse(createdAt) > 2 * DAY || target && Date.parse(target.createdAt) > Date.parse(createdAt) || contextual && Date.parse(createdAt) > horizon)) fail('Brief timestamps must be current, real and follow the visible target');
+  let timing = { status: 'ready',
     earliestAt: createdAt, availableUntil, source: existing ? 'saved-draft' : 'saved-window' };
-  const until = Math.min(now, Date.parse(createdAt)), rootPost = target ? threadRoot(target.id, before) : existing ?? null;
+  let until = Math.min(horizon, Date.parse(createdAt));
+  const rootPost = target ? threadRoot(target.id, before) : existing ?? null;
   const freshThreadMode = Boolean(requestedRoot && config.discussion?.replyAuthor);
   const threadAuthors = new Set(freshThreadMode ? [...before.values()].filter(post => validDate(post.createdAt) && Date.parse(post.createdAt) <= until &&
     threadRoot(post.id, before).id === requestedRoot.id).map(post => post.author) : []);
@@ -601,6 +650,27 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
   const guest = typeof author === 'string' && /^guest-[a-z0-9-]+$/.test(author) && ID.test(author);
   const ownUser = eligible.find(user => user.id === author);
   if (!guest && !ownUser) fail('Account is not eligible for this draft: ' + author);
+  if (contextual) {
+    const schedule = operation.plan.participationSchedules[author] ?? { timezone: 'Asia/Shanghai', windows: [] };
+    const after = [...before.values()].reduce((latest, post) => post.author === author && validDate(post.createdAt) && Date.parse(post.createdAt) <= now
+      ? Math.max(latest, Date.parse(post.createdAt)) : latest, Math.max(Date.parse(window.start), target ? Date.parse(target.createdAt) : 0));
+    timing = now - horizon > 2 * DAY ? { status: 'unavailable', reason: 'Saved participation window has expired',
+      availableUntil, recovery: 'Keep this work directory and prepare a new operation in a different work directory; do not redraw this operation' }
+      : scheduleParticipation({ seed: operation.plan.seed, postId, author, ...schedule, version: config.participation.version, after,
+        windowStart: existing ? createdAt : window.start, now: existing ? Date.parse(createdAt) : horizon,
+        preferredAt: existing ? createdAt : informal ? (target ? new Date(after + choices.waitSeconds * 1000).toISOString() : undefined) : preferredAt, exception: operation.timingExceptions?.[postId] });
+    if (timing.mode === 'unconfigured' && schedule.mode === 'event-driven') timing.mode = 'event-driven';
+    if (timing.status !== 'ready') {
+      if (existing) fail('Saved participation is outside its legal window: ' + postId);
+      return { id: operation.id, postId, draft: { id: postId, author, replyTo: targetId }, writer: null,
+        editor: { timing, waitSeconds: choices.waitSeconds, participation: { activeHours: data.material.profiles[author]?.basics.activeHours || '', ...schedule },
+          instruction: informal ? '本条已超出合法时间范围，可跳过或在后续更新接续。保留原身份与父帖。' : '本条没有可用发言时段；可跳过或在后续操作接续。确有本次特殊情境时，记录 timingExceptions 的实际时刻与依据后重试，不重抽身份或自动捏造熬夜。' } };
+    }
+    createdAt = existing?.createdAt ?? timing.createdAt;
+    timing.earliestAt = createdAt;
+    timing.source = existing ? 'saved-draft' : 'person-window';
+    until = Math.min(horizon, Date.parse(createdAt));
+  }
   let guestName, saveGuest = false;
   if (guest) {
     const knownNames = [existing?.guest?.name, returning?.guest?.name,
@@ -653,7 +723,7 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
     writer: {
       createdAt,
       writing: writerSource(writing, { sections: ['形成一条发言', ...(adaptedCase ? ['现实素材改编'] : [])] }),
-      sourceSamples: { instruction: sampleInstruction,
+      sourceSamples: { instruction: sampleInstruction + (informal ? '直接看原片段，保留里面没道理的嫌弃、低级玩笑、复读、没接上的话和沉默，不先提炼成合理诉求或完整冲突；去标识与核对事实不等于润色。' : ''),
         items: adaptedCase ? [{ sourcePath: adaptedCase.sourcePath, sample: structuredClone(adaptedCase.sample) }] :
           selectSamples(data.samples, { seed: operation.plan.seed + ':brief:' + postId, limit: 3 }).map(({ path, sample }) => ({ sourcePath: path, sample: structuredClone(sample) })) },
       ...(adaptedCase ? { caseAdaptation: { instruction: caseInstruction, rootPostId: adaptedCase.postId } } : {}),
@@ -663,17 +733,26 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
           .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en')).slice(0, 5)
           .map(post => ({ id: post.id, createdAt: post.createdAt, replyTo: post.replyTo, text: post.deleted ? '该回复已被删除。' : post.text, media: post.deleted ? [] : post.media })),
         voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
-      conditions: adaptedCase ? [] : choices.conditions.filter(condition => condition.dimension !== 'motivation' || !discussion || targetId === null && discussion.requiredTone !== 'negative' && discussion.toneSuggestion !== 'negative').map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
+      conditions: adaptedCase ? [] : choices.conditions.filter(condition => contextual || condition.dimension !== 'motivation' || !discussion || targetId === null && discussion.requiredTone !== 'negative' && discussion.toneSuggestion !== 'negative').map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
       ...(target ? { comments: scopedSource('environment/research-comments.md', ['逐条形成回复', '用表情接话']) } : {}),
       ...(requestedRoot || config.discussion?.replyAuthor ? { thread: { rootId: rootPost?.id ?? postId,
         role: !rootPost || author === rootPost.author ? 'root' : [...before.values()].some(post => post.author === author && validDate(post.createdAt) &&
           Date.parse(post.createdAt) <= until && threadRoot(post.id, before).id === rootPost.id) ? 'participant' : 'new' } } : {}),
-      ...(discussion ? { discussion: { ...(discussion.requiredTone !== undefined ? { requiredTone: discussion.requiredTone } : {}),
+      ...(discussion ? { discussion: contextual ? {
+        candidates: { toneSuggestion: discussion.toneSuggestion,
+          ...(discussion.toneSuggestion === 'negative' ? { negativeMotivation: discussion.negativeMotivation } : {}),
+          ...(target ? { replyStance: discussion.replyStance } : {}) },
+        instruction: informal ? (discussion.toneSuggestion === 'negative' ? '这次保留负面倾向，具体方向与回复姿态随眼前话头调整。' : '这次可以普通发言，求助、分享、闲聊或只留一个反应。') + '嫌烦、贬低、酸一句、跟风、乱猜、迁怒和毫无长进的嘴硬也都可成立，不必给人充分理由，正文可以没讲清楚便结束。开口只用实际可见的内容，人物偏见可以错，既有事实不随之改写。不要替发言者补成委屈经过、证据链或漂亮反击。' : '这些是生成候选，不是此人的固定情绪或必须执行的立场。先按本人处境、当下目的和实际读到的片段决定要说什么；可采用、适配或放弃候选，求助与普通接话均可直接成立。依据随 reviews.context 私下记录，正文保留当事人愿意公开的程度。',
+        ...(informal && discussion.toneSuggestion === 'negative' ? { negative: scopedSource('environment/research-negative.md', ['什么算负面', '低级与无序的参与']) } : {}),
+        ...(target ? { research: scopedSource('environment/research-comments.md', ['逐条形成回复']) } : {})
+      } : { ...(discussion.requiredTone !== undefined ? { requiredTone: discussion.requiredTone } : {}),
         ...(discussion.toneSuggestion !== undefined ? { toneSuggestion: discussion.toneSuggestion } : {}),
         ...(discussion.requiredTone === 'negative' || discussion.toneSuggestion === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: scopedSource('environment/research-negative.md', ['什么算负面', '异议怎样转成抬杠']) } : {}),
         ...(target ? { replyStance: discussion.replyStance } : {}),
         rules: scopedSource('docs/lottery.md', ['每条发言']) } } : {}),
       ...(config.media && !adaptedCase ? { presentation: { image: choices.image, emoteCount: choices.emoteCount, ...choices.presentation } } : {}),
+      ...(contextual ? { participation: { mode: timing.mode, activeHours: data.material.profiles[author]?.basics.activeHours || '',
+        ...(timing.mode === 'exception' && timing.reason ? { exception: timing.reason } : {}), instruction: informal ? '通常时段只是偏好。偶尔在别的时间出现可以自然发生，正文不必交代；只有这次时间本身影响话头时，才采用已知缘由。' : '发言时间按本人时段与实际父帖安排；未配置时段表示暂无约束，不表示此人随时在线。' } } : {}),
       visiblePosts
     },
     editor: {
@@ -785,6 +864,43 @@ async function validateImagePools(operation, data, root) {
   }
 }
 
+function validateParticipationBatch(operation, data, now) {
+  const reviews = reviewIndex(operation), adopted = new Set(operation.posts.map(post => post.id));
+  const history = data.feed.posts.filter(post => !adopted.has(post.id));
+  for (let index = 0; index < operation.posts.length; index++) {
+    const post = operation.posts[index], until = Date.parse(post.createdAt);
+    const before = new Map([...history, ...operation.posts.slice(0, index)].map(item => [item.id, item]));
+    const target = before.get(post.replyTo), choices = drawPostChoices({ seed: operation.plan.seed, postId: post.id, replyTo: post.replyTo, lottery: operation.plan.lottery });
+    const own = [...before.values()].filter(item => item.author === post.author && validDate(item.createdAt) && Date.parse(item.createdAt) <= now);
+    const after = Math.max(Date.parse(operation.plan.timeWindow.start), target ? Date.parse(target.createdAt) : 0,
+      ...own.map(item => Date.parse(item.createdAt)));
+    if (!validDate(post.createdAt) || until > Math.min(now, Date.parse(operation.plan.timeWindow.end)) || until < after) fail('Post violates its saved participation time bounds: ' + post.id);
+    const schedule = operation.plan.participationSchedules[post.author] ?? { timezone: 'Asia/Shanghai', windows: [] };
+    const timing = scheduleParticipation({ seed: operation.plan.seed, postId: post.id, author: post.author, ...schedule, version: operation.plan.lottery.participation.version,
+      after, windowStart: post.createdAt, now: until, preferredAt: post.createdAt, exception: operation.timingExceptions?.[post.id] });
+    if (timing.status !== 'ready' || Date.parse(timing.createdAt) !== until) fail((operation.plan.lottery.participation.version === 1 ? 'Post needs its usual time or a concrete timing exception: ' : 'Post violates its legal participation time bounds: ') + post.id);
+    if (caseForPost(operation.plan, post, operation.posts)) continue;
+    const visible = new Set();
+    if (target) {
+      const root = threadRoot(target.id, before);
+      visible.add(target.id);
+      if (choices.reading !== 'target-only') visible.add(root.id);
+      if (choices.reading === 'nearby') {
+        const nearby = [...before.values()].filter(item => item.id !== target.id && item.id !== root.id &&
+          validDate(item.createdAt) && Date.parse(item.createdAt) <= until && threadRoot(item.id, before).id === root.id)
+          .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en')).slice(0, choices.nearbyReplies);
+        for (const item of nearby) visible.add(item.id);
+      }
+    }
+    const profilePaths = post.author.startsWith('guest-') ? [] : ['users/' + post.author + '/profile.md',
+      ...(data.material.supplementalDocuments[post.author] ?? []).map(document => document.path)];
+    const ownPostIds = own.filter(item => Date.parse(item.createdAt) <= until).sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id, 'en')).slice(0, 5).map(item => item.id);
+    const context = reviews.get(post.id)?.context;
+    if (operation.plan.lottery.participation.version === 1 || context !== undefined)
+      validateContextReview(context, { post, profilePaths, visiblePostIds: [...visible], ownPostIds });
+  }
+}
+
 export async function validateUpdateForBatch(batch, { root = socialRoot, contextPath, backfill = false, now = Date.now() } = {}) {
   root = await checkedRoot(root);
   if (typeof backfill !== 'boolean') fail('Historical updates need an explicit boolean backfill option');
@@ -807,6 +923,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   validateDiversityReview(operation, data.feed.posts);
   const discussion = discussionProgress(operation);
   if (discussion && discussion.minimumNegativeShare !== undefined && discussion.negativePosts < Math.ceil(discussion.reviewedPosts * discussion.minimumNegativeShare)) fail('The update has fewer reviewed negative posts than its saved minimum share');
+  if (operation.plan.lottery?.participation) validateParticipationBatch(operation, data, now);
   const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));
   const users = new Map(data.registry.users.map(user => [user.id, user]));
   const posts = new Map([...data.feed.posts, ...batch.posts].map(post => [post.id, post]));

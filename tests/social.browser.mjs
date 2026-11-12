@@ -27,9 +27,16 @@ try {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
   trackErrors(page);
+  const expandHome = async () => {
+    while (await page.locator('[data-action="more"]').count()) {
+      await page.locator('[data-action="more"]').click();
+      await page.waitForFunction(() => !document.querySelector('[data-action="more"]:disabled'));
+    }
+  };
   const visit = async (hash, title) => {
     await page.goto(pageURL(hash));
     await page.locator('.boardbar h2').filter({ hasText: title }).waitFor();
+    if (['', '#/', '#/following'].includes(hash)) await expandHome();
   };
   const scrollTop = () => page.locator('main').evaluate(element => element.scrollTop);
   const waitForScrollIdle = () => page.locator('main').evaluate(async main => {
@@ -47,6 +54,7 @@ try {
     await page.screenshot({ path: join(output, name), fullPage: false, animations: 'disabled' });
   };
   const checkFeedEnd = async channel => {
+    await expandHome();
     const end = page.locator('.feed-end');
     check(await end.textContent() === '···', `${channel} ends with only an ellipsis`);
     check(await end.getAttribute('aria-hidden') === 'true', `${channel} ending is decorative`);
@@ -151,7 +159,7 @@ try {
   check(await page.locator('.topbar').evaluate(element => element.getBoundingClientRect().height <= 56), 'compact header is at most 56px');
   check(await page.locator('main .topbar').count() === 0, 'header is outside the content scroller');
   const compactPage = await context.newPage(); trackErrors(compactPage);
-  await compactPage.route('**/data/feed.json', route => route.fulfill({ json: { ...feed, posts: [{ ...roots[0], id: 'compact-layout-fixture', text: '一条短发言。', replyTo: null, media: [] }] } }));
+  await compactPage.route('**/data/feed-index.json', route => route.fulfill({ json: { ...feed, posts: [{ ...roots[0], id: 'compact-layout-fixture', text: '一条短发言。', replyTo: null, media: [] }] } }));
   await compactPage.goto(base); await compactPage.locator('article').waitFor();
   check(await compactPage.locator('article').evaluate(element => element.getBoundingClientRect().height <= 145), 'a synthetic single-line post stays compact at 390px');
   await compactPage.close();
@@ -400,7 +408,7 @@ try {
   check(await denied.locator('.app-shell').evaluate(element => getComputedStyle(element).backgroundColor) === blackBackground, 'black appearance does not require browser storage');
 
   const failed = await context.newPage(); trackErrors(failed);
-  await failed.route('**/data/feed.json', route => route.fulfill({ status: 503, body: 'unavailable' }));
+  await failed.route('**/data/feed-index.json', route => route.fulfill({ status: 503, body: 'unavailable' }));
   await failed.goto(base); await failed.getByRole('heading', { name: '帖子暂时没有载入' }).waitFor(); checks++;
   check(await failed.locator('.topbar').count() === 1, 'fixed header remains available on feed errors');
   await failed.locator('#login-button').click();
@@ -412,7 +420,7 @@ try {
   await failed.locator('#verification-submit').click();
   check(await failed.locator('#login-error').textContent() === '验证失败，请重试。', 'feed errors do not prevent the local photo verification flow');
   await failed.locator('#login-close').click();
-  await failed.unroute('**/data/feed.json');
+  await failed.unroute('**/data/feed-index.json');
   await failed.getByRole('button', { name: '重新载入' }).click();
   await failed.locator('article').first().waitFor(); checks++;
 
@@ -430,7 +438,7 @@ try {
     text: i ? `第${i + 1}条回复。` : longReply,
     media: i ? [] : [fixtureImage, fixtureEmote] }));
   let indexFeed = { ...feed, users: feed.users.map(user => user.id === indexRoot.author ? { ...user, inFollowing: true } : user), posts: [indexRoot, ...indexReplies] };
-  await indexed.route('**/data/feed.json', route => route.fulfill({ json: indexFeed }));
+  await indexed.route('**/data/feed-index.json', route => route.fulfill({ json: indexFeed }));
   await indexed.route(/\/core\.js(?:\?|$)/, async route => {
     const response = await route.fetch(), body = await response.text();
     const instrumented = body.replace('export function createThreadIndex(posts) {',

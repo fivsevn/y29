@@ -453,9 +453,11 @@ test('current joint media profiles replay one round tendency and allow all combi
   }
 });
 
-test('current discussion and identity draws favor strangers and never chase a negative share', () => {
+test('current discussion retains half negative intent, a final share floor and mostly unfamiliar identities', () => {
   const lottery=currentLottery, states=new Set(); let fresh=0, guest=0;
-  assert.equal(lottery.discussion.minimumNegativeShare, undefined);
+  assert.equal(lottery.discussion.minimumNegativeShare, 0.5);
+  assert.equal(lottery.discussion.negativeProbability, 0.5);
+  assert.equal(lottery.participation.version, 2);
   for(let i=0;i<1000;i++) {
     const choice=drawPostChoices({seed:'new-public-'+i,postId:'ordinary-reply',replyTo:'ordinary-root',lottery});
     states.add(choice.discussion.toneSuggestion);
@@ -465,4 +467,22 @@ test('current discussion and identity draws favor strangers and never chase a ne
   assert.ok(fresh>800&&fresh<900); assert.ok(guest>700&&guest<800);
   const invalid=structuredClone(lottery); invalid.discussion.negativeProbability=1.1;
   assert.throws(()=>validateLottery(invalid), /negative probability/);
+});
+
+
+test('v2 separates final negative share from stable draws and accepts low-effort negative directions', () => {
+  const lottery = structuredClone(currentLottery);
+  const values = new Set(), stances = new Set(); let negative = 0;
+  for (let i = 0; i < 2000; i++) {
+    const choice = drawPostChoices({ seed: 'informal-' + i, postId: 'informal-reply', replyTo: 'ordinary-root', lottery });
+    negative += choice.discussion.toneSuggestion === 'negative';
+    values.add(choice.discussion.negativeMotivation); stances.add(choice.discussion.replyStance);
+  }
+  assert.ok(negative > 900 && negative < 1100);
+  for (const value of ['irritation', 'contempt', 'envy', 'pile-on', 'grudge']) assert.ok(values.has(value));
+  for (const value of ['dismiss', 'repeat', 'sidetrack', 'pile-on']) assert.ok(stances.has(value));
+  const old = structuredClone(lottery); old.participation.version = 1;
+  assert.throws(() => validateLottery(old), /v1 cannot impose/);
+  const invalid = structuredClone(lottery); invalid.participation.version = 3;
+  assert.throws(() => validateLottery(invalid), /participation rules version/);
 });

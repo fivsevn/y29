@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Compare deployed source, full feed and every referenced image
+      - name: Compare deployed source, feed index, history parts and referenced images
         env:
           PUBLISHED_REVISION: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
@@ -34,8 +34,9 @@ jobs:
           const base='https://y29.fivsevn.com/lucifer0/';
           const revision=process.env.PUBLISHED_REVISION;
           const expected=JSON.parse(await readFile('lucifer0/data/feed.json','utf8'));
+          const index=JSON.parse(await readFile('lucifer0/data/feed-index.json','utf8'));
           const media=[...new Set(expected.posts.flatMap(post=>post.media.map(item=>item.src)))];
-          const files=['index.html','app.js','core.js','style.css','data/feed.json',...media];
+          const files=[...new Set(['index.html','app.js','core.js','feed-store.js','style.css','data/feed.json','data/feed-index.json',...index.parts.map(part=>part.src),...media])];
           const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
           async function verify(path){
             const wanted=hash(await readFile('lucifer0/'+path));

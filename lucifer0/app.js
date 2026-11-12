@@ -1,4 +1,5 @@
-import { escapeHTML as esc, readState, saveState, toggle, selectPosts, createThreadIndex, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText, isEmoteMedia } from './core.js?v=20261113-compact-replies';
+import { escapeHTML as esc, readState, saveState, toggle, selectPosts, createThreadIndex, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText, isEmoteMedia } from './core.js?v=20261113-feed-pages';
+import { createFeedStore, FEED_PAGE_SIZE } from './feed-store.js?v=20261113-feed-pages';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -12,7 +13,11 @@ const icon = (name, className = '') => `<svg class="${className}" viewBox="0 0 2
 document.querySelectorAll('[data-icon]').forEach(element => { element.innerHTML = icon(element.dataset.icon); });
 let storage;
 try { storage = window.localStorage; } catch { /* Browsing works without storage. */ }
-let state, feed, users, posts, threadIndex, toastTimer;
+let state, feed, users, posts, threadIndex, toastTimer, feedStore;
+let feedRevision = -1, renderRequest = 0;
+const routeLimits = new Map();
+const routeKey = () => location.hash || '#/';
+const pageLimit = () => routeLimits.get(routeKey()) || FEED_PAGE_SIZE;
 const main = document.querySelector('main');
 const imageDialog = document.querySelector('#image-dialog'), imageFrame = document.querySelector('#image-frame');
 const imageClose = document.querySelector('#image-close');
@@ -224,11 +229,18 @@ function postMarkup(post, { threaded = false, target, preview = false } = {}) {
     ${preview && !post.replyTo ? replyPreview(post) : ''}
   </article>`;
 }
+function homePosts(following) {
+  return selectPosts(feed.posts, state, { view: following ? 'following' : 'all', users: feed.users });
+}
+function homeFooter(shown, total) {
+  return shown < total ? '<div class="feed-pagination"><button type="button" data-action="more">显示更多</button></div>' : '<p class="feed-end" aria-hidden="true">···</p>';
+}
 function renderHome(following) {
-  const selected = selectPosts(feed.posts, state, { view: following ? 'following' : 'all', users: feed.users });
-  return boardbar(following ? '/following' : '/world', `${selected.length} 串`) +
+  const total = feedStore.homeRoots(following).length;
+  const selected = homePosts(following).slice(0, pageLimit());
+  return boardbar(following ? '/following' : '/world', `${total} 串`) +
     (selected.length ? selected.map(post => postMarkup(post, { preview: true })).join('') : empty('这里还没有帖子', '新的动态会出现在这里。')) +
-    '<p class="feed-end" aria-hidden="true">···</p>';
+    homeFooter(selected.length, total);
 }
 function renderProfile(id) {
   const user = users.get(id);
@@ -261,6 +273,7 @@ function renderAbout() {
       <div class="guide-heading"><span>/access</span><h3 id="access-heading">${esc(guide?.access.title || '访问权限')}</h3></div>
       ${guide ? `<p class="guide-copy access-copy">${esc(guide.access.text)}</p>` : ''}
       <a class="guide-post-link" href="${postURL(WELCOME_POST_ID)}">${guide ? '查看入站须知原帖' : '查看站务公告'} ↗</a>
+      <a class="guide-search-link" href="#/search">搜索旧帖与用户 ↗</a>
     </section>
   </div>`;
 }
@@ -294,8 +307,10 @@ document.addEventListener('click', async event => {
   if (loginButton) { openLogin(loginButton); return; }
   if (event.target.closest('#login-close')) { closeLogin(); return; }
   const button = event.target.closest('button[data-action]');
-  if (!button || !feed) return;
+  if (!button || !feedStore) return;
   const { action, id } = button.dataset;
+  if (action === 'more') { await appendHome(button); return; }
+  if (action === 'retry-route') { await showRoute(); return; }
   if (!['likes', 'share'].includes(action)) return;
   if (action === 'share') {
     const url = new URL(location.href); url.hash = postURL(id).slice(1);
@@ -324,29 +339,74 @@ function selectReply() {
   const barHeight = main.querySelector('.boardbar')?.getBoundingClientRect().height || 0;
   main.scrollTop = Math.max(0, main.scrollTop + rect.top - viewport.top - Math.max(barHeight + 10, (main.clientHeight - rect.height) / 2));
 }
-window.addEventListener('hashchange', () => {
+function refreshFeed() {
+  if (feedRevision === feedStore.revision) return;
+  feed = feedStore.feed;
+  users = new Map(feed.users.map(user => [user.id, user]));
+  posts = new Map(feed.posts.map(post => [post.id, post]));
+  threadIndex = createThreadIndex(feed.posts);
+  feedRevision = feedStore.revision;
+}
+async function showRoute({ scroll = 0, target = false } = {}) {
+  const request = ++renderRequest, current = route();
+  main.setAttribute('aria-busy', 'true');
+  try {
+    if (!feedStore.routeReady(current, pageLimit())) await feedStore.ensureRoute(current, pageLimit());
+    if (request !== renderRequest) return;
+    refreshFeed(); render();
+    main.scrollTop = scroll;
+    if (target) selectReply();
+  } catch {
+    if (request !== renderRequest) return;
+    main.innerHTML = '<div class="empty"><h3>这部分帖子暂时没有载入</h3><p>请稍后重试。</p><button class="follow-button" data-action="retry-route">重新载入</button></div>';
+  } finally {
+    if (request === renderRequest) main.removeAttribute('aria-busy');
+  }
+}
+async function appendHome(button) {
+  const key = routeKey(), following = route().page === 'following';
+  const shown = main.querySelectorAll('article.post').length, limit = pageLimit() + FEED_PAGE_SIZE;
+  button.disabled = true; button.textContent = '正在载入…';
+  try {
+    await feedStore.ensureRoute(route(), limit);
+    if (routeKey() !== key || !button.isConnected) return;
+    routeLimits.set(key, limit); refreshFeed();
+    const selected = homePosts(following).slice(0, limit);
+    // Append without replacing earlier cards, images or the reading position.
+    button.parentElement.outerHTML = selected.slice(shown).map(post => postMarkup(post, { preview: true })).join('') + homeFooter(selected.length, feedStore.homeRoots(following).length);
+    const firstNewPost = document.getElementById('post-' + selected[shown]?.id);
+    if (firstNewPost) { firstNewPost.tabIndex = -1; firstNewPost.focus({ preventScroll: true }); }
+  } catch {
+    if (button.isConnected) { button.disabled = false; button.textContent = '重新载入'; }
+  }
+}
+window.addEventListener('hashchange', async () => {
   if (imageDialog.open) closeImage();
-  if (!feed) return;
+  if (!feedStore) return;
   scrollPositions.set(renderedRoute, main.scrollTop);
-  renderedRoute = location.hash || '#/';
+  renderedRoute = routeKey();
   const previous = scrollPositions.get(renderedRoute);
-  render();
-  main.scrollTop = previous ?? 0;
+  await showRoute({ scroll: previous ?? 0, target: previous === undefined });
   main.focus({ preventScroll: true });
-  if (previous === undefined) selectReply();
 });
 async function load() {
   try {
-    const response = await fetch('./data/feed.json', { cache: 'no-cache' });
+    let response = await fetch('./data/feed-index.json', { cache: 'no-cache' });
+    // Existing snapshots can still be opened before a split index is rebuilt.
+    if (response.status === 404) response = await fetch('./data/feed.json', { cache: 'no-cache' });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    feed = await response.json();
-    if (feed.version !== 1 || !Array.isArray(feed.users) || !Array.isArray(feed.posts)) throw new Error('Invalid feed');
-    users = new Map(feed.users.map(user => [user.id, user])); posts = new Map(feed.posts.map(post => [post.id, post]));
-    threadIndex = createThreadIndex(feed.posts);
+    const index = await response.json();
+    feedStore = createFeedStore(index, async src => {
+      const part = await fetch('./' + src);
+      if (!part.ok) throw new Error(`HTTP ${part.status}`);
+      return part.json();
+    });
+    feedRevision = -1;
     state ??= readState(storage);
-    render(); renderedRoute = location.hash || '#/'; selectReply();
+    renderedRoute = routeKey();
+    await showRoute({ target: true });
   } catch {
-    feed = null;
+    feed = null; feedStore = null;
     main.innerHTML = '<div class="empty"><h3>帖子暂时没有载入</h3><p>请稍后重试。</p><button class="follow-button" id="retry">重新载入</button></div>';
     document.querySelector('#retry').addEventListener('click', load);
   }

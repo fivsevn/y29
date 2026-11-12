@@ -37,7 +37,7 @@ try {
     createdAt: new Date(Date.parse(root.createdAt) + 1000).toISOString(), text: '普通图片回复测试。', media: [structuredClone(root.media[0])] };
   feed.posts.push(reply);
   let displayedFeed = feed;
-  await page.route('**/data/feed.json*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(displayedFeed) }));
+  await page.route('**/data/feed-index.json*', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(displayedFeed) }));
   await page.reload();
   await page.locator(`#post-${root.id}`).waitFor();
   const dialog = page.getByRole('dialog', { name: '查看原图', exact: true });

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm, symlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { emptyProfile } from '../lucifer0/tools/profile-schema.js';
+import { emptyProfile, validateProfile } from '../lucifer0/tools/profile-schema.js';
 import { renderUserDocument, parseUserDocument, readUserDocuments, buildUserDirectory } from '../lucifer0/tools/user-documents.js';
 
 const account = (id = 'sample-user') => ({ id, handle: id.replaceAll('-', '_'), name: '窗边的人', bio: '偶尔上线。', avatar: '', kind: 'visitor', sourceWork: '', enabled: true, aiScope: 'sample', profileStatus: 'sample', inFollowing: false, allowPosts: true, allowReplies: true });
@@ -273,4 +273,63 @@ test('duplicate handles and symlinks to external profile or supplemental files a
   const path = join(root, 'users/sample-user/profile.md');
   await rm(path); await symlink(external, path);
   await assert.rejects(readUserDocuments(root), /符号链接/);
+});
+
+
+test('posting windows are optional and free-form active hours never create implicit restrictions', () => {
+  const user = account(), source = renderUserDocument(user), settings = control(user);
+  settings.activeHours = '午饭后 13:00–14:00，晚饭后偶尔出现';
+  const legacy = parseUserDocument(source, user.id, settings);
+  assert.ok(!Object.hasOwn(legacy.profile.basics, 'postingWindows'));
+  assert.deepEqual(legacy.user, user);
+  const unrestricted = parseUserDocument(source, user.id, { ...settings, postingWindows: [] });
+  assert.deepEqual(unrestricted.profile.basics.postingWindows, []);
+  assert.deepEqual(unrestricted.user, user);
+});
+
+test('structured posting windows stay private and do not alias the account setting arrays', async t => {
+  const root = await fixture(t), path = join(root, 'accounts.json');
+  const settings = JSON.parse(await readFile(path, 'utf8'));
+  const postingWindows = [{ days: [1, 2, 3, 4, 5], start: '23:00', end: '01:00' }];
+  settings.users[0].postingWindows = postingWindows;
+  await writeFile(path, JSON.stringify(settings));
+  const { registry, profiles } = await readUserDocuments(root);
+  assert.deepEqual(profiles['sample-user'].basics.postingWindows, postingWindows);
+  assert.ok(!Object.hasOwn(registry.users[0], 'postingWindows'));
+  assert.ok(!Object.hasOwn(registry.users[0], 'timezone'));
+  assert.ok(!Object.hasOwn(registry.users[0], 'activeHours'));
+  const source = await readFile(join(root, 'users/sample-user/profile.md'), 'utf8');
+  const parsed = parseUserDocument(source, 'sample-user', settings.users[0]);
+  parsed.profile.basics.postingWindows[0].days.push(6);
+  assert.deepEqual(settings.users[0].postingWindows[0].days, [1, 2, 3, 4, 5]);
+  assert.equal(renderUserDocument(parsed.user, parsed.profile), source, 'private controls do not add machine fields to the human dossier');
+});
+
+test('posting window schema rejects invalid weekdays, clocks and configured timezones', () => {
+  const user = account(), source = renderUserDocument(user), settings = control(user);
+  const valid = { days: [1, 7], start: '13:00', end: '14:00' };
+  for (const postingWindows of [undefined, null, {}, '13:00–14:00',
+    [{ ...valid, days: [] }], [{ ...valid, days: [0] }], [{ ...valid, days: [1, 1] }],
+    [{ ...valid, start: '24:00' }], [{ ...valid, end: '14:60' }],
+    [{ ...valid, start: '14:00' }], [{ ...valid, inferred: true }]]) {
+    assert.throws(() => parseUserDocument(source, user.id, { ...settings, postingWindows }), /postingWindows|posting window/i);
+    const profile = emptyProfile(user.id); profile.basics.postingWindows = postingWindows;
+    assert.throws(() => validateProfile(profile, user.id), /postingWindows|posting window/i);
+  }
+  for (const timezone of ['', 'Not/A_Timezone']) {
+    assert.throws(() => parseUserDocument(source, user.id, { ...settings, timezone, postingWindows: [valid] }), /posting timezone/i);
+    const profile = emptyProfile(user.id); Object.assign(profile.basics, { timezone, postingWindows: [valid] });
+    assert.throws(() => validateProfile(profile, user.id), /posting timezone/i);
+  }
+});
+
+test('registered time preferences preserve each account’s explicit source ranges', async () => {
+  const config = JSON.parse(await readFile(new URL('../lucifer0/accounts.json', import.meta.url), 'utf8'));
+  for (const setting of config.users) {
+    const sourceRanges = [...setting.activeHours.matchAll(/(\d{2}:\d{2})–(\d{2}:\d{2})/g)].map(match => match[1] + '/' + match[2]);
+    for (const window of setting.postingWindows ?? []) {
+      assert.ok(sourceRanges.includes(window.start + '/' + window.end), `${setting.id} must not acquire an inferred prose range`);
+      assert.deepEqual(window.days, [1, 2, 3, 4, 5, 6, 7], 'these are time preferences, not inferred shift days');
+    }
+  }
 });

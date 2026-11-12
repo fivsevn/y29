@@ -11,6 +11,7 @@ export { validateReplyLottery } from './lottery.js';
 import { preparePostImages, rewritePostImages, normalizeArchivedImages } from './media.js';
 import { readSiteEmotes, siteEmotePaths } from './site-emotes.js';
 import { validateCasePolicy } from './case-adaptation.js';
+import { partitionFeed } from './feed-parts.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
 const fail = message => { throw new Error(message); };
@@ -178,6 +179,10 @@ export async function buildFeed(root = socialRoot, { locked = false } = {}) {
     const path = join(root, 'data/feed.json');
     await mkdir(dirname(path), { recursive: true });
     await writeFile(path, JSON.stringify(feed, null, 2) + '\n');
+    const { index, files } = partitionFeed(feed);
+    await mkdir(join(root, 'data/feed'), { recursive: true });
+    await Promise.all(files.map(({ src, text }) => writeFile(join(root, src), text)));
+    await writeFile(join(root, 'data/feed-index.json'), JSON.stringify(index) + '\n');
     await buildUserDirectory(root);
     return feed;
   } finally { if (!locked) await rm(lock, { recursive: true, force: true }); }
@@ -350,4 +355,5 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
   await recordCases();
   return { status: 'archived', id: batch.id, count: batch.posts.length, path };
 }
+
 
