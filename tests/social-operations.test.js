@@ -2658,3 +2658,22 @@ test('v2 final negative share counts adapted cases and original posts together w
   reviews.find(review => review.negative).negative = false; await saveReviews(prepared.operationPath, reviews);
   await assert.rejects(validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath }), /fewer reviewed negative/);
 });
+
+test('v2 root briefs append after archived history while staying independent of later current drafts', async t => {
+  const lottery = informalLottery(); lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  const f = await fixture(t, 4, { lottery });
+  const archived = post('current-archive-cutoff', 'person-0', f.now - 1000);
+  await writeThreadBatch(f.root, { version: 1, id: 'archive-cutoff-batch', mode: 'daily', posts: [archived] }, (await loadContent(f.root)).batches);
+  const prepared = await prepareUpdate(f.options);
+  const first = await briefUpdatePost({ ...f.options, postId: prepared.id + '-after-archive' });
+  assert.ok(Date.parse(first.draft.createdAt) >= Date.parse(archived.createdAt));
+  const entry = { ...first.draft, text: 'A new ordinary statement.' };
+  await draft(prepared, f.now, [entry]);
+  await saveReviews(prepared.operationPath, [{ postId: entry.id, negative: true, reason: 'Actual irritation.' }]);
+  const before = await briefUpdatePost({ ...f.options, postId: prepared.id + '-independent' });
+  const operation = await readJSON(prepared.operationPath); operation.posts[0].createdAt = iso(f.now);
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  const after = await briefUpdatePost({ ...f.options, postId: prepared.id + '-independent' });
+  assert.equal(after.draft.createdAt, before.draft.createdAt, 'other speakers current drafts do not queue every root at now');
+  assert.ok(Date.parse(after.draft.createdAt) >= Date.parse(archived.createdAt));
+});

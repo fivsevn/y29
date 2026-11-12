@@ -652,8 +652,10 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
   if (!guest && !ownUser) fail('Account is not eligible for this draft: ' + author);
   if (contextual) {
     const schedule = operation.plan.participationSchedules[author] ?? { timezone: 'Asia/Shanghai', windows: [] };
+    const adoptedIds = new Set(operation.posts.map(post => post.id));
+    const archiveAfter = informal ? data.feed.posts.reduce((latest, post) => !adoptedIds.has(post.id) && validDate(post.createdAt) && Date.parse(post.createdAt) <= now ? Math.max(latest, Date.parse(post.createdAt)) : latest, 0) : 0;
     const after = [...before.values()].reduce((latest, post) => post.author === author && validDate(post.createdAt) && Date.parse(post.createdAt) <= now
-      ? Math.max(latest, Date.parse(post.createdAt)) : latest, Math.max(Date.parse(window.start), target ? Date.parse(target.createdAt) : 0));
+      ? Math.max(latest, Date.parse(post.createdAt)) : latest, Math.max(Date.parse(window.start), archiveAfter, target ? Date.parse(target.createdAt) : 0));
     timing = now - horizon > 2 * DAY ? { status: 'unavailable', reason: 'Saved participation window has expired',
       availableUntil, recovery: 'Keep this work directory and prepare a new operation in a different work directory; do not redraw this operation' }
       : scheduleParticipation({ seed: operation.plan.seed, postId, author, ...schedule, version: config.participation.version, after,
