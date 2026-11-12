@@ -54,7 +54,7 @@ export function validateReplyLottery(lottery) {
   return lottery;
 }
 export function validateLottery(config) {
-  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'media', 'likes', 'sampling', 'discussion', 'researchMaintenance'], 'lottery');
+  keys(config, ['version', 'rootBudget', 'authors', 'authorKind', 'motivation', 'length', 'conditionCount', 'waitSeconds', 'reading', 'textWindow', 'excerptCharacters', 'nearbyReplies', 'image', 'media', 'likes', 'sampling', 'discussion', 'researchMaintenance', 'diversity'], 'lottery');
   if (config.version !== 1) fail('Invalid lottery version');
   if (Object.hasOwn(config.rootBudget ?? {}, 'bands')) {
     keys(config.rootBudget, ['bands'], 'root budget');
@@ -78,11 +78,14 @@ export function validateLottery(config) {
     keys(config.media.emotes, ['root', 'reply'], 'emote pools');
     for (const role of ['root', 'reply']) {
       const images = config.media.images[role], emotes = config.media.emotes[role];
-      keys(images, ['probability', 'minimumPosts', 'types'], role + ' image pool');
+      keys(images, ['probability', 'minimumPosts', 'minimumShare', 'enforceDraw', 'lifePhotoShare', 'types'], role + ' image pool');
       if (!probability(images.probability) || !integer(images.minimumPosts, 1, 120)) fail('Invalid ' + role + ' image pool');
+      for (const key of ['minimumShare', 'lifePhotoShare']) if (images[key] !== undefined && !probability(images[key])) fail('Invalid ' + role + ' image ' + key);
+      if (images.enforceDraw !== undefined && typeof images.enforceDraw !== 'boolean') fail('Invalid ' + role + ' image enforceDraw');
       options(images.types, ['photo', 'screenshot', 'illustration'], role + ' image types');
-      keys(emotes, ['probability', 'counts'], role + ' emote pool');
+      keys(emotes, ['probability', 'counts', 'minimumPosts', 'minimumShare', 'enforceDraw'], role + ' emote pool');
       if (!probability(emotes.probability)) fail('Invalid ' + role + ' emote pool');
+      if (emotes.minimumPosts !== undefined && !integer(emotes.minimumPosts, 0, 120) || emotes.minimumShare !== undefined && !probability(emotes.minimumShare) || emotes.enforceDraw !== undefined && typeof emotes.enforceDraw !== 'boolean') fail('Invalid ' + role + ' emote minimum');
       bands(emotes.counts, 3, role + ' emote count');
       if (emotes.counts.some(band => band.min < 1)) fail('Invalid ' + role + ' emote count');
     }
@@ -105,6 +108,10 @@ export function validateLottery(config) {
     keys(maintenance, ['probability', 'maxDocuments', 'ageWeightDays', 'maxAgeWeight'], 'research maintenance');
     if (typeof maintenance.probability !== 'number' || !Number.isFinite(maintenance.probability) || maintenance.probability < 0 || maintenance.probability > 1 ||
       !integer(maintenance.maxDocuments, 1, 10) || !integer(maintenance.ageWeightDays, 1, 3650) || !weight(maintenance.maxAgeWeight) || maintenance.maxAgeWeight < 1) fail('Invalid research maintenance');
+  }
+  if (config.diversity !== undefined) {
+    keys(config.diversity, ['recentUpdates'], 'diversity');
+    if (!integer(config.diversity.recentUpdates, 1, 10)) fail('Invalid diversity recent updates');
   }
   return config;
 }
@@ -202,41 +209,100 @@ function validatePresentationPosts(posts) {
   }
 }
 
-export function imagePoolProgress({ posts, lottery = defaultLottery }) {
+function mediaMinimum({ seed, pool, lottery, role, kind }) {
+  const config = lottery.media[kind][role];
+  let drawn = 0;
+  if (config.enforceDraw && pool.length) {
+    if (typeof seed !== 'string' || !seed.trim() || seed.length > 200) fail('Enforced media draws need the saved seed');
+    drawn = pool.filter(post => {
+      const choice = drawPostChoices({ seed, postId: post.id, replyTo: post.replyTo, lottery });
+      return kind === 'images' ? choice.image !== 'none' : choice.emoteCount > 0;
+    }).length;
+  }
+  return Math.min(pool.length, Math.max(config.minimumPosts ?? 0, Math.ceil(pool.length * (config.minimumShare ?? 0)), drawn));
+}
+const ordinaryImage = image => image?.kind === 'image' && typeof image.src === 'string' && !image.src.startsWith('assets/emotes/l0/');
+const enhancedImagePool = config => ['minimumShare', 'enforceDraw', 'lifePhotoShare'].some(key => Object.hasOwn(config, key));
+
+export function imagePoolProgress({ seed, posts, lottery = defaultLottery, mediaReviews = [] }) {
+  validateLottery(lottery);
+  if (!lottery.media) return null;
+  validatePresentationPosts(posts);
+  if (!Array.isArray(mediaReviews)) fail('Media reviews must be an array');
+  // Count a reused ordinary source only once across both pools for new snapshots.
+  const usedSources = new Set(), actualSources = new Map();
+  for (const post of [...posts].sort((a, b) => a.id.localeCompare(b.id, 'en'))) {
+    const role = post.replyTo === null ? 'root' : 'reply', unique = enhancedImagePool(lottery.media.images[role]);
+    const sources = (Array.isArray(post.media) ? post.media : []).filter(ordinaryImage).map(image => image.src)
+      .filter(src => !unique || !usedSources.has(src));
+    actualSources.set(post.id, sources);
+    for (const src of sources) usedSources.add(src);
+  }
+  return Object.fromEntries(['root', 'reply'].map(role => {
+    const pool = posts.filter(post => (post.replyTo === null ? 'root' : 'reply') === role);
+    const config = lottery.media.images[role], minimumPosts = mediaMinimum({ seed, pool, lottery, role, kind: 'images' });
+    const actualImagePostIds = pool.filter(post => actualSources.get(post.id).length).map(post => post.id).sort();
+    const lifePhotos = config.lifePhotoShare === undefined ? {} : (() => {
+      const minimumLifePhotoPosts = Math.ceil(minimumPosts * config.lifePhotoShare);
+      const actualLifePhotoPostIds = pool.filter(post => mediaReviews.some(review => review?.postId === post.id && review.type === 'life-photo' && actualSources.get(post.id).includes(review.src))).map(post => post.id).sort();
+      return { minimumLifePhotoPosts, actualLifePhotoPostIds, missingLifePhotoPosts: Math.max(0, minimumLifePhotoPosts - actualLifePhotoPostIds.length) };
+    })();
+    return [role, { postIds: pool.map(post => post.id).sort(), minimumPosts, actualImagePostIds,
+      missingPosts: Math.max(0, minimumPosts - actualImagePostIds.length), ...lifePhotos }];
+  }));
+}
+
+export function emotePoolProgress({ seed, posts, lottery = defaultLottery }) {
   validateLottery(lottery);
   if (!lottery.media) return null;
   validatePresentationPosts(posts);
   return Object.fromEntries(['root', 'reply'].map(role => {
     const pool = posts.filter(post => (post.replyTo === null ? 'root' : 'reply') === role);
-    const minimumPosts = Math.min(pool.length, lottery.media.images[role].minimumPosts);
-    const actualImagePostIds = pool.filter(post => Array.isArray(post.media) && post.media.some(image =>
-      image?.kind === 'image' && typeof image.src === 'string' && !image.src.startsWith('assets/emotes/l0/'))).map(post => post.id).sort();
-    return [role, { postIds: pool.map(post => post.id).sort(), minimumPosts, actualImagePostIds,
-      missingPosts: Math.max(0, minimumPosts - actualImagePostIds.length) }];
+    const minimumPosts = mediaMinimum({ seed, pool, lottery, role, kind: 'emotes' });
+    const actualEmotePostIds = pool.filter(post => Array.isArray(post.media) && post.media.some(image =>
+      typeof image?.src === 'string' && (image.kind === 'emote' || image.kind === undefined && image.src.startsWith('assets/emotes/l0/')))).map(post => post.id).sort();
+    return [role, { postIds: pool.map(post => post.id).sort(), minimumPosts, actualEmotePostIds,
+      missingPosts: Math.max(0, minimumPosts - actualEmotePostIds.length) }];
   }));
 }
 
-export function suggestPostPresentation({ seed, posts, lottery = defaultLottery }) {
-  if (typeof seed !== 'string' || !seed.trim() || seed.length > 200) fail('Presentation suggestions need the saved seed and actual posts');
-  validatePresentationPosts(posts);
-  validateLottery(lottery);
-  const choices = posts.map(post => ({ id: post.id, ...drawPostChoices({ seed, postId: post.id, replyTo: post.replyTo, lottery }) }));
-  const likes = choices.map(item => ({ id: item.id, likes: item.likes }));
-  if (!lottery.media) return { imagePostIds: choices.filter(item => item.image !== 'none').map(item => item.id).sort(), likes };
-  const imagePools = imagePoolProgress({ posts, lottery });
-  const targets = Object.fromEntries(['root', 'reply'].map(role => {
-    const pool = imagePools[role], selected = choices.filter(item => pool.postIds.includes(item.id) && item.image !== 'none').map(item => item.id);
+function presentationTargets({ seed, pools, choices, kind }) {
+  return Object.fromEntries(['root', 'reply'].map(role => {
+    const pool = pools[role], selected = choices.filter(item => pool.postIds.includes(item.id) &&
+      (kind === 'image' ? item.image !== 'none' : item.emoteCount > 0)).map(item => item.id);
     const candidates = pool.postIds.filter(id => !selected.includes(id)).map(id => ({ id,
-      rank: randomFor(seed + '\0image-minimum-' + role + '\0' + id)() })).sort((a, b) => a.rank - b.rank || a.id.localeCompare(b.id, 'en'));
+      rank: randomFor(seed + '\0' + kind + '-minimum-' + role + '\0' + id)() })).sort((a, b) => a.rank - b.rank || a.id.localeCompare(b.id, 'en'));
     for (const candidate of candidates) {
       if (selected.length >= pool.minimumPosts) break;
       selected.push(candidate.id);
     }
     return [role, selected.sort()];
   }));
-  return { imagePostIds: [...targets.root, ...targets.reply].sort(), rootImagePostIds: targets.root, replyImagePostIds: targets.reply,
-    emotes: choices.filter(item => item.emoteCount > 0).map(item => ({ postId: item.id, count: item.emoteCount })).sort((a, b) => a.postId.localeCompare(b.postId, 'en')),
-    imagePools, likes };
+}
+
+export function suggestPostPresentation({ seed, posts, lottery = defaultLottery, mediaReviews = [] }) {
+  if (typeof seed !== 'string' || !seed.trim() || seed.length > 200) fail('Presentation suggestions need the saved seed and actual posts');
+  validatePresentationPosts(posts);
+  validateLottery(lottery);
+  const choices = posts.map(post => ({ id: post.id, ...drawPostChoices({ seed, postId: post.id, replyTo: post.replyTo, lottery }) }));
+  const likes = choices.map(item => ({ id: item.id, likes: item.likes }));
+  if (!lottery.media) return { imagePostIds: choices.filter(item => item.image !== 'none').map(item => item.id).sort(), likes };
+  const imagePools = imagePoolProgress({ seed, posts, lottery, mediaReviews }), emotePools = emotePoolProgress({ seed, posts, lottery });
+  const targets = presentationTargets({ seed, pools: imagePools, choices, kind: 'image' });
+  const emoteTargets = presentationTargets({ seed, pools: emotePools, choices, kind: 'emote' });
+  const lifePhotoPostIds = ['root', 'reply'].flatMap(role => targets[role].map(id => ({ id,
+    rank: randomFor(seed + '\0life-photo-minimum-' + role + '\0' + id)() })).sort((a, b) => a.rank - b.rank || a.id.localeCompare(b.id, 'en'))
+    .slice(0, imagePools[role].minimumLifePhotoPosts ?? 0).map(item => item.id)).sort();
+  const imagePostIds = [...targets.root, ...targets.reply].sort();
+  const images = imagePostIds.map(postId => {
+    const role = posts.find(post => post.id === postId).replyTo === null ? 'root' : 'reply';
+    const drawn = choices.find(item => item.id === postId).image;
+    return { postId, type: lifePhotoPostIds.includes(postId) ? 'life-photo' : drawn !== 'none' ? drawn :
+      pick(randomFor(seed + '\0image-fallback-type\0' + postId), lottery.media.images[role].types).value };
+  });
+  return { imagePostIds, rootImagePostIds: targets.root, replyImagePostIds: targets.reply, images, lifePhotoPostIds,
+    emotes: [...emoteTargets.root, ...emoteTargets.reply].sort().map(postId => ({ postId, count: choices.find(item => item.id === postId).emoteCount || 1 })),
+    imagePools, emotePools, likes };
 }
 
 export function drawResearchWindows({ seed, lottery }) {
@@ -271,3 +337,4 @@ export function drawResearchMaintenance({ seed, lottery, documents, now }) {
   }
   return selected;
 }
+

@@ -24,6 +24,14 @@ async function fixture(t) {
   await cp(new URL('../lucifer0/', import.meta.url), root, { recursive: true, filter: path => !/\/(?:posts|data|\.publish-lock|\.publish-staging|\.publish\.lock)(?:\/|$)/.test(path) });
   const policyPath = join(root, 'publication.json'), policy = await readJSON(policyPath);
   delete policy.lottery.researchMaintenance;
+  // Conversion/recovery fixtures retain the saved pre-quota media contract.
+  // Current quota enforcement is exercised through real ingest in social-operations.
+  delete policy.lottery.diversity;
+  for (const role of ['root', 'reply']) {
+    for (const key of ['minimumShare', 'enforceDraw', 'lifePhotoShare']) delete policy.lottery.media.images[role][key];
+    policy.lottery.media.images[role].minimumPosts = 1;
+    for (const key of ['minimumPosts', 'minimumShare', 'enforceDraw']) delete policy.lottery.media.emotes[role][key];
+  }
   delete policy.caseAdaptation; // Media fixtures exercise image import independently of live intake.
   policy.lottery.rootBudget = { min: 1, max: 10 };
   await writeFile(policyPath, JSON.stringify(policy));
@@ -206,3 +214,4 @@ test('post SVG is stored as small WebP in its package while interface SVG stays 
   assert.deepEqual(await readFile(join(f.root, 'assets/icon.svg')), icon);
   await assert.rejects(stat(join(f.root, '.publish-staging')), { code: 'ENOENT' });
 });
+

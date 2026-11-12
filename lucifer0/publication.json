@@ -184,8 +184,8 @@
     "media": {
       "images": {
         "root": {
-          "probability": 0.4,
-          "minimumPosts": 1,
+          "probability": 0.65,
+          "minimumPosts": 2,
           "types": [
             {
               "value": "photo",
@@ -199,10 +199,13 @@
               "value": "illustration",
               "weight": 10
             }
-          ]
+          ],
+          "minimumShare": 0.6,
+          "enforceDraw": true,
+          "lifePhotoShare": 0.6
         },
         "reply": {
-          "probability": 0.25,
+          "probability": 0.35,
           "minimumPosts": 1,
           "types": [
             {
@@ -217,7 +220,10 @@
               "value": "illustration",
               "weight": 10
             }
-          ]
+          ],
+          "minimumShare": 0.3,
+          "enforceDraw": true,
+          "lifePhotoShare": 0.6
         }
       },
       "emotes": {
@@ -239,7 +245,10 @@
               "min": 3,
               "max": 3
             }
-          ]
+          ],
+          "minimumPosts": 1,
+          "minimumShare": 0.2,
+          "enforceDraw": true
         },
         "reply": {
           "probability": 0.65,
@@ -259,7 +268,10 @@
               "min": 3,
               "max": 3
             }
-          ]
+          ],
+          "minimumPosts": 1,
+          "minimumShare": 0.4,
+          "enforceDraw": true
         }
       }
     },
@@ -393,6 +405,9 @@
       "maxDocuments": 1,
       "ageWeightDays": 7,
       "maxAgeWeight": 5
+    },
+    "diversity": {
+      "recentUpdates": 3
     }
   }
 }

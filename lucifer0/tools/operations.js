@@ -4,7 +4,7 @@ import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
-import { defaultLottery, compatibilityLotteryV1, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, imagePoolProgress, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance } from './lottery.js';
+import { defaultLottery, compatibilityLotteryV1, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, imagePoolProgress, emotePoolProgress, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance } from './lottery.js';
 export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
 import { siteEmoteManifestPath } from './site-emotes.js';
@@ -157,7 +157,7 @@ function planSeal(id, root, plan) {
 }
 const operationSourceDigest = (data, plan) => Object.keys(planExtensions(plan)).length ? digest({ sourceDigest: data.sourceDigest, ...planExtensions(plan) }) : data.sourceDigest;
 function checkOperation(value, root) {
-  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews', 'researchMaintenance'], 'operation');
+  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews', 'researchMaintenance', 'mediaReviews', 'diversityReview'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
   onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow', 'researchMaintenance', 'caseAdaptation'], 'saved plan');
@@ -178,6 +178,13 @@ function checkOperation(value, root) {
   const drawnBudget = drawRootBudget(plan.seed, plan.lottery);
   if (plan.budget !== (plan.replyLottery === undefined ? plan.requestedCount ?? drawnBudget : drawnBudget) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
   if (value.reviews !== undefined) reviewIndex(value);
+  if (value.mediaReviews !== undefined) checkMediaReviews(value.mediaReviews);
+  if (value.diversityReview !== undefined) {
+    onlyKeys(value.diversityReview, ['postsDigest', 'historyDigest', 'content', 'images'], 'diversity review');
+    const review = value.diversityReview;
+    if (!/^[a-f0-9]{64}$/.test(review.postsDigest) || !/^[a-f0-9]{64}$/.test(review.historyDigest) ||
+      !bounded(review.content, 2000) || !bounded(review.images, 2000)) fail('Invalid diversity review');
+  }
   maintenanceResults(value);
   return value;
 }
@@ -372,6 +379,7 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
         }
         operation.plan.lottery.rootBudget = { min: 1, max: 10 };
         delete operation.plan.lottery.discussion;
+        delete operation.plan.lottery.diversity;
       }
       operation.plan.timeWindow ??= { start: new Date(Date.parse(operation.preparedAt) - DAY).toISOString(), end: operation.preparedAt };
       operation.plan.seal = planSeal(operation.id, root, operation.plan);
@@ -389,7 +397,54 @@ export async function suggestUpdatePresentation({ root = socialRoot, workDirecto
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
   if (!operation.plan.lottery) fail('Prepare again to attach a stable lottery snapshot to this older operation');
-  return { id: operation.id, count: operation.posts.length, ...suggestPostPresentation({ seed: operation.plan.seed, posts: operation.posts, lottery: operation.plan.lottery }) };
+  const { feed } = await loadContent(root, { allowPending: true });
+  return { id: operation.id, count: operation.posts.length, ...suggestPostPresentation({ seed: operation.plan.seed, posts: operation.posts, lottery: operation.plan.lottery, mediaReviews: operation.mediaReviews }),
+    ...diversityContext(operation, feed.posts) };
+}
+
+function checkMediaReviews(reviews) {
+  if (!Array.isArray(reviews) || reviews.length > 492) fail('Invalid media reviews');
+  const seen = new Set();
+  for (const review of reviews) {
+    onlyKeys(review, ['postId', 'src', 'type', 'scene'], 'media review');
+    const key = review.postId + '\0' + review.src;
+    if (!ID.test(review.postId) || typeof review.src !== 'string' || !isPostMediaPath(review.src) ||
+      !['life-photo', 'photo', 'screenshot', 'illustration'].includes(review.type) || !bounded(review.scene, 1000) || seen.has(key)) fail('Invalid or duplicate media review');
+    seen.add(key);
+  }
+  return reviews;
+}
+
+// Format conversion only changes extensions. Bind the review to every other
+// public field, while allowing the importer to replace PNG/JPEG/SVG with WebP.
+const presentationPosts = posts => posts.map(post => ({ ...post, media: post.media?.map(image => ({ ...image,
+  src: typeof image.src === 'string' ? image.src.replace(/\.(?:png|jpe?g|svg)$/, '.webp') : image.src })) }));
+
+function diversityContext(operation, history) {
+  const config = operation.plan.lottery?.diversity;
+  if (!config) return {};
+  const groups = new Map();
+  for (const post of history) {
+    const id = post.id.match(/^l0-\d{14}-[a-f0-9]{8}(?=-)/)?.[0];
+    if (!id || id === operation.id) continue;
+    if (!groups.has(id)) groups.set(id, []);
+    groups.get(id).push(post);
+  }
+  const recentUpdates = [...groups].sort(([a], [b]) => b.localeCompare(a, 'en')).slice(0, config.recentUpdates)
+    .map(([id, posts]) => ({ id, posts: posts.sort((a, b) => a.id.localeCompare(b.id, 'en')) }));
+  const mediaReviews = (operation.mediaReviews ?? []).map(review => ({ ...review,
+    src: review.src.replace(/\.(?:png|jpe?g|svg)$/, '.webp') }))
+    .sort((a, b) => (a.postId + '\0' + a.src).localeCompare(b.postId + '\0' + b.src, 'en'));
+  return { recentUpdates, currentPosts: operation.posts,
+    reviewBasis: { postsDigest: digest({ posts: presentationPosts(operation.posts), mediaReviews }), historyDigest: digest(recentUpdates) } };
+}
+
+function validateDiversityReview(operation, history) {
+  if (!operation.plan.lottery?.diversity || !operation.posts.length) return;
+  const expected = diversityContext(operation, history).reviewBasis, review = operation.diversityReview;
+  if (!review || review.postsDigest !== expected.postsDigest || review.historyDigest !== expected.historyDigest) {
+    fail('Review the current draft against the recent updates and save its current diversity review basis from suggest');
+  }
 }
 
 export async function suggestUpdateReplies({ root = socialRoot, workDirectory, threadIds = [] } = {}) {
@@ -571,7 +626,9 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
       ...(discussion ? { discussion } : {}),
       timing, suggestedNotBefore: createdAt,
       ...(config.media ? { emoteCount: choices.emoteCount, imagePools: imagePoolProgress({
-        posts: existing ? operation.posts : [...operation.posts, draft], lottery: config }) } : {}),
+        posts: existing ? operation.posts : [...operation.posts, draft], lottery: config, seed: operation.plan.seed, mediaReviews: operation.mediaReviews }),
+        emotePools: emotePoolProgress({ posts: existing ? operation.posts : [...operation.posts, draft], lottery: config, seed: operation.plan.seed }) } : {}),
+      ...diversityContext({ ...operation, posts: existing ? operation.posts : [...operation.posts, draft] }, data.feed.posts),
       image: choices.image, likes: choices.likes, reading: choices.reading, textWindow: choices.textWindow,
       instruction: '将 writer 单独交给写作者；partial 表示只读到片段。将实际采用的正文、时间、图片和 guest 名字填入 draft，再保存到 operation.json.posts。抽签使用见 docs/lottery.md，创作见 docs/writing.md。'
     }
@@ -625,12 +682,23 @@ async function validateImagePools(operation, data, root) {
       }
     }
   }
-  const pools = imagePoolProgress({ posts: operation.posts, lottery });
+  const requiresMediaReviews = ['root', 'reply'].some(role => lottery.media.images[role].lifePhotoShare !== undefined);
+  if (requiresMediaReviews) {
+    const reviews = checkMediaReviews(operation.mediaReviews ?? []);
+    const expected = new Set(operation.posts.flatMap(post => post.media.filter(image => image.kind === 'image').map(image => post.id + '\0' + image.src)));
+    if (reviews.length !== expected.size || reviews.some(review => !expected.has(review.postId + '\0' + review.src))) fail('Each actual ordinary image needs one matching media review; remove missing, extra or stale entries');
+  }
+  const pools = imagePoolProgress({ posts: operation.posts, lottery, seed: operation.plan.seed, mediaReviews: operation.mediaReviews });
+  const emotes = emotePoolProgress({ posts: operation.posts, lottery, seed: operation.plan.seed });
   for (const role of ['root', 'reply']) {
     if (pools[role].missingPosts) fail(`The ${role} ordinary-image pool needs at least ${pools[role].minimumPosts} image-bearing post(s); emotes do not count`);
+    if (pools[role].missingLifePhotoPosts) fail(`The ${role} life-photo pool needs at least ${pools[role].minimumLifePhotoPosts} post(s) with reviewed everyday photographs; illustrations do not count`);
+    if (emotes[role].missingPosts) fail(`The ${role} emote pool needs at least ${emotes[role].minimumPosts} emote-bearing post(s); ordinary images do not count`);
   }
   const hash = bytes => createHash('sha256').update(bytes).digest('hex');
   const emoteHashes = new Set(await Promise.all((data.siteEmotes?.items ?? []).map(async item => hash(await readFile(join(root, item.src))))));
+  const ordinaryHashes = new Set();
+  const uniqueImages = ['root', 'reply'].some(role => ['minimumShare', 'enforceDraw', 'lifePhotoShare'].some(key => Object.hasOwn(lottery.media.images[role], key)));
   for (const path of ordinaryFiles) {
     let current = root;
     const parts = path.split('/');
@@ -639,7 +707,10 @@ async function validateImagePools(operation, data, root) {
       const stat = await lstat(current);
       if (stat.isSymbolicLink() || (index === parts.length - 1 ? !stat.isFile() : !stat.isDirectory())) fail('Ordinary image sources must be regular files in their thread package');
     }
-    if (emoteHashes.has(hash(await readFile(current)))) fail('A copied site emote cannot satisfy an ordinary-image pool');
+    const fingerprint = hash(await readFile(current));
+    if (emoteHashes.has(fingerprint)) fail('A copied site emote cannot satisfy an ordinary-image pool');
+    if (uniqueImages && ordinaryHashes.has(fingerprint)) fail('Repeated ordinary-image bytes cannot fill distinct image slots');
+    ordinaryHashes.add(fingerprint);
   }
 }
 
@@ -662,6 +733,7 @@ export async function validateUpdateForBatch(batch, { root = socialRoot, context
   validatePostBudget(operation.plan, batch.posts, data.feed.posts, data.policy);
   validateCasePosts(operation.plan, batch.posts, { complete: true });
   await validateImagePools(operation, data, root);
+  validateDiversityReview(operation, data.feed.posts);
   const discussion = discussionProgress(operation);
   if (discussion && discussion.negativePosts < Math.ceil(discussion.reviewedPosts * discussion.minimumNegativeShare)) fail('The update has fewer reviewed negative posts than its saved minimum share');
   const guests = batch.posts.filter(post => typeof post.author === 'string' && post.author.startsWith('guest-') && plain(post.guest) && bounded(post.guest.name, 40));
@@ -744,6 +816,8 @@ export async function cancelUpdate({ root = socialRoot, workDirectory, now = Dat
       const data = await source(root);
       operation.posts = [];
       if (operation.reviews !== undefined) operation.reviews = [];
+      if (operation.mediaReviews !== undefined) operation.mediaReviews = [];
+      delete operation.diversityReview;
       operation.preparedAt = new Date(now).toISOString();
       operation.sourceDigest = operationSourceDigest(data, operation.plan);
       operation.status = 'prepared';
@@ -753,3 +827,4 @@ export async function cancelUpdate({ root = socialRoot, workDirectory, now = Dat
     } finally { await releasePublish(); }
   } finally { await releaseWork(); }
 }
+
