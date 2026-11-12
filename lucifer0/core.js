@@ -119,7 +119,7 @@ export function createThreadIndex(posts) {
     },
     threadReplyPreview(id) {
       const root = findRoot(id), replies = root ? repliesByRoot.get(root.id) || [] : [];
-      return { rootId: root?.id ?? null, replies: replies.slice(0, 10), total: replies.length, collapsed: replies.length > 10 };
+      return { rootId: root?.id ?? null, replies: replies.slice(0, 5), total: replies.length, collapsed: replies.length > 5 };
     },
     replyCount(id) {
       const post = byId.get(id);
