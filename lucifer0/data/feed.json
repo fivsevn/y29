@@ -2022,9 +2022,437 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-4059b61b4dcd8deb",
+      "handle": "guest_820e19a22a93049fe9ad",
+      "name": "白色键帽",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-af05813e34787f79",
+      "handle": "guest_ea7975d5b7153f76de32",
+      "name": "墙外有脚手架",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f2c4b3078bb081e6",
+      "handle": "guest_a840a4be6e27915d484f",
+      "name": "最后一班吗",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b478b252b14fe29d",
+      "handle": "guest_e334577b87e203c8819e",
+      "name": "末班车",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8d754eb1907879f8",
+      "handle": "guest_e56bf72c83508106650f",
+      "name": "旧版规",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-11f3a7a2d1ca675e",
+      "handle": "guest_cc27ede13ea27b9f8cb2",
+      "name": "三元纸本",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f930fd0cad14a116",
+      "handle": "guest_981c43293977cec87731",
+      "name": "车窗左边",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f3bea3c29e239399",
+      "handle": "guest_bb37f7520d56d7397c3e",
+      "name": "雨刚停",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261112174153-117eae41-reply07",
+      "author": "guest-f3bea3c29e239399",
+      "createdAt": "2026-11-12T04:31:00.144Z",
+      "replyTo": "l0-20261112174153-117eae41-f21cb1e41a07",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "雨刚停"
+      },
+      "text": "师傅等人要十分钟，你等别人就不行？赶时间就先把时间空出来呗。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-reply02",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-12T01:50:22.144Z",
+      "replyTo": "l0-20261112174153-117eae41-29a7737b3fd7",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "我那个计时器也夜里亮，拿茶巾盖住又怕忘记关火。你这个还能换颜色呢。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-reply01",
+      "author": "visitor-epsilon-upper",
+      "createdAt": "2026-11-12T00:06:10.144Z",
+      "replyTo": "l0-20261112174153-117eae41-01e6003033ae",
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-01e6003033ae/media/artisan-bread.webp",
+          "alt": "一筐深浅不同的面包近景",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/clap.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "颜色深也可能是糖上色快，先掰开看看里头吧。我上周碰到一家只看表皮就退了两盘，厨师当场气笑了。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-reply05",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-11T23:47:24.144Z",
+      "replyTo": "l0-20261112174153-117eae41-d7554ccb278c",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "规则可以补，先写清楚找谁申诉行吗。每次都是标准没说完，人先吵翻。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-reply04",
+      "author": "guest-b478b252b14fe29d",
+      "createdAt": "2026-11-11T23:44:07.144Z",
+      "replyTo": "l0-20261112174153-117eae41-894f59e24b20",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "末班车"
+      },
+      "text": "你确定车还没过去？"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-reply03",
+      "author": "visitor-shiftcard",
+      "createdAt": "2026-11-11T23:39:01.144Z",
+      "replyTo": "l0-20261112174153-117eae41-56a1e33c4727",
+      "likes": 11,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-56a1e33c4727/media/building-neighbour.webp",
+          "alt": "公寓楼窗户与外墙的照片",
+          "kind": "image"
+        }
+      ],
+      "text": "我们那儿早上先搬钢管，问物业是不是提前施工，他们说那叫准备。准备的时候可没少响。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-reply06",
+      "author": "guest-11f3a7a2d1ca675e",
+      "createdAt": "2026-11-11T23:37:34.144Z",
+      "replyTo": "l0-20261112174153-117eae41-e2f43eaf0a82",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-e2f43eaf0a82/media/cheap-notebook.webp",
+          "alt": "桌面上小笔记本、手机与耳机",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/okay.webp",
+          "alt": "L0点头表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "三元纸本"
+      },
+      "text": "我用的是文具店三块一本的。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-894f59e24b20",
+      "author": "guest-f2c4b3078bb081e6",
+      "createdAt": "2026-11-11T23:36:49.144Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-894f59e24b20/media/bus-stop-light.webp",
+          "alt": "夜间站台灯光照着候车者",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "最后一班吗"
+      },
+      "text": "站台这盏灯都亮起来了，车还没影。时刻表写二十分钟一班，我等得都能记住广告牌上的字了。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-29a7737b3fd7",
+      "author": "guest-4059b61b4dcd8deb",
+      "createdAt": "2026-11-11T18:22:54.377Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-29a7737b3fd7/media/glowing-keyboard.webp",
+          "alt": "暗处紫色灯光照亮的一把机械键盘",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "白色键帽"
+      },
+      "text": "换了把背光键盘。颜色好看是好看，半夜那几个键亮得我眼睛疼。关了灯拍张照又觉得它很帅，烦。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-f21cb1e41a07",
+      "author": "guest-f930fd0cad14a116",
+      "createdAt": "2026-11-11T18:04:13.614Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-f21cb1e41a07/media/wet-window.webp",
+          "alt": "从带雨滴的窗玻璃后看见湿漉漉的城市街道",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "车窗左边"
+      },
+      "text": "雨天在车里拍窗外，照片看起来还蛮安静。实际司机刚刚因为有人忘了带伞，停在路边等了十来分钟，我后面还有个约。现在拍张照也不耽误我烦。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-e2f43eaf0a82",
+      "author": "visitor-theta-upper",
+      "createdAt": "2026-11-11T18:02:00.460Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-e2f43eaf0a82/media/pocket-notebook.webp",
+          "alt": "笔和夹子旁边放着一本小皮面随身笔记本",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "谁说做文具的就必须随身带本特别精致的本子。我记尺寸用这个小皮本，夹子还老掉。昨天有人翻我东西说这么普通，真就很无语。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-d806405709e0",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-11T17:52:26.758Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你们听过那个给软件养一个会自己发帖的‘小鱼’没有？说让它自己挣运行的钱，结果闹得好多人骂。我先听到的是钱用完了，后来又看到有人说其实是主人嫌它发得太像机器人，主动关的。那前面骂的到底在骂什么呀，我这半天白听了。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-56a1e33c4727",
+      "author": "guest-af05813e34787f79",
+      "createdAt": "2026-11-11T17:50:06.317Z",
+      "replyTo": null,
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-56a1e33c4727/media/apartment-wall.webp",
+          "alt": "一栋棕色公寓楼外墙和窗户",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "墙外有脚手架"
+      },
+      "text": "楼下外立面搭架子以后，早上七点就开始钻，物业公告写的施工时间是九点。问了两次说已转达，这几天照响。到底谁在看这个公告啊。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-01e6003033ae",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-11T17:50:04.998Z",
+      "replyTo": null,
+      "likes": 9,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-01e6003033ae/media/bread-tray.webp",
+          "alt": "面包店货架上的面包",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "早上那盘面包有人说颜色深一点就卖相不好。我说你先掰开看，外面深跟里面没熟可不是一回事。还没吃就判它不行，谁教的呀。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-d5453761f86d",
+      "author": "visitor-nu",
+      "createdAt": "2026-11-11T17:48:18.237Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-d5453761f86d/media/editing-keyboard.webp",
+          "alt": "电脑屏幕照亮的笔记本键盘",
+          "kind": "image"
+        }
+      ],
+      "text": "帮熟人转个小城初级后期的招聘，挂了几个月，问的也没几个。前两天才听说他们私下还卡三十岁。之前我还替他们说岗位挺稳定的，现在不知道该不该继续帮着转了。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-d7554ccb278c",
+      "author": "guest-8d754eb1907879f8",
+      "createdAt": "2026-11-11T17:46:30.927Z",
+      "replyTo": null,
+      "likes": 16,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0表情",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "旧版规"
+      },
+      "text": "有人提议把论坛里什么算引战、什么算钓鱼都一次开会定死。我倒想问一句，谁来执行？上回白纸黑字写了规则，还有人盯着一个像素说你违规。开完会难道以后不吵了吗。"
+    },
+    {
+      "id": "l0-20261112174153-117eae41-721a9b04a4fc",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-11T17:44:43.527Z",
+      "replyTo": null,
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-721a9b04a4fc/media/tea-cup.webp",
+          "alt": "桌面上的一只茶杯",
+          "kind": "image"
+        }
+      ],
+      "text": "茶杯内壁有层褐色的，我照人家说的拿酸的泡，水垢下来一点，茶渍还在。大家别给我只回一句‘用力刷’啊，我手都刷酸了。要用别的东西你说清楚用什么，我家就是普通不锈钢杯。"
+    },
     {
       "id": "l0-20261111214536-e145d75f-reply3",
       "author": "visitor-psi",
