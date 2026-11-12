@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm, readdir, cp, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import sharp from 'sharp';
-import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, suggestPostPresentation as rawSuggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies, briefUpdatePost } from '../lucifer0/tools/operations.js';
+import { drawUpdatePlan, prepareUpdate, validateResearch, validateUpdateForBatch, finishUpdate, cancelUpdate, checkpointUpdate, suggestPostPresentation as rawSuggestPostPresentation, suggestUpdatePresentation, drawThreadReplyCount, planThreadReplies, suggestUpdateReplies, briefUpdatePost } from '../lucifer0/tools/operations.js';
 import { emptyProfile } from '../lucifer0/tools/profiles.js';
 import { renderUserDocument } from '../lucifer0/tools/user-documents.js';
 import { renderPostDocument, writeThreadBatch, threadDirectory } from '../lucifer0/tools/thread-packages.js';
@@ -907,7 +907,9 @@ test('writer receives the current writing source and refreshes it without redraw
   assert.deepEqual(refreshed.writer.writing, { sourcePath, text: updated });
   assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
   assert.deepEqual(refreshed.draft, first.draft);
-  assert.deepEqual(refreshed.editor, first.editor);
+  assert.deepEqual(first.editor.sources.writing, { sourcePath, text: original });
+  assert.deepEqual(refreshed.editor.sources.writing, { sourcePath, text: updated });
+  assert.deepEqual({ ...refreshed.editor, sources: { ...refreshed.editor.sources, writing: first.editor.sources.writing } }, first.editor);
   assert.deepEqual({ ...refreshed.writer, writing: first.writer.writing }, first.writer);
 });
 
@@ -930,7 +932,12 @@ test('lottery and common research enter source digest, while config snapshots st
   const resumed = await prepareUpdate(f.options);
   assert.deepEqual((await readJSON(prepared.operationPath)).plan, saved.plan);
   assert.deepEqual(resumed.researchWindows, prepared.researchWindows);
-  assert.deepEqual(await briefUpdatePost({ ...f.options, postId }), initial);
+  const refreshed = await briefUpdatePost({ ...f.options, postId });
+  assert.deepEqual(refreshed.editor.sources.lottery, {
+    sourcePath: 'docs/lottery.md', text: await readFile(join(f.root, 'docs/lottery.md'), 'utf8')
+  });
+  assert.deepEqual({ ...refreshed, editor: { ...refreshed.editor,
+    sources: { ...refreshed.editor.sources, lottery: initial.editor.sources.lottery } } }, initial);
 });
 
 test('research maintenance discovers new files once and freezes the Git history draw across resume', async t => {
@@ -1276,7 +1283,7 @@ test('brief preserves drawn intervals and compresses overflowing timestamps to n
   assert.equal(first.draft.createdAt, iso(f.now - DAY + 120000));
   assert.equal(first.writer.createdAt, first.draft.createdAt);
   assert.equal(first.editor.suggestedNotBefore, first.draft.createdAt);
-  const one = { ...first.draft, text: '先发一句', guest: { name: '甲' } };
+  const one = { ...first.draft, text: '先发一句' };
   await draft(prepared, f.now, [one]);
   const second = await briefUpdatePost({ ...f.options, postId: prepared.id + '-two', replyTo: one.id });
   assert.equal(second.draft.createdAt, iso(Date.parse(one.createdAt) + 120000));
@@ -1291,14 +1298,14 @@ test('brief preserves drawn intervals and compresses overflowing timestamps to n
   assert.equal(compressed.editor.timing.availableUntil, iso(f.now));
   assert.equal(compressed.writer.createdAt, compressed.draft.createdAt);
   assert.equal(compressed.editor.waitSeconds, second.editor.waitSeconds);
-  const two = { ...compressed.draft, text: '接着回复', guest: { name: '乙' } };
+  const two = { ...compressed.draft, text: '接着回复' };
   await draft(prepared, f.now, [one, two]);
   const chain = [one, two];
   for (let index = 0; index < 6; index++) {
     const next = await briefUpdatePost({ ...f.options, postId: prepared.id + '-chain-' + index, replyTo: chain.at(-1).id });
     assert.equal(next.editor.timing.status, 'ready');
     assert.equal(next.draft.createdAt, two.createdAt);
-    chain.push({ ...next.draft, text: '继续接话', guest: { name: '参与者' + index } });
+    chain.push({ ...next.draft, text: '继续接话' });
     await draft(prepared, f.now, chain);
   }
   await prepareUpdate({ ...f.options, now: f.now + 300000 });
@@ -1390,7 +1397,7 @@ test('brief fills the actual reviewed gap and always carries negative guidance o
   assert.deepEqual(first.writer.discussion.rules, { sourcePath: 'docs/lottery.md', text: await readFile(join(f.root, 'docs/lottery.md'), 'utf8') });
   assert.deepEqual(first.writer.discussion.research, { sourcePath: 'environment/research-negative.md', text: await readFile(join(f.root, 'environment/research-negative.md'), 'utf8') });
   assert.ok(first.writer.conditions.every(condition => condition.dimension !== 'motivation'));
-  const firstPost = { ...first.draft, guest: { name: 'Synthetic first' }, text: 'A concrete adopted request; reviewers decide its actual stance.' };
+  const firstPost = { ...first.draft, text: 'A concrete adopted request; reviewers decide its actual stance.' };
   await draft(prepared, f.now, [firstPost]);
   const next = { ...f.options, postId: prepared.id + '-reply', replyTo: firstPost.id };
   await assert.rejects(briefUpdatePost(next), /Review saved drafts/);
@@ -1603,7 +1610,7 @@ test('discussion replies use their stance instead of root motivations while lega
     const f = await fixture(t, 4, { lottery, replyLottery: fixedReplies(5) }), prepared = await prepareUpdate(f.options);
     const rootBrief = await briefUpdatePost({ ...f.options, postId: prepared.id + '-root' });
     assert.ok(rootBrief.writer.conditions.some(condition => condition.dimension === 'motivation' && condition.value === 'ask-help'));
-    const root = { ...rootBrief.draft, guest: { name: 'Synthetic root' }, text: 'A neutral request for help.' };
+    const root = { ...rootBrief.draft, text: 'A neutral request for help.' };
     await draft(prepared, f.now, [root]);
     if (discussion) await saveReviews(prepared.operationPath, reviewed([root], 0));
     const reply = await briefUpdatePost({ ...f.options, postId: prepared.id + '-reply', replyTo: root.id });
@@ -2170,3 +2177,169 @@ test('current case descendants retain source structure without consuming origina
   await saveReviews(prepared.operationPath, reviewed(full.batch.posts, 0));
   await assert.rejects(validateUpdateForBatch(full.batch, { ...f.options, contextPath: prepared.operationPath }), /physical batch limit/);
 });
+
+test('new guest names are saved before text and survive writing, refresh and cancellation without redrawing', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  const f = await fixture(t, 4, { lottery }), prepared = await prepareUpdate(f.options);
+  const originalPlan = (await readJSON(prepared.operationPath)).plan;
+  const options = { ...f.options, postId: prepared.id + '-named' };
+  const first = await briefUpdatePost(options), name = first.draft.guest.name;
+  assert.ok(typeof name === 'string' && name.trim().length > 0);
+  assert.equal(first.draft.text, '');
+  assert.equal(first.writer.self.name, name);
+  assert.equal((await readJSON(prepared.operationPath)).guestNames[first.draft.author], name);
+  const namedOperation = await readFile(prepared.operationPath, 'utf8');
+  assert.deepEqual(await briefUpdatePost(options), first);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), namedOperation, 're-reading an allocated name does not rewrite the operation');
+  await draft(prepared, f.now, [{ ...first.draft, text: 'The author now talks about a completely different object.' }]);
+  assert.equal((await briefUpdatePost(options)).draft.guest.name, name);
+  await prepareUpdate(f.options);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, originalPlan);
+  assert.equal((await briefUpdatePost(options)).writer.self.name, name);
+  await cancelUpdate(f.options);
+  assert.equal((await readJSON(prepared.operationPath)).guestNames[first.draft.author], name);
+  assert.equal((await briefUpdatePost(options)).draft.guest.name, name);
+  assert.deepEqual((await readJSON(prepared.operationPath)).plan, originalPlan);
+});
+
+test('failed or locked briefs cannot leave names behind, and conflicting saved identities are rejected', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  const f = await fixture(t, 4, { lottery }), prepared = await prepareUpdate(f.options);
+  const options = { ...f.options, postId: prepared.id + '-named' };
+  const initial = await readFile(prepared.operationPath, 'utf8');
+  await assert.rejects(briefUpdatePost({ ...options, replyTo: 'unknown-parent' }), /earlier target/);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), initial);
+  await mkdir(join(f.workDirectory, '.update.lock'));
+  await assert.rejects(briefUpdatePost(options), /busy/);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), initial);
+  await rm(join(f.workDirectory, '.update.lock'), { recursive: true });
+  const first = await briefUpdatePost(options);
+  await draft(prepared, f.now, [{ ...first.draft, text: 'Saved under the allocated identity.' }]);
+  const operation = await readJSON(prepared.operationPath);
+  operation.guestNames[first.draft.author] = first.draft.guest.name + 'changed';
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  const conflicting = await readFile(prepared.operationPath, 'utf8');
+  await assert.rejects(briefUpdatePost(options), /Guest identity changed/);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), conflicting);
+});
+
+test('legacy guest names remain authoritative and private allocated names never enter the public feed', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  const f = await fixture(t, 4, { lottery }), prepared = await prepareUpdate(f.options);
+  const legacy = post(prepared.id + '-legacy', 'guest-legacy-name', f.now);
+  legacy.guest.name = 'Existing plain name';
+  await draft(prepared, f.now, [legacy]);
+  const existing = await briefUpdatePost({ ...f.options, postId: legacy.id });
+  assert.equal(existing.draft.guest.name, legacy.guest.name);
+  assert.equal(existing.writer.self.name, legacy.guest.name);
+  const allocated = await briefUpdatePost({ ...f.options, postId: prepared.id + '-new' });
+  await draft(prepared, f.now, [legacy, { ...allocated.draft, text: 'An ordinary new post.' }]);
+  await ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true });
+  const feed = (await loadContent(f.root)).feed;
+  assert.equal(feed.users.find(user => user.id === legacy.author).name, legacy.guest.name);
+  assert.equal(feed.users.find(user => user.id === allocated.draft.author).name, allocated.draft.guest.name);
+  assert.ok(!Object.hasOwn(feed, 'guestNames'));
+  assert.ok(feed.posts.every(entry => !Object.hasOwn(entry, 'guestNames')));
+  assert.ok(feed.users.every(user => !Object.hasOwn(user, 'guestNames')));
+});
+
+test('draft checkpoints keep original and edited text with their fixed source and plan and deduplicate exact retries', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options);
+  const entry = post(prepared.id + '-checkpoint', 'guest-checkpoint', f.now);
+  entry.text = 'A short unfinished first draft';
+  await draft(prepared, f.now, [entry]);
+  const operationBefore = await readFile(prepared.operationPath, 'utf8');
+  const first = await checkpointUpdate({ ...f.options, stage: 'draft' });
+  assert.equal(first.status, 'recorded');
+  assert.equal(first.historyPath, join(dirname(prepared.operationPath), 'draft-history-' + prepared.id + '.json'));
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), operationBefore, 'a checkpoint does not mutate its working draft');
+  const originalHistory = await readFile(first.historyPath, 'utf8');
+  const retry = await checkpointUpdate({ ...f.options, stage: 'draft', now: f.now + 1000 });
+  assert.equal(retry.status, 'unchanged');
+  assert.equal(await readFile(first.historyPath, 'utf8'), originalHistory);
+  const entryAfter = { ...entry, text: 'The actual edited text stays separate.' };
+  await draft(prepared, f.now, [entryAfter]);
+  const edited = await checkpointUpdate({ ...f.options, stage: 'edited', now: f.now + 2000 });
+  assert.equal(edited.status, 'recorded');
+  const history = await readJSON(first.historyPath);
+  assert.equal(history.version, 1);
+  assert.equal(history.operationId, prepared.id);
+  assert.equal(history.snapshots.length, 2);
+  assert.deepEqual(history.snapshots.map(snapshot => snapshot.stage), ['draft', 'edited']);
+  assert.equal(history.snapshots[0].posts[0].text, entry.text);
+  assert.equal(history.snapshots[1].posts[0].text, entryAfter.text);
+  for (const snapshot of history.snapshots) {
+    assert.match(snapshot.sourceDigest, /^[a-f0-9]{64}$/);
+    assert.match(snapshot.planDigest, /^[a-f0-9]{64}$/);
+  }
+  assert.equal(history.snapshots[0].sourceDigest, history.snapshots[1].sourceDigest);
+  assert.equal(history.snapshots[0].planDigest, history.snapshots[1].planDigest);
+  await writeFile(join(f.root, 'docs/writing.md'), '# Refreshed source\n\nA changed source must have a distinct review basis.\n');
+  await prepareUpdate(f.options);
+  await checkpointUpdate({ ...f.options, stage: 'edited', now: f.now + 3000 });
+  const refreshed = await readJSON(first.historyPath);
+  assert.equal(refreshed.snapshots.length, 3, 'an unchanged post under changed source material is a new review basis');
+  assert.equal(refreshed.snapshots[0].posts[0].text, entry.text);
+  assert.notEqual(refreshed.snapshots[2].sourceDigest, history.snapshots[1].sourceDigest);
+  assert.equal(refreshed.snapshots[2].planDigest, history.snapshots[1].planDigest);
+});
+
+test('checkpoint rejects invalid stages, active operations and nonregular history paths without overwriting data', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options);
+  await draft(prepared, f.now, [post(prepared.id + '-checkpoint', 'guest-checkpoint', f.now)]);
+  const before = await readFile(prepared.operationPath, 'utf8');
+  const historyPath = join(dirname(prepared.operationPath), 'draft-history-' + prepared.id + '.json');
+  await assert.rejects(checkpointUpdate({ ...f.options, stage: 'published' }), /stage/i);
+  await mkdir(join(f.workDirectory, '.update.lock'));
+  await assert.rejects(checkpointUpdate({ ...f.options, stage: 'draft' }), /busy/);
+  await rm(join(f.workDirectory, '.update.lock'), { recursive: true });
+  const outside = join(f.directory, 'preserved.json');
+  await writeFile(outside, '{"untouched":true}');
+  await symlink(outside, historyPath);
+  await assert.rejects(checkpointUpdate({ ...f.options, stage: 'draft' }), /regular|symlink/i);
+  assert.equal(await readFile(outside, 'utf8'), '{"untouched":true}');
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), before);
+});
+
+test('completed operations retain their checkpoints while a new operation gets an independent history', async t => {
+  const f = await fixture(t), firstPrepared = await prepareUpdate(f.options);
+  const first = await checkpointUpdate({ ...f.options, stage: 'draft' });
+  const originalHistory = await readFile(first.historyPath, 'utf8');
+  assert.equal((await finishUpdate(f.options)).status, 'no-posts');
+  const nextOptions = { ...f.options, now: f.now + 1000 };
+  const nextPrepared = await prepareUpdate(nextOptions);
+  assert.notEqual(nextPrepared.id, firstPrepared.id);
+  const next = await checkpointUpdate({ ...nextOptions, stage: 'draft' });
+  assert.equal(next.status, 'recorded');
+  assert.notEqual(next.historyPath, first.historyPath);
+  assert.equal((await readJSON(next.historyPath)).operationId, nextPrepared.id);
+  assert.equal((await readJSON(next.historyPath)).snapshots.length, 1);
+  assert.equal(await readFile(first.historyPath, 'utf8'), originalHistory);
+});
+
+test('ingest rejects a saved post that changes its preallocated guest name before archiving', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  const f = await fixture(t, 4, { lottery }), prepared = await prepareUpdate(f.options);
+  const first = await briefUpdatePost({ ...f.options, postId: prepared.id + '-identity' });
+  await draft(prepared, f.now, [{ ...first.draft, guest: { name: first.draft.guest.name + 'edited' }, text: 'The text cannot silently rename its author.' }]);
+  await assert.rejects(ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true }), /Guest identity changed in saved posts/);
+  assert.ok(!(await loadContent(f.root)).feed.posts.some(entry => entry.id === first.draft.id));
+});
+
+test('a reserved unposted guest name cannot collide with a legacy draft identity', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options);
+  const legacy = post(prepared.id + '-legacy', 'guest-legacy-visible', f.now);
+  legacy.guest.name = 'Kept legacy name';
+  await draft(prepared, f.now, [legacy]);
+  const operation = await readJSON(prepared.operationPath);
+  operation.guestNames = { 'guest-unposted-reservation': legacy.guest.name };
+  await writeFile(prepared.operationPath, JSON.stringify(operation));
+  const before = await readFile(prepared.operationPath, 'utf8');
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: legacy.id }), /Guest name conflicts with another author/);
+  assert.equal(await readFile(prepared.operationPath, 'utf8'), before);
+});
+

@@ -1,16 +1,17 @@
-import { prepareUpdate, finishUpdate, cancelUpdate, suggestUpdatePresentation, suggestUpdateReplies, briefUpdatePost } from './operations.js';
+import { prepareUpdate, finishUpdate, cancelUpdate, suggestUpdatePresentation, suggestUpdateReplies, briefUpdatePost, checkpointUpdate } from './operations.js';
 import { refreshIntake, bindIntakeRequest } from './intake-refresh.js';
 
 try {
   const [command, ...args] = process.argv.slice(2);
-  const usage = 'Usage: node lucifer0/tools/update.js prepare [--count 1-120] [--work /outside/work] | finish|cancel|suggest [--work /outside/work] | replies [--thread post-id ...] [--work /outside/work] | brief --post ID [--reply-to ID | --thread root-ID] [--work /outside/work]';
-  if (!['prepare', 'finish', 'cancel', 'suggest', 'replies', 'brief'].includes(command) || args.length % 2) throw new Error(usage);
+  const usage = 'Usage: node lucifer0/tools/update.js prepare [--count 1-120] [--work /outside/work] | finish|cancel|suggest [--work /outside/work] | checkpoint --stage draft|edited [--work /outside/work] | replies [--thread post-id ...] [--work /outside/work] | brief --post ID [--reply-to ID | --thread root-ID] [--work /outside/work]';
+  if (!['prepare', 'finish', 'cancel', 'suggest', 'replies', 'brief', 'checkpoint'].includes(command) || args.length % 2) throw new Error(usage);
   const options = {}, seen = new Set();
   for (let index = 0; index < args.length; index += 2) {
     const key = args[index], value = args[index + 1];
-    if (!['--work', '--count', '--thread', '--post', '--reply-to'].includes(key) || seen.has(key) && !(key === '--thread' && command === 'replies') || !value || key === '--count' && command !== 'prepare' || key === '--thread' && !['replies', 'brief'].includes(command) || ['--post', '--reply-to'].includes(key) && command !== 'brief') throw new Error(usage);
+    if (!['--work', '--count', '--thread', '--post', '--reply-to', '--stage'].includes(key) || seen.has(key) && !(key === '--thread' && command === 'replies') || !value || key === '--count' && command !== 'prepare' || key === '--thread' && !['replies', 'brief'].includes(command) || ['--post', '--reply-to'].includes(key) && command !== 'brief' || key === '--stage' && command !== 'checkpoint') throw new Error(usage);
     seen.add(key);
     if (key === '--work') options.workDirectory = value;
+    else if (key === '--stage') options.stage = value;
     else if (key === '--post') options.postId = value;
     else if (key === '--reply-to') options.replyTo = value;
     else if (key === '--thread') { if (command === 'brief') options.threadId = value; else (options.threadIds ||= []).push(value); }
@@ -29,6 +30,7 @@ try {
       result = await prepareUpdate({ ...options, ...(intake.intakeReceipt ? { intakeReceipt: intake.intakeReceipt } : {}) });
       if (intake.status === 'ready') await bindIntakeRequest({ ...options, requestId: intake.intakeReceipt.requestId, operationId: result.id });
     }
-  } else result = await ({ finish: finishUpdate, cancel: cancelUpdate, suggest: suggestUpdatePresentation, replies: suggestUpdateReplies, brief: briefUpdatePost }[command])(options);
+  } else result = await ({ finish: finishUpdate, cancel: cancelUpdate, suggest: suggestUpdatePresentation, replies: suggestUpdateReplies, brief: briefUpdatePost, checkpoint: checkpointUpdate }[command])(options);
   console.log(JSON.stringify(result, null, 2));
 } catch (error) { console.error(error.message); process.exitCode = 1; }
+
