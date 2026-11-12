@@ -2130,9 +2130,178 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-1ef752b397d4e32e",
+      "handle": "guest_a8233319f8847c2f90e6",
+      "name": "按工时算东西",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-45ab1312c579a123",
+      "handle": "guest_609fa39c2a0fc36d681e",
+      "name": "算着算着不买了",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8e6596d7868597bb",
+      "handle": "guest_d54bf8d17248b03676fd",
+      "name": "那是茶叶啊",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d8bfae05876863ad",
+      "handle": "guest_00af3e0c194f2999eb76",
+      "name": "红泥小炉",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-21a13e54af0ad449",
+      "handle": "guest_1f5fd991e37b7748a60b",
+      "name": "先看钳子",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261112073822-86a53324-reply02",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-12T06:35:17.508Z",
+      "replyTo": "l0-20261112073822-86a53324-1dcbd4ee3a19",
+      "likes": 11,
+      "canon": "derivative",
+      "media": [],
+      "text": "我只会换算成几顿食堂饭。。。前天30多的游戏道具买完，昨晚没加餐，笑死"
+    },
+    {
+      "id": "l0-20261112073822-86a53324-reply05",
+      "author": "visitor-omicron-upper",
+      "createdAt": "2026-11-12T06:24:25.508Z",
+      "replyTo": "l0-20261112073822-86a53324-91399be41d6f",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "年轻人也不一定爱这个味。我以前跑车时，有人在车上带臭豆腐，前排说香，后排说臭，吵了一路。你这是坐在店里，又是人家请客，躲也不好躲。"
+    },
+    {
+      "id": "l0-20261112073822-86a53324-reply01",
+      "author": "guest-45ab1312c579a123",
+      "createdAt": "2026-11-12T06:17:31.508Z",
+      "replyTo": "l0-20261112073822-86a53324-1dcbd4ee3a19",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112073822-86a53324-1dcbd4ee3a19/media/hour-tally.webp",
+          "alt": "一张有横线的便笺纸，写着90/20=4.5h，下方五个手绘方格填满四格和半格。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "算着算着不买了"
+      },
+      "text": "我上周想买个90块的键盘垫，也按20块一小时画了五格，画到最后半格不想付了。\n\n给你看看我那张算账纸。"
+    },
+    {
+      "id": "l0-20261112073822-86a53324-reply03",
+      "author": "guest-d8bfae05876863ad",
+      "createdAt": "2026-11-12T06:16:38.508Z",
+      "replyTo": "l0-20261112073822-86a53324-91399be41d6f",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "红泥小炉"
+      },
+      "text": "这个我吃过！那个味儿远远就闻到，入口倒还好。老板坐旁边看你尝了吗哈哈"
+    },
+    {
+      "id": "l0-20261112073822-86a53324-reply04",
+      "author": "guest-21a13e54af0ad449",
+      "createdAt": "2026-11-12T06:16:37.508Z",
+      "replyTo": "l0-20261112073822-86a53324-91399be41d6f",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "先看钳子"
+      },
+      "text": "我看你画的蟹钳子挺大啊，真菜里也是这么大一只吗"
+    },
+    {
+      "id": "l0-20261112073822-86a53324-3f4c1a8450ce",
+      "author": "guest-8e6596d7868597bb",
+      "createdAt": "2026-11-12T06:15:31.508Z",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "那是茶叶啊"
+      },
+      "text": "在小摊上看见有人把干茶叶拿纸卷成细细一根，居然点着抽？？？\n\n我一直以为茶叶就是泡水喝的啊。问了句，对方说习惯了。脑子受到了冲击"
+    },
+    {
+      "id": "l0-20261112073822-86a53324-91399be41d6f",
+      "author": "visitor-sigma-upper",
+      "createdAt": "2026-11-12T02:58:56.508Z",
+      "replyTo": null,
+      "likes": 52,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112073822-86a53324-91399be41d6f/media/hot-pot-doodle.webp",
+          "alt": "手绘餐桌小锅，锅内有豆腐块和蟹钳，锅下小炉冒出火光，热气向上飘。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "跟老板去外地搬活动设备，结束后被带去吃了家很贵的店。上来一小锅臭豆腐加蟹，底下还有火一直烘，味儿全冲我这边来了。\n\n老板：年轻人多尝尝。 我：这也是挑战项目吗？？\n\n没敢当场拍，回去给你们画了下那口锅。蟹能吃，豆腐我真的顶不住。"
+    },
+    {
+      "id": "l0-20261112073822-86a53324-1dcbd4ee3a19",
+      "author": "guest-1ef752b397d4e32e",
+      "createdAt": "2026-11-12T02:50:40.508Z",
+      "replyTo": null,
+      "likes": 20,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "按工时算东西"
+      },
+      "text": "看上一个杯子，脑子里第一反应居然是要上几个小时班才买得回来。算完又不舍得了。\n\n本来就是想买个喜欢的杯子啊……算工时算得我想哭T_T"
+    },
     {
       "id": "l0-20261112023707-f9dca533-reply04",
       "author": "guest-81aa3f4d5e410853",
