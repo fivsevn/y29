@@ -41,10 +41,20 @@ try {
   await page.reload();
   await page.locator(`#post-${root.id}`).waitFor();
   const dialog = page.getByRole('dialog', { name: '查看原图', exact: true });
+  const visitThread = async post => {
+    await page.goto(`${base}#/post/${post.id}`);
+    // Both routes contain the same thread: the target class confirms that the
+    // hashchange renderer has replaced the previous route's image elements.
+    await page.locator(`#post-${post.id}.is-target`).waitFor();
+  };
+  const readyImage = async image => {
+    await image.scrollIntoViewIfNeeded();
+    await page.waitForFunction(image => image.complete && image.naturalWidth > 0, await image.elementHandle());
+    await image.evaluate(image => image.decode());
+  };
   const assertCompactEmote = async post => {
     const image = page.locator(`#post-${post.id} .post-emote`).first();
-    await image.scrollIntoViewIfNeeded();
-    await image.evaluate(image => image.decode());
+    await readyImage(image);
     const presentation = await image.evaluate(image => {
       const box = image.getBoundingClientRect(), content = image.closest('.post-content').getBoundingClientRect();
       return { width: box.width, height: box.height, left: box.left - content.left,
@@ -60,9 +70,9 @@ try {
     check(page.url() === url && !await dialog.isVisible(), 'clicking a site emote leaves the route and image viewer unchanged');
   };
   await assertCompactEmote(emoteRoot);
-  await page.goto(`${base}#/post/${emoteRoot.id}`);
+  await visitThread(emoteRoot);
   await assertCompactEmote(emoteRoot);
-  await page.goto(`${base}#/post/${emoteReply.id}`);
+  await visitThread(emoteReply);
   await assertCompactEmote(emoteReply);
   await page.goto(base);
   await page.locator(`#post-${root.id}`).waitFor();
@@ -96,7 +106,7 @@ try {
 
   const defaultThumbnail = page.locator(`#post-${root.id} .post-image img`).first();
   check(await defaultThumbnail.evaluate(image => image.closest('.post-image').classList.contains('is-thumbnail')), 'home root image uses the thumbnail presentation');
-  await defaultThumbnail.evaluate(image => image.decode());
+  await readyImage(defaultThumbnail);
   check(await defaultThumbnail.evaluate(image => {
     const box = image.getBoundingClientRect();
     return box.width <= 160 && box.height <= 160 && Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
@@ -120,8 +130,7 @@ try {
   await dialog.waitFor({ state: 'hidden' });
   check(await link.evaluate(element => document.activeElement === element), 'clicking the backdrop closes the viewer and restores focus');
 
-  await page.goto(`${base}#/post/${reply.id}`);
-  await page.locator(`#post-${reply.id}`).waitFor();
+  await visitThread(reply);
   link = await open(reply);
   await assertWholeImage();
   await page.locator('#image-close').click();
@@ -154,7 +163,7 @@ try {
   await page.route('**/contained-small.webp*', route => route.fulfill({ contentType: 'image/webp', body: small }));
   const containedImage = async (post, expectedWidth, expectedHeight) => {
     const image = page.locator(`#post-${post.id} .post-image img`).first();
-    await image.evaluate(image => image.decode());
+    await readyImage(image);
     const box = await image.evaluate(image => {
       const rect = image.getBoundingClientRect(), style = getComputedStyle(image);
       return { width: rect.width, height: rect.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, fit: style.objectFit };
@@ -212,8 +221,7 @@ try {
   await assertWholeImage();
   await page.keyboard.press('Escape');
   await dialog.waitFor({ state: 'hidden' });
-  await page.goto(`${base}#/post/${reply.id}`);
-  await page.locator(`#post-${reply.id}`).waitFor();
+  await visitThread(reply);
   check(await page.locator(`#post-${reply.id} .post-text-link`).count() === 0, 'whitespace-only reply has no empty text link');
   await containedImage(replyOnly, 128, 128);
   await page.screenshot({ path: join(output, 'phone-image-only.png') });
@@ -223,11 +231,9 @@ try {
   await dialog.waitFor({ state: 'hidden' });
   for (const [width, height] of [[320, 568], [1440, 900]]) {
     await page.setViewportSize({ width, height });
-    await page.goto(`${base}#/post/${root.id}`);
-    await page.locator(`#post-${root.id}`).waitFor();
+    await visitThread(root);
     await containedImage(rootOnly, 360, 640);
-    await page.goto(`${base}#/post/${reply.id}`);
-    await page.locator(`#post-${reply.id}`).waitFor();
+    await visitThread(reply);
     await containedImage(replyOnly, 128, 128);
   }
   check(errors.length === 0, `no browser errors: ${errors.join(', ')}`);
