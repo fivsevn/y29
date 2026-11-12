@@ -1,5 +1,11 @@
 name: Verify published Lucifer0 forum files
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'lucifer0/**'
+      - '.github/workflows/lucifer0-verify.yml'
+  workflow_dispatch:
   workflow_run:
     workflows: ['pages build and deployment']
     types: [completed]
@@ -8,19 +14,19 @@ permissions:
   contents: read
 jobs:
   verify:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Compare deployed source, full feed and every referenced image
         env:
-          PUBLISHED_REVISION: ${{ github.event.workflow_run.head_sha }}
+          PUBLISHED_REVISION: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           node --input-type=module - <<'JS'
           import {readFile} from 'node:fs/promises';
