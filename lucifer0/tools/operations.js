@@ -12,6 +12,7 @@ import { cancelPendingBatch, isPostMediaPath } from './thread-packages.js';
 import { isResearchPath, researchPaths, researchCandidates } from './research-maintenance.js';
 import { sampleDocumentPaths, parseSampleDocuments, selectSamples } from './samples.js';
 import { createCasePlan, validateCasePlan, caseRootIds, caseRoot, caseForPost, validateCasePosts, casePlanSummary } from './case-adaptation.js';
+import { writerSource, assignGuestName } from './writer-input.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
@@ -176,7 +177,7 @@ function planSeal(id, root, plan) {
 }
 const operationSourceDigest = (data, plan) => Object.keys(planExtensions(plan)).length ? digest({ sourceDigest: data.sourceDigest, ...planExtensions(plan) }) : data.sourceDigest;
 function checkOperation(value, root) {
-  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews', 'researchMaintenance', 'mediaReviews', 'diversityReview'], 'operation');
+  onlyKeys(value, ['version', 'id', 'root', 'preparedAt', 'plan', 'sourceDigest', 'research', 'posts', 'status', 'reviews', 'researchMaintenance', 'mediaReviews', 'diversityReview', 'guestNames'], 'operation');
   if (value.version !== 1 || !ID.test(value.id) || value.root !== root || !validDate(value.preparedAt) || !/^[a-f0-9]{64}$/.test(value.sourceDigest) || !Array.isArray(value.research) || !Array.isArray(value.posts) || !['prepared', 'awaiting-online', 'published'].includes(value.status)) fail('Invalid operation record');
   const plan = value.plan;
   onlyKeys(plan, ['seed', 'budget', 'selectedIds', 'seal', 'requestedCount', 'totalBudget', 'replyLottery', 'lottery', 'timeWindow', 'researchMaintenance', 'caseAdaptation'], 'saved plan');
@@ -198,6 +199,12 @@ function checkOperation(value, root) {
   if (plan.budget !== (plan.replyLottery === undefined ? plan.requestedCount ?? drawnBudget : drawnBudget) || plan.seal !== planSeal(value.id, root, plan)) fail('The saved draw was changed; restore the original operation');
   if (value.reviews !== undefined) reviewIndex(value);
   if (value.mediaReviews !== undefined) checkMediaReviews(value.mediaReviews);
+  if (value.guestNames !== undefined) {
+    if (!plain(value.guestNames) || Object.entries(value.guestNames).some(([id, name]) => !/^guest-[a-z0-9-]+$/.test(id) || !ID.test(id) || !bounded(name, 40) || name !== name.trim())) fail('Invalid saved guest names');
+    const names = Object.values(value.guestNames).map(name => name.normalize('NFKC').trim().toLocaleLowerCase());
+    if (new Set(names).size !== names.length) fail('Duplicate saved guest names');
+    if (value.posts.some(post => value.guestNames[post?.author] !== undefined && value.guestNames[post.author] !== post.guest?.name)) fail('Guest identity changed in saved posts');
+  }
   if (value.diversityReview !== undefined) {
     onlyKeys(value.diversityReview, ['postsDigest', 'historyDigest', 'content', 'images'], 'diversity review');
     const review = value.diversityReview;
@@ -523,7 +530,12 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
     threadId !== undefined && (typeof threadId !== 'string' || !ID.test(threadId))) fail('Brief needs --post ID and an optional --reply-to ID or --thread root ID');
   if (replyTo !== undefined && threadId !== undefined) fail('Use either --reply-to or --thread for a brief');
   root = await checkedRoot(root);
-  const directory = await workFolder(workDirectory, root), operation = await readOperation(join(directory, 'operation.json'), root);
+  const directory = await workFolder(workDirectory, root), release = await lockWork(directory);
+  try { return await briefLocked({ root, directory, postId, replyTo, threadId, now }); }
+  finally { await release(); }
+}
+async function briefLocked({ root, directory, postId, replyTo, threadId, now }) {
+  const operationPath = join(directory, 'operation.json'), operation = await readOperation(operationPath, root);
   const data = await source(root);
   if (!data.policy.automaticPosting) fail('AI updates are disabled by publication.json');
   if (operation.sourceDigest !== operationSourceDigest(data, operation.plan)) fail('Source material changed; prepare again without redrawing');
@@ -589,7 +601,21 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const guest = typeof author === 'string' && /^guest-[a-z0-9-]+$/.test(author) && ID.test(author);
   const ownUser = eligible.find(user => user.id === author);
   if (!guest && !ownUser) fail('Account is not eligible for this draft: ' + author);
-  const draft = { id: postId, author, ...(guest ? { guest: existing?.guest ?? returning?.guest ?? { name: '' } } : {}), createdAt, replyTo: targetId, text: existing?.text ?? '', likes: existing?.likes ?? choices.likes, canon: 'derivative', media: existing?.media ?? [] };
+  let guestName, saveGuest = false;
+  if (guest) {
+    const knownNames = [existing?.guest?.name, returning?.guest?.name,
+      ...data.feed.users.filter(user => user.id === author).map(user => user.name),
+      ...operation.posts.filter(post => post.author === author).map(post => post.guest?.name), operation.guestNames?.[author]].filter(Boolean);
+    if (new Set(knownNames).size > 1) fail('Guest identity changed: ' + author);
+    guestName = knownNames[0] ?? assignGuestName({ author, seed: operation.plan.seed,
+      occupiedNames: [...data.feed.users.map(user => user.name), ...operation.posts.map(post => post.guest?.name).filter(Boolean), ...Object.values(operation.guestNames ?? {})] });
+    const normalized = guestName.normalize('NFKC').trim().toLocaleLowerCase();
+    if (data.feed.users.some(user => user.id !== author && user.name.normalize('NFKC').trim().toLocaleLowerCase() === normalized) ||
+      operation.posts.some(post => post.author !== author && post.guest?.name?.normalize('NFKC').trim().toLocaleLowerCase() === normalized) ||
+      Object.entries(operation.guestNames ?? {}).some(([id, name]) => id !== author && name.normalize('NFKC').trim().toLocaleLowerCase() === normalized)) fail('Guest name conflicts with another author');
+    saveGuest = operation.guestNames?.[author] !== guestName;
+  }
+  const draft = { id: postId, author, ...(guest ? { guest: { name: guestName } } : {}), createdAt, replyTo: targetId, text: existing?.text ?? '', likes: existing?.likes ?? choices.likes, canon: 'derivative', media: existing?.media ?? [] };
   validatePostBudget(operation.plan, existing ? operation.posts : [...operation.posts, draft], data.feed.posts, data.policy);
   const visible = new Map();
   if (target) {
@@ -614,17 +640,19 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
   const profilePaths = new Set(guest ? [] : ['users/' + author + '/profile.md', ...(data.material.supplementalDocuments[author] || []).map(document => document.path)]);
   const profiles = data.documents.filter(document => profilePaths.has(document.path)).map(writerProfile);
   const writing = data.documents.find(document => document.path === 'docs/writing.md');
-  const writerSource = path => { const document = data.documents.find(document => document.path === path); return { sourcePath: document.path, text: document.text }; };
+  const sourceDocument = path => data.documents.find(document => document.path === path);
+  const fullSource = path => { const document = sourceDocument(path); return { sourcePath: document.path, text: document.text }; };
+  const scopedSource = (path, sections) => writerSource(sourceDocument(path), { sections });
   const worldviewId = (guest ? '' : data.material.profiles[author].basics.worldview) ||
     (data.material.worldviewDocuments.some(document => document.id === 'worldview0' && document.kind === 'setting') ? 'worldview0' : null);
   const worldviewDocument = kind => data.material.worldviewDocuments.find(document => document.id === worldviewId && document.kind === kind)?.path ?? null;
   const presentationDrafts = existing ? operation.posts : [...operation.posts, draft];
   const presentationOriginals = config.media?.profiles ? presentationDrafts.filter(post => !caseForPost(operation.plan, post, presentationDrafts)) : presentationDrafts;
-  return {
+  const result = {
     id: operation.id, postId, draft,
     writer: {
       createdAt,
-      writing: { sourcePath: writing.path, text: writing.text },
+      writing: writerSource(writing, { sections: ['形成一条发言', ...(adaptedCase ? ['现实素材改编'] : [])] }),
       sourceSamples: { instruction: sampleInstruction,
         items: adaptedCase ? [{ sourcePath: adaptedCase.sourcePath, sample: structuredClone(adaptedCase.sample) }] :
           selectSamples(data.samples, { seed: operation.plan.seed + ':brief:' + postId, limit: 3 }).map(({ path, sample }) => ({ sourcePath: path, sample: structuredClone(sample) })) },
@@ -636,19 +664,22 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
           .map(post => ({ id: post.id, createdAt: post.createdAt, replyTo: post.replyTo, text: post.deleted ? '该回复已被删除。' : post.text, media: post.deleted ? [] : post.media })),
         voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
       conditions: adaptedCase ? [] : choices.conditions.filter(condition => condition.dimension !== 'motivation' || !discussion || targetId === null && discussion.requiredTone !== 'negative' && discussion.toneSuggestion !== 'negative').map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
-      ...(target ? { comments: writerSource('environment/research-comments.md') } : {}),
+      ...(target ? { comments: scopedSource('environment/research-comments.md', ['逐条形成回复', '用表情接话']) } : {}),
       ...(requestedRoot || config.discussion?.replyAuthor ? { thread: { rootId: rootPost?.id ?? postId,
         role: !rootPost || author === rootPost.author ? 'root' : [...before.values()].some(post => post.author === author && validDate(post.createdAt) &&
           Date.parse(post.createdAt) <= until && threadRoot(post.id, before).id === rootPost.id) ? 'participant' : 'new' } } : {}),
       ...(discussion ? { discussion: { ...(discussion.requiredTone !== undefined ? { requiredTone: discussion.requiredTone } : {}),
         ...(discussion.toneSuggestion !== undefined ? { toneSuggestion: discussion.toneSuggestion } : {}),
-        ...(discussion.requiredTone === 'negative' || discussion.toneSuggestion === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: writerSource('environment/research-negative.md') } : {}),
+        ...(discussion.requiredTone === 'negative' || discussion.toneSuggestion === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: scopedSource('environment/research-negative.md', ['什么算负面', '异议怎样转成抬杠']) } : {}),
         ...(target ? { replyStance: discussion.replyStance } : {}),
-        rules: writerSource('docs/lottery.md') } } : {}),
+        rules: scopedSource('docs/lottery.md', ['每条发言']) } } : {}),
       ...(config.media && !adaptedCase ? { presentation: { image: choices.image, emoteCount: choices.emoteCount, ...choices.presentation } } : {}),
       visiblePosts
     },
     editor: {
+      sources: { writing: fullSource('docs/writing.md'), lottery: fullSource('docs/lottery.md'),
+        ...(target ? { comments: fullSource('environment/research-comments.md') } : {}),
+        ...(discussion ? { negative: fullSource('environment/research-negative.md') } : {}) },
       authorKind: guest ? 'guest' : 'library', drawnAuthorKind: choices.authorKind,
       ...(adaptedCase ? { caseAdaptation: { rootPostId: adaptedCase.postId, sampleId: adaptedCase.sample.id } } : {}),
       worldviewId, worldviewPath: worldviewDocument('setting'), worldviewEventsPath: worldviewDocument('events'),
@@ -662,9 +693,16 @@ export async function briefUpdatePost({ root = socialRoot, workDirectory, postId
         emotePools: emotePoolProgress({ posts: presentationOriginals, lottery: config, seed: operation.plan.seed }) } : {}),
       ...diversityContext({ ...operation, posts: existing ? operation.posts : [...operation.posts, draft] }, data.feed.posts),
       ...(!adaptedCase ? { image: choices.image } : {}), likes: choices.likes, reading: choices.reading, textWindow: choices.textWindow,
-      instruction: '将 writer 单独交给写作者；partial 表示只读到片段。将实际采用的正文、时间、图片和 guest 名字填入 draft，再保存到 operation.json.posts。抽签使用见 docs/lottery.md，创作见 docs/writing.md。'
+      instruction: '将 writer 单独交给独立写作上下文；partial 表示只读到片段。本人历史用于核对已说过的事，避免沿用上次整条句式。沿用 draft 中已确定的署名，填写正文和图片后保存 posts；先 checkpoint --stage draft，再审读并 checkpoint --stage edited。整轮比较由策划者处理，只向原写作者返回涉及本条的具体改稿理由。'
     }
   };
+  // A failed brief must leave the operation untouched. Persist only after all
+  // source, author, budget and scoped-input checks above have succeeded.
+  if (saveGuest) {
+    operation.guestNames = { ...operation.guestNames, [author]: guestName };
+    await saveOperation(operationPath, operation);
+  }
+  return result;
 }
 
 function siteDomain(hostname) {
@@ -835,6 +873,35 @@ async function optionalText(path) {
   try { return await regularText(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
 }
 
+// Private checkpoints preserve the text before editorial changes. They are
+// deliberately outside the public thread packages and never enter feed.json.
+export async function checkpointUpdate({ root = socialRoot, workDirectory, stage, now = Date.now() } = {}) {
+  if (!['draft', 'edited'].includes(stage)) fail('Checkpoint stage must be draft or edited');
+  if (!Number.isFinite(now)) fail('Invalid checkpoint time');
+  root = await checkedRoot(root);
+  const directory = await workFolder(workDirectory, root), release = await lockWork(directory);
+  try {
+    const operation = await readOperation(join(directory, 'operation.json'), root);
+    const historyPath = join(directory, 'draft-history-' + operation.id + '.json');
+    const prior = await optionalText(historyPath);
+    const history = prior === null ? { version: 1, operationId: operation.id, snapshots: [] } : JSON.parse(prior);
+    onlyKeys(history, ['version', 'operationId', 'snapshots'], 'draft history');
+    if (history.version !== 1 || history.operationId !== operation.id || !Array.isArray(history.snapshots)) fail('Draft history belongs to another operation or is invalid');
+    for (const snapshot of history.snapshots) {
+      if (!plain(snapshot) || !['draft', 'edited'].includes(snapshot.stage) || !Array.isArray(snapshot.posts) ||
+        !validDate(snapshot.savedAt) || !/^[a-f0-9]{64}$/.test(snapshot.sourceDigest) || !/^[a-f0-9]{64}$/.test(snapshot.planDigest)) fail('Invalid draft history snapshot');
+    }
+    const basis = { stage, sourceDigest: operation.sourceDigest, planDigest: digest(operation.plan), posts: structuredClone(operation.posts) };
+    const last = history.snapshots.at(-1);
+    if (last && canonical({ stage: last.stage, sourceDigest: last.sourceDigest, planDigest: last.planDigest, posts: last.posts }) === canonical(basis)) {
+      return { id: operation.id, status: 'unchanged', stage, revision: history.snapshots.length, historyPath };
+    }
+    history.snapshots.push({ ...basis, savedAt: new Date(now).toISOString() });
+    await atomicFile(historyPath, JSON.stringify(history, null, 2) + '\n');
+    return { id: operation.id, status: 'recorded', stage, revision: history.snapshots.length, historyPath };
+  } finally { await release(); }
+}
+
 export async function cancelUpdate({ root = socialRoot, workDirectory, now = Date.now() } = {}) {
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root), operationPath = join(directory, 'operation.json'), readingPath = join(directory, 'reading.md');
@@ -860,4 +927,5 @@ export async function cancelUpdate({ root = socialRoot, workDirectory, now = Dat
     } finally { await releasePublish(); }
   } finally { await releaseWork(); }
 }
+
 
