@@ -2022,9 +2022,338 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-2ffedb9521c39de8",
+      "handle": "guest_3636b8bd61469142c787",
+      "name": "车尾再找找",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-371386829206372b",
+      "handle": "guest_fc6287625cb3096a78da",
+      "name": "哪个版本啊",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7b352ce5be0b1704",
+      "handle": "guest_2e24288536d1f68c21f4",
+      "name": "还没退押金",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-81aa3f4d5e410853",
+      "handle": "guest_9ca763f141cafc2fa168",
+      "name": "第九天收到",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-73e91ecc67210c74",
+      "handle": "guest_f8fea0aa9b8bf2c5721e",
+      "name": "借纸画一下",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a90608fc28ec7409",
+      "handle": "guest_2dd72ed719d1b0c672b2",
+      "name": "饭团对照组",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-51a9de073424840c",
+      "handle": "guest_618e2d945da5f11e576d",
+      "name": "后门没关",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e44fb3b7bcbd1cf7",
+      "handle": "guest_20642a36eea5dd41068e",
+      "name": "碗柜最上层",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e2cd080933bfa1e2",
+      "handle": "guest_cadc1586ad3a5411cf2b",
+      "name": "实践作业求救",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261112023707-f9dca533-reply04",
+      "author": "guest-81aa3f4d5e410853",
+      "createdAt": "2026-11-12T02:46:36.508Z",
+      "replyTo": "l0-20261112023707-f9dca533-81c4609d89b6",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "第九天收到"
+      },
+      "text": "我上次第九天才到……"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-reply03",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-12T02:46:36.141Z",
+      "replyTo": "l0-20261112023707-f9dca533-3f68970d2566",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "连书名都不知道就给人定罪，真会编"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-reply07",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-12T02:44:37.000Z",
+      "replyTo": "l0-20261112023707-f9dca533-af3e77aaf5b1",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "搬设备也可能是换机器。我们市场那边一个摊门口贴检修，第二天有人说要倒闭，结果就是修冰柜。你先别跟着传，老板还得做生意呢。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-reply08",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-12T02:44:16.000Z",
+      "replyTo": "l0-20261112023707-f9dca533-cbe78fdeda4d",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "用完先洗回来呀。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-reply02",
+      "author": "guest-371386829206372b",
+      "createdAt": "2026-11-12T02:33:09.000Z",
+      "replyTo": "l0-20261112023707-f9dca533-2146209a9dff",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "哪个版本啊"
+      },
+      "text": "我刚开网页版看了一次，提示还是会出来。你用的是客户端？"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-reply05",
+      "author": "guest-73e91ecc67210c74",
+      "createdAt": "2026-11-12T02:21:25.000Z",
+      "replyTo": "l0-20261112023707-f9dca533-a6e93dd24bd9",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112023707-f9dca533-a6e93dd24bd9/media/door-choice.webp",
+          "alt": "手画人物站在门口的叙事草图，两条箭头分别指向未交代的“等谁”和“为什么等”。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "借纸画一下"
+      },
+      "text": "你说的是这个吧，我把那段“坐在门口等”随手画成岔路了。作者写了等多久，没写等谁，人物就卡在这儿。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-reply06",
+      "author": "guest-a90608fc28ec7409",
+      "createdAt": "2026-11-12T02:20:59.000Z",
+      "replyTo": "l0-20261112023707-f9dca533-aaafe60753aa",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "饭团对照组"
+      },
+      "text": "这倒要看包装背面的净含量，或者批次。手感不准，我手里刚买的是110g。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-reply01",
+      "author": "guest-2ffedb9521c39de8",
+      "createdAt": "2026-11-12T02:20:53.000Z",
+      "replyTo": "l0-20261112023707-f9dca533-055d7ca0ad4f",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "车尾再找找"
+      },
+      "text": "你们自己挪了还让我再找...这句太熟了"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-81c4609d89b6",
+      "author": "guest-7b352ce5be0b1704",
+      "createdAt": "2026-11-12T02:19:00.000Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "还没退押金"
+      },
+      "text": "“三日内原路退回”，今天第四天。客服还让我再等三天。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-a6e93dd24bd9",
+      "author": "alan",
+      "createdAt": "2026-11-12T02:16:20.000Z",
+      "replyTo": null,
+      "likes": 14,
+      "canon": "derivative",
+      "media": [],
+      "text": "昨晚群里转来几篇年轻人的稿，字句都整齐，人物动机一问就没下文。有个写手把人物为什么不走解释了三遍，三遍用的都是同一句。\n\n我说先把没修过的那一稿拿来看看，又有人急了，说你不能因为人家用工具就看不起人。谁说看不起了？我连那人长什么样都不知道。写得好当然好，我问的是这人为什么还坐在门口等。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-aaafe60753aa",
+      "author": "visitor-lambda",
+      "createdAt": "2026-11-12T02:13:40.000Z",
+      "replyTo": null,
+      "likes": 17,
+      "canon": "derivative",
+      "media": [],
+      "text": "便利店那个标着“加量”的饭团，我买了两次。包装都一样，第二次捏着明显小一圈。\n\n没秤，不能说它少了多少克。但加量是跟哪一版比的？"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-2146209a9dff",
+      "author": "visitor-lambda",
+      "createdAt": "2026-11-12T02:11:00.000Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "看到有人说新版本把“重复弹窗”的问题修好了，下面一排人在恭喜。\n\n我翻了下更新说明，写的是“调整提示文案”。不是一个意思吧。有人实际试过吗？"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-d68e8fcbff12",
+      "author": "visitor-lambda",
+      "createdAt": "2026-11-12T02:08:20.000Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "试了两种写代码的助手，都是免费额度。\n\nA界面清爽，改一个小页面要等半天；B生成挺快，但每次从计划切回执行都要重新确认权限，确认完有时又跳回计划。已经连续遇到三次了。\n\n有人用过类似的吗？是设置问题，还是这种模式本来就这样？先不想换订阅，至少想知道哪里能关掉重复确认。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-055d7ca0ad4f",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-12T02:05:40.000Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "今天有家店说我漏送一袋可可粉，电话打过来就一句“你们车上再找找”。我翻清单、查签收，袋数都对。\n\n后来才知道她们自己把那袋搬到另一间库房，谁也没跟收货的说。\n\n我在停车场折腾四十分钟，她回了个“找到了”。就这三个字。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-3f68970d2566",
+      "author": "alan",
+      "createdAt": "2026-11-12T02:03:00.000Z",
+      "replyTo": null,
+      "likes": 20,
+      "canon": "derivative",
+      "media": [],
+      "text": "创作者群有人说新来的写手拿一篇旧稿去领奖，评委没看出来。传了三个人，版本变成他用机器写的整本书。\n\n我问书名，没人知道。好嘛，书还没见着，罪名倒印好了。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-af3e77aaf5b1",
+      "author": "guest-51a9de073424840c",
+      "createdAt": "2026-11-12T02:00:20.000Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "后门没关"
+      },
+      "text": "楼下那家修鞋店贴了张“暂停营业，设备维护”，旁边面包店的人却说已经有人来量过铺面，准备做甜品了。\n\n奇怪的是，昨天路过还看见老板坐在门边修一双鞋。我问了句以后还开不开，他只说下周再看。\n\n群里已经有人传成房东赶人，说得跟当事人亲口讲的一样。我想问这消息到底谁先说的。贴条上也没写转让啊。"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-e391c9c5fa2c",
+      "author": "guest-e2cd080933bfa1e2",
+      "createdAt": "2026-11-12T01:57:40.000Z",
+      "replyTo": null,
+      "likes": 12,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "实践作业求救"
+      },
+      "text": "救命，实践课要收30份问卷，我发出去十几份才发现把一个选项题设成了排序题……\n\n几个同学还真认真给排了第一第二第三。链接先关了，已经填的那十几份我还能算吗\n\n先别问是哪道题😶"
+    },
+    {
+      "id": "l0-20261112023707-f9dca533-cbe78fdeda4d",
+      "author": "guest-e44fb3b7bcbd1cf7",
+      "createdAt": "2026-11-12T01:55:00.000Z",
+      "replyTo": null,
+      "likes": 14,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112023707-f9dca533-cbe78fdeda4d/media/cup-shelf.webp",
+          "alt": "手绘碗柜位置图：上层左侧两只蓝杯标作A，右侧一只浅色杯标作B，下面是碗。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "碗柜最上层"
+      },
+      "text": "合租厨房，我自己买的两只杯子放上层，室友有一整排杯子，偏用我的。用完还放在她房间。\n\n昨天找不到杯子泡茶，她说不就是个杯子吗。我真不是舍不得让人碰，至少用完放回来洗一下吧。\n\n画了张架子的位置图给她看，她说我像在给厨房划地盘。那我放哪儿合适。"
+    },
     {
       "id": "l0-20261111214536-e145d75f-reply3",
       "author": "visitor-psi",
