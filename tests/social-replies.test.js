@@ -22,13 +22,13 @@ function fixture() {
     posts: [...thread('empty-thread', 0), ...thread('ten-thread', 10), ...thread('eleven-thread', 11), ...thread('outside-thread', 2, 'preview-reader')].reverse() };
 }
 
-test('reply previews show every reply through ten, then keep the first ten in chronological order', () => {
-  for (const count of [0, 2, 10, 11]) {
+test('reply previews show up to five replies in chronological order and collapse the sixth onward', () => {
+  for (const count of [0, 2, 5, 6, 10, 11]) {
     const posts = thread('boundary-thread', count).reverse(), preview = core.threadReplyPreview(posts, 'boundary-thread');
     assert.equal(preview.total, count);
-    assert.equal(preview.collapsed, count > 10);
+    assert.equal(preview.collapsed, count > 5);
     assert.equal(preview.rootId, 'boundary-thread');
-    assert.deepEqual(preview.replies.map(post => post.id), Array.from({ length: Math.min(count, 10) }, (_, index) => `boundary-thread-reply-${index + 1}`));
+    assert.deepEqual(preview.replies.map(post => post.id), Array.from({ length: Math.min(count, 5) }, (_, index) => `boundary-thread-reply-${index + 1}`));
   }
 });
 
@@ -36,7 +36,7 @@ test('nested replies count toward one thread and retain their immediate parents 
   const posts = thread('nested-thread', 11).reverse(), preview = core.threadReplyPreview(posts, 'nested-thread-reply-11');
   assert.equal(preview.rootId, 'nested-thread');
   assert.equal(preview.total, 11);
-  assert.equal(preview.replies.length, 10);
+  assert.equal(preview.replies.length, 5);
   const complete = core.threadPosts(posts, preview.rootId);
   assert.equal(complete.length, 12);
   assert.equal(complete.at(-1).id, 'nested-thread-reply-11');
@@ -148,17 +148,18 @@ const article = (html, id) => html.match(new RegExp(`<article\\b[^>]*id="post-${
 const previewIds = html => [...html.matchAll(/class="preview-reply(?: is-deleted)?" data-reply-id="([^"]+)"/g)].map(match => match[1]);
 const previewMarkup = (html, id) => html.match(new RegExp(`<div class="preview-reply[^\"]*" data-reply-id="${id}">([\\s\\S]*?)<\\/div><\\/div>`))?.[1] || '';
 
-test('world and following show every reply once in full without a ten-reply cutoff', async () => {
+test('world and following preview five complete replies and link to the rest of the thread', async () => {
   const feed = fixture(), page = await renderer(feed);
   for (const route of ['#/', '#/following']) {
     const html = page.visit(route), ten = article(html, 'ten-thread'), eleven = article(html, 'eleven-thread');
-    assert.equal(previewIds(ten).length, 10);
-    assert.doesNotMatch(ten, /preview-more/);
-    assert.deepEqual(previewIds(eleven), Array.from({ length: 11 }, (_, index) => `eleven-thread-reply-${index + 1}`));
-    assert.doesNotMatch(eleven, /preview-more/);
+    assert.equal(previewIds(ten).length, 5);
+    assert.match(ten, /class="preview-more" href="#\/post\/ten-thread">显示更多&gt;&gt;&gt;<\/a>/);
+    assert.deepEqual(previewIds(eleven), Array.from({ length: 5 }, (_, index) => `eleven-thread-reply-${index + 1}`));
+    assert.match(eleven, /class="preview-more" href="#\/post\/eleven-thread">显示更多&gt;&gt;&gt;<\/a>/);
     assert.match(eleven, /class="reply-count">11<\/span>/);
     assert.ok(eleven.includes(core.escapeHTML(feed.posts.find(post => post.id === 'eleven-thread-reply-1').text)));
-    assert.match(previewMarkup(eleven, 'eleven-thread-reply-11'), /class="preview-heading" href="#\/post\/eleven-thread-reply-11"/);
+    assert.match(previewMarkup(eleven, 'eleven-thread-reply-5'), /class="preview-heading" href="#\/post\/eleven-thread-reply-5"/);
+    assert.equal(previewMarkup(eleven, 'eleven-thread-reply-6'), '');
     assert.doesNotMatch(article(html, 'empty-thread'), /reply-preview/);
   }
   assert.doesNotMatch(page.html(), /id="post-outside-thread"/);
@@ -168,43 +169,33 @@ test('world and following show every reply once in full without a ten-reply cuto
   assert.doesNotMatch(paragraphRule, /line-clamp|overflow:hidden|max-height/);
 });
 
-test('feed replies show image links and lazy emotes beside full text without nested links', async () => {
-  const feed = fixture();
+test('feed replies use plain media tokens beside escaped full text without loading or linking images', async () => {
   const image = { src: 'posts/2026/01/ten-thread/media/photo.webp', alt: '普通图片', kind: 'image' };
   const emote = { src: 'posts/2026/01/ten-thread/media/reaction.webp', alt: '随帖表情', kind: 'emote' };
   const cases = [
-    { media: [{ src: 'assets/emotes/l0/huh.webp', alt: '公共表情' }], expected: '' },
-    { media: [emote], expected: '' },
-    { media: [image], expected: '' },
-    { media: [emote, image], expected: '' },
-    { media: [image, emote], text: '保留原来的回复 <文字>', expected: '保留原来的回复 &lt;文字&gt;' },
+    { media: [{ src: 'assets/emotes/l0/huh.webp', alt: '公共表情' }], expected: '[huh]' },
+    { media: [emote], expected: '[reaction]' },
+    { media: [image], expected: '[图片]' },
+    { media: [emote, image], expected: '[reaction][图片]' },
+    { media: [image, emote], text: '保留原来的回复 <文字>', expected: '[图片][reaction] 保留原来的回复 &lt;文字&gt;' },
     { media: [image, emote], deleted: true, expected: '该回复已被删除' },
     { media: [], expected: '' }
   ];
-  cases.forEach(({ expected, ...fields }, index) => Object.assign(
-    feed.posts.find(post => post.id === `ten-thread-reply-${index + 1}`), { text: '', ...fields }));
-  const page = await renderer(feed);
-  for (const route of ['#/', '#/following']) {
-    const markup = article(page.visit(route), 'ten-thread');
-    cases.forEach(({ expected, media, deleted }, index) => {
-      const preview = previewMarkup(markup, `ten-thread-reply-${index + 1}`);
-      assert.ok(preview, 'each reply is rendered');
+  for (const { expected, ...fields } of cases) {
+    const feed = fixture();
+    Object.assign(feed.posts.find(post => post.id === 'ten-thread-reply-1'), { text: '', ...fields });
+    const page = await renderer(feed);
+    for (const route of ['#/', '#/following']) {
+      const markup = article(page.visit(route), 'ten-thread');
+      const preview = previewMarkup(markup, 'ten-thread-reply-1');
+      assert.ok(preview, 'the reply is rendered');
       assert.equal(preview.match(/<p>([\s\S]*?)<\/p>/)?.[1] || '', expected);
-      const visibleMedia = deleted ? [] : media;
-      assert.equal((preview.match(/<img\b/g) || []).length, visibleMedia.filter(core.isEmoteMedia).length);
-      assert.equal((preview.match(/loading="lazy"/g) || []).length, visibleMedia.filter(core.isEmoteMedia).length);
-      assert.equal((preview.match(/class="post-emote"/g) || []).length, visibleMedia.filter(core.isEmoteMedia).length);
-      assert.equal((preview.match(/class="post-image-link"/g) || []).length, visibleMedia.filter(item => !core.isEmoteMedia(item)).length);
-      assert.doesNotMatch(preview, /class="post-image(?: |")|\[表情\]/);
-      assert.equal((preview.match(/>\[图片\]<\/a>/g) || []).length, visibleMedia.filter(item => !core.isEmoteMedia(item)).length);
-      let insideLink = false;
-      for (const [tag] of preview.matchAll(/<\/?a\b[^>]*>/g)) {
-        if (tag.startsWith('</')) { assert.equal(insideLink, true); insideLink = false; }
-        else { assert.equal(insideLink, false, 'reply headings and image links must be siblings'); insideLink = true; }
-      }
-      assert.equal(insideLink, false);
-    });
-    assert.equal((markup.match(/<img\b/g) || []).length, 4);
+      const content = preview.match(/<div class="preview-content">([\s\S]*)$/)?.[1];
+      assert.ok(content);
+      assert.doesNotMatch(content, /<(?:a|img|button)\b|loading=|post-image|post-emote/);
+      assert.equal((preview.match(/<a\b/g) || []).length, 1, 'only the reply identity remains linked');
+      assert.equal((markup.match(/<img\b/g) || []).length, 0);
+    }
   }
 });
 
@@ -564,22 +555,25 @@ test('deleted replies retain identity, dates, parent links and counts without or
   assert.deepEqual(core.selectPosts(feed.posts, { bookmarks: [] }, { user: 'site-admin', query: '删除前原文' }), []);
 });
 
-test('home roots use thumbnails while reply placeholders become full images in the discussion', async () => {
+test('home root thumbnails lead into the emote body while discussion replies use thumbnails', async () => {
   const feed = fixture(), root = feed.posts.find(post => post.id === 'ten-thread');
   const reply = feed.posts.find(post => post.id === 'ten-thread-reply-1');
   const image = { src: 'posts/2026/01/ten-thread/media/photo.webp', alt: '完整画面 & 说明', kind: 'image' };
-  root.media = [image]; reply.media = [image];
+  const emote = { src: 'assets/emotes/l0/huh.webp', alt: '随帖表情', kind: 'emote' };
+  root.media = [emote, image]; reply.media = [image];
   const page = await renderer(feed);
   for (const route of ['#/', '#/following']) {
     const home = article(page.visit(route), root.id);
     assert.match(home, /class="post-image is-thumbnail"/);
-    assert.match(home, /class="post-image-link"/);
-    assert.match(home, /data-image-alt="完整画面 &amp; 说明"/);
-    assert.equal((home.match(/<img\b/g) || []).length, 1);
+    assert.match(previewMarkup(home, reply.id), /<p>\[图片\]/);
+    assert.doesNotMatch(home, /post-image-link/);
+    assert.equal((home.match(/<img\b/g) || []).length, 2);
+    assert.match(home, /class="post-image is-thumbnail"[\s\S]*class="post-body"><img class="post-emote"/);
   }
   const detail = page.visit('#/post/' + reply.id);
-  assert.equal((detail.match(/class="post-image"/g) || []).length, 2);
-  assert.doesNotMatch(detail, /is-thumbnail|post-image-link/);
+  assert.match(article(detail, root.id), /class="post-image"[\s\S]*class="post-body"><img class="post-emote"/);
+  assert.match(article(detail, reply.id), /class="post-image is-thumbnail"/);
+  assert.doesNotMatch(detail, /post-image-link/);
   const css = await readFile(new URL('../lucifer0/style.css', import.meta.url), 'utf8');
   assert.match(css, /\.post-image\.is-thumbnail img\{[^}]*max-width:160px;max-height:160px/);
 });
