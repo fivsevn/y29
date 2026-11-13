@@ -2874,9 +2874,451 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-7b8f5d0e1ae9cf77",
+      "handle": "guest_ed0addf6fd2fe9f7d031",
+      "name": "yui3",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7e983cc2d0203d29",
+      "handle": "guest_64ee7bbd8a9e76fd7947",
+      "name": "4436普通人",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-28edd946a1f8f449",
+      "handle": "guest_07ca48f53f2f91f5438c",
+      "name": "毛豆_1782",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bd1a6521099e5b1e",
+      "handle": "guest_c4c7e148ca85ecec0fa1",
+      "name": "9117小青",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bd9e3babf7d6be1e",
+      "handle": "guest_d6deeae58cc6c720dd9b",
+      "name": "小青_92",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a3b66feca5e6c8ed",
+      "handle": "guest_d078430e39e9f7197f11",
+      "name": "sora3058",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-699d74a10506fa40",
+      "handle": "guest_d5093e804e6eb36bc5f4",
+      "name": "没什么_1813",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5e8693b5407964da",
+      "handle": "guest_3e3d92ecd86a6ccd3971",
+      "name": "路人甲_6959",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-76785a9e819f0ee7",
+      "handle": "guest_56bbc1db3758092db9ef",
+      "name": "nana69971",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-fffbae7d82083320",
+      "handle": "guest_2c1d5c3b51a085f4429a",
+      "name": "9394一一",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3e7fe218adc4fba5",
+      "handle": "guest_4207b6e259bc19049a10",
+      "name": "4501咸鱼",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e1e4d6cd678bc58a",
+      "handle": "guest_53d61683cc75a82f6402",
+      "name": "慢半步2441",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-837681319499f021",
+      "handle": "guest_62b3be66d50c86577a53",
+      "name": "7017R.",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-story07",
+      "author": "guest-e1e4d6cd678bc58a",
+      "createdAt": "2026-11-13T14:08:15.350Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-case-story06",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "慢半步2441"
+      },
+      "text": "草(╬ﾟдﾟ)"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-story06",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-13T14:08:09.338Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-case-story04",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "那我走了"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-story04",
+      "author": "guest-e1e4d6cd678bc58a",
+      "createdAt": "2026-11-13T14:05:33.129Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-case-story03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "慢半步2441"
+      },
+      "text": "不许围观( `д´)进来的都给我写口牙！( `д´)⊂彡☆))∀`)"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-story03",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-13T13:57:32.798Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-dc52613e0a1f",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "围观"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-dc52613e0a1f",
+      "author": "guest-e1e4d6cd678bc58a",
+      "createdAt": "2026-11-13T13:45:23.798Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "慢半步2441"
+      },
+      "text": "想开一个写手练手串，形式类似命题作文，有没有人愿意参加？(　ﾟ 3ﾟ)\n\n之前在别处见过类似的串，想在这里也开一个。欢迎大家踊跃参与，不要怕写得不好，好文笔都是练出来的口牙！( `д´)9\n\n规则采用【投票制】\n\n1、每轮给出一个题目和限制要求，最先回复的五条小短篇进入评选\n\n2、由这五位作者分别投票，选出除自己作品外写得最好的一篇，获胜者负责下一轮的题目\n\n首轮就由我来出题吧，拜托诸君啦( ;`д´; )\n\n第一题：【不寻常的访客】\n\n深夜，一个独居的人听见有人敲门。\n\n打开门后，门外站着一个浑身湿透的陌生人。陌生人没有自我介绍，只说了一句话：\n\n“你终于……回来了。”\n\n请以此为开头（是这个意思就行，不用一比一复刻），写一段故事。\n\n【要求】\n\n字数：300～500字\n\n人称：第一人称\n\n时间：必须发生在一个夜晚\n\n人物：只能出现两名有台词的人物\n\n限制:①必须包含至少一处环境描写、一处心理活动\n\n         ②不允许直接解释陌生人的身份\n\n         ③结尾必须留下一个悬念"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-original-scallion04",
+      "author": "guest-3e7fe218adc4fba5",
+      "createdAt": "2026-11-13T13:10:44.717Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-bfbc8b0fc47e",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113140817-aa49ce7f-bfbc8b0fc47e/media/soup-noodles.webp",
+          "alt": "一碗已经吃了几口的汤面，面上铺着很多切碎的葱，筷子斜搭在碗边。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "4501咸鱼"
+      },
+      "text": "我这碗倒是很满意。"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-original-scallion03",
+      "author": "guest-fffbae7d82083320",
+      "createdAt": "2026-11-13T13:09:17.717Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-bfbc8b0fc47e",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113140817-aa49ce7f-bfbc8b0fc47e/media/fried-rice.webp",
+          "alt": "外卖炒饭里混着细碎葱花，饭盒盖上挑出了一点带米粒的葱。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote"
+        }
+      ],
+      "guest": {
+        "name": "9394一一"
+      },
+      "text": "我这份也是。"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-original-scallion02",
+      "author": "guest-76785a9e819f0ee7",
+      "createdAt": "2026-11-13T12:49:58.717Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-original-scallion01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "nana69971"
+      },
+      "text": "哪有空为了骗你再切碎一遍，多半根本没看备注。"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-original-scallion01",
+      "author": "guest-5e8693b5407964da",
+      "createdAt": "2026-11-13T12:48:35.717Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-bfbc8b0fc47e",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。",
+          "kind": "emote"
+        }
+      ],
+      "guest": {
+        "name": "路人甲_6959"
+      },
+      "text": "我中午也这样，吃完满嘴葱味，烦死。"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-bfbc8b0fc47e",
+      "author": "guest-699d74a10506fa40",
+      "createdAt": "2026-11-13T12:47:52.717Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote"
+        }
+      ],
+      "guest": {
+        "name": "没什么_1813"
+      },
+      "text": "不要葱的意思是别放葱，不是切碎点我就发现不了。都碎成那样了我怎么挑。"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-app03",
+      "author": "news-gadgets",
+      "createdAt": "2026-11-13T12:12:05.016Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-case-app02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "对，应该说上架了。现在可以免费用，赶紧去薅羊毛🔥"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-app02",
+      "author": "guest-837681319499f021",
+      "createdAt": "2026-11-13T11:48:47.016Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-ddb4289dfe87",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "7017R."
+      },
+      "text": "是不是应该是上架了"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-ddb4289dfe87",
+      "author": "news-gadgets",
+      "createdAt": "2026-11-13T11:30:46.016Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "今天，一个免费开源的背词工具终于能在国区 App Store 直接下载了。🔥🔥\n依旧免费。🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\n\n作者几周前公开的还是背单词网站，现在已经有了大家能直接下载的 iOS App。\n\n从一条开源帖，到大家一起改造\n\n作者这次晒出的数据里，最初介绍网页版的帖子有几十万次浏览，几千个赞、上千次转发、几千次收藏。\n\nGitHub 上，这个项目收到了几千颗星、上千次 Fork。\n\n另一处社区里的介绍帖，也有几千次收藏。\n\n官网最近一个月，页面浏览和访问量都过了百万。\n\n大家一起学英语"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-original-ticket02",
+      "author": "guest-a3b66feca5e6c8ed",
+      "createdAt": "2026-11-13T10:03:09.040Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-original-ticket01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote"
+        }
+      ],
+      "guest": {
+        "name": "sora3058"
+      },
+      "text": "这种默认勾选的东西能去哪举报啊，烦死了。"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-original-ticket01",
+      "author": "guest-bd9e3babf7d6be1e",
+      "createdAt": "2026-11-13T10:01:04.040Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-8c88f54831c6",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小青_92"
+      },
+      "text": "看见这种附加保障就烦。"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-8c88f54831c6",
+      "author": "guest-bd1a6521099e5b1e",
+      "createdAt": "2026-11-13T09:43:05.040Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113140817-aa49ce7f-8c88f54831c6/media/ticket-extra.webp",
+          "alt": "机票订单确认页上，20元优享保障已勾选，机票及税费420元，下方合计440元。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "9117小青"
+      },
+      "text": "这20块怎么去掉"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-chain11",
+      "author": "visitor-shiftcard",
+      "createdAt": "2026-11-13T07:57:41.773Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-55ab537b888e",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "不要问这些让人感觉是大叔的问题"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-chain06",
+      "author": "guest-28edd946a1f8f449",
+      "createdAt": "2026-11-13T07:57:21.773Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-55ab537b888e",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "毛豆_1782"
+      },
+      "text": "这个梗已经老到需要解释了吗？( ﾟ∀。)"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-case-chain05",
+      "author": "guest-7e983cc2d0203d29",
+      "createdAt": "2026-11-13T07:55:23.773Z",
+      "replyTo": "l0-20261113140817-aa49ce7f-55ab537b888e",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "4436普通人"
+      },
+      "text": "一看表情就知道了，小圈子那套老接龙烂活"
+    },
+    {
+      "id": "l0-20261113140817-aa49ce7f-55ab537b888e",
+      "author": "guest-7b8f5d0e1ae9cf77",
+      "createdAt": "2026-11-13T07:54:56.773Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "yui3"
+      },
+      "text": "之前在别处刷到个串，一群人接了一个莫名其妙的龙，回头串就找不到了，我可太好奇了( ﾟ∀。)\n\n所以这个接龙是啥梗啊"
+    },
     {
       "id": "l0-20261113080807-68259ae8-original-doodle01",
       "author": "visitor-iota",
