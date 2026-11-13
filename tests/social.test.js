@@ -601,6 +601,10 @@ test('validation and build reject an unfinished import without rewriting the cur
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /different content/);
   await assert.rejects(loadContent(root), /unfinished update/);
   await assert.rejects(buildFeed(root), /unfinished update/);
+  await mkdir(join(root, 'docs'), { recursive: true });
+  await mkdir(join(root, 'assets/emotes'), { recursive: true });
+  await writeFile(join(root, 'docs/localization.md'), '# Synthetic localization rules\n');
+  await writeFile(join(root, 'assets/emotes/kaomoji.json'), await readFile(new URL('../lucifer0/assets/emotes/kaomoji.json', import.meta.url)));
   await cp(new URL('../lucifer0/tools/', import.meta.url), join(root, 'tools'), { recursive: true });
   await writeFile(join(root, 'package.json'), '{"type":"module"}');
   for (const command of ['validate', 'build']) {

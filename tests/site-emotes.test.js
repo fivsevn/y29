@@ -15,7 +15,7 @@ async function fixture(t, content = false) {
   t.after(() => rm(directory, { recursive: true, force: true }));
   const root = join(directory, 'project/lucifer0');
   if (content) await cp(new URL('../lucifer0/', import.meta.url), root, { recursive: true,
-    filter: path => !/\/(?:posts|data|emotes|\.publish-lock|\.publish-staging|\.publish\.lock)(?:\/|$)/.test(path) });
+    filter: path => !/\/(?:posts|data|emotes|\.publish-lock|\.publish-staging|\.publish\.lock)(?:\/|$)/.test(path) && !path.endsWith('/docs/localization.md') });
   await mkdir(join(root, 'assets/emotes/l0'), { recursive: true });
   const bytes = await sharp({ create: { width: 3, height: 4, channels: 4, background: { r: 80, g: 100, b: 140, alpha: .5 } } }).webp().toBuffer();
   await writeFile(join(root, item().src), bytes);
