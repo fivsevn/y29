@@ -201,7 +201,7 @@ function personRow(user) {
   return `<div class="person-row"><a class="person-identity" href="${userURL(user.id)}"><strong${nameStyle(user)}>${esc(user.name)}</strong><span class="author-id">ID:${boardID(user.id)}</span></a></div>`;
 }
 function empty(title, copy, href = '#/', label = '返回 /world') {
-  return `<div class="empty"><span class="empty-symbol" aria-hidden="true">( ´_ゝ｀)</span><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="text-link" href="${href}">[ ${esc(label)} ]</a></div>`;
+  return `<div class="empty"><span class="empty-symbol" aria-hidden="true">0[-_-]</span><h3>${esc(title)}</h3><p>${esc(copy)}</p><a class="text-link" href="${href}">[ ${esc(label)} ]</a></div>`;
 }
 function mediaMarkup(image, { thumbnail = false } = {}) {
   if (isEmoteMedia(image)) {

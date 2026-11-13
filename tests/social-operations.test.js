@@ -60,10 +60,12 @@ async function fixture(t, budget = 4, { maxBatchPosts = 10, replyLottery, lotter
   await writeFile(join(root, 'README.md'), '# Synthetic project purpose\n');
   await writeFile(join(root, 'assets/icon.svg'), '<svg xmlns="http://www.w3.org/2000/svg"/>');
   await writeFile(join(root, 'publication.json'), JSON.stringify({ version: 1, automaticPosting: true, timezone: 'Asia/Shanghai', maxBatchPosts, ...(replyLottery !== undefined ? { replyLottery } : {}), lottery: lottery ?? defaultLottery, ...(caseAdaptation ? { caseAdaptation } : {}) }));
-  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md']], ['environment', ['README.md', 'research-worldview.md', 'research-everyday-life.md', 'record-forum.md', 'research-comments.md', 'research-meme.md', 'research-negative.md']]]) {
+  for (const [folder, names] of [['docs', ['README.md', 'writing.md', 'publishing.md', 'lottery.md', 'localization.md']], ['environment', ['README.md', 'research-worldview.md', 'research-everyday-life.md', 'record-forum.md', 'research-comments.md', 'research-meme.md', 'research-negative.md']]]) {
     await mkdir(join(root, folder));
     for (const name of names) await writeFile(join(root, folder, name), '# Synthetic source\n\nSYNTHETIC_' + folder + '_' + name + '\n');
   }
+  await mkdir(join(root, 'assets/emotes'), { recursive: true });
+  await writeFile(join(root, 'assets/emotes/kaomoji.json'), JSON.stringify({ version: 1, name: 'L0', items: [{ id: 'neutral', name: 'Synthetic default', text: '0[·_·]', meaning: 'Synthetic context-dependent reaction.' }] }));
   await writeFile(join(root, 'accounts.json'), JSON.stringify({ version: 1, users: users().map(accountSetting) }));
   await mkdir(join(root, 'environment/worldviews'));
   await writeFile(join(root, 'environment/worldviews/README.md'), '# Synthetic world index\n\nSYNTHETIC_WORLDVIEW_INDEX\n');
@@ -1086,13 +1088,13 @@ test('new media updates enforce ordinary images independently in each nonempty p
     if (expected) await assert.rejects(ingestBatch(prepared.operationPath, { root: f.root, reviewed: true, ai: true }), expected);
     else await validateUpdateForBatch(saved.batch, { ...f.options, contextPath: prepared.operationPath });
   };
-  entries[0].media = [media.emote]; entries[1].media = [media.localEmote];
+  entries[0].media = [media.emote]; entries[1].media = [media.emote];
   await check(/root ordinary-image pool/);
   entries[0].media = [media.image];
   await check(/reply ordinary-image pool/);
-  entries[0].media = [media.localEmote]; entries[1].media = [media.image];
+  entries[0].media = [media.emote]; entries[1].media = [media.image];
   await check(/root ordinary-image pool/);
-  entries[0].media = [media.image, media.emote, media.emote, media.localEmote];
+  entries[0].media = [media.image, media.emote, media.emote, media.emote];
   await check();
   entries[0].media.push(media.emote, media.emote, media.emote);
   await check();
@@ -1842,6 +1844,36 @@ test('writers read the exact shared emote catalog and catalog changes refresh ma
   assert.deepEqual(second.writer.siteEmotes, { sourcePath: path, ...catalog });
   assert.ok(!Object.hasOwn(second.writer.siteEmotes.items[0], 'meaning'));
   assert.ok(!Object.hasOwn(second.writer.siteEmotes.items[0], 'negative'));
+});
+
+test('every independent writer receives localization rules and resources and their edits invalidate the saved source digest', async t => {
+  const f = await fixture(t), prepared = await prepareUpdate(f.options), original = await readJSON(prepared.operationPath);
+  const rulesPath = 'docs/localization.md', catalogPath = 'assets/emotes/kaomoji.json';
+  const rules = '# 本站化\n\nSYNTHETIC_LOCALIZATION_FOR_ALL_SOURCES\n';
+  const catalog = { version: 1, name: 'L0', items: [{ id: 'neutral', name: 'Default', text: '0[·_·]', meaning: 'A context-dependent lookup hint.' }] };
+  await mkdir(join(f.root, 'assets/emotes'), { recursive: true });
+  await writeFile(join(f.root, rulesPath), rules);
+  await writeFile(join(f.root, catalogPath), JSON.stringify(catalog));
+  const postId = prepared.id + '-localized-writer';
+  await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
+  await prepareUpdate(f.options);
+  const refreshed = await readJSON(prepared.operationPath);
+  assert.deepEqual(refreshed.plan, original.plan);
+  assert.notEqual(refreshed.sourceDigest, original.sourceDigest);
+  const first = await briefUpdatePost({ ...f.options, postId });
+  assert.deepEqual(first.writer.localization.rules, { sourcePath: rulesPath, text: rules });
+  assert.deepEqual(first.writer.localization.kaomoji, { sourcePath: catalogPath, ...catalog });
+  const reading = await readFile(prepared.readingPath, 'utf8');
+  assert.ok(reading.includes(rulesPath) && reading.includes(catalogPath) && reading.includes('SYNTHETIC_LOCALIZATION_FOR_ALL_SOURCES'));
+  catalog.items[0].meaning = 'Updated inventory guidance.';
+  await writeFile(join(f.root, catalogPath), JSON.stringify(catalog));
+  await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
+  await prepareUpdate(f.options);
+  const second = await briefUpdatePost({ ...f.options, postId });
+  assert.deepEqual(second.draft, first.draft, 'localization refresh preserves the post identity and lottery');
+  assert.deepEqual(second.writer.localization.kaomoji, { sourcePath: catalogPath, ...catalog });
+  await writeFile(join(f.root, rulesPath), rules + '\nSYNTHETIC_NEW_REFERRAL_RULE\n');
+  await assert.rejects(briefUpdatePost({ ...f.options, postId }), /Source material changed/);
 });
 
 const sampleMarkdown = body => '# Synthetic sampling guide\n\nSYNTHETIC_SAMPLING_ENTRYPOINT\n\n<!-- samples:start -->\n\n' + body + '\n\n<!-- samples:end -->\n';

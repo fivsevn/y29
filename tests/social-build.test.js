@@ -69,7 +69,7 @@ test('built site preserves current entrypoints and publishes only explicit socia
   const index = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed-index.json'), 'utf8'));
   const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'feed-store.js', 'data/feed.json', 'data/feed-index.json', ...index.parts.map(part => part.src), 'assets/icon.svg', 'assets/verification-lucifer.webp', `${mediaDirectory}/LICENSE.txt`,
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src)),
-    siteEmoteManifestPath, ...emoteCatalog.items.map(item => item.src)]);
+    'assets/emotes/kaomoji.json', siteEmoteManifestPath, ...emoteCatalog.items.map(item => item.src)]);
   const mediaLicenses = new Set(feed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')));
   for (const path of mediaLicenses) {
     let source;
@@ -83,6 +83,8 @@ test('built site preserves current entrypoints and publishes only explicit socia
   assert.equal(await readFile(join(directory, 'dist/lucifer0', mediaDirectory, 'LICENSE.txt'), 'utf8'), 'Google Noto Emoji license fixture');
   assert.deepEqual(await readFile(join(directory, 'dist/lucifer0', emote.src)), emoteBytes, 'declared shared emotes are published without being copied into posts');
   assert.deepEqual(JSON.parse(await readFile(join(directory, 'dist/lucifer0', siteEmoteManifestPath), 'utf8')), emoteCatalog);
+  assert.equal(await readFile(join(directory, 'dist/lucifer0/assets/emotes/kaomoji.json'), 'utf8'),
+    await readFile(join(directory, 'lucifer0/assets/emotes/kaomoji.json'), 'utf8'), 'the official text emote inventory is published as a reusable asset');
   assert.ok(published.includes(avatar), 'an optional avatar from its owner package is published');
   assert.ok(published.includes(`${mediaDirectory}/study.webp`), 'referenced media is published from its thread package');
   for (const path of ['signallock/index.html', 'mobileutopia/index.html', 'training/index.html', 'storyteller/index.html']) {

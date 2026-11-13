@@ -24,6 +24,7 @@ const runtimeFiles = [
 ];
 const socialAssets = new Set([
   'assets/icon.svg', 'assets/verification-lucifer.webp', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
+  'assets/emotes/kaomoji.json',
   ...socialFeed.posts.flatMap(post => post.media.map(image => image.src)),
   ...siteEmoteFiles(await readSiteEmotes(join(root, 'lucifer0')))
 ]);

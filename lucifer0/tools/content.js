@@ -12,6 +12,7 @@ import { preparePostImages, rewritePostImages, normalizeArchivedImages } from '.
 import { readSiteEmotes, siteEmotePaths } from './site-emotes.js';
 import { validateCasePolicy } from './case-adaptation.js';
 import { partitionFeed } from './feed-parts.js';
+import { readSiteLocalization, assertLocalizedPosts } from './localization.js';
 
 export const socialRoot = fileURLToPath(new URL('../', import.meta.url));
 const fail = message => { throw new Error(message); };
@@ -41,7 +42,7 @@ function validateBatch(batch, policy) {
   }
 }
 
-export function validateContent(registry, batches, policy, { now = Date.now(), siteEmotes = null } = {}) {
+export function validateContent(registry, batches, policy, { now = Date.now(), siteEmotes = null, localization = null } = {}) {
   const sharedMedia = siteEmotePaths(siteEmotes);
   keys(policy, ['version', 'automaticPosting', 'timezone', 'maxBatchPosts', 'replyLottery', 'lottery', 'caseAdaptation'], 'policy');
   if (policy.version !== 1 || typeof policy.automaticPosting !== 'boolean' || policy.timezone !== 'Asia/Shanghai' || !Number.isInteger(policy.maxBatchPosts) || policy.maxBatchPosts < 1 || policy.maxBatchPosts > 120) fail('Invalid publication policy');
@@ -128,6 +129,7 @@ export function validateContent(registry, batches, policy, { now = Date.now(), s
     const mediaDirectory = `${threadDirectory(post, posts)}/media/`;
     if (post.media.some(image => !image.src.startsWith(mediaDirectory) && !sharedMedia.has(image.src))) fail(`Media must belong to its root thread: ${post.id}`);
   }
+  if (localization) assertLocalizedPosts([...posts.values()], { kaomoji: localization.kaomoji, siteEmotes });
   // Explicit projection: operational permissions never become browser data.
   return {
     version: 1,
@@ -138,13 +140,13 @@ export function validateContent(registry, batches, policy, { now = Date.now(), s
 
 async function json(path) { return JSON.parse(await readFile(path, 'utf8')); }
 export async function loadContent(root = socialRoot, { allowPending = false } = {}) {
-  const [{ registry }, policy, { batches, files, pending }, siteEmotes] = await Promise.all([
-    readUserDocuments(root), json(join(root, 'publication.json')), readThreadPackages(root), readSiteEmotes(root)
+  const [{ registry }, policy, { batches, files, pending }, siteEmotes, localization] = await Promise.all([
+    readUserDocuments(root), json(join(root, 'publication.json')), readThreadPackages(root), readSiteEmotes(root), readSiteLocalization(root)
   ]);
   if (pending && !allowPending) fail(`An unfinished update must be completed or cancelled before validation or build: ${pending.id}`);
-  const feed = validateContent(registry, batches, policy, { siteEmotes });
+  const feed = validateContent(registry, batches, policy, { siteEmotes, localization });
   await validateAssets(root, feed);
-  return { registry, policy, batches, feed, files, pending, siteEmotes };
+  return { registry, policy, batches, feed, files, pending, siteEmotes, localization };
 }
 
 async function validateAssets(root, feed) {
@@ -277,7 +279,7 @@ export async function ingestBatch(input, { root = socialRoot, reviewed = false, 
 }
 
 async function ingestLocked(input, { root, ai, contextPath, backfill }) {
-  const { registry, policy, batches, feed: existingFeed, pending, siteEmotes } = await loadContent(root, { allowPending: true });
+  const { registry, policy, batches, feed: existingFeed, pending, siteEmotes, localization } = await loadContent(root, { allowPending: true });
   const value = await json(resolve(input));
   const isUpdate = value?.version === 1 && Object.hasOwn(value, 'plan');
   const batch = isUpdate ? { version: 1, id: value.id, mode: 'daily', posts: value.posts } : value;
@@ -343,7 +345,7 @@ async function ingestLocked(input, { root, ai, contextPath, backfill }) {
     await recordCases();
     return { status: 'already-archived', id: batch.id, count: batch.posts.length };
   }
-  const feed = validateContent(registry, [...batches, { ...batch, posts: fresh }], policy, { siteEmotes });
+  const feed = validateContent(registry, [...batches, { ...batch, posts: fresh }], policy, { siteEmotes, localization });
   await validateAssets(root, feed);
   if (ai && !policy.automaticPosting) fail('Automatic posting is disabled');
   if (ai && batch.mode === 'daily') {
