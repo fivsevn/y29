@@ -48,6 +48,7 @@ jobs:
           done
           browser_status=0
           Y29_SCREENSHOTS=test-results/images node tests/social-images.browser.mjs || browser_status=1
+          Y29_SCREENSHOTS=test-results/images-webkit Y29_BROWSER=webkit node tests/social-images.browser.mjs || browser_status=1
           Y29_SCREENSHOTS=test-results/chromium node tests/social.browser.mjs || browser_status=1
           Y29_SCREENSHOTS=test-results/webkit Y29_BROWSER=webkit node tests/social.browser.mjs || browser_status=1
           exit "$browser_status"

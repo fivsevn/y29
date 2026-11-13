@@ -7,14 +7,16 @@ import { createPreviewServer } from '../serve.js';
 import sharp from 'sharp';
 
 const browsers = await import(process.env.Y29_PLAYWRIGHT_MODULE || 'playwright');
+const browserName = process.env.Y29_BROWSER || 'chromium';
+if (!['chromium', 'webkit', 'firefox'].includes(browserName)) throw new Error('Unsupported Y29_BROWSER');
 const server = createPreviewServer();
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const base = `http://127.0.0.1:${server.address().port}/lucifer0/`;
-const browser = await browsers.chromium.launch({
+const browser = await browsers[browserName].launch({
   headless: true,
   ...(process.env.Y29_BROWSER_EXECUTABLE_PATH ? { executablePath: process.env.Y29_BROWSER_EXECUTABLE_PATH } : {})
 });
-const output = process.env.Y29_SCREENSHOTS || join(tmpdir(), 'y29-original-images');
+const output = process.env.Y29_SCREENSHOTS || join(tmpdir(), `y29-original-images-${browserName}`);
 await mkdir(output, { recursive: true });
 const errors = [];
 let checks = 0;
