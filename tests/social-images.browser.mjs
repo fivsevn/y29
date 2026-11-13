@@ -101,12 +101,15 @@ try {
   };
   const assertWholeImage = async () => {
     const bounds = await page.locator('#image-frame img').evaluate(image => {
-      const rect = image.getBoundingClientRect();
+      const rect = image.getBoundingClientRect(), viewer = image.closest('dialog');
+      const viewerRect = viewer.getBoundingClientRect(), style = getComputedStyle(viewer);
       return { width: rect.width, height: rect.height, naturalRatio: image.naturalWidth / image.naturalHeight,
-        fit: getComputedStyle(image).objectFit, viewport: innerWidth, right: rect.right, left: rect.left };
+        fit: getComputedStyle(image).objectFit, viewport: innerWidth, right: rect.right, left: rect.left,
+        topGap: rect.top - viewerRect.top, topInset: parseFloat(style.borderTopWidth) + parseFloat(style.paddingTop) };
     });
     check(bounds.width > 0 && bounds.height > 0 && Math.abs(bounds.width / bounds.height - bounds.naturalRatio) < .01, 'the full image keeps its original proportions');
     check(bounds.fit === 'contain' && bounds.left >= 0 && bounds.right <= bounds.viewport, 'the full image fits without cropping or horizontal overflow');
+    check(Math.abs(bounds.topGap - bounds.topInset) < 1, 'the image starts at the viewer padding without a reserved toolbar row');
   };
 
   const defaultThumbnail = page.locator(`#post-${root.id} .post-image img`).first();
