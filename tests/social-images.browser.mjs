@@ -91,7 +91,10 @@ try {
     check(await page.locator('#image-frame img').getAttribute('alt') === post.media[0].alt, 'the viewer retains its accessible image description');
     check(await dialog.locator('figcaption, #image-caption').count() === 0, 'the viewer has no visible image caption');
     check(await page.locator('#image-close').evaluate(button => document.activeElement === button), 'the close button receives focus');
-    check(await page.locator('#image-original').getAttribute('href') === new URL(post.media[0].src, base).href, 'the viewer links to the actual image file');
+    check(await dialog.locator('a').count() === 0, 'the viewer has no separate file-opening link');
+    check(await page.locator('#image-close').textContent() === '×', 'the viewer uses a compact close symbol');
+    check(await page.locator('#image-close').getAttribute('aria-label') === '关闭图片', 'the close symbol has an accessible name');
+    check(await page.locator('#image-close').evaluate(button => getComputedStyle(button).outlineStyle === 'none'), 'pointer opening does not outline the close button');
     return link;
   };
   const assertWholeImage = async () => {
@@ -120,11 +123,16 @@ try {
   await page.locator('#image-frame img').waitFor({ state: 'detached' });
   check(await page.locator('#image-frame img').count() === 0, 'closing removes the inactive full image');
   await link.focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  check(await link.evaluate(element => getComputedStyle(element).outlineStyle !== 'none'), 'Tab navigation visibly identifies the thumbnail');
   await page.keyboard.press('Enter');
   await dialog.waitFor();
+  check(await page.locator('#image-close').evaluate(button => getComputedStyle(button).outlineStyle !== 'none'), 'keyboard opening visibly identifies the close button');
   await page.locator('#image-close').click();
   await dialog.waitFor({ state: 'hidden' });
   check(await link.evaluate(element => document.activeElement === element), 'keyboard opening and the close button return focus');
+  check(await link.evaluate(element => getComputedStyle(element).outlineStyle === 'none'), 'pointer closing does not leave a thumbnail outline');
   await open(root);
   await page.mouse.click(1, 1);
   await dialog.waitFor({ state: 'hidden' });

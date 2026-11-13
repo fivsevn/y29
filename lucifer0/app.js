@@ -11,6 +11,15 @@ const icons = {
 };
 const icon = (name, className = '') => `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] || ''}</svg>`;
 document.querySelectorAll('[data-icon]').forEach(element => { element.innerHTML = icon(element.dataset.icon); });
+// Programmatic focus can inherit a browser's keyboard-focus heuristic. Keep
+// focus in place for navigation, but show its outline only during keyboard use.
+document.addEventListener('keydown', event => {
+  if (['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'].includes(event.key)) {
+    document.documentElement.dataset.focusInput = 'keyboard';
+  }
+}, true);
+document.addEventListener('pointerdown', () => { document.documentElement.dataset.focusInput = 'pointer'; }, true);
+window.addEventListener('blur', () => { document.documentElement.dataset.focusInput = 'pointer'; });
 let storage;
 try { storage = window.localStorage; } catch { /* Browsing works without storage. */ }
 let state, feed, users, posts, threadIndex, toastTimer, feedStore;
@@ -21,7 +30,7 @@ const pageLimit = () => routeLimits.get(routeKey()) || FEED_PAGE_SIZE;
 const main = document.querySelector('main');
 const imageDialog = document.querySelector('#image-dialog'), imageFrame = document.querySelector('#image-frame');
 const imageClose = document.querySelector('#image-close');
-const imageOriginal = document.querySelector('#image-original'), imageStatus = document.querySelector('#image-status');
+const imageStatus = document.querySelector('#image-status');
 let imageReturnFocus;
 const loginDialog = document.querySelector('#login-dialog'), loginHeading = document.querySelector('#login-heading');
 const inviteForm = document.querySelector('#invite-form'), inviteCode = document.querySelector('#invite-code');
@@ -60,7 +69,6 @@ function openImage(link) {
   image.src = link.href;
   imageReturnFocus = link;
   imageFrame.replaceChildren(image);
-  imageOriginal.href = link.href;
   imageStatus.textContent = '';
   if (!imageDialog.open) imageDialog.showModal();
   imageClose.focus({ preventScroll: true });
