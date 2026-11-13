@@ -5,7 +5,7 @@ createdAt: "2026-11-12T19:23:59.667Z"
 replyTo: null
 likes: 17
 canon: "derivative"
-media: [{"src":"assets/emotes/l0/speechless.webp","alt":"L0抬眼向上看，嘴边有一团呼气线。","kind":"emote","fit":"contain"}]
+media: [{"src":"assets/emotes/l0/ignore.webp","alt":"L0托腮侧身看着手机。","kind":"emote","fit":"contain"}]
 guest: {"name":"林檎"}
 ---
 

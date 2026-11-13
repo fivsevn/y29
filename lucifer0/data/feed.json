@@ -2546,7 +2546,13 @@
       "replyTo": "l0-20261112230605-a2415717-original-reply-6",
       "likes": 8,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112230605-a2415717-5a3ed64b37c1/media/wrinkled-oranges.webp",
+          "alt": "蓝灰色塑料架上放着三只皱皮橘子，其中一只剥开了一半，果皮摊在旁边。",
+          "kind": "image"
+        }
+      ],
       "text": "我那几个放到皮都皱了还酸，留着占地方，懒得吃。"
     },
     {
@@ -2556,7 +2562,14 @@
       "replyTo": "l0-20261112230605-a2415717-original-reply-6",
       "likes": 0,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/play-dead.webp",
+          "alt": "L0仰面躺着，头上有一个带叉号的小气泡。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "嗯嗯"
       },
@@ -2613,8 +2626,8 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "assets/emotes/l0/speechless.webp",
-          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "src": "assets/emotes/l0/ignore.webp",
+          "alt": "L0托腮侧身看着手机。",
           "kind": "emote",
           "fit": "contain"
         }
@@ -2644,7 +2657,14 @@
       "replyTo": null,
       "likes": 3,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/clap.webp",
+          "alt": "L0半睁眼拍着双手。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "YY"
       },
@@ -2761,7 +2781,14 @@
       "replyTo": "l0-20261112230605-a2415717-0b514b43e38e",
       "likes": 7,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "text": "还知道给你留两口，挺好啊，你还嫌。"
     },
     {
@@ -2771,7 +2798,14 @@
       "replyTo": "l0-20261112230605-a2415717-225ff6fedd1f",
       "likes": 7,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
       "guest": {
         "name": "toto"
       },
@@ -2795,6 +2829,11 @@
       "likes": 50,
       "canon": "derivative",
       "media": [
+        {
+          "src": "posts/2026/11/l0-20261112230605-a2415717-0b514b43e38e/media/two-bites-left.webp",
+          "alt": "浅蓝色饭碗里只剩两小团米饭，旁边搁着筷子，桌角露出吃过的菜盘。",
+          "kind": "image"
+        },
         {
           "src": "assets/emotes/l0/speechless.webp",
           "alt": "L0抬眼向上看，嘴边有一团呼气线。",
@@ -2889,8 +2928,8 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261112174153-117eae41-56a1e33c4727/media/building-neighbour.webp",
-          "alt": "公寓楼窗户与外墙的照片",
+          "src": "posts/2026/11/l0-20261112174153-117eae41-56a1e33c4727/media/scaffold-tubes.webp",
+          "alt": "从住户窗边向下拍，旧公寓外搭着脚手架，地上堆着钢管，旁边停着小推车。",
           "kind": "image"
         }
       ],
@@ -2905,8 +2944,8 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261112174153-117eae41-e2f43eaf0a82/media/cheap-notebook.webp",
-          "alt": "桌面上小笔记本、手机与耳机",
+          "src": "posts/2026/11/l0-20261112174153-117eae41-e2f43eaf0a82/media/paper-notebook-on-knee.webp",
+          "alt": "牛仔裤膝头上摊着一本薄薄的订书钉纸本，淡黄色封面折了角，里面露出横线页和铅笔记号。",
           "kind": "image"
         }
       ],
@@ -2951,7 +2990,7 @@
       "guest": {
         "name": "白色键帽"
       },
-      "text": "换了把背光键盘。颜色好看是好看，半夜那几个键亮得我眼睛疼。关了灯拍张照又觉得它很帅，烦。"
+      "text": "换了把背光键盘，关灯拍出来挺好看。\n\n真坐这儿打字，那几个键晃得眼睛疼。"
     },
     {
       "id": "l0-20261112174153-117eae41-f21cb1e41a07",
@@ -2970,7 +3009,7 @@
       "guest": {
         "name": "车窗左边"
       },
-      "text": "雨天在车里拍窗外，照片看起来还蛮安静。实际司机刚刚因为有人忘了带伞，停在路边等了十来分钟，我后面还有个约。现在拍张照也不耽误我烦。"
+      "text": "司机因为有人忘了带伞，停在路边等了十来分钟，我后面还有个约。\n\n还不走吗"
     },
     {
       "id": "l0-20261112174153-117eae41-e2f43eaf0a82",
@@ -2981,8 +3020,8 @@
       "canon": "derivative",
       "media": [
         {
-          "src": "posts/2026/11/l0-20261112174153-117eae41-e2f43eaf0a82/media/pocket-notebook.webp",
-          "alt": "笔和夹子旁边放着一本小皮面随身笔记本",
+          "src": "posts/2026/11/l0-20261112174153-117eae41-e2f43eaf0a82/media/pocket-book-in-use.webp",
+          "alt": "旧裁切垫上的小皮本翻到铅笔尺寸草图，松脱的小夹子放在旁边，手指扶着封皮。",
           "kind": "image"
         },
         {
@@ -3063,7 +3102,13 @@
       "replyTo": null,
       "likes": 12,
       "canon": "derivative",
-      "media": [],
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261112174153-117eae41-721a9b04a4fc/media/mug-after-scrubbing.webp",
+          "alt": "手拿不锈钢杯对着水槽，杯内仍留着褐色茶渍，杯口有少量白色水垢。",
+          "kind": "image"
+        }
+      ],
       "text": "茶杯内壁有层褐色的，我照人家说的拿酸的泡，水垢下来一点，茶渍还在。大家别给我只回一句‘用力刷’啊，我手都刷酸了。要用别的东西你说清楚用什么，我家就是普通不锈钢杯。"
     },
     {

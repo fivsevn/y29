@@ -5,7 +5,7 @@ createdAt: "2026-11-12T18:54:31.222Z"
 replyTo: null
 likes: 3
 canon: "derivative"
-media: []
+media: [{"src":"assets/emotes/l0/clap.webp","alt":"L0半睁眼拍着双手。","kind":"emote","fit":"contain"}]
 guest: {"name":"YY"}
 ---
 
