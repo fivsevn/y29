@@ -46,3 +46,37 @@ export function createFeedStore(index, fetchPart) {
     }
   };
 }
+
+// A deployment can retire immutable parts while an older tab still holds their
+// index. Refresh once for a missing part, sharing the request across routes.
+// Ordinary network errors remain retryable without discarding downloaded data.
+export function createLiveFeedStore(index, fetchPart, fetchIndex) {
+  let current = createFeedStore(index, fetchPart), refreshing;
+  let generation = 0;
+  return {
+    get generation() { return generation; },
+    get revision() { return generation + ':' + current.revision; },
+    get feed() { return current.feed; },
+    homeRoots(followingOnly) { return current.homeRoots(followingOnly); },
+    routeReady(route, limit = FEED_PAGE_SIZE) { return current.routeReady(route, limit); },
+    async ensureRoute(route, limit = FEED_PAGE_SIZE) {
+      const original = current;
+      try { await original.ensureRoute(route, limit); }
+      catch (error) {
+        if (![404, 410].includes(error.status)) throw error;
+        if (current === original) {
+          refreshing ??= Promise.resolve().then(fetchIndex).then(index => {
+            current = createFeedStore(index, fetchPart);
+            generation++;
+          }).finally(() => { refreshing = undefined; });
+          await refreshing;
+        }
+        // A second missing part is surfaced to the reader, not retried forever.
+        await current.ensureRoute(route, limit);
+        return;
+      }
+      // Another route may have refreshed the index during this successful load.
+      if (current !== original) await current.ensureRoute(route, limit);
+    }
+  };
+}

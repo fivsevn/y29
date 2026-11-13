@@ -254,6 +254,45 @@ function mediaMinimum({ seed, pool, lottery, role, kind }) {
 const ordinaryImage = image => image?.kind === 'image' && typeof image.src === 'string' && !image.src.startsWith('assets/emotes/l0/');
 const enhancedImagePool = config => ['minimumShare', 'enforceDraw', 'lifePhotoShare'].some(key => Object.hasOwn(config, key));
 
+// Historical posts may predate explicit media kinds. This summary is for
+// editorial comparison, never for satisfying the saved publication contract.
+export function summarizeMediaUse(posts) {
+  validatePresentationPosts(posts);
+  const count = pool => {
+    const uses = pool.map(post => {
+      const media = Array.isArray(post.media) ? post.media : [];
+      return {
+        image: media.some(item => typeof item?.src === 'string' &&
+          (item.kind === 'image' || item.kind === undefined && !item.src.startsWith('assets/emotes/l0/'))),
+        emote: media.some(item => typeof item?.src === 'string' &&
+          (item.kind === 'emote' || item.kind === undefined && item.src.startsWith('assets/emotes/l0/')))
+      };
+    });
+    return { posts: pool.length, ordinaryImagePosts: uses.filter(use => use.image).length,
+      emotePosts: uses.filter(use => use.emote).length, textOnlyPosts: uses.filter(use => !use.image && !use.emote).length };
+  };
+  return { ...count(posts), root: count(posts.filter(post => post.replyTo === null)),
+    reply: count(posts.filter(post => post.replyTo !== null)) };
+}
+
+function mediaFollowThrough(imagePools, emotePools, targets, emoteTargets) {
+  const compare = (pools, drawn, actualKey) => {
+    const roles = Object.fromEntries(['root', 'reply'].map(role => {
+      const suggestedPosts = drawn[role].length, actualPosts = pools[role][actualKey].length;
+      return [role, { suggestedPosts, actualPosts, shortfall: Math.max(0, suggestedPosts - actualPosts) }];
+    }));
+    const suggestedPosts = roles.root.suggestedPosts + roles.reply.suggestedPosts;
+    const actualPosts = roles.root.actualPosts + roles.reply.actualPosts;
+    return { suggestedPosts, actualPosts, shortfall: Math.max(0, suggestedPosts - actualPosts), ...roles };
+  };
+  const ordinaryImages = compare(imagePools, targets, 'actualImagePostIds');
+  const emotes = compare(emotePools, emoteTargets, 'actualEmotePostIds');
+  // A signal to revisit the material and editorial choices, not a media quota.
+  // An opportunity can move to another utterance or be declined for a reason.
+  return { ordinaryImages, emotes, reviewRequired: [ordinaryImages, emotes].some(kind =>
+    kind.root.shortfall > 0 || kind.reply.shortfall > 0) };
+}
+
 export function imagePoolProgress({ seed, posts, lottery = defaultLottery, mediaReviews = [] }) {
   validateLottery(lottery);
   if (!lottery.media) return null;
@@ -332,7 +371,10 @@ export function suggestPostPresentation({ seed, posts, lottery = defaultLottery,
   });
   return { imagePostIds, rootImagePostIds: targets.root, replyImagePostIds: targets.reply, images, lifePhotoPostIds,
     emotes: [...emoteTargets.root, ...emoteTargets.reply].sort().map(postId => ({ postId, count: choices.find(item => item.id === postId).emoteCount || 1 })),
-    imagePools, emotePools, likes, ...(lottery.media.profiles ? { mediaProfile: pick(randomFor(seed + '\0media-profile'), lottery.media.profiles).id } : {}) };
+    imagePools, emotePools, likes, ...(lottery.media.profiles ? {
+      mediaProfile: pick(randomFor(seed + '\0media-profile'), lottery.media.profiles).id,
+      mediaFollowThrough: mediaFollowThrough(imagePools, emotePools, targets, emoteTargets)
+    } : {}) };
 }
 
 export function drawResearchWindows({ seed, lottery }) {

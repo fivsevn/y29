@@ -467,6 +467,46 @@ test('builds are deterministic and preserve source archives', async t => {
   assert.equal((await loadContent(root)).feed.posts.length, 15);
 });
 
+test('build retires only unreferenced regular hash parts and preserves active parts and unknown files', async t => {
+  const { root, directory } = await repositoryCopy(t), partDirectory = join(root, 'data/feed');
+  const index = JSON.parse(await readFile(join(root, 'data/feed-index.json'), 'utf8'));
+  const active = await Promise.all(index.parts.map(async part => [part.src, await readFile(join(root, part.src), 'utf8')]));
+  const stale = 'a'.repeat(64) + '.json', folder = 'b'.repeat(64) + '.json', link = 'c'.repeat(64) + '.json';
+  await writeFile(join(partDirectory, stale), 'rebuildable obsolete view');
+  await writeFile(join(partDirectory, 'notes.json'), 'human notes');
+  await mkdir(join(partDirectory, folder));
+  await writeFile(join(partDirectory, folder, 'keep.txt'), 'unknown folder content');
+  const external = join(directory, 'outside.json');
+  await writeFile(external, 'external content');
+  await symlink(external, join(partDirectory, link));
+  await buildFeed(root);
+  await assert.rejects(readFile(join(partDirectory, stale)), { code: 'ENOENT' });
+  for (const [path, text] of active) assert.equal(await readFile(join(root, path), 'utf8'), text);
+  assert.equal(await readFile(join(partDirectory, 'notes.json'), 'utf8'), 'human notes');
+  assert.equal(await readFile(join(partDirectory, folder, 'keep.txt'), 'utf8'), 'unknown folder content');
+  assert.equal(await readFile(join(partDirectory, link), 'utf8'), 'external content');
+  assert.equal(await readFile(external, 'utf8'), 'external content');
+  assert.equal((await loadContent(root)).feed.posts.length, 15, 'published archives remain intact');
+});
+
+test('build refuses symlinked feed directories and current part files without changing their targets', async t => {
+  for (const target of ['data', 'data/feed', 'part']) {
+    const { root, directory } = await repositoryCopy(t);
+    const index = JSON.parse(await readFile(join(root, 'data/feed-index.json'), 'utf8'));
+    const relative = target === 'part' ? index.parts[0].src : target;
+    const external = join(directory, 'external-' + target.replaceAll('/', '-'));
+    await rm(join(root, relative), { recursive: true });
+    if (target === 'part') await writeFile(external, 'external content');
+    else {
+      await mkdir(external);
+      await writeFile(join(external, 'd'.repeat(64) + '.json'), 'external content');
+    }
+    await symlink(external, join(root, relative));
+    await assert.rejects(buildFeed(root), /Generated feed (?:directories|files) must be regular/);
+    assert.equal(await readFile(target === 'part' ? external : join(external, 'd'.repeat(64) + '.json'), 'utf8'), 'external content');
+  }
+});
+
 test('reviewed ingestion archives once, retries restore the feed, conflicting retries fail', async t => {
   const { root, directory } = await repositoryCopy(t);
   const input = join(directory, 'batch.json'); const batch = newBatch();
@@ -785,3 +825,4 @@ test('posting switches prevent new root posts and replies while retaining histor
   await assert.rejects(ingestBatch(input, { root, reviewed: true }), /does not allow replies/);
   assert.equal((await loadContent(root)).feed.posts.length, 15);
 });
+

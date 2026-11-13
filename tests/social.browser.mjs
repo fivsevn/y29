@@ -4,6 +4,7 @@ import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { parseSiteGuide, userNameColor, WELCOME_POST_ID, isEmoteMedia } from '../lucifer0/core.js';
+import { partitionFeed } from '../lucifer0/tools/feed-parts.js';
 
 const browsers = await import(process.env.Y29_PLAYWRIGHT_MODULE || 'playwright');
 const browserName = process.env.Y29_BROWSER || 'chromium';
@@ -539,6 +540,47 @@ try {
     'exactly five replies need no show-more link');
   check(await indexed.evaluate(() => window.threadIndexBuilds) === 1, 'the replacement feed is indexed once');
   await indexed.close();
+
+  // A long-lived tab can outlast a deployment which removes its old part URLs.
+  const recovery = await context.newPage(); trackErrors(recovery);
+  const recoveryRoots = Array.from({ length: 60 }, (_, index) => ({ ...roots[0],
+    id: 'recovery-root-' + index, replyTo: null, media: [],
+    createdAt: new Date(Date.UTC(2026, 0, 1, 0, index)).toISOString(), text: '旧版发言 ' + index }));
+  let recoveryData = partitionFeed({ ...feed, posts: recoveryRoots });
+  let recoveryIndexRequests = 0, missingPartRequests = 0;
+  await recovery.route('**/data/feed-index.json', route => {
+    recoveryIndexRequests++;
+    return route.fulfill({ json: recoveryData.index });
+  });
+  await recovery.route('**/data/feed/*.json', route => {
+    const path = new URL(route.request().url()).pathname.split('/lucifer0/')[1];
+    const part = recoveryData.files.find(part => part.src === path);
+    if (!part) { missingPartRequests++; return route.fulfill({ status: 404, body: 'retired part' }); }
+    return route.fulfill({ contentType: 'application/json', body: part.text });
+  });
+  await recovery.goto(base); await recovery.locator('article').first().waitFor();
+  check(await recovery.locator('article').count() === 24, 'recovery fixture initially loads one page');
+  recoveryData = partitionFeed({ ...feed, posts: [{ ...recoveryRoots.at(-1), id: 'recovery-new-root',
+    createdAt: '2026-01-01T02:00:00Z', text: '更新后新增的主帖' },
+    ...recoveryRoots.map(post => ({ ...post, text: post.text.replace('旧版', '新版') }))] });
+  await recovery.locator('main').evaluate(main => { main.scrollTop = 500; });
+  const recoveryScroll = await recovery.locator('main').evaluate(main => main.scrollTop);
+  await recovery.locator('[data-action="more"]').evaluate(button => button.click());
+  await recovery.waitForFunction(() => document.querySelectorAll('article').length === 48);
+  const recoveryIds = await recovery.locator('article').evaluateAll(posts => posts.map(post => post.id));
+  check(recoveryIndexRequests === 2 && missingPartRequests === 1, 'a retired part causes exactly one automatic index refresh');
+  check(recoveryIds.length === new Set(recoveryIds).size && recoveryIds[0] === 'post-recovery-new-root',
+    'recovery keeps the expanded page size without mixing old and new root positions');
+  check(!(await recovery.locator('main').textContent()).includes('旧版发言'), 'recovery replaces stale cards with the latest content');
+  check(Math.abs(await recovery.locator('main').evaluate(main => main.scrollTop) - recoveryScroll) < 1,
+    'recovering an expanded feed preserves its scroll position');
+  recoveryData = partitionFeed({ ...feed, posts: recoveryRoots.map(post => ({ ...post, text: '再次更新 ' + post.id })) });
+  await recovery.evaluate(() => { location.hash = '#/post/recovery-root-0'; });
+  await recovery.locator('#post-recovery-root-0').waitFor();
+  check(recoveryIndexRequests === 3 && missingPartRequests === 2 &&
+    (await recovery.locator('#post-recovery-root-0 .post-text').textContent()).startsWith('再次更新'),
+    'opening an older discussion also recovers from an index retired by a later deployment');
+  await recovery.close();
   check(errors.length === 0, `no browser errors: ${errors.join(', ')}`);
   console.log(`Passed ${checks} browser assertions (${browserName}). Screenshots: ${output}`);
 } finally { await browser.close(); }
