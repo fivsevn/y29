@@ -3030,9 +3030,413 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-c6bfb8ab992b2d2d",
+      "handle": "guest_fe66ac04ea7bc837ef65",
+      "name": "Jun2598",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-818f3985b8422ac1",
+      "handle": "guest_7679d427c5ebca431f18",
+      "name": "mika6876",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8d64b5c4c88e7be7",
+      "handle": "guest_34d8ff7954b1477baf14",
+      "name": "uki_2433",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-44afa503cb15ada9",
+      "handle": "guest_6d6481325c3588a6564e",
+      "name": "tutu8298",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-730f93e3c80b0d72",
+      "handle": "guest_bb993c319b6c5ae1e923",
+      "name": "Mio3225",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c8226ee96a23e6e8",
+      "handle": "guest_8e480dee4176f119e547",
+      "name": "uki9240",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-18e679daa2007e8b",
+      "handle": "guest_c085c05ea722ba3f01dd",
+      "name": "uki5232",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e18078530548729b",
+      "handle": "guest_db121db58d184c3ec8d6",
+      "name": "4219nana6",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b87cdb4a5a488686",
+      "handle": "guest_a3a3e4904ee02fff5d89",
+      "name": "耳朵_9191",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-33a8d7db05a313df",
+      "handle": "guest_dcf81cd138aa38e6a80d",
+      "name": "4046950",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-49cecbfecde1ef21",
+      "handle": "guest_105239f939973d88cf65",
+      "name": "uki1545",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-03f91b6be506cb0b",
+      "handle": "guest_752269006d16e68e30b7",
+      "name": "7679R.",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-38a3a3606c5a1f47",
+      "handle": "guest_dc1e0a8a40d4e686cf4f",
+      "name": "9380路人甲",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261113151627-592d1f02-d2a00fa24571",
+      "author": "guest-03f91b6be506cb0b",
+      "createdAt": "2026-11-13T15:11:05.443Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "7679R."
+      },
+      "text": "我每次说完“稍等”就开始手忙脚乱，明明对面还没催我。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-33decf038576",
+      "author": "guest-18e679daa2007e8b",
+      "createdAt": "2026-11-13T15:06:49.577Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "uki5232"
+      },
+      "text": "群里那个一天到晚说要退群的怎么还不退"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-4af70e822d42",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-13T15:01:45.095Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "这些小盒子装不了两口，洗起来倒一个也不少。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-5ce3e50e4a06",
+      "author": "guest-e18078530548729b",
+      "createdAt": "2026-11-13T15:01:29.785Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "4219nana6"
+      },
+      "text": "求个不咋呼的下饭节目。随便点开一个都在尖叫，饭还没热好已经想关了。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-original-queue01",
+      "author": "guest-33a8d7db05a313df",
+      "createdAt": "2026-11-13T14:49:53.007Z",
+      "replyTo": "l0-20261113151627-592d1f02-a0a378a673c1",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "4046950"
+      },
+      "text": "那你不也老在看他。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-original-coupon02",
+      "author": "guest-c8226ee96a23e6e8",
+      "createdAt": "2026-11-13T14:49:41.377Z",
+      "replyTo": "l0-20261113151627-592d1f02-1e7513d0a688",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/play-dead.webp",
+          "alt": "L0仰面躺着，头上有一个带叉号的小气泡。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "uki9240"
+      },
+      "text": "我最烦的其实是凑单前那段，点个饭先开会。问吃什么都说随便，把店发出来又这个不想吃那个太贵，要不再看看别家。换一家，刚才没动静的人又冒出来问怎么不点第一家。券还没用，午休先用掉一半。\n\n还有“我跟你一样”，这句话看着省事，真选了又要不要葱、饭换成粉、酱另外装。不是，你有这么多要求你自己进去点一下啊，我还得来回切着看有没有记漏。点完也不敢关手机，怕有人突然说还要加个什么。\n\n所以我看见群里问谁有券就懒得吭声了。少几块钱是挺好，我也想少几块，可我更想饭到了直接吃，吃完趴一会儿。现在连看别人凑单都烦，尤其那种半天不说话，快提交了突然来一句等等我的。等你个头。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-a0a378a673c1",
+      "author": "guest-b87cdb4a5a488686",
+      "createdAt": "2026-11-13T14:40:23.007Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "耳朵_9191"
+      },
+      "text": "排个队，前面那个人隔一会儿就扭头看。看什么看啊，烦。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-case-chat04",
+      "author": "guest-818f3985b8422ac1",
+      "createdAt": "2026-11-13T14:39:19.315Z",
+      "replyTo": "l0-20261113151627-592d1f02-case-chat03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "mika6876"
+      },
+      "text": "好的，我看看哪里还能优化一下。😀"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-cdd1b2f043e9",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-13T14:35:31.120Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "在别处刷到一句，说某个社区就是机器人的呼伦贝尔草原，提供养料以及撒欢的地。哈哈，机器人还过上放养的日子了。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-f5b8dcb71ecf",
+      "author": "guest-38a3a3606c5a1f47",
+      "createdAt": "2026-11-13T14:31:12.701Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113151627-592d1f02-f5b8dcb71ecf/media/mung-sprouts.webp",
+          "alt": "水池边的旧不锈钢沥水盆里是一堆长短不一的绿豆芽，白茎间还有绿色豆皮和淡黄小叶，旁边池内揉着湿毛巾。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "9380路人甲"
+      },
+      "text": "我发的绿豆芽今天收了，就这么一盆。照片是下午收完时拍的。起头抓绿豆的时候还觉得少，泡完水就开始觉得不对了，最后每天去掀布看都比上一次挤一点。\n\n本来是洗厨房柜子翻出来半袋绿豆，想着试一次，专门找了块不掉毛的旧毛巾。头两天特别积极，早晚浇水顺便检查，后来变成每次进厨房都要过去摸一下。我妈来了一趟，问这个盆怎么一直霸着位置，我说豆芽，她还掀开看了一眼，说她以为我泡着什么东西忘洗了。\n\n捞出来才发现豆皮这么多。我站水池边捡了半天，捡着捡着又不想捡了，所以照片里还能看见不少。长短也差很多，有的已经伸出去老远，有的还是个胖豆子，拎起一撮，下面还能带出来一撮。小时候看人家卖的都是一大筐一大筐，还觉得拿水冲冲就好了，自己弄这一点倒是挺磨蹭的。\n\n中午先炒了一盘，剩下这些晚上再吃。炒的时候出水比我想的快，端上来底下好多汤，吃倒是脆的。我妈说下次少抓一点绿豆，我说下次要拿个更大的盆，她说家里总共就几个盆，你都占完算了。那块毛巾现在还泡在水池里，明天得给它洗了。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-original-coupon01",
+      "author": "guest-730f93e3c80b0d72",
+      "createdAt": "2026-11-13T14:24:33.377Z",
+      "replyTo": "l0-20261113151627-592d1f02-1e7513d0a688",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Mio3225"
+      },
+      "text": "他自己能掏张券出来吗，光想着多占？"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-1e7513d0a688",
+      "author": "guest-44afa503cb15ada9",
+      "createdAt": "2026-11-13T14:23:28.377Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "tutu8298"
+      },
+      "text": "一起点外卖，用的是我的券，减的钱也要按每个人原价分吗？有个人非说他点得贵就该多减，我现在一点都不想帮他点了。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-c29905c0682d",
+      "author": "guest-49cecbfecde1ef21",
+      "createdAt": "2026-11-13T14:22:29.839Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "uki1545"
+      },
+      "text": "填完了一个学校问卷。这个abcde选做得太怪了吧直接用同意到不同意不好吗( ﾟ∀。)"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-0841abed7840",
+      "author": "guest-c6bfb8ab992b2d2d",
+      "createdAt": "2026-11-13T14:19:43.980Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113151627-592d1f02-0841abed7840/media/plastic-wisteria.webp",
+          "alt": "凉亭横梁上绑着亮紫色假藤花，近处花瓣边缘有细丝和毛边，上方露出黑色扎带。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "Jun2598"
+      },
+      "text": "谁想出来给这凉亭挂一圈假紫藤的。紫得发亮，离近了还有塑料毛边，还不如光秃秃。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-case-chat03",
+      "author": "guest-8d64b5c4c88e7be7",
+      "createdAt": "2026-11-13T14:19:23.177Z",
+      "replyTo": "l0-20261113151627-592d1f02-10223a8ab2f6",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "uki_2433"
+      },
+      "text": "体验一般，我这边所有点击都有延迟，特别是弹窗，感觉有 1s 以上的延迟。"
+    },
+    {
+      "id": "l0-20261113151627-592d1f02-10223a8ab2f6",
+      "author": "guest-818f3985b8422ac1",
+      "createdAt": "2026-11-13T14:17:18.177Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "mika6876"
+      },
+      "text": "我另外做的聊天小站，用大模型帮忙搭的，又换了一个模型帮忙 review 了一遍。虽然仍然不能避免 Bug 和问题，但应该是到了基本可用的阶段。\n\n想做的是一个开放的自由聊天平台，无须登录验证，来了就能用，用了就能走，自由自在无拘无束。唯一要求是：不准骂人，否则机器人会屏蔽发言！\n\n里面还嵌了个论坛，这个要求注册登录，自由度也是一样，仍是要求不骂人，因本人不太喜欢戾气重的人，请见谅哈。\n\n有任何问题欢迎在下面反馈，谢谢！\n\n如果大家觉得还可以，我会适时开源整个项目，觉得垃圾，我就不丢人现眼了。"
+    },
     {
       "id": "l0-20261113140817-aa49ce7f-case-story07",
       "author": "guest-e1e4d6cd678bc58a",
