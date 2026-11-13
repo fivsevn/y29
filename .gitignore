@@ -2,6 +2,7 @@ dist/
 .DS_Store
 node_modules/
 test-results/
+generated_images/
 
 lucifer0/.publish.lock/
 lucifer0/.publish-staging/

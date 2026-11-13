@@ -1,5 +1,5 @@
 import { escapeHTML as esc, readState, saveState, toggle, selectPosts, createThreadIndex, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText, isEmoteMedia } from './core.js?v=20261113-feed-pages';
-import { createFeedStore, FEED_PAGE_SIZE } from './feed-store.js?v=20261113-feed-pages';
+import { createLiveFeedStore, FEED_PAGE_SIZE } from './feed-store.js?v=20261113-feed-recovery';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -310,7 +310,7 @@ document.addEventListener('click', async event => {
   if (!button || !feedStore) return;
   const { action, id } = button.dataset;
   if (action === 'more') { await appendHome(button); return; }
-  if (action === 'retry-route') { await showRoute(); return; }
+  if (action === 'retry-route') { await load({ scroll: main.scrollTop }); return; }
   if (!['likes', 'share'].includes(action)) return;
   if (action === 'share') {
     const url = new URL(location.href); url.hash = postURL(id).slice(1);
@@ -366,12 +366,20 @@ async function showRoute({ scroll = 0, target = false } = {}) {
 async function appendHome(button) {
   const key = routeKey(), following = route().page === 'following';
   const shown = main.querySelectorAll('article.post').length, limit = pageLimit() + FEED_PAGE_SIZE;
+  const generation = feedStore.generation, scroll = main.scrollTop;
   button.disabled = true; button.textContent = '正在载入…';
   try {
     await feedStore.ensureRoute(route(), limit);
     if (routeKey() !== key || !button.isConnected) return;
     routeLimits.set(key, limit); refreshFeed();
     const selected = homePosts(following).slice(0, limit);
+    if (feedStore.generation !== generation) {
+      // The new index can insert roots ahead of the cards already displayed.
+      // Rebuild that page rather than appending mismatched slices of two feeds.
+      main.innerHTML = renderHome(following);
+      main.scrollTop = scroll;
+      return;
+    }
     // Append without replacing earlier cards, images or the reading position.
     button.parentElement.outerHTML = selected.slice(shown).map(post => postMarkup(post, { preview: true })).join('') + homeFooter(selected.length, feedStore.homeRoots(following).length);
     const firstNewPost = document.getElementById('post-' + selected[shown]?.id);
@@ -389,22 +397,25 @@ window.addEventListener('hashchange', async () => {
   await showRoute({ scroll: previous ?? 0, target: previous === undefined });
   main.focus({ preventScroll: true });
 });
-async function load() {
+async function fetchFeedIndex() {
+  let response = await fetch('./data/feed-index.json', { cache: 'no-cache' });
+  // Existing snapshots can still be opened before a split index is rebuilt.
+  if (response.status === 404) response = await fetch('./data/feed.json', { cache: 'no-cache' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+async function load({ scroll = 0 } = {}) {
   try {
-    let response = await fetch('./data/feed-index.json', { cache: 'no-cache' });
-    // Existing snapshots can still be opened before a split index is rebuilt.
-    if (response.status === 404) response = await fetch('./data/feed.json', { cache: 'no-cache' });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const index = await response.json();
-    feedStore = createFeedStore(index, async src => {
+    const index = await fetchFeedIndex();
+    feedStore = createLiveFeedStore(index, async src => {
       const part = await fetch('./' + src);
-      if (!part.ok) throw new Error(`HTTP ${part.status}`);
+      if (!part.ok) throw Object.assign(new Error(`HTTP ${part.status}`), { status: part.status });
       return part.json();
-    });
+    }, fetchFeedIndex);
     feedRevision = -1;
     state ??= readState(storage);
     renderedRoute = routeKey();
-    await showRoute({ target: true });
+    await showRoute({ scroll, target: !scroll });
   } catch {
     feed = null; feedStore = null;
     main.innerHTML = '<div class="empty"><h3>帖子暂时没有载入</h3><p>请稍后重试。</p><button class="follow-button" id="retry">重新载入</button></div>';

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultLottery as currentLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant, imagePoolProgress, emotePoolProgress, suggestPostPresentation } from '../lucifer0/tools/lottery.js';
+import { defaultLottery as currentLottery, drawRootBudget, drawPostChoices, drawThreadReplyCount, drawResearchWindows, drawResearchMaintenance, validateLottery, chooseReplyParticipant, imagePoolProgress, emotePoolProgress, suggestPostPresentation, summarizeMediaUse } from '../lucifer0/tools/lottery.js';
 import { drawUpdatePlan } from '../lucifer0/tools/operations.js';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -428,6 +428,7 @@ test('media quota and diversity settings reject malformed optional parameters', 
 test('current joint media profiles replay one round tendency and allow all combinations without quotas', () => {
   const lottery = structuredClone(currentLottery), posts = Array.from({length: 18}, (_, i) => ({id: 'joint-post-' + i, replyTo: i < 6 ? null : 'joint-post-0', media: []}));
   const combinations = new Set(), profiles = new Set();
+  const opportunities = { rootImages: 0, replyEmotes: 0, plain: 0 };
   for (let i = 0; i < 80; i++) {
     const seed = 'joint-round-' + i, first = suggestPostPresentation({seed, posts, lottery});
     assert.deepEqual(suggestPostPresentation({seed, posts: [...posts].reverse(), lottery}).images, first.images);
@@ -436,6 +437,9 @@ test('current joint media profiles replay one round tendency and allow all combi
       const choice = drawPostChoices({seed, postId:post.id, replyTo:post.replyTo, lottery});
       assert.equal(choice.presentation.profile, first.mediaProfile);
       combinations.add(choice.presentation.combination);
+      if (post.replyTo === null && choice.image !== 'none') opportunities.rootImages++;
+      if (post.replyTo !== null && choice.emoteCount > 0) opportunities.replyEmotes++;
+      if (choice.presentation.combination === 'none') opportunities.plain++;
       assert.equal(choice.image !== 'none', ['image','both'].includes(choice.presentation.combination));
       assert.equal(choice.emoteCount > 0, ['emote','both'].includes(choice.presentation.combination));
     }
@@ -447,10 +451,61 @@ test('current joint media profiles replay one round tendency and allow all combi
   }
   assert.equal(profiles.size, lottery.media.profiles.length);
   assert.deepEqual([...combinations].sort(), ['both','emote','image','none']);
+  assert.ok(opportunities.rootImages / (80 * 6) > 0.4, 'ordinary picture opportunities remain substantial');
+  assert.ok(opportunities.replyEmotes / (80 * 12) > 0.4, 'reply emotes participate in ordinary conversation');
+  assert.ok(opportunities.plain / (80 * 18) > 0.2, 'plain text remains an ordinary option');
   for (const broken of [[], [{id:'bad-profile',weight:1,root:{none:0,image:0,emote:0,both:0},reply:{none:1,image:0,emote:0,both:0}}]]) {
     const invalid=structuredClone(lottery); invalid.media.profiles=broken;
     assert.throws(()=>validateLottery(invalid), /media profile|media combinations/);
   }
+});
+
+test('media follow-through exposes lost opportunities without turning suggestions into quotas', () => {
+  const lottery = structuredClone(currentLottery);
+  lottery.media.profiles = [{ id: 'both-test', weight: 1,
+    root: { none: 0, image: 0, emote: 0, both: 1 }, reply: { none: 0, image: 0, emote: 0, both: 1 } }];
+  const image = { src: 'posts/2026/11/follow-root/media/scene.webp', kind: 'image' };
+  const emote = { src: 'assets/emotes/l0/huh.webp', kind: 'emote' };
+  const posts = [
+    { id: 'follow-root', replyTo: null, media: [image, emote, emote] },
+    { id: 'follow-second', replyTo: null, media: [] },
+    { id: 'follow-reply', replyTo: 'follow-root', media: [emote] }
+  ];
+  const before = structuredClone(posts), result = suggestPostPresentation({ seed: 'follow-seed', posts, lottery });
+  assert.deepEqual(posts, before, 'inspection must leave the draft unchanged');
+  assert.deepEqual(result.mediaFollowThrough.ordinaryImages, {
+    suggestedPosts: 3, actualPosts: 1, shortfall: 2,
+    root: { suggestedPosts: 2, actualPosts: 1, shortfall: 1 },
+    reply: { suggestedPosts: 1, actualPosts: 0, shortfall: 1 }
+  });
+  assert.equal(result.mediaFollowThrough.emotes.actualPosts, 2, 'multiple emotes count as one speaking opportunity');
+  assert.equal(result.mediaFollowThrough.reviewRequired, true);
+  assert.equal(result.imagePools.root.minimumPosts, 0);
+  assert.equal(result.imagePools.reply.missingPosts, 0);
+  assert.equal(result.emotePools.root.minimumPosts, 0);
+  assert.deepEqual(suggestPostPresentation({ seed: 'follow-seed', posts: [...posts].reverse(), lottery }).mediaFollowThrough,
+    result.mediaFollowThrough);
+  posts[1].media = [image, emote];
+  posts[2].media.push(image);
+  assert.equal(suggestPostPresentation({ seed: 'follow-seed', posts, lottery }).mediaFollowThrough.reviewRequired, false);
+});
+
+test('media summaries compare current and legacy posts, counting utterances rather than attachments', () => {
+  const posts = [
+    { id: 'summary-root', replyTo: null, media: [{ src: 'posts/2026/11/summary-root/media/old.webp' }] },
+    { id: 'summary-reply', replyTo: 'summary-root', media: [{ src: 'assets/emotes/l0/huh.webp' },
+      { src: 'posts/2026/11/summary-root/media/reaction.webp', kind: 'emote' }] },
+    { id: 'summary-both', replyTo: null, media: [{ src: 'posts/2026/11/summary-both/media/photo.webp', kind: 'image' },
+      { src: 'assets/emotes/l0/huh.webp', kind: 'emote' }] },
+    { id: 'summary-plain', replyTo: 'summary-root', media: [] }
+  ];
+  assert.deepEqual(summarizeMediaUse(posts), {
+    posts: 4, ordinaryImagePosts: 2, emotePosts: 2, textOnlyPosts: 1,
+    root: { posts: 2, ordinaryImagePosts: 2, emotePosts: 1, textOnlyPosts: 0 },
+    reply: { posts: 2, ordinaryImagePosts: 0, emotePosts: 1, textOnlyPosts: 1 }
+  });
+  assert.equal(summarizeMediaUse([]).posts, 0);
+  assert.throws(() => summarizeMediaUse([...posts, posts[0]]), /distinct valid/);
 });
 
 test('current discussion retains half negative intent, a final share floor and mostly unfamiliar identities', () => {

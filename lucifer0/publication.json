@@ -249,50 +249,50 @@
       "profiles": [
         {
           "id": "text-led",
-          "weight": 55,
+          "weight": 35,
           "root": {
-            "none": 65,
-            "image": 20,
-            "emote": 10,
-            "both": 5
+            "none": 50,
+            "image": 28,
+            "emote": 14,
+            "both": 8
           },
           "reply": {
-            "none": 65,
-            "image": 8,
-            "emote": 22,
-            "both": 5
+            "none": 48,
+            "image": 10,
+            "emote": 34,
+            "both": 8
           }
         },
         {
           "id": "mixed",
-          "weight": 30,
+          "weight": 45,
           "root": {
-            "none": 40,
-            "image": 35,
-            "emote": 15,
-            "both": 10
+            "none": 30,
+            "image": 38,
+            "emote": 17,
+            "both": 15
           },
           "reply": {
-            "none": 50,
+            "none": 35,
             "image": 12,
-            "emote": 28,
-            "both": 10
+            "emote": 39,
+            "both": 14
           }
         },
         {
           "id": "image-led",
-          "weight": 15,
+          "weight": 20,
           "root": {
-            "none": 25,
+            "none": 15,
             "image": 45,
-            "emote": 10,
-            "both": 20
+            "emote": 12,
+            "both": 28
           },
           "reply": {
-            "none": 40,
-            "image": 20,
-            "emote": 25,
-            "both": 15
+            "none": 25,
+            "image": 18,
+            "emote": 37,
+            "both": 20
           }
         }
       ]

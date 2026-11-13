@@ -1,6 +1,6 @@
 import { recordCaseUsage } from './case-usage.js';
 import { validateCasePlan } from './case-adaptation.js';
-import { readFile, mkdir, writeFile, realpath, lstat, rm, rename } from 'node:fs/promises';
+import { readFile, mkdir, writeFile, realpath, lstat, rm, rename, readdir } from 'node:fs/promises';
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash, randomUUID } from 'node:crypto';
@@ -177,13 +177,30 @@ export async function buildFeed(root = socialRoot, { locked = false } = {}) {
     let { feed } = await loadContent(root);
     if (await normalizeArchivedImages(root)) ({ feed } = await loadContent(root));
     const path = join(root, 'data/feed.json');
-    await mkdir(dirname(path), { recursive: true });
-    await writeFile(path, JSON.stringify(feed, null, 2) + '\n');
     const { index, files } = partitionFeed(feed);
-    await mkdir(join(root, 'data/feed'), { recursive: true });
+    // Generated views are replaceable, but their directories must never lead
+    // outside the project through a symlink, including during stale-part cleanup.
+    for (const directory of [root, join(root, 'data'), join(root, 'data/feed')]) {
+      if (directory !== root) await mkdir(directory, { recursive: true });
+      const stat = await lstat(directory);
+      if (!stat.isDirectory() || stat.isSymbolicLink()) fail('Generated feed directories must be regular: ' + directory);
+    }
+    for (const destination of [path, join(root, 'data/feed-index.json'), ...files.map(file => join(root, file.src))]) {
+      try {
+        const stat = await lstat(destination);
+        if (!stat.isFile() || stat.isSymbolicLink()) fail('Generated feed files must be regular: ' + destination);
+      } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    }
+    await writeFile(path, JSON.stringify(feed, null, 2) + '\n');
     await Promise.all(files.map(({ src, text }) => writeFile(join(root, src), text)));
     await writeFile(join(root, 'data/feed-index.json'), JSON.stringify(index) + '\n');
     await buildUserDirectory(root);
+    const currentParts = new Set(files.map(file => file.src.slice('data/feed/'.length)));
+    for (const entry of await readdir(join(root, 'data/feed'), { withFileTypes: true })) {
+      if (!/^[a-f0-9]{64}\.json$/.test(entry.name) || currentParts.has(entry.name) || !entry.isFile()) continue;
+      const obsolete = join(root, 'data/feed', entry.name), stat = await lstat(obsolete);
+      if (stat.isFile() && !stat.isSymbolicLink()) await rm(obsolete);
+    }
     return feed;
   } finally { if (!locked) await rm(lock, { recursive: true, force: true }); }
 }

@@ -4,7 +4,7 @@ import { resolve, dirname, join, relative, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { socialRoot, loadContent } from './content.js';
-import { defaultLottery, compatibilityLotteryV1, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, imagePoolProgress, emotePoolProgress, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance, randomFor } from './lottery.js';
+import { defaultLottery, compatibilityLotteryV1, validateLottery, validateReplyLottery, drawRootBudget, drawPlanSelection, drawThreadReplyCount, suggestPostPresentation, summarizeMediaUse, imagePoolProgress, emotePoolProgress, drawPostChoices, choosePostAuthor, chooseReplyParticipant, visibleExcerpt, drawResearchWindows, drawResearchMaintenance, randomFor } from './lottery.js';
 export { drawThreadReplyCount, suggestPostPresentation } from './lottery.js';
 import { externalFolder, readProfiles } from './profiles.js';
 import { siteEmoteManifestPath } from './site-emotes.js';
@@ -15,6 +15,7 @@ import { createCasePlan, validateCasePlan, caseRootIds, caseRoot, caseForPost, v
 import { writerSource, assignGuestName } from './writer-input.js';
 import { scheduleParticipation, validatePostingWindows } from './participation.js';
 import { contextReviewBasis, checkContextReviewShape, validateContextReview } from './context-review.js';
+import { cleanupCompletedWork } from './working-files.js';
 
 const DAY = 86400000;
 const ID = /^[a-z0-9][a-z0-9-]{1,63}$/;
@@ -381,6 +382,29 @@ async function acquireLock(path, message) {
   return () => rm(path, { recursive: true, force: true });
 }
 const lockWork = directory => acquireLock(join(directory, '.update.lock'), 'The current update is busy; retry after its active command finishes');
+function readingDocuments(operation, data) {
+  const limit = operation.plan.lottery?.diversity?.recentUpdates ?? 3;
+  const groups = new Map();
+  for (const post of data.feed.posts) {
+    const id = post.id.match(/^l0-\d{14}-[a-f0-9]{8}(?=-)/)?.[0] ?? 'archive-' + post.createdAt.slice(0, 10);
+    if (!groups.has(id)) groups.set(id, { latest: post.createdAt, ids: new Set() });
+    const group = groups.get(id);
+    if (Date.parse(post.createdAt) > Date.parse(group.latest)) group.latest = post.createdAt;
+    group.ids.add(post.id);
+  }
+  const recentIds = new Set([...groups].sort((a, b) => Date.parse(b[1].latest) - Date.parse(a[1].latest) || b[0].localeCompare(a[0], 'en'))
+    .slice(0, limit).flatMap(([, group]) => [...group.ids]));
+  const byId = new Map(data.feed.posts.map(post => [post.id, post]));
+  for (const id of recentIds) {
+    const parentId = byId.get(id)?.replyTo;
+    if (parentId) recentIds.add(parentId);
+  }
+  return data.documents.filter(document => {
+    if (!document.path.startsWith('posts/')) return true;
+    const match = /^posts\/\d{4}\/\d{2}\/([^/]+)\/(?:index\.md|replies\/([^/]+)\.md)$/.exec(document.path);
+    return match && recentIds.has(match[2] ?? match[1]);
+  });
+}
 function reading(operation, data) {
   const budget = operation.plan.replyLottery === undefined ? '发言上限：' + operation.plan.budget : '新主帖上限：' + operation.plan.budget + '；发言总上限：' + replyLimits(operation.plan, data.policy).totalBudget + '；回复合计上限：' + replyLimits(operation.plan, data.policy).maxReplies;
   const explanation = operation.plan.replyLottery === undefined ? '主帖和回复合计不超过上限。' : '先确定新主帖和要接续的旧串，再用 replies 命令逐串抽回复上限；所有楼中楼都计入原根串，实际回复可以少于抽取数。';
@@ -391,7 +415,8 @@ function reading(operation, data) {
     '## 当前账号权限与世界观\n\n| 账号 | 所属世界观 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- | --- |\n' +
     data.registry.users.map(user => '| ' + user.id + ' | ' + (data.material.profiles[user.id].basics.worldview || '未指定') + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
     '\n\n素材使用：' + sampleInstruction + (data.samples.length ? '' : '当前没有可用素材，继续按现有资料创作，不编造采集记录。') +
-    '\n\n' + data.documents.map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
+    '\n\n历史阅读范围：保留最近' + (operation.plan.lottery?.diversity?.recentUpdates ?? 3) + '轮帖子原文；旧编号归档按日期分组。规则、人物、世界观与研究资料仍为完整原文。更早的本人发言和实际可见父帖由 brief 按需提供；接续旧串时按原帖路径补读，不将未读历史当作人物已知事实。全部归档继续参与完整性核验。\n\n' +
+    readingDocuments(operation, data).map(document => '---\n\n## 原文路径：' + document.path + '\n\n' + document.text).join('\n\n') + '\n';
 }
 
 export async function prepareUpdate({ root = socialRoot, workDirectory, requestedCount, intakeReceipt, now = Date.now(), entropy = () => randomBytes(32).toString('hex') } = {}) {
@@ -506,6 +531,8 @@ function diversityContext(operation, history) {
     src: review.src.replace(/\.(?:png|jpe?g|svg)$/, '.webp') }))
     .sort((a, b) => (a.postId + '\0' + a.src).localeCompare(b.postId + '\0' + b.src, 'en'));
   return { recentUpdates, currentPosts: operation.posts,
+    mediaHistory: recentUpdates.map(update => ({ id: update.id, ...summarizeMediaUse(update.posts) })),
+    currentMedia: summarizeMediaUse(operation.posts),
     reviewBasis: { postsDigest: digest({ posts: presentationPosts(operation.posts), mediaReviews }), historyDigest: digest(recentUpdates) } };
 }
 
@@ -567,13 +594,19 @@ function writerProfile(document) {
 }
 
 // This is the only writer-facing view. Full source reading remains an editor resource.
-export async function briefUpdatePost({ root = socialRoot, workDirectory, postId, replyTo, threadId, now = Date.now() } = {}) {
+export async function briefUpdatePost({ root = socialRoot, workDirectory, postId, replyTo, threadId, view = 'full', now = Date.now() } = {}) {
+  if (!['full', 'writer'].includes(view)) fail('Brief view must be full or writer');
   if (typeof postId !== 'string' || !ID.test(postId) || replyTo !== undefined && (typeof replyTo !== 'string' || !ID.test(replyTo)) ||
     threadId !== undefined && (typeof threadId !== 'string' || !ID.test(threadId))) fail('Brief needs --post ID and an optional --reply-to ID or --thread root ID');
   if (replyTo !== undefined && threadId !== undefined) fail('Use either --reply-to or --thread for a brief');
   root = await checkedRoot(root);
   const directory = await workFolder(workDirectory, root), release = await lockWork(directory);
-  try { return await briefLocked({ root, directory, postId, replyTo, threadId, now }); }
+  try {
+    const result = await briefLocked({ root, directory, postId, replyTo, threadId, now });
+    if (view === 'full' || result.writer === null) return result;
+    const { id, draft, writer } = result;
+    return { id, postId, draft, writer };
+  }
   finally { await release(); }
 }
 async function briefLocked({ root, directory, postId, replyTo, threadId, now }) {
@@ -720,11 +753,12 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
   const worldviewDocument = kind => data.material.worldviewDocuments.find(document => document.id === worldviewId && document.kind === kind)?.path ?? null;
   const presentationDrafts = existing ? operation.posts : [...operation.posts, draft];
   const presentationOriginals = config.media?.profiles ? presentationDrafts.filter(post => !caseForPost(operation.plan, post, presentationDrafts)) : presentationDrafts;
+  const mediaOpportunity = adaptedCase || choices.image !== 'none' || choices.emoteCount > 0 || draft.media.length > 0;
   const result = {
     id: operation.id, postId, draft,
     writer: {
       createdAt,
-      writing: writerSource(writing, { sections: ['形成一条发言', ...(adaptedCase ? ['现实素材改编'] : [])] }),
+      writing: writerSource(writing, { sections: ['形成一条发言', ...(adaptedCase ? ['现实素材改编'] : []), ...(mediaOpportunity ? ['配图'] : [])] }),
       sourceSamples: { instruction: sampleInstruction + (informal ? '直接看原片段，保留里面没道理的嫌弃、低级玩笑、复读、没接上的话和沉默，不先提炼成合理诉求或完整冲突；去标识与核对事实不等于润色。' : ''),
         items: adaptedCase ? [{ sourcePath: adaptedCase.sourcePath, sample: structuredClone(adaptedCase.sample) }] :
           selectSamples(data.samples, { seed: operation.plan.seed + ':brief:' + postId, limit: 3 }).map(({ path, sample }) => ({ sourcePath: path, sample: structuredClone(sample) })) },
@@ -736,7 +770,7 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
           .map(post => ({ id: post.id, createdAt: post.createdAt, replyTo: post.replyTo, text: post.deleted ? '该回复已被删除。' : post.text, media: post.deleted ? [] : post.media })),
         voiceExamples: { status: 'practice', items: profiles.flatMap(profile => profile.examples) } },
       conditions: adaptedCase ? [] : choices.conditions.filter(condition => contextual || condition.dimension !== 'motivation' || !discussion || targetId === null && discussion.requiredTone !== 'negative' && discussion.toneSuggestion !== 'negative').map(condition => ({ ...condition, instruction: conditionText[condition.value] })),
-      ...(target ? { comments: scopedSource('environment/research-comments.md', ['逐条形成回复', '用表情接话']) } : {}),
+      ...(target || choices.emoteCount > 0 || adaptedCase ? { comments: scopedSource('environment/research-comments.md', [...(target ? ['逐条形成回复'] : []), '用表情接话']) } : {}),
       ...(requestedRoot || config.discussion?.replyAuthor ? { thread: { rootId: rootPost?.id ?? postId,
         role: !rootPost || author === rootPost.author ? 'root' : [...before.values()].some(post => post.author === author && validDate(post.createdAt) &&
           Date.parse(post.createdAt) <= until && threadRoot(post.id, before).id === rootPost.id) ? 'participant' : 'new' } } : {}),
@@ -746,13 +780,14 @@ async function briefLocked({ root, directory, postId, replyTo, threadId, now }) 
           ...(target ? { replyStance: discussion.replyStance } : {}) },
         instruction: informal ? (discussion.toneSuggestion === 'negative' ? '这次保留负面倾向，具体方向与回复姿态随眼前话头调整。' : '这次可以普通发言，求助、分享、闲聊或只留一个反应。') + '嫌烦、贬低、酸一句、跟风、乱猜、迁怒和毫无长进的嘴硬也都可成立，不必给人充分理由，正文可以没讲清楚便结束。开口只用实际可见的内容，人物偏见可以错，既有事实不随之改写。不要替发言者补成委屈经过、证据链或漂亮反击。' : '这些是生成候选，不是此人的固定情绪或必须执行的立场。先按本人处境、当下目的和实际读到的片段决定要说什么；可采用、适配或放弃候选，求助与普通接话均可直接成立。依据随 reviews.context 私下记录，正文保留当事人愿意公开的程度。',
         ...(informal && discussion.toneSuggestion === 'negative' ? { negative: scopedSource('environment/research-negative.md', ['什么算负面', '低级与无序的参与']) } : {}),
-        ...(target ? { research: scopedSource('environment/research-comments.md', ['逐条形成回复']) } : {})
+        ...(target && !informal ? { research: scopedSource('environment/research-comments.md', ['逐条形成回复']) } : {})
       } : { ...(discussion.requiredTone !== undefined ? { requiredTone: discussion.requiredTone } : {}),
         ...(discussion.toneSuggestion !== undefined ? { toneSuggestion: discussion.toneSuggestion } : {}),
         ...(discussion.requiredTone === 'negative' || discussion.toneSuggestion === 'negative' ? { negativeMotivation: discussion.negativeMotivation, research: scopedSource('environment/research-negative.md', ['什么算负面', '异议怎样转成抬杠']) } : {}),
         ...(target ? { replyStance: discussion.replyStance } : {}),
         rules: scopedSource('docs/lottery.md', ['每条发言']) } } : {}),
-      ...(config.media && !adaptedCase ? { presentation: { image: choices.image, emoteCount: choices.emoteCount, ...choices.presentation } } : {}),
+      ...(config.media && !adaptedCase ? { presentation: { image: choices.image, emoteCount: choices.emoteCount, ...choices.presentation,
+        ...(config.media.profiles ? { instruction: '把图片和表情作为开口方式一起构思：可以先有画面，再留一句话或不写正文。按本人会拍、会截、会画与眼前话头采用，保留纯表情、熟图复读和多图交流；需要调整组合时先核对实际用途，不因文字已经写完而顺手删去媒体机会。照片按配图原文分别确定场景和拍摄条件。' } : {}) } } : {}),
       ...(contextual ? { participation: { mode: timing.mode, activeHours: data.material.profiles[author]?.basics.activeHours || '',
         ...(timing.mode === 'exception' && timing.reason ? { exception: timing.reason } : {}), instruction: informal ? '通常时段只是偏好。偶尔在别的时间出现可以自然发生，正文不必交代；只有这次时间本身影响话头时，才采用已知缘由。' : '发言时间按本人时段与实际父帖安排；未配置时段表示暂无约束，不表示此人随时在线。' } } : {}),
       visiblePosts
@@ -981,6 +1016,8 @@ export async function finishUpdate({ root = socialRoot, workDirectory, fetchImpl
       await saveOperation(operationPath, operation);
       savedOperation = canonical(operation);
     }
+    await unchanged();
+    await cleanupCompletedWork(directory, operation);
     await unchanged();
     await rm(readingPath, { force: true });
     await rm(operationPath);

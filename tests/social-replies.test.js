@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 import * as core from '../lucifer0/core.js';
-import { createFeedStore, FEED_PAGE_SIZE } from '../lucifer0/feed-store.js';
+import { createLiveFeedStore, FEED_PAGE_SIZE } from '../lucifer0/feed-store.js';
 
 function thread(id, count, author = 'preview-owner') {
   const post = (postId, index, replyTo = null) => ({ id: postId, author: index % 2 ? 'preview-reader' : author,
@@ -112,7 +112,7 @@ async function renderer(feed, { pending = false, delayedClose = false } = {}) {
     querySelectorAll: selector => selector === '[data-tile]' ? tiles : [], createTextNode: textContent => ({ textContent }),
     getElementById: () => null, addEventListener: (type, handler) => { handlers[type] = handler; } };
   const location = { hash: '#/', href: 'https://fixture.invalid/lucifer0/#/' };
-  const context = { ...core, createFeedStore, FEED_PAGE_SIZE, esc: core.escapeHTML, URL, document, location, setTimeout: setTimer, clearTimeout: id => timerTasks.delete(id),
+  const context = { ...core, createLiveFeedStore, FEED_PAGE_SIZE, esc: core.escapeHTML, URL, document, location, setTimeout: setTimer, clearTimeout: id => timerTasks.delete(id),
     window: { localStorage: { getItem() { return null; }, setItem() { storageWrites++; } }, addEventListener: (type, handler) => { handlers[type] = handler; } },
     fetch: async (url, options = {}) => { requests.push({ url: String(url), method: options.method || 'GET' }); const response = { ok: true, json: async () => feed };
       return pending ? new Promise(resolve => { resumeFetch = () => resolve(response); }) : response; } };

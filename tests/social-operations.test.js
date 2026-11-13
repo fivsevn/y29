@@ -479,7 +479,7 @@ test('the prepare CLI accepts explicit counts and rejects changed, out-of-range 
   assert.throws(() => run(['--count', '121', '--work', join(f.directory, 'invalid')]));
 });
 
-test('prepare creates only one work record and a full raw-source reading, then resumes without redrawing', async t => {
+test('prepare creates only one work record and raw-source reading, then resumes without redrawing', async t => {
   const f = await fixture(t), result = await prepareUpdate(f.options), original = await readJSON(result.operationPath);
   assert.deepEqual((await readdir(f.workDirectory)).sort(), ['operation.json', 'reading.md']);
   const reading = await readFile(result.readingPath, 'utf8');
@@ -655,6 +655,9 @@ test('work records stay external and regular; a disabled policy cannot start an 
 test('finish keeps an awaiting-online operation until exact online posts and guest names match', async t => {
   const f = await fixture(t), result = await prepareUpdate(f.options);
   await draft(result, f.now, [post('verified-guest', 'guest-verified', f.now)]);
+  const briefPath = join(f.workDirectory, 'briefs.json');
+  const briefs = [{ id: result.id, postId: 'verified-guest', draft: { id: 'verified-guest' }, writer: {} }];
+  await writeFile(briefPath, JSON.stringify(briefs));
   await assert.rejects(finishUpdate({ ...f.options, fetchImpl: () => { throw new Error('Must not fetch before local import'); } }), /Local posts/);
   await ingestBatch(result.operationPath, { root: f.root, reviewed: true, ai: true });
   const { feed } = await loadContent(f.root), wrong = structuredClone(feed);
@@ -662,6 +665,7 @@ test('finish keeps an awaiting-online operation until exact online posts and gue
   await assert.rejects(finishUpdate({ ...f.options, fetchImpl: async () => ({ ok: true, json: async () => wrong }) }), /Online posts/);
   assert.equal((await readJSON(result.operationPath)).status, 'awaiting-online');
   assert.ok((await readdir(f.workDirectory)).includes('reading.md'));
+  assert.deepEqual(await readJSON(briefPath), briefs, 'failed online verification keeps the replay input');
   const finished = await finishUpdate({ ...f.options, fetchImpl: async url => {
     assert.equal(new URL(url).protocol, 'https:'); return { ok: true, json: async () => feed };
   } });
@@ -2676,4 +2680,58 @@ test('v2 root briefs append after archived history while staying independent of 
   const after = await briefUpdatePost({ ...f.options, postId: prepared.id + '-independent' });
   assert.equal(after.draft.createdAt, before.draft.createdAt, 'other speakers current drafts do not queue every root at now');
   assert.ok(Date.parse(after.draft.createdAt) >= Date.parse(archived.createdAt));
+});
+
+test('reading bounds history to recent rounds with ancestors while keeping the full archive in source validation', async t => {
+  const lottery = structuredClone(defaultLottery);
+  lottery.diversity = { recentUpdates: 3 };
+  const f = await fixture(t, 4, { lottery });
+  const entries = [];
+  for (let index = 1; index <= 6; index++) {
+    const id = 'l0-2026010100000' + index + '-bbbbbbb' + index;
+    const entry = post(id + '-root', 'person-0', f.now - DAY * (8 - index), index === 5 ? entries[0].id : null);
+    entry.text = 'HISTORY_ROUND_' + index;
+    entries.push(entry);
+    await writeThreadBatch(f.root, { version: 1, id, mode: 'daily', posts: [entry] }, (await loadContent(f.root)).batches);
+  }
+  const prepared = await prepareUpdate(f.options), reading = await readFile(prepared.readingPath, 'utf8');
+  for (const index of [1, 4, 5, 6]) assert.ok(reading.includes('HISTORY_ROUND_' + index));
+  for (const index of [2, 3]) assert.ok(!reading.includes('HISTORY_ROUND_' + index));
+  assert.ok(!reading.includes('SYNTHETIC_HISTORY_BODY'));
+  assert.ok(reading.includes('SYNTHETIC_FULL_PERSON_person-0') && reading.includes('SYNTHETIC_CHARACTER_RESEARCH'));
+  const saved = await draft(prepared, f.now, [post(prepared.id + '-own', 'person-0', f.now, entries[5].id)]);
+  const brief = await briefUpdatePost({ ...f.options, postId: saved.operation.posts[0].id, view: 'writer' });
+  assert.ok(brief.writer.self.recentPosts.some(entry => entry.text === 'HISTORY_ROUND_2'), 'relevant own history remains available on demand');
+  const path = join(f.root, threadDirectory(entries[1], new Map(entries.map(entry => [entry.id, entry]))), 'index.md');
+  await writeFile(path, renderPostDocument({ ...entries[1], text: 'CHANGED_OLD_HISTORY' }));
+  await assert.rejects(briefUpdatePost({ ...f.options, postId: saved.operation.posts[0].id }), /Source material changed/);
+  const resumed = await prepareUpdate({ ...f.options, entropy: () => { throw Error('Must not redraw'); } });
+  assert.equal(resumed.id, prepared.id);
+  assert.ok(!(await readFile(resumed.readingPath, 'utf8')).includes('CHANGED_OLD_HISTORY'));
+});
+
+test('writer view keeps identical scoped material, including media guidance, without repeating editorial context', async t => {
+  const lottery = structuredClone(rawProductionLottery);
+  delete lottery.discussion;
+  delete lottery.researchMaintenance;
+  lottery.rootBudget = { min: 1, max: 10 };
+  lottery.authorKind = [{ value: 'guest', weight: 1 }];
+  lottery.media.profiles = [{ id: 'both-for-scope', weight: 1,
+    root: { none: 0, image: 0, emote: 0, both: 1 }, reply: { none: 0, image: 0, emote: 0, both: 1 } }];
+  const f = await fixture(t, 4, { lottery });
+  await writeFile(join(f.root, 'docs/writing.md'), '# Writing\nIntro.\n## 形成一条发言\nActual utterance.\n## 配图\nMEDIA_SCENE_AND_VARIETY\n## 审读\nEDITORIAL_REVIEW_ONLY\n');
+  await writeFile(join(f.root, 'environment/research-comments.md'), '# Comments\nIntro.\n## 用表情接话\nEMOTE_USE_IN_CONTEXT\n## 逐条形成回复\nREPLY_ONLY\n## 整轮审读\nEDITORIAL_COMMENTS_ONLY\n');
+  const prepared = await prepareUpdate(f.options), postId = prepared.id + '-visual';
+  const full = await briefUpdatePost({ ...f.options, postId });
+  const compact = await briefUpdatePost({ ...f.options, postId, view: 'writer' });
+  assert.deepEqual(compact.writer, full.writer);
+  assert.deepEqual(compact.draft, full.draft);
+  assert.equal(compact.editor, undefined);
+  assert.match(compact.writer.writing.text, /MEDIA_SCENE_AND_VARIETY/);
+  assert.doesNotMatch(compact.writer.writing.text, /EDITORIAL_REVIEW_ONLY/);
+  assert.match(compact.writer.comments.text, /EMOTE_USE_IN_CONTEXT/);
+  assert.doesNotMatch(compact.writer.comments.text, /REPLY_ONLY|EDITORIAL_COMMENTS_ONLY/);
+  assert.equal(compact.writer.presentation.combination, 'both');
+  assert.ok(JSON.stringify(compact).length < JSON.stringify(full).length);
+  await assert.rejects(briefUpdatePost({ ...f.options, postId, view: 'invalid' }), /Brief view/);
 });
