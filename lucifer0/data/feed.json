@@ -2682,9 +2682,532 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-06984fe44569f688",
+      "handle": "guest_f1547212998f12842e47",
+      "name": "0_0",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-323bff01797cebdb",
+      "handle": "guest_5b773694422ec898654b",
+      "name": "阿迟",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-06660f8c85609a1f",
+      "handle": "guest_4675970e690002186650",
+      "name": "点点",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-17735a8ffc530b93",
+      "handle": "guest_d5fca291d40fcbee654f",
+      "name": "普通人",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-df45175e29bbc465",
+      "handle": "guest_3eced86edd4e3599b2fc",
+      "name": "人间散步",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-6fd1623926d050e7",
+      "handle": "guest_5fa5a2e4b2116dbfa5ad",
+      "name": "一颗豆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c3ea6028c8963f42",
+      "handle": "guest_6b5846b951864840b14a",
+      "name": "半拍",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c2f5a07d0a91b285",
+      "handle": "guest_0ed26856074bd5b02e14",
+      "name": "其他",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a77f4644660639b0",
+      "handle": "guest_a30c8e8698d3debe95bc",
+      "name": "R.",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-30a2ee22ad8d82f8",
+      "handle": "guest_39c2575ae766b27a2245",
+      "name": "晴",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-396dc5cbea6cf333",
+      "handle": "guest_9a900a0818c7f829e368",
+      "name": "没什么",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c163dc81da4d2bac",
+      "handle": "guest_4c24923e01c8c7cd1a2f",
+      "name": "乌米",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2c59376c4a030bb2",
+      "handle": "guest_4e4a5acae94adc568f8a",
+      "name": "名字没想好",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1d2535679b289a4e",
+      "handle": "guest_f9db00afb29d5221c62b",
+      "name": "ququ",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0d0af767f70fb65d",
+      "handle": "guest_ef9a7810d38c57e604af",
+      "name": "Jun",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7f28ba5bdff93be3",
+      "handle": "guest_57c5447ed7e2262f31e1",
+      "name": "27",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261113080807-68259ae8-original-doodle01",
+      "author": "visitor-iota",
+      "createdAt": "2026-11-13T07:38:43.770Z",
+      "replyTo": "l0-20261113080807-68259ae8-31abaefdc3f1",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "它自己都一脸算了"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-31abaefdc3f1",
+      "author": "visitor-mu-upper",
+      "createdAt": "2026-11-13T07:35:51.770Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-31abaefdc3f1/media/pencil-doodle.webp",
+          "alt": "膝上的小张废纸画着一个歪歪的铅笔表情，擦痕和橡皮屑留在旁边，左手按着纸角。",
+          "kind": "image"
+        }
+      ],
+      "text": "擦了两遍，更丑了。\n先留着，懒得再擦了。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-78914f30d064",
+      "author": "guest-df45175e29bbc465",
+      "createdAt": "2026-11-13T06:55:52.332Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-78914f30d064/media/frog-bin.webp",
+          "alt": "步道旁一个凸眼、咧嘴的绿色青蛙垃圾桶，桶身有些褪色。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "人间散步"
+      },
+      "text": "这青蛙怎么长得这么贱"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-9a74d1357236",
+      "author": "guest-6fd1623926d050e7",
+      "createdAt": "2026-11-13T05:53:30.206Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-9a74d1357236/media/scallion-roots.webp",
+          "alt": "厨房窗台上，一只玻璃杯里的几棵葱根长出了新绿叶，旁边露出水槽和洗碗海绵。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "一颗豆"
+      },
+      "text": "上周留的葱根，泡着还真长起来了。明天煮面剪一点。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-b38bacc496df",
+      "author": "guest-396dc5cbea6cf333",
+      "createdAt": "2026-11-13T05:45:03.200Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-b38bacc496df/media/yogurt-tab.webp",
+          "alt": "酸奶杯的封膜还盖着，断下来的小拉片落在杯子旁边。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "没什么"
+      },
+      "text": "怎么又只撕下来一个角"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-case-emoji02",
+      "author": "visitor-nu",
+      "createdAt": "2026-11-13T04:57:59.734Z",
+      "replyTo": "l0-20261113080807-68259ae8-6bebde3e4194",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "🌰"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-original-tile02",
+      "author": "guest-30a2ee22ad8d82f8",
+      "createdAt": "2026-11-13T04:57:33.838Z",
+      "replyTo": "l0-20261113080807-68259ae8-original-tile01",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-b00cc1f4cda8/media/dirty-socks.webp",
+          "alt": "入户门边刚脱下的一双浅色短袜，其中一只留着灰褐色湿痕，旁边露出半只运动鞋。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "晴"
+      },
+      "text": "袜子那块真恶心。我上次到家脱下来就这样，根本不想洗了。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-original-tile01",
+      "author": "guest-a77f4644660639b0",
+      "createdAt": "2026-11-13T04:54:44.838Z",
+      "replyTo": "l0-20261113080807-68259ae8-b00cc1f4cda8",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "guest": {
+        "name": "R."
+      },
+      "text": "我以前上班路上也有一块这种砖，专门记过它在哪，结果第二天从另一个方向走又踩中了，气得我站路边擦半天鞋。看到有人说这种绕着走就行，我就很烦，我当然知道绕，我又不是每天出门就盯着找那块砖。手上拿点东西，或者前面有人挡一下，就忘了。\n\n而且脏水溅到袜子上比鞋面还恶心，湿一小块，后面一路都感觉得到，又不值得专门回去换。图上这个缝里也全是水，看得我已经想抬脚了。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-b00cc1f4cda8",
+      "author": "guest-c2f5a07d0a91b285",
+      "createdAt": "2026-11-13T04:53:31.838Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-b00cc1f4cda8/media/loose-tile.webp",
+          "alt": "脚边一块砖缝积水的松动地砖，画面下沿的白鞋上溅着脏水。",
+          "kind": "image"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。"
+        }
+      ],
+      "guest": {
+        "name": "其他"
+      },
+      "text": "又是这块破砖，烦死了。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-6bebde3e4194",
+      "author": "guest-323bff01797cebdb",
+      "createdAt": "2026-11-13T04:44:20.734Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "阿迟"
+      },
+      "text": "🐶"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-ed23e103b834",
+      "author": "guest-7f28ba5bdff93be3",
+      "createdAt": "2026-11-13T04:41:04.427Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "27"
+      },
+      "text": "谁会不喜欢来上一杯中药奶茶呢(`ヮ´ )"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-a7ab7a850c48",
+      "author": "guest-c3ea6028c8963f42",
+      "createdAt": "2026-11-13T04:23:29.000Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "半拍"
+      },
+      "text": "想吃薯条。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-original-seats01",
+      "author": "guest-2c59376c4a030bb2",
+      "createdAt": "2026-11-13T04:10:17.357Z",
+      "replyTo": "l0-20261113080807-68259ae8-b456db730e9b",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "名字没想好"
+      },
+      "text": "俩袋子还一袋一座，待遇挺好。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-b456db730e9b",
+      "author": "guest-c163dc81da4d2bac",
+      "createdAt": "2026-11-13T03:46:27.357Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-b456db730e9b/media/occupied-seats.webp",
+          "alt": "商场餐饮区长桌旁，两个相邻凳子分别放着纸购物袋和塑料袋，右侧是过道。",
+          "kind": "image"
+        },
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote"
+        }
+      ],
+      "guest": {
+        "name": "乌米"
+      },
+      "text": "这也算有人啊？袋子占的能坐不"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-original-keyboard01",
+      "author": "guest-17735a8ffc530b93",
+      "createdAt": "2026-11-13T03:37:14.657Z",
+      "replyTo": "l0-20261113080807-68259ae8-721b28413269",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "guest": {
+        "name": "普通人"
+      },
+      "text": "得看你用的什么手机、什么输入法啊，光说手机键盘谁猜得出来。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-721b28413269",
+      "author": "guest-06660f8c85609a1f",
+      "createdAt": "2026-11-13T03:35:39.657Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "点点"
+      },
+      "text": "手机键盘的震动在哪关啊"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-case-static11",
+      "author": "passerby17",
+      "createdAt": "2026-11-13T03:12:15.760Z",
+      "replyTo": "l0-20261113080807-68259ae8-d77f84f51968",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "静电害人不浅……我把存储卡摸爆过，里面所以照片都没了，买了新的又去补拍了一次(;´Д`)"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-dabc78615413",
+      "author": "guest-0d0af767f70fb65d",
+      "createdAt": "2026-11-13T03:05:36.793Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。"
+        }
+      ],
+      "guest": {
+        "name": "Jun"
+      },
+      "text": "什么东西都加个AI，看着就烦。"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-d77f84f51968",
+      "author": "guest-1d2535679b289a4e",
+      "createdAt": "2026-11-13T03:01:33.760Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "ququ"
+      },
+      "text": "摸了一下同事的主机，“啪”的一声把同事电脑电蓝屏了( ・_ゝ・)"
+    },
+    {
+      "id": "l0-20261113080807-68259ae8-18d31799686e",
+      "author": "guest-06984fe44569f688",
+      "createdAt": "2026-11-13T02:54:52.142Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113080807-68259ae8-18d31799686e/media/reader-popup.webp",
+          "alt": "文档阅读器的最近文件列表上覆盖着“开通会员”弹窗，右上角有很小的关闭叉号。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "0_0"
+      },
+      "text": "这破阅读器的会员弹窗能关吗"
+    },
     {
       "id": "l0-20261113023354-a95f8498-hug11",
       "author": "visitor-levelpath",
