@@ -2406,9 +2406,280 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-34bf5d829a4b9075",
+      "handle": "guest_3e9cc8ce3bfa17e5aa70",
+      "name": "nana6",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ca84351defa8aa94",
+      "handle": "guest_47e914649c366a490d77",
+      "name": "慢半步",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f1b4edee2dd81d28",
+      "handle": "guest_b25b29fff142cf67bc1e",
+      "name": "咸鱼",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2b8b6d52aa2828bb",
+      "handle": "guest_ef2098a74f48bcbe825d",
+      "name": "sora",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-992f2195365a6102",
+      "handle": "guest_d2211450d4d6f9883ad2",
+      "name": "南",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-69256723759c2d90",
+      "handle": "guest_db360bdc9f8bc2f15685",
+      "name": "路人甲",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e721f98b37700cab",
+      "handle": "guest_6bd980ec19097796e0c7",
+      "name": "团团",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b39a747c5b82bc42",
+      "handle": "guest_cbbd5de09d2c00ce551d",
+      "name": "阿敏",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261113020140-a6d8305d-reply01",
+      "author": "guest-ca84351defa8aa94",
+      "createdAt": "2026-11-13T01:33:12.791Z",
+      "replyTo": "l0-20261113020140-a6d8305d-100675811490",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "慢半步"
+      },
+      "text": "包还新的，光是找个修包的地方都够烦。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-100675811490",
+      "author": "guest-34bf5d829a4b9075",
+      "createdAt": "2026-11-13T01:20:00.791Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113020140-a6d8305d-100675811490/media/backpack-zipper.webp",
+          "alt": "黑色背包横放在灰色裤腿上，拉链头后面的两排齿仍分开，露出包内衬。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "nana6"
+      },
+      "text": "这种拉链能只换个头吗，拉过去下面还是开着。包还挺新的"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-fcd4235bd033",
+      "author": "guest-b39a747c5b82bc42",
+      "createdAt": "2026-11-13T00:46:41.495Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113020140-a6d8305d-fcd4235bd033/media/vegetables-and-scallions.webp",
+          "alt": "厨房灰瓷砖地面上，塑料袋内是两个番茄和一根紫茄子，旁边放着一大把带根小葱，画面下缘露出拖鞋。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "阿敏"
+      },
+      "text": "买了两个番茄一根茄子，老板给抓了这么一大把葱。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-reply02",
+      "author": "guest-992f2195365a6102",
+      "createdAt": "2026-11-13T00:44:14.783Z",
+      "replyTo": "l0-20261113020140-a6d8305d-6b1f0d88e0f6",
+      "likes": 10,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "南"
+      },
+      "text": "最烦那种看着干了，一坐裤子湿一片。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-6b1f0d88e0f6",
+      "author": "visitor-delta-upper",
+      "createdAt": "2026-11-13T00:41:42.783Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "路边椅子全是湿的，想坐一下都不行。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-cc6cffc1a743",
+      "author": "lixing",
+      "createdAt": "2026-11-13T00:07:05.070Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "text": "那些说能把月付套出来、让加群的，我觉得大概都是骗子。我观察了一阵，有人加群骂了一句，接着就消失了。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-4ebe9d027df6",
+      "author": "guest-f1b4edee2dd81d28",
+      "createdAt": "2026-11-12T23:59:51.651Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "咸鱼"
+      },
+      "text": "在学校阅览室乱翻宣传画册，有一张画得是真丑，越看越好笑･ﾟ( ﾉヮ´ )"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-reply04",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-12T23:44:25.621Z",
+      "replyTo": "l0-20261113020140-a6d8305d-reply03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "看着像装油条的。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-reply03",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-12T23:41:40.621Z",
+      "replyTo": "l0-20261113020140-a6d8305d-b324a9f602c6",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113020140-a6d8305d-b324a9f602c6/media/narrow-bag.webp",
+          "alt": "手捏着一只无字半透明细长塑料袋的袋口，空袋垂在白色冰箱前，右下露出灰色垃圾桶。",
+          "kind": "image"
+        }
+      ],
+      "text": "这种细长的袋子到底能装什么？套垃圾桶又太窄，我拿着想了半天。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-880c9dad7423",
+      "author": "guest-69256723759c2d90",
+      "createdAt": "2026-11-12T23:40:48.131Z",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路人甲"
+      },
+      "text": "Plus这额度，我都不敢多追问两句了。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-b324a9f602c6",
+      "author": "guest-e721f98b37700cab",
+      "createdAt": "2026-11-12T23:27:20.621Z",
+      "replyTo": null,
+      "likes": 19,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113020140-a6d8305d-b324a9f602c6/media/sorting-plastic-bags.webp",
+          "alt": "厨房台面上米色布袋塞满旧塑料袋，旁边有一只蓝袋和小堆白袋，后面是沥水碗架、抹布及电饭煲边缘。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "团团"
+      },
+      "text": "我把水槽底下这兜塑料袋掏出来，想留几个大的，其余扔掉。现在收拾了半小时，还是这一兜。\n\n因为每拿出一个，我都觉得这个还能用。大的能套垃圾桶，小的装削下来的皮，厚的留着装湿东西，这个有提手，那个虽然小但是特别结实。还有一种不知道买什么送的长条袋，装垃圾根本兜不住，我居然也给它留了位置。反正现在压扁了也不占多少地方，就又塞回去了。\n\n最烦的是袋子里面还有袋子。我以为掏到底了，抖开又掉出来三个。我妈以前说别扔我还嫌她占地方，现在她不在旁边，我一个人也没舍得扔几个。图上台面那一小堆才是准备扔的，其中那个蓝的刚刚又被我捡回去了。"
+    },
+    {
+      "id": "l0-20261113020140-a6d8305d-635658ba1125",
+      "author": "guest-2b8b6d52aa2828bb",
+      "createdAt": "2026-11-12T22:22:18.439Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "sora"
+      },
+      "text": "国内居然没有竞品。"
+    },
     {
       "id": "l0-20261112230605-a2415717-case-phone-11",
       "author": "guest-74259952e8044b67",
