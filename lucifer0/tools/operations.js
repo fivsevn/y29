@@ -413,7 +413,7 @@ function reading(operation, data) {
   return '# 本次更新阅读材料\n\n操作：' + operation.id + '；' + budget + '；主动候选：' + (operation.plan.selectedIds.join('、') || '无') +
     '。\n\n' + explanation + '完整材料供策划阅读；逐条写作用 brief --post ID 获取 writer。抽签含义见 docs/lottery.md，创作方法见 docs/writing.md。\n\n' +
     (operation.plan.researchMaintenance ? '## 本次研究补充\n\n' + (operation.plan.researchMaintenance.selectedPaths.join('、') || '本轮略过。') + '\n\n' : '') +
-    (operation.plan.caseAdaptation ? '## 本轮额外案例主帖\n\n原抽签名额之外另有三条固定案例主帖；按下面的主帖顺序穿插起草，案例固定编号不能改作回复。' + (operation.plan.lottery?.media?.profiles ? '案例串保留原帖语气、篇幅、媒体和接话关系；案例主帖及回复不占原创抽签名额，仍受整批物理条数限制。' : '案例串沿原语气与篇幅，不参与原创部分的负向配额；回复仍占原回复数量预算。') + '私有映射只用于策划，不写进公开帖子。\n\n```json\n' + JSON.stringify(casePlanSummary(operation.plan), null, 2) + '\n```\n\n' : '') +
+    (operation.plan.caseAdaptation ? '## 本轮额外案例主帖\n\n原抽签名额之外另有' + operation.plan.caseAdaptation.count + '条固定案例主帖；按下面的主帖顺序穿插起草，案例固定编号不能改作回复。' + (operation.plan.lottery?.media?.profiles ? '案例串保留原帖语气、篇幅、媒体和接话关系；案例主帖及回复不占原创抽签名额，仍受整批物理条数限制。' : '案例串沿原语气与篇幅，不参与原创部分的负向配额；回复仍占原回复数量预算。') + '私有映射只用于策划，不写进公开帖子。\n\n```json\n' + JSON.stringify(casePlanSummary(operation.plan), null, 2) + '\n```\n\n' : '') +
     '## 当前账号权限与世界观\n\n| 账号 | 所属世界观 | 日常资格 | 可开串 | 可回复 | 本次主动候选 |\n| --- | --- | --- | --- | --- | --- |\n' +
     data.registry.users.map(user => '| ' + user.id + ' | ' + (data.material.profiles[user.id].basics.worldview || '未指定') + ' | ' + (ready(user, data.material) ? '可用' : '不可用') + ' | ' + (user.allowPosts !== false ? '是' : '否') + ' | ' + (user.allowReplies !== false ? '是' : '否') + ' | ' + (operation.plan.selectedIds.includes(user.id) ? '是' : '否') + ' |').join('\n') +
     '\n\n素材使用：' + sampleInstruction + (data.samples.length ? '' : '当前没有可用素材，继续按现有资料创作，不编造采集记录。') +
@@ -446,7 +446,7 @@ export async function prepareUpdate({ root = socialRoot, workDirectory, requeste
         return [user.id, { timezone, windows,
           mode: basics.postingMode ?? (basics.postingWindows?.length ? 'scheduled' : 'unconfigured') }];
       }));
-      if (data.policy.caseAdaptation) plan.caseAdaptation = createCasePlan({ operationId: id, plan, documents: data.documents, intakeReceipt, now, used: await readCaseUsage(root, now) });
+      if (data.policy.caseAdaptation) plan.caseAdaptation = createCasePlan({ operationId: id, plan, documents: data.documents, intakeReceipt, now, used: await readCaseUsage(root, now), count: data.policy.caseAdaptation.count });
       if (plan.lottery?.researchMaintenance) {
         const candidates = await researchCandidates(root, data.discoveredResearch);
         plan.researchMaintenance = { candidates, selectedPaths: drawResearchMaintenance({ seed, lottery: plan.lottery, documents: candidates, now }) };
