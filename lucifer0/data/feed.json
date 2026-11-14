@@ -3104,6 +3104,54 @@
       "inFollowing": false
     },
     {
+      "id": "guest-0026cb9fcbd2f6ec",
+      "handle": "guest_54010696edf9bd46e1c3",
+      "name": "elle6051",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3b1dea00010e5111",
+      "handle": "guest_f771964d32a657069cea",
+      "name": "nana6_1535",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-59ad5e36a7b26781",
+      "handle": "guest_95d82feaaafdb92c44ee",
+      "name": "毛豆5572",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ed27007edb6ea432",
+      "handle": "guest_3f6c638f346cfadb493f",
+      "name": "653AB12",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "guest-18e679daa2007e8b",
       "handle": "guest_c085c05ea722ba3f01dd",
       "name": "uki5232",
@@ -3320,6 +3368,42 @@
       "inFollowing": false
     },
     {
+      "id": "guest-3350e399f87a268a",
+      "handle": "guest_6ef1413636bed7957147",
+      "name": "7628一颗豆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f977ff67d3ee19c5",
+      "handle": "guest_f1da2b763051d640d70a",
+      "name": "7455圆圆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-867ce9ee3e259973",
+      "handle": "guest_058daa871b02bd8b0586",
+      "name": "毛豆9883",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "guest-534112609ddb003d",
       "handle": "guest_ab4c8e7b833623473bfa",
       "name": "0_05367",
@@ -3402,9 +3486,424 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-e594ca963930914c",
+      "handle": "guest_2acf9488939cfa4e8513",
+      "name": "耳朵_9985",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b1a66c0a339ded3c",
+      "handle": "guest_ba8a8b1cc0b9f491103c",
+      "name": "7827小青",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4f6230d7878c18b1",
+      "handle": "guest_4a6dcb597c5c9197e24b",
+      "name": "拾柒_2163",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2e8cb18ea0b7d3a6",
+      "handle": "guest_71fb84ec2d7d97702f1b",
+      "name": "半拍3117",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0b5afaf4349c2829",
+      "handle": "guest_0a78952ef92877fac244",
+      "name": "阿迟_7845",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-46e0fc3d04070552",
+      "handle": "guest_e18814a6ab8ea59b4e66",
+      "name": "5944rin_2",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d41ee230b080310b",
+      "handle": "guest_5be28d38a39abd1ad033",
+      "name": "kiwi7622",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261114020440-a09223df-835aa05c4bac",
+      "author": "guest-0b5afaf4349c2829",
+      "createdAt": "2026-11-14T01:38:39.148Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "阿迟_7845"
+      },
+      "text": "有点困了，找个零友拿他的肥腚当枕头睡觉0[¬‿¬]"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-39a53e8999bd",
+      "author": "nightbus3",
+      "createdAt": "2026-11-14T01:33:18.729Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "看到一则 AI 建站工具的介绍。主打界面和交互设计，说是能用较低的成本做出精致的网站。\n\n介绍里说，用自然语言描述需求就能让项目实际跑起来，有实时预览和自动纠错。试用价写的是 1 美元 7 天，含 100 万 token。说是海外开发者独立做的。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-6cb7434cce07",
+      "author": "guest-b1a66c0a339ded3c",
+      "createdAt": "2026-11-14T01:22:04.795Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "7827小青"
+      },
+      "text": "耳机找到了，在外套帽子里。都准备下单补一只了，幸好还嫌贵多犹豫了会儿"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-eb4330b3e90e",
+      "author": "nightbus3",
+      "createdAt": "2026-11-14T01:05:25.864Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114020440-a09223df-eb4330b3e90e/media/map-workbench.webp",
+          "alt": "地图小工具的浅灰桌面界面：左栏列着样本.pbf，中央三个节点依次为读取数据、筛选道路、地图预览，以端口连线连接；右侧显示灰色路网、浅蓝河流与浅绿地块。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "看到一个地图小工具的介绍。能读几种地理数据格式，包括 OpenStreetMap 的 PBF 文件，也能通过 Overpass 取数据。\n\n输入、工具和输出在画布上连起来，命令行也能跑同样的模型。图里这条是读取样本.pbf，筛选道路，再接地图预览。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-d26e5c56d75b",
+      "author": "guest-d41ee230b080310b",
+      "createdAt": "2026-11-14T00:36:23.837Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "kiwi7622"
+      },
+      "text": "大家好 0[·_-]\n\n我是新来的，很高兴找到这个论坛！\n\n停了很长一段时间没织东西，最近又开始织了，想给我的第一个小孙女织件套衫，她快一岁了 0[·‿·] 我手里有一份编织图解，但有些说明看不明白。我织的是最大号，插肩那一段看得出要织16行，可是不清楚到底在哪几行减针……是第1、5、9、13行减，一共减8针，还是第1、4、8、12、16行减，一共减10针？要是有人能帮忙解释一下就太好了，谢谢大家 0[^▽^]"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-coupon06",
+      "author": "guest-ed27007edb6ea432",
+      "createdAt": "2026-11-13T23:58:21.553Z",
+      "replyTo": "l0-20261114020440-a09223df-old-coupon01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "653AB12"
+      },
+      "text": "问券都能提前一天，问他开单就到时再看。今天再问他看好了没啊，我还想看他怎么装。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-salary06",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-13T23:50:06.553Z",
+      "replyTo": "l0-20261113200458-9bb7ef6a-reply-salary01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/ignore.webp",
+          "alt": "L0托腮侧身看着手机。",
+          "fit": "contain"
+        }
+      ],
+      "text": "不想回就先别回啊，谁还挨个点名看谁没恭喜。\n\n沾什么喜气，又不会多发我一点工资。我刚刚还在算外卖配送费，看见这种也高兴不起来。你本来就在那儿烦，还得打两个感叹号，装得比他还开心，发完再看着大家继续聊。\n\n我可能等消息多了再跟个表情，别刚好卡在工资后面。不然连我自己看着都觉得酸。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-coupon04",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-13T23:48:42.553Z",
+      "replyTo": "l0-20261114020440-a09223df-old-coupon03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113151627-592d1f02-1e7513d0a688/media/delivery-calculation-a09223df.webp",
+          "alt": "深色手机计算器显示小算式3.5÷2和大结果1.75，下方是完整的四列五行按键。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "text": "这就烦了啊，真羡慕。\n那你吃泡面吧，我连配送费都得算一下。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-coupon01",
+      "author": "guest-0026cb9fcbd2f6ec",
+      "createdAt": "2026-11-13T23:34:18.553Z",
+      "replyTo": "l0-20261113151627-592d1f02-original-coupon02",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261113151627-592d1f02-1e7513d0a688/media/coupon-next-day-a09223df.webp",
+          "alt": "匿名聊天局部：11月13日12:46，左侧问“明天有人有券吗”，右侧回“那你明天开单？”，12:48左侧答“到时再看”。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "elle6051"
+      },
+      "text": "我这边昨天中午就有人问今天谁有券。一说让他开单就“到时再看”，烦死。你让那个喊等等的下次开啊，我想看他等。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-b38b45c5d8c2",
+      "author": "guest-46e0fc3d04070552",
+      "createdAt": "2026-11-13T21:27:49.829Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114020440-a09223df-b38b45c5d8c2/media/double-yolk.webp",
+          "alt": "浅色小煎锅里，两枚大小略有差别的完整蛋黄挨在一起，周围是一片尚半透明、外沿开始发白的蛋白。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "5944rin_2"
+      },
+      "text": "一个鸡蛋开出两个黄，早饭赚了。\n\n刚才往锅里一倒，第二个黄还慢半拍才掉下来。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-7a5d85c8a415",
+      "author": "guest-2e8cb18ea0b7d3a6",
+      "createdAt": "2026-11-13T21:11:16.556Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heh.webp",
+          "kind": "emote",
+          "alt": "L0半睁眼，嘴角轻微上扬。"
+        }
+      ],
+      "guest": {
+        "name": "半拍3117"
+      },
+      "text": "翻昨天的合照，那个一直指挥大家怎么笑的人，自己闭着眼。单独放大欣赏了三遍，嘿嘿。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-64deb6567066",
+      "author": "nightbus3",
+      "createdAt": "2026-11-13T21:08:28.701Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "看来我必须要展现我的真实实力了0[¬‿·]"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-6e74dd2a9ae3",
+      "author": "guest-4f6230d7878c18b1",
+      "createdAt": "2026-11-13T20:57:59.512Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "拾柒_2163"
+      },
+      "text": "wallabag 更新出错\n\n应用：wallabag2 2.6.14~ynh1\nYunoHost 版本：12.1.41.2\n硬件类型：旧笔记本或电脑\n\n大家好，更新每次都会失败。\n\n报错是：“无法更新 wallabag2：执行应用升级脚本时发生错误。”\n\n先谢谢大家的帮助。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-coupon05",
+      "author": "guest-59ad5e36a7b26781",
+      "createdAt": "2026-11-13T20:28:16.553Z",
+      "replyTo": "l0-20261113151627-592d1f02-1e7513d0a688",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "毛豆5572"
+      },
+      "text": "点个饭还要跟他掰扯这个，烦不烦。换我也不想帮他点了。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-coupon03",
+      "author": "guest-3b1dea00010e5111",
+      "createdAt": "2026-11-13T20:23:29.553Z",
+      "replyTo": "l0-20261113151627-592d1f02-1e7513d0a688",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "nana6_1535"
+      },
+      "text": "怎么吃个饭还要算来算去的，烦。突然想吃泡面了。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-salary04",
+      "author": "guest-867ce9ee3e259973",
+      "createdAt": "2026-11-13T20:19:09.553Z",
+      "replyTo": "l0-20261114020440-a09223df-old-salary03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "毛豆9883"
+      },
+      "text": "连恭喜都要挑的话，真够烦的。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-3ed1b3fa1efe",
+      "author": "guest-e594ca963930914c",
+      "createdAt": "2026-11-13T20:08:49.017Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114020440-a09223df-3ed1b3fa1efe/media/clip-bag.webp",
+          "alt": "一枚带两根银色手柄的大黑长尾夹夹住折短的透明饼干袋，放在浅灰厨房台面偏左，袋里剩着少量饼干。",
+          "kind": "image"
+        }
+      ],
+      "guest": {
+        "name": "耳朵_9985"
+      },
+      "text": "夹子都快比袋子大了。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-salary03",
+      "author": "guest-f977ff67d3ee19c5",
+      "createdAt": "2026-11-13T20:05:14.553Z",
+      "replyTo": "l0-20261114020440-a09223df-old-salary01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "7455圆圆"
+      },
+      "text": "那只回个恭喜呢？"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-coupon02",
+      "author": "news-gadgets",
+      "createdAt": "2026-11-13T20:03:42.553Z",
+      "replyTo": "l0-20261113151627-592d1f02-original-coupon01",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "text": "要是自己一张券也掏不出来，还惦记着多占，那算盘打得可真顺手。\n\n说到券又想岔了。有些产品介绍，怎么领券写了一大篇，东西到底怎么用反倒没几句。优惠写得比演示还长，看完只记住个券后价。便宜当然要看，可我点进去也不是为了专门学算券的，烦。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-salary05",
+      "author": "visitor-chi",
+      "createdAt": "2026-11-13T20:03:16.553Z",
+      "replyTo": "l0-20261113200458-9bb7ef6a-reply-salary01",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "还要数谁没回，累不累啊。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-salary01",
+      "author": "guest-3350e399f87a268a",
+      "createdAt": "2026-11-13T20:02:50.553Z",
+      "replyTo": "l0-20261113200458-9bb7ef6a-reply-salary02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。"
+        }
+      ],
+      "guest": {
+        "name": "7628一颗豆"
+      },
+      "text": "回“沾喜气”会显得很捧着对方吗？我还以为就是句客套话。"
+    },
+    {
+      "id": "l0-20261114020440-a09223df-old-salary02",
+      "author": "visitor-chi",
+      "createdAt": "2026-11-13T20:02:20.553Z",
+      "replyTo": "l0-20261113200458-9bb7ef6a-reply-salary02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "text": "沾个喜气也碍你眼了？"
+    },
     {
       "id": "l0-20261113200458-9bb7ef6a-reply-salary02",
       "author": "guest-7ea87add4e7126d0",
