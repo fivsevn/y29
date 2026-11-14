@@ -3570,9 +3570,616 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-1328616410702459",
+      "handle": "guest_90ba82bb2b804c77c081",
+      "name": "普通人8964",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-38610876bc62834a",
+      "handle": "guest_37fa097205ba5c96407a",
+      "name": "Ryo_7860",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-42b5bb8d105c97f2",
+      "handle": "guest_6ca8d13ef7c37d72807d",
+      "name": "一颗豆9594",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bf213c1b11ba62f7",
+      "handle": "guest_fb23e4411c163e663f59",
+      "name": "一颗豆_3479",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-353a227ef8b9b77c",
+      "handle": "guest_38dd552661ac148a5f57",
+      "name": "kiwi2786",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0aff89074484134d",
+      "handle": "guest_4bc1d812e301f796728d",
+      "name": "nana6_5238",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-34db8a2ad69e8cc1",
+      "handle": "guest_a6ca7380979ad2a8d838",
+      "name": "1595点点",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-20531375e81a7c5f",
+      "handle": "guest_e2573437f28db39d6f3b",
+      "name": "AB126968",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9d162e4c5eef6dc2",
+      "handle": "guest_9d021f96ed47b2427de0",
+      "name": "一杯水_3838",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e0622d3d3bdde9e4",
+      "handle": "guest_f0cf6fce2179c2921734",
+      "name": "n74436",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d56c08220fcb2ed5",
+      "handle": "guest_3e541dd5cbac8d79c673",
+      "name": "3542Ryo",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-795d4507ed8d3ca8",
+      "handle": "guest_707fb2a4799c42158c90",
+      "name": "5403一颗豆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f7194527835e2dbc",
+      "handle": "guest_9d4f343b40f752b4bf32",
+      "name": "6270kiwi",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5e0d7d740b1ad18b",
+      "handle": "guest_3ba7481046f9cd76828e",
+      "name": "7510团团",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d46ecb2963eaa1ee",
+      "handle": "guest_f8ff9840696ae46931ae",
+      "name": "YY9504",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-04baeb09de659fbc",
+      "handle": "guest_f468f4fd89f44a7073d7",
+      "name": "9796一一",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-384199f293eab646",
+      "handle": "guest_a0cf3e5220783d1d0286",
+      "name": "七号_4199",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b79158b07facd634",
+      "handle": "guest_5f757d5c81b964b0ff57",
+      "name": "ququ_8092",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-617e09f6b3e8cfcd",
+      "handle": "guest_617631245cdd6d7c6959",
+      "name": "8134Haku",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261114080303-57d99eab-case-film02",
+      "author": "visitor-pi-upper",
+      "createdAt": "2026-11-14T07:31:09.609Z",
+      "replyTo": "l0-20261114080303-57d99eab-16be96458cf8",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "太酷了！"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-film04",
+      "author": "guest-38610876bc62834a",
+      "createdAt": "2026-11-14T06:28:45.092Z",
+      "replyTo": "l0-20261114080303-57d99eab-16be96458cf8",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Ryo_7860"
+      },
+      "text": "真不错，尤其喜欢高中拍的那两张黑白，拿来做专辑封面或者印在T恤上都挺合适。我大学时才开始接触摄影，那时还没用上数码，最喜欢的也是黑白。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-16be96458cf8",
+      "author": "guest-1328616410702459",
+      "createdAt": "2026-11-14T06:17:56.092Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-16be96458cf8/media/film-2026-bicycle.webp",
+          "alt": "略偏粉的彩色照片，一辆自行车停在灰绿色铁栏杆旁。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-16be96458cf8/media/film-2026-sheet.webp",
+          "alt": "略偏粉的竖幅彩色照片，住宅外墙前晾着一条浅色床单，树枝伸进一角。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-16be96458cf8/media/film-school-garden.webp",
+          "alt": "黑白照片，一名男子站在菜地里，手拿一把叶菜，抬头看向镜头。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-16be96458cf8/media/film-school-steps.webp",
+          "alt": "黑白照片，水泥台阶旁放着一把空折叠椅，栏杆的斜影落在台阶上。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "普通人8964"
+      },
+      "text": "35mm胶片\n\n今年春夏那会儿买了些35mm胶卷，冰箱里还放着几卷没用。隔了30年，想试试再拍胶片。拖到几周前才终于冲洗、扫描，也把高中时拍的一些拿去扫了。\n\n确实得重新学，不过又拍起来还是挺开心的。拨一下过片杆，听见咔哒那声，还是很喜欢。\n\n前两张是今年拍的，后两张是高中时拍的。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-reply-laundry01",
+      "author": "guest-34db8a2ad69e8cc1",
+      "createdAt": "2026-11-14T06:14:27.551Z",
+      "replyTo": "l0-20261114080303-57d99eab-943ff5cd2e1f",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。"
+        }
+      ],
+      "guest": {
+        "name": "1595点点"
+      },
+      "text": "袜子还跟床单一起洗啊……"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-reply-drawer01",
+      "author": "visitor-eta-upper",
+      "createdAt": "2026-11-14T06:05:12.551Z",
+      "replyTo": "l0-20261114080303-57d99eab-a33f5b9fe257",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "拿不出来也怪标签，真行。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-aiwork03",
+      "author": "guest-5e0d7d740b1ad18b",
+      "createdAt": "2026-11-14T06:04:42.696Z",
+      "replyTo": "l0-20261114080303-57d99eab-dcf0dd23fdfb",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "7510团团"
+      },
+      "text": "AI要都能干好，人还学技术干嘛？我看本来就是替代，现在还需要人指个大方向，以后再发展发展，嘴巴随便说几句就能弄个软件出来，没辙的"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-943ff5cd2e1f",
+      "author": "visitor-eta-upper",
+      "createdAt": "2026-11-14T06:04:35.551Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-943ff5cd2e1f/media/laundry-socks.webp",
+          "alt": "洗衣机门口堆着湿床单，一只手正从褶子里拉出深蓝袜子，旁边还露着一截灰袜子。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote"
+        }
+      ],
+      "text": "洗完还得从床单里一只只掏袜子，烦。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-aiwork02",
+      "author": "guest-f7194527835e2dbc",
+      "createdAt": "2026-11-14T05:55:19.696Z",
+      "replyTo": "l0-20261114080303-57d99eab-dcf0dd23fdfb",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "6270kiwi"
+      },
+      "text": "他为什么下班还要干活？"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-aiwork06",
+      "author": "guest-384199f293eab646",
+      "createdAt": "2026-11-14T05:49:27.696Z",
+      "replyTo": "l0-20261114080303-57d99eab-case-aiwork05",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "七号_4199"
+      },
+      "text": "回报不要想了，我看写代码这事会慢慢贬值，幸好现阶段还能减点负担"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-aiwork04",
+      "author": "guest-d46ecb2963eaa1ee",
+      "createdAt": "2026-11-14T05:48:08.696Z",
+      "replyTo": "l0-20261114080303-57d99eab-dcf0dd23fdfb",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "YY9504"
+      },
+      "text": "变成黑客帝国里的人体电池了"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-aiwork05",
+      "author": "guest-04baeb09de659fbc",
+      "createdAt": "2026-11-14T05:47:39.696Z",
+      "replyTo": "l0-20261114080303-57d99eab-dcf0dd23fdfb",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "9796一一"
+      },
+      "text": "我觉得主要还是没有回报的问题"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-dcf0dd23fdfb",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-14T05:45:58.696Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "在别处看到一个写软件的人诉苦，说原来晚上11点就睡，用了两个月AI帮他写代码，反而天天干到半夜1点，人还更累了。\n\n他说自己弄了两年的东西，用上AI以后，现在想自己动手改一点都发怵。这一两个月像把后面一年的活都赶出来了，可后面还是有干不完的活等着，越做越多。当初就是想偷个懒，结果给AI当上监工了。\n\n我看着都累，做得快了还是歇不下来，那省下来的工夫到哪去了。你们用起来也这样吗，我还以为交给它了，人就能少操点心。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-llm02",
+      "author": "guest-bf213c1b11ba62f7",
+      "createdAt": "2026-11-14T05:22:57.902Z",
+      "replyTo": "l0-20261114080303-57d99eab-5c1372a3a114",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一颗豆_3479"
+      },
+      "text": "“我们”指谁？"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-5c1372a3a114",
+      "author": "guest-42b5bb8d105c97f2",
+      "createdAt": "2026-11-14T05:20:46.902Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一颗豆9594"
+      },
+      "text": "我们不喜欢大语言模型的输出，不是因为看不懂。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-deck02",
+      "author": "guest-9d162e4c5eef6dc2",
+      "createdAt": "2026-11-14T05:15:41.594Z",
+      "replyTo": "l0-20261114080303-57d99eab-9e240216a95f",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一杯水_3838"
+      },
+      "text": "有句话叫“最好的服务就是自己动手”。我看是时候动手实现你的学习卡组梦想了。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-9e240216a95f",
+      "author": "guest-20531375e81a7c5f",
+      "createdAt": "2026-11-14T05:14:40.594Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "AB126968"
+      },
+      "text": "所以，有人在做《塞尔达传说：时之笛》的语言学习卡组吗？\n\n感觉现在做正是时候。里面有不少古老的词句，很适合拿来学。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-a33f5b9fe257",
+      "author": "visitor-gamma",
+      "createdAt": "2026-11-14T04:37:25.471Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-a33f5b9fe257/media/drawer-angle.webp",
+          "alt": "蓝色笔线画出只打开一条窄缝的零件抽屉，一只手斜伸进去够几枚垫圈。",
+          "kind": "image",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "抽屉就开这么点，拿个垫圈还得把手斜着塞进去。贴新标签有什么用，看着更烦。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-reply-pot01",
+      "author": "guest-795d4507ed8d3ca8",
+      "createdAt": "2026-11-14T04:25:58.746Z",
+      "replyTo": "l0-20261114080303-57d99eab-d0e4ff51460d",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-d0e4ff51460d/media/pot-comparison.webp",
+          "alt": "一只手把小黑色花盆提离浅绿色托盘，细根从盆底伸出，旁边放着一个更大的深灰色空盆。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "5403一颗豆"
+      },
+      "text": "不一定是挤满了。我这盆下面也有，伸出去那条已经在托盘里拐弯了，还没换。以前我是看到洞里有根就去买盆，买的时候觉得大不了多少，到手两个摆一起，跟套娃似的。那个大盆现在还空着。\n\n你这张只能看见底下出来的根，里面有多少根还是不知道，连是什么花我都没认出来。先别按这条根的长度挑盆啊，我当时就是觉得底下都伸这么长了，那不得买个深的，选着选着就买大了。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-case-mitten02",
+      "author": "guest-617e09f6b3e8cfcd",
+      "createdAt": "2026-11-14T04:07:33.828Z",
+      "replyTo": "l0-20261114080303-57d99eab-ff522a4da354",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "8134Haku"
+      },
+      "text": "你可能是把第31针也算进图解那一段了。\n\n如果右手这段是先1针、6针重复4次，末尾再5针，那就是：\n1＋6×4＋5＝30针\n下一针才是标记的第31针。\n\n如果说明接着是标记针织下针、后面25针织上针，合起来就是30＋1＋25＝56针。按这个数法，标记针前织30针就够了，可以对照一下是不是这里算多了。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-ff522a4da354",
+      "author": "guest-b79158b07facd634",
+      "createdAt": "2026-11-14T04:05:29.828Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "ququ_8092"
+      },
+      "text": "无指手套的图解有个地方想问一下，一共起了56针。\n\n我现在织右手这只，按图解起点要错开一针。说明让我标记第31针，但重复花样这里我看糊涂了：6针一个重复，里面的“yo、p2tog tbl”要做4次。\n\n我算着如果照图解织，第一行在该织第31针下针之前，好像会少一针？是我哪里数错了吗？"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-d0e4ff51460d",
+      "author": "guest-d56c08220fcb2ed5",
+      "createdAt": "2026-11-14T03:59:04.746Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114080303-57d99eab-d0e4ff51460d/media/pot-roots.webp",
+          "alt": "塑料花盆底部排水孔伸出细根，下方洗手池里掉了几粒土。",
+          "kind": "image",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "3542Ryo"
+      },
+      "text": "根都从底下钻出来了，是不是该换盆了。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-b8b1b1a2b06c",
+      "author": "guest-e0622d3d3bdde9e4",
+      "createdAt": "2026-11-14T03:57:57.508Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "n74436"
+      },
+      "text": "24年年初注册的，快三年了，刚开始订阅了俩月 Pro，后续一直是200美元的。两个落地都是家宽，后来也一直用同一条线路，我感觉应该不是 IP 的问题。\n\n说实话作为程序员，我一直觉得 Claude 有一万种办法认出中国用户，但心里不愿意承认，直到今天才面对现实..."
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-reply-gossip01",
+      "author": "guest-0aff89074484134d",
+      "createdAt": "2026-11-14T03:45:39.549Z",
+      "replyTo": "l0-20261114080303-57d99eab-72f013e031b1",
+      "likes": 11,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/laugh.webp",
+          "alt": "L0仰躺着张嘴笑，双腿抬起。"
+        }
+      ],
+      "guest": {
+        "name": "nana6_5238"
+      },
+      "text": "笑死，连编谁都要评论区帮忙。"
+    },
+    {
+      "id": "l0-20261114080303-57d99eab-72f013e031b1",
+      "author": "guest-353a227ef8b9b77c",
+      "createdAt": "2026-11-14T03:19:36.549Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。"
+        }
+      ],
+      "guest": {
+        "name": "kiwi2786"
+      },
+      "text": "那种“名字不能说，懂的都懂”的爆料，我怀疑就是等评论区猜个名字再认领。"
+    },
     {
       "id": "l0-20261114020440-a09223df-835aa05c4bac",
       "author": "guest-0b5afaf4349c2829",
