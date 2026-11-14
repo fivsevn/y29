@@ -1996,7 +1996,7 @@ test('obvious source leaks cannot enter either the reading pack or writer materi
 });
 
 async function caseFixture(t, budget = 4, settings = {}, count = 5) {
-  const f = await fixture(t, budget, { ...settings, caseAdaptation: { count: 3 } });
+  const f = await fixture(t, budget, { ...settings, caseAdaptation: settings.caseAdaptation ?? { count: 3 } });
   const blocks = await sampleDocuments(f, count), requestId = 'synthetic-intake-request';
   const document = sampleMarkdown('<!-- intake-request:' + requestId + ' -->\n整理日期：' + iso(f.now).slice(0, 10) + '\n\n' + blocks.join('\n\n'));
   await writeFile(join(f.root, 'environment/sources-daily-opinions.md'), document);
@@ -2046,6 +2046,37 @@ test('a fresh intake adds three fixed cases without changing the original draw a
   saved.plan.caseAdaptation.items[0].postId = prepared.id + '-changed-mapping';
   await writeFile(prepared.operationPath, JSON.stringify(saved));
   await assert.rejects(prepareUpdate(f.options), /mapping was changed|saved draw was changed/);
+});
+
+test('six-case policy keeps the original draw and old three-case operations keep their frozen plan after upgrade', async t => {
+  const lottery = structuredClone(rawProductionLottery);
+  delete lottery.discussion;
+  delete lottery.researchMaintenance;
+  delete lottery.diversity;
+  delete lottery.participation;
+  const settings = { maxBatchPosts: 120, lottery, replyLottery: fixedReplies(0) };
+  const base = await fixture(t, 4, settings), baseline = await prepareUpdate(base.options), basePlan = (await readJSON(baseline.operationPath)).plan;
+  const expanded = await caseFixture(t, 4, { ...settings, caseAdaptation: { count: 6 } }, 8);
+  const prepared = await prepareUpdate({ ...expanded.options, intakeReceipt: expanded.intakeReceipt });
+  const saved = await readJSON(prepared.operationPath);
+  for (const key of ['budget', 'selectedIds', 'lottery', 'replyLottery', 'totalBudget']) assert.deepEqual(saved.plan[key], basePlan[key]);
+  assert.equal(prepared.caseAdaptation.postIds.length, 6);
+  assert.equal(prepared.effectiveTotalBudget, 120);
+  assert.equal(prepared.caseAdaptation.rootOrder.length, prepared.budget + 6);
+  assert.match(await readFile(prepared.readingPath, 'utf8'), /另有6条固定案例主帖/);
+  const insufficient = await caseFixture(t, 4, { caseAdaptation: { count: 6 } }, 5);
+  await assert.rejects(prepareUpdate({ ...insufficient.options, intakeReceipt: insufficient.intakeReceipt }), /six distinct usable cases/);
+
+  const old = await caseFixture(t), oldPrepared = await prepareUpdate({ ...old.options, intakeReceipt: old.intakeReceipt });
+  const originalPlan = (await readJSON(oldPrepared.operationPath)).plan;
+  const policyPath = join(old.root, 'publication.json'), policy = await readJSON(policyPath);
+  policy.caseAdaptation.count = 6;
+  await writeFile(policyPath, JSON.stringify(policy));
+  const resumed = await prepareUpdate(old.options);
+  assert.equal(resumed.status, 'resumed');
+  assert.equal(resumed.caseAdaptation.count, 3);
+  assert.deepEqual((await readJSON(oldPrepared.operationPath)).plan, originalPlan);
+  assert.match(await readFile(resumed.readingPath, 'utf8'), /另有3条固定案例主帖/);
 });
 
 test('the three cases exceed the original total allowance only as complete mixed roots and add no public metadata', async t => {

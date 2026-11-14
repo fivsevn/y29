@@ -1,4 +1,7 @@
 import { caseFingerprint, readCaseUsage } from './case-usage.js';
+import { validateCasePolicy } from './case-adaptation.js';
+import { opinionSources as additionalSources, parseSourceTopics, parseSourceDiscussion } from './opinion-sources.js';
+import { relationshipSources, parsePttTopics, parsePttDiscussion } from './opinion-ptt.js';
 import { readFile, writeFile, rename, rm, appendFile, lstat, realpath } from 'node:fs/promises';
 import { dirname, basename, resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -8,10 +11,13 @@ import { parseSampleDocuments } from './samples.js';
 const DEFAULT_DOCUMENT = fileURLToPath(new URL('../environment/sources-daily-opinions.md', import.meta.url));
 const REPOSITORY = fileURLToPath(new URL('../../', import.meta.url));
 const START = '<!-- samples:start -->', END = '<!-- samples:end -->';
-const LIMITS = Object.freeze({ threadsPerSource: 8, detailRequests: 10, repliesPerThread: 10, rootCharacters: 1200, replyCharacters: 400, threadCharacters: 2200, responseBytes: 2_000_000, timeoutMs: 15_000 });
-const SOURCES = Object.freeze([
+export const collectionLimits = Object.freeze({ threadsPerSource: 8, detailRequests: 10, repliesPerThread: 10, rootCharacters: 1200, replyCharacters: 400, threadCharacters: 2200, responseBytes: 2_000_000, timeoutMs: 15_000, maxFragments: 48, maxRequests: 120, durationMs: 360_000, concurrency: 4 });
+const LIMITS = collectionLimits;
+const EXTRA_SOURCES = [...additionalSources, ...relationshipSources];
+export const opinionSources = Object.freeze([
   { name: 'V2EX', key: 'v2ex', lists: ['https://www.v2ex.com/api/topics/latest.json', 'https://www.v2ex.com/api/topics/hot.json'], detail: id => `https://www.v2ex.com/api/replies/show.json?topic_id=${id}` },
-  { name: 'X岛匿名版', key: 'island', lists: ['https://api.nmb.best/api/showf?id=4&page=1', 'https://api.nmb.best/api/showf?id=4&page=2'], detail: id => `https://api.nmb.best/api/thread?id=${id}&page=1` }
+  { name: 'X岛匿名版', key: 'island', lists: ['https://api.nmb.best/api/showf?id=4&page=1', 'https://api.nmb.best/api/showf?id=4&page=2'], detail: id => `https://api.nmb.best/api/thread?id=${id}&page=1` },
+  ...EXTRA_SOURCES
 ]);
 const PLATFORM = /哔哩哔哩|嗶哩嗶哩|b站|bilibili|小红书|小紅書|rednote|微博|weibo|抖音|douyin|知乎|zhihu|豆瓣|douban|telegram|電報|电报|twitter|推特|reddit|v2ex|v站|x岛|a岛|x島|a島|nmbxd|nmb\.best|匿名版|adnmb|\bnga\b|晴风村|小黑盒|linux\.do|快手|贴吧|貼吧|微信|wechat|discord|instagram|facebook|youtube|tiktok|\bx(?=\s*(?:上|里|看到|发了|刷到))/gi;
 const LINK = /(?:[a-z][a-z0-9+.-]{1,20}:\/\/|www\.|mailto:|data:)[^\s<>]+|\b(?:[a-z0-9-]+\.)+(?:com|org|net|cn|io|tv|me|dev|app|co|best|xyz)(?:\b|\/)[^\s<>]*/gi;
@@ -29,6 +35,7 @@ const PERSONAL = /身份证|身份證|银行卡|銀行卡|病历|病歷|诊断�
 const fail = message => { throw new Error(message); };
 const chars = text => [...text].length;
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const SOURCE_LABELS = new RegExp(EXTRA_SOURCES.flatMap(source => source.labels).sort((a, b) => b.length - a.length).map(escapeRegExp).join('|'), 'gi');
 const genericName = name => !name || /^(?:无名氏|無名氏|匿名|Anonymous|名無し)$/i.test(name);
 
 export function plainText(value) {
@@ -61,7 +68,7 @@ function redact(text) {
     .replace(INVITED_SOCIAL_CONTACT, '[联系标识隐去]').replace(SOCIAL_CONTACT, '[联系标识隐去]').replace(ATTACHED_SOCIAL_CONTACT, '[联系标识隐去]')
     .replace(/(?:QQ|群号|微信号|手机号|电话|账号|帐号|UID|user[_ -]?id)\s*[：:=]\s*[a-z0-9][a-z0-9_.-]{3,}/gi, '[联系标识隐去]')
     .replace(EMAIL, '[联系方式隐去]').replace(LINK, '[链接隐去]').replace(CONTACT, '[数字标识隐去]')
-    .replace(PLATFORM, '某社区').replace(/\bV\s*友/gi, '网友').replace(/@[\p{L}\p{N}_.-]+/gu, '[某参与者]');
+    .replace(SOURCE_LABELS, '某社区').replace(PLATFORM, '某社区').replace(/\bV\s*友/gi, '网友').replace(/@[\p{L}\p{N}_.-]+/gu, '[某参与者]');
 }
 
 function markdownText(text) {
@@ -94,6 +101,12 @@ export function parseDiscussion(source, topic, payload) {
       reply.replyTo = floor ? replies.find(item => item.floor === Number(floor[1]) && item.floor < reply.floor)?.id ?? null : null;
     }
     return { root: topic, replies };
+  }
+  if (source !== 'island') {
+    const descriptor = EXTRA_SOURCES.find(item => item.key === source);
+    if (!descriptor) fail('Unknown discussion source');
+    if (descriptor.kind === 'ptt') return parsePttDiscussion(descriptor, topic, payload, plainText);
+    return parseSourceDiscussion(descriptor, topic, payload, plainText);
   }
   if (!payload || Array.isArray(payload) || String(payload.id) !== topic.id || !Array.isArray(payload.Replies)) fail('Invalid discussion response');
   const root = islandTopic(payload);
@@ -135,11 +148,11 @@ export function anonymizeDiscussion(discussion, limits = LIMITS) {
   return { messages };
 }
 
-async function jsonRequest(url, fetchImpl, stats, limits, accepts) {
+async function publicRequest(url, fetchImpl, stats, limits, accepts, format = 'json') {
   stats.requests++;
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), limits.timeoutMs);
   try {
-    const response = await fetchImpl(url, { headers: { Accept: 'application/json', 'User-Agent': 'y29-opinion-intake/1.0 (+https://github.com/fivsevn/y29)' }, signal: controller.signal, redirect: 'error' });
+    const response = await fetchImpl(url, { headers: { Accept: format === 'html' ? 'text/html' : 'application/json', 'User-Agent': 'y29-opinion-intake/1.0 (+https://github.com/fivsevn/y29)' }, signal: controller.signal, redirect: 'error' });
     if (!response.ok) fail(`HTTP ${response.status}`);
     const declared = Number(response.headers.get('content-length'));
     if (declared > limits.responseBytes) fail('Response too large');
@@ -150,7 +163,8 @@ async function jsonRequest(url, fetchImpl, stats, limits, accepts) {
       if (bytes > limits.responseBytes) { controller.abort(); fail('Response too large'); }
       text += decoder.decode(chunk, { stream: true });
     }
-    const data = JSON.parse(text + decoder.decode());
+    text += decoder.decode();
+    const data = format === 'html' ? text : JSON.parse(text);
     if (!accepts(data)) fail('Invalid response shape');
     stats.succeeded++;
     return data;
@@ -160,50 +174,72 @@ async function jsonRequest(url, fetchImpl, stats, limits, accepts) {
   } finally { clearTimeout(timer); }
 }
 
-export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date.now(), limits = LIMITS, seed = randomUUID(), used = [] } = {}) {
+async function mapConcurrent(items, concurrency, action) {
+  const results = new Array(items.length);
+  let index = 0;
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+    while (index < items.length) { const current = index++; results[current] = await action(items[current]); }
+  }));
+  return results;
+}
+
+function discoveryTopics(source, payload) {
+  if (source.kind === 'ptt') return parsePttTopics(source, payload, plainText);
+  if (source.key !== 'v2ex' && source.key !== 'island') return parseSourceTopics(source, payload, plainText);
+  if (!Array.isArray(payload)) fail('Invalid discovery response');
+  return payload.map(source.key === 'v2ex' ? v2Topic : islandTopic).filter(Boolean);
+}
+
+export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date.now(), limits = LIMITS, seed = randomUUID(), used = [], sources: configuredSources = opinionSources, requiredCases = 6 } = {}) {
   if (!Number.isFinite(now)) fail('Invalid collection time');
-  const date = new Date(now), fragments = [], sources = [], queues = [];
-  const deadline = Date.now() + 180000;
+  validateCasePolicy({ count: requiredCases });
+  limits = { ...LIMITS, ...limits };
+  for (const key of ['concurrency', 'maxRequests', 'maxFragments', 'durationMs']) if (!Number.isSafeInteger(limits[key]) || limits[key] < 1) fail('Invalid collection limit');
+  const date = new Date(now), fragments = [], sources = configuredSources.map(source => ({ name: source.name, requests: 0, succeeded: 0, failed: 0, topicsSeen: 0, discussionsRead: 0, fragments: 0, messages: 0 }));
+  const deadline = Date.now() + limits.durationMs;
   let requestCount = 0;
   const seen = new Set(used.map(item => item.fingerprint));
-  const request = async (url, stats, accepts) => {
+  const request = async (url, stats, accepts, format) => {
     const remaining = deadline - Date.now();
-    if (requestCount >= 24 || remaining <= 0) return null;
+    if (requestCount >= limits.maxRequests || remaining <= 0) return null;
     requestCount++;
-    return jsonRequest(url, fetchImpl, stats, { ...limits, timeoutMs: Math.min(limits.timeoutMs, remaining) }, accepts);
+    return publicRequest(url, fetchImpl, stats, { ...limits, timeoutMs: Math.min(limits.timeoutMs, remaining) }, accepts, format);
   };
-  for (const source of SOURCES) {
-    const stats = { name: source.name, requests: 0, succeeded: 0, failed: 0, topicsSeen: 0, discussionsRead: 0, fragments: 0, messages: 0 };
-    sources.push(stats);
+  const queues = await mapConcurrent(configuredSources.map((source, index) => ({ source, stats: sources[index] })), limits.concurrency, async ({ source, stats }) => {
     const topics = new Map();
     for (const url of source.lists) {
-      const payload = await request(url, stats, Array.isArray);
-      if (!Array.isArray(payload)) continue;
-      for (const raw of payload) {
-        const topic = source.key === 'v2ex' ? v2Topic(raw) : islandTopic(raw);
-        if (topic) topics.set(topic.id, topic);
-      }
+      const payload = await request(url, stats, data => { discoveryTopics(source, data); return true; }, source.format);
+      if (payload === null) continue;
+      for (const topic of discoveryTopics(source, payload)) topics.set(topic.id, topic);
     }
     stats.topicsSeen = topics.size;
     const rank = topic => createHash('sha256').update(`${seed}:${source.key}:${topic.id}`).digest('hex');
     const eligible = [...topics.values()].filter(topic => Number.isFinite(topic.created) && topic.created <= now && now - topic.created < 7 * 86400000 && topic.text && chars(topic.text) <= limits.rootCharacters && !PERSONAL.test(topic.text))
       .sort((a, b) => rank(a).localeCompare(rank(b))).slice(0, limits.detailRequests);
-    queues.push({ source, stats, eligible });
-  }
+    return { source, stats, eligible };
+  });
+  const sourceRank = source => createHash('sha256').update(`${seed}:source-order:${source.key}`).digest('hex');
+  queues.sort((a, b) => sourceRank(a.source).localeCompare(sourceRank(b.source)));
   // Alternate available sources; a healthy source can fill the surplus when another fails.
-  while (fragments.length < 12 && requestCount < 24 && Date.now() < deadline) {
-    let attempted = false;
-    for (const { source, stats, eligible } of queues) {
-      if (!eligible.length || stats.fragments >= limits.threadsPerSource || fragments.length >= 12 || requestCount >= 24 || Date.now() >= deadline) continue;
-      attempted = true;
+  while (fragments.length < limits.maxFragments && requestCount < limits.maxRequests && Date.now() < deadline) {
+    const active = queues.filter(({ stats, eligible }) => eligible.length && stats.fragments < limits.threadsPerSource)
+      .slice(0, limits.maxFragments - fragments.length);
+    if (!active.length) break;
+    const discussions = await mapConcurrent(active, limits.concurrency, async ({ source, stats, eligible }) => {
       const topic = eligible.shift();
-      const payload = await request(source.detail(topic.id), stats, data => source.key === 'v2ex' ? Array.isArray(data) : data && String(data.id) === topic.id && Array.isArray(data.Replies));
-      if (payload === null) continue;
+      const payload = await request(source.detail(topic.id), stats, data => { parseDiscussion(source.key, topic, data); return true; }, source.format);
+      if (payload === null) return null;
       let discussion;
-      try { discussion = parseDiscussion(source.key, topic, payload); } catch { continue; }
+      try { discussion = parseDiscussion(source.key, topic, payload); } catch { return null; }
       stats.discussionsRead++;
+      if (!Number.isFinite(discussion.root.created) || discussion.root.created > now || now - discussion.root.created >= 7 * 86400000) return null;
       const fragment = anonymizeDiscussion(discussion, limits);
-      if (!fragment) continue;
+      return fragment ? { fragment, stats } : null;
+    });
+    // Process in saved source order so network timing cannot alter the seeded sample.
+    for (const value of discussions) {
+      if (!value) continue;
+      const { fragment, stats } = value;
       let entry;
       try {
         entry = parseSampleDocuments([{ path: 'environment/sources-daily-opinions.md', text: `${START}\n${renderFragment(fragment, 1)}\n${END}` }])[0];
@@ -214,7 +250,6 @@ export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date
       seen.add(fingerprint);
       fragments.push(fragment); stats.fragments++; stats.messages += fragment.messages.length;
     }
-    if (!attempted) break;
   }
   const allFailed = sources.every(source => source.succeeded === 0);
   const collectedAt = date.toISOString();
@@ -223,7 +258,7 @@ export async function collectOpinions({ fetchImpl = globalThis.fetch, now = Date
   for (const [index, fragment] of fragments.entries()) {
     parts.push(renderFragment(fragment, index + 1));
   }
-  return { markdown: parts.join('\n\n') + '\n', collectedAt, sources, fragments: fragments.length, messages: fragments.reduce((n, item) => n + item.messages.length, 0), allFailed, ready: fragments.length >= 3, exitCode: allFailed ? 1 : 0 };
+  return { markdown: parts.join('\n\n') + '\n', collectedAt, sources, fragments: fragments.length, messages: fragments.reduce((n, item) => n + item.messages.length, 0), allFailed, requiredCases, ready: fragments.length >= requiredCases, exitCode: allFailed ? 1 : 0 };
 }
 
 function renderFragment(fragment, number) {
@@ -259,7 +294,13 @@ export async function updateOpinionDocument({ documentPath = DEFAULT_DOCUMENT, o
   // Verify the target before spending requests, then reread to preserve manual edits outside the generated region.
   replaceCurrentSamples(await readFile(documentPath, 'utf8'), '');
   const used = await readCaseUsage(resolve(dirname(documentPath), '..'));
-  const result = await collectOpinions({ ...options, used });
+  let requiredCases = 6;
+  try {
+    const policy = JSON.parse(await readFile(resolve(dirname(documentPath), '../publication.json'), 'utf8'));
+    validateCasePolicy(policy.caseAdaptation);
+    requiredCases = policy.caseAdaptation?.count ?? requiredCases;
+  } catch (error) { if (error.code !== 'ENOENT') throw error; }
+  const result = await collectOpinions({ requiredCases, ...options, used });
   const document = await readFile(documentPath, 'utf8'), updated = replaceCurrentSamples(document, result.markdown);
   const temporary = resolve(dirname(target), `.opinions-${randomUUID()}.tmp`);
   try { await writeFile(temporary, updated, { flag: 'wx', mode: 0o600 }); await rename(temporary, target); }
@@ -268,7 +309,7 @@ export async function updateOpinionDocument({ documentPath = DEFAULT_DOCUMENT, o
 }
 
 export function collectionSummary(result) {
-  return ['## 舆论素材采集', '', `采集时间：${result.collectedAt}`, `本批：${result.fragments} 段，${result.messages} 条发言。${result.fragments >= 3 ? "可供本轮选择。" : "素材不足3条，需补采后再准备发帖。"}${result.allFailed ? '全部来源请求失败，当前材料已清空并标明本次未取得可用材料。' : !result.fragments ? '请求已完成，本次没有可采用的短节选。' : ''}`, '',
+  return ['## 舆论素材采集', '', `采集时间：${result.collectedAt}`, `本批：${result.fragments} 段，${result.messages} 条发言。${result.ready ? "可供本轮选择。" : `素材不足${result.requiredCases}条，需补采后再准备发帖。`}${result.allFailed ? '全部来源请求失败，当前材料已清空并标明本次未取得可用材料。' : !result.fragments ? '请求已完成，本次没有可采用的短节选。' : ''}`, '',
     '| 来源 | 请求成功 / 失败 | 收到话题 | 读取讨论 | 采用片段 |', '| --- | --- | --- | --- | --- |', ...result.sources.map(source => `| ${source.name} | ${source.succeeded} / ${source.failed} | ${source.topicsSeen} | ${source.discussionsRead} | ${source.fragments} |`), '', '这里只记录采集计数，不输出原账号、原帖链接或原始发言。', ''].join('\n');
 }
 
@@ -280,9 +321,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     const summary = collectionSummary(result);
     console.error(summary);
     if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, summary, 'utf8');
-    process.exitCode = result.fragments < 3 ? 2 : result.exitCode;
+    process.exitCode = result.ready ? result.exitCode : 2;
   } catch {
     console.error('Opinion collection could not update the material document; check its path, markers and write permissions.');
     process.exitCode = 1;
   }
 }
+

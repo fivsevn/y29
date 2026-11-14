@@ -7,9 +7,9 @@ const now = Date.parse('2026-11-11T01:00:00Z');
 const document = (count = 4) => ({ path: 'environment/sources-daily-opinions.md', text: '# 每日素材\n<!-- samples:start -->\n<!-- intake-request:test-request -->\n整理日期：2026-11-11\n\n' + Array.from({ length: count }, (_, index) => '### 讨论 ' + index + '\np01：实际的一段文字 ' + index + '\np02：哦。').join('\n\n') + '\n<!-- samples:end -->\n' });
 const receipt = text => ({ requestId: 'test-request', runId: '12345', runUrl: 'https://github.com/fivsevn/y29/actions/runs/12345', startedAt: '2026-11-11T00:55:00Z', completedAt: '2026-11-11T00:58:00Z', headSha: 'a'.repeat(40), documentSha: createHash('sha1').update('blob ' + Buffer.byteLength(text) + '\0' + text).digest('hex'), documentDigest: createHash('sha256').update(text).digest('hex') });
 const plan = (budget = 4) => ({ seed: 'stable-case-seed', budget, timeWindow: { start: '2026-11-10T01:00:00Z', end: '2026-11-11T01:00:00Z' } });
-function create(budget = 4, count = 4) {
+function create(budget = 4, count = 4, caseCount = 3) {
   const source = document(count), savedPlan = plan(budget);
-  const adapted = createCasePlan({ operationId: 'l0-synthetic', plan: savedPlan, documents: [source], intakeReceipt: receipt(source.text), now });
+  const adapted = createCasePlan({ operationId: 'l0-synthetic', plan: savedPlan, documents: [source], intakeReceipt: receipt(source.text), now, count: caseCount });
   return { source, savedPlan, adapted };
 }
 
@@ -22,6 +22,8 @@ test('receipts are tied to a completed current run and the exact daily document'
   assert.throws(() => validateIntakeReceipt(valid, { documentText: source.text + '\n', now }), /does not match/);
   assert.throws(() => validateCasePolicy({ count: 4 }), /three/);
   assert.throws(() => validateCasePolicy({ count: 3, extra: true }), /invalid/);
+  validateCasePolicy({ count: 3 });
+  validateCasePolicy({ count: 6 });
 });
 
 test('three distinct daily snapshots and opaque root IDs are frozen with a stable mixed recommendation', () => {
@@ -46,6 +48,28 @@ test('missing or insufficient daily cases cannot be replaced by selected cases',
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [document()], now }), /GitHub Actions/);
   const duplicate = { ...source, text: source.text.replace('<!-- samples:end -->', '### 另一个标题\np01：实际的一段文字 0\np02：哦。\n<!-- samples:end -->') };
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [duplicate], intakeReceipt: receipt(duplicate.text), now }), /three distinct usable cases/);
+});
+
+test('six-case plans preserve mixed roots and require six fresh cases while legacy plans retain three', () => {
+  const { adapted, savedPlan } = create(4, 8, 6);
+  validateCasePlan(adapted, { operationId: 'l0-synthetic', plan: savedPlan });
+  assert.equal(adapted.count, 6);
+  assert.equal(new Set(adapted.items.map(item => item.sample.id)).size, 6);
+  assert.equal(adapted.rootOrder.length, 10);
+  const roots = adapted.rootOrder.map((id, index) => ({ id, replyTo: null, createdAt: new Date(now - 10000 + index * 1000).toISOString() }));
+  const fullPlan = { ...savedPlan, caseAdaptation: adapted };
+  validateCasePosts(fullPlan, roots, { complete: true });
+  assert.throws(() => validateCasePosts(fullPlan, roots.filter(post => post.id !== adapted.items[0].postId), { complete: true }), /all six fixed case roots/);
+  const ids = new Set(adapted.items.map(item => item.postId));
+  const grouped = [...roots.filter(post => !ids.has(post.id)), ...roots.filter(post => ids.has(post.id))]
+    .map((post, index) => ({ ...post, createdAt: new Date(now - 10000 + index * 1000).toISOString() }));
+  assert.throws(() => validateCasePosts(fullPlan, grouped, { complete: true }), /interleave/);
+  assert.throws(() => validateCasePlan({ ...adapted, count: 3 }, { operationId: 'l0-synthetic', plan: savedPlan }), /invalid saved cases/);
+  assert.throws(() => create(4, 5, 6), /six distinct usable cases/);
+  assert.throws(() => create(4, 8, 4), /three or six/);
+  const legacy = create();
+  validateCasePlan(legacy.adapted, { operationId: 'l0-synthetic', plan: legacy.savedPlan });
+  assert.equal(legacy.adapted.count, 3);
 });
 
 test('case membership follows saved ancestry for nested replies and stops at unrelated or broken chains', () => {
@@ -104,3 +128,4 @@ test('usage retains only recent hashes and retries do not renew them; new replie
   assert.equal((await readCaseUsage(root, now + 31 * 86400000)).length, 0);
   assert.doesNotMatch(await readFile(join(dir, '.github/state/lucifer0-case-usage.json'), 'utf8'), /不同开头|标题|发言者/);
 });
+

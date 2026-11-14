@@ -18,8 +18,12 @@ on:
       - '.github/scripts/opinion-intake-request.mjs'
       - '.github/state/lucifer0-intake-request.json'
       - 'lucifer0/tools/collect-opinions.js'
+      - 'lucifer0/tools/opinion-sources.js'
+      - 'lucifer0/tools/opinion-ptt.js'
       - 'lucifer0/tools/samples.js'
       - 'lucifer0/tools/case-usage.js'
+      - 'lucifer0/tools/case-adaptation.js'
+      - 'lucifer0/publication.json'
 
 permissions:
   contents: read
@@ -51,7 +55,7 @@ jobs:
         run: node .github/scripts/opinion-intake-request.mjs
       - run: npm ci
       - name: Check collection and forum reading
-        run: node --test tests/opinion-intake-request.test.js tests/opinion-collection.test.js tests/samples.test.js tests/intake-refresh.test.js tests/case-adaptation.test.js tests/social-operations.test.js tests/population.test.js
+        run: node --test tests/opinion-intake-request.test.js tests/opinion-collection.test.js tests/opinion-sources.test.js tests/opinion-ptt.test.js tests/samples.test.js tests/intake-refresh.test.js tests/case-adaptation.test.js tests/social-operations.test.js tests/population.test.js
       - name: Collect the current batch
         id: collect
         continue-on-error: true
