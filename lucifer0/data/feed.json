@@ -4158,9 +4158,490 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-b9d820a860d4767f",
+      "handle": "guest_40a1ac08284550293260",
+      "name": "7609Haku",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-44b39a637d7cf112",
+      "handle": "guest_f317ad7032766c918d0d",
+      "name": "5160普通人",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-6ade794520f110b1",
+      "handle": "guest_245abeb706042d71aaa5",
+      "name": "半拍_2210",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-582ad00b57092f51",
+      "handle": "guest_c576ea1cf0ae7d74223f",
+      "name": "4116Ryo",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1bbaf6b02405aa5b",
+      "handle": "guest_677d4ca51f8ab4800e2f",
+      "name": "林檎_4787",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b9c37d5c280ac1a9",
+      "handle": "guest_0415a49f40255adcf044",
+      "name": "ququ_587",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-456047956f2dac7e",
+      "handle": "guest_cf2abd5ee6b0464ad6d6",
+      "name": "路人甲9270",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-cefde18ebc750ae2",
+      "handle": "guest_229e95bfee71a3bb4571",
+      "name": "aya__1363",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9f4028ec9143c523",
+      "handle": "guest_83d443921572b3e03902",
+      "name": "6206人间散步",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0909f9ac8a63b991",
+      "handle": "guest_657b38510138bd0e389c",
+      "name": "55没什么",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-86c6dd8c9c98e443",
+      "handle": "guest_cc8ea414d5eae8a8d0be",
+      "name": "3005石头",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c7ac6ac7a305b7f2",
+      "handle": "guest_7c43816ca0dcf24b32ee",
+      "name": "阿佑8419",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-fdd5a54361fd7980",
+      "handle": "guest_338db64c1180447ae803",
+      "name": "东东_7426",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261114201332-4907a50a-case-knit-03",
+      "author": "visitor-tau-upper",
+      "createdAt": "2026-11-14T20:12:02.647Z",
+      "replyTo": "l0-20261114201332-4907a50a-case-knit-02",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "太谢谢了！"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-reply-20",
+      "author": "guest-1bbaf6b02405aa5b",
+      "createdAt": "2026-11-14T20:09:40.503Z",
+      "replyTo": "l0-20261114201332-4907a50a-60cd16286e56",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。"
+        }
+      ],
+      "guest": {
+        "name": "林檎_4787"
+      },
+      "text": "我也饿了，烦。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-60cd16286e56",
+      "author": "visitor-tau-upper",
+      "createdAt": "2026-11-14T20:08:06.503Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。"
+        }
+      ],
+      "text": "看人摊饼看饿了。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-fd362a359326",
+      "author": "visitor-tau-upper",
+      "createdAt": "2026-11-14T20:06:18.754Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "这剧底下夸男主演得好的，我看着都像托。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-case-knit-02",
+      "author": "visitor-mu",
+      "createdAt": "2026-11-14T20:05:31.529Z",
+      "replyTo": "l0-20261114201332-4907a50a-c26076818c41",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "要是两条纵边对着缝，可以试试藏针缝（mattress stitch）。正面平针和反面平针的地方，挑针位置要跟着换。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-c26076818c41",
+      "author": "visitor-tau-upper",
+      "createdAt": "2026-11-14T20:03:16.062Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "正在织 Vogue Knitting 里一款“简单”的短披肩，叫 rolled collar shrug（卷领短披肩）。它是一片织的，正面平针组织织5行，反面平针组织织5行，这样交替重复。\n\n想问问侧缝和袖缝用什么针法缝合比较合适？先谢谢了。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-reply-21",
+      "author": "guest-9f4028ec9143c523",
+      "createdAt": "2026-11-14T19:55:25.375Z",
+      "replyTo": "l0-20261114201332-4907a50a-af7d5eb960d2",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "6206人间散步"
+      },
+      "text": "我袜子也这样。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-af7d5eb960d2",
+      "author": "visitor-tau-upper",
+      "createdAt": "2026-11-14T19:54:20.375Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114201332-4907a50a-af7d5eb960d2/media/sock-threads-night.webp",
+          "kind": "image",
+          "alt": "一只深灰袜子被拎着袜口提起来，垂下的袜面粘着几截浅色线头。",
+          "fit": "contain"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "text": "袜子上又全是线头，烦死了。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-case-app-05",
+      "author": "news-neon",
+      "createdAt": "2026-11-14T19:50:35.344Z",
+      "replyTo": "l0-20261114201332-4907a50a-cf43cbc392b3",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "快 2027 年了，还能看到堪比在线 base64 加密的 APP......"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-case-app-02",
+      "author": "guest-86c6dd8c9c98e443",
+      "createdAt": "2026-11-14T19:50:19.344Z",
+      "replyTo": "l0-20261114201332-4907a50a-cf43cbc392b3",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "3005石头"
+      },
+      "text": "就我的角度来看，0 价值"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-case-app-03",
+      "author": "guest-c7ac6ac7a305b7f2",
+      "createdAt": "2026-11-14T19:49:47.489Z",
+      "replyTo": "l0-20261114201332-4907a50a-cf43cbc392b3",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "阿佑8419"
+      },
+      "text": "这也不值得下个 app 啊，不如搞个网页，我估计小程序上都一大堆，那种聚会游戏的小程序"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-case-app-06",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-14T19:49:45.344Z",
+      "replyTo": "l0-20261114201332-4907a50a-cf43cbc392b3",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "你这个我只能说“长得丑不是你的错，但是...”"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-case-app-04",
+      "author": "visitor-eta",
+      "createdAt": "2026-11-14T19:49:30.344Z",
+      "replyTo": "l0-20261114201332-4907a50a-cf43cbc392b3",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "额。。。恕我直言...网页 5 分钟的工作量"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-cf43cbc392b3",
+      "author": "guest-0909f9ac8a63b991",
+      "createdAt": "2026-11-14T19:48:46.344Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "55没什么"
+      },
+      "text": "之前陪女儿玩大富翁的时候，想做个比普通摇骰子更有意思的工具，于是有了 Lucky Step。\n\n其实就是一个随机数生成器，做了数字滚动、幸运转盘、翻牌三种动画，带音效和语音播报。数字范围可以自己设置，除了大富翁、飞行棋，也能用在聚会小游戏、比点数大小、随机选人这些场景。\n\n目前支持 iPhone 和 iPad，完全免费，不用注册，也可以离线使用。\n\n这是我第一个独立开发并上架的 iOS App，主要用 React Native、Expo 和 Codex 做的。\n\n今天第一次自己在 Product Hunt 发布，也想借这个机会给自己的 App 增加一点曝光和互动。\n\n欢迎大家评论、提建议 0[·‿·]"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-reply-19",
+      "author": "guest-44b39a637d7cf112",
+      "createdAt": "2026-11-14T19:31:42.231Z",
+      "replyTo": "l0-20261114201332-4907a50a-0a43e993fbdd",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261114201332-4907a50a-0a43e993fbdd/media/sweet-tomato-chips.webp",
+          "alt": "灰绿色沙发坐垫上的敞口薯片袋，银色袋内有撒着橙红调味粉的薄薯片。"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "guest": {
+        "name": "5160普通人"
+      },
+      "text": "有不甜的番茄味吗？我这包也甜得发齁。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-0a43e993fbdd",
+      "author": "guest-b9d820a860d4767f",
+      "createdAt": "2026-11-14T19:27:48.231Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。"
+        }
+      ],
+      "guest": {
+        "name": "7609Haku"
+      },
+      "text": "这番茄味薯片怎么一嘴糖味，难吃。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-e5b7725601d3",
+      "author": "guest-fdd5a54361fd7980",
+      "createdAt": "2026-11-14T18:20:43.992Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261114201332-4907a50a-e5b7725601d3/media/autumn-tree-fog-edited.webp",
+          "kind": "image",
+          "alt": "调整后的沙地秋树，黄褐和暗橙色树叶较暖，沙地与灰白薄雾较明亮。",
+          "fit": "contain"
+        },
+        {
+          "src": "posts/2026/11/l0-20261114201332-4907a50a-e5b7725601d3/media/autumn-tree-fog-base.webp",
+          "kind": "image",
+          "alt": "同一棵沙地秋树的基准画面，色调较冷淡、对比较低，远处隐入灰白薄雾。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "东东_7426"
+      },
+      "text": "沙地上的秋树和雾\n\n第一张是调过的，第二张是没调的。在 darktable 和 greycard 里调不出想要的样子，greycard 的易用性我也开始有点不喜欢了。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-4dcfeb03dcd7",
+      "author": "guest-582ad00b57092f51",
+      "createdAt": "2026-11-14T17:32:07.418Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "4116Ryo"
+      },
+      "text": "TCG术语\n\n各位好，我这边镇上最近新开了家咖啡店，每周都有游戏夜，感觉是时候开始学点卡牌游戏的专门词汇了。\n\n想问问有没有人有具体某款卡牌游戏的词汇表？入门词汇我已经找了点资料开始学了。平时线下玩MTG和高达，这两个的词汇应该比较好找；但宝可梦和One Piece我完全不了解。有人手里有不错的表的话，麻烦分享一下，谢谢。\n\n另外我也在做一套词卡，会按游戏分开，做完也想分享出来，不光自己用。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-77806d543a73",
+      "author": "guest-b9c37d5c280ac1a9",
+      "createdAt": "2026-11-14T15:19:15.905Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "ququ_587"
+      },
+      "text": "至少得有第三种选择。\n\n有人会说，银行业务，甚至一些公共事务，现在还是能在网页上办。可我碰到的非用 App 不可的事情越来越多，用这些 App 就得在 Google 和 Apple 的生态里二选一。我完全不能接受。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-32ad58ab1d55",
+      "author": "guest-6ade794520f110b1",
+      "createdAt": "2026-11-14T15:14:42.478Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "半拍_2210"
+      },
+      "text": "SMTP relay 配置被密码要求卡住了\n\nYunoHost 12.1.41.2，平时通过 SSH 管理。\n\n我照着文档在网页管理界面配置外部 SMTP relay，结果被填进去的密码卡住了！报错说：“密码必须至少 8 个字符，并且包含大写和小写字母。”\n\n但这个密码又不是我和 YunoHost 能决定的！SMTP relay 的管理员给什么凭据，我们就得用什么。我用的 Sweego 给我的密码是 UUID，里面有数字和小写字母，就是没有大写字母。\n\n我觉得外部 SMTP relay 的认证密码字段就应该跳过这种检查。别把本地用户密码的大小写要求套在这里，密码格式根本不是我能改的啊。"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-reply-22",
+      "author": "guest-cefde18ebc750ae2",
+      "createdAt": "2026-11-14T15:13:16.990Z",
+      "replyTo": "l0-20261114201332-4907a50a-977b78b157dc",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。"
+        }
+      ],
+      "guest": {
+        "name": "aya__1363"
+      },
+      "text": "拿刀划一圈呢？"
+    },
+    {
+      "id": "l0-20261114201332-4907a50a-977b78b157dc",
+      "author": "guest-456047956f2dac7e",
+      "createdAt": "2026-11-14T15:11:40.990Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261114201332-4907a50a-977b78b157dc/media/stubborn-mandarin-peel.webp",
+          "alt": "水槽旁的手里托着剥得破碎的橘子，残皮和白色橘络还粘着果肉。"
+        }
+      ],
+      "guest": {
+        "name": "路人甲9270"
+      },
+      "text": "这橘子怎么这么难剥。"
+    },
     {
       "id": "l0-20261114140248-b86b21ce-original-paper02",
       "author": "guest-736d3be73855a053",
