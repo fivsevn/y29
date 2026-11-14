@@ -65,3 +65,12 @@ test('PTT quote headings hide unknown previous authors while retaining quoted wo
   assert.ok(discussion.replies.every(reply => reply.replyTo === discussion.root.id));
   assert.doesNotMatch(JSON.stringify(discussion), /OLD_ACCOUNT|舊暱稱|OTHER_ACCOUNT|另一暱稱/);
 });
+
+test('PTT standalone signature separators omit unknown signatures without truncating inline hyphens', () => {
+  const [topic] = parsePttTopics(source, list, plainText);
+  const signed = detail.replace('兩個人又沒說清楚。', '今天--還是沒說清楚。\n明天再談。\n-- \t\nUNKNOWN_SIGNATURE（個人署名）\n其他簽名內容');
+  const discussion = parsePttDiscussion(source, topic, signed, plainText);
+  assert.match(discussion.root.text, /今天--還是沒說清楚。\n明天再談。$/);
+  assert.doesNotMatch(JSON.stringify(discussion), /UNKNOWN_SIGNATURE|個人署名|其他簽名內容/);
+  assert.equal(discussion.replies.length, 2);
+});
