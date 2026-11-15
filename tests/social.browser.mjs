@@ -284,6 +284,8 @@ try {
   await visit(`#/user/${characterUser.id}`, '/user');
   check(await page.locator('button[data-action="follows"]').count() === 0, 'character channel does not expose optional follow controls');
   await visit(`#/user/${visitorPost.author}`, '/user');
+  // A hash navigation can retain the preceding profile's /user heading while loading.
+  await page.locator(`#post-${visitorPost.id}`).waitFor();
   check(await page.locator('button[data-action="follows"]').count() === 0, 'visitor profiles cannot enter following');
   check(await page.locator(`#post-${visitorPost.id}`).count() === 1, 'visitor profiles remain readable');
   for (const follows of [[], ['alan'], ['passerby17', 'nightbus3']]) {
