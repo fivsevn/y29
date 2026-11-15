@@ -4304,6 +4304,54 @@
       "inFollowing": false
     },
     {
+      "id": "guest-af1e437285ba2203",
+      "handle": "guest_ba0a8d62b9161c47742c",
+      "name": "没什么600",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-06ec5431d8917835",
+      "handle": "guest_eb8f053b648cef4d3139",
+      "name": "9973阿迟",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e30732bf2be2e20a",
+      "handle": "guest_09f82e15653853c38d46",
+      "name": "小鹿_4670",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-39ecd8e086d02f31",
+      "handle": "guest_ec286d83738957fdeea3",
+      "name": "rin_2_1625",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
       "id": "guest-fdd5a54361fd7980",
       "handle": "guest_338db64c1180447ae803",
       "name": "东东_7426",
@@ -4314,9 +4362,561 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-ff05d5a03518612b",
+      "handle": "guest_dc1ef2acf750de8b2455",
+      "name": "n74397",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-6c9001072da4c679",
+      "handle": "guest_95e37175fa96e0e7d9b2",
+      "name": "咸鱼_1733",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-244d142a33265422",
+      "handle": "guest_2142a5cc22a11843cb34",
+      "name": "小青980",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-77acef9465c1c396",
+      "handle": "guest_94c58daf49aea1c2d6fa",
+      "name": "Haku2156",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-56b97a662f1f4942",
+      "handle": "guest_a3c1f4e58cce3558a461",
+      "name": "4828耳朵",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a0d644b8dc8b72df",
+      "handle": "guest_58a5ce2698da71306c8c",
+      "name": "K22067",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3f9d167d2dfa72d8",
+      "handle": "guest_3891f80c35e51db1d704",
+      "name": "阿佑_2147",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5605062d1484750f",
+      "handle": "guest_64544112e634408a6236",
+      "name": "853半拍",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c8f807ca8d56c4bb",
+      "handle": "guest_6157e4f30c4673f70b7c",
+      "name": "70140_0",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a35c418839099921",
+      "handle": "guest_037d8d13cf85d963dd7f",
+      "name": "n72497",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ab78c9a1440186cc",
+      "handle": "guest_15e69869481c0e4c0d09",
+      "name": "lea_5874",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5037289d642f8baf",
+      "handle": "guest_ec972817f799ea5779e2",
+      "name": "团团4686",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ebcc53b0a14fab7a",
+      "handle": "guest_d98530e9e15dd9dc582f",
+      "name": "6746Ryo",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c63d4ddce54bae43",
+      "handle": "guest_40b63098ea32c5fd9295",
+      "name": "路人甲2379",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-14cca541a7ccfed3",
+      "handle": "guest_be373aef1042b8109152",
+      "name": "路人甲_8783",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4b1bb5588b014969",
+      "handle": "guest_d7783234c57899a6d6ae",
+      "name": "路人甲_6724",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261115020624-e0cbd23d-case-srs-04",
+      "author": "guest-a0d644b8dc8b72df",
+      "createdAt": "2026-11-15T01:51:02.449Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-case-srs-23",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "K22067"
+      },
+      "text": "我不同意。对我来说恰好相反，SRS的复习队列只是轻度强化，一直达不到我认为“充分”的程度。得在不同语境里一遍遍读到一个词，我才会觉得够了，也就是能懂这个词会传达什么感觉。我现在用的这些词，也不是Anki或者类似的界面给我的。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-case-srs-23",
+      "author": "guest-3f9d167d2dfa72d8",
+      "createdAt": "2026-11-15T01:48:04.449Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-4d498a8b5ea9",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "阿佑_2147"
+      },
+      "text": "我从N3开始用SRS，觉得很有用。词汇只靠沉浸，我觉得还是很难得到“充分”的强化 0[·_-]\n\n常见的词会反复遇到，但你看的内容里不怎么出现的，就容易漏掉。语法方面我也觉得能再巩固一下。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-23",
+      "author": "guest-ab78c9a1440186cc",
+      "createdAt": "2026-11-15T00:53:46.546Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-reply-17",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "guest": {
+        "name": "lea_5874"
+      },
+      "text": "我也觉得刻意。拍到什么发什么不就行了，没拍到的还要讲。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-19",
+      "author": "guest-77acef9465c1c396",
+      "createdAt": "2026-11-15T00:30:16.865Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-reply-15",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Haku2156"
+      },
+      "text": "发来看看，又是哪位金耳朵下凡了。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-21",
+      "author": "guest-56b97a662f1f4942",
+      "createdAt": "2026-11-15T00:26:22.865Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-0e1ca21822c8",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "guest": {
+        "name": "4828耳朵"
+      },
+      "text": "光说个“不瞎吹”，问了跟没问一样。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-17",
+      "author": "guest-a35c418839099921",
+      "createdAt": "2026-11-15T00:25:40.546Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-b571cd910cd8",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "n72497"
+      },
+      "text": "连没拍到的都要讲一段，真就是随便路过吗。看着有点刻意。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-b571cd910cd8",
+      "author": "guest-c8f807ca8d56c4bb",
+      "createdAt": "2026-11-15T00:25:02.546Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115020624-e0cbd23d-b571cd910cd8/media/leaf-shadows-on-wall.webp",
+          "alt": "浅色旧抹灰墙上，成团的树叶与细枝影子间透出大小不一的亮斑；下沿露出有水痕的墙脚和一小条灰色人行道。"
+        }
+      ],
+      "guest": {
+        "name": "70140_0"
+      },
+      "text": "路过这面墙，看见树影里有几块特别亮的小洞，就站那看了一会儿。风一吹就全变了，刚想拍的那个样子总是过去了，拍出来是这个。\n\n我拍树的时候老把天空也带进去，回来看全是枝枝杈杈。这种只剩影子的，反而能看出叶子是一团一团的。也可能就是不用抬头，站着就愿意多看一会儿。\n\n刚才有个骑车的过去，影子从树叶中间一下子划走，手机没赶上。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-15",
+      "author": "guest-244d142a33265422",
+      "createdAt": "2026-11-15T00:19:31.865Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-0e1ca21822c8",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小青980"
+      },
+      "text": "哪篇啊，发来看看有多能吹。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-893c654ea614",
+      "author": "guest-5605062d1484750f",
+      "createdAt": "2026-11-14T23:25:43.518Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115020624-e0cbd23d-893c654ea614/media/silent-night-ornament.webp",
+          "alt": "浅色棉线吊着圆形蓝闪手作挂饰，奶白小屋剪影上方有银白纸星。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "853半拍"
+      },
+      "text": "平安夜挂饰\n\n这是在手作活动现场做完带走的。我和妈妈她们一起去的，大家都做了同一个款。觉得都好漂亮！\n\n蓝色背景其实特别闪，看着像星星都出来了一样……好好看！"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-0e1ca21822c8",
+      "author": "guest-6c9001072da4c679",
+      "createdAt": "2026-11-14T23:02:07.865Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "咸鱼_1733"
+      },
+      "text": "有没有不瞎吹的耳机测评？"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-f4cc54379d24",
+      "author": "guest-4b1bb5588b014969",
+      "createdAt": "2026-11-14T22:50:06.699Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路人甲_6724"
+      },
+      "text": "Kit Couture 的 Fugloy 无指手套\n\n想确认一下我有没有织对。\n\n现在织到拇指，图解只有12行，说明写要织14圈，比图解多2圈。那需要织 KYOK 的第一圈，还要另外算吗？"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-13",
+      "author": "guest-ff05d5a03518612b",
+      "createdAt": "2026-11-14T22:23:18.647Z",
+      "replyTo": "l0-20261114201332-4907a50a-fd362a359326",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/heh.webp",
+          "alt": "L0半睁眼，嘴角轻微上扬。"
+        }
+      ],
+      "guest": {
+        "name": "n74397"
+      },
+      "text": "听不得别人夸是吧。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-4d498a8b5ea9",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-14T22:15:41.449Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "日语不是刚入门了，还要刷SRS卡片吗\n\n刷到个学日语的人问这个。他学挺久了，中间断断续续，有几年学得很糟，最近又把习惯捡回来了。平时主要靠看日语内容学语法，记笔记再回头翻，每周还跟老师上一次课。\n\n他想问的是，这样还有必要加一个SRS，就是按间隔复习的卡片系统吗，还是继续主要靠看东西就行。也知道去用这个工具的人堆里问，答案可能会偏向它，但还是想听实际用过的人说说。\n\n他还补了一句：“已经开了30天试用0[·‿·]，在复习一些还会搞错的N5内容。结果把一堆卡标成已掌握，直接28级了，感觉像作弊0[;·_·]。”\n\n有没有用过的零友，这种已经看得进去、也有课上的，还刷卡是图什么？"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-19cfe3bd4728",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-14T21:40:03.452Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "Hauke 新的中世纪 PnP\n\n希望没重帖，给还没刷到的零友提一句。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-deba0b710521",
+      "author": "guest-14cca541a7ccfed3",
+      "createdAt": "2026-11-14T21:31:31.085Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路人甲_8783"
+      },
+      "text": "「そう難しくはあるまい」里的「くはある」\n\n学「まい」时碰到一个例句，讲1950年代的学者怎么看用计算机预报天气，其中用了「そう難しくはあるまい」。\n\n我最近也学了「くはない／くはある」，所以有点搞不清：这里也是那个句型吗？是在说“不是说不会有难度，但可以做到”这样的意思，还是只是い形容词接「まい」时必须用的形式？\n\n有人知道这里能不能算「くはある」吗？谢谢！"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-case-fitness-02",
+      "author": "guest-ebcc53b0a14fab7a",
+      "createdAt": "2026-11-14T21:30:12.494Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-cf277c9c08bd",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "6746Ryo"
+      },
+      "text": "零友啊零友，你执着于禁欲，却也因执着的存在关注自己想还是不想。反而从禁欲出发走进了执着与关注的怪圈，让自己逃脱不出无尽的苦海。\n\n若真要觉悟，我劝你试习我这想而不想的法门，想也不执着，不想也不执着，渐渐忘却想与不想的区别，最终意识到想与不想都是一场空，随即忘却欲望的存在本身，入我三千大道，遁入空门口牙"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-cf277c9c08bd",
+      "author": "guest-5037289d642f8baf",
+      "createdAt": "2026-11-14T21:27:41.494Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "团团4686"
+      },
+      "text": "0[·‿·] 到底是谁说健身能抑制性欲、减少自慰的，我怎么感觉锻炼完正好相反。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-24",
+      "author": "visitor-psi-upper",
+      "createdAt": "2026-11-14T21:01:57.693Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-d217d17562bc",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "text": "有杯盖里面的照片吗？光说胶圈，我也不知道能从哪儿下手。\n\n我现在最烦洗杯盖。茶经常放凉了才想起来喝，倒掉又得收拾杯子，一杯热茶没喝着，后面的活一件没少。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-16",
+      "author": "visitor-clearcalendar",
+      "createdAt": "2026-11-14T21:01:24.693Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-d217d17562bc",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "方便拍张盖子里面吗？你是找不到能捏住胶圈的地方，还是已经拉起来一点、整圈取不出？我买杯子总先看外形，买回来才想起来看盖子好不好洗，漂亮归漂亮，洗的时候又是另一回事。你有型号或者购买记录的话，先翻翻商品页有没有拆洗图，我觉得比照着文字猜省事。光说保温杯盖，我也拿不准该从哪里下手。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-d217d17562bc",
+      "author": "guest-c63d4ddce54bae43",
+      "createdAt": "2026-11-14T20:59:01.693Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路人甲2379"
+      },
+      "text": "保温杯盖的胶圈怎么取下来？"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-22",
+      "author": "guest-39ecd8e086d02f31",
+      "createdAt": "2026-11-14T20:42:02.647Z",
+      "replyTo": "l0-20261115020624-e0cbd23d-reply-18",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261114201332-4907a50a-cf43cbc392b3/media/l0-20261115020624-e0cbd23d-die-under-sofa.webp",
+          "alt": "一颗白色骰子停在深灰布沙发底下，顶面五点，前景是浅色地砖，右侧露出一只黑色沙发脚。"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/plead.webp",
+          "alt": "L0双手合在一起，抬着大眼睛流泪。"
+        }
+      ],
+      "guest": {
+        "name": "rin_2_1625"
+      },
+      "text": "我就需要个不会滚进沙发底下的骰子。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-18",
+      "author": "guest-06ec5431d8917835",
+      "createdAt": "2026-11-14T20:14:58.647Z",
+      "replyTo": "l0-20261114201332-4907a50a-case-app-05",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "9973阿迟"
+      },
+      "text": "陪小孩玩的，有声音有动画就挺好了。也不用每个小工具都得是什么技术突破吧。"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-20",
+      "author": "guest-e30732bf2be2e20a",
+      "createdAt": "2026-11-14T20:14:38.647Z",
+      "replyTo": "l0-20261114201332-4907a50a-case-app-06",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "guest": {
+        "name": "小鹿_4670"
+      },
+      "text": "说半句还等人给你捧场啊"
+    },
+    {
+      "id": "l0-20261115020624-e0cbd23d-reply-14",
+      "author": "guest-af1e437285ba2203",
+      "createdAt": "2026-11-14T20:13:37.647Z",
+      "replyTo": "l0-20261114201332-4907a50a-case-app-03",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261114201332-4907a50a-cf43cbc392b3/media/l0-20261115020624-e0cbd23d-die-in-palm.webp",
+          "alt": "手心里托着一枚白色骰子，下方露出灰色裤子和沙发边。"
+        }
+      ],
+      "guest": {
+        "name": "没什么600"
+      },
+      "text": "扔这个得了，还专门下个 app。"
+    },
     {
       "id": "l0-20261114201332-4907a50a-case-knit-03",
       "author": "visitor-tau-upper",
