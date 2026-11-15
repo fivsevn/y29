@@ -94,7 +94,7 @@ try {
     check(await dialog.locator('figcaption, #image-caption').count() === 0, 'the viewer has no visible image caption');
     check(await page.locator('#image-close').evaluate(button => document.activeElement === button), 'the close button receives focus');
     check(await dialog.locator('a').count() === 0, 'the viewer has no separate file-opening link');
-    check(await page.locator('#image-close').textContent() === '×', 'the viewer uses a compact close symbol');
+    check(await page.locator('#image-close svg[aria-hidden="true"]').count() === 1, 'the viewer uses a compact close icon');
     check(await page.locator('#image-close').getAttribute('aria-label') === '关闭图片', 'the close symbol has an accessible name');
     check(await page.locator('#image-close').evaluate(button => getComputedStyle(button).outlineStyle === 'none'), 'pointer opening does not outline the close button');
     return link;

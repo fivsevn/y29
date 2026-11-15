@@ -135,9 +135,10 @@ main::-webkit-scrollbar{display:none}
 .about-content .guide-post-link,.about-content .guide-search-link{display:inline-block;margin-top:10px;color:var(--red);font-size:10px}
 .image-dialog{position:fixed;inset:0;margin:auto;width:calc(100% - 24px);max-width:1280px;min-height:70px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);padding:12px;border:1px solid #ffffff24;border-radius:12px;background:var(--surface);color:var(--ink);overflow:auto;box-shadow:var(--panel-shadow)}
 .image-dialog::backdrop{background:#050608e6}
-.image-toolbar{position:absolute;top:12px;right:12px;z-index:1}
-.image-toolbar button{display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;background:#101114b3;color:var(--ink)}
-.image-toolbar button span{font:26px/1 sans-serif}
+.image-toolbar{position:absolute;top:24px;right:24px;z-index:1}
+.image-toolbar button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid #ffffff24;border-radius:10px;background:#101114d9;color:var(--ink);box-shadow:0 2px 8px #00000033}
+.image-toolbar button:hover{background:var(--raised)}
+.image-toolbar button svg{width:20px;height:20px}
 .image-frame{display:flex;justify-content:center;align-items:center}
 .image-frame img{width:auto;height:auto;max-width:100%;max-height:calc(100vh - 50px);max-height:calc(100dvh - 50px);object-fit:contain}
 .image-status{margin-top:10px;font-size:12px;color:var(--muted)}
