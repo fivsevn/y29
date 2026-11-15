@@ -5130,9 +5130,857 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-19cb80986929bcc9",
+      "handle": "guest_97a990ca04c333868c72",
+      "name": "2208圆圆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2b6f32590dead24f",
+      "handle": "guest_f878a9b3cb9249a86b6e",
+      "name": "团团_7449",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-343ecb8f00288de1",
+      "handle": "guest_0e09f44a3586588c2739",
+      "name": "nana61391",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c9096c245e004cb5",
+      "handle": "guest_ea7ad087c54454167116",
+      "name": "AB121982",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-22f3aacc8a210cbc",
+      "handle": "guest_98421da24d7b57712968",
+      "name": "elle_4251",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e421d2e97aed0800",
+      "handle": "guest_dae9f0114586a19ec275",
+      "name": "4759小年",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0fe8db57fa472473",
+      "handle": "guest_544625c00c9200f0ee8f",
+      "name": "1546慢半步",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4551e2828bf46a8b",
+      "handle": "guest_3b26c34bb3004547c42c",
+      "name": "阿迟9080",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b90ae2ed155fe68d",
+      "handle": "guest_037de40518264fb320fa",
+      "name": "阿佑_5931",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-93f43e1402f2c4ed",
+      "handle": "guest_2b5f8d263c2da026c88d",
+      "name": "一杯水1283",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c7494869a82a13a2",
+      "handle": "guest_ed4b2fe4f4746ca1aaee",
+      "name": "小青_1871",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1abaabf884f6dd8e",
+      "handle": "guest_3e8ae7fbd978f9429c66",
+      "name": "88_1602",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0c99b09fa248c7f7",
+      "handle": "guest_329e8ee234d1f9ae9b9f",
+      "name": "米粒_2657",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d9ee555c776576ea",
+      "handle": "guest_42b53d91c88f040425df",
+      "name": "木木_2974",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d6d3ea68a768c037",
+      "handle": "guest_ae4aa6ee8b230575d954",
+      "name": "4827石头",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-32502d4e5472bdc0",
+      "handle": "guest_a521ef172fbca67995f6",
+      "name": "路过_4074",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5c4af040adfe38af",
+      "handle": "guest_0176c33aaa28a0df938a",
+      "name": "林檎8194",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2636587ee66d9ce9",
+      "handle": "guest_8f66ba8c1c57793cab91",
+      "name": "路人甲3224",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f5b721636885ff04",
+      "handle": "guest_a768b33a56fed421753a",
+      "name": "9854名字没想好",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-77b660157133c4a4",
+      "handle": "guest_6d7f2cfd69b39ac96bf2",
+      "name": "tutu84143",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ddbc738058d3087b",
+      "handle": "guest_f2ad286213c3d6b1c2ae",
+      "name": "南3454",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2e7422d407b7ee2f",
+      "handle": "guest_7deed0567f41b9f9e4a4",
+      "name": "88_7375",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-25f90babb2ff2dae",
+      "handle": "guest_caba9536a21764028ed7",
+      "name": "3165toto",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e759615d6e842d7e",
+      "handle": "guest_c5d2827e69074dde0ce8",
+      "name": "6365耳朵",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f3501a4d8d07aedc",
+      "handle": "guest_7df4ff52def70a3282ff",
+      "name": "拾柒6396",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e5608fd3da2bd94f",
+      "handle": "guest_a1df9bd7264f43926a6d",
+      "name": "ququ5540",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4643be9c765225fe",
+      "handle": "guest_05a67f2f5fbc5ab73f69",
+      "name": "阿迟1932",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-27",
+      "author": "nightbus3",
+      "createdAt": "2026-11-15T19:34:09.664Z",
+      "replyTo": "l0-20261115200204-662dc2fe-054b1ae92645",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "你也没说谁啊，还得我懂。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-f372f24c7ffb",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-15T19:22:20.601Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "大家好，我买了个Telstar 5G盒子，想给家里上网，上面已经装了OpenWrt。\n\nSIM卡插上了，PIN也设好了。看起来是连上4G了，在SMS那一栏也能发短信，所以应该是识别到网络了。\n\n但RJ45口和路由器的Wi-Fi都完全上不了网。我也没弄明白要怎么测试连接。\n\n有人能告诉我，要输什么命令来测试连接吗（ping？）\n\n连着这个路由器时，要改哪个参数才能上网，有人知道吗？\n\n先谢谢了"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-9d609ed23c14",
+      "author": "guest-25f90babb2ff2dae",
+      "createdAt": "2026-11-15T19:14:49.270Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "3165toto"
+      },
+      "text": "请教一下 Mesh 的接线\n\n各位，\n\n我刚给家里装了 Mesh 网络，把原来到处用的电力猫换掉了。现在不再掉线什么的了！\n\n不过有个问题。我在主音响系统旁边专门放了一个卫星节点，但它插的是主回路上的电源，不是音响的独立回路。节点有两个以太网口，我就把 NDX2 和 Uniticore 直接接到了节点上，没有再经过交换机，当时想着少一层连接应该更好。不过，要是单独用一个交换机，NDX2 从 Uniticore 接收到的信号会不会更好？我手头的交换机就是普通的 Netgear，没什么特别的。\n\n安装时我们两种接法都试过，坦白说没听出什么差别。所以你们说既然这样还问什么，也挺合理的。不过我就是有点好奇，想请教一下懂行的各位，通常怎么接比较合适。\n\n先谢谢各位了。\n\n3165toto"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-basket-09",
+      "author": "visitor-levelpath",
+      "createdAt": "2026-11-15T18:46:21.838Z",
+      "replyTo": "l0-20261115200204-662dc2fe-29d7892602c7",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "好喜欢这个！0[♥_♥]\n\n（真是的，我怎么也没什么地方用得上它呢？）"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-29",
+      "author": "guest-e759615d6e842d7e",
+      "createdAt": "2026-11-15T18:29:42.316Z",
+      "replyTo": "l0-20261115200204-662dc2fe-original-reply-26",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-df9152b05e9c/media/magnetic-glass-cleaner-sketch.webp",
+          "alt": "磁力擦识别线稿，两个灰色擦头对应贴在一片浅蓝玻璃两侧，外侧有短握把。",
+          "fit": "contain"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。"
+        }
+      ],
+      "guest": {
+        "name": "6365耳朵"
+      },
+      "text": "这种隔着玻璃吸住的擦子能擦白印吗？"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-35",
+      "author": "guest-4643be9c765225fe",
+      "createdAt": "2026-11-15T18:27:56.316Z",
+      "replyTo": "l0-20261115200204-662dc2fe-original-reply-26",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "阿迟1932"
+      },
+      "text": ""
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-33",
+      "author": "guest-e5608fd3da2bd94f",
+      "createdAt": "2026-11-15T18:19:08.316Z",
+      "replyTo": "l0-20261115200204-662dc2fe-df9152b05e9c",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "ququ5540"
+      },
+      "text": "这灯看着就晃眼。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-31",
+      "author": "guest-f3501a4d8d07aedc",
+      "createdAt": "2026-11-15T18:13:58.316Z",
+      "replyTo": "l0-20261115200204-662dc2fe-df9152b05e9c",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "拾柒6396"
+      },
+      "text": "下面橙色那条是什么鱼啊？"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-30",
+      "author": "guest-e421d2e97aed0800",
+      "createdAt": "2026-11-15T18:12:46.364Z",
+      "replyTo": "l0-20261115200204-662dc2fe-original-reply-25",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "4759小年"
+      },
+      "text": "我也去翻冰箱了，怀疑你就是故意来馋人的。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-26",
+      "author": "news-morningstar",
+      "createdAt": "2026-11-15T18:03:48.316Z",
+      "replyTo": "l0-20261115200204-662dc2fe-df9152b05e9c",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。"
+        }
+      ],
+      "text": "确实得擦了，白印比鱼还抢眼。用什么擦？"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-df9152b05e9c",
+      "author": "visitor-lambda-upper",
+      "createdAt": "2026-11-15T18:01:19.316Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-df9152b05e9c/media/aquarium-watermarks.webp",
+          "alt": "鱼缸前玻璃上留着浅白色水滴痕，后面有小鱼、绿色水草和浅色碎石，缸顶亮着冷白色灯。"
+        }
+      ],
+      "text": "隔着玻璃看鱼还行，拍出来先看见一排水印。得擦了。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-32",
+      "author": "guest-0fe8db57fa472473",
+      "createdAt": "2026-11-15T17:25:03.229Z",
+      "replyTo": "l0-20261115200204-662dc2fe-19943c11102e",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "1546慢半步"
+      },
+      "text": "看着都来气。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-28",
+      "author": "guest-22f3aacc8a210cbc",
+      "createdAt": "2026-11-15T17:10:32.229Z",
+      "replyTo": "l0-20261115200204-662dc2fe-original-reply-25",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-19943c11102e/media/plain-water-mug-by-sink.webp",
+          "alt": "不锈钢沥水台上放着一只装了约半杯清水的透明玻璃杯，杯旁有水滴，左侧露出水槽边和龙头底座。"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。"
+        }
+      ],
+      "guest": {
+        "name": "elle_4251"
+      },
+      "text": "你喝吧，我拿白开水跟一口。怎么越喝越馋。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-25",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-15T17:09:59.229Z",
+      "replyTo": "l0-20261115200204-662dc2fe-19943c11102e",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-19943c11102e/media/opened-can-in-hand.webp",
+          "alt": "一只手在灰色裤腿前握着深蓝色饮料罐，银色罐盖上的饮口已开，拉环仍连着，右边露出浅色瓷砖地面。"
+        }
+      ],
+      "text": "我这个开了，先替你喝一口。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-34",
+      "author": "guest-4551e2828bf46a8b",
+      "createdAt": "2026-11-15T17:02:21.229Z",
+      "replyTo": "l0-20261115200204-662dc2fe-19943c11102e",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-19943c11102e/media/broken-fish-tin-ring.webp",
+          "alt": "浅蓝碎花桌布上一只矮宽金属罐仍封着盖，脱落拉环放在右侧，右上露出饭碗和筷子。"
+        }
+      ],
+      "guest": {
+        "name": "阿迟9080"
+      },
+      "text": "我这罐也断了，破玩意。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-19943c11102e",
+      "author": "guest-c9096c245e004cb5",
+      "createdAt": "2026-11-15T17:00:30.229Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-19943c11102e/media/detached-pull-tab.webp",
+          "alt": "饮料罐的银色罐口仍封着，一枚脱落的拉环放在旁边深灰台面上。"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。"
+        },
+        {
+          "kind": "emote",
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。"
+        }
+      ],
+      "guest": {
+        "name": "AB121982"
+      },
+      "text": "拉环下来了，盖子没开。烦死。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-07",
+      "author": "guest-5c4af040adfe38af",
+      "createdAt": "2026-11-15T16:57:27.972Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "林檎8194"
+      },
+      "text": "是这样的，很难遇到能继续聊得下去的"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-05",
+      "author": "guest-d6d3ea68a768c037",
+      "createdAt": "2026-11-15T16:19:32.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "4827石头"
+      },
+      "text": "你不是她的菜"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-original-reply-24",
+      "author": "guest-2b6f32590dead24f",
+      "createdAt": "2026-11-15T16:10:31.349Z",
+      "replyTo": "l0-20261115200204-662dc2fe-054b1ae92645",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "团团_7449"
+      },
+      "text": "说了跟没说一样。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-054b1ae92645",
+      "author": "guest-19cb80986929bcc9",
+      "createdAt": "2026-11-15T16:08:02.349Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "2208圆圆"
+      },
+      "text": "有话直说行不行，最烦“懂的都懂”。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-basket-06",
+      "author": "visitor-pi",
+      "createdAt": "2026-11-15T15:43:34.831Z",
+      "replyTo": "l0-20261115200204-662dc2fe-29d7892602c7",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "可爱！把六角布片往里折成碗形，这个点子真不错。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-basket-02",
+      "author": "guest-93f43e1402f2c4ed",
+      "createdAt": "2026-11-15T15:42:48.831Z",
+      "replyTo": "l0-20261115200204-662dc2fe-29d7892602c7",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一杯水1283"
+      },
+      "text": "好——漂亮！0[♥_♥] 我觉得更多东西都该是彩虹色的。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-29d7892602c7",
+      "author": "guest-b90ae2ed155fe68d",
+      "createdAt": "2026-11-15T15:41:45.831Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-29d7892602c7/media/rainbow-hexie-basket-1.webp",
+          "alt": "灰色台面上的彩色六角拼布篮，中央是米白蓝点布。"
+        },
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-29d7892602c7/media/rainbow-hexie-basket-2.webp",
+          "alt": "俯看拼布篮，六片彩色花纹布围着米白篮底。"
+        },
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261115200204-662dc2fe-29d7892602c7/media/rainbow-hexie-basket-3.webp",
+          "alt": "近处侧看拼布篮，蓝格和绿点布边上可见白色缝线。"
+        }
+      ],
+      "guest": {
+        "name": "阿佑_5931"
+      },
+      "text": "彩虹六角拼布篮\n\n很可爱的小项目。还不知道自己拿来干什么，不过当小礼物送人应该挺好。\n\n反正做起来不难，还能用掉一些交换来的5×5方布。0[·‿·]"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-10",
+      "author": "guest-77b660157133c4a4",
+      "createdAt": "2026-11-15T15:04:15.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "tutu84143"
+      },
+      "text": "不管是啥方式，其实见面的一两分钟就知道是否合适了"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-04",
+      "author": "guest-d9ee555c776576ea",
+      "createdAt": "2026-11-15T14:49:15.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "木木_2974"
+      },
+      "text": "这种没机会就放弃吧，继续多试试，每个人的喜好不一样。我表哥嫂嫂说也是见了很多不合适，但最后见了我表哥感觉很合适。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-11",
+      "author": "news-morningstar",
+      "createdAt": "2026-11-15T14:48:23.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "text": "饭钱 AA 要回来！！！！"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-08",
+      "author": "guest-2636587ee66d9ce9",
+      "createdAt": "2026-11-15T14:46:00.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路人甲3224"
+      },
+      "text": "88_1602不都说了，你还没明白么"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-03",
+      "author": "guest-0c99b09fa248c7f7",
+      "createdAt": "2026-11-15T14:45:41.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "米粒_2657"
+      },
+      "text": "现在一些互联网相亲的程序感觉搞得还是挺不错的可以试试，减少自己试错的损失吧。遇到对的人不容易"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-06",
+      "author": "guest-32502d4e5472bdc0",
+      "createdAt": "2026-11-15T14:45:37.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路过_4074"
+      },
+      "text": "“对方明确表示，自己其实比较抵触通过相亲这种方式认识异性。”\n\n只是没有相中你"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-09",
+      "author": "guest-f5b721636885ff04",
+      "createdAt": "2026-11-15T14:45:12.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "9854名字没想好"
+      },
+      "text": "“得到的答复是：对方那周确实有事情，回老家了”\n\n到这一步基本就能推测出后面了。 基本上都是常见的套路。 我只想问，吃饭 AA 了没？ 哈哈"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-date-02",
+      "author": "guest-1abaabf884f6dd8e",
+      "createdAt": "2026-11-15T14:44:34.827Z",
+      "replyTo": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "88_1602"
+      },
+      "text": "双方的建模还满意吗？"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-7714fefa5e75",
+      "author": "guest-c7494869a82a13a2",
+      "createdAt": "2026-11-15T14:43:26.827Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小青_1871"
+      },
+      "text": "## 介绍认识\n\n前两周，一位亲戚把一个女生的联系方式推给我，大致介绍了一下对方的情况。\n\n我今年 30 岁，其实之前一直不太愿意通过相亲这种方式认识女生。不过最近想了想，先加上聊聊看也无妨。毕竟在目前的工作地，身边没什么朋友，如果能找到有共同爱好的人，以后一起骑骑车、爬爬山，偶尔约着出去玩，也挺不错。\n\n## 聊天\n\n加上以后，简单聊了几句，和我预想的差不多，基本看不出对方有什么主动交流的意愿，聊天也很难继续推进。\n\n两天后，我主动问对方有没有时间线下见一面。对方表示有时间可以，于是我接着问她什么时候方便。结果对方说最近没空，等有时间再说。\n\n说实话，到这里我其实已经不太想继续约了。\n\n过了几天，亲戚问起我们的进展，我便如实说了自己的感受，觉得女生应该没什么想法。后来亲戚又帮忙向对方的介绍人打听了一下，得到的答复是：对方那周确实有事情，回老家了。\n\n## 再次约见面\n\n既然如此，本周我便又主动约了一次。对方这次表示有空，于是我们约好周末一起吃饭。\n\n确定见面时间后，我问对方有没有什么特别想吃的。对方表示没有，于是我就随便找了一家店。对于这个安排，对方既没有明确表示认可，也没有提出异议。\n\n## 见面\n\n见面当天，我又问了一遍对方有没有什么想吃的，得到的答复依然是没有。既然如此，那就按照之前选好的地方吃饭吧。\n\n整个过程基本就是吃饭加客套话，聊的也都是一些比较常规的话题。聊天过程中，对方明确表示，自己其实比较抵触通过相亲这种方式认识异性。\n\n听到这里，我倒也不觉得意外，毕竟这和我最初的猜想基本一致。\n\n吃完饭后，对方表示要回去了。好，那就回去吧。\n\n我和她一起下楼，出了楼之后，她便径直离开了，头也没回。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-case-godot-03",
+      "author": "guest-2e7422d407b7ee2f",
+      "createdAt": "2026-11-15T14:27:59.496Z",
+      "replyTo": "l0-20261115200204-662dc2fe-98d32378bc2f",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "88_7375"
+      },
+      "text": "会不会是少了个 `+`？"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-98d32378bc2f",
+      "author": "guest-ddbc738058d3087b",
+      "createdAt": "2026-11-15T14:22:43.496Z",
+      "replyTo": null,
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "南3454"
+      },
+      "text": "Godot 4.5，这个报错怎么解决？\n\n提示 `expected closing ')' after call arguments`，意思是调用参数后应有右括号 `)`。"
+    },
+    {
+      "id": "l0-20261115200204-662dc2fe-13315cd392a4",
+      "author": "guest-343ecb8f00288de1",
+      "createdAt": "2026-11-15T14:07:46.479Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "nana61391"
+      },
+      "text": "0[O_O]我听来的说法是，这人是“生理性别为女、社会身份和自我认同为男、同时还是异性恋”\n\n首先故事都是我编的，不对任何可能的事实和真实性负责\n\n听个乐就好0[·_-]\n\n事情要从我的一个女性朋友谈了一个大她十六岁的对象开始0[ò_ó]\n\n据朋友自述，这个对象在她高中时期是她的数学家教，在她毕业之前，一切正常\n\n这个人在当时只是在正常的教学，并没有其他的行为0[·_-]\n\n直到毕业之后\n\n按我听来的意思，这个异性恋的对象是女人\n\n或者说是社会身份为女性的人\n\n听完这事之后我完全拿不准这人的取向0[o_0]\n\n总之叙述会比较混乱，还请见谅\n\n在毕业之后，朋友觉得这人教过她也算是个老师，于是就决定找这个人吃顿饭感谢一下\n\n中间过程我没听全\n\n总之这顿饭的结果是这个人把我的这个朋友认作了妹妹0[o_0]\n\n我不是对忘年交有什么刻板印象奥\n\n但是一个在社会认同上马上奔四，外在还是一个成年男性的人，把一个小自己十六岁，刚刚高中毕业的女性认作自己的妹妹\n\n这是否有些怪呢0[o_0]\n\n当然，没过俩月\n\n俩人就这么处上了\n\n0[o_0]我真的怀疑这个朋友是不是有什么恋老癖\n\n当然，我相信一段真挚的感情是可以跨越时间和年龄的鸿沟的\n\n可惜这个人好像并不那么真挚"
+    },
     {
       "id": "l0-20261115140203-6eed42f5-case-warm-11",
       "author": "visitor-pi",
