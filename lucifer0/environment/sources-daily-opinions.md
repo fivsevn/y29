@@ -46,123 +46,178 @@
 
 ## 当日素材
 
-<!-- intake-request:intake-c54e63edd85d408d8544086b41bdcde3 -->
 <!-- samples:start -->
 
-采集时间：2026-11-16 04:00:06（北京时间）
+采集时间：2026-11-16 13:50:06（北京时间）
 
 ### 讨论 1
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Wedge pillowcase  
+1. **发言者 1**：Mina and Lone  
      
-   My son has had really bad reflux for years. Recently I bought him a wedge pillow to sleep on, it seems to help. The only trouble is, it didn’t come with a pillowcase. Pillcases are advisable in our house, for both hygiene and comfort, so I decided to make one. The pillow is in multiple sections, with Velcro on the sides to hold them together, so the pillow cases needed to be tubes to leave the sides open. For the neck pillow, I just sewed a tube and slid it in. For the wedge itself, I made it snap shut so that it can come off easily for washing, and be adjusted if needed. I used a washable water resistant fabric with a suede finish. It’s super soft,  and my son loves the ghost print.  
+   \[图片省略\]  
+       
      
-   \[图片省略\]IMG\_20261111\_1530342571920×2560 1.15 MB  
-     
-   \[图片省略\]IMG\_20261111\_15\[数字标识隐去\]×1440 743 KB  
-     
-   \[图片省略\]IMG\_20261111\_15\[数字标识隐去\]×2560 1.17 MB
+   an entry to Mina the Hollower art contest
 
-2. **发言者 2**（回复第 1 条）：I wonder why odd shape pillows rarely come with pillowcases\!  
-     
-   Problem solved when you can sew\! Nice job\!
-
-3. **发言者 1**（回复第 2 条）：I know\! Odd pillows and weighted blankets should really come with cases included.
-
-4. **发言者 3**（回复第 1 条）：Cute solve\!
-
-5. **发言者 4**（回复第 1 条）：Excellent solution\!
+2. **发言者 2**（回复第 1 条）：Very cool. :ok\_hand:
 
 ### 讨论 2
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：EU: Digital Fairness Act - Discussion  
+1. **发言者 1**：Subwoofer For Linn Kan I?  
      
-   You might have heard of the Digital Fairness Act, currently being prepared in the EU. It’s mainly about commercial, digital practices in general but also has a few points on game-specific things like dark-patterns in advertising, in purchase flows, in-game currencies and loot boxes.  
+   I really enjoy my Linn Kan I’s for their excellent mid range but would like more bass. Any suggestions on a brand of subwoofer for them?  I remember decades back a company called Satterberg manufactured powered subwoofers for the LS 3/5A and there was also a passive subwoofer for that speaker. Was the Satterberg dedicated to the LS3/5A or could it be adjusted for use with the Kan I? Any suggestions would be appreciated\!
+
+2. **发言者 2**（回复第 1 条）：Buy better source and electronics for the Kans  
      
-   Some resources on this:  
+   is my advice,a Sub won’t be fast enough for the Kans.
+
+3. **发言者 3**（回复第 1 条）：You seem to also have some Kefs and some Neats, so why not just enjoy the Kans for what they are, wonderfully engaging speakers. Or get a 32.5, Hicap and 250 and hear what they are actually capable of.
+
+4. **发言者 1**（回复第 3 条）：I ran Kans decades ago with a 72/Hicap/135 system and they were quite good. Lightning fast with the 135’s \(the same was true with my 15 ohm LS3/5A’s and the 135’s\). Once again, no real bass.  
      
-   The DFA itself: Digital Fairness Act articles \| Digital Fairness  
+   I’m not sure that there even is a subwoofer that would work well with the Kan I. I started this thread just to get some opinions. :blush:
+
+5. **发言者 4**（回复第 1 条）：I used a Gale sub with my Kans in a small room. It makes a positive difference, especially at low volume listening. Find something with gain and crossover adjustment on ebay or similar and give it a try. You can then decide if it’s worth spending on something better.
+
+6. **发言者 2**（回复第 4 条）：Naim DBL is the answer :wink:  
      
-   An article about what the big video game lobby thinks: “Unworkable, unjustified and disproportionate”: trade bodies slam the EU’s Digital Fairness Act – Mobilegamer.biz  
+   Linn Kan with bass.  
      
-   One of those lobbies: Video Games Europe - About us  
+   \[图片省略\]IMG\_42421206×1580 260 KB  
      
-   I’m generally very much inclined to like the proposal and respect the willingness to protect minors especially from a practice that has been tolerated for a quite a long time now without being properly addressed.  
-     
-   Reading the lobby’s response pokes at my general distaste for the state of the games industry. Of course Roblox and Embracer don’t like the idea, that they can’t sell pay-to-win/progress and loot boxes to children anymore.  
-     
-   On a side note: does anybody know how it is with trading cards in the EU?
+   \[图片省略\]IMG\_42451206×1659 293 KB
+
+7. **发言者 5**（回复第 1 条）：I can’t see any reason why Kans should demand any specific type of sub more than any other speaker. All half decent subs allow adjustment of low pass filter, gain and phase. Try a regular Rel, BK or similar and see how it goes, with the proviso that successfully integrating a sub onto any system can be a challenge.
+
+8. **发言者 6**（回复第 7 条）：I used a Naim n-Sub with Kans in a temporary arrangement in a large Naim system and it sounded surprisingly good. The sub was much closer to the listening position than the Kans which may have helped with the speed issue.
+
+9. **发言者 7**（回复第 1 条）：Sub with Kans is a pizza with pineapple. :-1:
+
+10. **发言者 1**（回复第 9 条）：Never thought of it like that\! LOL
+
+11. **发言者 8**（回复第 9 条）：Really good then\!\!
 
 ### 讨论 3
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：\( ﾟᯅ 。\)原来世界上真的有“生理性别为女、社会身份和自我认同为男、同时还是异性恋”的人
-
-2. **发言者 1**：首先故事都是我编的，不对任何可能的事实和真实性负责  
+1. **发言者 1**：\# 背景  
      
-   听个乐就好\(　ﾟ 3ﾟ\)
-
-3. **发言者 1**：事情要从我的一个女性朋友谈了一个大她十六岁的对象开始\(｀･ω･\)
-
-4. **发言者 2**：什么一听可乐
-
-5. **发言者 3**：这异性恋喜欢的到底是男人还是女人
-
-6. **发言者 1**：据朋友自述，这个对象在她高中时期是她的数学家教，在她毕业之前，一切正常  
+   最近深受 magpie 的作者\(yetone\)还有 dsh-superagent 的启发。既然 AI 都这么牛逼了，为什么不能帮我把 github 的 issue 处理一下呢。  
      
-   这个人在当时只是在正常的教学，并没有其他的行为\(　ﾟ 3ﾟ\)  
+   我先搜索了一下有没有类似的项目，处理 issue 的。下载了几个，用的都不是很顺心。  
      
-   直到毕业之后
-
-7. **发言者 1**（回复第 5 条）：\[引用第 5 条\]  
+   我说：“要不咱 vibe coding 一个出来”。说干就干，我先用 nodejs 写了一个简单的版本，用于监控 issue，然后回复一个 smile 表情。结果非常快的就写出来了。看来 AI 的潜力很大呀。然后我用 go 开始正式开整，用了一个周末，就弄出来了，还是在手机上搓出来的。  
      
-   这个异性恋的对象是女人  
+   \# 现状  
      
-   或者说是社会身份为女性的人  
+   现在这个项目是什么水平呢。  
      
-   听完这事之后我完全拿不准这人的取向\( ﾟ∀。\)  
+   1. 自维护：给他提 issue 之后，它自己能写 plan -&gt; pr -&gt; merge -&gt; hotreload  
+   2. 定时发版。（现在是按天维护发布）  
+   3. 自推广。（自己去其他平台上介绍自己，推广自己）  
      
-   总之叙述会比较混乱，还请见谅
-
-8. **发言者 1**（回复第 6 条）：\[引用第 6 条\]  
+   举个 issue 的例子  
      
-   在毕业之后，朋友觉得这人教过她也算是个老师，于是就决定找这个人吃顿饭感谢一下  
+   \[链接隐去\]  
      
-   中间过程我没听全  
+   我提了一个增加定时发版的功能需求，它先写了个计划，我确认没问题，他就提了 pr，我再次确认没问题。它就合并并自更新了。  
      
-   总之这顿饭的结果是这个人把我的这个朋友认作了妹妹\( ﾟ∀。\)
-
-9. **发言者 1**：我不是对忘年交有什么刻板印象奥  
+   不过这篇文章还是我自己写的，不能让 AI 把这么好的活给我抢了。  
      
-   但是一个在社会认同上马上奔四，外在还是一个成年男性的人，把一个小自己十六岁，刚刚高中毕业的女性认作自己的妹妹  
-     
-   这是否有些怪呢\( ﾟ∀。\)
-
-10. **发言者 1**：当然，没过俩月  
-     
-   俩人就这么处上了  
-     
-   \( ﾟ∀。\)我真的怀疑这个朋友是不是有什么恋老癖
-
-11. **发言者 1**：当然，我相信一段真挚的感情是可以跨越时间和年龄的鸿沟的  
-     
-   可惜这个人好像并不那么真挚
+   项目地址：\[链接隐去\]
 
 ### 讨论 4
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Les p'tits jeux solo de TechDweeb  
+1. **发言者 1**：beer.drv.drv.drv
+
+2. **发言者 2**（回复第 1 条）：You could handle 99 beers if you do the recursion by decimal digits \(keeps max depth to 10\+digits\). Then, if that weren't sufficient, lower the base and implement binary-&gt;decimal encoding, and now max depth is 2\+digits. 2^499-2 sounds like a lot of beer.  
      
-   Article publié sur : Les p'tits jeux solo de TechDweeb - 某社区.fr  
-   Dans ma quête de RPG solitaires \(dont je vous parlais déjà ici\), je suis tombé sur un petit gars plutôt sympathique et débordant d’idées, l’ami TechDweeb, créateur de quelques petits jeux solo minimalistes qui méritent le coup d’œil. « Je n’ai pas de taf, je vis chez ma maman, je fais des vidéos 某社区, et mon chat me déteste ». C’est en…
+   I am extremely entertained by this today.
+
+3. **发言者 1**（回复第 2 条）：that's a pretty funny follow-up.   
+   I'm not sure if a \`drv\` can have &gt; 1 output though to make it work.  
+     
+   &gt; error: derivation names are allowed to end in '.drv' only if they produce a single derivation file  
+     
+   I wasn't sure about 2^52 should be the beers ? :\)
+
+4. **发言者 1**（回复第 3 条）：I ended up filing: \[链接隐去\]
 
 ### 讨论 5
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：某社区: New Book  
+     
+   I just published a new book that has important implications in model quantization. Enjoy responsibly\! :-\)
+
+### 讨论 6
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Monitoring email delivery  
+     
+   Discuss  
+   Hi All,  
+     
+   How do folks monitor email delivery with yunohost ?  With so many rejected emails, especially on home/small server that might be untrusted, an important aspect.  
+     
+   In the past I’ve used tools like pflogsumm \(Postfix Pflogsumm Log Entry Summary @ \[链接隐去\] but thats not \(currently\) installed with yunohost.  
+     
+   I do make use of the dmarc reports but that doesn’t include, say, delivery failures.  
+     
+   Thanks,  
+     
+   Pete
+
+2. **发言者 2**（引用未收录发言）：I am using this script Linux-scripts/yunohost/mail-report at main · DeMiro5001/Linux-scripts · GitHub  
+     
+   I have it on all my servers \(placed in /etc/cron.daily\)  
+     
+   It’s mainly to check the pattern bots are using to try authenticate on my server. I get daily report.
+
+3. **发言者 1**（引用未收录发言）：Actually I’m using home assistant to monitor a few /metrics endpoints.  I just want an alert \(signal message in my case\) when something needs looking at.
+
+### 讨论 7
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Wireless Headphones have really improved over time  
+     
+   During my most recent vacation, used a pair of B&amp;W PX8 S2 for playback.  They exceeded my expectations performance wise.  
+     
+   So, decided to compare the PX8 S2 to the venerable Sennheiser HD 600 and HD 650.  To my utter surprise, the PX8 S2 was clearly a step up sonically over either Sennheiser offering. Every aspect of playback was better with the PX8 S2.  Dynamics, low level detail, tonal balance, you name it, it was better.  The thing that really stood out was horns and woodwinds sounded a lot closer to real with the PX8 S2.  Also used a questyle dongle for hi-res.  
+     
+   I’m wondering how much the carbon fiber driver plays into this.  This has caused me to re-evaluate priorities regarding headphone listening, including costs to get high quality sound.
+
+2. **发言者 2**（回复第 1 条）：I’m so sorry for your ears.
+
+3. **发言者 2**（引用未收录发言）：It’s that almost all are closed back. I don’t deny use cases for wireless or ANC.  
+     
+   But closed backs are fatiguing. Even the ZMF Verite.
+
+4. **发言者 1**（回复第 3 条）：Ah\!  Makes sense.  
+     
+   My favorite headphones are open:  Abyss Diana TC and Verum 2.
+
+### 讨论 8
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：First needle felted project--heart pin  
+     
+   I saw a needle felted pin with the zipper embellishment and that put me over the edge; I just had to try needle felting. With the encouragement of needle felting master \[某参与者\], I embarked on the journey. Here’s my first piece. IRL it is a lighter color than the photo depicts.  
+     
+   \[图片省略\]image1596×1654 791 KB
+
+### 讨论 9
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -190,188 +245,655 @@
      
    Thank you.
 
-### 讨论 6
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：ESP32 \+ SPI Display  
+2. **发言者 2**（回复第 1 条）：发言者 1 ,  
      
-   Hello, I am having issues connecting my SPI display. Display Module, 3.5 inch TFT LCD Screen Module for Arduino MEGA 2560 Board 480x320\(with Touch Panel\) : Amazon.ca: Industrial &amp; Scientific  
+   What does “br” mean regarding the installation path?  
      
-   That is the one I purchased. I am wondering if i am doing something incorrectly. I have not used ESP32's before so this is my first try\! Is someone able to point me in the correct direction for instructions? I have tried putting color on the display but it always stays white no matter what. Thank you
-
-2. **发言者 2**（回复第 1 条）：Hi, can you make a wiring diagram of how you have the display connected to your ESP32?
-
-3. **发言者 2**（引用未收录发言）：There might be further documentation in the TFT\_eSPI library that can help you.  
-     
-   Can you also post any code you have tried?
-
-4. **发言者 2**（引用未收录发言）：Can you also post the user\_setup.h file from the TFT\_eSPI library?
-
-5. **发言者 2**（引用未收录发言）：There is a section you might want to use.  
-     
-   \[图片省略\]IMG\_66141242×2688 339 KB
-
-6. **发言者 1**（回复第 5 条）：Ill try that, thank you
-
-### 讨论 7
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：有在用的老师提供一些经验分享吗？  
-   只自己工作室内部使用。
-
-2. **发言者 2**：容易炸车
-
-3. **发言者 3**：哪里有卖，为啥不用中专站
-
-4. **发言者 4**：等个车
-
-5. **发言者 5**：\[链接隐去\]    这个是国庆的时候我自己订阅的账号被封，找到的方案，我是个人席位，使用到现在很稳，期间官方送的重置直接用也没影响。而且我看网站解答中说个人席位被封, 保 3 次换号（ 整个 Team 被官方停用不在保障范围内。）。  
-     
-   \[图片省略\]
-
-6. **发言者 1**：发言者 3 中转站容易掺水耽误工作啊
-
-7. **发言者 6**：Team 如果被端，就一锅端了吧？车头车厢全炸，自己开吧
-
-8. **发言者 7**：\[链接隐去\] 独享号，可多人共享一个独享号
-
-9. **发言者 8**：发言者 6 不会我同事的经常封
-
-10. **发言者 9**：我可以帮开, 6.25x \+ 500r 一个月. 目前只开了 3 个席位
-
-11. **发言者 10**：发言者 5   
-     
-   这家涨价了  
-     
-   价格：1100\(最开始的价格，不确定是不是这个\) --&gt; 1500 --&gt; 1700
-
-### 讨论 8
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Wooden Crate  
-     
-   \(topic deleted by author\)
-
-### 讨论 9
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Debbie Bliss Sweater With Ribbed Yoke  
-     
-   Good Morning,  发言者 1 here. I am a beginner/intermediate knitter and i cannot wrap my brain around how this collar works. Can anyone help me please?  Thank you\!  
-     
-   \[图片省略\]10000307921920×2560 759 KB  
-     
-    hopefully the upload worked.
-
-2. **发言者 1**（回复第 1 条）：Thank you so much. I just needed the back and forth, with tappered on either side directions. Youve been a great help. Time to rip it out now\!\!  Thanks again\!\!
-
-3. **发言者 2**（回复第 2 条）：You’re at the last bit now, almost finished\! Enjoy finishing this adorable sweater.
+   Is it okay to just place the images in \[installation directory\]\\share\\darktable\\pixmaps\\thematic\_images\\
 
 ### 讨论 10
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：某社区: Do you think everyone is going too far with Jensen Huang?
-
-2. **发言者 2**（回复第 1 条）：I think we’re at the beginning of a super cycle of reporting, not at the end.  The board obviously felt they had to move quickly, and that feels jarring when we know relatively little, but this story will continue for months.
-
-3. **发言者 3**（回复第 1 条）：pitchforks come out in a second these days. and people repeat what they hear, without anyone verifying anything.guilty or not, if the mob comes for you....
+1. **发言者 1**：Study question about 最近 and 最後  
+     
+   A question about the study question 「アンケート：「あなたが\_\_\_\_居酒屋へ行ったのはいつですか？」」  
+     
+   The hint translation provided was Survey: ‘When was the last time you went to an izakaya?’  
+     
+   某社区 marks the correct answer as 最近 as the sentence is linked to this vocabulary. But based on the translation, wouldn’t 最後 be more accurate? 最近 may require a change in the translation to most recent  right?
 
 ### 讨论 11
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Quad’s latest  
+1. **发言者 1**：Re: \[心情\] 努力了六年，世界還是沒留一個位置給我  
      
-   For those hankering after a 21st century Naim shoebox retrospective…..  
+   如果能在家裏當家庭主婦  
+       做得很好  
      
-   \[图片省略\]IMG\_0668820×547 396 KB  
+       把先生以及兩個孩子照顧好  
+       煮飯洗衣做家事也能樂在其中  
+       不也是很有成就感嗎?  
      
-   Looks really, really cool……:smiling\_face\_with\_sunglasses:  
+       為什麼你一直強調工作的追求自我  
+       也是有很多女性  
+       願意放下工作  
+       即使是高薪高成就也全部丟掉  
+       只為了專心照顧陪伴孩子  
      
-   ATB, J
+       另外  
+       行動不便人士賣東西的話  
+       我是看到好幾位  
+       都是固定時間就一定出來做生意  
+       也是很不簡單的呢  
+       \(敬禮\)
 
-2. **发言者 2**（回复第 1 条）：Sorry, no. 33, 303 meets Tandys.
+2. **发言者 2**（回复第 1 条）：肯認真工作 或是把家庭顧好 真心對
 
-3. **发言者 1**（回复第 2 条）：Now that’s a while ago……. But it’ll strike a chord with many, IAG’s marketing snipers tend not to miss :smirking\_face:.  
-     
-   ATB, J
+3. **发言者 2**（回复第 1 条）：家人好的 都很值得尊敬
 
-4. **发言者 2**（回复第 3 条）：Hi J,  
-     
-   They have kept the form, they have kept the font, I suppose they had to do something. But they have messed with an all time classic piece of industrial design.  
-     
-   Does it matter? No. I’d be surprised if today’s buyers know much of Quad’s back story and ESLs.  
-     
-   Best,  
-     
-   C.
+4. **发言者 2**（回复第 1 条）：但妳做得好 總有些老害老貪喜歡搞
 
-5. **发言者 3**（回复第 1 条）：Friend sent his Nagra in for a 2nd repair, decided to buy the Western Electric 300B amp. In the meantime thought the Quad would be a good interim. It was not. In the flesh they don’t appear well finished and the sound didn’t fall into the “surprisingly good for the money” category. Good to see them back but I don’t think they’re doing themselves justice at present.
+5. **发言者 2**（回复第 1 条）：是非 遠離即可 人生不過幾十年
 
-6. **发言者 1**（回复第 5 条）：Indeed, but of course price is everything, otherwise why introduce the Platina range?  
-     
-   And we all know there’s no such thing as Unicorns :joy::joy:.  
-     
-   ATB, J
+6. **发言者 3**（回复第 1 条）：請問你有看懂我的文章嗎？我到現在
 
-7. **发言者 4**（回复第 1 条）：At first I thought this must be AI.
+7. **发言者 3**（回复第 1 条）：還是坐輪椅我都沒有辦法自行走路要
 
-8. **发言者 5**（回复第 1 条）：It’s probably my bizarre taste but I like the new Quad look\!
+8. **发言者 3**（回复第 1 条）：談什麼照顧呢我自己都需要人家照顧
 
-9. **发言者 6**（回复第 1 条）：Maybe they’re hoping to pick up some disgruntled Naim owners who prefer green to white…  
-     
-   and green is one colour you can say without being accused by somebody of being a racist\!
+9. **发言者 3**（回复第 1 条）：了，我只是之前可以回去上班
 
-10. **发言者 4**（回复第 8 条）：\[图片省略\] 发言者 5:  
-     
-   I like the new Quad look\!  
-     
-   They obviously have a “new look” twice a’year.  
-     
-   Once Quad was iconic British Brand,  it still is but fully made in China with possible the same electronic as their other brands have, no thanks.
+10. **发言者 3**（回复第 1 条）：不能打理家務不能照顧家人，那上班
 
-11. **发言者 7**（回复第 1 条）：Reminds me of Lego. :rofl:
+11. **发言者 3**（回复第 1 条）：不就是我自己能找的成就嗎？
 
 ### 讨论 12
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Aggiungere a 60 parcheggi a pagamento già presenti in OSM i tag oggi mancanti  
+1. **发言者 1**：Emission makes the object flat  
      
-   Parcheggi gestiti da FS Park, APCOA e ViaMilano Parking \(aeroporti di Milano e Bergamo\) - sparsi in tutta Italia.  
-     
-   Fonte: le pagine ufficiali dei singoli parcheggi sui siti dei gestori \(fspark.it, apcoa.it, \[链接隐去\] Ogni changeset riporta nel tag source il link alla pagina usata.  
-     
-   Regole che il programma rispetta:  
-     
-   aggiungo un tag solo se manca e non modifica mai un valore già presente  
-     
-   prima di ogni invio rilegge l’elemento e, se qualcuno l’ha modificato dopo il mio controllo, lo salto;  
-     
-   un parcheggio per changeset, uno ogni 15 minuti, con automatic=yes e un commento che descrive la modifica;  
-     
-   ho controllato a mano l’elenco completo “prima/dopo” prima di avviarlo.  
-     
-   La domanda principale riguarda la licenza: secondo voi è accettabile copiare posti e orari dal sito del gestore del parcheggio stesso, o bisognerebbe chiedere un permesso scritto? Se la comunità preferisce, posso limitarmi a opening\_hours e parking.  
-     
-   Grazie,  
-     
-   Paolo
-
-2. **发言者 1**（引用未收录发言）：Il meccanismo è uno script sul mio computer che simula l’invio a mano, intendi questo?  
-     
-   grazie  
-     
-   ciao  
-     
-   paolo
+   I’m trying to emit light from a candle flame so my emission Strength is at 50. In base color and emission color inputs I have a red to yellow gradient node. The result is the candle flame being all flat white. I want to keep the emitted light but I want the flame to look like a red to yellow gradient. Is it possible?
 
 ### 讨论 13
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Joy Division/New Order Rock &amp; Roll Hall of Fame  
+     
+   Peter Hook looking good\!  
+     
+       
+       \[图片省略\]
+
+### 讨论 14
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：What do you think of local ai models on your pc helping with development?  
+     
+   Recently i’ve been playing with Ollama and tested few coding models like Qwen-2.5:14b or Qwen3.5:27b, for me they’re great text formatting tools and can somewhat help with math but writing large amounts of code is still problem for them, even if they’re not magic wand for coding do you think they can be game changer for game dev or minor improvement or even bigger problem than help?
+
+2. **发言者 2**（回复第 1 条）：I think for any tool, AI or otherwise, the important thing is to find a tool that solves a problem, not pick a tool and then find uses for that tool
+
+3. **发言者 1**（回复第 2 条）：it is true but still knowing possibilities of something is the way you find the tool when you need it
+
+4. **发言者 3**（回复第 1 条）：what do you expect to help you with those models?  
+     
+   do you know how to setup bridge? MCP  
+     
+   how do you prompt instructions? \( specific functions or documentation search or deliver full logic?\)
+
+5. **发言者 1**（回复第 4 条）：i didn’t dived into this much, but that’s the topic for overall local ai being helpfull for game dev in any sense, for me it fixes ton of problems with formatting but it’s nice to hear other’s opinion / ideas
+
+6. **发言者 2**（回复第 1 条）：Regardless of if it is capable of creating non-slop or not I’d advice avoiding using it generatively until the actual legal situation is established, to avoid risking unintended plagiarism issues or inability to copyright your work
+
+7. **发言者 1**（回复第 6 条）：really i never though ai might be a legal problem in the future
+
+8. **发言者 2**（回复第 1 条）：And the issue with the liability is that this isn’t something you can rely on being protected by the lack of law, they aren’t making anything new illegal, so anything done before new laws and precedent will be prosecutable
+
+9. **发言者 1**（引用未收录发言）：That’s the big problem with ai, i think code isn’t as bad in that terms but assets? i think it will cause some problems in the future  
+     
+   Also it is interesting that if you think about AI itself it won’t be better than a high organized team wtih free assets and knowledge of game engine
+
+10. **发言者 1**（引用未收录发言）：Well losing skill to add semicolons at the end of each line rapidly is very important skill so…
+
+11. **发言者 4**（回复第 1 条）：Has anyone used a local LLM model for programming in Godot with GDScript? Which one would you recommend, and where can I download it and find information on how to install and configure it?
+
+### 讨论 15
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：提车半年，每天通勤 13 公里，早上 5 公里，晚上走高架 8 公里，虽说晚上距离远点而且上海南北高架很堵，但是开起来都比早上轻松太多了...  
+     
+   几乎每天路上都能遇到电动车和自行车乱骑的，转弯回头观察也不会，电动车转向灯也没有，反正就是突然就要顶你车头前面转弯...  
+     
+   早上又遇到一个大妈，我直行过 T 字路口速度降低到 20 就是怕电动车来个转弯，果不其然大妈一个左转直接顶我车头前面，给我吓得一把方向加急刹才停下，大妈挡风被贴着车屁股过去了，更恶心的是我到公司翻看记录仪，我后车也遇到了 A 柱盲区的电动车，我车刚停下电动车就往我车屁股和他车头的缝里钻，他刚起步又是一脚急刹，估计也是吓坏了...  
+     
+   碰到了机动车高低是个次责，和同事吐槽，同事说被判过次责，电动车主责赔了 1000 补漆钱，然后他次责赔了 2000 去医院检查... 真是太抽象了...
+
+2. **发言者 2**：很多时候我看导航给我推荐避堵路线走地面，我都直接开到高架上，宁可在高架上堵着一点一点挪，也不愿意在地面小心那些电瓶车和老头了，感觉非常耗费精力……
+
+3. **发言者 3**：上海还好点，责任清晰 机动车不会吃 22 条
+
+4. **发言者 1**：发言者 2 是啊，天天和这些没安全意识和交规意识的人做博弈，永远不知道他们的脑子里怎么想的，用血肉之躯去挑战机动车驾驶员的反应和刹车... 要是下雨天路过学校和居民区，开完直接力竭了...
+
+5. **发言者 4**：但是开的多了就知道了，我现在基本能预测大部分小电驴的行为。
+
+6. **发言者 5**：焊颈帝，哈哈，太形象了。广州的电鸡也是这样，无牌、遮挡车牌的到处都是，马路当客厅开。
+
+7. **发言者 1**：发言者 3 难以想象别的城市开车有多累，听说上海是重罚\+不和稀泥的城市，开车已经算比较轻松的了，但就这样面对上海路上的鑫福帮\+山崎组\+电动车\+自行车还是要打起 12 分精神，不能放松一点
+
+8. **发言者 1**：发言者 4 早上我这个真的预测不了，那个大妈不回头，不打灯，也没任何转弯意图，骑到路中间突然 90 度要左转...
+
+9. **发言者 6**：习惯就好，开车骂骑，骑车的嫌开车挡路
+
+10. **发言者 7**：还有那种瞎 b 开车的,交警判了全责不认就要拖车耗你时间的
+
+11. **发言者 8**：看见路口，我都主动提前减速，就算是那些平时没啥人的路口也是一样，这些事故遇见一次就头疼。
+
+### 讨论 16
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：WebGL Flight Simulator with seed generated terrain
+
+2. **发言者 1**（回复第 1 条）：How to fly...  
+     
+   Press F to lower Flaps for Take Off  
+     
+   Press SHIFT to Throttle Up  
+     
+   At 50km/hr, Down arrow to take off.  
+     
+   Arrow keys are control stick.  
+     
+   If you have a Game controller, it should work seamless.  
+     
+   BSD 2-Clause and Source  \[链接隐去\]
+
+### 讨论 17
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：某社区: Anarchy Chess  
+     
+   A riff on the classic 8-queens problem, adding rooks, bishops and knights. Puzzles are generated daily, plus 8-queens itself and a couple of other static puzzles.
+
+2. **发言者 2**（回复第 1 条）：Very neat. I'm currently very addicted to Chess so I'm sure I won't spend the next hour on this\!
+
+3. **发言者 1**（回复第 2 条）：Thanks, glad you like it\! If you have thoughts on how to make it better, drop me a note, please\!
+
+### 讨论 18
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：零食推荐串串号请求  
+     
+   jp
+
+### 讨论 19
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：The Bridgerton Wrap  
+     
+   It’s been a while but finally it’s finished. The “Bridgerton” wrap. Made with the beautiful Bridgerton Advent 2025 by Castle View Yarns  
+     
+   I am absolutely delighted with it. So much so I’m debuting it at Centre Parks this week.  
+     
+   Merino 4ply, on 12.5dpi on a 24" Ashford. \#gwead \#rigidheddleloom \#handwoven \#slowfashion  
+     
+   \[图片省略\]10000647941920×1920 1.06 MB  
+     
+   \[图片省略\]10000647951920×1920 1.36 MB  
+     
+   \[图片省略\]10000647961920×1920 838 KB  
+     
+   \[图片省略\]10000647971920×1920 1.05 MB  
+     
+   \[图片省略\]10000647991920×1920 1.19 MB  
+     
+   \[图片省略\]10000648001920×1920 1.26 MB  
+     
+   \[图片省略\]10000649111542×1444 231 KB
+
+2. **发言者 2**（回复第 1 条）：This is so pretty and looks like just the right amount of warm
+
+3. **发言者 3**（回复第 1 条）：It is gorgeous\! Well done.
+
+4. **发言者 4**（回复第 1 条）：:maple\_leaf: :fallen\_leaf: :maple\_leaf: Congratulations\! Your Bridgerton Wrap is a Featured Project this week\! :maple\_leaf: :fallen\_leaf: :maple\_leaf:
+
+5. **发言者 1**（回复第 4 条）：Thank you :blush:
+
+6. **发言者 5**（回复第 1 条）：this is absolutely gorgegeous\!
+
+7. **发言者 6**（回复第 1 条）：Beautiful\!  
+     
+   Enjoy Centre Parks
+
+8. **发言者 1**（回复第 7 条）：It’s weird you not being here. Seemed poor form to bring you too considering Liz booked and paid for it :thinking: :rofl:
+
+9. **发言者 7**（回复第 1 条）：Absolutely gorgeous\! I can tell how much work into it and it looks so flawless\! I love looking at visibly woven fabric\!
+
+10. **发言者 8**（回复第 1 条）：So beautiful\! That gradation is so sumptuous.
+
+11. **发言者 6**（回复第 8 条）：Haha. That would be weird\!\!  
+     
+   Have fun :woman\_swimming:
+
+### 讨论 20
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Help with cable knit  
+     
+   Hey friends\! I’m doing my first ever cable knit in the round on a hat.  I’ve noticed that the one side of the cable is mess and doesn’t look right ? It doesn’t look like knit stitches. What am I doing wrong ?  
+     
+   \[图片省略\]IMG\_27511645×2193 637 KB
+
+2. **发言者 2**（回复第 1 条）：Welcome to KH\!  
+     
+   What is the name of your pattern and designer?  
+     
+   These look like traveling cables but knowing the pattern will help us.  
+     
+   Are you holding one or two sts to the front when making the left cross cable each time? Those same sts would be crossing over a stitch to the left of them each time similar to the right cross cable nearer the green stitch marker.
+
+3. **发言者 1**（回复第 1 条）：\[图片省略\]IMG\_27521290×2796 314 KB  
+     
+   This is the pattern I am following it is from Knitting House Square. Iv been most doing one st front and back. Following the pattern. I’ve only done 2 stitches in front once so far. I stopped because I noticed the left cables were looking weird.
+
+4. **发言者 1**（引用未收录发言）：Oh\! When I go to the left I’ve only been holding 1sts off instead of 2 sts\! I think that what I’m doing wrong\!? Your explanation helped so much\! Thank you\! Now I need to go restart :joy::face\_holding\_back\_tears:
+
+5. **发言者 2**（回复第 4 条）：Great, you’re set to go now. Let us know how it’s going and come back with any questions or clarifications.
+
+### 讨论 21
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Custom order - Drag and drop not worling  
+     
+   I’m using DT 5.6 under Linux Mint Cinnamon.  
+     
+   Using classic external mouse  
+     
+   I did manage to custom order a collection but I can’t do it anymore.  
+     
+   I tryed again and again the whole process described in the manual : collection filters  
+     
+   in filemanager, filemanager layout  
+     
+   order time capture \(or any but cusom order\)  
+     
+   select some pics  
+     
+   create new tag and attach it  
+     
+   go to collection &gt; my new tag  
+     
+   selection → select none  
+     
+   order → custom  
+     
+   try to drag and drop without success =&gt; no drag at all  
+     
+   In culling layout mode I can drag and drop to change custom order in the filmstrip, but I can’t do that on the thumbnails in the filemanager layout  
+     
+   I’m I doing something wrong ?  
+     
+   Do I have some strange option checked or unchecked that prevent me to drag and drop in filemanager layout mode ?  
+     
+   Any tips / help will be greatly appreciated
+
+### 讨论 22
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Quartet II vocab deck  
+     
+   Would someone be such a precious person and make a Quartet II vocab deck??? There’s only grammar and i feel like I don’t really remember or understand fully the vocab from Quartet as im finishing it now it’d really help me because I’m busy recently and not really able to take care of it right now…
+
+2. **发言者 2**（回复第 1 条）：\[图片省略\]  
+     
+         某社区  
+       
+     
+       
+       \[图片省略\]  
+     
+   Quartet Vocab Book 2 \| 某社区  
+     
+     The Vocabulary from Quartet II Supplement Text  
+     
+       
+     
+       
+         
+         
+       
+     
+       
+     
+   Here you go. I tried to match the existing Q1 deck’s format as much as possible, there’s also some proper nouns 某社区 doesn’t have. I submitted it for review as well so others can use it if they like.
+
+3. **发言者 3**（回复第 2 条）：Im no where near this level yet but thank you for adding\! Hopefully those who are using this textbook will find it very helpful\!
+
+### 讨论 23
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：\[閒聊\] 男人需要的是陪伴@@？  
+     
+   我聽大家說  男人需要的是陪伴  
+     
+   不過黃仁勳　吃了好幾個  
+     
+   有沒有可能他很怕寂寞？  
+     
+   事業能力這麼好的人！可能到哪都想要有人陪？⊙o⊙  
+     
+   這樣就一點都不會寂寞惹  
+     
+   有沒有窩悶透可？
+
+2. **发言者 2**（回复第 1 条）：我需要的是不要來煩我 一個人自由
+
+3. **发言者 2**（回复第 1 条）：的思考時間
+
+4. **发言者 2**（回复第 1 条）：不過可能是我不缺陪伴吧 一般人就
+
+5. **发言者 2**（回复第 1 条）：缺什麼才會想要什麼
+
+6. **发言者 3**（回复第 1 条）：女人需要的是陪伴
+
+7. **发言者 4**（回复第 1 条）：男人需要的是雞伴
+
+8. **发言者 5**（回复第 1 条）：需要的是愛愛吧
+
+9. **发言者 6**（回复第 1 条）：男人那麼好色 絕對不只是陪伴 蕫？
+
+10. **发言者 7**（回复第 1 条）：他好像外遇對象遍佈各種精英女性 老
+
+11. **发言者 7**（回复第 1 条）：婆白種人 小三黃種人 小四像拉丁膚
+
+### 讨论 24
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**："Only one fly 2026"  
+     
+   Hello here,  
+     
+   this is for fun with Blender 5.3.  
+     
+   tools: Blender, Cycles, Affinity Studio  
+     
+   fixed my wife constructive critics  
+     
+   \[图片省略\]MOUCHA\_F\_ART21500×1500 2.28 MB
+
+2. **发言者 2**（回复第 1 条）：Very nicely done\!
+
+3. **发言者 3**（回复第 1 条）：yooo what\! this is absolutely insane\! Crazy work my guy i can only hope i get to the point where i can put out stuff like this
+
+### 讨论 25
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Steven Wilson's New Release: Requiem for a Village  
+     
+   I know there are a number of folks on here that enjoy Steven Wilson’s various projects so I am interested to see if anyone has any thoughts on his new album which I believe was released last Friday. I have streamed the whole thing several times and I am not entirely sure what I think yet.
+
+2. **发言者 2**（回复第 1 条）：Pretty much the same reaction here, and I’ve held of on a physical copy for the moment. There is some great music and the production is top notch, but I don’t really gel with all the narration.
+
+3. **发言者 3**（回复第 1 条）：I have given it one listen but am yet to decide. I’ll listen more.
+
+4. **发言者 4**（回复第 1 条）：Bought it yesterday \(digital download\) and gave it a spin. Need time to digest and many more listens but my initial impression it’s his best work since The Future Bites. At times it reminded me off unfinished off-cuts from In Absentia-era Porcupine Tree. Promising thus far if a bit staccato.
+
+5. **发言者 5**（回复第 1 条）：It’s ok, if a bit self indulgent….  
+     
+   I’ve listened many times but I think it’s lacking melody and tempo.  
+     
+   Beautiful production though as always \!
+
+6. **发言者 6**（回复第 1 条）：Normally a big fan, but very undecided on this one.  
+     
+   Scheduled 3rd listen for today, but also not shelled out for a physical copy yet…:thinking:
+
+7. **发言者 7**（回复第 1 条）：Was able to get it with quite some discount on Qobuz \(Sublime subscription\)… Jury’s still out, not sure yet if I like it or not. But haven’t had the time to really give it a thorough listen.
+
+8. **发言者 6**（回复第 1 条）：3rd play happening now, no distractions.  
+     
+   Revised opinion to follow…
+
+9. **发言者 6**（回复第 1 条）：Well, that was a fully uninterrupted listen and I am not blown away by it.  
+     
+   It’s ok, but I won’t be playing it regularly in the future. There are many other albums of his, in all his various outlets/guises, that I much prefer to this.  
+     
+   So saying, the CD will be added to the collection for the sake of completeness :face\_with\_peeking\_eye:
+
+10. **发言者 8**（回复第 9 条）：I think 发言者 6 has hit the nail on the head.  I purchased the 3 disc earbook version and unless after multiple plays something clicks then I think this is one of he’s weakest releases in years.
+
+11. **发言者 9**（回复第 1 条）：Only given it one listen. It didn’t really draw me in. I may persevere or I may adopt the life is too short view.  
+     
+   Cheers,  
+     
+   Ian
+
+### 讨论 26
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：\[图片省略\]  
+     
+   ---  
+     
+   上次在 某社区 上分享了自己的学外语项目：\[\[送会员\] 为了学好 英语 和 日语，我做了这个...\]\(\[链接隐去\] 🥰。  
+     
+   不过有些用户就是不习惯看视频学语言，更喜欢背单词，所以我从 4000 多个 某社区 日语视频里，统计出了出现频率最高的 2000 个核心词，整理成了一套免费的 Anki 牌组。  
+     
+   最大的特点：\*\*每张卡片对应的都是视频里真实说过的一句话。点一下例句，就能直接跳转到原视频该时间点，听真人原汁原味的声音和语调。\*\*  
+     
+   \#\#\#\# 为什么我觉得这个牌组有价值？  
+     
+   - 例句真实：大多来自日语学习播客（Teppei、Japanese with Shun、Easy Japanese 等）以及日本本土的生活 Vlog。  
+   - 高频词更准：排除了单纯被某一位博主反复说的“口癖词”，只留大家都在说的高频词；同时也剔除了 は、を、です 等单纯靠背卡片没效果的语法助词。  
+   - 覆盖率：日常视频里基础语法占约 41%，背完前 500 词能覆盖 74%，背完全部 2000 词能覆盖 84% 的日常表达。  
+   - 分级：牌组拆成了 4 个子牌组（每组 500 词），有基础的朋友可以直接跳过第一组。  
+     
+   \#\#\#\# 几点说明  
+   - 释义与翻译：释义来自 JMdict，例句翻译使用 Muse spark 1.3 翻译并经过另外的 AI 校对，但难免有瑕疵，发现翻错随时欢迎捉虫，下版修正。  
+   - 发音：卡片自带单词发音；整句发音直接点链接去原视频听真实语调。  
+   - 关于链接：例句链接跳到了我自己做的一个视频学外语小网站（发言者 1），主要是方便直接在网页字幕里即点即查；不点链接，离线背牌组也完全够用。  
+     
+   \#\#\#\# 下载方式  
+     
+   免费分享，支持 Anki 电脑版 / AnkiMobile / AnkiDroid：  
+     
+   - 直接下载 .apkg：\[链接隐去\]  
+     
+   大家有任何意见，欢迎随时给我反馈！
+
+2. **发言者 2**：谢谢分享。点了例句后在浏览器打开才能播放。来回切换不太方便。可以在卡片里播放音频吗。
+
+3. **发言者 1**：发言者 2 卡片里面现在只有单词的音频，如果把例句音频也包含进去，牌组体积就太大了，我需要测试一下看看最终体积多少先。
+
+### 讨论 27
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：A NES emulator written in Odin
+
+2. **发言者 2**（回复第 1 条）：They got Battletoads to work\! That's pretty neat. It's one of the trickier games to emulate correctly due to how the DPCM sound effects interact with the CPU.
+
+### 讨论 28
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：某社区: atl, a Rust CLI for Jira, Confluence and Bitbucket with ~15ms overhead  
+     
+   Hello HN,I built \`atl\`, a Rust CLI for Jira, Confluence, Bitbucket, Jira Service Management, Trello and Atlassian Admin. The same commands work on Cloud and Data Center \(on-prem\).It's built for both people and AI agents: an --agent mode that outputs JSON and never prompts, a built-in MCP server with 136 tools, and a read-only login so an agent can't change anything. Confluence pages can be edited as Markdown and kept in git.It has SDK support as well for Python, TypeScript/JS, and WASM.Any feedback and contributions are welcome\!
+
+### 讨论 29
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：出差  
+     
+   饿饿  
+     
+   我对本地物价非常困惑
+
+2. **发言者 2**：夺少钱\(　д \) ﾟ ﾟ
+
+3. **发言者 3**：\(\|\|\|ﾟдﾟ\)抢钱啊！
+
+4. **发言者 4**：外卖券：请好好的看着我
+
+5. **发言者 5**：这份粥最好是一升装的
+
+6. **发言者 6**：\(\|\|\|ﾟДﾟ\)
+
+7. **发言者 7**：沪币吗\(\|\|\|ﾟдﾟ\)
+
+8. **发言者 8**：去看看大排挡的菜单
+
+9. **发言者 9**：在上海玩的时候都没买过那么贵的外卖\( ﾟ∀。\)
+
+10. **发言者 10**：上海都没这么贵的粥\(´ﾟДﾟ\`\)
+
+11. **发言者 1**（回复第 4 条）：\[引用第 4 条\]  
+     
+   \( ﾟ∀。\)这家店什么红包都用不了，点开差评全是说贵到莫名其妙
+
+### 讨论 30
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Pavement review  
+     
+   Good afternoon all,  
+     
+   Over a little time, I’ve tried some micro-mapping around part of this highway Way: 1356220273 \| OpenStreetMap. I’d be interested in any feedback for improvements. I’m not planning on doing a lot of this scale mapping, but I wanted a good example for me to refer to should I wish to do similar scale mapping as a break from other projects. I find actual examples of mapping easier to follow than pages of descriptions \(and arguments\) of good mapping.  
+     
+   Nearby is this level mapping OpenStreetMap. I like the outcome, but don’t have enough patience for such detail of mapping and tagging.
+
+2. **发言者 1**（引用未收录发言）：Thank you. It was the Cranbrook routing aspects that bothered me. The same mapper has used a similar approach in farmyards, where footpaths frequently exist…  
+     
+   Would removing the crossing tag create walking routing lack of warnings for unsighted users?  
+     
+   &amp; 3. So split the driveways at the intersection points with the footways and gates? Then tag as suggested?
+
+3. **发言者 1**（引用未收录发言）：These all have dropped kerbs from new. I’m not sure what you mean in your description. Do you mean where the drive intersects the footway and that there may be kerbs parallel to the drive?  
+     
+   This is why I prefer pictures\! Painting a 1000 words and all that. :slightly\_smiling\_face:
+
+4. **发言者 1**（引用未收录发言）：Now revised as advised. I think.
+
+### 讨论 31
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：FUGLOY FINGERLESS MITTENS - INCREASES  
+     
+   Hi, just wanted to check that I am thinking correctly: am I right in thinking, that to do my 7 increases every other row, I increase the yo’s. Eg. for round6  
+     
+   \[图片省略\]IMG\_84471678×1576 537 KB  
+     
+   , it should be ‘k1, yo, p5, yo, k1’ ..p25
+
+2. **发言者 2**（回复第 1 条）：Yes, that’s it. The increases are every other round. The increases are forming the thumb gusset as the sts between the yarn overs increase by 2sts each time.  
+     
+   \[链接隐去\]
+
+3. **发言者 1**（回复第 2 条）：Many many thanks\! So grateful
+
+### 讨论 32
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Guards in the Shadows  
+     
+   Two guards in the shadows,  at night in Athens. The image is very contrasty and noisy, and I do not find it particularly successful technically, but I find it interesting to work with.  
+     
+   My intention was mainly to bring out the figures. I would be curious to know how you would have developed it, and I am open to any direction.  
+     
+   IMG\_9951.CR2 \(11.7 MB\)  
+     
+   \[图片省略\]IMG\_99512250×3379 4.67 MB  
+     
+   This file is licensed Creative Commons, By-Attribution, Share-Alike.
+
+2. **发言者 2**（回复第 1 条）：\[图片省略\] 发言者 1:  
+     
+   in the shadows, at night  
+     
+   This I think gives a hint in which direction it should go. A night shot which looks like bright day isn’t what I would do. The picture gets in my eyes flat and a bit boring, even though you captured a really nice moment. So I embraced darkness.  
+     
+   \[图片省略\]IMG\_9951\_022000×2894 864 KB  
+     
+   IMG\_9951.CR2.xmp \(17,1 KB\)
+
+3. **发言者 3**（回复第 1 条）：\[图片省略\]IMG\_99511342×1920 860 KB  
+     
+   IMG\_9951.CR2.xmp \(11.3 KB\)
+
+4. **发言者 4**（回复第 1 条）：\[图片省略\]GreekGuards\_PIX1572×2058 571 KB  
+     
+   Tried to replay 发言者 2’s render…  
+     
+   More pictures of the Evzones here: Presidential Guard \(Greece\) - Wikipedia
+
+5. **发言者 5**（回复第 1 条）：You might go b&amp;w and bigger contrast. But it’s looking for the extremes of what can be done.  
+     
+   \[图片省略\]IMG\_9951\_0\_01999×1440 222 KB  
+     
+   IMG\_9951.CR2.xmp \(24.0 KB\)  
+     
+   Or the opposite direction, less graphical  
+     
+   \[图片省略\]IMG\_9951\_0\_02999×1440 209 KB  
+     
+   IMG\_9951.CR2.xmp \(23.5 KB\)  
+     
+   Or a mix of both worlds  
+     
+   \[图片省略\]IMG\_9951\_0\_03999×1440 241 KB  
+     
+   IMG\_9951.CR2.xmp \(43.9 KB\)
+
+6. **发言者 2**（回复第 5 条）：I like the first one.
+
+7. **发言者 4**（回复第 6 条）：I like their shoes… :slight\_smile:
+
+8. **发言者 6**（回复第 1 条）：Embracing the shadows  
+     
+   \[图片省略\]IMG\_99511318×1979 642 KB  
+     
+   IMG\_9951.CR2.xmp \(7.1 KB\)
+
+9. **发言者 7**（回复第 1 条）：Newspaper print  
+     
+   \[图片省略\]IMG\_9951899×1080 461 KB  
+     
+   IMG\_9951.CR2.xmp \(16.2 KB\)  
+     
+   \[图片省略\]IMG\_9951\_01899×1080 493 KB  
+     
+   IMG\_9951\_01.CR2.xmp \(14.6 KB\)
+
+10. **发言者 5**（回复第 6 条）：Something went wrong with the direction of the shadow :slight\_smile:  
+     
+   That gives it a bit aery look.
+
+11. **发言者 8**（回复第 1 条）：No xmp included for this image as I was experimenting with the okeinla AI denoising option available for downloading to DT 5.7. It was purely a denoising exercise for me.  
+     
+   \[图片省略\]IMG\_9951\_raw-denoise1331×2000 531 KB
+
+### 讨论 33
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -402,795 +924,86 @@
 
 4. **发言者 1**（回复第 3 条）：Hi 发言者 2\! Yes that’s exactly what I was looking for, my b for not being clear :bowing\_woman: Thanks for your help\! :relaxed:
 
-### 讨论 14
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Wireless Headphones have really improved over time  
-     
-   During my most recent vacation, used a pair of B&amp;W PX8 S2 for playback.  They exceeded my expectations performance wise.  
-     
-   So, decided to compare the PX8 S2 to the venerable Sennheiser HD 600 and HD 650.  To my utter surprise, the PX8 S2 was clearly a step up sonically over either Sennheiser offering. Every aspect of playback was better with the PX8 S2.  Dynamics, low level detail, tonal balance, you name it, it was better.  The thing that really stood out was horns and woodwinds sounded a lot closer to real with the PX8 S2.  Also used a questyle dongle for hi-res.  
-     
-   I’m wondering how much the carbon fiber driver plays into this.  This has caused me to re-evaluate priorities regarding headphone listening, including costs to get high quality sound.
-
-2. **发言者 2**（回复第 1 条）：I’m so sorry for your ears.
-
-3. **发言者 2**（引用未收录发言）：It’s that almost all are closed back. I don’t deny use cases for wireless or ANC.  
-     
-   But closed backs are fatiguing. Even the ZMF Verite.
-
-4. **发言者 1**（回复第 3 条）：Ah\!  Makes sense.  
-     
-   My favorite headphones are open:  Abyss Diana TC and Verum 2.
-
-### 讨论 15
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Anthropomorphic Software
-
-2. **发言者 2**（回复第 1 条）：&gt; If you are aware of any more examples, I would be glad to list them here.  
-     
-   Years ago while skimming dmesg, I chanced on:  
-     
-   \`\`\`  
-   Dazed and confused, but trying to continue  
-   \`\`\`  
-     
-   I have no memory of what I was trying to debug that day, but I think about that message often.  
-     
-   "Mood", I suppose.  Hang in there Tux 🫂
-
-3. **发言者 3**（回复第 1 条）：&gt; LLM agents are the ultimate version of anthropomorphic software. But agents do not have to sound human. I force my agents to not speak like humans for my own sanity.  
-     
-   What's the prompt/skill for that?
-
-4. **发言者 4**（引用未收录发言）：Perhaps "conversational software" would be a better term, then?
-
-5. **发言者 5**（引用未收录发言）：Indeed, I think there should be regulation prohibiting any automated agent from pretending to be a human.
-
-### 讨论 16
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Mi \(18.11.\) GTA 6- Releaseabend: Wir wollen eure Bingo-Vorschläge  
-     
-   \[图片省略\]73742000×1500 281 KB  
-     
-   Hallo ihr Lieben\! Wir sind tuuuurbo gehyped auf GTA 6 und deshalb steht der ganze Mittwoch im Stern des GTA-6-Countdowns\! Am Releaseabend \(Mi. 20 bis Do. 03:30 Uhr \), mit Ede, Nils Valle, Tim und meiner Wenigkeit, wollen wir gerne ein großes „Was erleben wir wohl gleich in GTA 6“-Bingofeld mit euren Vorschlägen befüllen. Wenn wir dann ab 0 Uhr mit noch mehr Bohnen das Game anzocken, könnt ihr fleißig abstreichen.  
-     
-   Aaaalso brauchen wir dafür eure Vorschläge\! Was sehen und erleben wir wohl alles in Vice City? Besoffene, die in eine Gasse kotzen? Leute, die sich vor einer Bar prügeln? Schreibts uns\! :two\_hearts:
-
-2. **发言者 2**（回复第 1 条）：Im Radio, auf einer Werbefläche oder sonst wo sieht man eine MAGA-Referenz :billed\_cap:
-
-3. **发言者 3**（回复第 1 条）：frei herumlaufende alligatoren
-
-4. **发言者 4**（回复第 1 条）：Wasted\!
-
-5. **发言者 5**（回复第 1 条）：Mehr als 5\(?\)s Airtime mit einem Auto.  
-     
-   Edit:  
-     
-   Moment, nicht wie bei Bingo Battle?
-
-6. **发言者 6**（回复第 1 条）：Hund kackt  
-     
-   Feuerwehr fährt mit Blaulicht  
-     
-   NPC machen Unfall  
-     
-   Hubschrauber fliegt vorbei
-
-7. **发言者 7**（回复第 1 条）：6 7  
-     
-   Maga Parodie  
-     
-   Mamdamu oder ein andere Demokratisch erfolgreiche Person  
-     
-   Elon Musk Parodie  
-     
-   Trump Parodie  
-     
-   Alte Charactere aus GTA Vice City  
-     
-   Lowrider
-
-8. **发言者 8**（回复第 1 条）：Lazlow sehen oder hören  
-     
-   Easter Egg zu anderen Games gefunden  
-     
-   NPC wird von Tier gefressen
-
-9. **发言者 9**（回复第 1 条）：jemand ruft an und möchte bowlen  
-     
-   Tommy Vercetti taucht auf  
-     
-   ferngesteuerter Helikopter Minispiel
-
-10. **发言者 10**（回复第 1 条）：Einen Hinweis auf Saint Denis finden.  
-     
-   Hinweise auf Arthur finden.
-
-11. **发言者 2**（回复第 1 条）：Florida Man wird erwähnt :beansmirk:
-
-### 讨论 17
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Change Custom Mouse  
-     
-   Godot Version  
-   4.6.3  
-     
-   Question  
-   Im Trying to make the player´s cursor to change when you press a key, but for some reason it isn´t working, i tested it without the if conditional and it worked perfectly, idk what the problem is  
-     
-   extends Node2D  
-   var fork = preload\("\[链接隐去\]  
-   var control: float = 1  
-     
-   func \_ready\(\):  
-   	if Input.is\_action\_just\_pressed\("change\_hand"\):  
-   		Input.set\_custom\_mouse\_cursor\(fork, Input.CURSOR\_ARROW\)
-
-2. **发言者 1**（引用未收录发言）：Thank you for you answer, it worked perfectly after i replaced the \_ready func for a \_unhandled\_input func, thanks a lot :slight\_smile:
-
-### 讨论 18
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：30块钱6斤蛋挞，我看看是怎么个事\(つд⊂\)
-
-2. **发言者 2**：jmjp
-
-3. **发言者 3**：jmjp
-
-4. **发言者 4**：看样子怎么好像是蛋挞皮边角料的样子\(\*ﾟーﾟ\)  
-     
-   po要不要翻翻评价看看，因为小肥我就曾经没仔细看所以买到了八块钱的车厘子树苗
-
-5. **发言者 5**（回复第 4 条）：\[引用第 4 条\]  
-     
-   最后怎么处理的\( ﾟ∀。\)
-
-6. **发言者 1**（回复第 4 条）：\[引用第 4 条\]  
-     
-   没评论，因为就上了几件，现在卖完了\( ﾟ∀。\)
-
-7. **发言者 6**：jmjp
-
-8. **发言者 7**（回复第 4 条）：\[引用第 4 条\]  
-     
-   脑海中出现一幅大馋猪收到一个大包裹打开一看是雷霆大树苗的画面，笑死了\(\`ヮ´ \)
-
-9. **发言者 4**（回复第 8 条）：\[引用第 8 条\]  
-     
-   别笑我了！\( \`д´\)  
-     
-   我早该警惕的，哪有这么便宜的车厘子呢\( ´ー\`\)雷霆树苗宿舍没地方种又不能一直扔阳台，双休日给奶奶带回去了，据说全种死了
-
-10. **发言者 8**：快速等待\( \`\_っ´\)
-
-### 讨论 19
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Openwrt : modem 5G pour internet dans une maison  
-     
-   \[图片省略\]IMG-20261109-WA00011396×441 66.6 KB  
-     
-   Bonjour,  
-     
-   J'ai acheté une box Telstar 5G avec openwrt d'installer dessus.  
-     
-   J'ai mis ma carte sim, configurer le pin. Ça a l'air de bien se passer puisque le réseau 4G est accroché . Par ailleurs, dans la partie SMS, j'arrive à en envoyer. Donc, à priori, le réseau est bien détecté.  
-     
-   Cependant, je n'ai aucune connexion internet sur les ports RJ45 ou via le wifi du routeur. Et je ne comprends pas comment faire pour tester le connectivité.  
-     
-   Pouvez-vous me dire quelles commandes envoyées \(ping ?\) pour tester la connexion ?  
-     
-   Savez-vous quel paramètre faut-il modifier pour avoir accès à Internet lorsqu'on est connecté au routeur ?  
-     
-   D'avance merci  
-     
-   Xavier
-
-### 讨论 20
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Replace skull icon in lighttable  
-     
-   Maybe most people keep photos always inside the same folder, I don’t.  
-     
-   So I see the skull icon for missing files on the lighttable very often.  
-     
-   To see this icon is awful and I’m talking only about this particular icon, not the whole app, if somebody feels bad because of my comment or this post.  
-     
-   Developers can add these “easter eggs” at Easter if users agree to this joke.  
-     
-   But please keep DT clean and nice, I don’t wanna see kids toy pixel skulls as icon replacement for something so common as a missing file.  
-     
-   Please allow users to replace this icon with a SVG or PNG we choose, if you don’t want to remove it \(Would be really a big loss, I know\). But this icon is taste and it isn’t my taste for a simple, missing file.
-
-2. **发言者 2**（回复第 1 条）：Something like the broken-image icon would be easier on the eye, and possibly more meaningful.
-
-### 讨论 21
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Philips CD-i Joystick Controller  
-     
-   I wanted to play a game I got on my Philips CD-i but the game required a controller with a joystick and not a regular Dpad. Well I don't own the bigger CD-i console that comes with the wireless controller so... I made my own.  
-     
-   Attached is code to run a diagnostic, just to make sure the signals are correct. \(It makes the cursor on screen drift to the right\) And the other is the controller code itself.  
-     
-   I will also be making a wireless version too using a couple of XIAO ESP32-C6 modules.  
-     
-   By the way, the game I wanted to play that requires a joystick is Super Mario's Wacky Worlds prototype. Link Here: \[链接隐去\]  
-     
-   \[图片省略\]IMG\_66051920×2560 983 KB  
-     
-   \[图片省略\]IMG\_66041920×2560 884 KB  
-     
-   CD-I Controller 2.zip \(2.1 MB\)  
-     
-   Included a text file with my references and a basic schematic
-
-2. **发言者 2**（回复第 1 条）：Please post links to datasheets and technical manuals, and schematics.
-
-3. **发言者 3**（回复第 1 条）：You don't seem to have any doubt... Wouldn't be the case to move your post to Projects/Showcase?
-
-4. **发言者 1**（回复第 2 条）：Updated
-
-5. **发言者 2**（回复第 4 条）：Please read reply \#2 again.
-
-6. **发言者 1**（回复第 1 条）：Here is what I used.  
-     
-   \[图片省略\]IMG\_66131920×1440 292 KB  
-     
-       
-     
-         \[链接隐去\]  
-       
-     
-       
-         
-     
-   The CD-i controller interface – The World of CD-i  
-     
-       
-     
-       
-         
-         
-       
-     
-       
-     
-   TwBurn Library: GitHub - TwBurn/cdi-controller-library: Arduino Library for CD-i controllers · GitHub  
-     
-   CD-i male connector: Philips 22ER9021 CD-i Gamepad Repair - retrostuff
-
-### 讨论 22
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：前几天蹭了一下所属大部门 VP 的饭，旁敲侧击的问了一下今年度企业接入 AI 带来的额外成本  
-     
-   我们公司在接入 AI 上起步算是比较晚的，今年 2 月伴随着 Opus4.6 的发布才开始大规模采购基于 AWS 分销的 Claude API，之后更进一步采购了外界的 Gateway 服务从而实现了几乎所有的模型供应商的模型覆盖  
-     
-   员工采取每月限额的方式来限制，截止到目前整体的大模型调用支出已经占据了部门往年总工资支出的 20%，估计一整个自然年的话应该能到 30%朝上。  
-     
-   公司的年度盈利并没有变好，甚至有变差的趋势，估摸着这份支出最后还是会回到打工人自己头上。明年应该是砍额度\+裁员，按照比例的话估计要裁 20%\+，瑟瑟发抖中。。。
-
-2. **发言者 2**：看着就有点儿焦虑了
-
-3. **发言者 3**：大半年体会下来  
-   个人感觉还是对移动端，前端开发影响最大  
-   减少 95%开发人力，叠加经济下行
-
-4. **发言者 4**：AI 时代，大家的武器都升级了，相当于都没升级。待遇相比于我司还是好的，我司不仅零 AI 补贴，实习都变成了“付费上班”。更离谱的是，一边理所当然地按 AI 时代的标准要求实习生 5 倍产出、拉高交付门槛，一边连一分钱的 Token 都不肯报销。
-
-5. **发言者 5**：自己革自己的命  
-     
-   营收基本不增反减, 效率反而提升\( 带来的正反结果都有\),但效率肯定是提升了, 那么不裁员 不换血干嘛  
-     
-   ai 阅读理解代码的能力,让老员工存在的必要性直接减到 0, 以前还要传帮带,现在有些代码连老员工都解释不清,ai 几分钟就给你分析的明明白白  
-     
-   所以, 自己搞死自己, 就是以前蒸汽机时代, 工人都不是被自己搞死的
-
-6. **发言者 6**：没有 ai 结果是一样的，商机/签约/回款每个统计指标都很差  
-     
-   已经打算再砍 30%了，剩下的人结合 ai 提效不影响正常业务，才是收益
-
-7. **发言者 7**：国外有公司已经采取本地部署开源模型，只有在开源模型解决不了时才调用闭源 api
-
-8. **发言者 8**：总工资 20% 有点夸张了，等于是你们 hc 成本凭空扩张了这么多。
-
-9. **发言者 9**：牛逼
-
-10. **发言者 10**：发言者 4 总结一下😢  
-    \[链接隐去\]
-
-11. **发言者 11**：变革期，  
-   工业革命也是大幅降低生产成本，造成分配不均，引发了周期性的经济危机，随后才推出社会保障、失业保险、最低工资和最高工时、让人无后顾之忧，去消费。  
-   降低成本总有个度。
-
-### 讨论 23
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：某社区: Perfectclone – Yoink the source code of any website, not an AI clone
-
-### 讨论 24
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Spotify connect “no longer works”  
-     
-   My fiancée this morning tried to stream to the SuperUniti from Spotify Connect on iOS and saw the message “no longer works with Spotify”.  
-     
-   Mine seems to be working, although the App Store shows an app update available for Spotify.  
-     
-   Has anyone else seen this?  And could someone from Naim confirm is it the case that the old streamers now don’t work with Spotify Connect anymore?  
-     
-   Edit: the SU is running the latest firmware with the new Naim radio.
-
-### 讨论 25
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Let's Employ
-
-2. **发言者 2**（回复第 1 条）：A "modern" job posting tech that doesn't have an explicit identifier for remote work?
-
-### 讨论 26
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Advent of Tess  
-     
-   Does anyone here do this kind of paper folding? Have you participated in previous years of Advent of Tess? I am thinking about taking on the challenge\!
-
-2. **发言者 2**（回复第 1 条）：Those look amazing. But also like I might pull my hair out trying to make them. What a cool Advent though\! If you participate I hope you’ll share the results with us\!
-
-3. **发言者 1**（回复第 2 条）：Thanks for the encouragement.  
-     
-   This combines things I enjoy \(math/geometry \+ art/tesselations\) and origami \(which I enjoy but sometimes lack the precision needed\) so, hmmm . . .  
-     
-   Also, should I take on another project . . . ?  
-     
-   :thinking:
-
-4. **发言者 2**（回复第 3 条）：Find a free tutorial and try one. If you like it, then why not. If it’s too frustrating there are a million other ways to bring your love of tessalations/geometry and origami together.  
-     
-   I’m an enabler. :joy:
-
-### 讨论 27
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：How to Make Particles Moving along a Path?  
-     
-   Godot Version  
-   4.2.1  
-     
-   Question  
-   Hi Everyone  
-     
-   How to make particles moving along a path in Godot, like the example below?  
-     
-   Unity Surge plugin - Wrangling a particle system  
-     
-   \[图片省略\]image1920×1092 168 KB
-
-2. **发言者 1**（引用未收录发言）：Wow, that sounds complicated. I think Unity and Unreal possess the directable particles with splines feature since ten years ago…  
-     
-   Is there no Godot plugin for moving particles along a path? How can Godot developers build dynamic particle effects that run through bezier curves?
-
-3. **发言者 2**（引用未收录发言）：Can you show a visual mockup of the effect, with the actual pipe paths?
-
-4. **发言者 1**（回复第 3 条）：It’s similar to these:  
-     
-   Particles through Pipe  
-     
-   Water through Pipes
-
-5. **发言者 2**（回复第 1 条）：And here it is combined with built in particle process shader:
-
-6. **发言者 1**（引用未收录发言）：Thank you\! It looks exactly like the Unity Surge plugin. Unfortunately, I can’t see anything when I play the engine, maybe because I’m a total noob in Godot. Here’s my project, made with Godot v4.7.2:  
-     
-   Project  
-     
-   Or could you please share your project?
-
-7. **发言者 2**（回复第 6 条）：Make sure to:  
-     
-   Assign the script to the particles node  
-     
-   Assign the path node to the path property of the particle node  
-     
-   Draw an actual curve for the path node.
-
-8. **发言者 1**（回复第 7 条）：Thanks again\! It works
-
-9. **发言者 1**（回复第 7 条）：Hey 发言者 2 , if I delete the Curve3D of the Path3D and create a new curve, the particles still follow the deleted curve. Is there an easy way to make the particles follow the new curve?
-
-### 讨论 28
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：好想被榨精\(つд⊂\)
-
-2. **发言者 2**：把出题的抓过来代替我被榨\(\`ゥ´ \)我负责把这份录像复制数十亿份卖给全世界
-
-3. **发言者 3**：1如果改成巨乳就选  
-     
-   2大妈味太重了犹豫要不要选  
-     
-   3必选  
-     
-   4可以选但是要换成那件黑丝警察服  
-     
-   5不选  
-     
-   6纯当妈子还行，瑟瑟就免了  
-     
-   7也行但也是换身衣服不喜欢皮衣  
-     
-   89不选
-
-4. **发言者 3**（回复第 3 条）：\[引用第 3 条\]  
-     
-   啊只能选三个吗？能不能先跟她们说好只要把那几个小的赶出去剩下的可以一起来
-
-5. **发言者 4**：选选选
-
-6. **发言者 5**：选了你给我吗
-
-7. **发言者 6**：先把蘑菇打一顿没有异议吧
-
-8. **发言者 7**（引用未收录发言）：\[引用未收录发言\]  
-     
-   对不起，我看错了，4不是巴格斯特
-
-9. **发言者 7**：说到底亚瑟王的胸虽然大但怎么会这么大啊，男性
-
-10. **发言者 8**（引用未收录发言）：\[引用未收录发言\]  
-     
-   发言和饼干最匹配的一次\( ﾟ∀。\)
-
-11. **发言者 9**：骗你的，选完三个也是一样榨
-
-### 讨论 29
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：How to optimise a picture that is dark in one part and too light in the other part?  
-     
-   Hello,  
-     
-   How do you go about optimising a photograph that is too dark in one area \(shadows\) and bright or too bright in another due to the bright sunshine –  
-     
-   or like this one of the cathedral of Palermo, Sicily, where the foreground is more or less correct and the background too light?  
-     
-   Which functions does one use for that?  
-     
-   Kind regards  
-     
-   发言者 1  
-     
-   \_1330467.RW2 \(20.9 MB\)
-
-2. **发言者 2**（回复第 1 条）：Tools on the first tab \(Exposure\):  
-     
-   Shadows/Highlights  
-     
-   Tone Equalizer  
-     
-   Dynamic Range Compression
-
-3. **发言者 3**（回复第 1 条）：since there is no licence for a playraw, i just upload the pp3. You can apply this file to you picture \(open folder top right\) and inspect the tools i used.  
-     
-   \_1330467.RW2.jpg.out.pp3 \(17,2 KB\)
-
-### 讨论 30
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：MP3 or WAV in onboard memory  
-     
-   I am trying to understand how to store and call up a small MP3 \(52K\) or WAV \(138K\) file up for my thunderstorm sketch. Any help or suggestions would be helpful.
-
-2. **发言者 2**（回复第 1 条）：You can try looking here: GitHub - pschatzmann/arduino-audio-tools: Audio Tools \(a powerful Audio library for Microcontrollers and the Desktop\) · GitHub .
-
-3. **发言者 3**（回复第 1 条）：What board are you trying to store those files on.
-
-4. **发言者 1**（回复第 1 条）：Arduino R4 But I can use an Arduino Nano ESP32 or an Arduino R3 if those will work better.  
-     
-   I have considered getting an ArduinoQ to try it if the others will not work.
-
-5. **发言者 4**（回复第 4 条）：You can use SPIFFS or there are online sites that will convert an audio file into a C array.
-
-6. **发言者 5**（回复第 4 条）：All those boards will work.
-
-7. **发言者 5**（回复第 1 条）：What do you want to store the file on, SD/TF card or local RAM/Flash or even better FRAM.
-
-8. **发言者 1**（回复第 1 条）：Local ram, I can get a FRAM module if that would work better. I have tried 2 different SD/TF readers and neither can see the SD card. I decided to try to add it local in order to resolve issue.  
-     
-   Update: I ordered a FRAM module and will try that once I figure out how to put the file on it and call it up.
-
-9. **发言者 5**（回复第 8 条）：As a professional programmer for over half a century and as an employer of professional programmers, the comment that you couldn't get the SD/TF to work is not acceptable. Why did you not use the forum to help you to get it to work?  
-     
-   In any case, the FRAM is better all around, what size did you get?
-
-10. **发言者 3**（回复第 1 条）：How are you planning to play that WAV file.  
-     
-   An R4 Minima does not have an I2S sound output.  
-     
-   A basic ESP32 has I2S and plenty of internal storage \(4MB\).
-
-11. **发言者 1**（回复第 10 条）：I have a pam8403 installed and tested
-
-### 讨论 31
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Mottle is a small browser game I got hooked on, so I built a place to play it online: \[链接隐去\]  
-     
-   The idea is simple. Drag \(or use WASD / arrow keys\) to move, and the moment you let go your creature fades into the colour of the tile under it. Seekers sweep the garden with cones of light, and if one sees you for too long you lose a life. Grab fireflies for points, survive each round's timer for a bonus, and the Seekers get faster and more numerous every round.  
-     
-   - Plays instantly in the browser, no download or sign-up  
-   - Works on desktop and mobile, with a portrait layout for phones  
-   - A full guide under the game: how the camo and alert meters work, scoring, and tips for surviving later rounds  
-     
-   One round takes a couple of minutes. Give it a try, and feedback is welcome.
-
-### 讨论 32
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Wooden Crate  
-     
-   A game-ready prop  
-     
-   Tris: 300  
-     
-   Textures: 4096x4096, PBR  
-     
-   Maps: Base Color, Normal, Roughness, AO  
-     
-   Time spent: ~7 hours  
-     
-   \[图片省略\]BoxRender2160×2160 2.61 MB  
-     
-   \[图片省略\]BoxWireframeRender2160×2160 2.91 MB
-
-### 讨论 33
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Thumb gusset  
-     
-   Hi . I m making Susan Crawford winter warmer mittens.  I have got to row 20 … it states.  
-     
-   Pattern to marker place the next 13 stitches on hold  for thumb gusset .  
-     
-   Using  backwards loop and continuing to maintain pattern cast on 13st   patt 2 pm patt to end of round .  
-     
-   I,m confused re the maintain pattern bit … how do i do that when casting on .  
-     
-   Do i cast on in the colours that correspond with the colourwork chart . Thank you
-
-2. **发言者 2**（回复第 1 条）：\[链接隐去\]  
-     
-   You can see in the 4th photo down on the details page that the palm pattern is maintained across the newly cast on sts. As 某参与者 mentioned, just remember to carry one of the yarns over the cast on sts so that both yarns are available as you continue the mitten. Either color will work.
-
-3. **发言者 1**（引用未收录发言）：Thank you
-
 ### 讨论 34
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Thoughts on memory layers like mem0  
+1. **发言者 1**：I understand loud pops on startup/shutdown are mostly normal but  
      
-   Really curious if there is actually a market for companies trying to sell a memory layer for AI agents.Look at Claude code's "automemory" for example, they don't use a vector database or anything complex. Its just simple markdown files on the local filesystem along with grep for retrieval and it works great for me.For many simpler use cases, simple techniques like context summarisation are good enough.
+   I recently switched from NAC 152 XS / NAP 155 XS combo to NAIT XS 3, and have a question about loud pops I used to experience which are now almost gone with XS 3. Is that normal for Naim pre/power units where the preamp is drawing power from the power amp to have these pops, while Naim integrateds don’t have them as much? Or could something be off with my old units and I should have them looked into?
 
-2. **发言者 2**（回复第 1 条）：It depends on how you productize it. There’s market. The memory itself is a must-have, but you should probably implement it with some advantages and make it domain-specific to be better at something like retrieving, indexing, etc.
+2. **发言者 2**（回复第 1 条）：\[图片省略\] 发言者 1:  
+     
+   Is that normal for Naim pre/power units where the preamp is drawing power from the power amp to have these pops  
+     
+   My 282/200DR pops very loud when powering off, but barely audible when paired with either one or two HCDRs.
 
-3. **发言者 1**（回复第 2 条）：I agree that domain-specific memory layers might be the way to go, in which case devs are just better off making their own memory layer for their use case, instead of having a dependency on a third party, don't you think?Especially now that building a simple memory layer particular to your use case won't take a lot of time and effort. And you can keep making it better as you go forward.
+3. **发言者 3**（回复第 1 条）：The XS3 has mute enabled while starting and automatically disables mute after a few seconds. That’s why you do not hear a pop. It’s different with other amps. I had a 5si and that amp popped loud.
+
+4. **发言者 1**（回复第 3 条）：I noticed mute function on startup but XS 3 also sounds quiet when powered down. 152/155 XS is loud either up or down. But maybe this is how it’s meant to work.
+
+5. **发言者 4**（回复第 1 条）：I have my Preamp and Sources on one circuit and the power amps on another. I switch on the preamp first and after a few seconds when I hear the relay click I switch on the power amps.  
+     
+   When I shut down I switch off the power amps and and wait for them to power down before shutting off the preamp power.  
+     
+   This procedure eliminates nasty pops through the speakers.
+
+6. **发言者 5**（回复第 1 条）：\[图片省略\] 发言者 1:  
+     
+   Is that normal for Naim \[XS\] pre/power units \[….?\]  
+     
+   I seem to remember that pops were considered normal for XS gear when the range was launched, just as it had been for all other Naim amps.
+
+7. **发言者 1**（回复第 5 条）：My preamp doesn’t have its own power button, it operates on and off strictly via the power amp to which it’s connected with a SNAIC. When I power it down, I can mute it first, but not much can be done when I turned it on.
+
+8. **发言者 4**（回复第 7 条）：I appreciate that my solution doesn’t work for everyone.
+
+9. **发言者 6**（回复第 1 条）：Naim always suggested that amps remain powered up. This avoids the loud annoying thumps when turning on and off. Probably not relevant with new range?
 
 ### 讨论 35
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Advice on Mesh  
+1. **发言者 1**：How to actually use \[某参与者\]  
      
-   Guys,  
+   Godot Version  
+   4.7  
      
-   I’ve just installed a mesh network to replace powerlines throughout the house.  No more drop outs etc\!  
+   Question  
+   For the longest time I can never get \[某参与者\] to run script in editor. Today I want to draw a path curve by code and tween its points so I want to see the changes real time in editor.  
      
-   But one question. I have a dedicated satellite adjacent to the main system but plugged in to the main circuit not the hi-fi dedicated radial.  As the satellite has 2 Ethernet points I’ve wired the NDX2 and Uniticore directly to the satellite rather than via a switch figuring that one less connection was better, but would the NDX2 receive a better feed from the Uniticore if I used a dedicated switch? The switch I have is a standard Netgear, nothing fancy.  
+   So first I tried simple script in \_ready to draw a curve path, add \[某参与者\], press “Reload Saved Scene” then nothing show in editor…Here’s the code I tried:  
      
-   We tried both when installing and frankly there was no difference, so you would reasonably say why ask, but I was curious to know if there was any thoughts on best practice amongst the experts.  
+   \[某参与者\]  
+   extends Node3D  
+   func \_ready\(\) -&gt; void:  
+   	\#\#\# CODES TO EXECUTE IN EDITOR  
+   	if Engine.is\_editor\_hint\(\):  
+   		var path := Path3D.new\(\)  
+   		var curve := Curve3D.new\(\)  
+   		curve.add\_point\(Vector3\(-5, 1, 0\)\)  
+   		curve.add\_point\(Vector3\(0, 3, 0\)\)  
+   		curve.add\_point\(Vector3\(5, 1, 0\)\)  
+   		path.curve = curve  
+   		add\_child\(path\)  
      
-   Thanks in advance guys.  
-     
-   Lindsay
+   When I tested with running in game and it shows path correctly \(without editor\_hit\(\)\). I don’t get it. Am I miss something?
 
-2. **发言者 1**（引用未收录发言）：Thank you Sean.  
+2. **发言者 1**（回复第 1 条）：The line below is required to make the node visible in the Scene tree dock  
      
-   Edit to say yes the satellite does act as a switch.  Thanks again.
+   and persist changes made by the tool script to the saved scene file.  
+     
+   node.owner = get\_tree\(\).edited\_scene\_root  
+     
+   OK found this at bottom of page. Works in editor now. :\+1:
 
 ### 讨论 36
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Wordpress single sign on  
-     
-   What app is this about, and its version: wordpress  
-     
-   What YunoHost version are you running: 13.0.10 \(testing\)  
-     
-   What type of hardware are you using: VPS bought online  
-     
-   Describe your issue  
-   With many apps I can login once to the yunohost portal and then click through to the application … however, with wordpress this doesn’t work.  
-     
-   ie I have to login twice \(although the second login to wordpress does work well with yunohost ldap server\).  
-     
-   Is there a way to pass the yunohost login through to wordpress ?  I see the plugin http-authentication gets installed but not enabled \(I tried enabling it and couldn’t get it to work\).  
-     
-   Perhaps there is an alternative wordpress plugin that does the job ?  
-     
-   \(I know this has come up before, but I didn’t spot anything recently\)  
-     
-   Thanks\!  
-     
-   Thanks.  
-     
-   Share relevant logs or error messages  
-   none
-
-2. **发言者 2**（回复第 1 条）：Ihave the same problem.  wp-admin → login yunohost → wp-admin → login wordpress and it is ok
-
-3. **发言者 3**（回复第 1 条）：Not sure is a good idea because this process on Yunohost add a very good security guarantee and wordpress is always attacked..  
-     
-   you can try add the permission wp-admin  in the group visitors and comment the sso in the  nginx conf…  
-     
-   \#include conf.d/yunohost\_panel.conf.inc;  
-     
-   and restart the service nginx  
-     
-   systemctl restart nginx  
-     
-   but as said before it is still safer be protected by the sso…
-
-4. **发言者 1**（回复第 3 条）：\[图片省略\] 发言者 3:  
-     
-   Not sure is a good idea because this process on Yunohost add a very good security guarantee and wordpress is always attacked..  
-     
-   Indeed.  
-     
-   I want to only use LDAP, but login to yunohost once, but when I click in wordpress I’m logged into wordpress \(like many other apps\).  
-     
-   Presumably, there is some http headers to pass through or something.
-
-5. **发言者 1**（回复第 2 条）：\[图片省略\] 发言者 2:  
-     
-   Ihave the same problem. wp-admin → login yunohost → wp-admin → login wordpress and it is ok  
-     
-   Thanks … glad its not just me \!
+1. **发言者 1**：坐标一个小作坊,平时做一些前端小项目,tob 那种,9 月底开始老板沉迷 vibecoding,现在张嘴就是"这个 AI 生成一下很快的"诸如此类的话,到现在,已经进化成许愿式开发了,需求没有,原型图没有,然后直接向 AI 许愿.已经想跑路了
 
 ### 讨论 37
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Parsing nested lists in BQN
-
-2. **发言者 2**（回复第 1 条）：This approach to parsing, and wrangling with trees in array languages in general, have been really eye-opening for me\! Plus, it's really quite a lot of fun.  
-     
-   It's also worth noting that CBQN's performance characteristics seem to have changed quite a bit since that post, as for me the nested array-based version is faster than the recursive descent approach.
-
-### 讨论 38
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Rainbow hexie basket  
-     
-   Cute little project. Not sure I have any use for it but it will make a sweet gift.  
-     
-   \[图片省略\]IMG\_13842016×1512 400 KB  
-     
-   \[图片省略\]IMG\_13882839×2126 1.12 MB  
-     
-   \[图片省略\]IMG\_13862016×1512 458 KB  
-     
-   Easy, anyhow, &amp; a chance to use some 5X5 swap squares :slight\_smile:
-
-2. **发言者 2**（回复第 1 条）：Soooo pretty\! :heart\_eyes: More things need to be rainbow, I think.
-
-3. **发言者 3**（回复第 1 条）：Can’t have enough rainbow baskets\!
-
-4. **发言者 4**（回复第 1 条）：So dang cute\!
-
-5. **发言者 5**（回复第 1 条）：I love it so much\! What a great little basket\!
-
-6. **发言者 6**（回复第 1 条）：Cute\! Good idea to let the hexies fold in to get a bowl shape.
-
-7. **发言者 1**（回复第 1 条）：Thanks all\! It’s not my idea, I saw it online somewhere &amp; thought it was cute. And of course, “I can make that\!”
-
-8. **发言者 7**（回复第 1 条）：That is extremely cute
-
-9. **发言者 8**（回复第 1 条）：Love this\! :heart\_eyes:  
-     
-   \(darnit, why do I have no use for one either?\)
-
-10. **发言者 1**（回复第 1 条）：1 more hexie makes a lid :wink:
-
-11. **发言者 9**（回复第 1 条）：It’s adorable\! And I recognize some of those prints\! :pink\_heart:
-
-### 讨论 39
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：How yo use navigation agents 3D in godot engine  
-     
-   Godot Version 4.8 Beta 3  
-   Hellooooooooooo :waving\_hand:t2: How are you today?  
-     
-   Question  
-   Please help me for how i can use navigation agents 3d in my simple test prototype level for knowledge about how can ai navigation agents works and how i can use this\!
-
-2. **发言者 2**（回复第 1 条）：Godot Engine documentation  
-       
-     
-       
-         
-     
-   3D navigation overview  
-     
-     Godot provides multiple objects, classes and servers to facilitate grid-based or mesh-based navigation and pathfinding for 2D and 3D games. The following section provides a quick overview over all ...
-
-### 讨论 40
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：如何停止自我审判？
-
-2. **发言者 2**：做点事，就算做的很烂也先别管，先做。
-
-3. **发言者 3**：做点能马上有正反馈的事情
-
-4. **发言者 4**：用一些适度的感官刺激打断当前的想法，比如含一块冰，喝一口醋
-
-5. **发言者 1**（回复第 2 条）：\[引用第 2 条\]  
-     
-   有时就是因为做得太烂才开始审判的\(;´Д\`\)
-
-6. **发言者 5**：细说
-
-7. **发言者 6**：冲一发
-
-8. **发言者 7**：\( ﾟ∀。\)搞差不多得了，真想把自己审判到完美啊
-
-9. **发言者 8**：休庭
-
-10. **发言者 9**：我的咨询师给我的办法，虽然不能根本性解决你的问题，但是能稍微好受一些：  
-     
-   478呼吸法，可以随便找个视频跟着做五分钟，适用于失眠焦虑  
-     
-   身体扫描，这个同上  
-     
-   以上两个办法更多是让你的注意力回归当下，我个人还是觉得人是环境动物，不舒服先换一个环境慢慢缓解
-
-11. **发言者 1**（回复第 8 条）：\[引用第 8 条\]  
-     
-   我的理性告诉我这根本不可能，但我的感性不接受\(;´Д\`\)
-
-### 讨论 41
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -1221,177 +1034,217 @@
 
 11. **发言者 4**（引用未收录发言）：tu bosses chez Nvidia ? :sweat\_smile:
 
+### 讨论 38
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Memory management in 40 major C projects, a survey
+
+2. **发言者 2**（回复第 1 条）：Good but under analysed. It looks like programming languages mostly are using garbage collectors or reference counting; regions seem to used by postgres, and forks and extensions, and https and nginx. The rest are mostly doing it raw. There’s more to this story.
+
+3. **发言者 3**（回复第 1 条）：I think this is an interesting subject, but it seems a bit thin on the methodology?  Is it basically grep and a human classifies what style of memory management it is?
+
+4. **发言者 1**（回复第 2 条）：I was just finishing up a big move \(NYC to Durham\) last week and ran out of time to publish anything deeper. I will probably return back to this eventually. I'd also welcome \(and pay\) anyone else come to do a second pass on the topic for The Consensus.
+
+5. **发言者 1**（回复第 3 条）：Basically yes. Part of the goal was to try out The Consensus's code search APIs \(which I still need to write about\). But also someone literally asked the question on 某社区: what do C projects actually do for memory management. And some people were particularly surprised about SQLite not picking a "safer" path.
+
+6. **发言者 4**（回复第 1 条）：i remember an old article that covered the many memory allocation strategies just for Nethack. it is a fun read.
+
+7. **发言者 5**（回复第 1 条）：The analysis looks lime regions work well for things that are server-like, while reference counting and garbage collection are popular among programming languages. I don’t find this surprising, but it’s still nice to see it show up in the survey.
+
+8. **发言者 2**（回复第 4 条）：Tell us more about the apis you used for this? Are they free?
+
+9. **发言者 6**（回复第 6 条）：This one? \[链接隐去\]
+
+10. **发言者 7**（回复第 4 条）：Slightly off-topic, but welcome to Durham\! Hope you're getting settled well. Also selfishly excited for your new meetup.
+
+11. **发言者 4**（回复第 9 条）：Yes, that is the one.
+
+### 讨论 39
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：We handed our lives to closed software. AI is about to show us the cost
+
+### 讨论 40
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：纯正的苏联笑话味\(\`ヮ´ \)
+
+2. **发言者 2**：苏联在哪
+
+3. **发言者 3**：笑话在哪
+
+4. **发言者 4**：赔偿款到了吗
+
+5. **发言者 5**：苏联在哪
+
+6. **发言者 6**：笑话在哪
+
+### 讨论 41
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Umweltzone \(green sticker\)  
+     
+   Ist das hier korrekt getaggt?  
+     
+   Way History: Umweltzone Hagen \(846203303\) \| OpenStreetMap  
+     
+   Bemängelt wird das access=green\_sticker\_germany .
+
+2. **发言者 2**（回复第 1 条）：Laut Wiki ist zu access gar nichts beschrieben: DE:Tag:boundary=low\_emission\_zone - OpenStreetMap Wiki  
+     
+   Wenn ich mir die anderen Relationen in Deutschland anschaue, scheint das aber durchaus übliche Praxis zu sein.
+
+3. **发言者 3**（回复第 1 条）：Das Problem, so wie ich es verstehe, ist, dass access= sich auf alle Formen der Fortbewegung bezieht. Strenggenommen dürften mit dem derzeitigen Tagging Fußgänger ohne eine grüne Plakette auf ihrer Stirn die Stadt Hagen nicht betreten - und das ist sicher nicht gemeint.
+
 ### 讨论 42
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：\#\# 介绍认识  
+1. **发言者 1**：Ralphie - Mouse, Needle Felting  
      
-   前两周，一位亲戚给我推了一个女生的某社区，大致介绍了一下对方的情况。  
+   eh - I’m still deep into the “I hate this project” stage even though there were significant improvements by adding the mouse ears and the slipper details in the last work session.  
      
-   我今年 30 岁，其实之前一直不太愿意通过相亲这种方式认识女生。不过最近想了想，加个某社区也没什么，先聊聊看也无妨。毕竟在目前的工作地，身边没什么朋友，如果能找到有共同爱好的人，以后一起骑骑车、爬爬山，偶尔约着出去玩，也挺不错。  
+   \[图片省略\]20261110\_1043431920×2560 446 KB  
      
-   \#\# 聊天  
+   \[图片省略\]20261110\_1043561920×3432 689 KB  
      
-   加上某社区后，简单聊了几句，和我预想的差不多，基本看不出对方有什么主动交流的意愿，聊天也很难继续推进。  
+   \[图片省略\]20261110\_1044311920×2560 421 KB  
      
-   两天后，我主动问对方有没有时间线下见一面。对方表示有时间可以，于是我接着问她什么时候方便。结果对方说最近没空，等有时间再说。  
+   \[图片省略\]20261110\_1044461920×2560 526 KB  
      
-   说实话，到这里我其实已经不太想继续约了。  
-     
-   过了几天，亲戚问起我们的进展，我便如实说了自己的感受，觉得女生应该没什么想法。后来亲戚又帮忙向对方的介绍人打听了一下，得到的答复是：对方那周确实有事情，回老家了。  
-     
-   \#\# 再次约见面  
-     
-   既然如此，本周我便又主动约了一次。对方这次表示有空，于是我们约好周末一起吃饭。  
-     
-   确定见面时间后，我问对方有没有什么特别想吃的。对方表示没有，于是我就随便找了一家店。对于这个安排，对方既没有明确表示认可，也没有提出异议。  
-     
-   \#\# 见面  
-     
-   见面当天，我又问了一遍对方有没有什么想吃的，得到的答复依然是没有。既然如此，那就按照之前选好的地方吃饭吧。  
-     
-   整个过程基本就是吃饭加客套话，聊的也都是一些比较常规的话题。聊天过程中，对方明确表示，自己其实比较抵触通过相亲这种方式认识异性。  
-     
-   听到这里，我倒也不觉得意外，毕竟这和我最初的猜想基本一致。  
-     
-   吃完饭后，对方表示要回去了。OK，那就回去吧。  
-     
-   我和她一起下楼，出了楼之后，她便径直离开了，头也没回。
+   This guy is smaller than my usual mice, probably an inch shorter which equals a foot or 26mm in mouse measurements.
 
-2. **发言者 2**：双方的建模还满意吗？
+2. **发言者 2**（回复第 1 条）：Absolutely darling in every way.
 
-3. **发言者 3**：现在一些互联网相亲的程序感觉搞得还是挺不错的可以试试，减少自己试错的损失吧。遇到对的人不容易
+3. **发言者 3**（回复第 1 条）：So. Darn. Adorable\!
 
-4. **发言者 4**：这种没机会就放弃吧，继续多试试，每个人的喜好不一样。我表哥嫂嫂说也是见了很多不合适，但最后见了我表哥感觉很合适。
-
-5. **发言者 5**：你不是她的菜
-
-6. **发言者 6**：“ 对方明确表示，自己其实比较抵触通过相亲这种方式认识异性。”,只是没有相中你
-
-7. **发言者 7**：是这样的，很难遇到能继续聊得下去的
-
-8. **发言者 8**：发言者 2 不都说了，你还没明白么
-
-9. **发言者 9**：“得到的答复是：对方那周确实有事情，回老家了”    
+4. **发言者 1**（回复第 1 条）：Thank you 发言者 2 &amp; 发言者 3 \!\!  
      
-   到这一步基本就能推测出后面了。 基本上都是常见的套路。 我只想问，吃饭 AA 了没？ 哈哈
+   I hope some day to share your sentiments\! :wink:
 
-10. **发言者 10**：不管是啥方式，其实见面的一两分钟就知道是否合适了
+5. **发言者 4**（回复第 1 条）：He’s so sweet\! I hope you are able to see his cuteness soon\! Maybe he needs an accessory for you to find love?
 
-11. **发言者 11**：饭钱 AA 要回来！！！！
+6. **发言者 1**（回复第 1 条）：Thanks 发言者 4 \!\!  
+     
+   It usually just takes time. :wink:
+
+7. **发言者 5**（回复第 5 条）：\[图片省略\] 发言者 4:  
+     
+   Maybe he needs an accessory for you to find love?  
+     
+   Maybe a long, skinny, wrapped present, rather than a tiny gun?  
+     
+   My brain is insisting l say ”He looks like a deranged Easter Bunny.”. \(But in the best way.\).  
+     
+   And ”Oh boy, a zeppelin\!”
+
+8. **发言者 1**（回复第 7 条）：“you’ll shoot your eye out\!\!”  :smiley:
+
+9. **发言者 6**（回复第 1 条）：The little bunny slippers are indeed a great addition\!
+
+10. **发言者 1**（回复第 1 条）：Thank you 发言者 5 &amp; 发言者 6 \!\! :smiley:
+
+11. **发言者 7**（回复第 1 条）：He’s so cute :slight\_smile:
 
 ### 讨论 43
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Modeling and rigging needed  
+1. **发言者 1**：Documentation for Raw Therapee  
      
-   hello im making a Roblox game called Facility after hours and its a horror asym game  
-     
-   i really would like help with modeling and rigging and this project could be fun\!
+   I’m having trouble finding documentation for Raw Therapee. I go to the Rawpedia page and it only has an index page with nothing there.
+
+2. **发言者 2**（回复第 1 条）：\[链接隐去\]
 
 ### 讨论 44
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：FUGLOY FINGERLESS MITTENS - INCREASES  
+1. **发言者 1**：Artwork - hello  
      
-   Hi, just wanted to check that I am thinking correctly: am I right in thinking, that to do my 7 increases every other row, I increase the yo’s. Eg. for round6  
+   \[图片省略\]1.1. hello551×600 154 KB  
      
-   \[图片省略\]IMG\_84471678×1576 537 KB  
-     
-   , it should be ‘k1, yo, p5, yo, k1’ ..p25
-
-2. **发言者 2**（回复第 1 条）：Yes, that’s it. The increases are every other round. The increases are forming the thumb gusset as the sts between the yarn overs increase by 2sts each time.  
-     
-   \[链接隐去\]
-
-3. **发言者 1**（回复第 2 条）：Many many thanks\! So grateful
+   :grapes:
 
 ### 讨论 45
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：某社区: Online Protractor
+1. **发言者 1**：Audioquest Rocket 44  
+     
+   Has anybody experience with these speaker cables? I own now Naims own NAC A5 cables. Is the Audioquest an improvement?  
+     
+   My main set Naim Supernait 3, Naim NDX 2, Audioquest Niagara 3000 and Sonus Faber Olympica Nova 2.
+
+2. **发言者 1**（引用未收录发言）：Thank you for the replie\! How is the bass? Is it tight or muddy? And are the hights soft?
+
+3. **发言者 2**（引用未收录发言）：Cannot comment on this technical aspect. The dealer who sold the Rocket 44 to me also sold me SN3, was a very experienced Naim dealer and said there is no compatibility issue. My knowledge ends there.
+
+4. **发言者 2**（回复第 2 条）：It is almost 3 years ago, so my memory of the Rocket 44 is not very accurate. If I remember correctly the bass was promninent but also slightly muddy and not very well defined.  The Rocket really shined in the midrange.
 
 ### 讨论 46
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Coordinating Star Bag and Tablet Cover  
+1. **发言者 1**：My charecter just gets "stuck" to my enemys when i walk into them bottom up. but only from below  
      
-   \[图片省略\]10000281851920×2550 1.41 MB  
+   Godot Version  
+   4.7  
      
-   \[图片省略\]10000281641920×2410 567 KB  
+   Question  
+   \[图片省略\]image1916×752 147 KB  
      
-   A few weeks ago, I stumbled across a star shaped tote bag pattern on Etsy, saved it for later, and then completely forgot about it. A random 某社区 video popped up, someone making the same bag from the same pattern\! It was not difficult, but it was a lot of ironing, and it’s still a little wrinkled from turning it inside out. The pattern provided some smaller stars for decoration, but they were so small\! I made my own and stuffed it with scraps, and I already had the chain/ring. I’m definitely going to make the larger size next.  
+   so when I walk into my enemys from the bottom side to the top, my charecter just gets stuck to them??? And the only way to be let free is by walking into an object on the map like a rack or tree that has a collision to seperate the enemy and player. I really dont know what could be causeing this. I don’t think it’s somthing to do with the code, but if you want to check any of my code. ask and ill provide it to you as a reply.
+
+2. **发言者 1**（回复第 1 条）：\[图片省略\]image136×192 392 Bytes
+
+3. **发言者 2**（回复第 1 条）：From the picture, is this a topdown game?  
      
-   \[图片省略\]10000281801920×2550 1.85 MB  
-     
-   \[图片省略\]10000282071920×2550 1.88 MB  
-     
-   I really liked the fabric I used on the star, and I needed something to keep my tablet in. I was amazed, my machine went through two layers of batting, the lining, outer fabric, and the lace\! I wanted to add a snap, but my snap pliers went missing. I used bias tape to tie the cover shut instead, and I think I like it better. It fits in the star bag with room to spare\!
+   do both the player and the enemy have their motion\_mode set to Grounded? can you try changing both their motion\_mode to Floating to see if they still stick to each other.
 
-2. **发言者 2**（回复第 1 条）：Cute\! That star back could be very versatile for gifting, too\!
-
-3. **发言者 1**（回复第 2 条）：Thanks\! Gifting one is a great idea\! :pink\_heart:
-
-4. **发言者 2**（回复第 3 条）：They’d be great gift bags\!
-
-5. **发言者 3**（回复第 1 条）：What an adorable tote and tablet bag\!
-
-6. **发言者 1**（回复第 5 条）：Thanks\!
-
-7. **发言者 4**（回复第 1 条）：Very nice, blue is my favorite color. Love the colorful charm.
-
-8. **发言者 1**（回复第 7 条）：Thanks\! I’ve seen a bunch of bag charms like that lately on social media, and even with adding the eyelet, it was easier than I thought.
-
-9. **发言者 4**（回复第 8 条）：I’ve seen them too. I need to look into make me some for my bookbags
-
-10. **发言者 3**（回复第 1 条）：:maple\_leaf: :fallen\_leaf: :maple\_leaf: Congratulations\! Your Coordinating Star Bag and Tablet Cover are a Featured Project this week\! :maple\_leaf: :fallen\_leaf: :maple\_leaf:
-
-11. **发言者 1**（回复第 10 条）：Thanks\! :pink\_heart:
+4. **发言者 1**（回复第 3 条）：Ill give that a try thank you.
 
 ### 讨论 47
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Help fix text error  
+1. **发言者 1**：Do. \(19.11.\) Adventure Abend  
      
-   Godot Version  
-   4.5  
+   Moin,  
      
-   Question  
-   how to solve this text error  
+   am Donnerstag Abend ermitteln wieder vier Bohnen in einem Kriminalfall\!  
      
-   \[图片省略\]
-
-2. **发言者 1**（回复第 1 条）：it says “expected closing “\)” after call arguments”
-
-3. **发言者 2**（回复第 1 条）：You are missing a ‘\+’  
+   Teilnehmende: Sam, Johanna, Florentin und Andreas  
      
-   %UpgradeClickButton.text = \(str\(int\(hoses\)\)\+ " garden hoses 💸 " \+ str\(int\(click\_cost\)\)\)
+   Start: 20:00 Uhr  
+     
+   Spiel: Hidden Games: Königsmord  
+     
+   Setting: Ein Fest auf einem alten Landsitz der Familie König endet mit einem Mord.  
+     
+   \[图片省略\]Screenshot 2026-11-16 \[数字标识隐去\]×706 39.9 KB
 
 ### 讨论 48
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Fr. \(04.12.\) Kneipenquiz  
-     
-   Moin,  
-     
-   der Dezember startet mit einem Kracher am Freitag:  
-     
-   Das Kneipenquiz kommt mit einer neuen Ausgabe ab 20 Uhr\!  
-     
-   Andreas und Johanna führen durch den Abend und müssen sich durch die „Halbe Punkt“-Chöre durchsetzen.  
-     
-                 
-     
-   \[图片省略\]Screenshot 2026-11-13 1832221920×1342 175 KB
+1. **发言者 1**：\[图片省略\]
 
-2. **发言者 2**（回复第 1 条）：Viertel Punkte…\!\!\! Buuuuh…  2 3/17 Punkte… Yeeeeah
+2. **发言者 2**：有没有可能，牛已经变成熊了
+
+3. **发言者 3**：难道不是股灾了？科技跌了 60-70%了
+
+4. **发言者 4**：老老实实上班赚钱一定很枯燥吧
+
+5. **发言者 5**：第二轮主跌浪才刚刚完成，装睡有瘾，那就继续装吧。
+
+6. **发言者 6**：已经回到 24 年 11 月份的位置了，相当于两年，没有任何变化。确实是诈骗市场无疑
+
+7. **发言者 7**：你要知道它什么点涨上去的就明白只是正常波动，还在 3600 点呢，都没到 2600 点。
 
 <!-- samples:end -->
 
