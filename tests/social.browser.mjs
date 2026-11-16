@@ -305,6 +305,7 @@ try {
   await checkPlatformDates('thread');
   check(await page.locator(`#post-${nestedReply.id} .reply-context`).getAttribute('href') === `#/post/${nestedReply.replyTo}`, 'nested reply links its immediate parent');
   await visit(`#/post/${nestedReply.id}`, '讨论串');
+  await page.locator(`#post-${nestedReply.id}.is-target`).waitFor();
   check(await page.locator(`#post-${nestedReply.id}`).evaluate(element => element.classList.contains('is-target')), 'reply permalink selects the reply');
   check(await page.evaluate(() => window.scrollY === 0), 'reply anchors do not move the outer document');
   await visit(`#/user/${profileUser.id}`, '/user');
