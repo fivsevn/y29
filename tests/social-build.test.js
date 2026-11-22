@@ -68,7 +68,7 @@ test('built site preserves current entrypoints and publishes only explicit socia
   const feed = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed.json'), 'utf8'));
   const index = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed-index.json'), 'utf8'));
   const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'feed-store.js', 'data/feed.json', 'data/feed-index.json', ...index.parts.map(part => part.src), 'assets/icon.svg', 'assets/verification-lucifer.webp', `${mediaDirectory}/LICENSE.txt`,
-    'assets/brand/neutral-head-16.png', 'assets/brand/neutral-head-32.png', 'assets/brand/neutral-head-64.png',
+    'favicon.ico', 'assets/brand/neutral-head-16.png', 'assets/brand/neutral-head-32.png', 'assets/brand/neutral-head-64.png',
     'assets/brand/neutral-touch-180.png', 'assets/brand/neutral-full-256.png',
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src)),
     ...Object.values(feed.thumbnails ?? {}).map(image => image.src),
@@ -82,6 +82,18 @@ test('built site preserves current entrypoints and publishes only explicit socia
     assert.equal(await readFile(join(directory, 'dist/lucifer0', path), 'utf8'), source, 'published media retains its accompanying license');
   }
   assert.deepEqual(published, [...expected].sort());
+  const favicon = await readFile(join(directory, 'dist/lucifer0/favicon.ico'));
+  assert.equal(favicon.readUInt16LE(2), 1);
+  assert.equal(favicon.readUInt16LE(4), 3);
+  for (const [index, size] of [16, 32, 64].entries()) {
+    const entry = 6 + index * 16;
+    assert.equal(favicon[entry], size);
+    assert.equal(favicon[entry + 1], size);
+    const offset = favicon.readUInt32LE(entry + 12);
+    const length = favicon.readUInt32LE(entry + 8);
+    const portrait = await readFile(join(directory, 'dist/lucifer0/assets/brand', `neutral-head-${size}.png`));
+    assert.deepEqual(favicon.subarray(offset, offset + length), portrait, `the ${size}px tab icon uses the cropped head`);
+  }
   assert.ok(!published.some(path => /private|not-referenced|unused|registry|profile-seeds|manage|tools|docs|\.md$/.test(path)));
   assert.equal(await readFile(join(directory, 'dist/lucifer0', mediaDirectory, 'LICENSE.txt'), 'utf8'), 'Google Noto Emoji license fixture');
   assert.deepEqual(await readFile(join(directory, 'dist/lucifer0', emote.src)), emoteBytes, 'declared shared emotes are published without being copied into posts');

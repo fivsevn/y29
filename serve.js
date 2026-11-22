@@ -11,7 +11,7 @@ const types = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.png': 'image/png',
-  '.webp': 'image/webp', '.jpg': 'image/jpeg'
+  '.webp': 'image/webp', '.jpg': 'image/jpeg', '.ico': 'image/x-icon'
 };
 export function createPreviewServer({ root = resolve(process.env.Y29_PREVIEW_DIR || process.cwd()) } = {}) {
   root = resolve(root);
