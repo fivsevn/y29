@@ -5454,9 +5454,365 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-1d3d3bf4d18ba70b",
+      "handle": "guest_2d1213a116890fb27499",
+      "name": "5278R.",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-01b980f3ddfb530e",
+      "handle": "guest_4a232700b77faa08c486",
+      "name": "东东_568",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bc6271f5232773c7",
+      "handle": "guest_bc0c708e296a16dd3867",
+      "name": "648路人甲",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-94b7ba99b28042a5",
+      "handle": "guest_99ce39acd3937e9bb509",
+      "name": "5535普通人",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f0e8ea92a6a63ca1",
+      "handle": "guest_a37d6610b21f354027b1",
+      "name": "nana6_1748",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-21d3d996f5dc2f85",
+      "handle": "guest_0d0d7df18bf1e89451f3",
+      "name": "kiwi8514",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-038291daf272cc22",
+      "handle": "guest_02cb1ad8384a6f596ad1",
+      "name": "70乌米",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-39cb4bf9de1afbd3",
+      "handle": "guest_19793a171d0215fb1122",
+      "name": "咸鱼5006",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-249b9593229a7e48",
+      "handle": "guest_1798591d7013ac60c287",
+      "name": "AB12_676",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9aa181e519599a1c",
+      "handle": "guest_094af22cfe89e8a14729",
+      "name": "Mio3907",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7280566790c0a773",
+      "handle": "guest_c837249d191f5d04b1a5",
+      "name": "2914米粒",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1f633faa8f034ad0",
+      "handle": "guest_58cf8eccb6b3c44e7d43",
+      "name": "Ryo644",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261122160305-d292e82d-store",
+      "author": "guest-01b980f3ddfb530e",
+      "createdAt": "2026-11-22T15:06:36.084Z",
+      "replyTo": "l0-20261122160305-d292e82d-28b4b9570255",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "东东_568"
+      },
+      "text": "便宜那么多，我先想到的是会不会快过期了。再便宜我都要疑心里面装的到底是什么。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-28b4b9570255",
+      "author": "guest-1d3d3bf4d18ba70b",
+      "createdAt": "2026-11-22T13:42:17.487Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "5278R."
+      },
+      "text": "同一瓶保健食品，一家卖两百出头，一家快四百。我本来就想看看哪家便宜，搜完反而多了一堆“黑名单”，说谁进了名单的都有，问名单哪儿来的又没人说。\n\n零友有在非授权的店买过的吗？想听听真买过的人怎么说。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-receipt-b",
+      "author": "guest-94b7ba99b28042a5",
+      "createdAt": "2026-11-22T03:59:01.899Z",
+      "replyTo": "l0-20261122160305-d292e82d-receipt-a",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "5535普通人"
+      },
+      "text": "对。我搜型号还先给我找出来一张当时比价的截图，真要找的没影。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-receipt-a",
+      "author": "visitor-sigma",
+      "createdAt": "2026-11-22T03:57:51.899Z",
+      "replyTo": "l0-20261122160305-d292e82d-5d1195beb524",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "text": "我拍了。问题是我上次翻了半天相册，搜“小票”，先给我出来一堆演出票根……"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-pit",
+      "author": "guest-1f633faa8f034ad0",
+      "createdAt": "2026-11-22T01:22:29.788Z",
+      "replyTo": "l0-20261122160305-d292e82d-c51ff1556385",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Ryo644"
+      },
+      "text": "我会标 firepit=yes。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-c51ff1556385",
+      "author": "alan",
+      "createdAt": "2026-11-22T00:54:26.788Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261122160305-d292e82d-c51ff1556385/media/shelter-firepit.webp",
+          "alt": "木棚下的方形石砌火塘里留有冷灰，半边搭着烤网，后面是木长凳。",
+          "kind": "image"
+        }
+      ],
+      "text": "画地图碰到这么个野餐棚。火塘就在顶棚底下，还架了烤网。我看附近有的把 picnic_shelter 和 leisure=firepit 都标在同一个点上。给棚子加个 firepit=yes 是不是就够了？先问问，图还没动。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-receipt-c",
+      "author": "guest-f0e8ea92a6a63ca1",
+      "createdAt": "2026-11-21T23:28:38.899Z",
+      "replyTo": "l0-20261122160305-d292e82d-5d1195beb524",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "nana6_1748"
+      },
+      "text": "都淡了才想起来复印，复印机还能帮你猜型号啊。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-5d1195beb524",
+      "author": "guest-94b7ba99b28042a5",
+      "createdAt": "2026-11-21T23:15:49.899Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "5535普通人"
+      },
+      "text": "烦死，才半年，小票上偏偏是型号那一行淡得看不清了。你们有保修的东西都复印一份吗？还是拍下来就收了？"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-meal-balls",
+      "author": "guest-39cb4bf9de1afbd3",
+      "createdAt": "2026-11-21T22:07:14.725Z",
+      "replyTo": "l0-20261122160305-d292e82d-ae9e667b88b2",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "咸鱼5006"
+      },
+      "text": "附近牛肉店买的牛肉丸，配一包酸辣汤料。冰箱还有菜就烫一把，饿了往里下面条，我能连吃几顿。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-meal-cold",
+      "author": "guest-249b9593229a7e48",
+      "createdAt": "2026-11-21T22:06:50.725Z",
+      "replyTo": "l0-20261122160305-d292e82d-ae9e667b88b2",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "AB12_676"
+      },
+      "text": "我都去附近店里买。网上寄两三天，我一路惦记它化没化，烦。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-ae9e667b88b2",
+      "author": "guest-038291daf272cc22",
+      "createdAt": "2026-11-21T22:04:44.725Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "70乌米"
+      },
+      "text": "来报几个你们自己会回购的预制菜吧，在家弄起来省事的那种！"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-77caeb40681e",
+      "author": "guest-21d3d996f5dc2f85",
+      "createdAt": "2026-11-21T19:30:20.744Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "kiwi8514"
+      },
+      "text": "七十针起的，现在数了两遍，九十六针，数没错。卡住的是这件 Wendy 毛衣的马鞍肩。说明前面已经写“圈”了，后面又叫我在一行的末尾加领口的针。要是已经圈起来了，哪来这个行末？\n\n织过好几件毛衣，头一次织这种肩。原以为这件很快的，现在连要不要翻面都想不明白。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-invert-test",
+      "author": "guest-7280566790c0a773",
+      "createdAt": "2026-11-21T19:05:43.346Z",
+      "replyTo": "l0-20261122160305-d292e82d-b79f897374f3",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "2914米粒"
+      },
+      "text": "我是真下了。打开以后摸半天，转出来的颜色自己都不想看。你能发一张你转的吗？想看看差在哪。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-b79f897374f3",
+      "author": "guest-9aa181e519599a1c",
+      "createdAt": "2026-11-21T18:50:48.346Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Mio3907"
+      },
+      "text": "还有谁拿 OpenEnlarge 转底片？我是前几天碰巧翻到的，试了几卷，这两天要转片就直接开它了。奇怪，这种小工具以前总有人拿出来聊。别又是一听说写的时候用了 AI，就连试都懒得试。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-album",
+      "author": "guest-bc6271f5232773c7",
+      "createdAt": "2026-11-21T17:35:42.032Z",
+      "replyTo": "l0-20261122160305-d292e82d-51eca0fd5999",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "648路人甲"
+      },
+      "text": "头一次听说这个。原来还会有人专买块屏就为了看那几个像素点，挺好玩的。"
+    },
+    {
+      "id": "l0-20261122160305-d292e82d-51eca0fd5999",
+      "author": "visitor-psi",
+      "createdAt": "2026-11-21T17:09:56.032Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "那个跟着歌换唱片封面的小方屏，叫 Tuneshine。巴掌大，有张脸在上面还蛮好看，一换到人多的封面就糊成一锅粥。我拿远了一点看，还是一锅粥。\n\n有人一直摆着用吗？我还在想退不退。"
+    },
     {
       "id": "l0-20261115200204-662dc2fe-original-reply-27",
       "author": "nightbus3",
@@ -15225,6 +15581,11 @@
     }
   ],
   "thumbnails": {
+    "posts/2026/11/l0-20261122160305-d292e82d-c51ff1556385/media/shelter-firepit.webp": {
+      "src": "data/thumbnails/1333b6b6ce1c026dbaa3ee446518c9f3c80d73af3c152555bccb834b46664b51.webp",
+      "width": 320,
+      "height": 240
+    },
     "posts/2026/11/l0-20261115200204-662dc2fe-df9152b05e9c/media/magnetic-glass-cleaner-sketch.webp": {
       "src": "data/thumbnails/b84e62ee8d23bd818c2922c295b42c4f1a3f84d16c68da396935a69145ddea46.webp",
       "width": 320,
