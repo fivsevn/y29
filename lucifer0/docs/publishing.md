@@ -137,7 +137,7 @@ node lucifer0/tools/update.js brief --post 本次操作ID-01 --view writer --wor
 
 `--view writer` 只输出本条 `draft` 与 `writer`，完整规则和整轮比较从 `reading.md`、`suggest` 读取，不逐条重复输出。需要核对策划信息时省略该参数，取得完整 `editor`；时间不可用时仍返回原因，`writer: null` 的发言跳过或后续接续。两种输出使用同一抽签与草稿，不影响结果。
 
-案例主帖使用准备结果中固定的 `caseAdaptation.postIds` 作为 `--post`，读取案例全文。按原素材的篇幅、媒体与实际采用的互动形成草稿，调整身份、公开事实与本站时间线，将源回复对应到真正站内父帖。两路草稿写入同一份 `posts`，`rootOrder` 供最终按时间混排参考。
+案例主帖使用准备结果中固定的 `caseAdaptation.postIds` 作为 `--post`，读取案例全文。按实际采用的内容、媒体和互动形成草稿，依[现实素材改编](writing.md#现实素材改编)取舍来源论坛的发帖格式，调整身份、公开事实与本站时间线，将源回复对应到真正站内父帖。两路草稿写入同一份 `posts`，`rootOrder` 供最终按时间混排参考。
 
 为原创根串取得一条新回复：
 
@@ -173,7 +173,7 @@ node lucifer0/tools/update.js checkpoint --stage edited --work /outside/work
 
 `checkpoint` 将当前全部 `posts` 的快照、来源及计划摘要保存在外部工作目录的 `draft-history-操作ID.json`，不进入公开信息流。同阶段同内容重复执行不会增加重复快照，后续修订保留新快照，初稿不随终稿被覆盖。把修改依据写入本轮具体审读说明，保存 `reviews` 审读项后再获取下一条材料。完整 `reading.md` 供策划者核对资料。命令中的 ID 替换为实际当前操作编号，回复目标使用草稿或归档中已有的帖号。
 
-整轮 `suggest` 的 `recentUpdates` 提供最近几轮完整发言与媒体，`currentPosts` 提供本轮草稿，策划者按[审读方法](writing.md#审读)检查重复；需要逐条诊断时也可取得完整 `editor`。单条写作者继续使用独立 `writer`，避免从整批稿件学到同一种口吻。
+整轮 `suggest` 的 `recentUpdates` 提供最近几轮完整发言与媒体，`currentPosts` 提供本轮草稿。`caseNeighbors` 按首页从上到下列出涉及本轮改编主帖的相邻帖号对，包含交界处的旧帖。策划者按[审读方法](writing.md#审读)连读正文，查看两篇是否沿用了同一套发帖格式。逐条诊断也可读取完整 `editor`。单条写作者继续使用独立 `writer`，只接收与自己这篇有关的改稿意见。
 
 ## 生成并归档配图
 

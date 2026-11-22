@@ -2009,6 +2009,25 @@ const caseRoots = (f, prepared, originalCount = prepared.budget) => {
   const ids = new Set(prepared.caseAdaptation.postIds), originals = prepared.caseAdaptation.rootOrder.filter(id => !ids.has(id)).slice(0, originalCount);
   return prepared.caseAdaptation.rootOrder.filter(id => ids.has(id) || originals.includes(id)).map((id, index) => post(id, 'guest-adapted-' + index, f.now - 20000 + index * 1000));
 };
+
+test('case review pairs drafted case roots with their actual home neighbours across the archive boundary', async t => {
+  const f = await caseFixture(t);
+  const prepared = await prepareUpdate({ ...f.options, intakeReceipt: f.intakeReceipt });
+  assert.deepEqual((await suggestUpdatePresentation(f.options)).caseNeighbors, []);
+  const [first, second] = prepared.caseAdaptation.postIds.slice(0, 2).sort();
+  const recent = post('recent-original', 'guest-one', f.now - 100);
+  const a = post(first, 'guest-two', f.now - 1000), b = post(second, 'guest-three', f.now - 1000);
+  const reply = post('intervening-reply', 'guest-four', f.now - 300, a.id);
+  const newest = post('newest-original', 'guest-five', f.now);
+  await draft(prepared, f.now, [b, newest, a, reply, recent]);
+  assert.deepEqual((await suggestUpdatePresentation(f.options)).caseNeighbors, [
+    [recent.id, a.id], [a.id, b.id], [b.id, 'history-entry']
+  ]);
+  const { writer } = await briefUpdatePost({ ...f.options, postId: first });
+  assert.equal(writer.caseNeighbors, undefined);
+  assert.match(writer.caseAdaptation.instruction, /预先致谢/);
+});
+
 async function recentCaseHistory(f) {
   const historical = post('history-entry', 'person-0', f.now - 1000);
   await rm(join(f.root, 'posts'), { recursive: true });
