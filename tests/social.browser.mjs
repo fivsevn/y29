@@ -111,6 +111,10 @@ try {
   check(JSON.stringify(await page.locator('.main-nav a').allTextContents()) === JSON.stringify(['/world', '/following', '0/about']), 'exactly three bottom destinations');
   check(await page.locator('.tabs,.welcome-note,.edition-pill').count() === 0, 'redundant tabs and welcome card are removed');
   check((await page.locator('.topbar .brand').innerText()).trim() === '/lucifer0', 'header keeps the app path');
+  check(await page.locator('.topbar .brand img').evaluate(async image => {
+    await image.decode();
+    return image.currentSrc.endsWith('/neutral-head-64.png') && image.naturalWidth === 64;
+  }), 'the masthead uses the cropped head icon');
   check(await page.locator('.topbar #login-button').textContent() === 'log in', 'header has the invitation-only log in button');
   const loginRequests = [], loginURL = page.url();
   const observeLoginRequest = request => { if (['fetch', 'xhr', 'document'].includes(request.resourceType())) loginRequests.push(request.url()); };
@@ -376,6 +380,10 @@ try {
   await screenshot('phone-profile.png');
   await visit('#/about', '/about');
   check(await page.locator('.about-brand').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
+  check(await page.locator('.about-brand img').evaluate(async image => {
+    await image.decode();
+    return image.currentSrc === document.querySelector('link[rel="icon"][sizes="256x256"]').href && image.naturalWidth === 256;
+  }), 'about displays the same full character offered as the large site icon');
   check(await page.locator('.board-guide').innerText().then(text => text.includes('/guide')), 'about includes the entry guide');
   check(await page.locator('.board-access .guide-heading').innerText().then(text => text.includes('/access') && text.includes('访问权限')), 'about has a separate access section');
   check(await page.locator('.board-access').evaluate(element => element.getBoundingClientRect().top >= document.querySelector('.board-guide').getBoundingClientRect().bottom), 'access sits below the guide');

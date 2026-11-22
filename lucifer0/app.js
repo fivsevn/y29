@@ -281,7 +281,10 @@ function renderSearch(query) {
 function renderAbout() {
   const guide = parseSiteGuide(feed.posts, feed.users);
   return boardbar('/about') + `<div class="about-content">
-    <header class="about-brand"><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2></header>
+    <header class="about-brand">
+      <div><span class="about-wordmark">LUCIFER<br>ZERO<span> / Ω</span></span><p class="company-name">路西法零</p><h2>自由表达的商业承诺</h2></div>
+      <img src="./assets/brand/neutral-full-256.png" width="96" height="96" alt="">
+    </header>
     <section class="board-guide" aria-labelledby="guide-heading">
       <div class="guide-heading"><span>/guide</span><h3 id="guide-heading">${esc(guide?.title || '站务公告')}</h3></div>
       ${guide ? `<p class="guide-copy">${esc(guide.intro)}</p><ol class="board-rules">${guide.rules.map(rule => `<li data-number="${esc(rule.number)}"><p>${esc(rule.text)}</p></li>`).join('')}</ol>${guide.closing ? `<p class="guide-copy guide-closing">${esc(guide.closing)}</p>` : ''}` : ''}
