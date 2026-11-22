@@ -23,7 +23,7 @@ const runtimeFiles = [
   'lucifer0/data/feed.json', 'lucifer0/data/feed-index.json', ...socialIndex.parts.map(part => 'lucifer0/' + part.src)
 ];
 const socialAssets = new Set([
-  'assets/icon.svg', 'assets/verification-lucifer.webp', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
+  'favicon.ico', 'assets/icon.svg', 'assets/verification-lucifer.webp', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
   'assets/brand/neutral-head-16.png', 'assets/brand/neutral-head-32.png', 'assets/brand/neutral-head-64.png',
   'assets/brand/neutral-touch-180.png', 'assets/brand/neutral-full-256.png',
   'assets/emotes/kaomoji.json',

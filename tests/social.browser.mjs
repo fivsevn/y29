@@ -115,6 +115,13 @@ try {
     await image.decode();
     return image.currentSrc.endsWith('/neutral-head-64.png') && image.naturalWidth === 64;
   }), 'the masthead uses the cropped head icon');
+  const tabIcon = page.locator('head link[rel~="icon"]');
+  check(await tabIcon.count() === 1 && await tabIcon.evaluate(async link => {
+    const image = new Image();
+    image.src = link.href;
+    await image.decode();
+    return new URL(link.href).pathname === '/lucifer0/favicon.ico' && [16, 32, 64].includes(image.naturalWidth);
+  }), 'the tab icon decodes from the forum favicon URL');
   check(await page.locator('.topbar #login-button').textContent() === 'log in', 'header has the invitation-only log in button');
   const loginRequests = [], loginURL = page.url();
   const observeLoginRequest = request => { if (['fetch', 'xhr', 'document'].includes(request.resourceType())) loginRequests.push(request.url()); };
@@ -382,8 +389,9 @@ try {
   check(await page.locator('.about-brand').innerText().then(text => text.includes('自由表达的商业承诺')), 'corporate slogan is retained in about');
   check(await page.locator('.about-brand img').evaluate(async image => {
     await image.decode();
-    return image.currentSrc === document.querySelector('link[rel="icon"][sizes="256x256"]').href && image.naturalWidth === 256;
-  }), 'about displays the same full character offered as the large site icon');
+    const preview = document.querySelector('meta[property="og:image"]').content;
+    return new URL(image.currentSrc).pathname === new URL(preview).pathname && image.naturalWidth === 256;
+  }), 'about and link previews use the full character');
   check(await page.locator('.board-guide').innerText().then(text => text.includes('/guide')), 'about includes the entry guide');
   check(await page.locator('.board-access .guide-heading').innerText().then(text => text.includes('/access') && text.includes('访问权限')), 'about has a separate access section');
   check(await page.locator('.board-access').evaluate(element => element.getBoundingClientRect().top >= document.querySelector('.board-guide').getBoundingClientRect().bottom), 'access sits below the guide');

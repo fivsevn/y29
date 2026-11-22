@@ -72,7 +72,7 @@ test('the deployed-file verifier checks the loader, current index and every refe
   const preview = thumbnail('b').slice('lucifer0/'.length);
   const feed = { posts: [{ replyTo: null, media: [{ src: image }] }], thumbnails: { [image]: { src: preview } } };
   const index = { version: 1, parts: [{ src: shard }] };
-  const expected = ['index.html', 'app.js', 'core.js', 'feed-store.js', 'style.css', 'data/feed.json', 'data/feed-index.json', shard, image, preview];
+  const expected = ['index.html', 'favicon.ico', 'app.js', 'core.js', 'feed-store.js', 'style.css', 'data/feed.json', 'data/feed-index.json', shard, image, preview];
   const bytes = new Map(expected.map(path => [path, Buffer.from(path === 'data/feed.json' ? JSON.stringify(feed) : path === 'data/feed-index.json' ? JSON.stringify(index) : 'Content of ' + path)]));
   const fetched = [];
   const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
