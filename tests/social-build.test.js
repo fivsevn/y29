@@ -69,6 +69,7 @@ test('built site preserves current entrypoints and publishes only explicit socia
   const index = JSON.parse(await readFile(join(directory, 'dist/lucifer0/data/feed-index.json'), 'utf8'));
   const expected = new Set(['index.html', 'style.css', 'app.js', 'core.js', 'feed-store.js', 'data/feed.json', 'data/feed-index.json', ...index.parts.map(part => part.src), 'assets/icon.svg', 'assets/verification-lucifer.webp', `${mediaDirectory}/LICENSE.txt`,
     ...feed.users.map(user => user.avatar).filter(Boolean), ...feed.posts.flatMap(post => post.media.map(image => image.src)),
+    ...Object.values(feed.thumbnails ?? {}).map(image => image.src),
     'assets/emotes/kaomoji.json', siteEmoteManifestPath, ...emoteCatalog.items.map(item => item.src)]);
   const mediaLicenses = new Set(feed.posts.flatMap(post => post.media.map(image => image.src.slice(0, image.src.lastIndexOf('/')) + '/LICENSE.txt')));
   for (const path of mediaLicenses) {

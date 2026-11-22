@@ -1,5 +1,5 @@
 import { escapeHTML as esc, readState, saveState, toggle, selectPosts, createThreadIndex, dateLabel, boardID, postNumber, userNameColor, parseSiteGuide, WELCOME_POST_ID, postText, isEmoteMedia } from './core.js?v=20261113-feed-pages';
-import { createLiveFeedStore, FEED_PAGE_SIZE } from './feed-store.js?v=20261113-feed-recovery';
+import { createLiveFeedStore, FEED_PAGE_SIZE } from './feed-store.js?v=20261122-thumbnails';
 
 const icons = {
   world: '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
@@ -207,8 +207,17 @@ function mediaMarkup(image, { thumbnail = false } = {}) {
   if (isEmoteMedia(image)) {
     return `<img class="post-emote" src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="160" height="160">`;
   }
-  return `<a class="post-image${image.fit === 'contain' ? ' is-contained' : ''}${thumbnail ? ' is-thumbnail' : ''}" href="./${esc(image.src)}" aria-haspopup="dialog" aria-label="查看原图：${esc(image.alt)}"><img src="./${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" width="840" height="480"><span>查看原图 ↗</span></a>`;
+  const preview = thumbnail && feed.thumbnails?.[image.src];
+  const dimensions = preview ? `width="${esc(preview.width)}" height="${esc(preview.height)}" data-thumbnail` : 'width="840" height="480"';
+  return `<a class="post-image${image.fit === 'contain' ? ' is-contained' : ''}${thumbnail ? ' is-thumbnail' : ''}" href="./${esc(image.src)}" aria-haspopup="dialog" aria-label="查看原图：${esc(image.alt)}"><img src="./${esc(preview?.src || image.src)}" alt="${esc(image.alt)}" loading="lazy" ${dimensions}><span>查看原图 ↗</span></a>`;
 }
+// An open tab may still refer to a preview retired by a newer publication.
+document.addEventListener('error', event => {
+  const image = event.target;
+  if (!image.matches?.('.post-image img[data-thumbnail]')) return;
+  image.removeAttribute('data-thumbnail');
+  image.src = image.closest('a').href;
+}, true);
 function replyPreview(post) {
   const { rootId, replies, collapsed } = threadIndex.threadReplyPreview(post.id);
   if (!replies.length) return '';

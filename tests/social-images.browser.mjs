@@ -25,14 +25,27 @@ const check = (value, message) => { assert.ok(value, message); checks++; };
 try {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   page.on('pageerror', error => errors.push(error.message));
+  const requestedImages = new Set();
+  page.on('request', request => { if (request.resourceType() === 'image') requestedImages.add(request.url()); });
   await page.goto(base);
   await page.locator('article.post').first().waitFor();
   const feed = await (await page.request.get(new URL('data/feed.json', base).href)).json();
   const isEmote = image => image.src.startsWith('assets/emotes/l0/');
-  const root = feed.posts.find(post => !post.replyTo && post.media.length && !isEmote(post.media[0]));
+  const root = feed.posts.find(post => !post.replyTo && feed.thumbnails?.[post.media[0]?.src]);
   const emoteRoot = feed.posts.find(post => !post.replyTo && post.media.some(isEmote));
   const emoteReply = feed.posts.find(post => post.replyTo && post.media.some(isEmote));
   assert.ok(root && emoteRoot && emoteReply, 'the feed contains an ordinary photo and emotes in main posts and replies');
+  const preview = feed.thumbnails[root.media[0].src];
+  const originalURL = new URL(root.media[0].src, base).href;
+  const homePhoto = page.locator(`#post-${root.id} .post-image img`).first();
+  await homePhoto.scrollIntoViewIfNeeded();
+  await homePhoto.evaluate(image => image.decode());
+  check(await homePhoto.getAttribute('src') === './' + preview.src, 'the real home feed resolves the thumbnail from its own history part');
+  check(requestedImages.has(new URL(preview.src, base).href) && !requestedImages.has(originalURL), 'scrolling the feed downloads only the preview of this photo');
+  await homePhoto.click();
+  await page.locator('#image-frame img').evaluate(image => image.decode());
+  check(requestedImages.has(originalURL), 'opening the image requests the original');
+  await page.locator('#image-close').click();
   // The live archive may contain only emote replies. Keep photo-reply checks
   // independent by adding a synthetic reply to the intercepted feed only.
   const reply = { ...structuredClone(root), id: 'image-viewer-fixture-reply', replyTo: root.id,
@@ -91,6 +104,7 @@ try {
     check(page.url() === url, 'opening the image preserves the post route');
     check(await page.locator('main').evaluate(main => main.scrollTop) === scroll, 'opening the image preserves reading position');
     check(await page.locator('#image-frame img').getAttribute('alt') === post.media[0].alt, 'the viewer retains its accessible image description');
+    check(await page.locator('#image-frame img').evaluate(image => image.currentSrc) === new URL(post.media[0].src, base).href, 'the viewer decodes the original URL');
     check(await dialog.locator('figcaption, #image-caption').count() === 0, 'the viewer has no visible image caption');
     check(await page.locator('#image-close').evaluate(button => document.activeElement === button), 'the close button receives focus');
     check(await dialog.locator('a').count() === 0, 'the viewer has no separate file-opening link');
@@ -115,6 +129,7 @@ try {
   const defaultThumbnail = page.locator(`#post-${root.id} .post-image img`).first();
   check(await defaultThumbnail.evaluate(image => image.closest('.post-image').classList.contains('is-thumbnail')), 'home root image uses the thumbnail presentation');
   await readyImage(defaultThumbnail);
+  check(await defaultThumbnail.getAttribute('src') === './' + preview.src, 'the complete feed also resolves the home thumbnail');
   check(await defaultThumbnail.evaluate(image => {
     const box = image.getBoundingClientRect();
     return box.width <= 160 && box.height <= 160 && Math.abs(box.width / box.height - image.naturalWidth / image.naturalHeight) < .01;
@@ -146,6 +161,7 @@ try {
   await visitThread(root);
   const threadPhoto = page.locator(`#post-${root.id} .post-image img`).first();
   await readyImage(threadPhoto);
+  check(await threadPhoto.getAttribute('src') === './' + root.media[0].src, 'the independent discussion opens with a full-size root image');
   check(await threadPhoto.evaluate(image => {
     const box = image.getBoundingClientRect(), content = image.closest('.post-content').getBoundingClientRect();
     return !image.closest('.post-image').classList.contains('is-thumbnail') && box.width > 160 && box.width <= content.width;
@@ -153,6 +169,7 @@ try {
   await visitThread(reply);
   const replyPhoto = page.locator(`#post-${reply.id} .post-image img`).first();
   await readyImage(replyPhoto);
+  check(await replyPhoto.getAttribute('src') === './' + preview.src, 'the discussion reply loads the derivative');
   check(await replyPhoto.evaluate(image => {
     const box = image.getBoundingClientRect();
     return image.closest('.post-image').classList.contains('is-thumbnail') && box.width <= 160 && box.height <= 160 &&
@@ -163,6 +180,14 @@ try {
   await page.locator('#image-close').click();
   await dialog.waitFor({ state: 'hidden' });
   check(await link.evaluate(element => document.activeElement === element), 'reply images return to their thumbnail');
+  await page.route(new URL(preview.src, base).href, route => route.fulfill({ status: 404 }));
+  await page.reload();
+  await replyPhoto.scrollIntoViewIfNeeded();
+  await page.waitForFunction(url => {
+    const image = document.querySelector('#post-image-viewer-fixture-reply .post-image img');
+    return image?.currentSrc === url && image.complete && image.naturalWidth > 0;
+  }, originalURL);
+  await page.unroute(new URL(preview.src, base).href);
   for (const [width, height] of [[320, 568], [844, 390], [1440, 900]]) {
     await page.setViewportSize({ width, height });
     await open(reply);

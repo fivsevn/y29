@@ -8,7 +8,7 @@ import { readUserDocuments, buildUserDirectory, isUserAvatarPath, isUserNameColo
 import { readThreadPackages, writeThreadBatch, isPostMediaPath, threadDirectory } from './thread-packages.js';
 import { validateReplyLottery, validateLottery } from './lottery.js';
 export { validateReplyLottery } from './lottery.js';
-import { preparePostImages, rewritePostImages, normalizeArchivedImages } from './media.js';
+import { preparePostImages, rewritePostImages, normalizeArchivedImages, buildPostThumbnails } from './media.js';
 import { readSiteEmotes, siteEmotePaths } from './site-emotes.js';
 import { validateCasePolicy } from './case-adaptation.js';
 import { partitionFeed } from './feed-parts.js';
@@ -179,14 +179,16 @@ export async function buildFeed(root = socialRoot, { locked = false } = {}) {
     let { feed } = await loadContent(root);
     if (await normalizeArchivedImages(root)) ({ feed } = await loadContent(root));
     const path = join(root, 'data/feed.json');
-    const { index, files } = partitionFeed(feed);
     // Generated views are replaceable, but their directories must never lead
     // outside the project through a symlink, including during stale-part cleanup.
-    for (const directory of [root, join(root, 'data'), join(root, 'data/feed')]) {
+    for (const directory of [root, join(root, 'data'), join(root, 'data/feed'), join(root, 'data/thumbnails')]) {
       if (directory !== root) await mkdir(directory, { recursive: true });
       const stat = await lstat(directory);
       if (!stat.isDirectory() || stat.isSymbolicLink()) fail('Generated feed directories must be regular: ' + directory);
     }
+    const thumbnails = await buildPostThumbnails(root, feed.posts);
+    if (Object.keys(thumbnails).length) feed.thumbnails = thumbnails;
+    const { index, files } = partitionFeed(feed);
     for (const destination of [path, join(root, 'data/feed-index.json'), ...files.map(file => join(root, file.src))]) {
       try {
         const stat = await lstat(destination);
@@ -197,11 +199,12 @@ export async function buildFeed(root = socialRoot, { locked = false } = {}) {
     await Promise.all(files.map(({ src, text }) => writeFile(join(root, src), text)));
     await writeFile(join(root, 'data/feed-index.json'), JSON.stringify(index) + '\n');
     await buildUserDirectory(root);
-    const currentParts = new Set(files.map(file => file.src.slice('data/feed/'.length)));
-    for (const entry of await readdir(join(root, 'data/feed'), { withFileTypes: true })) {
-      if (!/^[a-f0-9]{64}\.json$/.test(entry.name) || currentParts.has(entry.name) || !entry.isFile()) continue;
-      const obsolete = join(root, 'data/feed', entry.name), stat = await lstat(obsolete);
-      if (stat.isFile() && !stat.isSymbolicLink()) await rm(obsolete);
+    const published = new Set([...files, ...Object.values(thumbnails)].map(file => file.src));
+    for (const [directory, namePattern] of [['data/feed', /^[a-f0-9]{64}\.json$/], ['data/thumbnails', /^[a-f0-9]{64}\.webp$/]]) {
+      for (const entry of await readdir(join(root, directory), { withFileTypes: true })) {
+        const src = directory + '/' + entry.name;
+        if (entry.isFile() && namePattern.test(entry.name) && !published.has(src)) await rm(join(root, src));
+      }
     }
     return feed;
   } finally { if (!locked) await rm(lock, { recursive: true, force: true }); }

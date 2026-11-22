@@ -1,6 +1,6 @@
 import { readFile, writeFile, mkdir, lstat, realpath, link, rename, rm, rmdir } from 'node:fs/promises';
 import { join, resolve, relative, isAbsolute } from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { isPostMediaPath, parsePostDocument, readThreadPackages } from './thread-packages.js';
 import { readSiteEmotes, siteEmotePaths } from './site-emotes.js';
 
@@ -60,6 +60,36 @@ async function encodeWebP(bytes, path) {
   // Decode the completed result before any source references can be changed.
   await convert(output).raw().toBuffer();
   return output;
+}
+
+// The original and the encoding recipe together identify an immutable preview.
+// The caller owns the publication lock and has checked the output directory.
+export async function buildPostThumbnails(root, posts) {
+  const thumbnails = {};
+  const sources = new Set(posts.flatMap(post => post.media
+    .filter(image => image.kind !== 'emote' && isPostMediaPath(image.src)).map(image => image.src)));
+  for (const src of sources) {
+    const input = await readFile(await regularFile(root, src));
+    const digest = createHash('sha256').update('webp-320-q78-v1\0').update(input).digest('hex');
+    const preview = `data/thumbnails/${digest}.webp`;
+    const convert = await sharp();
+    let file = await regularFile(root, preview, true);
+    if (!file) {
+      const original = await convert(input).metadata();
+      if (original.pages > 1 || Math.max(original.width, original.height) <= 320) continue;
+      const bytes = await convert(input).rotate()
+        .resize({ width: 320, height: 320, fit: 'inside', withoutEnlargement: true })
+        .webp({ quality: 78, effort: 6 }).toBuffer();
+      if (bytes.length >= input.length) continue;
+      file = join(root, preview);
+      const staged = await stagingFile(root, bytes, 0o644);
+      try { await rename(staged, file); }
+      finally { await rm(staged, { force: true }); await clearStaging(root); }
+    }
+    const { width, height } = await convert(file).metadata();
+    thumbnails[src] = { src: preview, width, height };
+  }
+  return thumbnails;
 }
 
 /** Create verified files first. Callers update references before cleaning originals. */

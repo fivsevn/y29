@@ -48,6 +48,7 @@ test('build converts directly uploaded raster and updates only media metadata; r
   const document = join(f.root, `${threadPath}/index.md`);
   await writeFile(document, renderPostDocument(entry));
   const feed = await buildFeed(f.root), converted = feed.posts[0];
+  assert.equal(feed.thumbnails, undefined, 'small originals are served directly');
   assert.equal(converted.media[0].src, imagePath.replace('.png', '.webp'));
   assert.equal(converted.media[0].fit, 'contain');
   assert.deepEqual({ ...converted, media: entry.media }, entry);
@@ -59,6 +60,42 @@ test('build converts directly uploaded raster and updates only media metadata; r
   assert.deepEqual(await buildFeed(f.root), feed);
   assert.deepEqual(await readFile(join(f.root, converted.media[0].src)), bytes);
   assert.equal(await normalizeArchivedImages(f.root), 0);
+});
+
+test('published photo previews preserve the original, deduplicate equal images and retire replaced previews', async t => {
+  const f = await fixture(t), entry = post(f.now);
+  const pixels = Buffer.alloc(480 * 720 * 3);
+  for (let i = 0; i < pixels.length; i++) pixels[i] = (i * 41 + Math.floor(i / 137)) % 256;
+  const photo = sharp(pixels, { raw: { width: 480, height: 720, channels: 3 } });
+  const original = await photo.clone().webp({ quality: 86 }).toBuffer();
+  const first = imagePath.replace('sample.png', 'first.webp'), second = first.replace('first', 'second');
+  entry.media = [first, second].map(src => ({ src, alt: 'Portrait fixture', kind: 'image' }));
+  await writeFile(join(f.root, first), original);
+  await writeFile(join(f.root, second), original);
+  const document = join(f.root, threadPath, 'index.md');
+  const source = renderPostDocument(entry);
+  await writeFile(document, source);
+  const feed = await buildFeed(f.root), preview = feed.thumbnails[first];
+  assert.deepEqual(feed.posts[0].media, entry.media);
+  assert.deepEqual(preview, feed.thumbnails[second]);
+  assert.match(preview.src, /^data\/thumbnails\/[a-f0-9]{64}\.webp$/);
+  const previewPath = join(f.root, preview.src);
+  const bytes = await readFile(previewPath), metadata = await sharp(bytes).metadata();
+  assert.deepEqual([metadata.format, metadata.width, metadata.height], ['webp', 213, 320]);
+  assert.deepEqual([preview.width, preview.height], [metadata.width, metadata.height]);
+  assert.ok(bytes.length < original.length);
+  assert.deepEqual(await readFile(join(f.root, first)), original);
+  assert.equal(await readFile(document, 'utf8'), source);
+  const index = await readJSON(join(f.root, 'data/feed-index.json'));
+  assert.deepEqual((await readJSON(join(f.root, index.parts[0].src))).thumbnails, feed.thumbnails);
+  const initial = await stat(previewPath);
+  assert.deepEqual((await buildFeed(f.root)).thumbnails, feed.thumbnails);
+  assert.equal((await stat(previewPath)).mtimeMs, initial.mtimeMs);
+  const replacement = await photo.clone().negate().webp({ quality: 86 }).toBuffer();
+  await writeFile(join(f.root, first), replacement);
+  await writeFile(join(f.root, second), replacement);
+  assert.notEqual((await buildFeed(f.root)).thumbnails[first].src, preview.src);
+  await assert.rejects(stat(previewPath), { code: 'ENOENT' });
 });
 
 test('AI import saves WebP in operation, source and feed, shares reply image, and finishes', async t => {

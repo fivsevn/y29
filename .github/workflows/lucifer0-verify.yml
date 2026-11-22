@@ -36,7 +36,8 @@ jobs:
           const expected=JSON.parse(await readFile('lucifer0/data/feed.json','utf8'));
           const index=JSON.parse(await readFile('lucifer0/data/feed-index.json','utf8'));
           const media=[...new Set(expected.posts.flatMap(post=>post.media.map(item=>item.src)))];
-          const files=[...new Set(['index.html','app.js','core.js','feed-store.js','style.css','data/feed.json','data/feed-index.json',...index.parts.map(part=>part.src),...media])];
+          const previews=Object.values(expected.thumbnails ?? {}).map(image=>image.src);
+          const files=[...new Set(['index.html','app.js','core.js','feed-store.js','style.css','data/feed.json','data/feed-index.json',...index.parts.map(part=>part.src),...media,...previews])];
           const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
           async function verify(path){
             const wanted=hash(await readFile('lucifer0/'+path));

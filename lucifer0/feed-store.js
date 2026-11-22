@@ -10,6 +10,7 @@ export function createFeedStore(index, fetchPart) {
   const parts = legacy ? [] : index.parts;
   const byPost = new Map(parts.flatMap(part => part.postIds.map(id => [id, part.src])));
   const loaded = new Map(), pending = new Map();
+  const thumbnails = {};
   let revision = 0;
   const following = new Set(index.users.filter(user => user.inFollowing).map(user => user.id));
   const homeRoots = followingOnly => roots.filter(root => !followingOnly || following.has(root.author));
@@ -30,6 +31,7 @@ export function createFeedStore(index, fetchPart) {
       const expectedIds = new Set(expected.postIds);
       if (data?.version !== 1 || !Array.isArray(data.posts) || data.posts.length !== expected.postIds.length ||
         new Set(data.posts.map(post => post.id)).size !== expected.postIds.length || data.posts.some(post => !expectedIds.has(post.id))) throw new Error('Invalid feed part');
+      Object.assign(thumbnails, data.thumbnails);
       loaded.set(src, data.posts); revision++;
     })().finally(() => pending.delete(src)));
     await pending.get(src);
@@ -37,7 +39,7 @@ export function createFeedStore(index, fetchPart) {
 
   return {
     get revision() { return revision; },
-    get feed() { return legacy ? index : { version: 1, users: index.users, posts: [...loaded.values()].flat() }; },
+    get feed() { return legacy ? index : { version: 1, users: index.users, posts: [...loaded.values()].flat(), thumbnails }; },
     homeRoots,
     routeReady(route, limit = FEED_PAGE_SIZE) { return legacy || routeParts(route, limit).every(src => loaded.has(src)); },
     async ensureRoute(route, limit = FEED_PAGE_SIZE) {
