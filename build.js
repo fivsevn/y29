@@ -24,6 +24,8 @@ const runtimeFiles = [
 ];
 const socialAssets = new Set([
   'assets/icon.svg', 'assets/verification-lucifer.webp', ...socialFeed.users.map(user => user.avatar).filter(Boolean),
+  'assets/brand/neutral-head-16.png', 'assets/brand/neutral-head-32.png', 'assets/brand/neutral-head-64.png',
+  'assets/brand/neutral-touch-180.png', 'assets/brand/neutral-full-256.png',
   'assets/emotes/kaomoji.json',
   ...socialFeed.posts.flatMap(post => post.media.map(image => image.src)),
   ...Object.values(socialFeed.thumbnails ?? {}).map(image => image.src),
