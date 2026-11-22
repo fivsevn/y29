@@ -7,17 +7,24 @@ import { pathToFileURL } from 'node:url';
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 const generated = ['lucifer0/users/README.md', 'lucifer0/data/feed.json', 'lucifer0/data/feed-index.json', 'lucifer0/posts'];
 const feedPart = /^lucifer0\/data\/feed\/[a-f0-9]{64}\.json$/;
+const thumbnail = /^lucifer0\/data\/thumbnails\/[a-f0-9]{64}\.webp$/;
 
-// Stage only the current manifest's parts. A disposable checkout can retain
-// untracked parts from an earlier build/retry; those must never accumulate on
-// main. Previously committed parts replaced by this build are removed.
+// Only referenced generated files are published, even after an interrupted build.
 export function stageGeneratedContent({ root = process.cwd(), gitImpl = git } = {}) {
   const index = JSON.parse(readFileSync(join(root, 'lucifer0/data/feed-index.json'), 'utf8'));
   if (index.version !== 1 || !Array.isArray(index.parts) || index.parts.some(part => !feedPart.test('lucifer0/' + part.src))) throw new Error('Invalid generated feed index');
   const current = new Set(index.parts.map(part => 'lucifer0/' + part.src));
-  for (const path of current) readFileSync(join(root, path));
-  const tracked = gitImpl('ls-files', '-z', '--', 'lucifer0/data/feed').split('\0').filter(Boolean);
-  const obsolete = tracked.filter(path => feedPart.test(path) && !current.has(path));
+  for (const { src } of index.parts) {
+    const part = JSON.parse(readFileSync(join(root, 'lucifer0', src), 'utf8'));
+    for (const image of Object.values(part.thumbnails ?? {})) {
+      const path = 'lucifer0/' + image.src;
+      if (!thumbnail.test(path)) throw new Error('Invalid generated thumbnail path');
+      if (!current.has(path)) readFileSync(join(root, path));
+      current.add(path);
+    }
+  }
+  const tracked = gitImpl('ls-files', '-z', '--', 'lucifer0/data/feed', 'lucifer0/data/thumbnails').split('\0').filter(Boolean);
+  const obsolete = tracked.filter(path => (feedPart.test(path) || thumbnail.test(path)) && !current.has(path));
   if (obsolete.length) gitImpl('rm', '--', ...obsolete);
   gitImpl('add', '-A', '--', ...generated, ...current);
 }

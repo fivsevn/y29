@@ -20,7 +20,15 @@ export function partitionFeed(feed, pageSize = 24) {
   for (let offset = 0; offset < roots.length; offset += pageSize) {
     const selected = roots.slice(offset, offset + pageSize);
     const posts = selected.flatMap(root => [root, ...byRoot.get(root.id)]);
-    const text = JSON.stringify({ version: 1, posts }) + '\n';
+    const thumbnails = {};
+    for (const post of posts) {
+      for (const { src } of post.media) {
+        if (feed.thumbnails?.[src]) thumbnails[src] = feed.thumbnails[src];
+      }
+    }
+    const part = { version: 1, posts };
+    if (Object.keys(thumbnails).length) part.thumbnails = thumbnails;
+    const text = JSON.stringify(part) + '\n';
     const src = `data/feed/${createHash('sha256').update(text).digest('hex')}.json`;
     files.push({ src, text });
     parts.push({ src, postIds: posts.map(post => post.id), authors: [...new Set(posts.map(post => post.author))] });

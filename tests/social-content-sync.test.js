@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { stageGeneratedContent } from '../.github/scripts/social-content-sync.mjs';
 
 const part = letter => `lucifer0/data/feed/${letter.repeat(64)}.json`;
+const thumbnail = letter => `lucifer0/data/thumbnails/${letter.repeat(64)}.webp`;
 async function fixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'social-content-sync-'));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -19,6 +20,7 @@ async function fixture(t) {
   git('init'); git('config', 'user.name', 'Fixture'); git('config', 'user.email', 'fixture@example.test');
   for (const path of ['lucifer0/users/README.md', 'lucifer0/posts/fixture/index.md', 'lucifer0/data/feed.json', 'lucifer0/data/feed/notes.json']) await save(path, 'old');
   await save(part('a'), '{"version":1,"posts":[]}');
+  await save(thumbnail('a'), 'previously published preview');
   await save('lucifer0/data/feed-index.json', { version: 1, parts: [{ src: part('a').slice('lucifer0/'.length) }] });
   git('add', '.'); git('commit', '-m', 'Initial generated view');
   return { root, git, save };
@@ -28,7 +30,9 @@ test('content sync commits the live index and referenced parts while retiring tr
   const { root, git, save } = await fixture(t);
   const index = { version: 1, parts: [{ src: part('b').slice('lucifer0/'.length) }] };
   await save('lucifer0/data/feed-index.json', index);
-  await save(part('b'), '{"version":1,"posts":[{"id":"new-post"}]}');
+  await save(part('b'), { version: 1, posts: [{ id: 'new-post' }], thumbnails: { 'photo.webp': { src: thumbnail('b').slice('lucifer0/'.length) } } });
+  await save(thumbnail('b'), 'current preview');
+  await save(thumbnail('c'), 'an abandoned preview');
   await save(part('c'), 'an untracked part from an abandoned build');
   await save('lucifer0/data/feed/notes.json', 'a human file outside the generated naming scheme');
   await save('lucifer0/private-note.txt', 'unrelated private material');
@@ -36,9 +40,11 @@ test('content sync commits the live index and referenced parts while retiring tr
   await save('lucifer0/data/feed.json', 'new complete feed');
   stageGeneratedContent({ root, gitImpl: git });
   assert.deepEqual(git('diff', '--cached', '--name-only').split('\n').sort(), [
-    'lucifer0/users/README.md', 'lucifer0/data/feed.json', 'lucifer0/data/feed-index.json', part('a'), part('b')
+    'lucifer0/users/README.md', 'lucifer0/data/feed.json', 'lucifer0/data/feed-index.json', part('a'), part('b'), thumbnail('a'), thumbnail('b')
   ].sort());
   assert.equal(git('diff', '--cached', '--name-status', '--', part('a')), 'D\t' + part('a'));
+  assert.equal(git('diff', '--cached', '--name-status', '--', thumbnail('a')), 'D\t' + thumbnail('a'));
+  assert.equal(await readFile(join(root, thumbnail('c')), 'utf8'), 'an abandoned preview');
   assert.equal(await readFile(join(root, part('c')), 'utf8'), 'an untracked part from an abandoned build');
   assert.equal(await readFile(join(root, 'lucifer0/data/feed/notes.json'), 'utf8'), 'a human file outside the generated naming scheme');
   git('commit', '-m', 'Refresh generated view');
@@ -63,9 +69,10 @@ test('the deployed-file verifier checks the loader, current index and every refe
   const workflow = await readFile(new URL('../.github/workflows/lucifer0-verify.yml', import.meta.url), 'utf8');
   const source = workflow.match(/<<'JS'\n([\s\S]+?)\n          JS/)[1].replace(/^          /gm, '').replace(/^import .*;\n/gm, '');
   const shard = part('b').slice('lucifer0/'.length), image = 'posts/2026/11/fixture/media/image.webp';
-  const feed = { posts: [{ replyTo: null, media: [{ src: image }] }] };
+  const preview = thumbnail('b').slice('lucifer0/'.length);
+  const feed = { posts: [{ replyTo: null, media: [{ src: image }] }], thumbnails: { [image]: { src: preview } } };
   const index = { version: 1, parts: [{ src: shard }] };
-  const expected = ['index.html', 'app.js', 'core.js', 'feed-store.js', 'style.css', 'data/feed.json', 'data/feed-index.json', shard, image];
+  const expected = ['index.html', 'app.js', 'core.js', 'feed-store.js', 'style.css', 'data/feed.json', 'data/feed-index.json', shard, image, preview];
   const bytes = new Map(expected.map(path => [path, Buffer.from(path === 'data/feed.json' ? JSON.stringify(feed) : path === 'data/feed-index.json' ? JSON.stringify(index) : 'Content of ' + path)]));
   const fetched = [];
   const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
