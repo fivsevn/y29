@@ -43,7 +43,7 @@ test('three distinct daily snapshots and opaque root IDs are frozen with a stabl
 });
 
 test('missing or insufficient daily cases cannot be replaced by selected cases', () => {
-  const source = document(2), selected = { path: 'environment/sources-selected-cases.md', text: '# 精选案例\n\n### 别的内容\n甲：长期保存的另一段。' };
+  const source = document(2), selected = { path: 'environment/sources-selected-cases/001-case.md', text: '# 精选案例\n<!-- samples:start -->\n### 别的内容\n甲：长期保存的另一段。\n<!-- samples:end -->\n## 对案例的分析\n### 不得拆分\n此处不是额外素材。' };
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [source, selected], intakeReceipt: receipt(source.text), now }), /three distinct usable cases/);
   assert.throws(() => createCasePlan({ operationId: 'l0-synthetic', plan: plan(), documents: [document()], now }), /GitHub Actions/);
   const duplicate = { ...source, text: source.text.replace('<!-- samples:end -->', '### 另一个标题\np01：实际的一段文字 0\np02：哦。\n<!-- samples:end -->') };

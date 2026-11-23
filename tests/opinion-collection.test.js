@@ -157,7 +157,11 @@ test('replacement preserves manual material, external preview leaves the origina
   const folder = await mkdtemp(join(tmpdir(), 'y29-opinion-'));
   t.after(() => rm(folder, { recursive: true, force: true }));
   await mkdir(join(folder, 'environment'));
-  const documentPath = join(folder, 'environment/sources-daily-opinions.md'), selected = join(folder, 'environment/sources-selected-cases.md'), outputPath = join(folder, 'preview.md');
+  const selectedDirectory = join(folder, 'environment/sources-selected-cases');
+  await mkdir(join(selectedDirectory, 'nested'), { recursive: true });
+  const documentPath = join(folder, 'environment/sources-daily-opinions.md'), selected = join(selectedDirectory, '001-case.md'), outputPath = join(folder, 'preview.md');
+  const index = join(selectedDirectory, 'README.md');
+  await writeFile(index, '# 精选索引\n');
   await writeFile(documentPath, document); await writeFile(selected, '用户精选\n');
   const result = await updateOpinionDocument({ documentPath, outputPath, ...fixtures(), now: NOW });
   assert.equal(await readFile(documentPath, 'utf8'), document);
@@ -174,6 +178,14 @@ test('replacement preserves manual material, external preview leaves the origina
   const protectedOptions = { documentPath, now: NOW, fetchImpl: async () => { requested = true; return new Response('[]'); } };
   await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: selected }), /Selected cases/);
   await assert.rejects(updateOpinionDocument({ ...protectedOptions, documentPath: selected }), /Selected cases/);
+  for (const path of [index, join(selectedDirectory, 'new-case.md'), join(selectedDirectory, 'nested/notes.md'), join(folder, 'sources-selected-cases.md')]) {
+    await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: path }), /Selected cases/);
+    await assert.rejects(updateOpinionDocument({ ...protectedOptions, documentPath: path }), /Selected cases/);
+  }
+  const directoryAlias = join(folder, 'case-alias');
+  await symlink(selectedDirectory, directoryAlias);
+  await assert.rejects(updateOpinionDocument({ ...protectedOptions, documentPath: join(directoryAlias, '001-case.md') }), /Selected cases/);
+  await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: join(directoryAlias, 'nested/new.md') }), /Selected cases/);
   const alias = join(folder, 'preview-link.md');
   await symlink(selected, alias);
   await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: alias }), /regular file/);
@@ -181,6 +193,7 @@ test('replacement preserves manual material, external preview leaves the origina
   await assert.rejects(updateOpinionDocument({ ...protectedOptions, outputPath: repositoryPath }), /outside the repository/);
   assert.equal(requested, false, 'unsafe output is rejected before any external requests');
   assert.equal(await readFile(selected, 'utf8'), '用户精选\n');
+  assert.equal(await readFile(index, 'utf8'), '# 精选索引\n');
 });
 
 test('longer and root-only discussions survive without invented replies', () => {

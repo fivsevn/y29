@@ -1,11 +1,14 @@
-import { lstat, realpath, readFile } from 'node:fs/promises';
+import { lstat, realpath, readFile, readdir } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 
 const defaultRoot = fileURLToPath(new URL('../', import.meta.url));
 const MAX_BYTES = 2000000;
-export const sampleDocumentPaths = ['environment/sources-daily-opinions.md', 'environment/sources-selected-cases.md'];
+export const sampleDocumentPaths = ['environment/sources-daily-opinions.md'];
+export const selectedCasesDirectory = 'environment/sources-selected-cases';
+const selectedDocument = path => typeof path === 'string' && /^environment\/sources-selected-cases\/[^/.\\][^/\\]*\.md$/.test(path);
+const selectedIndex = path => path === selectedCasesDirectory + '/README.md';
 const START = '<!-- samples:start -->', END = '<!-- samples:end -->';
 const URL_PATTERN = /(?:[a-z][a-z0-9+.-]{1,20}:\/\/|www\.|data:|mailto:)[^\s<>\]）)]+|\b(?:[a-z0-9-]+\.)+(?:com|org|net|cn|io|tv|me|dev|app|co)(?:\b|\/)[^\s<>\]）)]*/i;
 const EMAIL = /[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+/i;
@@ -15,13 +18,13 @@ const HANDLE = /@(?!(?:p\d{2,4})(?![a-z0-9_]))[\p{L}\p{N}_-]+/u;
 const fail = label => { throw new Error('Sample materials: ' + label); };
 
 function materialBody(path, text) {
-  if (path === sampleDocumentPaths[0]) {
-    if (!text.includes(START) && !text.includes(END)) return '';
-    if (text.split(START).length !== 2 || text.split(END).length !== 2 || text.indexOf(END) < text.indexOf(START)) fail(path + ': invalid material markers');
-    return text.slice(text.indexOf(START) + START.length, text.indexOf(END)).trim();
+  if (!text.includes(START) && !text.includes(END)) {
+    // Older daily guides and empty selected placeholders have no material.
+    if (path === sampleDocumentPaths[0] || !text.trim().replace(/^# [^\n]*(?:\n|$)/, '').trim()) return '';
+    fail(path + ': selected cases require explicit material markers');
   }
-  // An empty titled page is a valid place to start collecting selected cases.
-  return text.trim().replace(/^# [^\n]*(?:\n|$)/, '').trim();
+  if (text.split(START).length !== 2 || text.split(END).length !== 2 || text.indexOf(END) < text.indexOf(START)) fail(path + ': invalid material markers');
+  return text.slice(text.indexOf(START) + START.length, text.indexOf(END)).trim();
 }
 
 function paragraphs(body, fallbackTitle) {
@@ -61,11 +64,16 @@ export function parseSampleDocuments(documents) {
   if (!Array.isArray(documents)) fail('documents: expected a list');
   const entries = [];
   for (const { path, text } of documents) {
-    if (!sampleDocumentPaths.includes(path) || typeof text !== 'string' || text.includes('\u0000') || Buffer.byteLength(text) > MAX_BYTES) fail('documents: invalid source');
+    if (!(sampleDocumentPaths.includes(path) || selectedDocument(path)) || typeof text !== 'string' || text.includes('\u0000') || Buffer.byteLength(text) > MAX_BYTES) fail('documents: invalid source');
+    if (selectedIndex(path)) continue;
     const body = materialBody(path, text.replaceAll('\r\n', '\n'));
-    if ([URL_PATTERN, EMAIL, CONTACT, PLATFORM, HANDLE].some(pattern => pattern.test(body))) fail(path + ': identifying text requires review');
-    for (const section of paragraphs(body, path === sampleDocumentPaths[0] ? '当日素材' : '精选案例')) {
-      const content = section.text.replace(/^ {0,3}###\s+[^\n]*(?:\n|$)/, '').trim();
+    const selected = selectedDocument(path), title = selected ? text.match(/^# (.+?)\s*$/m)?.[1] ?? '精选案例' : '当日素材';
+    if ([URL_PATTERN, EMAIL, CONTACT, PLATFORM, HANDLE].some(pattern => pattern.test(body + '\n' + title))) fail(path + ': identifying text requires review');
+    // A selected file is one complete case. Its headings never split the sample;
+    // provenance and research outside the markers never enter writer material.
+    const sections = selected ? (body ? [{ title, text: body }] : []) : paragraphs(body, title);
+    for (const section of sections) {
+      const content = selected ? section.text : section.text.replace(/^ {0,3}###\s+[^\n]*(?:\n|$)/, '').trim();
       const id = 'sample-' + createHash('sha256').update(content).digest('hex').slice(0, 12);
       entries.push({ path, text: section.text, sample: { id, ...section } });
     }
@@ -73,21 +81,37 @@ export function parseSampleDocuments(documents) {
   return entries;
 }
 
-export async function readSamples(root = defaultRoot) {
+export async function readSampleDocuments(root = defaultRoot) {
   const selected = resolve(root), rootStat = await lstat(selected);
   if (!rootStat.isDirectory() || rootStat.isSymbolicLink()) fail('root: expected a regular directory');
   root = await realpath(selected);
   const documents = [];
-  for (const path of sampleDocumentPaths) {
+  try {
+    const folder = await lstat(join(root, 'environment'));
+    if (!folder.isDirectory() || folder.isSymbolicLink()) fail('environment: expected a regular directory');
+  } catch (error) { if (error.code === 'ENOENT') return documents; throw error; }
+  const read = async (path, optional = false) => {
     try {
-      const folder = await lstat(join(root, 'environment'));
-      if (!folder.isDirectory() || folder.isSymbolicLink()) fail('environment: expected a regular directory');
       const filename = join(root, path), stat = await lstat(filename);
       if (!stat.isFile() || stat.isSymbolicLink() || stat.size > MAX_BYTES) fail(path + ': expected a regular bounded file');
       documents.push({ path, text: await readFile(filename, 'utf8') });
-    } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    } catch (error) { if (!optional || error.code !== 'ENOENT') throw error; }
+  };
+  for (const path of sampleDocumentPaths) await read(path, true);
+  const directory = join(root, selectedCasesDirectory);
+  let folder;
+  try { folder = await lstat(directory); }
+  catch (error) { if (error.code === 'ENOENT') return documents; throw error; }
+  if (!folder.isDirectory() || folder.isSymbolicLink()) fail(selectedCasesDirectory + ': expected a regular directory');
+  for (const name of (await readdir(directory)).sort()) {
+    const path = selectedCasesDirectory + '/' + name;
+    if (selectedDocument(path)) await read(path);
   }
-  return parseSampleDocuments(documents);
+  return documents;
+}
+
+export async function readSamples(root = defaultRoot) {
+  return parseSampleDocuments(await readSampleDocuments(root));
 }
 
 export function selectSamples(entries, { seed, limit = 3 } = {}) {

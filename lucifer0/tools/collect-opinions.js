@@ -272,14 +272,20 @@ export function replaceCurrentSamples(document, markdown) {
 }
 
 async function outputTarget(documentPath, outputPath) {
-  if (basename(documentPath).toLowerCase() === 'sources-selected-cases.md' || outputPath && basename(outputPath).toLowerCase() === 'sources-selected-cases.md') fail('Selected cases are never a collector target');
+  const protectSelected = path => {
+    if (resolve(path).split(/[\\/]/).some(part => /^sources-selected-cases(?:\.md)?$/i.test(part))) fail('Selected cases are never a collector target');
+  };
+  protectSelected(documentPath);
+  if (outputPath !== undefined) protectSelected(outputPath);
   const source = resolve(documentPath), sourceStat = await lstat(source);
   if (!sourceStat.isFile() || sourceStat.isSymbolicLink()) fail('The material source must be a regular file');
+  protectSelected(await realpath(source));
   if (outputPath === undefined) return source;
   if (!isAbsolute(outputPath)) fail('Preview output needs an absolute path outside the repository');
   const output = resolve(outputPath), parent = dirname(output), parentStat = await lstat(parent);
   if (!parentStat.isDirectory() || parentStat.isSymbolicLink()) fail('Preview output needs a regular parent directory');
   const canonical = resolve(await realpath(parent), basename(output)), rel = relative(await realpath(REPOSITORY), canonical);
+  protectSelected(canonical);
   if (!rel || !isAbsolute(rel) && rel !== '..' && !rel.startsWith('../')) fail('Preview output must stay outside the repository');
   if (canonical === await realpath(source)) fail('Preview output cannot replace the input document');
   try {

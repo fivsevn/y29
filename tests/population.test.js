@@ -70,13 +70,18 @@ test('individual methods and shared-life references have one owning research doc
   const { registry } = await readUserDocuments(socialRoot);
   const individualNotes = await readFile(join(socialRoot, 'users/research-character.md'), 'utf8');
   const environmentPath = join(socialRoot, 'environment');
-  const environmentFiles = ['README.md', 'research-worldview.md', 'research-everyday-life.md', 'research-comments.md', 'research-meme.md', 'record-forum.md', 'research-negative.md', 'sources-daily-opinions.md', 'sources-selected-cases.md'];
-  assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles, 'worldviews'].sort());
+  const environmentFiles = ['README.md', 'research-worldview.md', 'research-everyday-life.md', 'research-comments.md', 'research-meme.md', 'record-forum.md', 'research-negative.md', 'sources-daily-opinions.md'];
+  assert.deepEqual((await readdir(environmentPath)).sort(), [...environmentFiles, 'sources-selected-cases', 'worldviews'].sort());
   const environmentIndex = await readFile(join(environmentPath, 'README.md'), 'utf8');
   for (const name of environmentFiles) {
     assert.ok((await readFile(join(environmentPath, name), 'utf8')).trim(), `${name}: empty environment document`);
     if (name !== 'README.md') assert.ok(environmentIndex.includes(`(${name})`), `${name}: missing from the environment entrypoint`);
   }
+  assert.ok(environmentIndex.includes('(sources-selected-cases/README.md)'));
+  const selectedIndex = await readFile(join(environmentPath, 'sources-selected-cases/README.md'), 'utf8');
+  const cases = (await readdir(join(environmentPath, 'sources-selected-cases'))).filter(name => name.endsWith('.md') && name !== 'README.md');
+  assert.ok(cases.length > 0);
+  for (const name of cases) assert.ok(selectedIndex.includes('(' + name + ')'), name + ': missing from the selected index');
   const sourceIds = (text, label) => {
     const ids = [...text.matchAll(/^#{3,4} ([SOLIMD]\d{2})｜\S.+$/gm)].map(match => match[1]);
     const unique = new Set(ids);

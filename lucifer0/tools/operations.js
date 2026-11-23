@@ -11,7 +11,7 @@ import { siteEmoteManifestPath } from './site-emotes.js';
 import { kaomojiManifestPath, localizationRulesPath, assertLocalizedPosts } from './localization.js';
 import { cancelPendingBatch, isPostMediaPath } from './thread-packages.js';
 import { isResearchPath, researchPaths, researchCandidates } from './research-maintenance.js';
-import { sampleDocumentPaths, parseSampleDocuments, selectSamples } from './samples.js';
+import { readSampleDocuments, parseSampleDocuments, selectSamples } from './samples.js';
 import { createCasePlan, validateCasePlan, caseRootIds, caseRoot, caseForPost, validateCasePosts, casePlanSummary } from './case-adaptation.js';
 import { writerSource, assignGuestName } from './writer-input.js';
 import { scheduleParticipation, validatePostingWindows } from './participation.js';
@@ -336,11 +336,9 @@ async function source(root) {
   const material = await readProfiles({ root });
   const discoveredResearch = await researchPaths(root);
   const documents = await Promise.all([...new Set([...controlPaths, ...environmentPaths, ...discoveredResearch])].map(path => sourceText(root, path)));
-  for (const path of sampleDocumentPaths) {
-    try { documents.push(await sourceText(root, path)); }
-    catch (error) { if (error.code !== 'ENOENT') throw error; }
-  }
-  const samples = parseSampleDocuments(documents.filter(document => sampleDocumentPaths.includes(document.path)));
+  const sampleDocuments = await readSampleDocuments(root);
+  const samples = parseSampleDocuments(sampleDocuments);
+  documents.push(...sampleDocuments);
   if (siteEmotes) documents.push(await sourceText(root, siteEmoteManifestPath));
   if (localization) documents.push(...await Promise.all([localizationRulesPath, kaomojiManifestPath].map(path => sourceText(root, path))));
   for (const user of registry.users) {

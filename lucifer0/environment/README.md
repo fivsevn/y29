@@ -26,7 +26,7 @@
 | [研究-世界观](research-worldview.md) | 世界设定的组织方法与框架参考 |
 | [研究-日常生活](research-everyday-life.md) | 人口、劳动、收支、职业任务与公共服务资料，以及日常生活场景 |
 | [素材-每日舆论](sources-daily-opinions.md) | 每日自动刷新的当前材料，也可直接贴入用户来料 |
-| [素材-精选参考](sources-selected-cases.md) | 用户挑选后长期保留的材料 |
+| [素材-精选参考](sources-selected-cases/README.md) | 用户挑选后长期保留的独立案例与索引 |
 | [研究-负面与争议](research-negative.md) | 八卦、抱怨、爆点与冲突讨论的实际样本和话头结构 |
 | [研究-Meme](research-meme.md) | 表情包、反应图、网络句式的资源与用法 |
 | [研究-评论与点赞](research-comments.md) | 回复行为、互动样本与点赞差异 |
