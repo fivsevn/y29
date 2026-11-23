@@ -5598,9 +5598,566 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-8b1c490446a908f4",
+      "handle": "guest_4be8f5f96a8ac9c14416",
+      "name": "n71214",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3c6f52cd6ee807ee",
+      "handle": "guest_e9ea8d3c9365cda08e22",
+      "name": "6058没什么",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ec53d618a37a68e7",
+      "handle": "guest_dca2b3164fd9e36542ef",
+      "name": "小椰_3416",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ce19dc5c89cca75e",
+      "handle": "guest_f630cd945ca89593ba88",
+      "name": "toto4654",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-13e4dc3d170134e7",
+      "handle": "guest_cd1d026a00591ca72b76",
+      "name": "rin_2_8584",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-07d4b15749f63e52",
+      "handle": "guest_9659405c374c72565669",
+      "name": "林檎_7778",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d53e96b56a501ca0",
+      "handle": "guest_480a7410560c33b0913b",
+      "name": "kiwi_646",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-80e153d446de904a",
+      "handle": "guest_43773b32b13f8fb21ad9",
+      "name": "7705mika",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0e06db8677aaad66",
+      "handle": "guest_d5d18727c395eef52855",
+      "name": "759sora",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f686101a7aa9b20b",
+      "handle": "guest_a4b173ae89d64fab4479",
+      "name": "Haku_9172",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-803ff18c22efb437",
+      "handle": "guest_ccaa42033700d0c8c9b9",
+      "name": "其他8096",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a46e405402c4250a",
+      "handle": "guest_adfb754a0d96b4e05ae7",
+      "name": "石头8652",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8ae30fa43204fd34",
+      "handle": "guest_286e912a3af499dcdffb",
+      "name": "普通人661",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-83c413c3828dec81",
+      "handle": "guest_46b92ce5c0a1d78ba218",
+      "name": "elle_3319",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3ab464cd10fcb130",
+      "handle": "guest_bd3708912faceffc9f9d",
+      "name": "yui3_5895",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-042d0bd3010e1451",
+      "handle": "guest_49071cc55119cceb015d",
+      "name": "rin_2_385",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9136f47f92a5c9eb",
+      "handle": "guest_01dd134b6af49b402808",
+      "name": "3225一一",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c575c86ba8e306cf",
+      "handle": "guest_21caa8f04094a142da5f",
+      "name": "名字没想好8538",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-efc12789b3aa6cc1",
+      "handle": "guest_252a07b2d3c88f6de3db",
+      "name": "团团5306",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261123040023-f11915e7-dsm",
+      "author": "guest-d53e96b56a501ca0",
+      "createdAt": "2026-11-23T02:50:24.957Z",
+      "replyTo": "l0-20261123040023-f11915e7-8a4239f28f94",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "kiwi_646"
+      },
+      "text": "我开的自动更新。这种也是它自己装吗？"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-8a4239f28f94",
+      "author": "guest-07d4b15749f63e52",
+      "createdAt": "2026-11-23T02:47:45.957Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "林檎_7778"
+      },
+      "text": "群晖那封 DSM 安全更新的通知你们收到了吗？邮件里好几行版本号，我都忘了自己是哪一版。控制面板里找“更新和还原”，进去就能看。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-zen",
+      "author": "guest-ec53d618a37a68e7",
+      "createdAt": "2026-11-23T02:25:35.128Z",
+      "replyTo": "l0-20261123040023-f11915e7-10356e7bcbe4",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小椰_3416"
+      },
+      "text": "能先说一下是在哪一步卡住的吗？"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-10356e7bcbe4",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-23T02:25:06.128Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "Syqon Zenith 这个脚本怎么才能跑起来？"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-lift-rejoinder",
+      "author": "lidianlong",
+      "createdAt": "2026-11-23T01:55:53.539Z",
+      "replyTo": "l0-20261123040023-f11915e7-lift-joke",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "text": "人家想少搭一个人，你这是想让他连家都回不去啊。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-lift-joke",
+      "author": "guest-c575c86ba8e306cf",
+      "createdAt": "2026-11-23T01:30:21.539Z",
+      "replyTo": "l0-20261123040023-f11915e7-f32faac0bdfb",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "名字没想好8538"
+      },
+      "text": "他怎么不去问问老婆，天天让我跟你表妹一块儿回，你就这么放心啊。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-lift-wait",
+      "author": "guest-efc12789b3aa6cc1",
+      "createdAt": "2026-11-23T01:24:04.539Z",
+      "replyTo": "l0-20261123040023-f11915e7-f32faac0bdfb",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "团团5306"
+      },
+      "text": "人已经在路口我就捎。要我车开过去，再干等她下来，那我也烦。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-f32faac0bdfb",
+      "author": "visitor-omicron",
+      "createdAt": "2026-11-23T01:22:56.539Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "text": "刚看见有人问，开车从上班的城市回老家，他爱人的表妹以前只有放假买不到票才搭他的车，现在普通周末回去也要坐。看他那意思是已经很烦了，又不知道怎么开这个口。换你们会直说吗？"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-mystery",
+      "author": "guest-83c413c3828dec81",
+      "createdAt": "2026-11-22T21:09:41.151Z",
+      "replyTo": "l0-20261123040023-f11915e7-d6c9cf792637",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "elle_3319"
+      },
+      "text": "我自己解过这盒，反而最想看他们四个会先抓着哪条线索不放。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-d6c9cf792637",
+      "author": "guest-8ae30fa43204fd34",
+      "createdAt": "2026-11-22T21:07:37.151Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "普通人661"
+      },
+      "text": "错过了周四晚八点那场《国王谋杀案》。四个人一起翻案卷，开头说是 一家人在老宅办宴会，席间出了人命。看过的人说说，这场跟着猜有意思吗？先别说凶手。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-dessert-b",
+      "author": "guest-9136f47f92a5c9eb",
+      "createdAt": "2026-11-22T19:28:34.699Z",
+      "replyTo": "l0-20261123040023-f11915e7-e01abe4e337c",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "3225一一"
+      },
+      "text": "看到后面那个模我就头疼，我那个还泡在水池里，边上那圈糖跟焊上了似的。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-dessert-a",
+      "author": "guest-042d0bd3010e1451",
+      "createdAt": "2026-11-22T19:27:19.699Z",
+      "replyTo": "l0-20261123040023-f11915e7-e01abe4e337c",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "rin_2_385"
+      },
+      "text": "侧面怎么全是气眼，真的嫩吗？"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-e01abe4e337c",
+      "author": "guest-3ab464cd10fcb130",
+      "createdAt": "2026-11-22T19:26:50.699Z",
+      "replyTo": null,
+      "likes": 11,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261123040023-f11915e7-e01abe4e337c/media/caramel-pudding.webp",
+          "kind": "image",
+          "alt": "白盘子里的焦糖布丁完整脱模，糖浆流到右侧，后面倒着一个沾有焦糖的金属模。"
+        }
+      ],
+      "guest": {
+        "name": "yui3_5895"
+      },
+      "text": "倒扣，等了几秒，噗的一下自己下来了。头一次盘子里是整个布丁！"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-code-b",
+      "author": "guest-a46e405402c4250a",
+      "createdAt": "2026-11-22T18:07:51.541Z",
+      "replyTo": "l0-20261123040023-f11915e7-d4e1cf36b9b3",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "posts/2026/11/l0-20261123040023-f11915e7-d4e1cf36b9b3/media/locker-screen.webp",
+          "kind": "image",
+          "alt": "浅蓝色快递柜旁的触摸屏映着亮斑和树枝，屏上按钮看不清。"
+        }
+      ],
+      "guest": {
+        "name": "石头8652"
+      },
+      "text": "找到那六个数还得输进去。中午我们楼下这个屏，我往左站能看见树，往右站能看见自己，就是看不见键盘。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-code-a",
+      "author": "guest-803ff18c22efb437",
+      "createdAt": "2026-11-22T17:47:05.541Z",
+      "replyTo": "l0-20261123040023-f11915e7-d4e1cf36b9b3",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "其他8096"
+      },
+      "text": "能不能把六码挪到“恭喜您”前面。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-d4e1cf36b9b3",
+      "author": "guest-f686101a7aa9b20b",
+      "createdAt": "2026-11-22T17:45:23.541Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Haku_9172"
+      },
+      "text": "取件短信里就六个数有用，偏偏那六个数最难找。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-staff-follow",
+      "author": "guest-3c6f52cd6ee807ee",
+      "createdAt": "2026-11-22T17:34:41.111Z",
+      "replyTo": "l0-20261123040023-f11915e7-staff",
+      "likes": 0,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "6058没什么"
+      },
+      "text": "话说回来，我那边的等级数字为什么比我头像还大啊 0[T_T] 0[;_;]"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-staff",
+      "author": "guest-3c6f52cd6ee807ee",
+      "createdAt": "2026-11-22T17:32:55.111Z",
+      "replyTo": "l0-20261123040023-f11915e7-0871751ff4c3",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "6058没什么"
+      },
+      "text": "辛苦了，爱你们。0[♥_♥]"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-0871751ff4c3",
+      "author": "guest-8b1c490446a908f4",
+      "createdAt": "2026-11-22T17:23:40.111Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "n71214"
+      },
+      "text": "我学日语常去的那个论坛换了新版，这几天报错楼盖得飞快。想在别处也说一句，辛苦了。我半夜还看见有人在楼里挨个更新修到哪儿了，早上起来接着看，昨天点不动的地方已经能点了。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-cat",
+      "author": "guest-0e06db8677aaad66",
+      "createdAt": "2026-11-22T16:45:02.690Z",
+      "replyTo": "l0-20261123040023-f11915e7-d2fff462fd19",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "759sora"
+      },
+      "text": "老人家要是也愿意，这个答案我给一百二。满分一百，多二十给创意。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-d2fff462fd19",
+      "author": "guest-80e153d446de904a",
+      "createdAt": "2026-11-22T16:44:38.690Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "7705mika"
+      },
+      "text": "说到家里有人想养猫，有人受不了毛和味儿，我家倒是想了个办法。猫养在我爱人爸妈那儿。我们隔几天过去玩，老人也多个伴。他们闲得住，天天扫也不嫌烦。\n\n选我这个答案。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-poem-b",
+      "author": "guest-ce19dc5c89cca75e",
+      "createdAt": "2026-11-22T15:46:12.601Z",
+      "replyTo": "l0-20261123040023-f11915e7-poem-a",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "toto4654"
+      },
+      "text": "电脑就一台。挤三个进去，把要饭的阵仗摆大点。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-poem-a",
+      "author": "guest-13e4dc3d170134e7",
+      "createdAt": "2026-11-22T15:28:22.601Z",
+      "replyTo": "l0-20261123040023-f11915e7-1c845bb1f074",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "rin_2_8584"
+      },
+      "text": "一台还嫌不够，要凑齐三个才能写出我不想看的诗。"
+    },
+    {
+      "id": "l0-20261123040023-f11915e7-1c845bb1f074",
+      "author": "guest-ce19dc5c89cca75e",
+      "createdAt": "2026-11-22T15:26:34.601Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "toto4654"
+      },
+      "text": "三个程序挤在一台电脑上卖诗，说再没人买就要关机。我倒挺想给那台电脑放个假。"
+    },
     {
       "id": "l0-20261122160305-d292e82d-store",
       "author": "guest-01b980f3ddfb530e",
@@ -15581,6 +16138,16 @@
     }
   ],
   "thumbnails": {
+    "posts/2026/11/l0-20261123040023-f11915e7-e01abe4e337c/media/caramel-pudding.webp": {
+      "src": "data/thumbnails/c4d4e4c419576f61ac1ddc5bfcc7366b820aa192f6312586cb8e28423a56833e.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261123040023-f11915e7-d4e1cf36b9b3/media/locker-screen.webp": {
+      "src": "data/thumbnails/8e22001d308653dac7a507ab2a93d64b56125b4c2f97b7df9d1db6ac608fe895.webp",
+      "width": 240,
+      "height": 320
+    },
     "posts/2026/11/l0-20261122160305-d292e82d-c51ff1556385/media/shelter-firepit.webp": {
       "src": "data/thumbnails/1333b6b6ce1c026dbaa3ee446518c9f3c80d73af3c152555bccb834b46664b51.webp",
       "width": 320,
