@@ -6054,9 +6054,475 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-ca103f637a90f1b7",
+      "handle": "guest_58344e6fbe2ab0246bdc",
+      "name": "米粒7148",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7b798f7ac4569e15",
+      "handle": "guest_f33c30252a11a23c7ee1",
+      "name": "R.1635",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ffe7d0556dc6af02",
+      "handle": "guest_e194a673e3ab62fa0f51",
+      "name": "273537",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-361aae805b92f9cc",
+      "handle": "guest_70b6406ef3badf77ff71",
+      "name": "yui35558",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-93f7c5fd7ec868c3",
+      "handle": "guest_840758a32a47cbf713d7",
+      "name": "ququ6669",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d2db44c30efb8c91",
+      "handle": "guest_2608ed34bc1f2061aa4b",
+      "name": "5765一杯水",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ec298262b0070269",
+      "handle": "guest_302e2acc7699a66484f6",
+      "name": "咸鱼2089",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e738fe737c2d6feb",
+      "handle": "guest_ccfe73effff480e0f400",
+      "name": "其他5428",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-482fc984d3f14d6c",
+      "handle": "guest_cc9a875aff41c71ecfdf",
+      "name": "林檎1035",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d7d759bab40ea114",
+      "handle": "guest_fa8eb5a290bf4c2103a4",
+      "name": "Mio_7926",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261124040231-aced649d-poll-echo",
+      "author": "visitor-tau",
+      "createdAt": "2026-11-24T02:42:02.401Z",
+      "replyTo": "l0-20261124040231-aced649d-oldpoll",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "谢天谢地，总算有人也这么记。我刚才还在想是不是我记串了。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-praise",
+      "author": "visitor-eta",
+      "createdAt": "2026-11-24T02:13:48.000Z",
+      "replyTo": "l0-20261124040231-aced649d-front",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "text": "这几股麻花真立得住。谢谢回来给看前片，好看。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-front",
+      "author": "guest-7b798f7ac4569e15",
+      "createdAt": "2026-11-24T02:10:17.000Z",
+      "replyTo": "l0-20261124040231-aced649d-count",
+      "likes": 9,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124040231-aced649d-3e718e23eb9e/media/knit.webp",
+          "alt": "深红色毛衣前片铺在条纹床单上，领口两边是凸起的麻花纹"
+        }
+      ],
+      "guest": {
+        "name": "R.1635"
+      },
+      "text": "前片交作业！这回领口两边都出来了。还剩个后片。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-oldpoll",
+      "author": "guest-ec298262b0070269",
+      "createdAt": "2026-11-24T00:00:55.843Z",
+      "replyTo": "l0-20261124040231-aced649d-a447fdd42936",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "咸鱼2089"
+      },
+      "text": "我有点糊涂，这以前就能投了吧？"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-center",
+      "author": "news-surf",
+      "createdAt": "2026-11-23T23:45:46.639Z",
+      "replyTo": "l0-20261124040231-aced649d-straight",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "拉直以后那个点也可能还偏在一边啊。楼主要的是正中间。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-straight",
+      "author": "visitor-mu-upper",
+      "createdAt": "2026-11-23T23:44:16.639Z",
+      "replyTo": "l0-20261124040231-aced649d-a520c897eaba",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "要是加完点把线碰歪了，选这段上相邻的点，按 L 还能给它拉直。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-poll-badge",
+      "author": "guest-d2db44c30efb8c91",
+      "createdAt": "2026-11-23T23:40:17.843Z",
+      "replyTo": "l0-20261124040231-aced649d-a447fdd42936",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "5765一杯水"
+      },
+      "text": "我也没说以前不能投啊 0[^▽^] 我看中的是新版说有人投了，你这个开投票的人还能拿徽章。我折腾半天一个章都没见着，白高兴。0[·_·;]"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-mid",
+      "author": "guest-e738fe737c2d6feb",
+      "createdAt": "2026-11-23T23:39:05.639Z",
+      "replyTo": "l0-20261124040231-aced649d-a520c897eaba",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "其他5428"
+      },
+      "text": "装了 utilsplugin2 的话，先在线段大约中间点一下，选中新点按 E 把两边的点一起选上，再按 Shift+B 均匀分布。补一句，我前面那个 E 是插件的。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-a447fdd42936",
+      "author": "guest-d2db44c30efb8c91",
+      "createdAt": "2026-11-23T23:39:04.843Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "5765一杯水"
+      },
+      "text": "我常逛的那个论坛改版了，我才发现里面能开投票。于是试开了一个：“你喜欢投票吗？”\n\n喜欢／不喜欢。\n目前零票。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-a520c897eaba",
+      "author": "news-gadgets",
+      "createdAt": "2026-11-23T23:38:38.639Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "有人在 JOSM 里画一条直线，两端各一个点。选中时，正中间有个黄叉；偏偏一切到画点，黄叉就没了。拖它又容易把线扯歪。想加的是正中间那个点，其他相连的路也不想动。有没有直接平分这一段的操作？"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-pads-seam",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-23T23:20:19.378Z",
+      "replyTo": "l0-20261124040231-aced649d-pads-other",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "能只换垫当然好，我那副就是这么救回来的。可邮费比垫子还贵，我付钱那会儿真有点憋屈。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-pads-fit",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-23T23:15:48.378Z",
+      "replyTo": "l0-20261124040231-aced649d-6c0ec75d31c8",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124040231-aced649d-6c0ec75d31c8/media/ring.webp",
+          "alt": "拆下的耳垫翻到背面，手指旁露出固定圈上的卡扣"
+        },
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "你那个背面也有这一圈卡扣吗？我拆自己这个，掰得拇指疼。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-8fd123b57616",
+      "author": "guest-93f7c5fd7ec868c3",
+      "createdAt": "2026-11-23T23:14:42.664Z",
+      "replyTo": null,
+      "likes": 9,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124040231-aced649d-8fd123b57616/media/dough.webp",
+          "alt": "细面条旁散着一小堆面粒，手指放在旁边比大小"
+        },
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "ququ6669"
+      },
+      "text": "我就想搓到一片指甲能搁三四粒。这点面够我坐到明年。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-13287bf53fbf",
+      "author": "guest-ca103f637a90f1b7",
+      "createdAt": "2026-11-23T21:55:05.596Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "米粒7148"
+      },
+      "text": "Amni-CAD，在浏览器里改模型参数，还能看应力和流动模拟。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-dec3bca9e3c8",
+      "author": "anmianyao",
+      "createdAt": "2026-11-23T21:13:32.969Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "刚看见一篇讲 Signal 怎么护住聊天隐私的文章。标题真敢夸自己，我差点也当广告划走。倒是里面那个问题还留在我脑子里：要是系统里的智能助手本来就能读屏，聊天软件这头能管到哪儿？"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-pads-wash",
+      "author": "guest-361aae805b92f9cc",
+      "createdAt": "2026-11-23T21:07:16.378Z",
+      "replyTo": "l0-20261124040231-aced649d-pads-first",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "yui35558"
+      },
+      "text": "擦眼镜的布也遭殃，我最烦那种抹一下从一个黑点变成一条黑印的。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-pads-first",
+      "author": "guest-ffe7d0556dc6af02",
+      "createdAt": "2026-11-23T21:06:52.378Z",
+      "replyTo": "l0-20261124040231-aced649d-6c0ec75d31c8",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/disgust.webp",
+          "alt": "L0一手捏鼻子，一手向外推。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "273537"
+      },
+      "text": "还会粘到眼镜腿上。怪不得我擦了脸过会儿又有，烦死。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-count",
+      "author": "visitor-eta",
+      "createdAt": "2026-11-23T19:37:42.097Z",
+      "replyTo": "l0-20261124040231-aced649d-3e718e23eb9e",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "text": "你现在针上还剩几针？42 是对的。正面走到领口减一针，翻过来，领口就在这行开头，再减。这样的领边我得拿纸划，织一行划一下，光记脑子里真的会乱。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-3e718e23eb9e",
+      "author": "guest-7b798f7ac4569e15",
+      "createdAt": "2026-11-23T19:34:57.097Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "R.1635"
+      },
+      "text": "领口这六行我已经数烦了。开始 51 针，下一行开头先收 3 针，往后六行靠领口各减 1 针。我算该剩 42，织出来偏偏对不上。\n\n正面到行尾减，翻过来在行头减，我把“靠领口”读反了吗？"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-pads-other",
+      "author": "visitor-gamma-upper",
+      "createdAt": "2026-11-23T19:14:18.378Z",
+      "replyTo": "l0-20261124040231-aced649d-6c0ec75d31c8",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "单换垫吧，听着还好就为这层破皮再买一副，我可舍不得。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-6c0ec75d31c8",
+      "author": "anmianyao",
+      "createdAt": "2026-11-23T19:12:08.378Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124040231-aced649d-6c0ec75d31c8/media/pads.webp",
+          "alt": "黑耳罩的皮面已剥落，灰色箱盖上洒着黑屑"
+        }
+      ],
+      "text": "耳机摘下来，半边脸全是黑渣。最烦它这个皮，声音还好好的。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-build",
+      "author": "guest-d7d759bab40ea114",
+      "createdAt": "2026-11-23T18:10:19.007Z",
+      "replyTo": "l0-20261124040231-aced649d-a71f1d0e9663",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Mio_7926"
+      },
+      "text": "又装了一回，SDL3 还是没加载。这个毛病真磨人，我去项目里报过了。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-a71f1d0e9663",
+      "author": "guest-482fc984d3f14d6c",
+      "createdAt": "2026-11-23T18:08:32.007Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "林檎1035"
+      },
+      "text": "用 Windows 修照片的零，darktable 5.7 这周的测试版出来了。新功能已经冻结，想提前看看 5.8 大概什么样的可以试试。碰到毛病去项目那边报一下。"
+    },
+    {
+      "id": "l0-20261124040231-aced649d-f64fac582ecf",
+      "author": "zhaoyangxue",
+      "createdAt": "2026-11-23T16:17:33.849Z",
+      "replyTo": null,
+      "likes": 11,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124040231-aced649d-f64fac582ecf/media/zip.webp",
+          "alt": "粉色文具袋的拉链上挂了一颗蓝绿色玻璃珠"
+        }
+      ],
+      "text": "另一只耳坠找了一个月。算了，剩的这只去文具袋上班吧。"
+    },
     {
       "id": "l0-20261123160434-6fe2232e-tail",
       "author": "guest-3e8a18847d2ee535",
@@ -16696,6 +17162,31 @@
     }
   ],
   "thumbnails": {
+    "posts/2026/11/l0-20261124040231-aced649d-3e718e23eb9e/media/knit.webp": {
+      "src": "data/thumbnails/805b03af550d97b6fa4ace13de9412ffeed80efae2fb39183f8986d44d4f78b1.webp",
+      "width": 293,
+      "height": 320
+    },
+    "posts/2026/11/l0-20261124040231-aced649d-6c0ec75d31c8/media/ring.webp": {
+      "src": "data/thumbnails/af3eaa3b6d6715774a68a13d6584049cdd6b413cf68a61732701211704ae6ae6.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261124040231-aced649d-8fd123b57616/media/dough.webp": {
+      "src": "data/thumbnails/e968ecf099c190cfca2450108d9bb7aeb2eaa7017c9cb4adb86e24c10c7f649d.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261124040231-aced649d-6c0ec75d31c8/media/pads.webp": {
+      "src": "data/thumbnails/5bf3358d7a643cc4dc68eac43d72b95dcab61cf98460a24636648cbdbb671f63.webp",
+      "width": 320,
+      "height": 180
+    },
+    "posts/2026/11/l0-20261124040231-aced649d-f64fac582ecf/media/zip.webp": {
+      "src": "data/thumbnails/e098816caac1df74ecb92d3aff2c4bd4a3dc76aabd2984c750d5b3e6f3f6d8d7.webp",
+      "width": 320,
+      "height": 320
+    },
     "posts/2026/11/l0-20261123160434-6fe2232e-7623db997ba2/media/chairs.webp": {
       "src": "data/thumbnails/ba6efbce7126da939c9f655d7011a6daba413198703d31bdd97fc8c1094fd9fe.webp",
       "width": 320,
