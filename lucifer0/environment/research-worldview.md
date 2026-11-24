@@ -34,3 +34,8 @@
 
 - **来源与范围**：Michael D. McGinnis：[Building a Program for Institutional Analysis of Social-Ecological Systems](https://mcginnis.pages.iu.edu/buildingpiases.pdf)（2010年工作稿）。已读摘要及IAD／SES概念框架部分，PDF第2–7页。
 - **参考要点**：论文讨论Ostrom的相关框架；本项目取用资源、参与者、规则、互动、结果及反馈之间的联系，用于检查设定的运行条件。
+
+### W04｜住户需要认得哪一段路
+
+- **来源与范围**：2026-11-25 读取一则关于奇幻世界尺度的提问、以《碟形世界》为例的回答及其下可见评论。回答发表于 2017-07-21。有人赞同用一句话收尾，有人接着谈局部地图的精度，随后几条又在争论短回答的价值。[Worldbuilding 原讨论](https://worldbuilding.stackexchange.com/questions/86723/how-large-can-a-world-be-in-fantasy)
+- **参考要点**：同一个居民能把去邮局的每个转弯讲清楚，却只听说过去远山要走好几天。两种说法可以并存。若有人约好天亮前到邻镇交货，再核对他从哪儿出门、走哪条路、途中要耗多少时间。把这段路写实就足以检验这次约定；其他地区可在有人真正往来时再补。

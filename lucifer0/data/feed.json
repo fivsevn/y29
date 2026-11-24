@@ -6174,9 +6174,612 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-5376f8299f105c25",
+      "handle": "guest_090db984dd9b2473aa4b",
+      "name": "sora_5326",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-e8e2852467e2e188",
+      "handle": "guest_24f18b24f1c5379fa550",
+      "name": "毛豆_4513",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c8f66d790ed6866f",
+      "handle": "guest_56c2ab6c5d62a1590332",
+      "name": "ququ_597",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-161dd95213b57cfb",
+      "handle": "guest_84e19a5166316bcaf3f3",
+      "name": "Jun5386",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-42c8fcf55d7a372b",
+      "handle": "guest_670e3741b7d8790e9925",
+      "name": "拾柒4564",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7d8910ad7d6612dc",
+      "handle": "guest_b5fcd537b476feb7f289",
+      "name": "6595拾柒",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2f715ab93e650f81",
+      "handle": "guest_0c01202b47e8fc941c6c",
+      "name": "4813小年",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-57f4d1bf849a9abe",
+      "handle": "guest_4baa118abe84bbd4e31a",
+      "name": "2866toto",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-11b1bd58be69ccb0",
+      "handle": "guest_63a1f3ccef1741c3ab36",
+      "name": "米粒_194",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bd0ab77b040994a7",
+      "handle": "guest_a287110db890cb1dded0",
+      "name": "东东7852",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c4f30a2f437c0717",
+      "handle": "guest_58b0f61d8171ec79b38b",
+      "name": "ququ7229",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b853e6e2bfc68b10",
+      "handle": "guest_3f1ada3deba823f3f8f0",
+      "name": "9672yui3",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-382cb953e86e6935",
+      "handle": "guest_5c08fa92f6b768e6c49b",
+      "name": "南_6152",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2a14e1d50d04faf5",
+      "handle": "guest_637e5e0a1e30873a4901",
+      "name": "路过9630",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1db3e0d9038bba4c",
+      "handle": "guest_e6cf0890c2df0d34a9ad",
+      "name": "一一9788",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bf4969e64028ee56",
+      "handle": "guest_b04062244c0954673603",
+      "name": "乌米_418",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-969c0b041a6baadf",
+      "handle": "guest_27ea676c227a6b0a103f",
+      "name": "6586圆圆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261124160406-2f5ea7ac-oneball",
+      "author": "guest-bd0ab77b040994a7",
+      "createdAt": "2026-11-24T15:48:17.752Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-bind",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "东东7852"
+      },
+      "text": "可是我就一团线。能一边抽中间那个头，一边用外面那个头吗？我还在想能不能一点点减过去，怕最后一缝侧边，这个口就被拉歪了。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-dns",
+      "author": "visitor-pi",
+      "createdAt": "2026-11-24T15:20:34.376Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-35cbf0fca52a",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "我看到的消息是还不行。上周末有人动了适配那块，离发布还差一步。真加进去了可以看对应版本的更新记录。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-35cbf0fca52a",
+      "author": "passerby17",
+      "createdAt": "2026-11-24T15:06:19.376Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "text": "替人问个事，域名放在 lebureau.coop，YunoHost 现在能替它自动更新 DNS 记录了吗？"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-leaves",
+      "author": "visitor-tau-upper",
+      "createdAt": "2026-11-24T14:07:19.278Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-657a170c4e30",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "我家那盆也是。帘子一拉，先蹭一鼻子葱味。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-sill",
+      "author": "guest-2a14e1d50d04faf5",
+      "createdAt": "2026-11-24T13:57:35.278Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-657a170c4e30",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "路过9630"
+      },
+      "text": "看得我手痒，那几根一剪够我下一碗面了，干吗还伺候它。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-657a170c4e30",
+      "author": "guest-382cb953e86e6935",
+      "createdAt": "2026-11-24T13:56:43.278Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124160406-2f5ea7ac-657a170c4e30/media/onions.webp",
+          "alt": "窗台花盆里的葱叶往旁边倒，有一根碰到了窗帘"
+        }
+      ],
+      "guest": {
+        "name": "南_6152"
+      },
+      "text": "关个窗帘还得先给葱拨个头发。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-bind",
+      "author": "guest-c4f30a2f437c0717",
+      "createdAt": "2026-11-24T13:09:06.752Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-478fbdaf1037",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "ququ7229"
+      },
+      "text": "可以的。扣眼也是在一行当中收针。你这张图开口要留好几行，分开以后，左右两边各用一团线往上织就行。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-trailer",
+      "author": "guest-1db3e0d9038bba4c",
+      "createdAt": "2026-11-24T13:07:24.244Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-a0a73ebffcc5",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一一9788"
+      },
+      "text": "预告里一喊“X 战警，到我这儿来”，我一胳膊鸡皮疙瘩。明明小时候看的是翻译本，听见英文还跟自己记着原声似的。0[^▽^]"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-a0a73ebffcc5",
+      "author": "passerby17",
+      "createdAt": "2026-11-24T13:06:20.244Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "那档聊漫威电影的播客更到 116 期了。三个人又押了一轮《复仇者联盟：毁灭之日》的剧情，后半才轮到《秘密战争》。我就是冲后半去的。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-478fbdaf1037",
+      "author": "guest-bd0ab77b040994a7",
+      "createdAt": "2026-11-24T13:06:03.752Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124160406-2f5ea7ac-478fbdaf1037/media/notch.webp",
+          "alt": "方格纸上的铅笔草图，长方形织片的上边向下凹出一个宽 U 形"
+        }
+      ],
+      "guest": {
+        "name": "东东7852"
+      },
+      "text": "第一次自己画包的织法。我想平着织一片，最后把两侧缝起来。口要像图里那样往下凹。能织到一行的半中间，突然收掉好几针，再接着往下织吗？"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-wash",
+      "author": "guest-11b1bd58be69ccb0",
+      "createdAt": "2026-11-24T12:12:21.024Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-44c3a0b00226",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "米粒_194"
+      },
+      "text": "这是机洗掉的还是手洗也掉？我问卖家，回了我一句“杯身可机洗”。我问的是那些线，谁担心玻璃洗没了。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-measure",
+      "author": "guest-57f4d1bf849a9abe",
+      "createdAt": "2026-11-24T12:12:10.024Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-44c3a0b00226",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124160406-2f5ea7ac-44c3a0b00226/media/taper.webp",
+          "alt": "杯形示意图上两段都标一厘米，上段的杯身比下段宽"
+        },
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "2866toto"
+      },
+      "text": "还有人叫我拿尺每隔一厘米补一条。上边这么宽，下边那么窄，怎么可能倒进去的都是一样多？"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-44c3a0b00226",
+      "author": "guest-2f715ab93e650f81",
+      "createdAt": "2026-11-24T12:09:30.024Z",
+      "replyTo": null,
+      "likes": 12,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124160406-2f5ea7ac-44c3a0b00226/media/jug.webp",
+          "alt": "玻璃量杯外壁剩下几道红色刻度，中间一段已经磨淡"
+        }
+      ],
+      "guest": {
+        "name": "4813小年"
+      },
+      "text": "一只量杯，洗着洗着变成了一只杯。偏偏我常倒到的那一截，红线褪得最干净。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-share",
+      "author": "visitor-chi",
+      "createdAt": "2026-11-24T11:14:44.059Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-5770c31a45de",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124160406-2f5ea7ac-5770c31a45de/media/bus.webp",
+          "alt": "晚间公交车里，一排黄色吊环朝车厢深处延伸"
+        },
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "所以我宁可站一路。手累点，也省得下车还跟人掰扯钱。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-5770c31a45de",
+      "author": "guest-b853e6e2bfc68b10",
+      "createdAt": "2026-11-24T08:39:05.034Z",
+      "replyTo": null,
+      "likes": 11,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "9672yui3"
+      },
+      "text": "三个人拼一辆车，我第一个下。到家都洗完澡了，那俩才到最后一站，然后发过来个三等分的收款。早知道我也坐到终点看风景。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-askmaker",
+      "author": "guest-5376f8299f105c25",
+      "createdAt": "2026-11-24T08:21:08.253Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-01a70ad02d91",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "sora_5326"
+      },
+      "text": "好，我去问 Weiss 自家这个型号到底怎么接的。谢啦。0[^▽^]"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-ground",
+      "author": "guest-e8e2852467e2e188",
+      "createdAt": "2026-11-24T08:17:25.253Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-01a70ad02d91",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "毛豆_4513"
+      },
+      "text": "先问 Weiss 吧，得知道它的信号地在机内怎么接的。只报 NDX 后面这些型号，看不出这一点。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-01a70ad02d91",
+      "author": "guest-5376f8299f105c25",
+      "createdAt": "2026-11-24T08:04:18.253Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "sora_5326"
+      },
+      "text": "我这套原来是 NDX 接 XPS-DR，后面 282、250.2。刚添了台 Weiss DAC501 MK2 当第二个音源，才又注意到 NDX 背面那个信号地开关。两台都接着的时候，该选 Chassis 还是 Floating？"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-snack",
+      "author": "guest-c8f66d790ed6866f",
+      "createdAt": "2026-11-24T07:36:03.832Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-11ae4ad3054d",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "ququ_597"
+      },
+      "text": "最气的是它都探出来半个身子了。要卡就整个卡里面，别让我以为再等两秒能掉。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-tray",
+      "author": "guest-161dd95213b57cfb",
+      "createdAt": "2026-11-24T07:36:00.832Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-11ae4ad3054d",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "Jun5386"
+      },
+      "text": "别跟我似的，再买一包想把前头那包顶下来。那天我站在玻璃前，看着自己花了两份钱买的两包东西互相扶着。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-11ae4ad3054d",
+      "author": "passerby17",
+      "createdAt": "2026-11-24T07:34:02.832Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261124160406-2f5ea7ac-11ae4ad3054d/media/stuck.webp",
+          "alt": "一包浅黄色饼干斜挂在售货机货道的边缘"
+        }
+      ],
+      "text": "三点多就指着这包饼干顶一顶。它比我还能熬，到现在都不肯下来。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-alarm",
+      "author": "guest-42c8fcf55d7a372b",
+      "createdAt": "2026-11-24T04:44:22.666Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-167e2096965e",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "拾柒4564"
+      },
+      "text": "谁跟我说过“关了再开就行”，我能记得再开我还用闹钟啊。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-167e2096965e",
+      "author": "passerby17",
+      "createdAt": "2026-11-24T04:38:22.666Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "text": "就想明天早上少响一回，后天还照旧。怎么到我这儿只有把一整排工作日全关掉？上回这么弄我周一睡过了，烦。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-hex",
+      "author": "guest-969c0b041a6baadf",
+      "createdAt": "2026-11-24T04:35:18.368Z",
+      "replyTo": "l0-20261124160406-2f5ea7ac-aafd1747ae2b",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "6586圆圆"
+      },
+      "text": "看完只想叹气。光是这些工具各认各的格式就够人受了。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-aafd1747ae2b",
+      "author": "guest-bf4969e64028ee56",
+      "createdAt": "2026-11-24T04:32:34.368Z",
+      "replyTo": null,
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "乌米_418"
+      },
+      "text": "翻到 Hex.pm 发的那篇安全事件说明了。"
+    },
+    {
+      "id": "l0-20261124160406-2f5ea7ac-20dff0a6f531",
+      "author": "guest-7d8910ad7d6612dc",
+      "createdAt": "2026-11-24T04:00:03.678Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "6595拾柒"
+      },
+      "text": "《漫画小歇》第 39 期出来了。这档是从聊漫威电影的节目里分出来的，每个月挑几本漫画说说，偶尔也拖更。订阅的零现在可以听了。"
+    },
     {
       "id": "l0-20261124040231-aced649d-poll-echo",
       "author": "visitor-tau",
@@ -17162,6 +17765,36 @@
     }
   ],
   "thumbnails": {
+    "posts/2026/11/l0-20261124160406-2f5ea7ac-657a170c4e30/media/onions.webp": {
+      "src": "data/thumbnails/7fa3bb2688a45b1183f0b73293e5ff0075e6ab020bd7638d56b96689d0a26e0d.webp",
+      "width": 180,
+      "height": 320
+    },
+    "posts/2026/11/l0-20261124160406-2f5ea7ac-478fbdaf1037/media/notch.webp": {
+      "src": "data/thumbnails/95e1a0cd8f366d6888c4060230790314e6088f152f31ab8ee9d913929fe13f31.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261124160406-2f5ea7ac-44c3a0b00226/media/taper.webp": {
+      "src": "data/thumbnails/9ef462ece7338f81743da8a65a60824e020aac54319116e6dc3bb840d2b625b1.webp",
+      "width": 320,
+      "height": 223
+    },
+    "posts/2026/11/l0-20261124160406-2f5ea7ac-44c3a0b00226/media/jug.webp": {
+      "src": "data/thumbnails/e12b651852a6cf011f912b47e13e7f5168f3e7b36df892b5f98c0658c74fd890.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261124160406-2f5ea7ac-5770c31a45de/media/bus.webp": {
+      "src": "data/thumbnails/3d45e58ded5363893418925a4a46f9afeb7c96191f85cdf20935d745a9237a06.webp",
+      "width": 240,
+      "height": 320
+    },
+    "posts/2026/11/l0-20261124160406-2f5ea7ac-11ae4ad3054d/media/stuck.webp": {
+      "src": "data/thumbnails/889b94e73dad4f24135e8e0bf6fab461c652303ed588c1e983b79475c709317a.webp",
+      "width": 240,
+      "height": 320
+    },
     "posts/2026/11/l0-20261124040231-aced649d-3e718e23eb9e/media/knit.webp": {
       "src": "data/thumbnails/805b03af550d97b6fa4ace13de9412ffeed80efae2fb39183f8986d44d4f78b1.webp",
       "width": 293,
