@@ -48,11 +48,46 @@
 
 ## 当日素材
 
+<!-- intake-request:intake-52238c8221b746cb98bc887efbbfbedd -->
 <!-- samples:start -->
 
-采集时间：2026-11-24 17:21:40（北京时间）
+采集时间：2026-11-25 00:03:18（北京时间）
 
 ### 讨论 1
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：不知道是不是切换频繁，还是有其他人登录过的原因，今天突然就告诉我账号封禁了。  
+     
+   我换了个号，结果一直要我 Authenticator 的验证码，我输了又说验证码错误，就是过不了。  
+     
+   即使通过其他方式过了两步验证，但是想把两步验证或者动态验证码关掉的话，就还是会回到登录的页面，叫你输动态验证码，却不给二维码给你扫。。。我就是动态验证码登不了才想关掉的呀，又叫我输动态验证码，晕了。  
+     
+   问了下 Gemini，它说是因为设备太新还没信任，得用上 7 天之后，才能看看能不能改。。  
+     
+   反正这个动态验证码真是太有毒了，明明之前就是通过它进去的现在却老说我验证码错误，是不是有别人用动态验证码登录过我这的就失效了？  
+     
+   太烦了，只能等明天看看账号申诉结果了。  
+     
+   你们有没有遇到过这种情况？
+
+2. **发言者 2**：你是薅羊毛了？
+
+3. **发言者 3**：谷歌对老号感觉容忍度是可以的，你是新号？
+
+4. **发言者 4**：对于老号来说,只要不是新设备登入你 IP 全球乱跳都没问题
+
+### 讨论 2
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：General measurements discussion for GraphWorks visualizer  
+     
+   Share and discuss your impressions of different measurements in the new GraphWorks visualizer tool, whether you’ve actually listened to the headphones or not \(which is normally taboo on most audiophile forums\).  
+     
+   I have not listened to most of the headphones in this tool btw. So most of my impressions will be based on the 5128 graphs, and sometimes some virtual listening. So they should be taken with a grain of salt.
+
+### 讨论 3
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -89,116 +124,330 @@
 
 2. **发言者 2**（回复第 1 条）：有心沒心其實都看得出來
 
-### 讨论 2
+3. **发言者 3**（回复第 1 条）：馭夫術這麼簡單就是有一堆白癡要對著幹
 
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：我顿悟了肥哥们，昨晚梦见白月光了，和那时候一样还是不敢靠近。  
-     
-   醒来后发现这特么不是心魔吗，这哪是什么狗屁白月光，误我渡劫十几年的能是什么好东西，下次遇到了看我不把你扒出原型抽成陀螺\( \`д´\)
-
-2. **发言者 2**：梦初恋肥肥敬而远之  
-     
-   渡心魔宅宅怒抽陀螺
-
-### 讨论 3
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：cgo's pointer check is all over the place
+4. **发言者 4**（回复第 1 条）：能靠半百肉體就抓緊的老公，不知道到底在不滿什麼
 
 ### 讨论 4
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：\[閒聊\] 在台日企，應配合台灣人的習慣嗎？  
-     
-   安安，大家好，我很好奇一件事，日企來台開分店，應該配合台灣人的習慣，入境隨俗，還  
-   是我們台灣人要遵守他們日企的禮貌跟規範啊？不知道大家覺得呢？
+1. **发言者 1**：Let's Meet in the Middle
 
-2. **发言者 2**（回复第 1 条）：慣老闆的共體時艱習慣
-
-3. **发言者 3**（回复第 1 条）：看錢多寡及個人奴性
-
-4. **发言者 4**（回复第 1 条）：看靠誰賺錢
+2. **发言者 2**（回复第 1 条）：I always have \`whereami\` aliased to \`hostname\`.
 
 ### 讨论 5
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：某社区: Agent-first-browse – Web automation with delta snapshots and LangGraph
+1. **发言者 1**：Need help finding model for mysterious 3.2 inch touchscreen display  
+     
+   I've picked up a 3.2 inch touchscreen module from a friend \(they got it in a bulk lot with no identification\) wanting to build a photo frame type project, but found myself stuck as what driver chip it could be using, I'm posting hoping someone could point me to a driver name or arduino library. pictures below  
+     
+   \[图片省略\]TFT\_back1920×1201 966 KB  
+     
+   \[图片省略\]TFT\_front1790×2724 1.43 MB
+
+2. **发言者 1**（引用未收录发言）：ah thanks\! never thought to do that but that looks to be the one, I'll test it out and put a result here in a bit.
+
+3. **发言者 1**（回复第 2 条）：got it working now, thanks\! just used the UTFT 320x240 demo with the line UTFT myGLCD\(SSD1289\_8,A1,A2,A0,A3\); pasted in where the default one was and it works\!
 
 ### 讨论 6
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：General measurements discussion for GraphWorks visualizer  
+1. **发言者 1**：Material 3 for Godot  
      
-   Share and discuss your impressions of different measurements in the new GraphWorks visualizer tool, whether you’ve actually listened to the headphones or not \(which is normally taboo on most audiophile forums\).  
+   I created a port for material 3 to be used in Godot.  I personally love the modern style of websites and apps, but video game UI always seems to fall by the wayside.  So I made this a while back and decided to upload to github and share.  
      
-   I have not listened to most of the headphones in this tool btw. So most of my impressions will be based on the 5128 graphs, and sometimes some virtual listening. So they should be taken with a grain of salt.
+   Hope you guys find it helpful,  
+     
+       
+     
+         \[链接隐去\]  
+       
+     
+       
+         
+     \[图片省略\]  
+     
+     GitHub - 发言者 1/godot\_material3  
+     
+       Contribute to 发言者 1/godot\_material3 development by creating an account on GitHub.
 
 ### 讨论 7
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：What am I doing wrong in this custom sentence?  
-     
-   \[图片省略\]277721080×2102 153 KB  
-     
-   I’m trying to add this sentence for the vocab word 捧げる, but I get the error in red. I don’t get what I’m doing wrong, my answer IS in Japanese, isn’t it?
-
-2. **发言者 1**（回复第 1 条）：Okay, it works if I use just hiragana but… a\) the error message doesn’t make sense because hiragana IS Japanese, but also, for a vocab example sentence, why can’t I use kanji? I’m trying to learn the vocab, which does include a kanji?
-
-3. **发言者 2**（回复第 1 条）：I haven’t used this feature, so forgive the speculatory answer, but maybe it’s a mobile vs web issue\(?\). I get the following when trying to gin up a sentence:  
-     
-   \[图片省略\]image853×938 51.5 KB  
-     
-   As per the on screen instructions and the with your experience, I get no error using kana only.
-
-4. **发言者 1**（回复第 1 条）：But yours says you can use kanji with hiragana in parenthesis, but that also doesn’t work…  
-     
-   \[图片省略\]277761080×2102 153 KB  
-     
-   Maybe I should try on web later?
-
-5. **发言者 1**（回复第 1 条）：I was on mobile, in the app, yeah\! With your help, I was able to get the right brackets and I got it to work\! Thanks\!
-
-6. **发言者 3**（回复第 5 条）：发言者 1 发言者 2  
-     
-   I am fixing this issue in the mobile app right now\!
-
-7. **发言者 4**（回复第 1 条）：your answer probably shouldn’t include the exclamation mark, otherwise you’d have to type it in every time. But it’s also part of the template  
-     
-   \(personally I wouldn’t include the よ either and instead make it part of the template too\)
-
-8. **发言者 1**（回复第 7 条）：you’re right, I was playing around with the sentence, but I did it like this now, and it seems to work\!  
-     
-   \[图片省略\]278201080×2102 145 KB  
-     
-   \(it’s a line from 進撃の巨人, so I wanted to keep the よ in the word as I want to practice the full phrase, otherwise you’re right and the よ would be better as part of the template. Thanks for the tips\!\)
-
-9. **发言者 1**（回复第 6 条）：ah, thank you so much\!
-
-10. **发言者 3**（回复第 9 条）：发言者 1, 发言者 4 is right, both mobile and the web do not support the exclamation mark in the answer :person\_bowing:
-
-11. **发言者 1**（回复第 10 条）：yeah, I removed it\!
+1. **发言者 1**：某社区: Daydream – AI video editor for your agents
 
 ### 讨论 8
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：昨晚跟一个朋友吃饭，他说他有个朋友今年年初的时候开始自己做的游戏公会（他之前在游戏公会的公司做了 2 年了的），我朋友说他现在一个月有 5000 多美金充值流水，有 5 个人左右。平时工作就是拉人来玩游戏，但是具体怎么拉的不懂，有大佬知道的吗？这个真的那么赚钱的吗
-
-2. **发言者 2**：不能是私服吧？
-
-3. **发言者 3**：正规游戏不会的，但是有些不正规游戏就是赌场，工会就是叠码仔，能拉到人确实挺赚的。
-
-4. **发言者 1**：发言者 2 应该不是，不太清楚
-
-5. **发言者 1**：发言者 3 就是不知道怎么拉的，而且拉的那么精准。
+1. **发言者 1**：Search Improvements  
+     
+   I don’t know if there has been a post about it although I got a replay on the bug reports thread about some speed optimization being done which I have noticed and is awesome, but I also wanted to point out that it seems that now in searching, all non JLTP results are now followed by common results first, rather than mixing them in by character length order only, and this change is much appreciated\! Although it does seem sometimes that a ‘common’ marked result appears a row or two after the block of ‘common’ results \(example searching for 極 shows 極寒 not together with all the other common items.
 
 ### 讨论 9
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Blender v4.5.17 LTS v5.2.5 LTS v5.4.0 OpenPBR Patch Releases  
+     
+   on the releases page v4.5.17 LTS, v5.2.5 LTS, at the WIP OpenPBR page \[near bottom\] the newest v5.4.0 OpenPBR patch build are there for downloading.  
+     
+   on the release notes page one can read about the changes for every release.  
+     
+   happy :blender\_logo\_64\_png:ing\!
+
+### 讨论 10
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：\[閒聊\] 女孩兒會用潤唇膏嗎？  
+     
+   如題，  
+   大家午安啊肥肥來了！  
+     
+   最近冬天比較冷，  
+   常常舔嘴唇就會乾裂，  
+     
+   這時候我都會用小護士。  
+     
+   女孩兒們會用潤唇膏嗎？  
+   大多什麼時候用？  
+   一天會補幾次呢？  
+     
+   一起來聊聊！
+
+2. **发言者 2**（回复第 1 条）：炸豬油
+
+3. **发言者 1**（回复第 1 条）：那個現在比護唇膏還貴
+
+4. **发言者 3**（回复第 1 条）：乾了就用
+
+5. **发言者 4**（回复第 1 条）：照三餐用  無法忍受嘴唇乾
+
+### 讨论 11
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：上早八，老师要交名单  
+     
+   ：班长交下名单哈？班长呢？班长也没来啊？  
+     
+   ：那一班还有别的班干部吗？团支书来了吗？  
+     
+   ：团支书也没来啊？那学习委员呢？  
+     
+   ：学习委员也没来啊？？那只有这三个是主要班干部吗，，副班呢？  
+     
+   ：副班也没来啊？？？  
+     
+   \( ﾟ∀。\)\( ﾟ∀。\)\( ﾟ∀。\)
+
+2. **发言者 1**：都不要笑了\( \`д´\)\( \`д´\)\( \`д´\)σ这是一班的，耻辱！
+
+3. **发言者 2**：\(\`ヮ´ \)σ\`∀´\)ﾟ∀ﾟ\)σ
+
+4. **发言者 3**：σ\`∀´\)
+
+5. **发言者 4**：\(\`ヮ´ \)σ\`∀´\) ﾟ∀ﾟ\)σ
+
+6. **发言者 5**：\(\`ヮ´ \)σ\`∀´\) ﾟ∀ﾟ\)σ
+
+7. **发言者 6**：\(\`ヮ´ \)σ\`∀´\) ﾟ∀ﾟ\)σ
+
+8. **发言者 7**：看来真是人民的班干部\(\`ヮ´ \)σ\`∀´\) ﾟ∀ﾟ\)σ颇具群众作风啊
+
+### 讨论 12
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Mise à jour automatique des entrées DNS avec lebureau.coop  
+     
+   Est-ce que vous savez si on peut utiliser lebureau.coop avec les fonctions automatiques de mise à jour des entrées DNS de yunohost ?
+
+2. **发言者 2**（回复第 1 条）：Pas encore, mais il y a eu du travail dessus le week end dernier.  
+     
+   Le code dns-lexicon a été adapté, mais je crois que la pull request n’est pas encore transmise:  
+     
+   Comparing dns-lexicon:main...arthru:lebureau · dns-lexicon/dns-lexicon · GitHub  
+     
+   Une fois proposée et intégrée, ce sera assez rapide.
+
+3. **发言者 1**（回复第 1 条）：C’est magnifique merci.  
+     
+   Tu as une idée de où est-ce que ce sera annoncé ?
+
+4. **发言者 2**（回复第 1 条）：A minima dans le changelog de la version qui intégrera ce travail. Il est possible qu’on en parle dans la catégorie Anouncement aussi
+
+5. **发言者 1**（回复第 1 条）：Merci je vais suivre ça.
+
+### 讨论 13
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：今天总感觉遇到了不少好兆头，趁这个机会，把自己做了很久的一个个人项目拿出来，想听听大家的意见与反馈，叨扰大家了。  
+     
+   　　项目名为「星愿遗嘱」，简单来讲，这是一个帮助用户长期记录、保存和传递个人意愿的项目。  
+     
+   　　项目的创作理念，其实来自一些大家经常开玩笑讲起的话：“如果我哪天死了，请一定帮我删除浏览记录”、“如果我哪天死了，记得帮我告诉某个朋友一些事情”。  
+     
+   　　我自己也曾经经历过相当严重的心理困境，一度走到了轻生的边缘。当时让我选择继续生活的理由其实很简单：我意识到自己还有很多话没有来得及跟孩子讲，也不希望有一天，自己的想法只能由别人来解释。这个看似微不足道的念想，让我重新有了面对生活的意愿。  
+     
+   　　从那之后，我就希望自己的经历多少可以帮助到一些有类似困境的人。很多时候，人在情绪中很难看清自己的生活，而那些尚未完成的事情、尚未说出口的话，或许也能成为我们重新审视生活的一个契机。  
+     
+   　　于是便有了「星愿遗嘱」这个项目。  
+     
+   　　软件会邀请用户在日常生活中不断记录、修改和完善自己的“遗嘱”，并通过定期打卡刷新自己的“存续状态”。这里的遗嘱并不局限于财产分配，它可以是想对某个人说的话，可以是对一些事情的交代，也可以只是现阶段对自己人生的理解。  
+     
+   　　对于有长期意愿保存需求的用户，项目也提供实体信件的托管与交付服务。在满足预先约定的存续失效条件并完成必要核实后，平台会通过邮政渠道将信件寄往用户事先验证的指定地址。当然，存续失效并不等同于死亡认定，信件也不必然具备法律意义上的遗嘱效力。  
+     
+   　　除了这些功能之外，我也花了相当多的时间在项目的美术与交互设计上。随着用户一次次完成打卡，画面中的星空也会逐渐发生变化。我希望用这种方式，让原本有些机械的打卡行为，成为一件能够感受到时间积累的事情。  
+     
+   　　我其实并不希望用户把写遗嘱当作一件临终时才需要做的事情。人的想法会随着生活不断发生变化，今天在意的事情，几年后或许已经释怀；今天尚未说出口的话，明天或许就有机会亲口告诉对方。  
+     
+   　　我希望遗嘱不一定是人生的最后一篇文字，它也可以是一篇伴随人生不断修改的文字。  
+     
+   　　这大概也是我做这个项目时所理解的“向死而生”。  
+     
+   　　目前项目的基础功能已经基本完备，但距离自己心目中的样子还有相当长的一段路要走。作为一个独立开发者，也很想知道大家对这种产品形态、交互设计，以及存续确认和隐私保护机制有什么看法。  
+     
+   　　欢迎各位体验、批评，也欢迎提出一些我没有考虑到的问题。测试阶段使用虚构内容即可，不必填写真实的私人意愿。  
+     
+   　　网页版（PC / iOS / Android）：  
+   　　\[链接隐去\]  
+     
+   　　安卓版（目前采用 WebView 套壳）：  
+   　　\[链接隐去\]  
+        
+   　　感谢各位愿意花时间读到这里。
+
+2. **发言者 2**：1. 没有公证处对接  
+   2. 没有律所合作  
+   3. 无法证实遗嘱人精神状态  
+   = 这个项目 100%死亡 （还不如改成 备忘录 app）
+
+### 讨论 14
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：AI maskin do not work  
+     
+   HI, When I try to do AI masking in Dartable 5.6.2 get following error message:  
+     
+   Objekt mask preparation failed.  
+     
+   It has worked before.  Any tips of what to do?  
+     
+   Anders
+
+2. **发言者 2**（回复第 1 条）：My gut tells me it might have something to do with the AI models not being properly initialized. What OS are you on? What does Preferences/AI show? Can you share a screenshot?
+
+3. **发言者 1**（回复第 2 条）：Hi, I.a running Manjaro and attach a screenshot.  
+     
+   \[图片省略\]Skärmbild från 2026-11-24 11-45-481825×736 41.4 KB
+
+4. **发言者 2**（回复第 1 条）：Mh, others might have more informed suggestions. I’d try deleting darktables cache folder ~/.cache/darktable/. You’ll need to re-download the AI models afterwards.
+
+5. **发言者 1**（回复第 1 条）：~/.cache/darktable/ai was and is now empty. I have tried reinstall Darktable and re-download the AI modules but no succes…
+
+6. **发言者 3**（回复第 1 条）：The same thing happened to me a few weeks ago. I will try to find the thread and link to it here. Short version: In the end, I had to install another module.  
+     
+   PS - Here it is: Introducing neural restore module – raw denoise, denoise, and upscale - \#205 by 发言者 3
+
+7. **发言者 1**（回复第 1 条）：Thank you, I looked at 发言者 3 comment but I already have Onnx installed and it have been working… I starting to wonder if the problem is in Darktable or some outside access to an AI modell?\!
+
+8. **发言者 2**（回复第 7 条）：darktable’s AI models work exclusively offline. Are you using the appimage? if no, could you try that one?
+
+9. **发言者 1**（回复第 8 条）：I don’t know that program but I,ll look into it. THanks
+
+10. **发言者 2**（回复第 9 条）：I mean simply running the official darktable appimage. It will use the same config folder as your package-manager-installed instance but comes bundled with it’s dependencies.
+
+### 讨论 15
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Les Clairvoyants \#116 : Secret Wars, Marvel fait sa guerre des mondes  
+     
+   Article publié sur :			Les Clairvoyants \#116 : Secret Wars, Marvel fait sa guerre des mondes - 某社区.fr  
+     
+   Épisode 116 : où Fask, Fox et Arkeon spéculent une toute dernière fois sur Avengers: Doomsday, font le focus sur la suite avec Secret Wars, sans oublier un petit coup d'œil sur toutes les dernières news en provenance du Marvel Cinematic Universe...
+
+2. **发言者 2**（回复第 1 条）：Je vous le dis les amis, le "To me my X-Men" du last trailer m’a foutu les poils. Beaucoup trop d’heures passées sur ces comics quand j’étais gamin. Ce qui est très drôle puisque gamin, la phrase existait pas. Déjà parce que je lisais des trads, et a priori la formulation date de… 2013. :smiley:  
+     
+       
+       \[图片省略\]
+
+3. **发言者 2**（引用未收录发言）：Je me suis mal exprimé, je voulais dire que le fait que la phrase devienne "populaire" date de 2013, et la source c’était les occurrences sur le Net via un papier random donc :man\_shrugging: \(et a priori c’était lié a un DA, mais je vais retrouver ça ASAP.\)  
+     
+   Bon en revanche y’a pas Hawkeye ? Du coup ils vont perdre ?  :grimacing:
+
+4. **发言者 3**（回复第 1 条）：Référence direct au premier épisode de X Men 97, j'imagine, où Cyclope dit exactement "to me, my x-men" dans son oreillette...  
+     
+   Ce podcast tombe à pic, je suis complètement largué dans le MCU. J'imagine qu'on parle du  Secret Wars de Hickman, que j'avais adoré lire à sa sortie y a déjà une éternité... \(mention spéciale à Battleworld, 1602 et Weirdworld\)
+
+5. **发言者 1**（回复第 4 条）：\[图片省略\] 发言者 3:  
+     
+   Référence direct au premier épisode de X Men 97, j'imagine, où Cyclope dit exactement "to me, my x-men" dans son oreillette...  
+     
+   Aussi, oui. :slight\_smile:
+
+### 讨论 16
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Great Electronic Music With Meaningful Lyrics  
+     
+   I’m searching for more albums in this category.  
+     
+   As examples, here are 3 albums that I really enjoy and think are highly worthy of strong recommendations:  
+     
+   \[图片省略\]IMG\_0021994×1055 49.1 KB  
+     
+   \[图片省略\]IMG\_0020973×1066 158 KB  
+     
+   \[图片省略\]IMG\_0022980×1038 128 KB  
+     
+   Based on my taste, would anyone care to share some similar recommendations?  
+     
+   Cheers,  
+     
+   Stavs
+
+2. **发言者 2**（回复第 1 条）：Hi 发言者 1,  
+     
+   Nearly a day passed and no responses from the forum:- what is going on? :thinking:  
+     
+   FYI I found the Lilly Allen album example OK, I was less keen on the Smile:D album by Porter Robinson, however not sure if this will work for you, but you could try music by ‘Getdown Services’.  
+     
+   Presently, I am listening to the album Massive Champion.  
+     
+   Have fun\!
+
+3. **发言者 1**（回复第 2 条）：Thanks 发言者 2 for the recommendation. I’ll check it out.  
+     
+   Electronic music is a funny thing these days - there is just so much of it available. A lot of it leaves me a cold. It’s difficult to pinpoint what ticks my boxes. So different from the jazz, rock and blues I tend to listen to most, but certain electronic albums really do it for me.  
+     
+   The search continues…
+
+4. **发言者 3**（回复第 1 条）：It depends what you mean by meaningful lyrics, and the type of electronic music you like…  
+     
+   I love this album:  
+     
+   \[图片省略\]image516×516 38.4 KB  
+     
+   An electric storm by White Noise  
+     
+   An old album, lyrics quite varied from amusing to sombre. I find the lyrics of the track The Visitation quite moving.
+
+5. **发言者 4**（回复第 1 条）：Hi 发言者 1  
+     
+   Would 发言者 4 Eno - The Ship, fit your requirements?
+
+### 讨论 17
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -230,7 +479,17 @@
 
 10. **发言者 1**（回复第 9 条）：Thanks.
 
-### 讨论 10
+### 讨论 18
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Security incident on Hex.pm
+
+2. **发言者 2**（回复第 1 条）：Holly-molly. What a bug\! I mean, yeah, it’s a standart-ish way to get RCE but the way how it’s triggered is something.   
+     
+   I want to believe at some moment all languages will stick to 2-3 formats and will not reinvent the wheel.
+
+### 讨论 19
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -252,147 +511,359 @@
      
    \#TeamITZJANINA
 
-### 讨论 11
+### 讨论 20
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：44 ynh apps not instalable/upgradable due to codeberg outage  
+1. **发言者 1**：is it posible to make a dictionary with 2 values?  
      
-   Hello,  
+   Godot Version  
+   4.7.2  
      
-   Codeberg is currently down. As a result, all apps whose upstream is hosted on Codeberg can no longer be installed or updated.  
+   Question  
      
-   We hope codeberg are going to find a solution.  
+   im triying to make a list of questions with a dictionary the question should have an answer and a topic to create other options based on the topic.   
      
-   Here a list of apps we think it’s risky to upgrade or install now:  
+   example   
      
-   anarcosyndicalismebook  
-   digipad  
-   digiscreen  
-   digisteps  
-   digitools  
-   digitranscode  
-   digiwords  
-   fail2ban-web  
-   faircamp  
-   feber  
-   fittrackee  
-   flohmarkt  
-   forte  
-   gamja  
-   gotosocial  
-   holos  
-   liberaforms  
-   lichenmarkdown  
-   mailbag  
-   mastofessb  
-   memo  
-   mitra  
-   mlmmj  
-   moviebuff  
-   piefed  
-   readeck  
-   snac  
-   streams  
-   translite  
-   zwiicms
+   "question": "answer,"topic"  
+     
+   "who are you" : "juan", "name"  
+     
+   is there a way to do it or should i find another method?
 
-2. **发言者 2**（回复第 1 条）：Has a woraround you can temporarily add this in your /etc/hosts file:  
-     
-   217.197.84.140 \[链接隐去\]  
-   2a0a:4580:103f:c0de::1 \[链接隐去\]  
-     
-   Source: \[链接隐去\]  
-     
-   NB: i didn’t check the ip so i hope it’s the good one…
+2. **发言者 2**（回复第 1 条）：Dictionary values can be arrays or objects.
 
-3. **发言者 3**（回复第 1 条）：It is reachable now
-
-### 讨论 12
+### 讨论 21
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：\[链接隐去\] à sauvegarder  
-     
-   Bonjour,  
-     
-   j'ai une adresse e mail sur \[链接隐去\] avec un bridge  
-     
-   comment faire pour sauvegarder sur un PC les paramétres du compte et tous les e mails ?  
-     
-   Cordialement
+1. **发言者 1**：某社区: Cdx-dock – Bridge LangChain/CrewAI/AutoGen/Hermes, cut token overhead
 
-2. **发言者 1**（回复第 1 条）：bonjour,  
-     
-   j'avais trouvé le système importexportstooolNG  
-     
-   est-ce qu'il existe un autre moyen pour une sauvegarde ?
-
-### 讨论 13
+### 讨论 22
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Beaded Penguins  
+1. **发言者 1**：Curvature map maddness  
      
-   My son and I made these beaded penguins by following this 某社区 tutorial \[链接隐去\] It took significantly longer than anticipated \(like, it took hours…not the deceptive 15 minutes of the video\), but they are super cute\!  
+   I’m getting all these white lines and noise.  
      
-   \[图片省略\]IMG\_20261115\_1945042771920×2560 784 KB  
+   The model has around 5m verts, which is big for Blender. I’m using the pointiness geometry attribute to bake a curvature map but it’s doing this. Any ideas what’s going on?  
      
-   \[图片省略\]854a4592-d742-44f8-b026-9cb8ed3e6e6b1920×1440 394 KB  
+   \[图片省略\]261123 pointiness 013758×1806 4.13 MB
+
+2. **发言者 2**（回复第 1 条）：I’m asking myself:1  
      
-   \[图片省略\]IMG\_20261115\_1945344611920×1440 370 KB  
+   Why do you use the color of the colorramp to drive the factor of a mix node ?  
      
-   \[图片省略\]IMG\_20261115\_1945449931920×1440 351 KB
+   ..so maybe the conversation from color to factor uses some color management “thingy” which leads to some not quite white to extremely white transformation ?
 
-2. **发言者 2**（回复第 1 条）：Those are so tiny and cute\! Anything with tiny beads looks like it takes hours to me.
+3. **发言者 3**（回复第 1 条）：Pointiness works per vertex and reacts strongly to uneven density, so on a 5M-vert mesh long thin triangles show up as those white lines and noise. Try baking from a remeshed or decimated copy, or smooth the value first with a Blur Attribute node in Geometry Nodes before you bake.
 
-3. **发言者 1**（回复第 2 条）：It does. It definitely takes hours. So many repetitive hours \(this is why beading is not my craft of choice\).
+4. **发言者 1**（回复第 2 条）：Just to push the contrast.
 
-4. **发言者 3**（回复第 1 条）：They are ADORABLE \!
+5. **发言者 1**（回复第 3 条）：It’s all quads and the mesh is symmetrical and pretty smooth. I had to really push the contrast with the colour ramp because it is so smooth. The really weird part, is the white streaks and spots are not symmetrical.
 
-5. **发言者 4**（回复第 1 条）：Adorable\! I love how your kids craft with you\! :heart:
-
-6. **发言者 5**（回复第 1 条）：They’re so darn cute\! You both did a great job. I want to do some of these but my seed beads are cheap and therefor not a uniform size - which is death for this kind of work, alas.
-
-7. **发言者 6**（回复第 1 条）：Penguins are my favorite. These are just so darling, I can’t\!
-
-8. **发言者 1**（回复第 1 条）：Thank you 发言者 6 发言者 4 发言者 3 发言者 5 \!  
-     
-   发言者 5 Our beads were a little bigger than seed beads, and probably not the ideal shape either, but I agree that a uniform size of bead is important for this kind of project.
-
-9. **发言者 7**（回复第 1 条）：Adorable\!
-
-10. **发言者 1**（回复第 9 条）：Thank you\!
-
-11. **发言者 8**（回复第 1 条）：I love these\! Too cute\!
-
-### 讨论 14
+### 讨论 23
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：头油脱发的肥哥们都用什么洗发水\(つд⊂\)
-
-2. **发言者 2**：霸王
-
-3. **发言者 3**：拉芳，建议脱到一定程度直接去植发
-
-4. **发言者 4**：随便什么便宜洗发水掺稀了每天一洗
-
-5. **发言者 5**：已经没有了\( ´\_ゝ\`\)不用担心了
-
-6. **发言者 1**（回复第 3 条）：\[引用第 3 条\]  
+1. **发言者 1**：Re: \[閒聊\] 相親男生聽到女生薪水2萬多就跑了  
      
-   主要是没到那种程度，但是也确实算得上烦恼\(;´Д\`\)
-
-7. **发言者 6**：先用去油洗发水洗两遍，再用二硫化硒洗剂泡5分钟
-
-8. **发言者 1**（引用未收录发言）：\[引用未收录发言\]  
+   昨天才在網路上看到  
+   一個男的做感情諮詢  
      
-   已下单\(｀･ω･\)
+   月薪38K住家裡吃爸媽的，開BMW月繳車貸15k，信用卡欠款7萬循環利率，存款2萬  
+     
+   抱怨覺得自己長得不錯（？），沒有女生看的上他，覺得女生只看錢跟條件，然後說自己  
+   開BMW女生坐了也舒服也很有面子啊，為什麼沒人選他  
+     
+   真的是底層魯中魯  
+     
+   這已經不是女生看他條件選不選他的問題  
+   是根本沒能力好好生活了吧  
+     
+   月薪38K有點少但勉強算有一技之長吧  
+   但是車貸、卡債這種消費觀，看就知道揀角沒前途  
+     
+   要談戀愛，至少雙方都有月薪4萬比較合適一點，要結婚至少雙方5-6萬，勉強可以過兩人  
+   生活  
+     
+   自己現在月薪50K，平時吃吃喝喝大概15k左右，之前信貸投資每個月還款15k  
+     
+   3C產品買一次就要勒緊褲腰帶好幾個月，談戀愛光是出去玩的經費、油錢、開銷，想一想  
+   就頭皮發麻，每天回家尻尻槍身心舒暢，完全不想談戀愛了  
+     
+   不要說什麼全付男，就是AA 制我也覺得我自己談不起戀愛，完全就是虧本買賣，如果沒  
+   有走到最後更是賠了夫人又折兵  
+     
+   然後上網看很多女生還在幻想男生就是要買單一切就覺得好好笑...真的是，睏矇睏麥眠  
+   夢，只能說慢慢找吧，祝夢姐們都可以找到月收50w如意郎君XD
 
-9. **发言者 7**：\( ・\_ゝ・\)建议去皮肤科照个皮肤镜看看是不是毛囊萎缩了，是的话就要开始弄点米诺了
+2. **发言者 2**（回复第 1 条）：月薪38K比殘廢還不如 啥一技之長...
 
-### 讨论 15
+3. **发言者 3**（回复第 1 条）：題外話 我個人不支持信貸投資 以投
+
+4. **发言者 3**（回复第 1 条）：資大盤連續N年的賠錢率來看 七年還
+
+5. **发言者 3**（回复第 1 条）：有10%左右 房貸20年就趨近於0% 甚
+
+6. **发言者 3**（回复第 1 条）：至30年就更低（以名目報酬率算）
+
+7. **发言者 3**（回复第 1 条）：扣掉貸款利率和通膨率的話賠錢率就
+
+8. **发言者 3**（回复第 1 条）：更高了
+
+9. **发言者 4**（回复第 1 条）：開BMW給人印象不好，很多毒駕酒駕肇
+
+10. **发言者 4**（回复第 1 条）：事都開BMW，把BMW賣掉，減少負債
+
+11. **发言者 5**（回复第 1 条）：男女有別，男生38K廢物，女生小資
+
+### 讨论 24
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：蹲厕迷思：如果片里的老师都是表演，那么现实中现充进行活塞运动的时候，会不会也有表演的成分\( ﾟ∀。\)
+
+2. **发言者 2**：你问我？
+
+3. **发言者 3**：据说是有的\( ﾟ∀。\)
+
+4. **发言者 4**：问
+
+5. **发言者 5**：道
+
+6. **发言者 6**：于
+
+7. **发言者 7**：于
+
+### 讨论 25
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Stacktrace when installing kernel 6.1.0-56-amd64, stuck and can't move on  
+     
+   What type of hardware are you using: Old laptop or computer  
+     
+   What YunoHost version are you running: 12  
+     
+   How are you able to access your server: The webadmin  
+     
+   SSH  
+     
+   Direct access via physical keyboard/screen  
+     
+   Describe your issue  
+   Since yesterday, my yunohost did not respond while updating using the web interface. The culprit seems the update to the kernel 6.1.0-56, which seems partially installed. dpkg --reconfigure -a allows to move on to an apt upgrade but the upgrade always fail in a stacktrace \(i see calls from ext4 within\). and drops either unresponsive or to unresponsive bash.  
+     
+   Is it a known issue ? How do I fix that ?  
+     
+   Currently running memtest86 to ensure that it’s not an hardware fault, tried also to check the disk, seems OK.  
+     
+   Share relevant logs or error messages
+
+2. **发言者 2**（回复第 1 条）：\[图片省略\] 发言者 1:  
+     
+   The culprit seems the update to the kernel 6.1.0-56, which  
+     
+   I have a similar problem with Yunohost on a VPS with that same kernel.  
+     
+   Anytime an intensive process runs, the kernel panics.  
+     
+   I worked around the issue by booting to the old kernel. The same actions now don’t cause a panic.
+
+### 讨论 26
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Turkey Print Autumn Napkins with Mitered Corners  
+     
+   I have made cloth napkins for October and December, so I decided I wanted some for November. My November/Thanksgiving decor is turkey-based, so I spend a couple of years looking for a print that suited my tastes. Earlier this year, I found it and this week I made 'em\!  
+     
+   \[图片省略\]TurkeyNapkins01576×445 105 KB  
+     
+   I was able to get eight 13.5" napkins out of 2 yards. The suqares were originally 15", with 3/4" for the mitered hem.  
+     
+   \[图片省略\]TurkeyNapkins03440×576 94.4 KB  
+     
+   I had intended to find a coordinating print for a panel on the back, framed by the mitered edge. But I couldn’t find something that worked for me in color, theme, and style. I picked up something that I had settled for, but when I realized that the back was pretty much plain white, I decided to forego the panel\!  
+     
+   \[图片省略\]TurkeyNapkins02274×576 56.2 KB  
+     
+   We’ll use them all month in the coming years, but the napkin rings only come out for holiday dinner or guests\!
+
+2. **发言者 2**（回复第 1 条）：Love them\!  They’ll go so well with all your turkey decor.
+
+3. **发言者 1**（回复第 2 条）：Thanks\! I think they’re a good match for any of our plates, too\!
+
+4. **发言者 3**（回复第 1 条）：Love them\!
+
+5. **发言者 1**（回复第 4 条）：Thank you\!
+
+6. **发言者 4**（回复第 1 条）：The mitered corners are perfect\!\!\!
+
+7. **发言者 1**（回复第 6 条）：Hehe\! They aren’t all perfect. THANKS\!
+
+8. **发言者 5**（回复第 1 条）：These will bring so much charm to the table\!\!
+
+9. **发言者 6**（回复第 1 条）：Those are so elegant and perfect. Also, your corners are admirably perfect \(mine always come out wonky\).
+
+10. **发言者 7**（回复第 1 条）：Oh my goodness, this print is so dreamy. Festive without being too typically “turkey forward”. Would love to see your turkey decor all out and how these fit in\!
+
+### 讨论 27
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：不懂就问，不知道大法的保修政策，还是没发票按照出厂日期保修？
+
+### 讨论 28
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：A pair of plays...  
+     
+   I drove out again to the same lake where I shot the sunrise a week or so back. There was periodic, off-and-on warm sunset light, but it was undependable. Also it’s already kind of toasted and crunchy looking in terms of “fall color”. Just hasn’t happened too much. These are a pair of images shot side by side. I’m not sure they’re good enough to survive. I’m also not sure the edits are done, but I’m stopping now.  
+     
+   Done in Greycard.  
+     
+   Hmmmm…  
+     
+   \[图片省略\]IMG\_7847-social1365×2048 1.31 MB  
+     
+   IMG\_7847.CR3 \(28.4 MB\)  
+     
+   IMG\_7847.CR3.gcd.txt \(1.4 MB\)  
+     
+   \[图片省略\]IMG\_7862-social1365×2048 1.73 MB  
+     
+   IMG\_7862.CR3 \(32.2 MB\)  
+     
+   IMG\_7862.CR3.gcd.txt \(2.3 MB\)  
+     
+   This file is licensed Creative Commons, By-Attribution, Share-Alike.
+
+2. **发言者 2**（回复第 1 条）：Those are stunning, especially the first one is composed beautifully :slight\_smile: \!
+
+3. **发言者 3**（回复第 1 条）：Brighter and louder.   :slight\_smile:  
+     
+   \[图片省略\]IMG\_78471600×2400 1.95 MB
+
+4. **发言者 4**（回复第 1 条）：\[图片省略\]IMG\_78471322×1920 1.64 MB  
+     
+   IMG\_7847.CR3.xmp \(22.5 KB\)
+
+5. **发言者 5**（回复第 1 条）：IMG\_7847.CR3.xmp \(11.6 KB\)  
+     
+   IMG\_7862.CR3.xmp \(14.7 KB\)  
+     
+   \[图片省略\]IMG\_78471762×2563 916 KB  
+     
+   \[图片省略\]IMG\_78621744×2380 1.04 MB
+
+6. **发言者 6**（回复第 3 条）：\[图片省略\] 发言者 3:  
+     
+   Brighter and louder. :slight\_smile:  
+     
+   Aahh… Non, non un non\! :disguised\_face:  
+     
+   Softer and quieter. :shushing\_face:  
+     
+   \[图片省略\]IMG\_78621999×2999 1.09 MB  
+     
+   IMG\_7862\_01.CR3.xmp \(10.1 KB\)  
+     
+   dt 5.7.0\+1845~g69c98c95aa
+
+7. **发言者 1**（回复第 6 条）：\[图片省略\] 发言者 6:  
+     
+   Softer and quieter.  
+     
+   I thought about B&amp;W when I shot that one but it was getting a little late when I was processing and I didn’t even try. The contrast makes it a natural.  
+     
+   What caught my eye were all the tiny leaves / blooms \(or whatever they are – it was too wet to get very close to it\).
+
+8. **发言者 3**（回复第 6 条）：Different strokes for different folks.  Even so, might try a low key, later.   :slight\_smile:
+
+9. **发言者 7**（回复第 1 条）：This is a one click edit using a style based on Fujifilm Velvia.  
+     
+   R7 Velvia.dtstyle \(6.0 KB\)  
+     
+   DT 5.7 IMG\_7847.CR3.xmp \(13.4 KB\)  
+     
+   \[图片省略\]IMG\_78471334×2000 1.14 MB
+
+10. **发言者 8**（回复第 1 条）：dt 5.7 with C&amp;T module:  
+     
+   \[图片省略\]IMG\_78472000×2718 2.03 MB  
+     
+   IMG\_7847\_01.CR3.xmp \(27,1 KB\)
+
+11. **发言者 7**（回复第 1 条）：Again another one click edit based on the Fujifilm style. I tend not to use it as it is overtop for color but it kind of suits this image.  
+     
+   IMG\_7862.CR3.xmp \(13.8 KB\)  
+     
+   \[图片省略\]IMG\_78621334×2000 1.38 MB
+
+### 讨论 29
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：\[Calendrier de l’Avent\] ChocoCervo 2026  
+     
+   Le calendrier de l’Avent d’énigmes ChocoCervo \(anciennement lockee . fr / avent\) est de retour pour 2026, l’ouverture du site a eu lieu ce matin.  
+     
+   Il faut évidemment attendre le 1er décembre pour les énigmes, mais la chasse aux badges est déjà commencée \(ça fait turbiner les neurones aussi\).  
+     
+   Et un des badges s'obtient en "parrainant" quelqu'un, donc je mets mon lien  :wink:  
+     
+       
+         \[图片省略\]  
+     
+         chococervo.fr  
+       
+     
+       
+       \[图片省略\]  
+     
+   ChocoCervo : Calendrier de l'Avent d'énigmes  
+     
+     Bienvenue sur le premier calendrier de l'Avent d'énigmes en ligne. Entièrement gratuit, communautaire et solidaire, et toujours porté par Lockee et The Escapers.
+
+### 讨论 30
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：binding off mid row  
+     
+   hey so i made a pattern for a freehand idea i’m making, and im a beginner knitter so i need to know if you can bind off several stitches mid row, and how. i’m trying to make a U-shaped edge indent  
+     
+   below are photos from my pattern and my reference image for the project  
+     
+   \[图片省略\]IMG\_3779544×917 94.3 KB  
+     
+   \[图片省略\]IMG\_3764225×225 4.89 KB
+
+2. **发言者 2**（回复第 1 条）：Welcome to the forum\!  
+     
+   Yes, you can bind off in the middle of a row. It’s a technique often used to make the neckline in a sweater or to make buttonholes. You would then need to use two balls of yarn to work each side of the bind off.  
+     
+       
+       \[图片省略\]
+
+3. **发言者 3**（回复第 1 条）：Looks like a fun pattern\!  
+     
+   In addition to binding off mid row you would also be continuing with either a sloped bind off or decreases at the opening edge.  
+     
+   I hope you’ll share pics of your experiments and final project, it’s great seeing ideas take shape.
+
+4. **发言者 1**（回复第 2 条）：I don’t have a second ball, would it be possible to use both sides of the yarn to reach the desired effect? or would it be possible to use decreases in the same way ? i’ll be seaming the sides so that may pull it to the side
+
+5. **发言者 1**（引用未收录发言）：I’m actually flat-knitting this as a rectangle, then ill seam the sides to create a bag
+
+6. **发言者 4**（回复第 5 条）：In that case, you can bind off in the center and work one side completely, cut the yarn and reattach to work the other side.  Just keep track of how many decreases you make on each row so you can mirror them.
+
+### 讨论 31
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -400,654 +871,68 @@
 
 2. **发言者 2**（回复第 1 条）：Very interesting discussion about economics, IMO.
 
-### 讨论 16
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Re: \[難過\] 花了半年原來對方超噁  
-     
-   同意前一個觀點  
-   如果男人發現不需要花時間金錢經營啥感情  
-   就能上床打免費砲  
-   請問誰還會花錢花時間談戀愛呢  
-     
-   你說別只想打砲，那跟結婚不是一回事  
-     
-   那好 他就從免費炮友中找出可以結婚對象的不行嗎
-
-2. **发言者 2**（回复第 1 条）：看起來男生的外貌不錯 可以到處約砲
-
-### 讨论 17
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Please make the pay button blue  
-     
-   Yeah mate, just implemented the the now third possible payment path. Will just leave the others there in case they want a pink pay button or something.   
-   BTW, just burned all your tokens on that.   
-   Simply pay us again and we will clean up the mess.  
-   Sorry clean up stalled. need more credit.
-
-### 讨论 18
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：How to gradually add vocab to Master\+?  
-     
-   I apologize as I’m certain this has been discussed before but I can’t find the thread. I really want to start incorporating master\+ for my vocab \(I’ve already done so for grammar\) but I’m worried I will have a deluge of over 1000 reviews if I do so. Is there any way to mark just a few items at a time as master\+ so I can space out the reviews?
-
-### 讨论 19
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：两个事  
-   1、先厚着脸皮给各位推荐一下我自己捣鼓的这个 MCP，到底是个啥。  
-     
-   用过 Playwright MCP 或者 browser-use 的兄弟们都有感受，有时候下拉菜单打不开、浮窗关不掉，一个结果对比还得在两个标签页来回切，整个过程提心吊胆，生怕任务突然失败，上下文也容易炸，token 跟不要钱似的流。  
-     
-   我这的做法是把整个可见页面编译成一套结构化契约再给 LLM，上下文能有效压一压。这个契约都是已经渲染过的东西，模型用起来没那么烧心。实测大概能少 91.9% 的 Token，遮挡泄漏基本是 0，也不用写站点规则，Shadow DOM 也能穿。任务过程中窗口大小变了、页面缩放了，对它感知和操作影响也不大。（我帖子里的碎碎念也发过点心路历程，我是被爬虫折磨的）  
-     
-   目前也有能力边界目前是纯 text 驱动，纯 canvas 这种目前还搞不定，但是 canvas 也在探索中有了一些突破，未来有突破了就上线。纯 text 驱动常规网站的基本操作一般没什么问题，用起来绝对省心。  
-     
-   如果还在被 Token 爆炸、操作漂移、网页操作不准这些问题烦到的伙伴，可以直接到官网先看看，觉得新鲜就尝试一下，让自己的 AI 助手实际跑跑。\[链接隐去\]  
-     
-   2、经历了一个多月的测试，核心能力又强化了一轮，也把不少还在开发中的感知能力开放出来了。现在完全免费（只允许单并发），之前测试用的订阅版项目也迁移到这里了：\[链接隐去\]
-
-2. **发言者 1**：忘了说，一些原因导致，用前记得 TUN 模式
-
-3. **发言者 2**："能力越强，越需要护栏。为了防止感知核心被滥用、并持续拦截银行、支付、医疗、凭据输入等高敏感站点，我作为独立开发者选择在云端托管并维护感知核心；同时将本仓库的薄客户端完全公开、零第三方依赖、逐行可审计，你的 Chrome、Cookie 与网络身份始终留在本地。"
-
-4. **发言者 1**：发言者 2 哎哟哥哥，核心目前不打算开源，自动化工具的合规和法律风险这些咱也谨慎。又不收钱的，感兴就试试呗
-
-### 讨论 20
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Create Colorful 3D Text with Geometry Nodes in Blender \| Procedural Motion Graphics  
-     
-   \[图片省略\]Riddon\_Text\_Intro000865221920×1080 812 KB  
-     
-   Hi. Create stunning, colorful 3D typography using Geometry Nodes in Blender\!  
-     
-   In this project, I explore procedural 3D text design, combining vibrant colors, layered geometry, transparency, and depth to create a unique and eye-catching typography style.  
-     
-   This project demonstrates how Geometry Nodes can be used to create interesting procedural designs and creative motion graphics in Blender.  
-     
-   Software: Blender  
-     
-   Technique: Geometry Nodes  
-     
-   Category: Procedural Design \| 3D Typography \| Motion Graphics  
-     
-       
-       \[图片省略\]  
-       
-     
-   \[图片省略\]Riddon\_Text\_Intro000864001920×1080 1.09 MB  
-     
-   \[图片省略\]Riddon\_Text\_Intro000864731920×1080 622 KB  
-     
-   \[图片省略\]Riddon\_Text\_Intro000864491920×1080 955 KB  
-     
-   \[图片省略\]Riddon\_Text\_Intro000864741920×1080 873 KB
-
-### 讨论 21
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Work in pattern as established confusing  
-     
-   I am knitting a cardigan from a free pattern off Ravelry. It is called Lethe. I have gotten to where I am to Establish Front Bands and Side detail. The previous instructions have me finishing the edge band on WS row 3. Now the instructions say “work 20 sts in pattern as established”. My confusion is what row of pattern to start at. I just finshed WS row 3 which is same as row 1. Do I start on RS row 4 of established pattern or repeat row 1? And further to that - the established pattern is 10 sts so I am a bit confused when it says work 9 sts in pattern as established. Any help would be most appreciated.  
-     
-   \[图片省略\]IMG\_35071920×2081 900 KB
-
-2. **发言者 1**（回复第 1 条）：Up to this point it is beautiful  
-     
-   \[图片省略\]IMG\_35051920×1440 571 KB
-
-3. **发言者 2**（回复第 2 条）：\[图片省略\] 发言者 1:  
-     
-   Lethe  
-     
-   \[链接隐去\]  
-     
-   Nice pattern.
-
-### 讨论 22
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Need help with understanding auto exposure values  
-     
-   Godot Version  
-   4.7.3  
-     
-   Question  
-   I’m having trouble understanding how to properly set up auto exposure with proper values in Godot.  
-     
-   I’m using physical light units with a small test scene. I have a sun and sky set up with correct values. According to charts for EV 100, the max exposure value should be around 14 and the minimum between 4 - 7 \( I have a small indoor area for testing exposure\). However, these settings make everything way too dark. The default settings look more correct, but it doesn’t make sense to me. In Unreal these settings work just fine so I figured it had to do with aperture and shutter speed. I’ve looked through the documentation on camera attributes as well as looking up real world camera settings, but I’ve not been able to translate between the two. I’m guessing I’m just not understanding how cameras work in general. Any help is appreciated.
-
-### 讨论 23
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Torréfaction \#392 : GTA VI, Alfred 6, le bug tueur de SSD chez Nvidia, teasing DDR6 et Anthropic cartonne en bourse  
-     
-   Article publié sur :			Torréfaction \#392 : GTA VI, Alfred 6, le bug tueur de SSD chez Nvidia, teasing DDR6 et Anthropic cartonne en bourse - 某社区.fr  
-     
-   Cette semaine : GTA VI, Pool of Madness, Peel, Crest, Alfred 6, DJ Trax – A Moment of Clarity, nouvel épisode des Clairvoyants, Dynamic Duo – Higher than Rap \+ A2O Lite Neon, Infinite Edition \+ XG – DEPENDS, Musk, Nvidia a aussi son bug tueur de SSD, première baisse des prix des SSD début 2027 ?, le JEDEC taunt la DDR6, et Anthropic \(Claude\) fait un carton en bourse...
-
-2. **发言者 2**（回复第 1 条）：Au moment d'aborder le sujet GTA VI, il y a eu 1/2 seconde de blanc - j'ai vraiment cru que pour troller, vous alliez lancer le son "Jean-Pierre Coffe qui râle".
-
-3. **发言者 3**（回复第 1 条）：Je viens de me taper un fou rire de malade. 发言者 1 "ils veulent me tuer mon ssd les encules \!"... et j'étais pas prêt :joy:
-
-4. **发言者 4**（回复第 1 条）：Alors c'est \[某参与者\] qui a decouvert Crest.  
-     
-   Moi je suis juste allé le pointer du doigt à Caf pour pas qu'il le rate.  
-     
-   Il l'a raté et c'est moi qui est prit pour lui.
-
-5. **发言者 5**（回复第 1 条）：Hotfix pour sauver vos SSDs  
-     
-   \[链接隐去\]
-
-6. **发言者 1**（回复第 5 条）：Perso, je vais rester en 621.01 et attendre les WHQL, parce qu'ils sont foutus d'introduire d'autres nouveaux bugs...
-
-7. **发言者 6**（回复第 1 条）：Vraiment excellent Crest.
-
-8. **发言者 7**（回复第 1 条）：\(message supprimé par son auteur\)
-
-9. **发言者 8**（回复第 1 条）：Les gens qui font GTA6 prennent certainement de la drogue pour survivre au crunch et aux licenciements, mais en ce qui concerne le chien sur un jet ski, ça c’est inspiré de faits réels. Le chien original s’appelle Loosy, et il habite vers Fort Lauderdale.
-
-10. **发言者 1**（回复第 6 条）：LOL.  
-     
-       
-         \[图片省略\]  
-     
-         Le Comptoir du Hardware – 23 Nov 26  
-       
-     
-       
-       \[图片省略\]  
-     
-   Malgré le hotfix de NVIDIA, les écritures intempestives sur les SSD persistent  
-     
-     Plusieurs utilisateurs rapportent toujours des volumes d'écriture anormaux après l'installation du correctif 621.35.
-
-11. **发言者 9**（回复第 10 条）：Et a priori ça touche par les RTX 50 c’est pour ça que je voyais pas de prob ici. Ce merdier…
-
-### 讨论 24
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Big and little nightgowns  
-     
-   I made a nightgown for my granddaughter for Christmas. It will be full length and voluminous- perfect for cuddling\! It’s hard to see, but the fabric has a pattern of mermaids and sea creatures.  
-     
-   \[图片省略\]IMG\_70421830×2462 1.25 MB  
-     
-   I made a matching nightgown for her Barbie doll.  
-     
-   \[图片省略\]IMG\_70371242×1587 498 KB  
-     
-   Thanks for looking\!
-
-2. **发言者 2**（回复第 1 条）：Nice\! It will look really cute on a little girl. And she will probably love the matching doll dress. My grandma did the samec thing and I know I loved wearing the same outfit as my doll.
-
-### 讨论 25
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：来点活字印刷
-
-2. **发言者 2**：分享图片
-
-3. **发言者 3**（回复第 2 条）：\[引用第 2 条\]  
-     
-   ･ﾟ\( ﾉヮ´ \)
-
-4. **发言者 4**（回复第 2 条）：\[引用第 2 条\]  
-     
-   ･ﾟ\( ﾉヮ´ \)bbb
-
-5. **发言者 5**（回复第 2 条）：\[引用第 2 条\]  
-     
-   \(\`ヮ´ \)
-
-6. **发言者 6**（回复第 2 条）：\[引用第 2 条\]  
-     
-   ･ﾟ\( ﾉヮ´ \)b
-
-7. **发言者 7**：\( ﾟ∀。\)b
-
-8. **发言者 8**：\( ﾟ∀。\) 我怎么想不到这种活
-
-9. **发言者 9**（回复第 2 条）：\[引用第 2 条\]  
-     
-   ･ﾟ\( ﾉヮ´ \)
-
-10. **发言者 10**（回复第 2 条）：\[引用第 2 条\]  
-     
-   \(\`ヮ´ \)\(\`ヮ´ \)\(\`ヮ´ \)
-
-11. **发言者 1**（回复第 2 条）：\[引用第 2 条\]  
-     
-   \( ﾟ∀。\)
-
-### 讨论 26
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Sneakernet
-
-2. **发言者 2**（回复第 1 条）：I see the comparison to scuttlebut, but to me it looks closer to what briar wanted to achieve.  
-     
-   And on a less serious note, I'm kinda disappointed that Drew didn't use \[my project\]\(\[链接隐去\] for building the docs for this.
-
-3. **发言者 3**（回复第 1 条）：uucp successor?
-
-4. **发言者 4**（回复第 1 条）：Has bro just reinvented a post office? I assume this is electronic, but the description sure doesn't sound like it.
-
-5. **发言者 5**（回复第 2 条）：I think Drew is trying to avoid tools that have dependencies with LLM-generated code. StaticMan uses Go which includes such code.
-
-6. **发言者 6**（回复第 1 条）：Cute but why don't they just have people carry around PGP:ed messages for them?
-
-7. **发言者 7**（回复第 3 条）：That's exactly what came to mind first. I wonder why we don't just dust that off. The rough edges can be worked on.
-
-8. **发言者 4**（引用未收录发言）：Kinda half in jest. Its a very fun mix of retro and futurist, but I have to doubt its utility.
-
-9. **发言者 8**（回复第 7 条）：\[NNCP\]\(\[链接隐去\] seems like a modernized attempt in that area but I've never seriously sat down with it.
-
-10. **发言者 9**（回复第 1 条）：Not to be confused with sneakerweb \[链接隐去\]
-
-11. **发言者 10**（回复第 1 条）：This is neat, but basically no information about how it works. mDNS LAN discovery or similar? Can I move content using a usb stick to another node? Etc
-
-### 讨论 27
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Is there a list oall IDE file locations...?  
-     
-   Hello\!  
-     
-   I needed to completely reset the IDE but need to know whether there is a list of the seemingly-myriad subdirectories where the IDE dumps files.  
-     
-   I think the ones I need to change to customize it are all in one's personal "Users" subdirectory, but I seem to keep finding new locations every time I di another search... so a list would be great if one exists\!  
-     
-   Thank you\!  
-     
-   Kris
-
-2. **发言者 2**（回复第 1 条）：\[图片省略\] 发言者 1:  
-     
-   where the IDE dumps files  
-     
-   For a clean removal of libraries, use the IDE to make a list of your libraries \(select IDE &gt;&gt; SKETCH &gt;&gt; INCLUDE LIBRARY &gt;&gt; LIBRARY MANAGER then select TYPE &gt;&gt; INSTALLED\).  
-     
-   After you have your list of installed libraries, use the IDE to click "remove" on each library.
-
-3. **发言者 1**（回复第 2 条）：That  helps, too, thank you, tho' the various "preferences" files \(both preferences.txt and preferences.json\) are looking like the main culprits.  I'm slowly searching for them, changing the appropriate ones, saving, making them Read Only, and I might also need to alter the security privileges...
-
-4. **发言者 3**（回复第 1 条）：Great news\! I'm glad it is working now. Thanks for taking the time to post an update.  
-     
-   Regards, Per
-
-### 讨论 28
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：\[閒聊\] 女孩兒會用潤唇膏嗎？  
-     
-   如題，  
-   大家午安啊肥肥來了！  
-     
-   最近冬天比較冷，  
-   常常舔嘴唇就會乾裂，  
-     
-   這時候我都會用小護士。  
-     
-   女孩兒們會用潤唇膏嗎？  
-   大多什麼時候用？  
-   一天會補幾次呢？  
-     
-   一起來聊聊！
-
-2. **发言者 2**（回复第 1 条）：炸豬油
-
-3. **发言者 1**（回复第 1 条）：那個現在比護唇膏還貴
-
-### 讨论 29
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：某社区: Seabraid, Nvidia and AMD GPUs serving one MoE layer together
-
-### 讨论 30
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Naim app  
-     
-   The latest update to the Naim app is failing to update on my iPhone tonight. Any suggestions?
-
-2. **发言者 2**（回复第 1 条）：Sorry, same for me. Do not know how to fix.
-
-3. **发言者 3**（回复第 1 条）：Yes same here, wheel spins, and then it goes back to ‘update’…..odd
-
-4. **发言者 4**（回复第 1 条）：Ditto :frowning:  
-     
-   ATB, J
-
-5. **发言者 5**（回复第 1 条）：Same issue for me also on iPhone and Mac
-
-6. **发言者 6**（回复第 1 条）：it is not only the naim app, other apps show same
-
-7. **发言者 5**（回复第 6 条）：I was ok on a load of other apps
-
-8. **发言者 7**（回复第 1 条）：same here. other apps above naim in list also won’t update. They will update if you click each one in turn though . Only the Naim one actually stuck
-
-9. **发言者 8**（回复第 1 条）：Thx for the heads up.  I’ll avoid updating for a few days.  
-     
-   Roger
-
-10. **发言者 9**（回复第 1 条）：Same here, other apps will update but not the Naim app. Maybe \[某参与者\] or \[某参与者\] would know what’s going on - or is this just an aberration?
-
-11. **发言者 10**（回复第 1 条）：Updated on my android phone, no problem.
-
-### 讨论 31
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：\[图片省略\]
-
-2. **发言者 2**：NVIDIA CorporationNVDA  
-     
-   加入自選股  
-   162.22  
-   USD  
-   36.69  
-   \(29.23%\)  
-   開盤中 \| 2026/11/23 22:32 台北時間 \(股價延遲 15 分鐘\)
-
-3. **发言者 3**：背后的政治斗争很激烈啊
-
-4. **发言者 4**：纳指涨 7.9%
-
-5. **发言者 5**：适才相戏尔
-
-6. **发言者 6**：不是，这让 v 站前几天信誓旦旦说美国和下属私情无法饶恕的大聪明怎么圆回来啊：）
-
-7. **发言者 7**：126-&gt;162 涨了 30%
-
-8. **发言者 8**：哈哈。。。V2 大聪明一直很多。。。
-
-9. **发言者 6**：这个世界就是一部红果 AI 短剧
-
-10. **发言者 9**：发言者 6 这帮嗯舔的，被打脸是常态啊。怎么圆？硬着头皮不认呗
-
-11. **发言者 10**：那是一片神奇的地方，发生什么都不奇怪。
-
 ### 讨论 32
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Golden Great Sword  
+1. **发言者 1**：Instatiated Scene Visibilty Scripting help please  
      
-   I made this for my main character in my indie game Phantom Mask: Fire Trap  
+   Godot Version  
+   4.7  
      
-   \[图片省略\]Screenshot 2026-11-23 \[数字标识隐去\]×1079 1.88 MB  
+   Hi all.  
      
-   \[图片省略\]Screenshot 2026-11-23 \[数字标识隐去\]×1078 1.04 MB  
+   Sorry a noob here :slight\_smile:  
      
-   i wanted a very specific look and to symbolize the element of fire, so i spent about a week on the shape and ornate details. looks firey to me\!  
+   I am starting to design a game which is quite UI heavy. After some research it seems the best way to approach this is to create separate scenes for each UI.  
      
-   \[图片省略\]Screenshot \(13\)1822×988 970 KB  
+   In starting out I have just 3 UI scenes:  
      
-   \[图片省略\]Screenshot \(12\)1140×1011 178 KB  
+   MainMenuUI  
      
-   \[图片省略\]Screenshot \(11\)1876×974 691 KB  
+   LocationUI  
      
-   please check out the game the demo is free\! both in AI and price\!  
+   ShopUI  
      
-       
-         \[图片省略\]  
+   My main scene is named ‘GAME’ and I have added a child node to this called ‘UI’.  
      
-         \[链接隐去\]  
-       
+   Then I have instatiated each of my UI scenes underneath.  
      
-       
-       \[图片省略\]  
+   So, my ‘GAME’ node2D tree looks like this:  
      
-   Phantom Mask: Fire Trap by brandongreygames  
+   GAME  
      
-       
+   -UI  
      
-       
-         
-         
-       
+   MainMenuUI  
      
-       
+   ShopUI  
      
-   I have it on sketchfab Golden Great Sword - 3D model by brandon\_grey \(\[某参与者\]\) \[93073ff\] - Sketchfab
+   LocationUI  
+     
+   How do I go about scripting the visibilty of each of the instatiated nodes so only one shows up at once?  
+     
+   I am so sorry if my explanation is poor.  
+     
+   I just need to be able to swap each of the scenes.  
+     
+   Thanks in advance for ANY help\!
 
 ### 讨论 33
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Redondance itinéraire de randonnée lwn sur un tronçon?  
+1. **发言者 1**：某社区: Everything will get breached. How do you limit the blast radius?  
      
-   Bonjour.  
-     
-   Je crée une nouvelle relation de type itinéraire de randonnée rwn sur ID pour le compte d’un Parc naturel régional. Je me base pour cela sur les tronçons déjà exitstants. Pour chacun d’eux, une relation de type lwn a déjà été créée. Je suis parfois tombé sur des tronçons avec deux relations de type lwn. Est-ce possible?  
-     
-   Merci pour votre réponse.  
-     
-   MD
+   Got another breach email this morning, this travel operator had my passport number and travel history stored. At this point I feel every service we use is going to get dumped eventually.I consider unique passwords and hardware 2FA as no brainers, they stop credential stuffing, but they don't help when a service leaks your actual identity. There are just so many services that require personal data like your passport number, phone number etc. And I think the fallout will only get worse as agentic workflows and local models become more mainstream and people start giving them more and more personal data.Assuming every vendor database is basically public eventually, how are you actually limiting the blast radius without turning everyday life into a massive faff?
 
-2. **发言者 2**（回复第 1 条）：Welcome to the 某社区\!  
-     
-   For questions about hiking routes in France, I would recommend the French OpenStreetMap forum, where you may find people more familiar with local mapping practices: \[链接隐去\]
+2. **发言者 2**（回复第 1 条）：I don't give my real name/info to a website unless it's absolutely required. Helps limit the fallout but is not complete prevention.
+
+3. **发言者 3**（回复第 1 条）：Lock down your credit reports.  \(I admit that I have not done so.  I should.\)
+
+4. **发言者 1**（回复第 3 条）：I'm assuming this is a USA centric suggestion. How do you even do this?
 
 ### 讨论 34
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Decrease for armhole shape in Irish moss stitch  
-     
-   Morning fellow knitters  
-     
-   Ive been looking for help with how to decrease to shape the armholes in Irish Moss Stitch.  
-     
-   Im a confident knitter and  have tried about 5 ways i know to decrease to make either side look equal. Every way I’ve tried its lop sided.  
-     
-   On checking this forum the decrease page shows how to without the pattern and Ive tried every one\!  
-     
-   Otherwise its a lovely garment  
-     
-   Help please  
-     
-   Hayfield 5223 ,  marked “easy”  
-     
-   pattern says decrease one stitch at each end and every following alternative row but this has stumped me
-
-2. **发言者 1**（引用未收录发言）：Seems I can’t yet post a photo ….  
-     
-   I have tried what you suggested but all very lopsided. Just wondering if I ditch trying to follow the pattern on the decrease :face\_with\_raised\_eyebrow:
-
-3. **发言者 1**（引用未收录发言）：Thank you that does look better \!\!  
-     
-   That was going to be my last effort to make the first and last stitches of the row stockinette and ignore the pattern.  
-     
-   It would have been good if Hayfiled had given clear instructions……  
-     
-   I’ll give this a go Tom  
-     
-   Regards  
-     
-   Pat
-
-4. **发言者 2**（回复第 3 条）：I think it works when there are 2 of the same stitch in the column before decreasing.  
-     
-   It was interesting to try it out.  
-     
-   If you try it and don’t like it let us know, there might be other options too.
-
-### 讨论 35
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：//-Planet: Ani \| play-test \| Steam Chat  
-     
-   Hi, I’m now about to start having live play tests for the game to test out multiplayer and the game, so I’m looking for volunteers to join and test the game\! And also at the release of the game when I release it on steam, a random 10 people will be picked and given a free copy of the game for play testing\! Join the GC to get a chance to play-test or bug-test the game\! you will get a ping if the play-tests are live\! The link is Steam Community :: Chat Invitation \!
-
-### 讨论 36
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Les Clairvoyants \#116 : Secret Wars, Marvel fait sa guerre des mondes  
-     
-   Article publié sur :			Les Clairvoyants \#116 : Secret Wars, Marvel fait sa guerre des mondes - 某社区.fr  
-     
-   Épisode 116 : où Fask, Fox et Arkeon spéculent une toute dernière fois sur Avengers: Doomsday, font le focus sur la suite avec Secret Wars, sans oublier un petit coup d'œil sur toutes les dernières news en provenance du Marvel Cinematic Universe...
-
-2. **发言者 2**（回复第 1 条）：Je vous le dis les amis, le "To me my X-Men" du last trailer m’a foutu les poils. Beaucoup trop d’heures passées sur ces comics quand j’étais gamin. Ce qui est très drôle puisque gamin, la phrase existait pas. Déjà parce que je lisais des trads, et a priori la formulation date de… 2013. :smiley:  
-     
-       
-       \[图片省略\]
-
-### 讨论 37
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：First attempt at weaving \(with yarn\)  
-     
-   At some point I’d like to try learning to weave in a more structured way. In the meantime, at some point last year I tried creating something by weaving some yarn in a homemade “loom” made out of cardboard :joy:. It was fun but a lot of work… I will likely not pick this up again until I have some massive amount of time to learn how to do it properly, lol…  
-     
-   \[图片省略\]20260509\_0955581920×2560 1.58 MB  
-     
-   \[图片省略\]20260509\_0956001920×2560 1.45 MB  
-     
-   \[图片省略\]20260509\_1035051920×2560 1.45 MB  
-     
-   \[图片省略\]20260509\_1055041920×2560 1.61 MB  
-     
-   \[图片省略\]20260511\_2020001920×2560 1.33 MB  
-     
-   \[图片省略\]20260513\_1220351920×2560 1.83 MB  
-     
-   \[图片省略\]20260511\_1629231920×2560 1.35 MB  
-     
-   In hindsight, starting with a really long article of clothing was probably not the best choice for a first project, lol\! And it wasn’t even that long… It was not long enough for me, but my youngest daughter can use it, and she was pretty excited about it, too :heart:  
-     
-   \[图片省略\]20260513\_161034\(1\)1920×2560 786 KB  
-     
-   Thanks for looking\!
-
-2. **发言者 2**（回复第 1 条）：What an ambitious project\!  I love your color choices and how great is that that your daughter can not only use it, but that she’s excited about it too\!  Perfect outcome for a project that turned out to be so much work.
-
-3. **发言者 3**（回复第 1 条）：So fun\! And I believe the cardboard loom \(or the plastic ones with stretchy bands to make potholders\) is probably where most would start that learning process, so you are obviously on the right track\!
-
-4. **发言者 4**（回复第 1 条）：That’s a huge first project\! Nice job\!
-
-5. **发言者 5**（回复第 1 条）：Wow\! I like how you made it sooooo long\! When I first started dabbling in weaving I made a cardboard loom like this:  
-     
-   \[图片省略\]1fbd1b155eec9301ddf968b93f4cdcf9581×513 50.7 KB  
-     
-   Here’s a tutorial of you’d like\!\!  
-     
-       
-         \[图片省略\]  
-     
-         \[链接隐去\]  
-       
-     
-       
-       \[图片省略\]  
-     
-   Cardboard Box Looms: DIY Weaving at it’s finest\! – Craft Leftovers
-
-6. **发言者 1**（回复第 1 条）：Thank you everyone for your kind words, and thank you 发言者 5 for the tutorial\!
-
-### 讨论 38
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：虽然很不想承认但我似乎是个只要符合了几个特定条件就会被颜值吸引的肤浅的人\|-\` \)  
-     
-   最近正在研究自己的xp，感觉越研究越不对劲，多的不说只谈脸的话，只要满足条件中的任意几个我就会流口水\(;´Д\`\)  
-     
-   感觉自己的代码和哈基米差不多简单，女娲老师你搓人的时候能不能认真点\( ;\`д´; \)
-
-2. **发言者 2**：人都是这样的，喜欢fps或者喜欢MOBA就会什么都玩点，其实抛开脸不说可以多试试其他方面
-
-3. **发言者 1**：黑发，小眼睛，圆鼻子，大耳朵，圆/方脸，圆鼻子，短/寸发，背头，胡渣/络腮胡  
-     
-   以上满足任意4项就在我的好球区内，人类的审美怎么会肤浅成这样\(\(\(　ﾟдﾟ\)\)\)
-
-4. **发言者 3**：\(´ﾟДﾟ\`\)
-
-5. **发言者 1**（回复第 2 条）：\[引用第 2 条\]  
-     
-   主要是xp夺舍大脑很吓人啊\( ;´д\`\)  
-     
-   只是看了脸就会开始偏袒和溺爱喜欢的角色，这种已经是病的程度了吧，大小头的关系不该是这样的吧\(\(\(　ﾟдﾟ\)\)\)  
-     
-   我理想的欣赏应该对精神内核的认同与共鸣，外貌这种不应该有这么重要的啊\( ;\`д´; \)  
-     
-   而且我对黑发的偏爱已经到了接近种族歧视的程度了，我不要当这种肤浅的人･ﾟ\( ﾉд\`ﾟ\)
-
-6. **发言者 1**：我喜欢的类型应该是呆呆的，笨笨的，不擅长新事物，虽然有基本自理能力，但还是会习惯性地依赖我，怕生，爱吃飞醋，没有安全感，但即使我出轨了也只会自责，对外排斥却喜欢对我撒娇，哪怕我伤害了他也会一遍遍热脸贴上来跪着求我，为了我随意施舍的爱意能舍弃自尊和一切，光是待着我身边看着我就能满足的狗才对……
-
-7. **发言者 1**：骂我畜牲是什么意思，我想要的是狠狠疼爱这样的乖孩子啊，除了情趣玩法以外我绝对不会伤害他的\( ;\`д´; \)
-
-8. **发言者 1**：感觉大半夜脑子有点不正常了……还是别熬夜了吧……
-
-9. **发言者 4**（回复第 3 条）：\[引用第 3 条\]  
-     
-   gayﾟ∀ﾟ\)σ
-
-10. **发言者 5**：gayﾟ∀ﾟ\)σ
-
-11. **发言者 6**：Gay，还是喜熊gay
-
-### 讨论 39
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Let's Meet in the Middle
-
-2. **发言者 2**（回复第 1 条）：I always have \`whereami\` aliased to \`hostname\`.
-
-### 讨论 40
-
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
-
-1. **发言者 1**：Communicating via the BluePill USB port without flashing the usual Bootloader  
-     
-   I would like to be able to communicate serially via USB whilst still programming the board with an St-link dongle.  
-     
-   All the links I could find on the internet all recommend flashing the standard generic bootloader which works on some clones but not on others even after doing the recommended modifications.  
-     
-   On the ones that work this bootloader gets overwritten the next time I flash a new sketch via the ST-link. I have not tried this again recently but when I did in the past I had concluded that this is because St-link loads the sketch at location 0x8000000 which is also the location where the bootloader gets installed.  
-     
-   I have seen programs which manage to incorporate this functionality but unfortunately I have not managed to find out how they do it.  
-     
-   Any suggestions please?
-
-2. **发言者 2**（回复第 1 条）：Change the build procedure for uploading with the STlink to put the sketch past the bootloader...  
-     
-   The STM32F103 has a bootloader in ROM, but it only supports UART; no USB.
-
-3. **发言者 1**（回复第 2 条）：Thank you. And how would one do that?
-
-4. **发言者 3**（回复第 1 条）：\[图片省略\] 发言者 1:  
-     
-   I would like to be able to communicate serially via USB whilst still programming the board with an St-link dongle.  
-     
-   Why do you want to load a bootloader in this case? If you want to program via St-link you don't need a bootloader. Communication via serial USB doesn't need the bootloader.
-
-### 讨论 41
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -1066,115 +951,98 @@
       還好渣男離開了  
       如果糾纏不清看怎麼辦才好
 
-### 讨论 42
+### 讨论 35
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Tell HN: Today marks the first anniversary of Opus 4.5's release
+1. **发言者 1**：出版行业真的很缺翻译人才吗？怎么看些引进的出版书翻译都跟坨屎没什么区别，甚至也不太通人性
 
-2. **发言者 2**（回复第 1 条）：Fast progress is addictive.
+2. **发言者 2**：一眼某社区读书《肠子》･ﾟ\( ﾉヮ´ \)
 
-### 讨论 43
+3. **发言者 1**（回复第 2 条）：\[引用第 2 条\]  
+     
+   忍到这里终于忍不下去了，恨不得给翻译的肠子抽出来
 
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+4. **发言者 3**：我也想吐槽，这书就狗龄记岁和出亡还好点，其它翻译，尤其是电视模特那一章跟狗屎一样。
 
-1. **发言者 1**：Thoughts on an upgrade  
-     
-   I currently have a Linn LP12, a Naim CDx2 and a pair of Neat Momentum speakers but my current thinking on my next upgrade is amplification/streaming \(via Tidal\) where I was thinking of replacing my Naim 272 with a separates combo of Naim 333/332. In an ideal world I might also update my Naim 250 with a pair of 350’s but that may have to wait for future pay days.  
-     
-   Any initial thoughts on the sense of such a plan would be welcome, including any alternatives \(KEF Reference 1’s?\)  and what can I expect from such an upgrade
+5. **发言者 4**：名著类的好翻译需要对两种语言都有极高的掌握水平，同时还需要对原作者的写作风格、写作习惯、著作思想、甚至旁征博引的文献资料有足够的了解和自己的思考，在做到这些的同时，还要坚持翻译的原则，让译文流畅优美又不失原作的本意。能做下来这种工作的人，素养和底蕴都是绝对不能浅薄的，举个例子，咱读的中文版泰戈尔诗集，最广为流传的版本是冰心和郑振铎的译版。我记得我最近看的一本考古专著的翻译，作者在翻译的同时还考据了大量中外文献，对全文多处错漏处进行了校订和注释。我很喜欢读一些优秀作品的译者序也是这个原因，抛开翻译本身，这些译者本身都是非常非常优秀的人文类学者，他们写的序涉及到自己对原作的总结和观点，都是非常值得一读的。
 
-2. **发言者 2**（回复第 1 条）：It would be a good move I think.  I did use a 222 with a 250DR for a while, and it worked well, sounded great. Naim make a cable to connect the NC kit to the Classic 250s. I later sold the 250DR and replaced with a NC250, which I still have with my 332-333, both with NPX300s.  
-     
-   Someone I know uses the 332-333 pairing with a DR250 and is very happy.
+6. **发言者 5**：很多翻译工作都是外包的，质量和校对看心情
 
-3. **发言者 1**（引用未收录发言）：LP12 comes with an Ekos SE tonearm, Dynavector Xx2A MC cartridge going to the pre-amp via a Naim stageline / hi-cap which I could upgrade to a superline but vinyl has suffered in terms of time spent listening from streaming in recent years - any thoughts on a superline would be interesting
+7. **发言者 6**：宁顺而不信，宁信而不顺，其实翻译真正纠结的不是什么信达雅，就是这两个。  
+     
+   实际上当年严复提出信达雅之后，在后半句马上就补充，说他自己其实觉得这种翻译不太对，所以后世的人不要拿他说事。结果完全没人提这茬。  
+     
+   很多时候原文就是混乱的，以至于我真的自己学了外语接触翻译之后，受到了不小的冲击\( ﾟ∀。\)感觉自己被骗了一样。
 
-4. **发言者 3**（回复第 1 条）：A 332 will be very much superior to a 272 with no PSU, whatever amp you pair it with.
+8. **发言者 7**：老板：我们把这个，这个，还有这章留给学生作为练习，小肥你和肥博士来校对一下挂我的名字出版
 
-### 讨论 44
+9. **发言者 8**：翻译已经成学阀自留地了
 
-近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+10. **发言者 9**：这书我买的台版\(　ﾟ 3ﾟ\)
 
-1. **发言者 1**：Knitted sections placed on holders  
-     
-   I am knitting the Leaves Cardigan by Florence Merlin, getting ready to start the yoke part of the pattern and need to pick up stitches from holders for left front, first sleeve, back, second sleeve and right front. Just wondering if anyone has a great way to avoid holes between all these picked up stitches. Thank you\!\!\!  
-     
-   Additionally if anyone has made this little cardigan and has any tips on the yoke portion, I would love to hear them. I’ve been reading all the notes on Ravelry and see I’m not only one in my confusion with this pattern. Thank you\!  
-     
-   Charlene
+11. **发言者 10**：主要业界也没什么利润能雇厉害的人吧
 
-2. **发言者 2**（引用未收录发言）：I’m such a loose knitter. It looks like I knit the entire cardigan on a 2.25mm \(US1\) needle.  
-     
-   Don’t hesitate to come back and ask away\!
-
-3. **发言者 1**（回复第 2 条）：Yikes\! Those are small needles\! Thanks for your help\!\!\!
-
-4. **发言者 3**（引用未收录发言）：I use this method from Patty Lyons. It works really well\!  
-     
-       
-         \[图片省略\]  
-     
-         \[链接隐去\]  
-       
-     
-       
-         
-     
-   Ask Patty: Seamless Sweater, No Holes – Modern Daily Knitting
-
-5. **发言者 1**（回复第 4 条）：Thank you so much\!  
-     
-   Charlene
-
-6. **发言者 1**（回复第 2 条）：And I’m back\! Ha\! Still working on the leaves pattern. About to start the row which has a K5tog. Did you knit as written or did you do something different?  
-     
-   I am taking this slowly. Already had to take it all out once so carefully counting after each row\! I used your advice, marking each repeat which really helps\!\!\!  
-     
-   thank you\!  
-     
-   Charlene
-
-7. **发言者 2**（回复第 6 条）：I worked the k5tog as written. It worked out well as I remember.  
-     
-   Working slowly through this yoke pattern is a good idea. Lots of shaping and fun at the same time. You’re making great progress\!
-
-8. **发言者 4**（回复第 1 条）：Do you know about lifelines, which can protect your hard work if you have to rip back to fix something?  
-     
-       
-       \[图片省略\]
-
-9. **发言者 1**（回复第 7 条）：Thank you\!  I love a challenge.  Ha\!  
-     
-   Hope you have a nice Thanksgiving.  
-     
-   Charlene
-
-10. **发言者 1**（回复第 8 条）：Great video\!  Thank you so much.  I am hoping I won’t need to take out any more rows on this project.  Taking it slow\!  
-     
-   Happy knitting and I hope you have a nice Thanksgiving.  
-     
-   Charlene
-
-11. **发言者 5**（回复第 1 条）：I need the stitch pearl or knit it plain but from the back that avoids holes for me .Good luck \!
-
-### 讨论 45
+### 讨论 36
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Free 2D weather shaders for Godot 4: rain, snow, fog and lightning \(Weather FX 2D Lite\)  
+1. **发言者 1**：说下怎么开，正常点进去，按年付，是正常的价格 大概 199.  
+   但是你可以到活动列表页面，有个 4 块钱开一个月的。先点击开下。再回到老的页面，选择年付，就是半价了  
      
-   Weather FX 2D Lite is free: 4 weather shaders for 2D games in Godot 4 \(rain, snow, fog, lightning flash\) with 6 presets and a WeatherLayerLite helper node that fades between presets.  
-     
-   Free Lite: Weather FX 2D Lite - Free Rain, Snow, Fog and Lightning Shaders for Godot 4 by 发言者 1  
-     
-   Full pack \(24 shaders, 72 presets\): Weather FX 2D - 24 Rain, Snow, Fog &amp; Lightning VFX Shaders for Godot 4 by 发言者 1  
-     
-   Works with Godot 4.3\+. Tested on 4.3, 4.4 and 4.7 \(Windows, NVIDIA GPU\). Not tested: web export.  
-     
-   The shaders, scripts and text were written with AI assistance and checked by running them in Godot. There is no AI-generated audio, and no third-party code or assets.
+   \[链接隐去\]
 
-### 讨论 46
+2. **发言者 2**：此福利不再提供
+
+3. **发言者 1**：发言者 2 。。好吧
+
+### 讨论 37
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：v.4.1.0: Call for testers :\)  
+     
+   :carpentry\_saw: Call for Testing: :hammer\_and\_wrench:  
+     
+   I’ve just released new pre-release packages for the version :arrow\_forward: 4.0.9 :arrow\_backward:  \(listed as the latest dev packages on the G’MIC downloads page\). I’d be interested in getting feedback on these packages, particularly for the G’MIC-Qt plugin, whose code has been significantly modified \(should be more responsive than ever\!\).  
+     
+   :arrow\_forward: G'MIC - GREYC's Magic for Image Computing: A Full-Featured Open-Source Framework for Image Processing - Download
+
+2. **发言者 2**（回复第 1 条）：Does this mean thousands of parameters gui filter can work well now? I have a not released filter that has thousanda of parameters \(color related\). Though to be fair, this is why I’d like a palette dialog. And I also wanted a crack on grid variant of existing dialogs.
+
+3. **发言者 1**（回复第 2 条）：The parsing of filter parameters should have been slightly improved yes. I can’t tell if a thousand parameter filter will work, but it’s worth trying\!
+
+4. **发言者 3**（回复第 1 条）：Threw a couple of presets at it and they worked well, David.  I say it’s a keeper \(and yes; today is my Thanksgiving holiday; lol\).   :slight\_smile:
+
+5. **发言者 4**（引用未收录发言）：Kubuntu 24.04 / Gimp 3.2.8 / gmic\_gimp\_qt v4.1.0  / QT5  
+     
+   Too many filters, I went down  from Colorful Blobs to Warp \(BRF\)  About 20 filters with points in the preview …and all worked. Gave up.  
+     
+   Looks like deformations are ok.  Anything in particular that might not work ?
+
+### 讨论 38
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：NDX Ground Setting with Weiss DAC501 MK2  
+     
+   Hi Folks,  
+     
+   I am using NDX/XPS-DR/282/HC-DR/250.2 for current system and I had added the second source \(Weiss DAC501 MK2\) to the system.  
+     
+   Could kindly advise what is the ground setting on NDX should I select ? Chassic or Floating ?  
+     
+   Thanks for advise and support \!\!\!
+
+2. **发言者 2**（回复第 1 条）：there may be a subtle difference in sound in either position, but ive found no difference but it depends on how the weiss is earthed, just try in both positions and see if you hear any change.
+
+3. **发言者 3**（回复第 1 条）：It will depend upon whether the Weiss has its signal ground connected to earth or not. Probably best to ask them.  If so, set the NDX to floating, if not, set it to chassis.
+
+4. **发言者 1**（回复第 1 条）：发言者 3  发言者 2  
+     
+   Thanks for your advise, let me consult Weiss for the question :smiley:
+
+### 讨论 39
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
@@ -1188,39 +1056,103 @@
      
    \[链接隐去\]
 
+### 讨论 40
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Release: Roto v0.14.0
+
+2. **发言者 2**（回复第 1 条）：Didn't expect this mostly bugfix release to be posted here\! Anyway, happy to answer any questions about Roto\!
+
+3. **发言者 2**（引用未收录发言）：That is indeed correct. You can share Rust types to Roto so there's also no way to provide this really. Of course, you could work around this by ensuring that all the scripts only manipulate some state object that you serialize, but I understand that this would be cumbersome and error prone.
+
+4. **发言者 3**（回复第 3 条）：Right, but this proposal fails quickly with my use case, whereby the scripts yield to the engine to resolve user prompts, thus their 'program counter' could be anywhere in the script, including inside a loop. At that point, it's not possible to segregate runtime state from script state \(from game state\).  
+     
+   Thanks nonetheless for the good work\!
+
+5. **发言者 2**（回复第 4 条）：Yep, for sure. I hope you find a language that can do what you want\!
+
+### 讨论 41
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：Serving scrape bots on a silver platter: the dotMD extension  
+     
+   Every "post number" and "topic" link on the forum with a ".md" extension, is plaintext.  A little obfuscation could go a long way.  
+     
+   For example:  
+     
+   This topic: Serving scrape bots on a silver platter: the dotMD extension  
+     
+   This topic with .md: Serving scrape bots on a silver platter: the dotMD extension  
+     
+   The .md extension only works in the URL bar...
+
+2. **发言者 2**（回复第 1 条）：Sorry but I don't know what you are talking about
+
+3. **发言者 2**（引用未收录发言）：OK, I see that result, but I am not clear what point you are making
+
+4. **发言者 1**（回复第 3 条）：For a moment I thought, "that is why bots are johnny-on-the-spot" with finding and replying... but I realize, that is how all search engines find the data.
+
+### 讨论 42
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：How do I crop a subviewport  
+     
+   \(topic deleted by author\)
+
+### 讨论 43
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：某社区: SutraDB – Zero-build embedded hybrid vector and BM25 database in Rust
+
+### 讨论 44
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：How to gradually add vocab to Master\+?  
+     
+   I apologize as I’m certain this has been discussed before but I can’t find the thread. I really want to start incorporating master\+ for my vocab \(I’ve already done so for grammar\) but I’m worried I will have a deluge of over 1000 reviews if I do so. Is there any way to mark just a few items at a time as master\+ so I can space out the reviews?
+
+### 讨论 45
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：\[图片省略\]  
+   到账可能有延迟
+
+### 讨论 46
+
+近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
+
+1. **发言者 1**：La Pause Comics 39  
+     
+   Article publié sur :			La Pause Comics 39 - 某社区.fr  
+     
+   Comme tous les mois \(ou presque\), si vous êtes abonné à notre Patreon, vous pouvez désormais dévorer une nouvelle Pause Comics, notre podcast mensuel dans lequel Arkeon vous propose sa sélection de BD et comics du mois. En spin-off des Clairvoyants, notre podcast dédié au Marvel Cinematic Universe, La Pause Comics s’attache à traiter de l’actu BD, toutes catégories et…
+
 ### 讨论 47
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：GTA6 Releaseparty ab 15:30\!  
-     
-   Hallohallo, wir haben alles umgeschmissen und sind doch gleich um 15:30 schon live und zocken rein in GTA\!\!  
-     
-   Alles andere was heute geplant war ist aufgeschoben, nicht aufgehoben\!  
-     
-   Eddy und Nils sind die ganze Zeit für euch am Start und im Laufe des Tages gesellen sich allerlei Böhnchen dazu, unter anderem Valle, Bonnie, Tim, Sarah, Henry, Ben uvm\!\! &lt;3  
-     
-   Das wird toll, kommt rum\! Stream geht mindestens bis Mitternacht, danach schauen wir mal, juhuuuu lets fucking goooo\!\!
+1. **发言者 1**：\[链接隐去\]  
+   彻底重构了之前的架构，实测超级稳定
+
+2. **发言者 2**：文件传输协议,使用场景是什么
+
+3. **发言者 3**：你来晚了啊。现在都按上传流量一刀切了。管你啥协议
 
 ### 讨论 48
 
 近七天主帖与公开首批回复中的短节选，省略了部分发言。已自动去除明显标识；未做逐条语义转述。
 
-1. **发言者 1**：Fair isle  
+1. **发言者 1**：feedback re mask management in Darktable 5.7  
      
-   So my first stitch after a color change is too loose and wonky because if I tighten it to where it’s supposed to be, that obviously tightens my float. Anyone have any tricks for this?  
+   I downloaded the 5.7 nightly build yesterday and have been experimenting on a quarantined subset of my images. The new mask management interface is much better and less confusing, even without any formal documentation\!  
      
-   Thank you
-
-2. **发言者 2**（回复第 1 条）：What pattern are you doing?  Would trapping the float help?
-
-3. **发言者 3**（回复第 1 条）：One trick that may help is to tighten the second stitch after that first stitch following the color change. It may also help to twist the two yarns around each other to set the stitch size.
-
-4. **发言者 1**（回复第 1 条）：I want it for general knowledge. It would apply no matter what pattern. So you’re suggesting trapping it on the stitch just prior to the color change? Hmm that may work. I’m screwing around on a flat swatch so lemme see. Hot damn\! You’re my favorite\!\!\! Perfect solution :hugs::hugs::hugs::hugs: Thank you. How did that not occur to me in my madness? Lol
-
-5. **发言者 1**（回复第 3 条）：You know, I’ve done that. If you watch closely, however, it does pull that float a bit, especially with lighter weight yarns. Im swatching with worsted and I’ve noticed that particular issue isn’t quite as prevelant. But I think I’m going to trap the new color one stitch before the color change. It worked very well on my swatch. :smiling\_face: Thank you for your response\!\!
-
-6. **发言者 1**（引用未收录发言）：Also this would really work out for me bc I knit true to needle size. Some folks call that tight but I call it accurate\! There is no slack under my stitches and they still move freely.
+   Keep up the good work
 
 <!-- samples:end -->
 
