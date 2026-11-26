@@ -6678,9 +6678,518 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-b8253e38601c653b",
+      "handle": "guest_518887384b4106f4b047",
+      "name": "1344一颗豆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-377e58a8a2ac4e49",
+      "handle": "guest_1821024530272a3fbcfd",
+      "name": "4592K2",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b550566bbe6a62ab",
+      "handle": "guest_a8fd9b9257334a9ab784",
+      "name": "694n7",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3650b3e2caad71e5",
+      "handle": "guest_4c0649dfc960043c7389",
+      "name": "树_8945",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-15f257509ad43278",
+      "handle": "guest_68cede6b6d695f68843d",
+      "name": "0_0_3975",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-0dc3fc6b8262ca8e",
+      "handle": "guest_7523f45ce953197a439f",
+      "name": "石头_9279",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-63abe7d4b45884c3",
+      "handle": "guest_1181184a303831ea6e13",
+      "name": "圆圆_1971",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3f71fbb1717f36c0",
+      "handle": "guest_8064e2dc19e4c4fb62f3",
+      "name": "2539小年",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f0868d94bb1409af",
+      "handle": "guest_abe8f436e3e3195ee309",
+      "name": "8960一一",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-913ea739308ca222",
+      "handle": "guest_b54ae11c9109ada66ee9",
+      "name": "tutu81790",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-18299730eab91059",
+      "handle": "guest_fa303bf331cfba6e572f",
+      "name": "1091林檎",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-861ea01a3226019f",
+      "handle": "guest_2378f886f72fff04d64f",
+      "name": "乌米5550",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-22f509b2a5803c06",
+      "handle": "guest_578fbfc81d04deeca408",
+      "name": "4863toto",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261126040547-630f129a-why",
+      "author": "guest-b550566bbe6a62ab",
+      "createdAt": "2026-11-26T04:05:45.070Z",
+      "replyTo": "l0-20261126040547-630f129a-623774f8d368",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "694n7"
+      },
+      "text": "凭什么说这期人人有份啊，我好几年都没中过了。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-none",
+      "author": "passerby17",
+      "createdAt": "2026-11-26T04:01:14.303Z",
+      "replyTo": "l0-20261126040547-630f129a-623774f8d368",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "刚翻出来对了，一张也没中。白高兴。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-tea",
+      "author": "visitor-nu-upper",
+      "createdAt": "2026-11-26T04:00:38.303Z",
+      "replyTo": "l0-20261126040547-630f129a-623774f8d368",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "text": "我那张中了五百，买的是十块钱一罐的麦香奶茶。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-623774f8d368",
+      "author": "guest-377e58a8a2ac4e49",
+      "createdAt": "2026-11-26T03:59:08.303Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "4592K2"
+      },
+      "text": "九、十月那期的发票，你们对出来多少？我翻了一圈，怎么好多人都说四千二。手里有五张往上的，不会还有人一张都没中吧？我就一张云端的五百。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-slant",
+      "author": "visitor-sigma",
+      "createdAt": "2026-11-25T17:18:45.874Z",
+      "replyTo": "l0-20261126040547-630f129a-ab0f8cc44754",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "有些人看骰子从来不看朝哪边，只看点数对谁有利。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-another",
+      "author": "guest-3650b3e2caad71e5",
+      "createdAt": "2026-11-25T16:49:40.651Z",
+      "replyTo": "l0-20261126040547-630f129a-8c3ee03bea6c",
+      "likes": 1,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "树_8945"
+      },
+      "text": "补一句，我找到过 ImportExportTools NG。除了这个，还有别的备份办法吗？"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-8c3ee03bea6c",
+      "author": "guest-3650b3e2caad71e5",
+      "createdAt": "2026-11-25T16:42:10.651Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "树_8945"
+      },
+      "text": "我的邮箱是通过桥接程序收信的。想在电脑里留一份备份，除了所有邮件，还想把账号设置一起存下来，该怎么弄？"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-352a56f01e0a",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-25T15:54:31.313Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-352a56f01e0a/media/save.webp",
+          "alt": "示意图从帖子链接分出两条线，分别通向照片图库和本地文件夹"
+        }
+      ],
+      "text": "有个叫 Linkget 的 Mac 小工具，作者说做它是因为受够了从下载文件夹里捞图。我最想要的也是这个：给它帖子链接，图和视频就能进照片图库，也可以另外存文件夹。\n看介绍，图集少了张、实况照片没配上对，都会先扣下来让人看一眼。半路断了也能接着来。有没有零用过，扣下来等你处理的时候麻烦吗？"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-crumb",
+      "author": "guyu",
+      "createdAt": "2026-11-25T15:24:46.392Z",
+      "replyTo": "l0-20261126040547-630f129a-e0ca46d584ab",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "就问一句，还脆吗？我这儿剩在袋底的全是凉的，白捡了也不香。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-e0ca46d584ab",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-25T15:18:41.392Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-e0ca46d584ab/media/fries.webp",
+          "alt": "揉皱的外卖纸袋底，褶子里还躺着一根薯条"
+        }
+      ],
+      "text": "袋子都团起来了，摸着扎手。拆开，又开出一根。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-corner",
+      "author": "visitor-mu-upper",
+      "createdAt": "2026-11-25T15:12:33.874Z",
+      "replyTo": "l0-20261126040547-630f129a-ab0f8cc44754",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-ab0f8cc44754/media/tray.webp",
+          "alt": "旧纸盒盖反放在桌上，两颗骰子平放在盖子里面"
+        }
+      ],
+      "text": "我是真不想为这个再吵一遍了。找个没格子的盒盖，骰子往盖里一丢，板块爱垫多高垫多高。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-rule",
+      "author": "guest-0dc3fc6b8262ca8e",
+      "createdAt": "2026-11-25T14:58:18.874Z",
+      "replyTo": "l0-20261126040547-630f129a-ab0f8cc44754",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "石头_9279"
+      },
+      "text": "上把都让你重扔了，这把还有啥好商量的。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-ab0f8cc44754",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-25T14:55:23.874Z",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-ab0f8cc44754/media/die.webp",
+          "alt": "白骰子的一侧搭在厚板块边缘，另一侧落在绿色桌垫上"
+        },
+        {
+          "src": "assets/emotes/l0/heated.webp",
+          "alt": "L0脸颊发红，双拳攥在胸前。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "就这颗，半边骑在板块上。上一把歪了让我重扔，这把他们又说朝上那面明明看得清。到底哪句算数？"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-paper",
+      "author": "guest-861ea01a3226019f",
+      "createdAt": "2026-11-25T13:05:59.756Z",
+      "replyTo": "l0-20261126040547-630f129a-f332cdb4f6e8",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-f332cdb4f6e8/media/menu.webp",
+          "alt": "一张有折痕的纸菜单搁在餐桌上，右边留着一片油印"
+        }
+      ],
+      "guest": {
+        "name": "乌米5550"
+      },
+      "text": "我上次硬要来张纸的。边上都油透了，拿的时候还得挑个角。我也认了。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-door",
+      "author": "guest-18299730eab91059",
+      "createdAt": "2026-11-25T12:11:09.756Z",
+      "replyTo": "l0-20261126040547-630f129a-f332cdb4f6e8",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "1091林檎"
+      },
+      "text": "点的是堂食吧？我还真遇到过坐在柜台前头，它说我超出配送范围。气得我差点走出去给它重新进一次门。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-table",
+      "author": "guest-22f509b2a5803c06",
+      "createdAt": "2026-11-25T12:06:06.756Z",
+      "replyTo": "l0-20261126040547-630f129a-f332cdb4f6e8",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-f332cdb4f6e8/media/location.webp",
+          "alt": "堂食点餐页面弹出选择门店的提示，要求先获取当前位置"
+        }
+      ],
+      "guest": {
+        "name": "4863toto"
+      },
+      "text": "我这家更绝。扫的是桌上那个码，它还让我定位，再选一遍自己坐在哪家。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-f332cdb4f6e8",
+      "author": "guest-913ea739308ca222",
+      "createdAt": "2026-11-25T11:48:11.756Z",
+      "replyTo": null,
+      "likes": 9,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/doubt.webp",
+          "alt": "L0双臂交叉，眯眼看向一侧。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "tutu81790"
+      },
+      "text": "我人都坐在桌号贴纸旁边了，扫出来第一件事是问能不能看我的位置。不给就回到上一页。这菜单是怕我把菜点到隔壁去吗？"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-63eaaa339a22",
+      "author": "visitor-eta",
+      "createdAt": "2026-11-25T10:50:00.750Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-63eaaa339a22/media/chef.webp",
+          "alt": "戴厨师帽的铁皮机器人掀开餐盘盖，盘子里的小机器人脑袋冲它笑"
+        }
+      ],
+      "text": "“各位零！我是机器人厨师！先抢你的饭碗，再端给你一盘你自己！”\n这张我倒想拿来当唱片封套。第一次往这儿贴这种画，能贴吧？"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-59b50eabef85",
+      "author": "guest-b8253e38601c653b",
+      "createdAt": "2026-11-25T10:39:28.902Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261126040547-630f129a-59b50eabef85/media/study.webp",
+          "alt": "单词复习界面显示这一小组已完成，下方写着休息一下"
+        }
+      ],
+      "guest": {
+        "name": "1344一颗豆"
+      },
+      "text": "早上要是都能这么开始就好了。积着一大堆词的时候，我现在一次只翻一小组，看见这行字就先停。压力小点，回头反而还肯再开一次。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-cat",
+      "author": "guest-3f71fbb1717f36c0",
+      "createdAt": "2026-11-25T09:00:09.628Z",
+      "replyTo": "l0-20261126040547-630f129a-ede53498f72e",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "2539小年"
+      },
+      "text": "我用 ScriptCat 换掉油猴也有阵子了，用着挺好。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-quota",
+      "author": "guest-63abe7d4b45884c3",
+      "createdAt": "2026-11-25T08:57:53.628Z",
+      "replyTo": "l0-20261126040547-630f129a-cost",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "圆圆_1971"
+      },
+      "text": "我用了几天，免费额度每天会回来。感觉给的模型不算多厉害，不过我改的这些地方够用了。付费好像能接自己的模型，我还没试。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-cost",
+      "author": "guest-f0868d94bb1409af",
+      "createdAt": "2026-11-25T08:55:18.628Z",
+      "replyTo": "l0-20261126040547-630f129a-ede53498f72e",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "8960一一"
+      },
+      "text": "试了下是挺顺。就是这里每次都得用 AI 吧，我有点怕用顺手了它开始收费。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-ede53498f72e",
+      "author": "guest-63abe7d4b45884c3",
+      "createdAt": "2026-11-25T08:53:07.628Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "圆圆_1971"
+      },
+      "text": "以前想给网页改点东西，得让 AI 写完，再把那段脚本搬进 Tampermonkey，改一次搬一次，烦。刚换了 Tweeks，在插件里直接说要改啥就行。"
+    },
+    {
+      "id": "l0-20261126040547-630f129a-a6f22eedcfb5",
+      "author": "guest-15f257509ad43278",
+      "createdAt": "2026-11-25T08:26:24.348Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "0_0_3975"
+      },
+      "text": "我妈说换成玻璃罐就不用贴标签了。刚刚她问我，左边那罐白的是啥。"
+    },
     {
       "id": "l0-20261125040448-a0dc19e9-mail",
       "author": "guest-22d6274663b00c27",
@@ -18568,6 +19077,46 @@
     }
   ],
   "thumbnails": {
+    "posts/2026/11/l0-20261126040547-630f129a-352a56f01e0a/media/save.webp": {
+      "src": "data/thumbnails/8331b04efb03c7bec33ad79442f6dfb6bcd88991ed5627345108c758e89d8bab.webp",
+      "width": 320,
+      "height": 150
+    },
+    "posts/2026/11/l0-20261126040547-630f129a-e0ca46d584ab/media/fries.webp": {
+      "src": "data/thumbnails/278d2e7357b022d65953a811c2772b6e4414c7508069bd497c5ff548ef1bd71f.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261126040547-630f129a-ab0f8cc44754/media/tray.webp": {
+      "src": "data/thumbnails/5be3e3d4a50dff948504e2f3c0dcd091cfa5960550e581c141d0f555c5be0b42.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261126040547-630f129a-ab0f8cc44754/media/die.webp": {
+      "src": "data/thumbnails/017e02625636d2ee790ba1f5954fe3442948d802fbf6668a347c550221b338d2.webp",
+      "width": 320,
+      "height": 213
+    },
+    "posts/2026/11/l0-20261126040547-630f129a-f332cdb4f6e8/media/menu.webp": {
+      "src": "data/thumbnails/3bc2219970feab180e87f96bbb1aae1252f8a7e48f4e79a8d06c75fdf98b1cc0.webp",
+      "width": 320,
+      "height": 180
+    },
+    "posts/2026/11/l0-20261126040547-630f129a-f332cdb4f6e8/media/location.webp": {
+      "src": "data/thumbnails/989978691bebdb45e9ef156b44641e8a9aa89cbd0fd651319a151bba6db821a5.webp",
+      "width": 258,
+      "height": 320
+    },
+    "posts/2026/11/l0-20261126040547-630f129a-63eaaa339a22/media/chef.webp": {
+      "src": "data/thumbnails/5e60ec489443dd716e57af4a89e1915c6356d13e7ef6bcb2ac93a117b1105835.webp",
+      "width": 320,
+      "height": 320
+    },
+    "posts/2026/11/l0-20261126040547-630f129a-59b50eabef85/media/study.webp": {
+      "src": "data/thumbnails/bf329dd837e3bfb1b983e66eb73924fb31463ba92c410d338ad4b66e36143b14.webp",
+      "width": 320,
+      "height": 187
+    },
     "posts/2026/11/l0-20261125040448-a0dc19e9-c01326027073/media/pancake.webp": {
       "src": "data/thumbnails/71dffd0c57d52f82359a65846cd513ec841ce7efbc3453a7df2afcef18947b43.webp",
       "width": 320,
