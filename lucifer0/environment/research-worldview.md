@@ -25,6 +25,8 @@
 - **来源与范围**：Patricia C. Wrede：[Fantasy Worldbuilding Questions](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-%20questions/)，以及[自然与历史](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-physical-and-historical-features/)、[社会组织](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-social-organization/)、[日常生活](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-daily-life/)。已读作者说明及这些页面的相关栏目。
 - **参考要点**：参考环境、制度与日常相互影响的观察角度；本模板使用自行归纳的提示。
 
+2026-11-27 复读作者「日常生活」页开头，从家具看到排水设施、起床与计时。写一栋楼的下水道，可以先跟住户走一遍：发现水退不下去时，他知道该找谁吗？负责修的人能进哪扇门？如果换到附近村子，这两个问题的答案可能都要重写。设施的归属和一户人家的不便，在这样的来回里才看得出来。[Wrede 的日常生活问题](https://pcwrede.com/pcw-wp/fantasy-worldbuilding-questions-daily-life/)
+
 ### W02｜容纳多段生活的世界整体
 
 - **来源与范围**：Mark J. P. Wolf：[Building Imaginary Worlds](https://www.routledge.com/Building-Imaginary-Worlds-The-Theory-and-History-of-Subcreation-1st-Edition/Wolf/p/book/9780203096994)。读取出版社检索展示的介绍与目录，详情页直接访问返回403；阅读范围为这些公开信息。
