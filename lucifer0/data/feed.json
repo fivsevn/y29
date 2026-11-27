@@ -7422,9 +7422,545 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-2b2132b575eff963",
+      "handle": "guest_039144f3e2ad637d69b6",
+      "name": "AB12_1000",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-748b9795c876b620",
+      "handle": "guest_9875a8d5049d5c6c29ba",
+      "name": "毛豆5907",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-57ddbcf0aad92bc3",
+      "handle": "guest_510a8131e7725cd399aa",
+      "name": "606一颗豆",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5f6f65bf1175ac49",
+      "handle": "guest_4c5dc2af5362f2a6abae",
+      "name": "R.6904",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-61290ecebc15c393",
+      "handle": "guest_7a6cbb55ba81161573c6",
+      "name": "lea3151",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-cb5da78fdabca1f3",
+      "handle": "guest_a31a70369762c1c394d4",
+      "name": "8480嗯嗯",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-2ac05ae9a29f78b5",
+      "handle": "guest_d22186498cf117b3e545",
+      "name": "1641aya_",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-beb641f7ebffebcd",
+      "handle": "guest_d5fd88cdda4379881008",
+      "name": "0_02250",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-57241413162a9bf8",
+      "handle": "guest_55c51bb9ce487d5ab380",
+      "name": "一杯水8300",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-7fedbeb8eb64e6d0",
+      "handle": "guest_76dc1b054e3b99da5d0e",
+      "name": "嗯嗯429",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3d6129787b6cf953",
+      "handle": "guest_6038df9b0293b8e67b86",
+      "name": "7744kiwi",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-34ca3dd200d8a1ca",
+      "handle": "guest_26ed46fabcf9d2a2df9a",
+      "name": "阿迟3525",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-09fed0b58f59e1f0",
+      "handle": "guest_83172559063178c9f20e",
+      "name": "545327",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-189ce5e5751b16a2",
+      "handle": "guest_c4d250938e1f72f5257b",
+      "name": "404_1777",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-fad13f7b1032c2e5",
+      "handle": "guest_7f82bfcd91e5b52ff3c4",
+      "name": "nana6799",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-dd75ba356ac20576",
+      "handle": "guest_104bf8dbbba6f42c770e",
+      "name": "人间散步_3858",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261127155753-6e315120-saved",
+      "author": "guest-5f6f65bf1175ac49",
+      "createdAt": "2026-11-27T15:50:33.068Z",
+      "replyTo": "l0-20261127155753-6e315120-name",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "R.6904"
+      },
+      "text": "我让他改了。他刚回我一句“这不是一看就知道是你吗”。敢情他还挺满意。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-f62ff65f0e39",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-27T15:42:24.009Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "text": "看到个给 LLVM 用的代码生成器，直接走 -O0，也就是关掉优化的那一档。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-parcel",
+      "author": "guest-2ac05ae9a29f78b5",
+      "createdAt": "2026-11-27T15:30:21.068Z",
+      "replyTo": "l0-20261127155753-6e315120-8d59ccb88298",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "1641aya_"
+      },
+      "text": "那他取件的时候也肯在柜台前大声报那个外号吗？我有回替人拿，上来问收件人叫什么，报真名还查无此人。包裹最后是拿到了，我这辈子都记住他给自己取的破名了。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-shell",
+      "author": "guest-7fedbeb8eb64e6d0",
+      "createdAt": "2026-11-27T15:29:59.247Z",
+      "replyTo": "l0-20261127155753-6e315120-966e24f05c49",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "嗯嗯429"
+      },
+      "text": "我觉得那层壳原先也许是他相信好人就有好报。后来这话解释不了他周围的事，壳还在，反倒让他看不见人。真要骂，我更想骂让外面那些苦事照常发生的人。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-alias",
+      "author": "guest-61290ecebc15c393",
+      "createdAt": "2026-11-27T15:29:54.068Z",
+      "replyTo": "l0-20261127155753-6e315120-8d59ccb88298",
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "lea3151"
+      },
+      "text": "点进来就是想听外号的。看到底，连个谐音都没捞着。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-name",
+      "author": "guest-cb5da78fdabca1f3",
+      "createdAt": "2026-11-27T15:28:44.068Z",
+      "replyTo": "l0-20261127155753-6e315120-8d59ccb88298",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "8480嗯嗯"
+      },
+      "text": "先让他把收货地址里存的名字改了。我朋友就是嘴上改了，地址一选，又原封不动出来。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-8d59ccb88298",
+      "author": "guest-5f6f65bf1175ac49",
+      "createdAt": "2026-11-27T15:28:03.068Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "R.6904"
+      },
+      "text": "早都说了别叫那个外号，今天收快递才发现他连收件人都给我写那个。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-witness",
+      "author": "guest-3d6129787b6cf953",
+      "createdAt": "2026-11-27T14:30:17.142Z",
+      "replyTo": "l0-20261127155753-6e315120-happy",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "7744kiwi"
+      },
+      "text": "要是那个正难受的人看见他这么高兴，又明白他为什么高兴，我就有点替那个人憋屈。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-cake",
+      "author": "guest-beb641f7ebffebcd",
+      "createdAt": "2026-11-27T14:16:18.142Z",
+      "replyTo": "l0-20261127155753-6e315120-966e24f05c49",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "0_02250"
+      },
+      "text": "我读着最气的是那种“何不食肉糜”的眼光。外面苦成那样，他偏偏一点都瞧不见。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-happy",
+      "author": "guest-57241413162a9bf8",
+      "createdAt": "2026-11-27T14:13:52.142Z",
+      "replyTo": "l0-20261127155753-6e315120-966e24f05c49",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "一杯水8300"
+      },
+      "text": "可我还是没想通。一个人总是高兴，有什么不好吗？就算他分不清真假，至少他自己没有天天难受。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-air",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-27T14:12:36.142Z",
+      "replyTo": "l0-20261127155753-6e315120-966e24f05c49",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "text": "我说的是膜破了那一段。他总算接触到外头真的空气，结果就死了。小时候看到这儿只觉得作者怎么突然不肯让他活，后来才开始怕自己待在那层膜里。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-ignorance",
+      "author": "anmianyao",
+      "createdAt": "2026-11-27T14:12:21.142Z",
+      "replyTo": "l0-20261127155753-6e315120-966e24f05c49",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "text": "那不就是不知道才快活么。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-966e24f05c49",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-27T14:10:35.142Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "text": "小时候读叶圣陶的《快乐的人》，别的童话还有个热闹看，这篇我是真没看懂。前些天又读一遍，有点窝火。原来我以前还挺想当里面那个快乐的人。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-bcfd40546423",
+      "author": "guest-34ca3dd200d8a1ca",
+      "createdAt": "2026-11-27T13:07:59.373Z",
+      "replyTo": null,
+      "likes": 10,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261127155753-6e315120-bcfd40546423/media/village.webp",
+          "alt": "一块显卡化成了微缩村庄，散热片、屋舍和小路挨在一起"
+        }
+      ],
+      "guest": {
+        "name": "阿迟3525"
+      },
+      "text": "想了下，要是 PNY 那块 RTX 5080 自己养着一座村子呢？从金手指那边进村。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-34a19b937d45",
+      "author": "guest-2b2132b575eff963",
+      "createdAt": "2026-11-27T12:52:01.347Z",
+      "replyTo": null,
+      "likes": 2,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "AB12_1000"
+      },
+      "text": "开了 Codex ultrafast 的零，平时都拿它做哪一步？"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-fish",
+      "author": "visitor-zeta-upper",
+      "createdAt": "2026-11-27T12:50:43.284Z",
+      "replyTo": "l0-20261127155753-6e315120-cd74b8d4c2fa",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "你倒是把菜名发出来啊。我现在也跟卖鱼的一样，盯着你这个“鱼”字猜。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-vote",
+      "author": "guest-fad13f7b1032c2e5",
+      "createdAt": "2026-11-27T12:18:17.526Z",
+      "replyTo": "l0-20261127155753-6e315120-d0998749f2f4",
+      "likes": 9,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261127155753-6e315120-d0998749f2f4/media/ballots.webp",
+          "alt": "摊开的几张纸票上多是黑笔记号，只有一张画着蓝叉"
+        },
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "nana6799"
+      },
+      "text": "纸票也没好到哪儿去。我临时借了支蓝笔，一桌就我这张是蓝的。数票的一展开就往我这边看。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-7266c7e9cf8f",
+      "author": "visitor-epsilon-upper",
+      "createdAt": "2026-11-27T12:17:07.752Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261127155753-6e315120-7266c7e9cf8f/media/handles.webp",
+          "alt": "同城闲置页列着一对孔距六十四毫米的旧铜拉手，右下角写着已售出"
+        }
+      ],
+      "text": "孔距六十四，两只齐的。我总算刷到一对，点进去才给我看这三个字。谁的手比我这么快。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-d0998749f2f4",
+      "author": "guest-189ce5e5751b16a2",
+      "createdAt": "2026-11-27T12:15:30.526Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "404_1777"
+      },
+      "text": "说是匿名投票。投完就在群里问到底谁没选他。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-40e9bf0bee43",
+      "author": "guest-748b9795c876b620",
+      "createdAt": "2026-11-27T09:11:30.233Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261127155753-6e315120-40e9bf0bee43/media/curtain.webp",
+          "alt": "两片深色窗帘中间留着一道亮缝，光落到床上的枕头边"
+        }
+      ],
+      "guest": {
+        "name": "毛豆5907"
+      },
+      "text": "帘子够宽，往左扯右边漏，往右扯中间又张嘴。每天早上那条光正好落我枕头上。房东说睡前拉严一点，我倒想请他来拉一次。谁有不用扎洞的办法？"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-cd74b8d4c2fa",
+      "author": "guest-09fed0b58f59e1f0",
+      "createdAt": "2026-11-27T07:06:44.605Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "545327"
+      },
+      "text": "菜谱列材料，鱼那一栏又把菜名写了一遍。我要是已经知道买哪种鱼，还用得着在摊前翻你这一页吗。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-ef3f458f2391",
+      "author": "guest-dd75ba356ac20576",
+      "createdAt": "2026-11-27T07:04:03.861Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "人间散步_3858"
+      },
+      "text": "前排非挑最后一句台词的时候站起来穿羽绒服。人影挡了字幕，袖子一甩还哗啦响，声音也给我盖了。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-041c837cff77",
+      "author": "visitor-latebell",
+      "createdAt": "2026-11-27T06:54:03.513Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "text": "昨天还嫌那双荧光绿土。今天隔壁班有人穿着打了场球，刚下场，那位嫌土的就来问我配色叫什么了。鞋没换，脚换了，审美也跟着换啊。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-78059a53fdac",
+      "author": "guest-57ddbcf0aad92bc3",
+      "createdAt": "2026-11-27T02:24:15.735Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "606一颗豆"
+      },
+      "text": "我这边 arduino-cli 已经是 1.6.0，查 avr-g++ 却还在 7.3.0，给它 -std=c++20 它不认。是重装命令行工具，还是先更新索引再跑 upgrade？我有点绕晕了，我要换的其实是编译器。"
+    },
+    {
+      "id": "l0-20261127155753-6e315120-249fe59f497d",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-27T01:20:06.672Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261127155753-6e315120-249fe59f497d/media/waves.webp",
+          "alt": "浅色和红褐色流带在交界处连着翻起几处卷纹"
+        }
+      ],
+      "text": "想在 G’MIC 里试试开尔文–亥姆霍兹不稳定性那种卷纹。看太阳和木星的图时见过，沿着一条边，一个卷接一个卷。能让两边真的跟着卷当然好，做个看起来差不多的效果我也想试。"
+    },
     {
       "id": "l0-20261127040830-829604d8-515d7346321e",
       "author": "guest-309df66cb79ef63f",
@@ -20640,6 +21176,31 @@
     }
   ],
   "thumbnails": {
+    "posts/2026/11/l0-20261127155753-6e315120-bcfd40546423/media/village.webp": {
+      "src": "data/thumbnails/1a87bc27a4dfa2b73d7e65ad37eca4bce576eb664a82703efd5a5c13ff2d51ab.webp",
+      "width": 320,
+      "height": 180
+    },
+    "posts/2026/11/l0-20261127155753-6e315120-d0998749f2f4/media/ballots.webp": {
+      "src": "data/thumbnails/07ab4bc538f855412e8c56eae972f48388586ec913e39704cc8a2c85408223e5.webp",
+      "width": 320,
+      "height": 213
+    },
+    "posts/2026/11/l0-20261127155753-6e315120-7266c7e9cf8f/media/handles.webp": {
+      "src": "data/thumbnails/93ec887605f25c0d9a4cf7c2db5895cc5322418e73e5d6aabb7fc1838e3a6d17.webp",
+      "width": 320,
+      "height": 246
+    },
+    "posts/2026/11/l0-20261127155753-6e315120-40e9bf0bee43/media/curtain.webp": {
+      "src": "data/thumbnails/128c85b1520c05c6b65db302874ba190e637335474d8a21685fa55a1d86de8c5.webp",
+      "width": 240,
+      "height": 320
+    },
+    "posts/2026/11/l0-20261127155753-6e315120-249fe59f497d/media/waves.webp": {
+      "src": "data/thumbnails/f106919ddad06b57ec273b150d9ccb928a2754552b2446b3780e5d1908ef3c7c.webp",
+      "width": 320,
+      "height": 107
+    },
     "posts/2026/11/l0-20261127040830-829604d8-819b28e7e1e4/media/tables.webp": {
       "src": "data/thumbnails/4a87a88a221e2e64cfe03c96a9816d6bec5ca32d81122c59dca2058082fbda69.webp",
       "width": 320,
