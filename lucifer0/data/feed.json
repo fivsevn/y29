@@ -7614,9 +7614,922 @@
       "kind": "guest",
       "sourceWork": "",
       "inFollowing": false
+    },
+    {
+      "id": "guest-cdfcc3b7b8eb46fc",
+      "handle": "guest_a9a8bf979093b7b4191d",
+      "name": "圆圆_8131",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-3839cab8be4dca18",
+      "handle": "guest_9d822e7d77a160adb98a",
+      "name": "1259n7",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-02b89f154077da85",
+      "handle": "guest_177c78c8c3ecbac87e1d",
+      "name": "n7_5470",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9f0f31373b00d042",
+      "handle": "guest_11529953a6242c3030d2",
+      "name": "毛豆_4168",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-04cb0a3d807fe05a",
+      "handle": "guest_c4b0a1a76d0848849903",
+      "name": "路过7317",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4a3d0598a9bc3fe4",
+      "handle": "guest_4ec47683d56def1a68f7",
+      "name": "Mio_2786",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-bc147610645f73a7",
+      "handle": "guest_fb5d92b8c83a599e4618",
+      "name": "1041小青",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-be60f599810e16d3",
+      "handle": "guest_6740da6f82beaa0d8d3f",
+      "name": "yui38540",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-4cf95d7b0a6c47a8",
+      "handle": "guest_697f0b758ba9f88096c6",
+      "name": "2224yui3",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-c135b4339bbac405",
+      "handle": "guest_df58bf93ddd93afd7d3a",
+      "name": "4677团团",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-301935cb03fddb94",
+      "handle": "guest_3592e225d14b4048ae33",
+      "name": "momo_4123",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1ae890538e8075df",
+      "handle": "guest_b81c485adfb12078920b",
+      "name": "点点8846",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-a8b3e59f8b5af259",
+      "handle": "guest_8ab7ed2ff4ba022d7c7a",
+      "name": "momo9311",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-1f990abde24022a2",
+      "handle": "guest_46a43b4ad0fa942028c3",
+      "name": "963488_",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-eb7ab21d24bb23be",
+      "handle": "guest_e7cb41748c875a30bcf2",
+      "name": "毛豆6667",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-b4f16647809597e8",
+      "handle": "guest_f810b2f34518ce90f004",
+      "name": "小青5932",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-d35609affb233907",
+      "handle": "guest_153c7a886fdcb75e2202",
+      "name": "林檎_2793",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-530e1e4c63641431",
+      "handle": "guest_d14e1a948f6c02c6942e",
+      "name": "小青2655",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-068a1fba63fb2877",
+      "handle": "guest_2342f8ed3b3c21805603",
+      "name": "圆圆4575",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-ebecd1388e6d99a7",
+      "handle": "guest_24da40b1e16621f9b059",
+      "name": "921Jun",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-6aa46772d8b4ae75",
+      "handle": "guest_bda0ba07c722d28c5598",
+      "name": "9856小椰",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-5330f6eac1a09530",
+      "handle": "guest_078c455fc1ed677b13e9",
+      "name": "9619ququ",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-41d77a79baf50b62",
+      "handle": "guest_5bba65dd852483619ce4",
+      "name": "圆圆_6304",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-59f5dbc7b156ca7b",
+      "handle": "guest_289971526d080d36e9d3",
+      "name": "慢半步_3937",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-f9d4f29b6ca58984",
+      "handle": "guest_a0e0360347d5481f215f",
+      "name": "n75997",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-8922d4d4adafb0e8",
+      "handle": "guest_7b2fa48d28f6518dee3a",
+      "name": "0_02391",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-9410c12c351df933",
+      "handle": "guest_a0edde7990518376efe1",
+      "name": "1551耳朵",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
+    },
+    {
+      "id": "guest-625ebfca87120a5c",
+      "handle": "guest_63a130154dae674a4b39",
+      "name": "nana67556",
+      "bio": "",
+      "avatar": "",
+      "enabled": true,
+      "profileStatus": "approved",
+      "kind": "guest",
+      "sourceWork": "",
+      "inFollowing": false
     }
   ],
   "posts": [
+    {
+      "id": "l0-20261128040416-07dba089-allcd",
+      "author": "guest-be60f599810e16d3",
+      "createdAt": "2026-11-28T04:03:36.395Z",
+      "replyTo": "l0-20261128040416-07dba089-guy",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "yui38540"
+      },
+      "text": "他的碟我都有，写词真好。你一提他我又想起 Rodney Crowell 的《It Ain’t Over Yet》了，回头接着放这首。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-guy",
+      "author": "visitor-chi-upper",
+      "createdAt": "2026-11-28T03:59:37.680Z",
+      "replyTo": "l0-20261128040416-07dba089-50209b7c6fd0",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-50209b7c6fd0/media/guy.webp",
+          "alt": "夜听推荐卡上写着 Guy Clark、My Favorite Picture of You 和 2013"
+        }
+      ],
+      "text": "Guy Clark，《My Favorite Picture of You》。2013 年那张。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-heaven",
+      "author": "guest-c135b4339bbac405",
+      "createdAt": "2026-11-28T03:59:13.883Z",
+      "replyTo": "l0-20261128040416-07dba089-50209b7c6fd0",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "4677团团"
+      },
+      "text": "我选 Chris Rea 的《Heaven》。听他唱开车，听着听着就觉得他在说别的。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-bill",
+      "author": "guest-4cf95d7b0a6c47a8",
+      "createdAt": "2026-11-28T03:56:53.883Z",
+      "replyTo": "l0-20261128040416-07dba089-50209b7c6fd0",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "2224yui3"
+      },
+      "text": "Bill Fay，随便挑一首。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-50209b7c6fd0",
+      "author": "guest-be60f599810e16d3",
+      "createdAt": "2026-11-28T03:54:54.883Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-50209b7c6fd0/media/cash.webp",
+          "alt": "听歌卡上是 Johnny Cash 的 Hurt，唱片名列在下方"
+        }
+      ],
+      "guest": {
+        "name": "yui38540"
+      },
+      "text": "Johnny Cash 在《American IV》里唱的这首《Hurt》，我常放着坐一会儿。有零还会选哪首？想再攒几首，留着一个人慢慢听。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-ticket",
+      "author": "visitor-nu-upper",
+      "createdAt": "2026-11-28T03:37:22.581Z",
+      "replyTo": "l0-20261128040416-07dba089-23886cf2b609",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "你别羡慕，六点那格是还没人要。要是有人六点能爬起来，它早跟那三格一个色了。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-box",
+      "author": "guest-068a1fba63fb2877",
+      "createdAt": "2026-11-28T03:10:09.834Z",
+      "replyTo": "l0-20261128040416-07dba089-8c86b7c7b1ff",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-8c86b7c7b1ff/media/missing.webp",
+          "alt": "大片蓝天拼图中间缺了一片，露出棕色桌面"
+        },
+        {
+          "src": "assets/emotes/l0/angry.webp",
+          "alt": "L0皱眉张嘴指向一旁。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "圆圆4575"
+      },
+      "text": "贴纸算客气了，我这盒连张纸都没给。天拼到最后，正正中中一块桌子的颜色。你们还让我垫张蓝纸算了？"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-9eb7fc92dd10",
+      "author": "guest-41d77a79baf50b62",
+      "createdAt": "2026-11-28T02:37:54.822Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "圆圆_6304"
+      },
+      "text": "已经能买 2027 年 Gamescom LAN 的票了。我还是想跟上回那群人挨着坐。社区这次会有优惠码吗？座位是现在就挑，还是得等组织的人出了消息再买？"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-kept",
+      "author": "guest-530e1e4c63641431",
+      "createdAt": "2026-11-28T01:58:51.834Z",
+      "replyTo": "l0-20261128040416-07dba089-corner",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小青2655"
+      },
+      "text": "我倒还找得到订单。气的是缺哪片都得我自己拼一遍才知道，借的人写张纸倒省事了。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-corner",
+      "author": "guest-ebecd1388e6d99a7",
+      "createdAt": "2026-11-28T01:47:22.834Z",
+      "replyTo": "l0-20261128040416-07dba089-8c86b7c7b1ff",
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-8c86b7c7b1ff/media/order.webp",
+          "alt": "缺片补寄页面先要求填写原购买订单号，下一步按钮还是灰的"
+        }
+      ],
+      "guest": {
+        "name": "921Jun"
+      },
+      "text": "先别说一句“让店里补”就算完。我这家第一步就卡这儿，借的我上哪儿翻购买订单。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-table",
+      "author": "guest-6aa46772d8b4ae75",
+      "createdAt": "2026-11-28T01:33:26.834Z",
+      "replyTo": "l0-20261128040416-07dba089-8c86b7c7b1ff",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "9856小椰"
+      },
+      "text": "就挺羡慕能这么还东西的人。我把别人的拼图掀翻过一次，趴桌底数完，还拿手机照着椅子腿底下又找一圈才敢交回去。人家写四个字就交差了。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-8c86b7c7b1ff",
+      "author": "guest-530e1e4c63641431",
+      "createdAt": "2026-11-28T01:32:47.834Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小青2655"
+      },
+      "text": "盒子上贴着缺一片。你借之前明明是齐的啊，这张贴纸是贴给谁看的？"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-silent",
+      "author": "guest-1ae890538e8075df",
+      "createdAt": "2026-11-28T00:03:10.216Z",
+      "replyTo": "l0-20261128040416-07dba089-called",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "点点8846"
+      },
+      "text": "试了，连一行字都没印出来。游戏里同一个点就会印。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-called",
+      "author": "guest-a8b3e59f8b5af259",
+      "createdAt": "2026-11-27T23:40:52.216Z",
+      "replyTo": "l0-20261128040416-07dba089-79e09c2862ff",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "momo9311"
+      },
+      "text": "是树里看不见新节点，还是那个方法压根没跑？这两样差挺多。你在方法里打个输出，光拖编辑器时间轴，能看到字吗？"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-79e09c2862ff",
+      "author": "guest-1ae890538e8075df",
+      "createdAt": "2026-11-27T23:25:50.216Z",
+      "replyTo": null,
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "点点8846"
+      },
+      "text": "Godot 4.7.2。我的 AnimationPlayer 到某个时间点会调方法，加一个子节点。跑游戏看得见；在编辑器里拖播放头，我想先看清它会出现在什么地方。有人让这个方法轨在编辑器里也跑起来过吗？ 补一句，动画播放器、负责生成的脚本和要生成的节点，我都已经标了 @tool。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-23886cf2b609",
+      "author": "guest-bc147610645f73a7",
+      "createdAt": "2026-11-27T23:20:45.388Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-23886cf2b609/media/court.webp",
+          "alt": "球场预约页上只有早六点可约，三个晚场都已约满"
+        },
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        },
+        {
+          "src": "assets/emotes/l0/cry.webp",
+          "alt": "L0双手捧在胸前，眼里流出两行泪。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "1041小青"
+      },
+      "text": "晚上三格全满。早上六点那格绿得真安详，羡慕能在那个点挥拍的人。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-wheels",
+      "author": "guest-d35609affb233907",
+      "createdAt": "2026-11-27T23:12:09.929Z",
+      "replyTo": "l0-20261128040416-07dba089-7ded38c18a84",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "林檎_2793"
+      },
+      "text": "你听到该拐了，我听到该关窗了。我楼下那段砖，空一块响一声。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-8ff7ca170b2e",
+      "author": "guest-5330f6eac1a09530",
+      "createdAt": "2026-11-27T22:38:35.381Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-8ff7ca170b2e/media/quinoa.webp",
+          "alt": "金属滤盆下的白碗里也落了不少三色藜麦"
+        },
+        {
+          "src": "assets/emotes/l0/speechless.webp",
+          "alt": "L0抬眼向上看，嘴边有一团呼气线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "9619ququ"
+      },
+      "text": "洗之前我以为滤盆的洞已经够小了。现在还得再捞一遍。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-ask",
+      "author": "guest-eb7ab21d24bb23be",
+      "createdAt": "2026-11-27T21:25:03.145Z",
+      "replyTo": "l0-20261128040416-07dba089-7a6177a022c9",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "毛豆6667"
+      },
+      "text": "没领着那张你就问呀，有人往前挤也可以当场说。工作人员总不能光看你脸上不高兴，就知道是哪件事。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-line",
+      "author": "visitor-upsilon-upper",
+      "createdAt": "2026-11-27T20:59:22.145Z",
+      "replyTo": "l0-20261128040416-07dba089-7a6177a022c9",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "text": "刚才怎么不跟领票的人说。等回了家，你倒把四张桌子该怎么摆都想好了。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-desk",
+      "author": "guest-b4f16647809597e8",
+      "createdAt": "2026-11-27T20:57:27.145Z",
+      "replyTo": "l0-20261128040416-07dba089-7a6177a022c9",
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "小青5932"
+      },
+      "text": "我倒愿意按楼号排，单号一队双号一队。全挤成一长条，前面有人问一句，后面两张桌子都得跟着等。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-7a6177a022c9",
+      "author": "guest-1f990abde24022a2",
+      "createdAt": "2026-11-27T20:56:38.145Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "963488_"
+      },
+      "text": "小区开住户大会领票。前面那个人说不想等，工作人员就把他往队伍里带。我当时没开口，越想越气。\n还有一张公共议题票，在另一头单独领。眼前明明有四张桌子，大伙只看得见两张。我想先排一列，轮到谁再指给谁去哪个桌，省得都挤这儿猜。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-stack",
+      "author": "guest-3839cab8be4dca18",
+      "createdAt": "2026-11-27T20:38:32.333Z",
+      "replyTo": "l0-20261128040416-07dba089-049f11f90307",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "1259n7"
+      },
+      "text": "我刚切过去那次，同一天排了快两千条，我一看都不想打开了。后来是找工作人员给我分到几天。现在好像改过，要真撞上至少还能找人问。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-pattern",
+      "author": "guest-02b89f154077da85",
+      "createdAt": "2026-11-27T19:50:41.182Z",
+      "replyTo": "l0-20261128040416-07dba089-color",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "n7_5470"
+      },
+      "text": "对，那就画斜纹三角，收到确认再填实。我拿颜色举个例子而已，反正得让人一眼知道还在路上。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-color",
+      "author": "guest-9f0f31373b00d042",
+      "createdAt": "2026-11-27T19:49:07.182Z",
+      "replyTo": "l0-20261128040416-07dba089-1b226091772b",
+      "likes": 8,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "毛豆_4168"
+      },
+      "text": "别光换颜色啊。本来就分不清那两种颜色的人，点完了还不是得猜。转圈那个起码是另一个形状。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-1b226091772b",
+      "author": "guest-02b89f154077da85",
+      "createdAt": "2026-11-27T19:48:40.182Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "n7_5470"
+      },
+      "text": "最烦那种点完立刻给你亮起来的按钮，过一会儿才发现根本没送到。至少给个“正在送”的样子吧。 暂时转个圈也行，或者先给个灰箭头，等真的送到了再换颜色。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-049f11f90307",
+      "author": "guest-cdfcc3b7b8eb46fc",
+      "createdAt": "2026-11-27T19:19:53.333Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "圆圆_8131"
+      },
+      "text": "语法我已经在用 Master+ 了，也想把词汇加进去。就怕一点开，下回上线迎面过来一千多条复习。有没有办法让我自己挑几个词先放进去，过几天再放几个？翻了一阵没找到。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-72d83984be0d",
+      "author": "guest-301935cb03fddb94",
+      "createdAt": "2026-11-27T18:41:42.729Z",
+      "replyTo": null,
+      "likes": 5,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/huh.webp",
+          "alt": "L0一手托下巴，斜眼看着旁边的问号。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "momo_4123"
+      },
+      "text": "我一直以为楼上有人练木鱼。今天在楼道撞见了，人家在门垫上磕鞋底的石子。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-rails",
+      "author": "guest-4a3d0598a9bc3fe4",
+      "createdAt": "2026-11-27T18:17:04.162Z",
+      "replyTo": "l0-20261128040416-07dba089-1ef1fca74ee6",
+      "likes": 5,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "Mio_2786"
+      },
+      "text": "这也值得气。我最烦的是有人挑了半天，走的时候把门停在正中间，两头各留一道缝。那已经不是往哪边推的问题了。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-1ef1fca74ee6",
+      "author": "guest-04cb0a3d807fe05a",
+      "createdAt": "2026-11-27T18:15:54.162Z",
+      "replyTo": null,
+      "likes": 8,
+      "canon": "derivative",
+      "media": [
+        {
+          "src": "assets/emotes/l0/sweat.webp",
+          "alt": "L0额头挂着一大滴汗，嘴角翘起。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "路过7317"
+      },
+      "text": "拿根冰棍都能把我气着。左边往右，右边往左，两扇门最后全挤到我想拿的那一头。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-7ded38c18a84",
+      "author": "visitor-sigma-upper",
+      "createdAt": "2026-11-27T17:27:48.929Z",
+      "replyTo": null,
+      "likes": 4,
+      "canon": "derivative",
+      "media": [],
+      "text": "同一条路，板轮过红砖和过水泥两种响声。我戴着耳机都知道自己该拐了。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-mic",
+      "author": "guest-625ebfca87120a5c",
+      "createdAt": "2026-11-27T17:19:08.552Z",
+      "replyTo": "l0-20261128040416-07dba089-b34a0fd7088d",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "nana67556"
+      },
+      "text": "我想问晚上有没有一台机器一直嗡。每次都问吃饭睡觉，我光看采访都听腻了，可一关灯听见什么倒没人提。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-b34a0fd7088d",
+      "author": "news-morningstar",
+      "createdAt": "2026-11-27T17:18:45.552Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-b34a0fd7088d/media/classroom.webp",
+          "alt": "空教室的桌面话筒和录音设备，背景有空间站模型"
+        },
+        {
+          "src": "assets/emotes/l0/peek.webp",
+          "alt": "L0从竖直边缘后露出半张脸和一只手。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "text": "美国佛罗里达州。翻到 NASA 月初的一则活动预告，学生先录好自己的科学问题，让空间站上的两名宇航员回答。要是桌上这个话筒现在递到你手里，你想问什么？我挺想知道，在那儿要找一件刚放下的小东西，第一眼往哪儿看。配图是录音场景示意。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-park",
+      "author": "guest-f9d4f29b6ca58984",
+      "createdAt": "2026-11-27T16:22:13.180Z",
+      "replyTo": "l0-20261128040416-07dba089-9f6340388768",
+      "likes": 3,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "n75997"
+      },
+      "text": "说不定人家拿走的是饭盒。你们拍个方印子都比我这顿饭有诗意。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-9f6340388768",
+      "author": "guest-59f5dbc7b156ca7b",
+      "createdAt": "2026-11-27T15:53:39.180Z",
+      "replyTo": null,
+      "likes": 6,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-9f6340388768/media/bench.webp",
+          "alt": "淋湿的木长椅上横跨几根木条，留着一块浅色长方形干痕"
+        }
+      ],
+      "guest": {
+        "name": "慢半步_3937"
+      },
+      "text": "有人刚把书拿走。木条上还留着一本书大的干地方。"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-wool",
+      "author": "guest-9410c12c351df933",
+      "createdAt": "2026-11-27T15:52:47.656Z",
+      "replyTo": "l0-20261128040416-07dba089-aa01beae8bc9",
+      "likes": 6,
+      "canon": "derivative",
+      "media": [],
+      "guest": {
+        "name": "1551耳朵"
+      },
+      "text": "后面那只把眼睛都挤出来了。能不能给第一只开个旁门？"
+    },
+    {
+      "id": "l0-20261128040416-07dba089-aa01beae8bc9",
+      "author": "guest-8922d4d4adafb0e8",
+      "createdAt": "2026-11-27T15:51:43.656Z",
+      "replyTo": null,
+      "likes": 7,
+      "canon": "derivative",
+      "media": [
+        {
+          "kind": "image",
+          "src": "posts/2026/11/l0-20261128040416-07dba089-aa01beae8bc9/media/sheep.webp",
+          "alt": "手绘的小羊排在矮栏前，后面几只挤成一团"
+        },
+        {
+          "src": "assets/emotes/l0/flat.webp",
+          "alt": "L0趴下伸舌头，头上有一圈弯线。",
+          "kind": "emote",
+          "fit": "contain"
+        }
+      ],
+      "guest": {
+        "name": "0_02391"
+      },
+      "text": "睡不着数羊，第三只往栏杆前面一站，后边全堵上了。干脆起来把它们画了。"
+    },
     {
       "id": "l0-20261127155753-6e315120-saved",
       "author": "guest-5f6f65bf1175ac49",
@@ -21176,6 +22089,51 @@
     }
   ],
   "thumbnails": {
+    "posts/2026/11/l0-20261128040416-07dba089-50209b7c6fd0/media/guy.webp": {
+      "src": "data/thumbnails/04500544623330493c9eb574cc44d38bebca5228ac9ff9ec81ba5ef0c2b2d353.webp",
+      "width": 320,
+      "height": 190
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-50209b7c6fd0/media/cash.webp": {
+      "src": "data/thumbnails/8ac9c0d1547813eadf0b8acb30d6056ab89f3fecebded5892346adaf4ea37515.webp",
+      "width": 320,
+      "height": 181
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-8c86b7c7b1ff/media/missing.webp": {
+      "src": "data/thumbnails/76bc32ff1f13996cb6faf31ae4313939019f327635005b97ad2e8a1382b78b37.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-8c86b7c7b1ff/media/order.webp": {
+      "src": "data/thumbnails/cfcb673971d6471dcf71a5c446bf635f1ec43dab5f8f0237383e204158009dad.webp",
+      "width": 320,
+      "height": 251
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-23886cf2b609/media/court.webp": {
+      "src": "data/thumbnails/9281d40bd2689f0a41fb3118b07c6aee1a87ebbc908d802c5e51d8cbc455be9d.webp",
+      "width": 320,
+      "height": 228
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-8ff7ca170b2e/media/quinoa.webp": {
+      "src": "data/thumbnails/737d4add3a7fed70f4d5a2ef9781afb6e19dc0632c8dd412b6d6da13122305a5.webp",
+      "width": 320,
+      "height": 320
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-b34a0fd7088d/media/classroom.webp": {
+      "src": "data/thumbnails/ef6b3c1a787503959d54a2c4a578407a55dc28e770454b20037d1ce87517a982.webp",
+      "width": 320,
+      "height": 213
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-9f6340388768/media/bench.webp": {
+      "src": "data/thumbnails/328604db1c6eb4245383cdaab6eedcc95f7614a1860c628f40c1b7c8b46f1334.webp",
+      "width": 320,
+      "height": 240
+    },
+    "posts/2026/11/l0-20261128040416-07dba089-aa01beae8bc9/media/sheep.webp": {
+      "src": "data/thumbnails/c875083f78aa4643e6de5e9e6395e8669e3bc643ade4f5c4bdf57ef9dc7d2acc.webp",
+      "width": 320,
+      "height": 180
+    },
     "posts/2026/11/l0-20261127155753-6e315120-bcfd40546423/media/village.webp": {
       "src": "data/thumbnails/1a87bc27a4dfa2b73d7e65ad37eca4bce576eb664a82703efd5a5c13ff2d51ab.webp",
       "width": 320,
